@@ -60,7 +60,7 @@
   display: none;
 }
 .ctaButton {
-  display: none;
+  display: none !important;
 }
 
 @media (min-width: 768px) {
@@ -70,7 +70,7 @@
     gap: 32px;
   }
   .ctaButton {
-    display: flex;
+    display: inline-flex !important;
   }
 }
 
