@@ -1,0 +1,258 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+ * Kramaniti Global Styles
+ * Adheres to brand_identity_guidelines.md 
+ */
+
+:root {
+  /* Colors - Light Theme Default Variables (though we default to dark below) */
+  --color-obsidian: #0A0A0F;
+  --color-graphite: #141418;
+  --color-charcoal: #1E1E24;
+  
+  --color-burnished-gold: #C9A84C;
+  --color-aged-bronze: #A07D3A;
+  --color-muted-amber: #D4A843;
+  
+  --color-ice-white: #F0F0F5;
+  --color-silver-mist: #9B9BA8;
+  --color-slate-grey: #6B6B78;
+  
+  --color-success: #3ECF8E;
+  --color-warning: #F5A623;
+  --color-error: #E54D42;
+  --color-info: #4A90D9;
+  --color-smoke: #2A2A32;
+
+  /* Theme mappings (Light) */
+  --bg-primary: var(--color-ice-white);
+  --bg-elevated: #ffffff;
+  --bg-surface: #f8f8f8;
+  --text-primary: var(--color-obsidian);
+  --text-secondary: var(--color-slate-grey);
+  --text-tertiary: var(--color-silver-mist);
+  --border-subtle: #e0e0e0;
+  
+  /* Gradients */
+  --gradient-gold-horizon: linear-gradient(135deg, #C9A84C 0%, #A07D3A 50%, #7A5C2E 100%);
+  --gradient-dark-depth: linear-gradient(180deg, #0A0A0F 0%, #141418 50%, #1E1E24 100%);
+  --gradient-ambient-glow: radial-gradient(ellipse at center, rgba(201,168,76,0.08) 0%, transparent 70%);
+
+  /* Default mode is system dependent, but we define dark overrides */
+  @media (prefers-color-scheme: dark) {
+    --bg-primary: var(--color-obsidian);
+    --bg-elevated: var(--color-graphite);
+    --bg-surface: var(--color-charcoal);
+    --text-primary: var(--color-ice-white);
+    --text-secondary: var(--color-silver-mist);
+    --text-tertiary: var(--color-slate-grey);
+    --border-subtle: var(--color-smoke);
+  }
+
+  /* color-scheme allows system UI to adapt automatically */
+  color-scheme: light dark;
+}
+
+/* Explicit data-theme overrides for user toggle */
+:root[data-theme='light'] {
+  --bg-primary: var(--color-ice-white);
+  --bg-elevated: #ffffff;
+  --bg-surface: #f8f8f8;
+  --text-primary: var(--color-obsidian);
+  --text-secondary: var(--color-slate-grey);
+  --text-tertiary: var(--color-silver-mist);
+  --border-subtle: #e0e0e0;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg-primary: var(--color-obsidian);
+  --bg-elevated: var(--color-graphite);
+  --bg-surface: var(--color-charcoal);
+  --text-primary: var(--color-ice-white);
+  --text-secondary: var(--color-silver-mist);
+  --text-tertiary: var(--color-slate-grey);
+  --border-subtle: var(--color-smoke);
+  color-scheme: dark;
+}
+
+/* Global Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  html, body {
+    font-size: 15px;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+}
+
+h4, h5, h6 {
+  font-family: var(--font-sora), system-ui, sans-serif;
+}
+
+h1 {
+  font-size: 56px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 36px;
+  }
+}
+
+h2 {
+  font-size: 40px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  h2 {
+    font-size: 28px;
+  }
+}
+
+h3 {
+  font-size: 28px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  h3 {
+    font-size: 22px;
+  }
+}
+
+h4 {
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  h4 {
+    font-size: 18px;
+  }
+}
+
+p {
+  margin-bottom: 1.5em;
+  max-width: 72ch; /* 680px approx */
+}
+
+a {
+  color: var(--color-info);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-burnished-gold);
+}
+
+/* Typography Utilities */
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.caption {
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 768px) {
+  .caption {
+    font-size: 12px;
+  }
+}
+
+code {
+  font-family: var(--font-jetbrains-mono), 'Fira Code', 'Consolas', monospace;
+  font-size: 14px;
+  background-color: var(--bg-surface);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  code {
+    font-size: 13px;
+  }
+}
+
+/* Micro-labels */
+.micro-label {
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--color-burnished-gold);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.animate-reveal {
+  animation: fadeIn 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Mobile Web App Optimizations */
+html, body {
+  overscroll-behavior-y: none; /* Prevent pull-to-refresh on mobile */
+  -webkit-tap-highlight-color: transparent; /* Remove blue highlight on tap */
+}
+
+input, textarea, select {
+  /* Prevent iOS zoom on focus by ensuring font size is at least 16px */
+  font-size: 16px !important;
+}
+
+/* Ensure smooth touch scrolling globally */
+* {
+  -webkit-overflow-scrolling: touch;
+}

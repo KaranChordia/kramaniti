@@ -1,0 +1,93 @@
+.contact {
+  padding: 120px 0;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-subtle); /* Separates from footer */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 64px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.header.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+}
+
+.formColumn {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease 100ms, transform 600ms ease 100ms;
+}
+
+.formColumn.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background-color: var(--bg-elevated);
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+}
+
+.submitBtn {
+  margin-top: 8px;
+}
+
+.calendlyColumn {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease 200ms, transform 600ms ease 200ms;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendlyColumn.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.calendlyPlaceholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--bg-elevated);
+  padding: 48px 32px;
+  border-radius: 12px;
+  border: 1px dashed var(--border-subtle);
+}
+
+.placeholderBtn {
+  margin-top: 24px;
+}

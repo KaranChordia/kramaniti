@@ -1,0 +1,151 @@
+.navWrapper {
+  position: fixed;
+  top: 24px;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding: 0 24px;
+  pointer-events: none; /* Let clicks pass through outside the header */
+}
+
+.header {
+  width: 100%;
+  max-width: 1000px;
+  background-color: rgba(20, 20, 24, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px; /* Pill shape */
+  pointer-events: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+/* Light mode specific override */
+:global(html[data-theme='light']) .header {
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+}
+
+.container {
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoGroup {
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+.logoK {
+  color: var(--color-burnished-gold);
+}
+
+.logoRest {
+  color: var(--text-primary);
+}
+
+/* Mobile Menu button removed, Desktop nav hidden on small screens */
+.desktopNav {
+  display: none;
+}
+.ctaButton {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktopNav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .ctaButton {
+    display: flex;
+  }
+}
+
+/* Mobile Menu */
+.mobileMenuBtn {
+  display: flex;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 4px;
+}
+
+@media (min-width: 768px) {
+  .mobileMenuBtn {
+    display: none;
+  }
+}
+
+.mobileMenuOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(10, 10, 15, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 40; /* Just below the navWrapper */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+:global(html[data-theme='light']) .mobileMenuOverlay {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.mobileNavLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.mobileLink {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.mobileLink:active {
+  color: var(--color-burnished-gold);
+}
+
+.navLink {
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.navLink:hover {
+  color: var(--color-burnished-gold);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}

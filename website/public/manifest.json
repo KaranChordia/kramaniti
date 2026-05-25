@@ -1,0 +1,17 @@
+{
+  "name": "Kramaniti",
+  "short_name": "Kramaniti",
+  "description": "AI Architect & Technology Consulting",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0F",
+  "theme_color": "#0A0A0F",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}

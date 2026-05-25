@@ -1,0 +1,138 @@
+.story {
+  padding: 120px 0;
+  background-color: var(--bg-primary);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 80px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.header.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.timelineWrapper {
+  position: relative;
+  padding-top: 40px; /* Space for the timeline node */
+}
+
+.timelineLine {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background: var(--gradient-gold-horizon);
+  border-radius: 2px;
+  transition: width 1000ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.timelineLine.visibleLine {
+  width: 100%;
+}
+
+.epochsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+}
+
+@media (min-width: 768px) {
+  .epochsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+.epochColumn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.epochColumn.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.epochNode {
+  position: absolute;
+  top: -40px; /* Aligns with the timeline line */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 36px;
+  background: var(--bg-primary);
+  border: 2px solid var(--color-burnished-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .epochNode {
+    left: 24px;
+    transform: none;
+  }
+}
+
+.epochNumber {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 14px;
+  color: var(--color-burnished-gold);
+  font-weight: 600;
+}
+
+.epochCard {
+  margin-top: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.epochImagePlaceholder {
+  height: 160px;
+  background-color: var(--bg-surface);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.abstractVisual {
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    var(--color-smoke) 10px,
+    var(--color-smoke) 11px
+  );
+  opacity: 0.3;
+}
+
+.epochMeta {
+  margin-bottom: 12px;
+}
+
+.epochMeta h4 {
+  margin-bottom: 0;
+  margin-top: 4px;
+}

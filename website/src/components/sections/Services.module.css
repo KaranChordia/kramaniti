@@ -1,0 +1,118 @@
+.services {
+  padding: 120px 0;
+  background-color: var(--bg-surface);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 64px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.header.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.tierCard {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease, border-color 300ms ease-in-out;
+}
+
+.tierCard.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tierCard:hover {
+  transform: translateY(-4px); /* Slightly more lift for service cards */
+}
+
+.popularCard {
+  border-color: var(--color-burnished-gold);
+  border-width: 2px;
+}
+
+.popularBadge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gradient-gold-horizon);
+  color: #0A0A0F;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 12px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.cardHeader {
+  margin-bottom: 24px;
+}
+
+.cardHeader h4 {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.deliverables {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1; /* Pushes footer to bottom */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.deliverables li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.deliverables svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.cardFooter {
+  margin-top: 32px;
+}
+
+.tierCta {
+  width: 100%;
+}

@@ -1,0 +1,51 @@
+.button {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 200ms ease-out;
+  outline: none;
+  font-size: 16px;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.primary {
+  background: var(--gradient-gold-horizon);
+  color: #0A0A0F;
+  border: none;
+  padding: 14px 28px;
+}
+
+.primary:hover {
+  background: var(--color-burnished-gold); /* Solid on hover per specs */
+  transform: scale(1.02);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--color-smoke);
+  padding: 12px 24px;
+}
+
+.secondary:hover {
+  border-color: var(--color-burnished-gold);
+  color: var(--color-burnished-gold);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--text-tertiary); /* Silver mist */
+  border: none;
+  padding: 12px 24px;
+}
+
+.ghost:hover {
+  color: var(--color-burnished-gold);
+}

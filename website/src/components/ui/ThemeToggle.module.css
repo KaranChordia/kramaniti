@@ -1,0 +1,17 @@
+.toggle {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color 200ms ease, background-color 200ms ease;
+}
+
+.toggle:hover {
+  color: var(--color-burnished-gold);
+  background-color: var(--bg-surface);
+}

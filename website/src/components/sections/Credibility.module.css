@@ -1,0 +1,175 @@
+.credibility {
+  padding: 120px 0;
+  background-color: var(--bg-primary);
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 64px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.header.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.carouselWrapper {
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms ease 200ms, transform 600ms ease 200ms;
+}
+
+.carouselWrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.carousel {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 24px; /* Room for scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.caseCard {
+  min-width: 300px;
+  width: 80vw;
+  max-width: 400px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+.caseHeader {
+  margin-bottom: 16px;
+}
+
+.caseHeader h3 {
+  margin-bottom: 4px;
+  color: var(--color-ice-white); /* Enforce white as per constraints */
+}
+
+/* Light mode specific override for the text */
+:global(html[data-theme='light']) .caseHeader h3 {
+  color: var(--color-obsidian);
+}
+
+.scrollBtn {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 200ms ease;
+}
+
+@media (min-width: 768px) {
+  .scrollBtn {
+    display: flex;
+  }
+}
+
+.scrollBtn:hover {
+  color: var(--color-burnished-gold);
+  border-color: var(--color-burnished-gold);
+}
+
+.leftBtn {
+  left: -24px;
+}
+
+.rightBtn {
+  right: -24px;
+}
+
+.numbersStrip {
+  margin-top: 80px;
+  border-top: 1px solid var(--color-smoke);
+  border-bottom: 1px solid var(--color-smoke);
+  background-color: var(--bg-surface);
+  padding: 40px 0;
+  opacity: 0;
+  transition: opacity 800ms ease 400ms;
+}
+
+.numbersStrip.visible {
+  opacity: 1;
+}
+
+.numbersContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .numbersContainer {
+    justify-content: space-between;
+    gap: 0;
+  }
+}
+
+.numberItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.number {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--color-burnished-gold);
+  line-height: 1.2;
+}
+
+.numberLabel {
+  font-family: var(--font-sora), sans-serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.numberDivider {
+  display: none;
+  width: 1px;
+  background-color: var(--color-smoke);
+}
+
+@media (min-width: 768px) {
+  .numberDivider {
+    display: block;
+  }
+}
