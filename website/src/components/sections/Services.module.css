@@ -36,8 +36,16 @@
 
 @media (min-width: 1024px) {
   .grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
+}
+
+.price {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 12px;
 }
 
 .tierCard {

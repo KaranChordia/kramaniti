@@ -8,34 +8,47 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 const tiers = [
   {
     id: 1,
-    title: 'AI Workflow Audit',
-    label: 'ENTRY POINT',
-    deliverables: ['AI Stack Map', '1 Prototype Spec', 'Strategy Blueprint PDF'],
-    ctaText: 'Book a Discovery Call',
+    title: 'AI Strategy Consulting',
+    price: '35,000/-',
+    label: 'PER PROJECT',
+    deliverables: ['Strategic Architecture', 'AI Stack Audit', 'Implementation Roadmap'],
+    ctaText: 'Book Consulting',
     isPopular: false
   },
   {
     id: 2,
-    title: 'Founder Narrative Kit',
-    label: 'CORE PROJECT',
-    deliverables: ['1 Hero Video', '5 Social Shorts', 'Repurposing Kit (3 blogs, 1 newsletter, 5 threads)'],
-    ctaText: 'Discuss Your Story',
-    isPopular: false
-  },
-  {
-    id: 3,
-    title: 'Autonomous Agent Build',
-    label: 'PREMIUM BUILD',
-    deliverables: ['1 Custom AI Agent', '1 API Pipeline', 'Training & Handoff Playbook'],
-    ctaText: 'Scope Your Build',
+    title: 'AI Integration',
+    price: '35,000/-',
+    label: 'PER PROJECT',
+    deliverables: ['Custom AI Agent Build', 'Workflow Automation', 'API Pipeline Integration'],
+    ctaText: 'Scope Integration',
     isPopular: true
   },
   {
+    id: 3,
+    title: 'Creative Brand Kit',
+    price: '45,000/-',
+    label: 'PER PROJECT',
+    deliverables: ['Visual Identity System', 'Design Tokens', 'Master Guidelines'],
+    ctaText: 'Discuss Brand Kit',
+    isPopular: false
+  },
+  {
     id: 4,
-    title: 'Content Engine Retainer',
-    label: 'ONGOING',
-    deliverables: ['Weekly content assets', 'Monthly analytics dashboard', 'Pipeline optimization'],
-    ctaText: 'Explore the Retainer',
+    title: 'Content Alignment / Branding',
+    price: '25,000/-',
+    label: 'PER PROJECT',
+    deliverables: ['Narrative Positioning', 'Platform Strategy', 'Core Messaging'],
+    ctaText: 'Align Content',
+    isPopular: false
+  },
+  {
+    id: 5,
+    title: 'Content Director',
+    price: '50,000/-',
+    label: 'PER PROJECT',
+    deliverables: ['End-to-End Direction', 'Team Orchestration', 'Production Oversight'],
+    ctaText: 'Hire Director',
     isPopular: false
   }
 ];
@@ -51,8 +64,8 @@ export function Services() {
     <section className={styles.services} id="services" ref={ref as React.RefObject<HTMLDivElement>}>
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
-          <h2>What We Build</h2>
-          <p className="text-secondary">Four tiers of engagement. From a focused audit to a full-service content engine.</p>
+          <h2>Pricing & Services</h2>
+          <p className="text-secondary">Transparent project rates. No hidden fees.</p>
         </div>
 
         <div className={styles.grid}>
@@ -62,11 +75,12 @@ export function Services() {
               className={`${styles.tierCard} ${tier.isPopular ? styles.popularCard : ''} ${isVisible ? styles.visible : ''}`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
-              {tier.isPopular && <div className={styles.popularBadge}>HIGH IMPACT</div>}
+              {tier.isPopular && <div className={styles.popularBadge}>RECOMMENDED</div>}
               
               <div className={styles.cardHeader}>
                 <span className="micro-label">{tier.label}</span>
                 <h4>{tier.title}</h4>
+                <div className={styles.price}>{tier.price}</div>
               </div>
               
               <ul className={styles.deliverables}>

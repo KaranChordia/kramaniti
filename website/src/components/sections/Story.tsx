@@ -16,7 +16,7 @@ const epochs = [
     number: '02',
     years: '2020 – 2023',
     title: 'Systems R&D',
-    description: 'A deliberate withdrawal from public content to study the logic underneath. Three years inside quantitative trading, macroeconomic forecasting, and algorithmic market systems — developing the systems-thinking that powers every workflow we build today.',
+    description: 'A deliberate withdrawal from public content to study the logic underneath. Three years deep inside backend systems, data architecture, and algorithmic environments — developing the systems-thinking that powers every workflow we build today.',
     image: '/kramaniti/assets/epoch-2.png'
   },
   {

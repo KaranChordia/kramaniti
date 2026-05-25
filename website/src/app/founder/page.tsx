@@ -35,7 +35,7 @@ export default function FounderPage() {
                   
                   <p>His career began in the commercial videography and digital marketing sectors, where he established himself as a premier media vendor. Under his creative brand, he captured the aggressive expansion of the Indian co-working ecosystem, directing inaugurals for WeWork India and developing visual campaigns for tier-one hospitality names like Hyatt Centric.</p>
                   
-                  <p>As technologies shifted, Karan embarked on a multi-year deep dive into complex algorithmic environments. He spent years mastering macroeconomic forecasting and quantitative trading in high-leverage cryptocurrency markets, developing the technical systems-thinking that would define his next chapter.</p>
+                  <p>As technologies shifted, Karan embarked on a multi-year deep dive into complex algorithmic environments. He spent years mastering backend systems, data architecture, and autonomous logic, developing the technical systems-thinking that would define his next chapter.</p>
                   
                   <p>With the rise of generative artificial intelligence, Karan transitioned this computational rigor into tool-building. As AI Architect at Aimpact Space, he designed custom GPT architectures and became an active contributor to OpenAI developer discussions on knowledge retrieval and automation workflows. Following a successful engagement building internal automation tools and brand assets for Nexocean, Karan launched a productized consultancy via kramaniti.</p>
                   
@@ -46,7 +46,7 @@ export default function FounderPage() {
                   <div className={styles.angleCard}>
                     <span className={styles.angleIcon}>⚖️</span>
                     <h4>The Quantitative Creative</h4>
-                    <p className="text-secondary caption">Bridging risk management and narrative empathy to build systems that are both robust and compelling.</p>
+                    <p className="text-secondary caption">Bridging systems architecture and narrative empathy to build workflows that are both robust and compelling.</p>
                   </div>
                   
                   <div className={styles.angleCard}>
