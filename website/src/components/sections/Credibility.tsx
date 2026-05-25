@@ -40,10 +40,15 @@ export function Credibility() {
 
   return (
     <section className={styles.credibility} id="credibility" ref={ref as React.RefObject<HTMLDivElement>}>
+      <div className={styles.atmosphere} aria-hidden="true">
+        <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Proof</span>
+        <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Trust</span>
+      </div>
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
+          <span className="micro-label">Proof</span>
           <h2>Trusted By</h2>
-          <p className="text-secondary">Verified operational history.</p>
+          <p className="text-secondary">Verified work across media, automation, and internal tooling.</p>
         </div>
 
         <div className={`${styles.carouselWrapper} ${isVisible ? styles.visible : ''}`}>

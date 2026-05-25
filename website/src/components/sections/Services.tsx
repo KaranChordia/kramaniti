@@ -8,47 +8,29 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 const tiers = [
   {
     id: 1,
-    title: 'AI Strategy Consulting',
-    price: '35,000/-',
-    label: 'PER PROJECT',
-    deliverables: ['Strategic Architecture', 'AI Stack Audit', 'Implementation Roadmap'],
-    ctaText: 'Book Consulting',
+    title: 'Diagnose',
+    price: '₹75K - ₹1.5L',
+    label: 'ENTRY AUDIT',
+    deliverables: ['Current workflow audit', 'AI stack map', '1 prototype blueprint'],
+    ctaText: 'Book an Audit',
     isPopular: false
   },
   {
     id: 2,
-    title: 'AI Integration',
-    price: '35,000/-',
-    label: 'PER PROJECT',
-    deliverables: ['Custom AI Agent Build', 'Workflow Automation', 'API Pipeline Integration'],
-    ctaText: 'Scope Integration',
+    title: 'Build',
+    price: '₹3L - ₹6L',
+    label: 'PREMIUM BUILD',
+    deliverables: ['Custom AI agent', 'API / CRM pipeline', 'Training + handoff'],
+    ctaText: 'Scope the Build',
     isPopular: true
   },
   {
     id: 3,
-    title: 'Creative Brand Kit',
-    price: '45,000/-',
-    label: 'PER PROJECT',
-    deliverables: ['Visual Identity System', 'Design Tokens', 'Master Guidelines'],
-    ctaText: 'Discuss Brand Kit',
-    isPopular: false
-  },
-  {
-    id: 4,
-    title: 'Content Alignment / Branding',
-    price: '25,000/-',
-    label: 'PER PROJECT',
-    deliverables: ['Narrative Positioning', 'Platform Strategy', 'Core Messaging'],
-    ctaText: 'Align Content',
-    isPopular: false
-  },
-  {
-    id: 5,
-    title: 'Content Director',
-    price: '50,000/-',
-    label: 'PER PROJECT',
-    deliverables: ['End-to-End Direction', 'Team Orchestration', 'Production Oversight'],
-    ctaText: 'Hire Director',
+    title: 'Run',
+    price: '₹1.2L - ₹2.5L/mo',
+    label: 'ONGOING RETAINER',
+    deliverables: ['Weekly content assets', 'Monthly analytics', 'Pipeline optimization'],
+    ctaText: 'Explore Retainer',
     isPopular: false
   }
 ];
@@ -62,10 +44,15 @@ export function Services() {
 
   return (
     <section className={styles.services} id="services" ref={ref as React.RefObject<HTMLDivElement>}>
+      <div className={styles.atmosphere} aria-hidden="true">
+        <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Offer</span>
+        <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Build</span>
+      </div>
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
-          <h2>Pricing & Services</h2>
-          <p className="text-secondary">Transparent project rates. No hidden fees.</p>
+          <span className="micro-label">Offer Ladder</span>
+          <h2>Three Ways to Work Together</h2>
+          <p className="text-secondary">Start with an audit, move into a build, or retain the system.</p>
         </div>
 
         <div className={styles.grid}>

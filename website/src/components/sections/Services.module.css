@@ -1,12 +1,103 @@
 .services {
   padding: 120px 0;
-  background-color: var(--bg-surface);
+  background-color: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.services::before {
+  content: '';
+  position: absolute;
+  inset: -8% -4%;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(201, 168, 76, 0.08), transparent 30%),
+    radial-gradient(circle at 82% 12%, rgba(255, 255, 255, 0.04), transparent 26%),
+    linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.03) 42%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.services::after {
+  content: '';
+  position: absolute;
+  inset: auto -5% 6% -5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.26), transparent);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.atmosphere::before {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 28%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.34), transparent);
+  opacity: 0.45;
+}
+
+.atmosphere::after {
+  content: '';
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  right: 16%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  opacity: 0.35;
+}
+
+.atmosWord {
+  position: absolute;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(54px, 10vw, 140px);
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.18);
+  text-shadow: 0 0 24px rgba(201, 168, 76, 0.06);
+  opacity: 0.5;
+  user-select: none;
+  white-space: nowrap;
+  animation: wordFloat 10s ease-in-out infinite;
+}
+
+.atmosWordOne {
+  top: 6%;
+  left: 4%;
+}
+
+.atmosWordTwo {
+  bottom: 8%;
+  right: 8%;
+  animation-delay: -4s;
+}
+
+:global(html[data-theme='light']) .atmosWord {
+  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.38);
+  text-shadow: 0 0 18px rgba(201, 168, 76, 0.1);
+  opacity: 0.58;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .header {
@@ -20,6 +111,15 @@
 .header.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.header p {
+  margin: 0.75rem auto 0;
+  max-width: 680px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 18px;
+  line-height: 1.65;
+  text-align: center;
 }
 
 .grid {
@@ -42,7 +142,7 @@
 
 .price {
   font-family: var(--font-outfit), sans-serif;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   color: var(--text-primary);
   margin-top: 12px;
@@ -55,6 +155,11 @@
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease, border-color 300ms ease-in-out;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%),
+    var(--bg-elevated);
+  border-radius: 18px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
 }
 
 .tierCard.visible {
@@ -63,12 +168,14 @@
 }
 
 .tierCard:hover {
-  transform: translateY(-4px); /* Slightly more lift for service cards */
+  transform: translateY(-4px);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
 }
 
 .popularCard {
   border-color: var(--color-burnished-gold);
   border-width: 2px;
+  box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.15), 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
 .popularBadge {
@@ -123,4 +230,20 @@
 
 .tierCta {
   width: 100%;
+}
+
+@keyframes wordFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atmosWord {
+    animation: none !important;
+  }
 }

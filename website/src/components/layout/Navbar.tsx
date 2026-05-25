@@ -25,6 +25,7 @@ export function Navbar() {
               <Link href="/founder" className={styles.navLink}>Founder</Link>
               <Link href="/#story" className={styles.navLink}>Story</Link>
               <Link href="/#services" className={styles.navLink}>Services</Link>
+              <Link href="/#credibility" className={styles.navLink}>Proof</Link>
               <Link href="/#workflows" className={styles.navLink}>Workflows</Link>
             </nav>
 
@@ -66,6 +67,7 @@ export function Navbar() {
             <Link href="/founder" className={styles.mobileLink} onClick={closeMobileMenu}>Founder</Link>
             <Link href="/#story" className={styles.mobileLink} onClick={closeMobileMenu}>Story</Link>
             <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
+            <Link href="/#credibility" className={styles.mobileLink} onClick={closeMobileMenu}>Proof</Link>
             <Link href="/#workflows" className={styles.mobileLink} onClick={closeMobileMenu}>Workflows</Link>
             <div style={{ marginTop: '24px' }}>
               <Button variant="primary" onClick={() => {

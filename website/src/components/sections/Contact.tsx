@@ -20,10 +20,15 @@ export function Contact() {
 
   return (
     <section className={styles.contact} id="contact" ref={ref as React.RefObject<HTMLDivElement>}>
+      <div className={styles.atmosphere} aria-hidden="true">
+        <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Connect</span>
+        <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Start</span>
+      </div>
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
-          <h2>Let's Build Something</h2>
-          <p className="text-secondary">Tell us about your project. We respond within 24 hours.</p>
+          <span className="micro-label">Contact</span>
+          <h2>Let&apos;s Build Something</h2>
+          <p className="text-secondary">Start with an audit, a build, or an ongoing retainer. We respond within 24 hours.</p>
         </div>
 
         <div className={styles.grid}>
@@ -35,17 +40,17 @@ export function Contact() {
               <Select label="Budget Range" options={budgetOptions} />
               <Textarea label="Message" placeholder="Tell us briefly what you're looking for" />
               <Button type="submit" variant="primary" className={styles.submitBtn}>
-                Send Project Brief
+                Send the Brief
               </Button>
             </form>
           </div>
 
           <div className={`${styles.calendlyColumn} ${isVisible ? styles.visible : ''}`}>
             <div className={styles.calendlyPlaceholder}>
-              <h3>Book a Discovery Call</h3>
-              <p className="text-secondary caption">Select a time that works for you. (Calendly embed placeholder)</p>
+              <h3>Prefer a direct call?</h3>
+              <p className="text-secondary caption">Book time to review the audit, scope the build, or talk about a retainer.</p>
               <Button variant="secondary" className={styles.placeholderBtn}>
-                Open Calendly (Placeholder)
+                Open Calendly
               </Button>
             </div>
           </div>

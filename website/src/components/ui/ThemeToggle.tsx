@@ -3,24 +3,32 @@ import React, { useEffect, useState } from 'react';
 import styles from './ThemeToggle.module.css';
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window === 'undefined') {
+      return 'dark';
+    }
+
+    const storedTheme = localStorage.getItem('kramaniti-theme') as 'light' | 'dark' | null;
+    if (storedTheme) {
+      return storedTheme;
+    }
+
+    const currentTheme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark' | null;
+    if (currentTheme) {
+      return currentTheme;
+    }
+
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
 
   useEffect(() => {
-    // Read from data-theme which is set by the script in layout
-    const currentTheme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark';
-    if (currentTheme) {
-      setTheme(currentTheme);
-    } else {
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(isDark ? 'dark' : 'light');
-    }
-  }, []);
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('kramaniti-theme', theme);
+  }, [theme]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('kramaniti-theme', newTheme);
   };
 
   if (!theme) return null;

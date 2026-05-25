@@ -1,17 +1,108 @@
 .story {
   padding: 120px 0;
   background-color: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.story::before {
+  content: '';
+  position: absolute;
+  inset: -8% -4%;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(201, 168, 76, 0.08), transparent 28%),
+    radial-gradient(circle at 88% 74%, rgba(255, 255, 255, 0.035), transparent 22%),
+    linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.03) 48%, transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.story::after {
+  content: '';
+  position: absolute;
+  inset: auto -5% 8% -5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.22), transparent);
+  opacity: 0.48;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.atmosphere::before {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 32%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.32), transparent);
+  opacity: 0.4;
+}
+
+.atmosphere::after {
+  content: '';
+  position: absolute;
+  top: 8%;
+  bottom: 12%;
+  right: 14%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  opacity: 0.3;
+}
+
+.atmosWord {
+  position: absolute;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(56px, 11vw, 150px);
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.18);
+  text-shadow: 0 0 24px rgba(201, 168, 76, 0.06);
+  opacity: 0.4;
+  user-select: none;
+  white-space: nowrap;
+  animation: wordFloat 12s ease-in-out infinite;
+}
+
+.atmosWordOne {
+  top: 10%;
+  left: 6%;
+}
+
+.atmosWordTwo {
+  bottom: 10%;
+  right: 8%;
+  animation-delay: -5s;
+}
+
+:global(html[data-theme='light']) .atmosWord {
+  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.36);
+  text-shadow: 0 0 18px rgba(201, 168, 76, 0.1);
+  opacity: 0.5;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 80px;
+  margin-bottom: 72px;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease;
@@ -22,117 +113,314 @@
   transform: translateY(0);
 }
 
-.timelineWrapper {
+.header p {
+  margin: 0.75rem auto 0;
+  max-width: 680px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 18px;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.legendPill {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  border: 1px solid rgba(201, 168, 76, 0.28);
+  background: rgba(201, 168, 76, 0.08);
+  border-radius: 999px;
+  padding: 8px 12px;
+}
+
+.legendArrow {
+  color: var(--color-burnished-gold);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.processDiagram {
   position: relative;
-  padding-top: 40px; /* Space for the timeline node */
 }
 
-.timelineLine {
+.rail {
   position: absolute;
-  top: 16px;
-  left: 0;
-  width: 0;
-  height: 4px;
-  background: var(--gradient-gold-horizon);
-  border-radius: 2px;
-  transition: width 1000ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  top: 48px;
+  left: 18px;
+  right: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(201, 168, 76, 0.15), rgba(201, 168, 76, 0.9), rgba(201, 168, 76, 0.15));
+  transform: scaleX(0.15);
+  transform-origin: left center;
+  opacity: 0.35;
+  transition: transform 1000ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 600ms ease;
+  overflow: hidden;
 }
 
-.timelineLine.visibleLine {
-  width: 100%;
+.railVisible {
+  transform: scaleX(1);
+  opacity: 1;
 }
 
-.epochsGrid {
+.railVisible::after {
+  content: '';
+  position: absolute;
+  inset: -1px 0 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+  animation: railSweep 2.8s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.stageGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 48px;
+  gap: 18px;
 }
 
-@media (min-width: 768px) {
-  .epochsGrid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+@media (min-width: 900px) {
+  .stageGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
   }
 }
 
-.epochColumn {
+.stage {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  padding: 28px 22px 22px;
+  border-radius: 18px;
+  border: 1px solid var(--border-subtle);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%),
+    var(--bg-elevated);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 600ms ease, transform 600ms ease;
+  transform: translateY(18px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 300ms ease,
+    box-shadow 300ms ease;
 }
 
-.epochColumn.visible {
+.stage.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.epochNode {
-  position: absolute;
-  top: -40px; /* Aligns with the timeline line */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 36px;
-  height: 36px;
-  background: var(--bg-primary);
-  border: 2px solid var(--color-burnished-gold);
-  border-radius: 50%;
+.stage.visible:nth-child(1) {
+  animation: stageLift 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.stage.visible:nth-child(2) {
+  animation: stageLift 700ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+}
+
+.stage.visible:nth-child(3) {
+  animation: stageLift 700ms cubic-bezier(0.22, 1, 0.36, 1) 240ms both;
+}
+
+.stage:hover {
+  border-color: rgba(201, 168, 76, 0.35);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
+}
+
+.stageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.stageMarker {
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(201, 168, 76, 0.16), rgba(201, 168, 76, 0.04));
+  border: 1px solid rgba(201, 168, 76, 0.6);
+  animation: markerPulse 4s ease-in-out infinite;
 }
 
-@media (min-width: 768px) {
-  .epochNode {
-    left: 24px;
-    transform: none;
-  }
-}
-
-.epochNumber {
+.stageNumber {
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: 14px;
   color: var(--color-burnished-gold);
-  font-weight: 600;
+  font-weight: 700;
 }
 
-.epochCard {
-  margin-top: 24px;
-  height: 100%;
+.iconBadge {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at top, rgba(201, 168, 76, 0.15), transparent 70%),
+    rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  margin-bottom: 18px;
+  transform: translateY(0);
+  transition: transform 300ms ease, border-color 300ms ease, background 300ms ease;
+  animation: iconFloat 5.5s ease-in-out infinite;
 }
 
-.epochImagePlaceholder {
-  height: 160px;
-  background-color: var(--bg-surface);
-  border-radius: 8px;
-  margin-bottom: 20px;
-  overflow: hidden;
-  position: relative;
+.stage:hover .iconBadge {
+  transform: translateY(-2px);
+  border-color: rgba(201, 168, 76, 0.32);
 }
 
-.abstractVisual {
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    var(--color-smoke) 10px,
-    var(--color-smoke) 11px
-  );
-  opacity: 0.3;
+.iconBadge svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: var(--color-burnished-gold);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.epochMeta {
+.stage h4 {
+  margin: 0 0 10px;
+}
+
+.stage p {
+  margin: 0;
+}
+
+.flowChip {
+  display: inline-flex;
+  align-self: flex-start;
   margin-bottom: 12px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 999px;
+  padding: 6px 10px;
 }
 
-.epochMeta h4 {
-  margin-bottom: 0;
-  margin-top: 4px;
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.tag {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 7px 10px;
+}
+
+.metricRail {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  margin-top: 22px;
+  min-height: 28px;
+}
+
+.metricBar,
+.metricBarShort {
+  display: block;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(201, 168, 76, 0.95), rgba(201, 168, 76, 0.38));
+}
+
+.metricBar {
+  width: 100%;
+  height: 8px;
+}
+
+.metricBarShort {
+  width: 55%;
+  height: 8px;
+}
+
+@keyframes railSweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@keyframes markerPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(201, 168, 76, 0);
+  }
+}
+
+@keyframes iconFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes stageLift {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .rail,
+  .stage,
+  .stageMarker,
+  .iconBadge,
+  .railVisible::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@keyframes wordFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
 }

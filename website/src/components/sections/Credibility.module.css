@@ -2,12 +2,102 @@
   padding: 120px 0;
   background-color: var(--bg-primary);
   overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+.credibility::before {
+  content: '';
+  position: absolute;
+  inset: -6% -4%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(201, 168, 76, 0.08), transparent 28%),
+    radial-gradient(circle at 88% 70%, rgba(255, 255, 255, 0.04), transparent 24%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.025) 50%, transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.credibility::after {
+  content: '';
+  position: absolute;
+  inset: auto -5% 8% -5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.24), transparent);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.atmosphere::before {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 12%;
+  top: 24%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.34), transparent);
+  opacity: 0.4;
+}
+
+.atmosphere::after {
+  content: '';
+  position: absolute;
+  top: 8%;
+  bottom: 10%;
+  left: 18%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  opacity: 0.3;
+}
+
+.atmosWord {
+  position: absolute;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(54px, 11vw, 150px);
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.18);
+  text-shadow: 0 0 24px rgba(201, 168, 76, 0.06);
+  opacity: 0.42;
+  user-select: none;
+  white-space: nowrap;
+  animation: wordFloat 12s ease-in-out infinite;
+}
+
+.atmosWordOne {
+  top: 8%;
+  right: 5%;
+}
+
+.atmosWordTwo {
+  left: 6%;
+  bottom: 10%;
+  animation-delay: -5s;
+}
+
+:global(html[data-theme='light']) .atmosWord {
+  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.36);
+  text-shadow: 0 0 18px rgba(201, 168, 76, 0.1);
+  opacity: 0.5;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .header {
@@ -21,6 +111,15 @@
 .header.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.header p {
+  margin: 0.75rem auto 0;
+  max-width: 680px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 18px;
+  line-height: 1.65;
+  text-align: center;
 }
 
 .carouselWrapper {
@@ -56,6 +155,18 @@
   max-width: 400px;
   flex-shrink: 0;
   scroll-snap-align: start;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%),
+    var(--bg-elevated);
+  border-radius: 18px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+  transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+}
+
+.caseCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
+  border-color: rgba(201, 168, 76, 0.28);
 }
 
 .caseHeader {
@@ -112,9 +223,11 @@
 
 .numbersStrip {
   margin-top: 80px;
-  border-top: 1px solid var(--color-smoke);
-  border-bottom: 1px solid var(--color-smoke);
-  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  background:
+    radial-gradient(circle at top, rgba(201, 168, 76, 0.06), transparent 50%),
+    var(--bg-surface);
   padding: 40px 0;
   opacity: 0;
   transition: opacity 800ms ease 400ms;
@@ -169,7 +282,23 @@
 }
 
 @media (min-width: 768px) {
-  .numberDivider {
+.numberDivider {
     display: block;
+  }
+}
+
+@keyframes wordFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atmosWord {
+    animation: none !important;
   }
 }

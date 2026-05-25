@@ -1,13 +1,104 @@
 .contact {
   padding: 120px 0;
   background-color: var(--bg-primary);
-  border-bottom: 1px solid var(--border-subtle); /* Separates from footer */
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.contact::before {
+  content: '';
+  position: absolute;
+  inset: -8% -4%;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(201, 168, 76, 0.08), transparent 28%),
+    radial-gradient(circle at 86% 66%, rgba(255, 255, 255, 0.04), transparent 24%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.02) 50%, transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.contact::after {
+  content: '';
+  position: absolute;
+  inset: auto -5% 8% -5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.22), transparent);
+  opacity: 0.48;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.atmosphere::before {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 26%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.32), transparent);
+  opacity: 0.4;
+}
+
+.atmosphere::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 16%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  opacity: 0.3;
+}
+
+.atmosWord {
+  position: absolute;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(56px, 11vw, 150px);
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.18);
+  text-shadow: 0 0 24px rgba(201, 168, 76, 0.06);
+  opacity: 0.4;
+  user-select: none;
+  white-space: nowrap;
+  animation: wordFloat 12s ease-in-out infinite;
+}
+
+.atmosWordOne {
+  top: 10%;
+  right: 6%;
+}
+
+.atmosWordTwo {
+  left: 7%;
+  bottom: 8%;
+  animation-delay: -5s;
+}
+
+:global(html[data-theme='light']) .atmosWord {
+  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.36);
+  text-shadow: 0 0 18px rgba(201, 168, 76, 0.1);
+  opacity: 0.52;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .header {
@@ -21,6 +112,15 @@
 .header.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.header p {
+  margin: 0.75rem auto 0;
+  max-width: 680px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 18px;
+  line-height: 1.65;
+  text-align: center;
 }
 
 .grid {
@@ -51,11 +151,13 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  background-color: var(--bg-elevated);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%),
+    var(--bg-elevated);
   padding: 32px;
-  border-radius: 12px;
+  border-radius: 18px;
   border: 1px solid var(--border-subtle);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.12);
 }
 
 .submitBtn {
@@ -82,12 +184,31 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-color: var(--bg-elevated);
+  background:
+    radial-gradient(circle at top, rgba(201, 168, 76, 0.06), transparent 50%),
+    var(--bg-elevated);
   padding: 48px 32px;
-  border-radius: 12px;
+  border-radius: 18px;
   border: 1px dashed var(--border-subtle);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.12);
 }
 
 .placeholderBtn {
   margin-top: 24px;
+}
+
+@keyframes wordFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atmosWord {
+    animation: none !important;
+  }
 }

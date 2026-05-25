@@ -6,6 +6,7 @@
 
 **Related Files:**
 *   [positioning_analysis.md](file:///Users/k.c/kramaniti/03_brand_strategy/positioning/positioning_analysis.md) — Market positioning and differentiators
+*   [visual_system_palette.md](file:///Users/k.c/kramaniti/03_brand_strategy/positioning/visual_system_palette.md) — Reusable website palette, motion system, and section language
 *   [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/narrative/brand_narrative.md) — Core storytelling copy
 *   [company_name_ideas.md](file:///Users/k.c/kramaniti/03_brand_strategy/naming/company_name_ideas.md) — Naming etymology and strategic rationale
 *   [domain_and_handles_registry.md](file:///Users/k.c/kramaniti/03_brand_strategy/naming/domain_and_handles_registry.md) — Digital asset registry
