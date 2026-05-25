@@ -1,21 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Outfit, Sora, JetBrains_Mono } from "next/font/google";
+import { Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 const outfit = Outfit({
   variable: "--font-outfit",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const sora = Sora({
-  variable: "--font-sora",
   subsets: ["latin"],
   display: "swap",
 });
@@ -72,7 +60,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${outfit.variable} ${sora.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${outfit.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
       </body>

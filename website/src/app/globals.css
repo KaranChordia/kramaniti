@@ -8,6 +8,10 @@
  */
 
 :root {
+  --font-inter: var(--font-outfit);
+  --font-sora: var(--font-outfit);
+  --font-geist-sans: var(--font-outfit);
+
   /* Colors - Light Theme Default Variables (though we default to dark below) */
   --color-obsidian: #0A0A0F;
   --color-graphite: #141418;
@@ -89,7 +93,7 @@
 html, body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
   line-height: 1.7;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
@@ -113,7 +117,7 @@ h1, h2, h3 {
 }
 
 h4, h5, h6 {
-  font-family: var(--font-sora), system-ui, sans-serif;
+  font-family: var(--font-outfit), system-ui, sans-serif;
 }
 
 h1 {
