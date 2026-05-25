@@ -12,16 +12,16 @@ export default function FounderPage() {
             <div className={styles.grid}>
               <div className={styles.imageColumn}>
                 <div className={styles.imageWrapper}>
-                  <img src="/assets/founder_real.jpg" alt="Karan Chordia - AI Architect" className={styles.portrait} />
+                  <img src="/kramaniti/assets/founder_real.jpg" alt="Karan Chordia - AI Architect" className={styles.portrait} />
                   <div className={styles.glassLabel}>Karan Chordia — AI Architect</div>
                 </div>
 
                 <div className={styles.gallery}>
                   <div className={styles.galleryImageWrapper}>
-                    <img src="/assets/founder_cinematic_1.png" alt="Karan in server room" className={styles.galleryImage} />
+                    <img src="/kramaniti/assets/founder_cinematic_1.png" alt="Karan in server room" className={styles.galleryImage} />
                   </div>
                   <div className={styles.galleryImageWrapper}>
-                    <img src="/assets/founder_cinematic_2.png" alt="Karan at desk" className={styles.galleryImage} />
+                    <img src="/kramaniti/assets/founder_cinematic_2.png" alt="Karan at desk" className={styles.galleryImage} />
                   </div>
                 </div>
               </div>

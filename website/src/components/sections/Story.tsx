@@ -10,21 +10,21 @@ const epochs = [
     years: '2017 – 2019',
     title: 'Spatial Capture',
     description: 'Directing commercial cinematography and drone mapping for the rise of WeWork India and Hyatt Centric. Built distribution to 1,000+ YouTube subscribers and 15K Instagram followers documenting Bengaluru\'s co-working boom.',
-    image: '/assets/epoch-1.png'
+    image: '/kramaniti/assets/epoch-1.png'
   },
   {
     number: '02',
     years: '2020 – 2023',
     title: 'Systems R&D',
     description: 'A deliberate withdrawal from public content to study the logic underneath. Three years inside quantitative trading, macroeconomic forecasting, and algorithmic market systems — developing the systems-thinking that powers every workflow we build today.',
-    image: '/assets/epoch-2.png'
+    image: '/kramaniti/assets/epoch-2.png'
   },
   {
     number: '03',
     years: '2023 – Present',
     title: 'Autonomous Architecture',
     description: 'Returned as an AI Architect — building custom GPTs, autonomous agent systems, and automated content engines for scaling startups and enterprise teams. From capturing reality with cameras to architecting it with code.',
-    image: '/assets/epoch-3.png'
+    image: '/kramaniti/assets/epoch-3.png'
   }
 ];
 
