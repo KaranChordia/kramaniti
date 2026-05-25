@@ -7,8 +7,8 @@ export function Footer() {
       <div className={styles.container}>
         <div className={styles.brandGroup}>
           <div className={styles.logoGroup}>
-            <span className={styles.logoK}>K</span>
-            <span className={styles.logoRest}>RAMANITI</span>
+            <span className={styles.logoK}>KRAMA</span>
+            <span className={styles.logoRest}>NITI</span>
           </div>
           <p className={styles.tagline}>The Logic of Sequence</p>
         </div>

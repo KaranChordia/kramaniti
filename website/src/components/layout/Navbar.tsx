@@ -17,8 +17,8 @@ export function Navbar() {
         <header className={styles.header}>
           <div className={styles.container}>
             <Link href="/" className={styles.logoGroup} style={{ textDecoration: 'none' }} onClick={closeMobileMenu}>
-              <span className={styles.logoK}>K</span>
-              <span className={styles.logoRest}>RAMANITI</span>
+              <span className={styles.logoK}>KRAMA</span>
+              <span className={styles.logoRest}>NITI</span>
             </Link>
             
             <nav className={styles.desktopNav}>
