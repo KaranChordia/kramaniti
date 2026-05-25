@@ -1,6 +1,7 @@
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
 import { Hero } from '../components/sections/Hero';
+import { Clients } from '../components/sections/Clients';
 import { Story } from '../components/sections/Story';
 import { Services } from '../components/sections/Services';
 import { Credibility } from '../components/sections/Credibility';
@@ -13,6 +14,7 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <Clients />
         <Story />
         <Services />
         <Credibility />
