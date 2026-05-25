@@ -21,8 +21,8 @@ export function Workflows() {
               <span className={styles.nodeIcon}>01</span>
             </div>
             <Card className={styles.nodeCard}>
-              <h4>Input & Vision</h4>
-              <p className="text-secondary caption">Capturing the raw data—whether through cinematic interviews, voice notes, or API streams.</p>
+              <h4>Data Ingestion</h4>
+              <p className="text-secondary caption">Make.com webhooks capture raw input from Calendly, Typeform, or custom API streams instantly.</p>
             </Card>
           </div>
 
@@ -34,8 +34,8 @@ export function Workflows() {
             </div>
             <Card className={`${styles.nodeCard} ${styles.primaryCard}`}>
               <div className={styles.glowOverlay}></div>
-              <h4>Agentic Architecture</h4>
-              <p className="text-secondary caption">Custom AI models process, route, and transform inputs based on strict computational logic.</p>
+              <h4>Claude Processing</h4>
+              <p className="text-secondary caption">Anthropic's Claude 3 intelligently parses the payload, restructuring narratives and extracting actionable logic.</p>
             </Card>
           </div>
 
@@ -46,8 +46,8 @@ export function Workflows() {
               <span className={styles.nodeIcon}>03</span>
             </div>
             <Card className={styles.nodeCard}>
-              <h4>Output & Scale</h4>
-              <p className="text-secondary caption">Deploying polished assets across distribution channels or internal ops dashboards.</p>
+              <h4>Autonomous Delivery</h4>
+              <p className="text-secondary caption">The finalized assets are seamlessly distributed to your CRM, Webflow CMS, or internal Slack dashboards.</p>
             </Card>
           </div>
         </div>
