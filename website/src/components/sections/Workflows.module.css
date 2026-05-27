@@ -368,3 +368,15 @@
     animation: none !important;
   }
 }
+
+@media (max-width: 768px) {
+  .workflows {
+    padding: 80px 0;
+  }
+  .header {
+    margin-bottom: 48px;
+  }
+  .flowSummary {
+    padding: 16px;
+  }
+}

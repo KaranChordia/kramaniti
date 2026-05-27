@@ -398,3 +398,62 @@
     filter: none;
   }
 }
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 120px 0 48px;
+  }
+  .content {
+    gap: 16px;
+  }
+  .eyebrow {
+    font-size: 9px;
+    padding: 6px 10px;
+    letter-spacing: 0.12em;
+    text-align: center;
+  }
+  .headline {
+    font-size: clamp(36px, 10vw, 48px);
+    line-height: 1.1;
+  }
+  .subheading {
+    font-size: 15px;
+    padding: 0 12px;
+  }
+  .motifStrategy {
+    top: 12%;
+    right: -5%;
+    font-size: clamp(40px, 12vw, 64px);
+    opacity: 0.25;
+  }
+  .motifAutomation {
+    top: 65%;
+    left: -10%;
+    font-size: clamp(40px, 12vw, 64px);
+    opacity: 0.25;
+  }
+  .motifContent {
+    bottom: 8%;
+    right: -5%;
+    font-size: clamp(40px, 12vw, 64px);
+    opacity: 0.25;
+  }
+  .motifRingOne {
+    top: 5%;
+    right: -30%;
+    opacity: 0.4;
+  }
+  .motifRingTwo {
+    bottom: 10%;
+    left: -20%;
+    opacity: 0.4;
+  }
+  .motifLineOne {
+    left: 4%;
+    opacity: 0.4;
+  }
+  .motifLineTwo {
+    right: 4%;
+    opacity: 0.4;
+  }
+}

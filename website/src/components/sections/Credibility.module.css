@@ -321,3 +321,12 @@
     animation: none !important;
   }
 }
+
+@media (max-width: 768px) {
+  .credibility {
+    padding: 80px 0;
+  }
+  .header {
+    margin-bottom: 48px;
+  }
+}

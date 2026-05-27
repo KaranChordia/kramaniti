@@ -443,3 +443,15 @@
     transform: translate3d(0, -10px, 0);
   }
 }
+
+@media (max-width: 768px) {
+  .story {
+    padding: 80px 0;
+  }
+  .header {
+    margin-bottom: 48px;
+  }
+  .stage {
+    padding: 24px 20px 20px;
+  }
+}

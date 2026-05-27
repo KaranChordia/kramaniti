@@ -3,7 +3,12 @@ import Link from 'next/link';
 import { Navbar } from '../../../components/layout/Navbar';
 import { Footer } from '../../../components/layout/Footer';
 import { insights } from '../../../data/insights';
-import { TechStackInfographic } from '../../../components/ui/Infographics';
+import { 
+  TechStackInfographic, 
+  DisconnectedOpsInfographic, 
+  AgenticWorkflowsInfographic, 
+  CinematicStandardInfographic 
+} from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
 export function generateStaticParams() {
@@ -47,6 +52,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               {post.content.map((paragraph, index) => {
                 if (paragraph === '[infographic:tech-stack]') {
                   return <TechStackInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:disconnected-ops]') {
+                  return <DisconnectedOpsInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:agentic-workflows]') {
+                  return <AgenticWorkflowsInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:cinematic-standard]') {
+                  return <CinematicStandardInfographic key={index} />;
                 }
                 
                 // Parse gold highlights
