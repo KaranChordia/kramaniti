@@ -98,16 +98,47 @@
   font-weight: 700;
   letter-spacing: -0.06em;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.22);
-  text-shadow: 0 0 26px rgba(201, 168, 76, 0.08);
-  opacity: 0.5;
+  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.35);
+  text-shadow: 0 0 26px rgba(201, 168, 76, 0.12);
+  opacity: 0.7;
   user-select: none;
   white-space: nowrap;
 }
 
+.motif::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.65);
+  text-shadow: 0 0 8px rgba(201, 168, 76, 0.35);
+  
+  -webkit-mask-image: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(0,0,0,0.2) 40%,
+    rgba(0,0,0,0.85) 50%,
+    rgba(0,0,0,0.2) 60%,
+    transparent 80%
+  );
+  -webkit-mask-size: 200% 100%;
+  animation: goldShimmer 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes goldShimmer {
+  0% { -webkit-mask-position: 200% 0; }
+  100% { -webkit-mask-position: -200% 0; }
+}
+
 :global(html[data-theme='light']) .motif {
-  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.12);
-  text-shadow: 0 0 20px rgba(0, 0, 0, 0.04);
+  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+}
+
+:global(html[data-theme='light']) .motif::before {
+  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.65);
 }
 
 .motifStrategy {
@@ -164,9 +195,18 @@
 
 .motifLine {
   position: absolute;
-  background: linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.45), transparent);
+  background-color: rgba(201, 168, 76, 0.15);
+  background-image: linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.8), rgba(255, 255, 255, 0.9), rgba(201, 168, 76, 0.8), transparent);
+  background-size: 100% 300px;
+  background-repeat: no-repeat;
   border-radius: 999px;
-  opacity: 0.65;
+  opacity: 0.85;
+  animation: flowVerticalLine 4s linear infinite;
+}
+
+@keyframes flowVerticalLine {
+  0% { background-position: 0 -300px; }
+  100% { background-position: 0 calc(100% + 300px); }
 }
 
 .motifLineOne {

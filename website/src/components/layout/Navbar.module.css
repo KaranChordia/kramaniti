@@ -13,9 +13,9 @@
 .header {
   width: 100%;
   max-width: 1000px;
-  background-color: rgba(20, 20, 24, 0.6);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background-color: rgba(20, 20, 24, 0.85);
+  backdrop-filter: blur(48px);
+  -webkit-backdrop-filter: blur(48px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 9999px; /* Pill shape */
   pointer-events: auto;
@@ -25,7 +25,7 @@
 
 /* Light mode specific override */
 :global(html[data-theme='light']) .header {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
 }

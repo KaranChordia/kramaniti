@@ -43,9 +43,9 @@ export function Hero() {
         <div className={`${styles.glow} ${styles.glowRight}`}></div>
         <div className={styles.scanline}></div>
         <div className={styles.motifs}>
-          <span className={`${styles.motif} ${styles.motifStrategy}`}>Strategy</span>
-          <span className={`${styles.motif} ${styles.motifAutomation}`}>Automation</span>
-          <span className={`${styles.motif} ${styles.motifContent}`}>Content</span>
+          <span className={`${styles.motif} ${styles.motifStrategy}`} data-text="Strategy">Strategy</span>
+          <span className={`${styles.motif} ${styles.motifAutomation}`} data-text="Automation">Automation</span>
+          <span className={`${styles.motif} ${styles.motifContent}`} data-text="Content">Content</span>
           <span className={`${styles.motifRing} ${styles.motifRingOne}`}></span>
           <span className={`${styles.motifRing} ${styles.motifRingTwo}`}></span>
           <span className={`${styles.motifLine} ${styles.motifLineOne}`}></span>

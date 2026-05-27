@@ -91,8 +91,12 @@
   right: 8%;
   top: 28%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.34), transparent);
-  opacity: 0.45;
+  background-color: rgba(201, 168, 76, 0.15);
+  background-image: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.8), rgba(255, 255, 255, 0.9), rgba(201, 168, 76, 0.8), transparent);
+  background-size: 300px 100%;
+  background-repeat: no-repeat;
+  animation: flowHorizontal 6s linear infinite;
+  opacity: 0.6;
 }
 
 .atmosphere::after {
@@ -102,8 +106,13 @@
   bottom: 10%;
   right: 14%;
   width: 1px;
-  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.12), transparent);
-  opacity: 0.3;
+  background-color: rgba(255, 255, 255, 0.05);
+  background-image: linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.6), rgba(255, 255, 255, 0.9), rgba(201, 168, 76, 0.6), transparent);
+  background-size: 100% 300px;
+  background-repeat: no-repeat;
+  animation: flowVertical 7s linear infinite;
+  animation-delay: -3s;
+  opacity: 0.5;
 }
 
 .atmosWord {
@@ -114,29 +123,29 @@
   letter-spacing: -0.08em;
   line-height: 0.9;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.18);
+  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.25);
   text-shadow: 0 0 24px rgba(201, 168, 76, 0.06);
-  opacity: 0.42;
+  opacity: 0.5;
   user-select: none;
   white-space: nowrap;
   animation: wordFloat 12s ease-in-out infinite;
 }
 
 .atmosWordOne {
-  top: 8%;
-  left: 4%;
+  top: 18%;
+  left: -2%;
 }
 
 .atmosWordTwo {
-  bottom: 8%;
-  right: 8%;
+  bottom: 22%;
+  right: -2%;
   animation-delay: -4s;
 }
 
 :global(html[data-theme='light']) .atmosWord {
-  -webkit-text-stroke: 1px rgba(201, 168, 76, 0.34);
-  text-shadow: 0 0 18px rgba(201, 168, 76, 0.1);
-  opacity: 0.52;
+  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.6);
+  text-shadow: 0 0 18px rgba(201, 168, 76, 0.2);
+  opacity: 0.7;
 }
 
 .heroIntro {
@@ -599,13 +608,13 @@
   }
 
   .atmosWordOne {
-    top: 6%;
-    left: 2%;
+    top: 10%;
+    left: 0%;
   }
 
   .atmosWordTwo {
-    right: 2%;
-    bottom: 6%;
+    right: 0%;
+    bottom: 12%;
   }
 
   .heroGrid {
