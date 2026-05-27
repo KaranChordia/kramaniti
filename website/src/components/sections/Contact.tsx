@@ -27,8 +27,8 @@ export function Contact() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Contact</span>
-          <h2>Let&apos;s Build Something</h2>
-          <p className="text-secondary">Start with an audit, a build, or an ongoing retainer. We respond within 24 hours.</p>
+          <h2>Let&apos;s Build the Pipeline</h2>
+          <p className="text-secondary">Reach out to align your strategy, systems, and content under one roof. We respond within 24 hours.</p>
         </div>
 
         <div className={styles.grid}>

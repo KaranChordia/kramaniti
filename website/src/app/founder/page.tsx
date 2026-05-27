@@ -5,22 +5,22 @@ import styles from './Founder.module.css';
 
 const timeline = [
   {
-    year: '2017 - 2019',
-    title: 'Spatial capture',
-    copy: 'Built commercial media for WeWork India and Hyatt Centric while the Indian co-working market was expanding quickly.',
-    tags: ['Commercial media', 'Drone mapping', 'Visual systems']
+    year: 'Phase One',
+    title: 'Deep Strategy',
+    copy: 'Laying the true foundation for AI implementation by diving deep into the core vision and operations.',
+    tags: ['Brand Audit', 'AI Readiness', 'Vision Mapping']
   },
   {
-    year: '2020 - 2023',
-    title: 'Systems R&D',
-    copy: 'Used the gap as an incubation period to study logic, automation, and the structure behind repeatable digital work.',
-    tags: ['Process study', 'Automation', 'System logic']
+    year: 'Phase Two',
+    title: 'Agentic Infrastructure',
+    copy: 'Engineering custom workflows, agentic tools, and automated systems to seamlessly enhance daily operations.',
+    tags: ['Custom Workflows', 'Agentic Tools', 'System logic']
   },
   {
-    year: '2023 - Present',
-    title: 'Autonomous architecture',
-    copy: 'Now building AI workflows, custom agents, and content engines for founders and teams that need sharper delivery.',
-    tags: ['AI workflows', 'Custom agents', 'Delivery systems']
+    year: 'Phase Three',
+    title: 'Cinematic Content',
+    copy: 'Applying rigorous design thinking to the system\'s raw output to craft premium content that never feels like AI slop.',
+    tags: ['Design Thinking', 'High-End Production', 'Authenticity']
   }
 ];
 
@@ -44,16 +44,16 @@ const proofPoints = [
 
 const principles = [
   {
-    title: 'Quantitative creative',
-    copy: 'Use systems thinking to make creative output more repeatable, measurable, and commercially useful.'
+    title: 'A Single Pipeline',
+    copy: 'Unifying strategy, operational tech, and final creative output under one roof to ensure a totally coherent digital presence.'
   },
   {
-    title: 'Spatial transition',
-    copy: 'Move from physical-space capture to digital-space architecture without losing narrative quality.'
+    title: 'Agentic Leverage',
+    copy: 'Deploying custom AI systems to handle operational scale without ever losing the human touch or authentic voice.'
   },
   {
-    title: 'Editorial precision',
-    copy: 'Keep the work premium, direct, and evidence-led instead of generic or overdesigned.'
+    title: 'Cinematic Standard',
+    copy: 'Refusing to settle for generic automated output. Every asset is held to the highest standard of rigorous design thinking.'
   }
 ];
 
@@ -73,14 +73,14 @@ export default function FounderPage() {
           <div className={styles.container}>
             <div className={styles.heroIntro}>
               <span className={styles.eyebrow}>Founder Profile</span>
-              <h1>The Logic of Sequence</h1>
+              <h1>The Architect of the Pipeline.</h1>
               <p className={styles.lead}>
-                Karan Chordia builds from the intersection of cinematic capture, algorithmic systems, and AI delivery.
+                Karan Chordia builds from the intersection of deep strategy, algorithmic systems, and cinematic storytelling.
               </p>
               <div className={styles.heroPills}>
-                <span className={styles.heroPill}>Commercial media</span>
-                <span className={styles.heroPill}>Systems R&D</span>
-                <span className={styles.heroPill}>AI architecture</span>
+                <span className={styles.heroPill}>Strategy</span>
+                <span className={styles.heroPill}>Infrastructure</span>
+                <span className={styles.heroPill}>Cinematic Content</span>
               </div>
             </div>
 
@@ -114,7 +114,7 @@ export default function FounderPage() {
                         className={styles.galleryImage}
                       />
                     </div>
-                    <span className={styles.galleryTag}>Capture</span>
+                    <span className={styles.galleryTag}>Strategy</span>
                   </div>
 
                   <div className={styles.galleryCard}>
@@ -127,7 +127,7 @@ export default function FounderPage() {
                         className={styles.galleryImage}
                       />
                     </div>
-                    <span className={styles.galleryTag}>Build</span>
+                    <span className={styles.galleryTag}>Systems</span>
                   </div>
                 </div>
               </div>
@@ -135,16 +135,16 @@ export default function FounderPage() {
               <div className={styles.contentColumn}>
                 <article className={styles.storyCard}>
                   <span className="micro-label">Background</span>
-                  <h2>From spatial capture to computational systems.</h2>
+                  <h2>Bridging strategy, code, and cinema.</h2>
                   <div className={styles.bio}>
                     <p>
-                      Karan is a Bengaluru-based AI Architect, storyteller, and systems consultant with a track record at the edge of media and automation.
+                      Karan is a Bengaluru-based AI Architect and strategist who believes that true scale requires treating operations and creative as a single pipeline.
                     </p>
                     <p>
-                      He started in commercial videography and digital marketing, documenting the rise of the Indian co-working ecosystem for brands like WeWork India and Hyatt Centric.
+                      He started in commercial videography, documenting the rise of the Indian co-working ecosystem. But he realized that beautiful content without operational leverage couldn't scale.
                     </p>
                     <p>
-                      He then moved into a multi-year incubation period focused on logic, workflow design, and automated systems. That progression now shapes the AI infrastructure he builds for clients.
+                      After a multi-year incubation period focused on workflow design and agentic systems, he now architects unified pipelines that allow brands to automate their operations while maintaining a premium, cinematic voice.
                     </p>
                   </div>
                 </article>
@@ -166,9 +166,9 @@ export default function FounderPage() {
 
                 <article className={styles.summaryCard}>
                   <span className="micro-label">Current Focus</span>
-                  <h3>Build systems that are useful, repeatable, and visually coherent.</h3>
+                  <h3>Engineering pipelines that are highly automated, yet deeply authentic.</h3>
                   <p className="text-secondary caption">
-                    The founder page follows the same design language as the homepage: dark editorial surfaces, gold accent lines, centered lead copy, and small atmospheric motion.
+                    When strategy, operational tech, and final content are driven by the exact same vision, a brand&apos;s digital presence remains completely coherent and undeniably impactful.
                   </p>
                 </article>
               </div>
@@ -184,10 +184,10 @@ export default function FounderPage() {
 
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className="micro-label">Trajectory</span>
-              <h2>Three phases, one through-line.</h2>
+              <span className="micro-label">The Pipeline</span>
+              <h2>Three phases, one unified approach.</h2>
               <p className={styles.sectionLead}>
-                The founder narrative stays consistent: capture real-world systems, study how they work, then build the automation layer on top.
+                The philosophy remains consistent: lay a deep strategic foundation, engineer the agentic systems, and craft cinematic output.
               </p>
             </div>
 
@@ -222,9 +222,9 @@ export default function FounderPage() {
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <span className="micro-label">Selected Proof</span>
-              <h2>Client signals that support the repositioning.</h2>
+              <h2>Client signals across the pipeline.</h2>
               <p className={styles.sectionLead}>
-                The page keeps evidence tight and readable, using smaller cards rather than oversized imagery.
+                A track record of executing both high-end commercial media and complex internal automation.
               </p>
             </div>
 
@@ -249,9 +249,9 @@ export default function FounderPage() {
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <span className="micro-label">Working Style</span>
-              <h2>The founder lens behind the brand.</h2>
+              <h2>The philosophy behind the architecture.</h2>
               <p className={styles.sectionLead}>
-                These principles help keep the founder page aligned with the same visual identity, tone, and pacing as the main website.
+                These core principles ensure that every system built delivers maximum operational leverage without compromising on premium quality.
               </p>
             </div>
 

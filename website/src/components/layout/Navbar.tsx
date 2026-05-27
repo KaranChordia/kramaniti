@@ -23,6 +23,7 @@ export function Navbar() {
             
             <nav className={styles.desktopNav}>
               <Link href="/founder" className={styles.navLink}>Founder</Link>
+              <Link href="/insights" className={styles.navLink}>Insights</Link>
               <Link href="/#story" className={styles.navLink}>Story</Link>
               <Link href="/#services" className={styles.navLink}>Services</Link>
               <Link href="/#credibility" className={styles.navLink}>Proof</Link>
@@ -65,6 +66,7 @@ export function Navbar() {
           <nav className={styles.mobileNavLinks}>
             <Link href="/" className={styles.mobileLink} onClick={closeMobileMenu}>Home</Link>
             <Link href="/founder" className={styles.mobileLink} onClick={closeMobileMenu}>Founder</Link>
+            <Link href="/insights" className={styles.mobileLink} onClick={closeMobileMenu}>Insights</Link>
             <Link href="/#story" className={styles.mobileLink} onClick={closeMobileMenu}>Story</Link>
             <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
             <Link href="/#credibility" className={styles.mobileLink} onClick={closeMobileMenu}>Proof</Link>

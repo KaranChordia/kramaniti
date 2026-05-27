@@ -8,28 +8,28 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 const tiers = [
   {
     id: 1,
-    title: 'Diagnose',
+    title: 'Foundation Strategy',
     price: '₹75K - ₹1.5L',
-    label: 'ENTRY AUDIT',
-    deliverables: ['Current workflow audit', 'AI stack map', '1 prototype blueprint'],
+    label: 'DEEP ANALYSIS',
+    deliverables: ['Business deep-dive', 'AI implementation roadmap', 'Brand vision alignment'],
     ctaText: 'Book an Audit',
     isPopular: false
   },
   {
     id: 2,
-    title: 'Build',
+    title: 'Systems Engineering',
     price: '₹3L - ₹6L',
-    label: 'PREMIUM BUILD',
-    deliverables: ['Custom AI agent', 'API / CRM pipeline', 'Training + handoff'],
+    label: 'AGENTIC BUILD',
+    deliverables: ['Custom workflow creation', 'Agentic tool deployment', 'Operational tech integration'],
     ctaText: 'Scope the Build',
     isPopular: true
   },
   {
     id: 3,
-    title: 'Run',
+    title: 'The Complete Lifecycle',
     price: '₹1.2L - ₹2.5L/mo',
-    label: 'ONGOING RETAINER',
-    deliverables: ['Weekly content assets', 'Monthly analytics', 'Pipeline optimization'],
+    label: 'UNIFIED PIPELINE',
+    deliverables: ['Strategy & Systems maintenance', 'Cinematic content production', 'Coherent brand presence'],
     ctaText: 'Explore Retainer',
     isPopular: false
   }
@@ -51,8 +51,8 @@ export function Services() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Offer Ladder</span>
-          <h2>Three Ways to Work Together</h2>
-          <p className="text-secondary">Start with an audit, move into a build, or retain the system.</p>
+          <h2>Engaging the Pipeline</h2>
+          <p className="text-secondary">Enter the pipeline at the stage your brand needs most.</p>
         </div>
 
         <div className={styles.grid}>

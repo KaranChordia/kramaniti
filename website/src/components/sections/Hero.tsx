@@ -56,9 +56,9 @@ export function Hero() {
       <div className={styles.container}>
         <div className={styles.split}>
           <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
-            <span className={styles.eyebrow}>Strategy / Automation / Content</span>
-            <h1 className={styles.headline}>We turn expertise into AI systems that scale.</h1>
-            <p className={styles.subheading}>One partner across strategy, automation, and content operations.</p>
+            <span className={styles.eyebrow}>Strategy / Infrastructure / Cinematic Content</span>
+            <h1 className={styles.headline}>We engineer brand growth as a single, connected pipeline.</h1>
+            <p className={styles.subheading}>Deep strategy, custom agentic workflows, and premium cinematic content—all driven by the exact same vision.</p>
           </div>
         </div>
       </div>

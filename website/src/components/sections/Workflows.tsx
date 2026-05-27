@@ -16,25 +16,25 @@ export function Workflows() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Delivery System</span>
-          <h2>How the Model Works</h2>
-          <p className="text-secondary">A short flow with visible inputs, process, and outputs.</p>
+          <h2>Why A Single Pipeline?</h2>
+          <p className="text-secondary">Ensuring your digital presence remains coherent, authentic, and impactful.</p>
         </div>
 
         <div className={`${styles.flowShell} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.flowSummary}>
             <div className={styles.summaryItem}>
               <span className="micro-label">Input</span>
-              <span className={styles.summaryValue}>Workflow audit</span>
+              <span className={styles.summaryValue}>Brand Vision</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
               <span className="micro-label">Process</span>
-              <span className={styles.summaryValue}>Automation build</span>
+              <span className={styles.summaryValue}>Unified Pipeline</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
               <span className="micro-label">Output</span>
-              <span className={styles.summaryValue}>Running system</span>
+              <span className={styles.summaryValue}>Authentic Impact</span>
             </div>
           </div>
 
@@ -45,8 +45,8 @@ export function Workflows() {
               </div>
               <Card className={styles.nodeCard}>
                 <div className={styles.nodeBar}></div>
-                <h4>Diagnose</h4>
-                <p className="text-secondary caption">Map the current workflow, identify bottlenecks, and define the first high-impact automation.</p>
+                <h4>Align Vision</h4>
+                <p className="text-secondary caption">Map the core strategy so the technology serves the brand&apos;s unique identity, not the other way around.</p>
               </Card>
             </div>
 
@@ -59,8 +59,8 @@ export function Workflows() {
               <Card className={`${styles.nodeCard} ${styles.primaryCard}`}>
                 <div className={styles.glowOverlay}></div>
                 <div className={styles.nodeBar}></div>
-                <h4>Build</h4>
-                <p className="text-secondary caption">Create the agent, automation, or content pipeline and connect it to the tools the team already uses.</p>
+                <h4>Engineer Systems</h4>
+                <p className="text-secondary caption">Deploy the exact agentic workflows needed to scale operations without losing the human touch.</p>
               </Card>
             </div>
 
@@ -72,8 +72,8 @@ export function Workflows() {
               </div>
               <Card className={styles.nodeCard}>
                 <div className={styles.nodeBar}></div>
-                <h4>Run</h4>
-                <p className="text-secondary caption">Keep the system live with iteration, reporting, and monthly optimization support.</p>
+                <h4>Craft Content</h4>
+                <p className="text-secondary caption">Transform the system&apos;s output into high-end, design-driven content that resonates with your audience.</p>
               </Card>
             </div>
           </div>
@@ -81,9 +81,9 @@ export function Workflows() {
           <div className={styles.outputStrip}>
             <span className={styles.outputLabel}>System Output</span>
             <div className={styles.outputPills}>
-              <span className={styles.outputPill}>Internal agent</span>
-              <span className={styles.outputPill}>Workflow automation</span>
-              <span className={styles.outputPill}>Content engine</span>
+              <span className={styles.outputPill}>Coherent Strategy</span>
+              <span className={styles.outputPill}>Automated Operations</span>
+              <span className={styles.outputPill}>Cinematic Content</span>
             </div>
           </div>
         </div>

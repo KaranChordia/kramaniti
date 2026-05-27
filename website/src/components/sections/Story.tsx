@@ -6,27 +6,27 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 const epochs = [
   {
     number: '01',
-    years: '2017 – 2019',
-    title: 'Spatial Capture',
-    flow: 'Capture',
-    description: 'Built commercial media for WeWork India and Hyatt Centric while growing a public audience around Bengaluru\'s co-working boom.',
-    tags: ['Commercial media', 'Drone mapping', 'Audience growth']
+    years: 'Phase One',
+    title: 'Deep Analysis & Strategy',
+    flow: 'Foundation',
+    description: 'We dive deep into your business to create a strategy that lays the true foundation for AI implementation.',
+    tags: ['Brand Audit', 'AI Readiness', 'Vision Mapping']
   },
   {
     number: '02',
-    years: '2020 – 2023',
-    title: 'Systems R&D',
-    flow: 'Study',
-    description: 'Spent this period studying systems, logic, and automation instead of public content creation.',
-    tags: ['Process study', 'Systems logic', 'Automation']
+    years: 'Phase Two',
+    title: 'Agentic Infrastructure',
+    flow: 'Engineering',
+    description: 'We build the actual infrastructure—custom workflows, agentic tools, and automated systems that seamlessly enhance daily operations.',
+    tags: ['Custom Workflows', 'Agentic Tools', 'Operational Tech']
   },
   {
     number: '03',
-    years: '2023 – Present',
-    title: 'Autonomous Architecture',
-    flow: 'Build',
-    description: 'Now building AI workflows, custom agents, and content engines for scaling startups and enterprise teams.',
-    tags: ['AI workflows', 'Custom agents', 'Content engines']
+    years: 'Phase Three',
+    title: 'Cinematic Content',
+    flow: 'Creative',
+    description: 'We take the raw output from those systems and apply rigorous design thinking to craft premium content that never feels like \'AI slop.\'',
+    tags: ['Design Thinking', 'High-End Production', 'Authenticity']
   }
 ];
 
@@ -68,14 +68,14 @@ export function Story() {
       </div>
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
-          <h2>The System Behind the Story</h2>
-          <p className="text-secondary">Three phases. One through-line: narrative plus systems.</p>
+          <h2>The Unified Lifecycle</h2>
+          <p className="text-secondary">Strategy, systems, and content under one roof.</p>
           <div className={styles.legend}>
-            <span className={styles.legendPill}>Capture</span>
+            <span className={styles.legendPill}>Strategy</span>
             <span className={styles.legendArrow}>→</span>
-            <span className={styles.legendPill}>Study</span>
+            <span className={styles.legendPill}>Systems</span>
             <span className={styles.legendArrow}>→</span>
-            <span className={styles.legendPill}>Build</span>
+            <span className={styles.legendPill}>Content</span>
           </div>
         </div>
 

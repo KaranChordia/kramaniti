@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   images: { unoptimized: true },
   basePath: '/kramaniti',
   assetPrefix: '/kramaniti/',
+  trailingSlash: true,
 };
 
 export default nextConfig;
