@@ -7,7 +7,8 @@ import {
   TechStackInfographic, 
   DisconnectedOpsInfographic, 
   AgenticWorkflowsInfographic, 
-  CinematicStandardInfographic 
+  CinematicStandardInfographic,
+  SpatialAcquisitionInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -61,6 +62,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:cinematic-standard]') {
                   return <CinematicStandardInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:spatial-acquisition]') {
+                  return <SpatialAcquisitionInfographic key={index} />;
                 }
                 
                 // Parse gold highlights

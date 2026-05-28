@@ -132,3 +132,36 @@ export function CinematicStandardInfographic() {
     </div>
   );
 }
+
+export function SpatialAcquisitionInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Spatial Acquisition Pipeline</div>
+      <div className={styles.comparisonGrid}>
+        
+        <div className={styles.wrongWay}>
+          <div className={styles.wayLabel}>Physical Staging (Legacy)</div>
+          <div className={styles.flow}>
+            <div className={`${styles.node} ${styles.nodeWeak}`}>₹10L Staging Budget</div>
+            <div className={styles.arrow}>↓</div>
+            <div className={`${styles.node} ${styles.nodeBroken}`}>Weeks of Production & Shoots</div>
+            <div className={styles.arrow}>↓</div>
+            <div className={`${styles.node} ${styles.nodeDanger}`}>Siloed, Manual Sales Follow-ups</div>
+          </div>
+        </div>
+
+        <div className={styles.rightWay}>
+          <div className={styles.wayLabel}>Agentic Spatial Engine</div>
+          <div className={styles.flow}>
+            <div className={`${styles.node} ${styles.nodeGold}`}>Generative Digital Staging (1/10th cost)</div>
+            <div className={styles.arrowGold}>↓</div>
+            <div className={`${styles.node} ${styles.nodeGold}`}>Dynamic Layout Customization</div>
+            <div className={styles.arrowGold}>↓</div>
+            <div className={`${styles.node} ${styles.nodeSolid}`}>Autonomous Leasing Agents</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
