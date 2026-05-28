@@ -1,23 +1,25 @@
+/* Core Wrapper */
 .infographicWrapper {
   margin: 48px 0;
   padding: 32px;
   border-radius: 24px;
-  background: linear-gradient(180deg, rgba(201, 168, 76, 0.05) 0%, rgba(20, 20, 24, 0.8) 100%);
-  border: 1px solid rgba(201, 168, 76, 0.2);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(201, 168, 76, 0.1);
+  background: linear-gradient(180deg, rgba(201, 168, 76, 0.03) 0%, rgba(20, 20, 24, 0.9) 100%);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(201, 168, 76, 0.05);
 }
 
 .infographicTitle {
   font-family: var(--font-outfit), sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--color-burnished-gold);
   text-align: center;
   margin-bottom: 32px;
   font-weight: 600;
 }
 
+/* 1. Side-by-Side Flow Comparison */
 .comparisonGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -27,80 +29,504 @@
 @media (min-width: 640px) {
   .comparisonGrid {
     grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    gap: 40px;
   }
 }
 
 .wayLabel {
   font-family: var(--font-inter), sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-secondary);
-  text-align: center;
-  margin-bottom: 24px;
-  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-weight: 600;
+}
+
+.labelIconDanger {
+  color: #e26c6c;
+}
+
+.labelIconGold {
+  color: var(--color-burnished-gold);
 }
 
 .flow {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .node {
   width: 100%;
-  padding: 16px 20px;
+  padding: 14px 18px;
   border-radius: 12px;
   text-align: center;
   font-family: var(--font-inter), sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 14px;
   backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.node:hover {
+  transform: translateY(-2px);
 }
 
 .nodeDanger {
-  background: rgba(220, 50, 50, 0.05);
-  border: 1px dashed rgba(220, 50, 50, 0.3);
-  color: #e08888;
-}
-
-.nodeWeak {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px dashed rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-  opacity: 0.8;
+  background: rgba(226, 108, 108, 0.05);
+  border: 1px dashed rgba(226, 108, 108, 0.3);
+  color: #f1b3b3;
 }
 
 .nodeBroken {
-  background: rgba(220, 50, 50, 0.1);
-  border: 1px solid rgba(220, 50, 50, 0.4);
-  color: #ff9999;
+  background: rgba(226, 108, 108, 0.08);
+  border: 1px solid rgba(226, 108, 108, 0.25);
+  color: #fca5a5;
 }
 
 .nodeGold {
-  background: rgba(201, 168, 76, 0.08);
-  border: 1px solid rgba(201, 168, 76, 0.4);
+  background: rgba(201, 168, 76, 0.05);
+  border: 1px solid rgba(201, 168, 76, 0.3);
   color: var(--color-burnished-gold);
-  box-shadow: 0 4px 12px rgba(201, 168, 76, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .nodeSolid {
   background: linear-gradient(135deg, #C9A84C 0%, #A07D3A 100%);
-  border: 1px solid rgba(201, 168, 76, 0.6);
-  color: #000;
+  border: 1px solid rgba(201, 168, 76, 0.5);
+  color: #0d0d0f;
   font-weight: 700;
-  box-shadow: 0 8px 24px rgba(201, 168, 76, 0.2);
+  box-shadow: 0 6px 20px rgba(201, 168, 76, 0.15);
 }
 
 .arrow, .arrowGold {
-  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .arrow {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.15);
 }
 
 .arrowGold {
+  color: rgba(201, 168, 76, 0.4);
+}
+
+/* 2. Priority Pyramid (Layered Stack) */
+.pyramidContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.pyramidLayer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.pyramidLayer:hover {
+  transform: scale(1.015);
+}
+
+.layerTop {
+  width: 76%;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.layerTop .layerNum {
+  color: var(--text-secondary);
+}
+
+.layerMiddle {
+  width: 88%;
+  background: rgba(201, 168, 76, 0.05);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.layerMiddle .layerNum {
+  color: rgba(201, 168, 76, 0.7);
+}
+
+.layerBase {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.1) 0%, rgba(20, 20, 24, 0.8) 100%);
+  border: 1px solid rgba(201, 168, 76, 0.45);
+  box-shadow: 0 8px 24px rgba(201, 168, 76, 0.08);
+}
+
+.layerBase .layerNum {
+  color: var(--color-burnished-gold);
+  font-weight: 700;
+}
+
+.layerNum {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  min-width: 28px;
+}
+
+.layerContent {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.layerTitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.layerBase .layerTitle {
+  color: var(--color-burnished-gold);
+}
+
+.layerDesc {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* 3. The Intersection Equation (Venn / Equation Layout) */
+.equationContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .equationContainer {
+    flex-direction: row;
+    gap: 16px;
+  }
+}
+
+.eqCard {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 22px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.eqCard:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.eqCardHighlight {
+  background: rgba(201, 168, 76, 0.06);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  box-shadow: 0 8px 24px rgba(201, 168, 76, 0.1);
+}
+
+.eqCardHighlight:hover {
+  border-color: rgba(201, 168, 76, 0.6);
+}
+
+.eqIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 14px;
+}
+
+.eqIconWrapperHighlight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  margin-bottom: 14px;
+}
+
+.eqIcon {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.eqIconGold {
+  color: var(--color-burnished-gold);
+}
+
+.eqCardTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.eqCardTitleGold {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-burnished-gold);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eqCardDesc {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.eqCardDescGold {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.45;
+  opacity: 0.95;
+}
+
+.eqOperator {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 28px;
+  font-weight: 300;
   color: rgba(201, 168, 76, 0.6);
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 4. The Capability Matrix (Comparison Table) */
+.matrixScrollWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(20, 20, 24, 0.4);
+}
+
+.matrixTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13.5px;
+}
+
+.matrixColHeader {
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.matrixColHeaderHighlight {
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.04);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+}
+
+.matrixCellLabel {
+  padding: 14px 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.01);
+  min-width: 130px;
+}
+
+.matrixCell {
+  padding: 14px 18px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  min-width: 180px;
+  line-height: 1.4;
+}
+
+.matrixCellHighlight {
+  color: var(--text-primary);
+  font-weight: 500;
+  background: rgba(201, 168, 76, 0.02);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+  min-width: 180px;
+}
+
+/* 5. The Horizontal Pipeline (Flow Loop) */
+.pipelineContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .pipelineContainer {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.pipelineNode {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pipelineNode:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.pipelineNodeHighlight {
+  background: rgba(201, 168, 76, 0.05);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.pipelineNodeHighlight:hover {
+  border-color: rgba(201, 168, 76, 0.55);
+}
+
+.pipelineStep {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pipelineStepHighlight {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0d0d0f;
+  background: var(--color-burnished-gold);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pipelineContent {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.pipelineNodeTitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.pipelineNodeTitleHighlight {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-burnished-gold);
+  margin-bottom: 4px;
+}
+
+.pipelineNodeDesc {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.pipelineNodeDescHighlight {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11.5px;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+.pipelineArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(201, 168, 76, 0.4);
+  flex-shrink: 0;
+}
+
+.arrowIconDesktop {
+  display: none;
+}
+
+.arrowIconMobile {
+  display: block;
+  margin: 4px 0;
+}
+
+@media (min-width: 768px) {
+  .arrowIconDesktop {
+    display: block;
+  }
+  .arrowIconMobile {
+    display: none;
+  }
 }

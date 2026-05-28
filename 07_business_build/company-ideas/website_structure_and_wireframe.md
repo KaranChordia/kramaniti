@@ -264,7 +264,7 @@ graph LR
 | Decision | Recommendation | Rationale |
 | :--- | :--- | :--- |
 | **Platform** | Custom HTML/CSS/JS (static site) or Next.js with static export | Maximum control over animations, performance, and brand consistency. Avoid WordPress/Wix — they compromise load speed and design fidelity for this use case. |
-| **Hosting** | Cloudflare Pages (free tier) or Vercel (free tier) | Both offer global CDN, instant deploys from Git, and free SSL. Cloudflare Pages pairs naturally if domains are already on Cloudflare Registrar (see [domain_and_handles_registry.md](file:///Users/k.c/kramaniti/03_brand_strategy/naming/domain_and_handles_registry.md)). |
+| **Hosting** | Cloudflare Pages (free tier) or GitHub Pages (free) | Both offer global CDN, instant deploys from Git, and free SSL. Cloudflare Pages pairs naturally if domains are already on Cloudflare Registrar (see [domain_and_handles_registry.md](file:///Users/k.c/kramaniti/03_brand_strategy/naming/domain_and_handles_registry.md)). |
 | **Analytics** | Plausible Analytics (privacy-first, no cookie banner required) or Cloudflare Web Analytics (free, lightweight) | GDPR-compliant by default. No Google Analytics — it requires cookie consent banners that erode trust and add visual noise. |
 | **Form Backend** | Make.com webhook → Google Sheets + Brevo email | Zero backend infrastructure needed. Make.com handles routing; Brevo handles email automation. |
 | **Font Loading** | Self-host Google Fonts via `@font-face` with `font-display: swap` | Eliminates render-blocking requests to `fonts.googleapis.com`. Pre-load heading font (Outfit) for LCP optimization. |
