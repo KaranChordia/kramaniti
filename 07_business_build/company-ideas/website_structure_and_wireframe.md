@@ -1,6 +1,13 @@
 # Website Structure & Wireframe
 
-**Purpose:** Define the complete frontend architecture for the Kramaniti one-page portfolio website. This document maps every section, its content hierarchy, interactive elements, and conversion objectives. It serves as the canonical brief for development — whether hand-coded, built in Framer/Webflow, or generated via code.
+**Status:** Historical reference. This document reflects an earlier website direction and should not be treated as the current canonical homepage plan.
+
+**Current Canonical Website References:**
+*   `website/AGENTS.md`
+*   `docs/kramaniti_site_implementation_plan.md`
+*   `06_ai_agent_context/system_prompts/master_context.md`
+
+**Purpose:** Preserve the earlier frontend architecture for reference. This document maps a previous section hierarchy, interaction model, and conversion approach. Do not use it as the active implementation brief without reconciling it against the current canonical website references above.
 
 **Key Findings:** A single-page structure is optimal for the current launch phase: it concentrates SEO authority on one URL, reduces development scope, and funnels all visitor attention toward a single CTA. Multi-page expansion (dedicated case study pages, blog, /tools subdomain) should be planned for Phase 2.
 

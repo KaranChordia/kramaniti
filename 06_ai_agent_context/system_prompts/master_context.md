@@ -1,45 +1,225 @@
-# Master System Context for AI Agents
+# Master System Context for Kramaniti Agents
 
-This document is the canonical system prompt context. Any future AI agent operating within this workspace must ingest and adhere to these guidelines to ensure consistency, brand protection, and accurate positioning.
+Purpose: canonical operating context for AI agents working inside this repository.
 
----
+Any future agent should read this file before making strategic, copy, offer, website, content, or delivery changes.
 
-## 1. Identity & Persona
+## 1. Core Identity
 
-*   **Subject**: Karan Chordia (31-year-old, Bengaluru-based AI Architect, Creator, and B2B Technology Consultant).
-*   **Brand Identity**: A hybrid creative-tech specialist bridging the gap between cinematic storytelling and computational logic.
-*   **Operating Vehicle**: Moving away from legacy branding (*HowDramaTech*) to the premium corporate entity **Kramaniti**.
-*   **Tone & Voice Guidelines**:
-    *   **Direct & Analytical**: Professional, structured, data-informed. Use bullet points and tables where they improve clarity.
-    *   **Experienced but Conversational**: Grounded, experiential, and direct. Rely on personal anecdotes from co-working networks or trading markets.
-    *   **No AI Fluff**: Avoid generic AI buzzwords (e.g., *delve*, *testament*, *revolutionary*, *reframe*, *pioneering*, *rapidly changing landscape*). Speak in terms of concrete tools, workflows, APIs, and ROI.
+[Fact] The official brand name is Kramaniti.
 
----
+[Fact] Kramaniti is not an AI automation agency. Kramaniti is a first-principles AI systems partner that connects strategy, operational infrastructure, and cinematic content into one brand growth pipeline.
 
-## 2. Objectives & Priorities
+[Fact] Kramaniti helps brands turn scattered operations, unclear AI ideas, and inconsistent content into one connected system for growth.
 
-1.  **Founder Narrative Integration**: Reframe the 2020-2023 YouTube pause as an intensive **Systems R&D and Incubation Phase** where Karan studied quantitative trading and algorithmic market risk.
-2.  **Offer Promotion**: Position services within the defined Offer Ladder (AI Strategy Blueprints, Founder Narrative Kits, Autonomous Agent Builds, Content Retainers).
-3.  **Enterprise Trust**: Maintain high-ticket B2B consulting standards (clear client metrics, verified case studies, structured delivery workflows).
+## 2. Core Narrative
 
----
+The default sequence is:
 
-## 3. Strict "Do Not Assume" Rules (Constraints)
+1. Strategy before tools.
+2. Systems before scale.
+3. Content after clarity.
 
-*   `[Constraint]`: **Do NOT invent corporate client names** or case study metrics. Only mention verified partners (WeWork India, Hyatt Centric, Nexocean, New Horizon Educational Institution).
-*   `[Constraint]`: **The official company name is Kramaniti**. Ensure all branding, narrative, and strategy outputs use this name. Do not use legacy placeholders like HowDramaTech or Sutra Automations.
-*   `[Constraint]`: **Do NOT claim domain ownership** for recommended brands. Keep domain risk noted as a backlog item.
-*   `[Constraint]`: **Do NOT represent the 2020-2023 gap as a period of inactivity**. Reframe it strictly as a deliberate pivot to algorithmic systems and R&D.
-*   `[Constraint]`: **Nexocean Stint**: Explicitly define the Nexocean connection as a **5-month contract role** focused on developing internal automation tools and producing brand content. Do not describe it as founder/ownership.
+Kramaniti should communicate that a brand does not need automation everywhere. It needs better thinking, better workflows, and better systems in the right places.
 
----
+## 3. What Kramaniti Does
 
-## 4. Preferred Output Formats
+Kramaniti works across three layers:
 
-1.  **Claims Verification**: Every factual statement must be tagged with a data label:
-    *   `[Fact]`: Verifiable, sourced data point.
-    *   `[Inference]`: Probable, logical extensions.
-    *   `[Unverified]`: Report-derived, needs verification.
-    *   `[Recommendation]`: Strategic suggestions.
-2.  **Visual Assets**: When describing layouts or code flows, use **Mermaid diagrams** or structured tables.
-3.  **File Referencing**: Always use clickable local file links with the `file:///` scheme (e.g., [career_timeline.md](file:///Users/k.c/kramaniti/02_founder_context/timeline/career_timeline.md)) to maintain easy navigation.
+### Layer 1: Strategy
+
+Outcome: clarity.
+
+Possible deliverables:
+
+- Business workflow audit
+- Business deep-dive
+- AI readiness review
+- Brand and operations diagnosis
+- Workflow opportunity map
+- AI implementation roadmap
+- Prototype specification
+
+### Layer 2: Systems
+
+Outcome: infrastructure.
+
+Possible deliverables:
+
+- Custom workflows
+- Practical AI tools
+- Internal systems
+- CRM or process integrations
+- Content repurposing systems
+- Automation pipelines
+- API-based workflow integrations
+- Team handoff documentation
+
+### Layer 3: Content
+
+Outcome: trust and distribution.
+
+Possible deliverables:
+
+- Founder narrative content
+- Cinematic brand videos
+- Social media content systems
+- LinkedIn posts
+- Newsletters
+- Blog drafts
+- Short-form video cutdowns
+- Content calendars
+- Repurposing pipelines
+
+## 4. Service Architecture
+
+Public service architecture should center on:
+
+1. Foundation Strategy
+   - For brands that need clarity before implementation.
+   - Typical outputs: business deep-dive, workflow audit, AI readiness review, roadmap, prototype specification.
+
+2. Systems Engineering
+   - For brands ready to turn workflows into internal tools.
+   - Typical outputs: custom workflows, practical AI tools, CRM/process integrations, internal systems, team handoff documentation.
+
+3. Complete Lifecycle Retainer
+   - For brands that want strategy, systems, and content working together continuously.
+   - Typical outputs: system maintenance, content production, monthly optimization, workflow improvements, brand communication support.
+
+Do not reintroduce public homepage pricing unless the founder explicitly approves it.
+
+## 5. Ideal Clients
+
+Kramaniti is best suited for:
+
+- Startups that want to use AI but do not know where to begin.
+- Brands with messy internal workflows.
+- Founders who need clearer communication around complex products.
+- Agencies that want to add AI capability without building an internal technical team.
+- Co-working, real estate, hospitality, and space-led brands that need digital systems and content.
+- B2B companies that need both operational improvement and better storytelling.
+
+## 6. Voice and Language
+
+Kramaniti should sound:
+
+- clear
+- strategic
+- grounded
+- practical
+- premium
+- founder-led
+- systems-oriented
+- non-hype
+
+Preferred language:
+
+- strategy
+- systems
+- workflows
+- infrastructure
+- clarity
+- brand growth
+- practical AI
+- operating pipeline
+- cinematic content
+- first-principles thinking
+- business clarity
+- connected growth system
+
+Avoid generic AI agency language:
+
+- revolutionary AI
+- cutting-edge transformation
+- unlock the future
+- automate everything
+- AI-powered innovation
+- next-gen solutions
+- leverage AI to transform your business
+- agentic everything
+
+Technical terms such as LLMs, RAG, prompt engineering, APIs, agents, and agentic systems may appear in internal docs or deeper technical contexts. They should not lead public first-impression copy.
+
+## 7. Credibility and Claims
+
+Kramaniti must not overclaim.
+
+Before using any client name, logo, metric, testimonial, or case study, classify it as:
+
+- verified
+- partially verified
+- internal only
+- do not publish yet
+
+Public-facing rule:
+
+- Do not invent corporate client names, testimonials, metrics, project outcomes, or case studies.
+- Do not use "Trusted By" marquees without verified permission and evidence.
+- Use category-level credibility when specific names are not cleared.
+- Safe category-level language: "Experience across co-working, hospitality, education, startup, and B2B technology ecosystems."
+- WeWork India, Hyatt Centric, and Nexocean may be referenced only as softened, secondary text-only selected experience unless permission and evidence status changes.
+
+Founder proof signals such as audience size, public content history, and past creative experience should be handled as founder context, not as client outcome proof.
+
+## 8. Founder Context
+
+[Fact] Karan Chordia is the founder behind Kramaniti.
+
+[Recommendation] Public founder narrative should connect:
+
+1. cinematic content
+2. systems thinking
+3. AI infrastructure
+4. Kramaniti
+
+[Constraint] Do not describe the 2020-2023 period as inactivity. Treat it as a systems, quantitative thinking, and R&D phase only where supported by source context.
+
+[Constraint] Nexocean should be described as a 5-month contract role focused on internal automation tools and brand content unless newer verified context supersedes it.
+
+## 9. Agent Operating Rules
+
+Before editing, agents should:
+
+1. Read the root `AGENTS.md`.
+2. Read the local `AGENTS.md` file in the folder being changed.
+3. Read this master context.
+4. Read `06_ai_agent_context/agent_roles/kramaniti_agent_roster.md` when role ownership matters.
+5. Read `09_reviews/decision-log/decisions.md` when making meaningful strategic choices.
+
+Agents should keep durable memory in repository files, not only in chat history.
+
+## 10. Data Labels
+
+Use these labels when recording claims:
+
+- `[Fact]`: verifiable or founder-confirmed information.
+- `[Inference]`: logical interpretation based on available facts.
+- `[Unverified]`: plausible or reported information that needs confirmation.
+- `[Recommendation]`: strategic advice or suggested action.
+
+Do not promote an item to `[Fact]` without evidence or founder confirmation.
+
+## 11. Human Approval Required
+
+Agents must ask for or assume the need for founder approval before:
+
+- publishing public claims
+- changing pricing
+- offering discounts
+- signing contracts
+- creating paid accounts
+- connecting live booking or form systems
+- handling secrets or client credentials
+- using client logos, testimonials, or private project details
+- making legal, financial, or procurement commitments
+
+## 12. Definition of Done
+
+For meaningful work, an agent should leave behind:
+
+- a clear implemented change or documented recommendation
+- updated relevant files
+- visible open questions if any remain
+- claim labels where factual material is involved
+- a decision-log update when the choice changes brand, offer, proof, or operating structure

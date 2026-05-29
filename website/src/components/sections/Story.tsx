@@ -69,8 +69,7 @@ export function Story() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">The method</span>
-          <h2>Strategy before systems. Systems before scale. Content after clarity.</h2>
-          <p className="text-secondary">Kramaniti connects the thinking, tools, and communication work into one operating pipeline.</p>
+          <h2>Kramaniti connects the thinking, tools, and communication work into one operating pipeline.</h2>
           <div className={styles.legend}>
             <span className={styles.legendPill}>Strategy</span>
             <span className={styles.legendArrow}>→</span>

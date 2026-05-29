@@ -73,7 +73,7 @@ export default function FounderPage() {
           <div className={styles.container}>
             <div className={styles.heroIntro}>
               <span className={styles.eyebrow}>Founder Profile</span>
-              <h1>The Architect of the Pipeline.</h1>
+              <h1>Building One Connected Growth System.</h1>
               <p className={styles.lead}>
                 Karan Chordia builds from the intersection of deep strategy, algorithmic systems, and cinematic storytelling.
               </p>
@@ -103,33 +103,6 @@ export default function FounderPage() {
                   </div>
                 </div>
 
-                <div className={styles.galleryRow}>
-                  <div className={styles.galleryCard}>
-                    <div className={styles.galleryFrame}>
-                      <Image
-                        src="/kramaniti/assets/founder_cinematic_1.png"
-                        alt="Karan in a cinematic environment"
-                        fill
-                        sizes="(min-width: 1024px) 220px, 45vw"
-                        className={styles.galleryImage}
-                      />
-                    </div>
-                    <span className={styles.galleryTag}>Strategy</span>
-                  </div>
-
-                  <div className={styles.galleryCard}>
-                    <div className={styles.galleryFrame}>
-                      <Image
-                        src="/kramaniti/assets/founder_cinematic_2.png"
-                        alt="Karan at work"
-                        fill
-                        sizes="(min-width: 1024px) 220px, 45vw"
-                        className={styles.galleryImage}
-                      />
-                    </div>
-                    <span className={styles.galleryTag}>Systems</span>
-                  </div>
-                </div>
               </div>
 
               <div className={styles.contentColumn}>

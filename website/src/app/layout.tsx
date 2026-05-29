@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -18,6 +19,11 @@ export const metadata: Metadata = {
   title: "Kramaniti | Practical AI Systems for Brand Growth",
   description: "Kramaniti helps brands identify high-impact workflows, build practical AI infrastructure, and turn those systems into clear, cinematic communication.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/kramaniti/assets/brand/kramaniti-mark-gold.png",
+    apple: "/kramaniti/assets/brand/kramaniti-mark-gold.png",
+    shortcut: "/kramaniti/assets/brand/kramaniti-mark-gold.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -39,25 +45,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         <meta name="color-scheme" content="light dark" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                const colorScheme = localStorage.getItem("kramaniti-theme");
-                if (colorScheme) {
-                  document.documentElement.setAttribute("data-theme", colorScheme);
-                } else {
-                  // If no local storage, fallback to system preference
-                  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                  document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
-                }
-              } catch (e) {}
-            `,
-          }}
-        />
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`
+            try {
+              const colorScheme = localStorage.getItem("kramaniti-theme");
+              if (colorScheme) {
+                document.documentElement.setAttribute("data-theme", colorScheme);
+              } else {
+                const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+              }
+            } catch (e) {}
+          `}
+        </Script>
       </head>
       <body
         className={`${outfit.variable} ${jetbrainsMono.variable} antialiased`}

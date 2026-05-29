@@ -1,8 +1,8 @@
 # Kramaniti
 
-The canonical operating workspace and knowledge base for **Kramaniti** — Karan Chordia's AI strategy, content automation, and enterprise consulting practice.
+The canonical operating workspace and knowledge base for **Kramaniti**: a first-principles AI systems partner connecting strategy, operational infrastructure, and cinematic content into one brand growth pipeline.
 
-This workspace is designed to be **human-readable** (for the founder, clients, and partners) and **AI-agent-ready** (with structured formats, clear identifiers, and semantic files that subagents can digest without noise).
+This workspace is designed to be **human-readable** (for the founder, clients, and partners) and **AI-agent-ready** (with structured formats, clear identifiers, local `AGENTS.md` files, and semantic files that subagents can digest without noise).
 
 ---
 
@@ -23,7 +23,7 @@ This workspace is designed to be **human-readable** (for the founder, clients, a
 │   └── pillars/               # Core storytelling themes
 ├── 05_ai_strategy/            # Strategic delivery blueprints
 │   └── workflows/             # Delivery workflows & sequence diagrams
-├── 06_ai_agent_context/       # System contexts for autonomous agents
+├── 06_ai_agent_context/       # System contexts for brand agents
 │   ├── system_prompts/        # Master context and prompt guidelines
 │   └── agent_roles/           # Specialized agent definitions (JTBD)
 ├── 07_business_build/         # Commercial structures & launch operations
@@ -36,12 +36,43 @@ This workspace is designed to be **human-readable** (for the founder, clients, a
 │   └── exports/               # Exported PDF packages
 ├── 09_reviews/                # Governance and log records
 │   └── decision-log/          # Major design & branding decisions
+├── docs/                      # Implementation plans and handoff notes
+├── website/                   # Public Next.js website
+├── AGENTS.md                  # Global agent operating rules
 └── README.md                  # This file
 ```
 
 ---
 
-## 2. Document Conventions & Data Labels
+## 2. Agent Operating Layer
+
+Kramaniti now uses local `AGENTS.md` files as an operating layer for future AI agents. These files define how each area should be handled and which agent should lead the work.
+
+Core agent files:
+
+| File | Purpose |
+| :--- | :--- |
+| `AGENTS.md` | Global repository rules and brand constraints |
+| `02_founder_context/AGENTS.md` | Founder facts, verification, and archive rules |
+| `03_brand_strategy/AGENTS.md` | Positioning, offers, narrative, and identity rules |
+| `04_content_system/AGENTS.md` | Editorial and content-system rules |
+| `05_ai_strategy/AGENTS.md` | Workflow audit and systems delivery rules |
+| `06_ai_agent_context/AGENTS.md` | Agent definition and prompt-maintenance rules |
+| `07_business_build/AGENTS.md` | Launch, sales, CRM, and delivery operations rules |
+| `08_assets/AGENTS.md` | Asset organization and permission rules |
+| `09_reviews/AGENTS.md` | Claim review and decision-log rules |
+| `docs/AGENTS.md` | Implementation documentation rules |
+| `website/AGENTS.md` | Website, CTA, credibility, and public-copy rules |
+
+Primary roster:
+
+- `06_ai_agent_context/agent_roles/kramaniti_agent_roster.md`
+
+When a task crosses multiple areas, choose the lead agent from the roster, read the relevant local `AGENTS.md`, and leave updates in the canonical folder rather than relying only on chat history.
+
+---
+
+## 3. Document Conventions & Data Labels
 
 To maintain strict data integrity, every file must clearly label its claims using one of the following prefixes:
 *   **`[Fact]`**: Verifiable, publicly documented evidence with source URLs/citations (e.g., specific employment dates, registered domains, published videos).
@@ -51,40 +82,41 @@ To maintain strict data integrity, every file must clearly label its claims usin
 
 ---
 
-## 3. File Naming & Style Conventions
+## 4. File Naming & Style Conventions
 
 1.  **File Naming:** Use snake_case for all markdown files (e.g., `founder_background.md`, `career_timeline.md`).
 2.  **File Headers:** Every major document should begin with a metadata block detailing its **Purpose**, **Key Findings**, **Evidence**, **Interpretation**, **Implications**, **Open Questions**, and **Next Steps**.
-3.  **Cross-Linking:** Use full `file:///` URLs to cross-link related documents within this workspace to enable rapid navigation for agents and editors.
+3.  **Cross-Linking:** Prefer repo-relative paths for durable internal links. Use absolute local paths only when a tool specifically requires them.
 4.  **No Placeholders:** Never use filler text or lorem ipsum. Use realistic examples, structured drafts, or document as an open question within the relevant file.
 
 ---
 
-## 4. How to Update This Workspace
+## 5. How to Update This Workspace
 
 1.  **Founder Feedback:** When the founder clarifies a point (e.g., a client engagement detail), update the relevant context files and move the data label from `[Unverified]` to `[Fact]`.
-2.  **Audit Trail:** Document the change in [decisions.md](file:///Users/k.c/kramaniti/09_reviews/decision-log/decisions.md).
-3.  **AI Readiness:** Ensure system prompts in `06_ai_agent_context` are synchronized with any changes to service offerings or branding choices.
+2.  **Audit Trail:** Document the change in [decisions.md](09_reviews/decision-log/decisions.md).
+3.  **AI Readiness:** Ensure system prompts, agent roles, and local `AGENTS.md` files stay synchronized with any changes to service offerings or branding choices.
 
 ---
 
-## 5. Key Files Quick Reference
+## 6. Key Files Quick Reference
 
 | Area | File | Purpose |
 | :--- | :--- | :--- |
-| **Identity** | [founder_background.md](file:///Users/k.c/kramaniti/02_founder_context/background/founder_background.md) | Canonical founder profile with fact/inference split |
-| **Identity** | [career_timeline.md](file:///Users/k.c/kramaniti/02_founder_context/timeline/career_timeline.md) | Five-epoch career progression with evidence tags |
-| **Identity** | [skill_clusters.md](file:///Users/k.c/kramaniti/02_founder_context/skills/skill_clusters.md) | Competency trees across Visual, Algorithmic, Quantitative, and B2B domains |
-| **Brand** | [positioning_analysis.md](file:///Users/k.c/kramaniti/03_brand_strategy/positioning/positioning_analysis.md) | Market positioning, differentiators, and target ICPs |
-| **Brand** | [brand_identity_guidelines.md](file:///Users/k.c/kramaniti/03_brand_strategy/positioning/brand_identity_guidelines.md) | Color palette, typography, voice rules, and visual standards |
-| **Brand** | [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/narrative/brand_narrative.md) | Core storytelling copy, bios, and strategic angles |
-| **Brand** | [company_name_ideas.md](file:///Users/k.c/kramaniti/03_brand_strategy/naming/company_name_ideas.md) | Naming evaluation and selection rationale |
-| **Brand** | [domain_and_handles_registry.md](file:///Users/k.c/kramaniti/03_brand_strategy/naming/domain_and_handles_registry.md) | Domain and social handle acquisition tracker |
-| **Offers** | [service_packages.md](file:///Users/k.c/kramaniti/03_brand_strategy/offers/service_packages.md) | 4-tier offer ladder with pricing and deliverables |
-| **Content** | [content_pillars.md](file:///Users/k.c/kramaniti/04_content_system/pillars/content_pillars.md) | 5 core content pillars with post examples |
-| **Delivery** | [ai_service_workflows.md](file:///Users/k.c/kramaniti/05_ai_strategy/workflows/ai_service_workflows.md) | Onboarding, audit, content, and agent build workflows |
-| **AI Agents** | [master_context.md](file:///Users/k.c/kramaniti/06_ai_agent_context/system_prompts/master_context.md) | System prompt context, constraints, and operating rules |
-| **AI Agents** | [agent_roles.md](file:///Users/k.c/kramaniti/06_ai_agent_context/agent_roles/agent_roles.md) | Specialized subagent JTBD definitions |
-| **Launch** | [website_structure_and_wireframe.md](file:///Users/k.c/kramaniti/07_business_build/company-ideas/website_structure_and_wireframe.md) | One-page portfolio site architecture and wireframe |
-| **Launch** | [launch_operations_checklist.md](file:///Users/k.c/kramaniti/07_business_build/delivery/launch_operations_checklist.md) | Business registration, payments, invoicing, and CRM setup |
-| **Governance** | [decisions.md](file:///Users/k.c/kramaniti/09_reviews/decision-log/decisions.md) | Decision log with rejected alternatives |
+| **Identity** | [founder_background.md](02_founder_context/background/founder_background.md) | Canonical founder profile with fact/inference split |
+| **Identity** | [career_timeline.md](02_founder_context/timeline/career_timeline.md) | Five-epoch career progression with evidence tags |
+| **Identity** | [skill_clusters.md](02_founder_context/skills/skill_clusters.md) | Competency trees across Visual, Algorithmic, Quantitative, and B2B domains |
+| **Brand** | [positioning_analysis.md](03_brand_strategy/positioning/positioning_analysis.md) | Market positioning, differentiators, and target ICPs |
+| **Brand** | [brand_identity_guidelines.md](03_brand_strategy/positioning/brand_identity_guidelines.md) | Color palette, typography, voice rules, and visual standards |
+| **Brand** | [brand_narrative.md](03_brand_strategy/narrative/brand_narrative.md) | Core storytelling copy, bios, and strategic angles |
+| **Brand** | [company_name_ideas.md](03_brand_strategy/naming/company_name_ideas.md) | Naming evaluation and selection rationale |
+| **Brand** | [domain_and_handles_registry.md](03_brand_strategy/naming/domain_and_handles_registry.md) | Domain and social handle acquisition tracker |
+| **Offers** | [service_packages.md](03_brand_strategy/offers/service_packages.md) | 4-tier offer ladder with pricing and deliverables |
+| **Content** | [content_pillars.md](04_content_system/pillars/content_pillars.md) | 5 core content pillars with post examples |
+| **Delivery** | [ai_service_workflows.md](05_ai_strategy/workflows/ai_service_workflows.md) | Onboarding, audit, content, and agent build workflows |
+| **AI Agents** | [master_context.md](06_ai_agent_context/system_prompts/master_context.md) | System prompt context, constraints, and operating rules |
+| **AI Agents** | [agent_roles.md](06_ai_agent_context/agent_roles/agent_roles.md) | Agent role index and task routing matrix |
+| **AI Agents** | [kramaniti_agent_roster.md](06_ai_agent_context/agent_roles/kramaniti_agent_roster.md) | Full company-style agent roster |
+| **Launch** | [website_structure_and_wireframe.md](07_business_build/company-ideas/website_structure_and_wireframe.md) | Historical one-page portfolio wireframe reference |
+| **Launch** | [launch_operations_checklist.md](07_business_build/delivery/launch_operations_checklist.md) | Business registration, payments, invoicing, and CRM setup |
+| **Governance** | [decisions.md](09_reviews/decision-log/decisions.md) | Decision log with rejected alternatives |

@@ -267,6 +267,119 @@
   filter: blur(0);
 }
 
+.heroBrandText {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(44px, 7vw, 94px);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.34);
+  text-shadow: 0 0 22px rgba(201, 168, 76, 0.14);
+  user-select: none;
+  margin-bottom: 2px;
+}
+
+.heroBrandText::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.68);
+  text-shadow: 0 0 10px rgba(201, 168, 76, 0.32);
+  -webkit-mask-image: linear-gradient(
+    110deg,
+    transparent 16%,
+    rgba(0, 0, 0, 0.2) 38%,
+    rgba(0, 0, 0, 0.85) 50%,
+    rgba(0, 0, 0, 0.2) 62%,
+    transparent 84%
+  );
+  -webkit-mask-size: 200% 100%;
+  animation: goldShimmer 6s linear infinite;
+  pointer-events: none;
+}
+
+.networkStage {
+  position: relative;
+  width: min(900px, 94vw);
+  height: clamp(140px, 20vw, 220px);
+  margin-top: -10px;
+  margin-bottom: -2px;
+}
+
+.networkWord {
+  position: absolute;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(28px, 4.4vw, 54px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: 0;
+  color: transparent;
+  -webkit-text-stroke: 1.8px rgba(201, 168, 76, 0.36);
+  text-shadow: 0 0 16px rgba(201, 168, 76, 0.12);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.networkWord::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: transparent;
+  -webkit-text-stroke: 1.8px rgba(201, 168, 76, 0.62);
+  text-shadow: 0 0 8px rgba(201, 168, 76, 0.3);
+  -webkit-mask-image: linear-gradient(110deg, transparent 16%, rgba(0, 0, 0, 0.2) 40%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.2) 60%, transparent 84%);
+  -webkit-mask-size: 200% 100%;
+  animation: goldShimmer 6s linear infinite;
+  pointer-events: none;
+}
+
+.networkWordStrategy { top: 10%; right: 5%; }
+.networkWordSystems { top: 42%; left: 1%; }
+.networkWordContent { top: 66%; right: 4%; }
+
+.connectorSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.connectorPathBase {
+  fill: none;
+  stroke: rgba(201, 168, 76, 0.3);
+  stroke-width: 2;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 3px rgba(201, 168, 76, 0.12));
+  opacity: 0;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: connectorDraw 1.1s ease forwards;
+}
+
+.connectorPathFlow {
+  fill: none;
+  stroke: url(#connectorFlowGradient);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-dasharray: 260 1200;
+  filter: drop-shadow(0 0 6px rgba(201, 168, 76, 0.22));
+  opacity: 0;
+  stroke-dashoffset: 0;
+  animation: connectorReveal 0.9s ease forwards, connectorFlow 4.8s linear infinite;
+}
+
+.connectorStem { animation-delay: 40ms, 180ms; }
+.connectorOne { animation-delay: 220ms, 520ms; }
+.connectorTwo { animation-delay: 360ms, 760ms; }
+.connectorThree { animation-delay: 520ms, 980ms; }
+
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -286,21 +399,28 @@
 
 .headline {
   margin: 0;
-  max-width: 13ch;
+  max-width: 100%;
   color: var(--text-primary);
   text-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
 }
 
+.headlineLine {
+  display: block;
+  white-space: nowrap;
+}
+
 .subheading {
   margin: 0;
-  max-width: 680px;
+  max-width: none;
+  width: 100%;
   font-family: var(--font-inter), sans-serif;
-  font-size: 18px;
+  font-size: clamp(13px, 1.65vw, 18px);
   color: var(--text-secondary);
   line-height: 1.65;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
+  white-space: nowrap;
 }
 
 .ctaRow {
@@ -365,10 +485,12 @@
 
 .secondaryButton {
   color: var(--text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
-    rgba(20, 20, 24, 0.18);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.08)),
+    rgba(20, 20, 24, 0.42);
+  backdrop-filter: blur(20px) saturate(1.08);
+  -webkit-backdrop-filter: blur(20px) saturate(1.08);
 }
 
 .secondaryButton:hover {
@@ -439,6 +561,37 @@
   }
 }
 
+@keyframes connectorReveal {
+  from {
+    opacity: 0;
+    stroke-dashoffset: 1200;
+  }
+  to {
+    opacity: 0.92;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes connectorDraw {
+  from {
+    opacity: 0;
+    stroke-dashoffset: 1200;
+  }
+  to {
+    opacity: 0.75;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes connectorFlow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -240;
+  }
+}
+
 @keyframes drift {
   0%,
   100% {
@@ -488,6 +641,22 @@
   .content {
     gap: 16px;
   }
+  .heroBrandText {
+    font-size: clamp(32px, 11vw, 56px);
+    -webkit-text-stroke: 1.5px rgba(201, 168, 76, 0.34);
+  }
+  .networkStage {
+    width: 100%;
+    height: 136px;
+    margin-top: -4px;
+  }
+  .networkWord {
+    font-size: clamp(20px, 6vw, 30px);
+    -webkit-text-stroke: 1.3px rgba(201, 168, 76, 0.34);
+  }
+  .networkWordStrategy { right: 1%; }
+  .networkWordSystems { left: 0%; }
+  .networkWordContent { right: 0%; top: 68%; }
   .eyebrow {
     font-size: 9px;
     padding: 6px 10px;
@@ -499,7 +668,7 @@
     line-height: 1.1;
   }
   .subheading {
-    font-size: 15px;
+    font-size: clamp(10px, 3.4vw, 13px);
     padding: 0 12px;
   }
   .ctaRow {
@@ -509,24 +678,6 @@
   .heroButton {
     width: 100%;
     max-width: 320px;
-  }
-  .motifStrategy {
-    top: 12%;
-    right: -5%;
-    font-size: clamp(40px, 12vw, 64px);
-    opacity: 0.25;
-  }
-  .motifAutomation {
-    top: 65%;
-    left: -10%;
-    font-size: clamp(40px, 12vw, 64px);
-    opacity: 0.25;
-  }
-  .motifContent {
-    bottom: 8%;
-    right: -5%;
-    font-size: clamp(40px, 12vw, 64px);
-    opacity: 0.25;
   }
   .motifRingOne {
     top: 5%;

@@ -1,79 +1,92 @@
-# AI Agent Roles & Jobs-to-be-Done (JTBD)
+# AI Agent Roles Index
 
-This document defines the specialized agent roles that can be spawned to automate marketing, research, strategy, sales, and delivery within this workspace.
+Purpose: provide a short operating index for Kramaniti's agent team. The full role definitions live in `kramaniti_agent_roster.md`.
 
----
+This file replaces the earlier generic roster with a company-style model aligned to the current Kramaniti foundation direction:
 
-## 1. Agent Roster & JTBD Matrix
+1. Strategy before tools.
+2. Systems before scale.
+3. Content after clarity.
 
-```mermaid
-graph TD
-    A[Master Coordinator] --> B[Research Agent]
-    A --> C[Strategy Agent]
-    A --> D[Brand Agent]
-    A --> E[Content Agent]
-    A --> F[Sales Agent]
-    A --> G[Delivery Agent]
-```
+## Primary Roster
 
----
+| Agent | Business Analogue | Primary Ownership |
+| :--- | :--- | :--- |
+| Master Coordinator | Chief of Staff | Priority routing, handoffs, continuity |
+| Founder Archivist | Founder Office Researcher | Founder facts, timeline, verification |
+| Brand Strategist | Head of Strategy | Positioning, ICPs, brand direction |
+| Narrative Editor | Editorial Director | Copy, founder story, voice |
+| Offer Architect | Product and Packaging Lead | Service architecture and scope |
+| Workflow Architect | Principal Systems Consultant | Workflow audits and implementation roadmap |
+| Systems Designer | Solutions Architect | System specs, integrations, handoff docs |
+| Content Director | Head of Content | Content pillars and editorial system |
+| Sales Operator | Discovery and Revenue Ops Lead | Qualification, audit call flow, proposals |
+| Operations Lead | Business Operations Manager | Launch, CRM, delivery operations |
+| Website Steward | Website and Conversion Owner | Website copy, CTA flow, QA |
+| Proof and Governance Auditor | Trust and Risk Reviewer | Claim audits, decision logs, proof discipline |
+| Asset Librarian | Brand Asset Manager | Logos, screenshots, references, public-use flags |
+| Agent Operations Architect | Internal Agent Systems Designer | Agent definitions, prompts, local rules |
 
-## 2. Agent Specifications
+## Specialist Support Modes
 
-### A. The Research Agent
-*   **Job-to-be-Done:** Continuous footprint monitoring, competitor tracking, and technology upskilling audits.
-*   **Target Files:**
-    *   `02_founder_context/background/founder_background.md`
-    *   `02_founder_context/skills/skill_clusters.md`
-*   **Key Responsibilities:**
-    *   Monitor the web for new references, articles, or social mentions of Karan Chordia or related entities.
-    *   Identify new AI tools, libraries, or model updates (e.g. Midjourney, Claude, make.com API updates).
-    *   Update founder context files when new verifiable information surfaces, promoting `[Unverified]` items to `[Fact]`.
-*   **Operating Constraint:** Never modify strategic positioning or offer packages. Only report facts and update verification statuses.
+These are narrower modes that lead agents may activate without becoming separate standing agents.
 
-### B. The Strategy Agent
-*   **Job-to-be-Done:** Analyzing service market fit, editing pricing structures, and evaluating naming ideas.
-*   **Target Files:**
-    *   `03_brand_strategy/positioning/positioning_analysis.md`
-    *   `03_brand_strategy/naming/company_name_ideas.md`
-*   **Key Responsibilities:**
-    *   Evaluate proposed company name options based on target ICP appeal.
-    *   Review competitive pricing shapes to optimize Karan’s offer ladder.
-    *   Ensure all strategies align with the narrative reframe of the 2020-2023 R&D gap.
-*   **Operating Constraint:** All strategic proposals must be labeled as `[Recommendation]` and log-documented before execution.
+| Specialist Mode | Parent Agent | Primary Use |
+| :--- | :--- | :--- |
+| Identity Steward | Brand Strategist | Visual identity consistency |
+| Digital Asset Strategist | Brand Strategist | Domains, handles, naming footprint |
+| Editorial Strategist | Content Director | Monthly themes and pillar coverage |
+| Repurposing Producer | Content Director | Multi-format content adaptation |
+| Cinematic Scriptwriter | Content Director | Founder-led video scripts |
+| Distribution Editor | Content Director | Channel-specific editing |
+| Audit Specialist | Workflow Architect | Workflow diagnosis and readiness gaps |
+| Integration Planner | Systems Designer | CRM, data, and process connections |
+| Handoff QA Agent | Systems Designer | Training, adoption, and documentation checks |
+| Delivery Operator | Operations Lead | Client delivery milestones and handoff |
+| Launch Coordinator | Operations Lead | Launch dependencies and setup tracking |
+| CRM Steward | Operations Lead | Lead stages, routing, and follow-up hygiene |
 
-### C. The Brand Agent
-*   **Job-to-be-Done:** Writing founder stories, pitching briefs, and managing narrative voice.
-*   **Target Files:**
-    *   `03_brand_strategy/narrative/brand_narrative.md`
-*   **Key Responsibilities:**
-    *   Draft outreach letters and pitch copy using the multi-length founder bios.
-    *   Review all copy to ensure the "Quantitative Creative" tone is maintained.
-*   **Operating Constraint:** Never invent client results or make claims that violate the "Do Not Assume" rules in `master_context.md`.
+## How To Use This Index
 
-### D. The Content Agent
-*   **Job-to-be-Done:** Ingesting raw transcripts, chunking content, and drafting multi-format social/video scripts.
-*   **Target Files:**
-    *   `04_content_system/pillars/content_pillars.md`
-*   **Key Responsibilities:**
-    *   Draft weekly LinkedIn posts, newsletters, and Twitter/X threads mapped to the 5 core content pillars.
-    *   Ensure prompts contain professional cinematographic tokens (focal lengths, lighting rules) when drafting image/video assets.
-*   **Operating Constraint:** Must pass all draft copy through a human-in-the-loop validation step.
+Use this file to choose the lead agent for a task. Then read the full agent card in:
 
-### E. The Sales Agent
-*   **Job-to-be-Done:** Structuring discovery scripts, pitch proposals, and pricing options.
-*   **Target Files:**
-    *   `03_brand_strategy/offers/service_packages.md`
-*   **Key Responsibilities:**
-    *   Generate discovery questionnaires tailored to specific target ICPs (e.g., co-working managers).
-    *   Draft project proposal sheets containing standard Tier 1/2/3 pricing modules.
-*   **Operating Constraint:** Never offer discounts below the approved floor pricing without founder authorization.
+- `06_ai_agent_context/agent_roles/kramaniti_agent_roster.md`
+- the relevant local `AGENTS.md` file for the directory being changed
+- `06_ai_agent_context/system_prompts/master_context.md`
 
-### F. The Delivery Agent
-*   **Job-to-be-Done:** Automating client onboarding sequences, tracking project milestones, and formatting client delivery documents.
-*   **Target Files:**
-    *   `05_ai_strategy/workflows/ai_service_workflows.md`
-*   **Key Responsibilities:**
-    *   Monitor the onboarding pipeline, send kickoff emails, and draft shared folder configurations.
-    *   Format AI integration blue-prints and tool-selection templates for clients.
-*   **Operating Constraint:** Maintain strict data security. Ensure client API credentials are segregated and never mixed.
+## Task Routing Matrix
+
+| Task Type | Lead Agent | Supporting Agents |
+| :--- | :--- | :--- |
+| Public website copy | Website Steward | Brand Strategist, Narrative Editor, Proof and Governance Auditor |
+| Homepage or SEO update | Website Steward | Brand Strategist, Content Director |
+| Founder bio or story | Founder Archivist | Narrative Editor, Proof and Governance Auditor |
+| Service packaging | Offer Architect | Brand Strategist, Sales Operator, Workflow Architect |
+| AI Workflow Audit design | Workflow Architect | Systems Designer, Sales Operator |
+| Client-facing proposal | Sales Operator | Offer Architect, Workflow Architect, Proof and Governance Auditor |
+| Content calendar | Content Director | Narrative Editor, Brand Strategist |
+| Workflow/system delivery docs | Systems Designer | Workflow Architect, Handoff QA Agent |
+| Launch operations | Operations Lead | Launch Coordinator, Website Steward, Sales Operator |
+| CRM or lead follow-up structure | Operations Lead | CRM Steward, Sales Operator, Website Steward |
+| Client delivery checklist | Operations Lead | Delivery Operator, Workflow Architect, Systems Designer |
+| Client or proof claim audit | Proof and Governance Auditor | Founder Archivist, Asset Librarian |
+| Asset organization | Asset Librarian | Website Steward, Content Director |
+| New agent definition | Agent Operations Architect | Master Coordinator, Proof and Governance Auditor |
+
+## Activation Rule
+
+Do not create a new agent unless the work is recurring, has a clear owner, and cannot be handled by an existing agent. Add new agents to `kramaniti_agent_roster.md` only after defining:
+
+- role
+- memory
+- goals
+- recurring tasks
+- inputs
+- outputs
+- owned files
+- escalation triggers
+- hard constraints
+
+## Public-Claim Rule
+
+Any agent preparing public-facing material must route client names, logos, testimonials, metrics, and case studies through the Proof and Governance Auditor before publication.

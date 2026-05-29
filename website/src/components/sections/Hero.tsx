@@ -17,10 +17,7 @@ export function Hero() {
 
     const updateScroll = () => {
       const rect = hero.getBoundingClientRect();
-      const scrollProgress = Math.min(
-        Math.max((-rect.top + window.innerHeight * 0.6) / (rect.height + window.innerHeight * 0.5), 0),
-        1
-      );
+      const scrollProgress = Math.min(Math.max((-rect.top) / 260, 0), 1);
 
       hero.style.setProperty('--hero-scroll', `${scrollProgress.toFixed(3)}`);
     };
@@ -43,9 +40,6 @@ export function Hero() {
         <div className={`${styles.glow} ${styles.glowRight}`}></div>
         <div className={styles.scanline}></div>
         <div className={styles.motifs}>
-          <span className={`${styles.motif} ${styles.motifStrategy}`} data-text="Strategy">Strategy</span>
-          <span className={`${styles.motif} ${styles.motifAutomation}`} data-text="Systems">Systems</span>
-          <span className={`${styles.motif} ${styles.motifContent}`} data-text="Content">Content</span>
           <span className={`${styles.motifRing} ${styles.motifRingOne}`}></span>
           <span className={`${styles.motifRing} ${styles.motifRingTwo}`}></span>
           <span className={`${styles.motifLine} ${styles.motifLineOne}`}></span>
@@ -56,10 +50,40 @@ export function Hero() {
       <div className={styles.container}>
         <div className={styles.split}>
           <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
+            <span className={styles.heroBrandText} data-text="Kramaniti">Kramaniti</span>
+            <div className={styles.networkStage} aria-hidden="true">
+              <span className={`${styles.networkWord} ${styles.networkWordStrategy}`} data-text="Strategy">Strategy</span>
+              <span className={`${styles.networkWord} ${styles.networkWordSystems}`} data-text="Systems">Systems</span>
+              <span className={`${styles.networkWord} ${styles.networkWordContent}`} data-text="Content">Content</span>
+              <svg viewBox="0 0 900 240" className={styles.connectorSvg}>
+                <defs>
+                  <linearGradient id="connectorFlowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="rgba(201,168,76,0)" />
+                    <stop offset="45%" stopColor="rgba(201,168,76,0.15)" />
+                    <stop offset="55%" stopColor="rgba(255,236,173,0.95)" />
+                    <stop offset="65%" stopColor="rgba(201,168,76,0.2)" />
+                    <stop offset="100%" stopColor="rgba(201,168,76,0)" />
+                  </linearGradient>
+                </defs>
+                <path className={styles.connectorPathBase} d="M 450 8 L 450 88" />
+                <path className={styles.connectorPathBase} d="M 450 88 C 520 82, 628 70, 770 58" />
+                <path className={styles.connectorPathBase} d="M 450 88 C 378 102, 268 116, 132 128" />
+                <path className={styles.connectorPathBase} d="M 450 88 C 528 122, 634 156, 770 188" />
+
+                <path className={`${styles.connectorPathFlow} ${styles.connectorStem}`} d="M 450 8 L 450 88" />
+                <path className={`${styles.connectorPathFlow} ${styles.connectorOne}`} d="M 450 88 C 520 82, 628 70, 770 58" />
+                <path className={`${styles.connectorPathFlow} ${styles.connectorTwo}`} d="M 450 88 C 378 102, 268 116, 132 128" />
+                <path className={`${styles.connectorPathFlow} ${styles.connectorThree}`} d="M 450 88 C 528 122, 634 156, 770 188" />
+              </svg>
+            </div>
             <span className={styles.eyebrow}>Strategy / Systems / Cinematic Content</span>
-            <h1 className={styles.headline}>Build the AI systems your brand actually needs.</h1>
+            <h1 className={styles.headline}>
+              <span className={styles.headlineLine}>Strategy before systems.</span>
+              <span className={styles.headlineLine}>Systems before scale.</span>
+              <span className={styles.headlineLine}>Content after clarity.</span>
+            </h1>
             <p className={styles.subheading}>
-              Kramaniti helps brands identify high-impact workflows, build practical AI infrastructure, and turn those systems into clear, cinematic communication.
+              We turn strategic clarity into practical systems and cinematic communication that scales.
             </p>
             <div className={styles.ctaRow}>
               <button

@@ -2,8 +2,13 @@
 import React, { useState } from 'react';
 import styles from './Navbar.module.css';
 import Link from 'next/link';
-import { ThemeToggle } from '../ui/ThemeToggle';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { Button } from '../ui/Button';
+
+const ThemeToggle = dynamic(() => import('../ui/ThemeToggle').then((mod) => mod.ThemeToggle), {
+  ssr: false,
+});
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,8 +22,14 @@ export function Navbar() {
         <header className={styles.header}>
           <div className={styles.container}>
             <Link href="/" className={styles.logoGroup} style={{ textDecoration: 'none' }} onClick={closeMobileMenu}>
-              <span className={styles.logoK}>KRAMA</span>
-              <span className={styles.logoRest}>NITI</span>
+              <Image
+                src="/kramaniti/assets/brand/kramaniti-mark-gold.png"
+                alt="Kramaniti logo"
+                width={70}
+                height={70}
+                className={styles.logoMark}
+                priority
+              />
             </Link>
             
             <nav className={styles.desktopNav}>

@@ -9,18 +9,9 @@ export function ThemeToggle() {
     }
 
     const storedTheme = localStorage.getItem('kramaniti-theme') as 'light' | 'dark' | null;
-    if (storedTheme) {
-      return storedTheme;
-    }
-
     const currentTheme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark' | null;
-    if (currentTheme) {
-      return currentTheme;
-    }
-
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return storedTheme ?? currentTheme ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   });
-
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('kramaniti-theme', theme);
@@ -30,8 +21,6 @@ export function ThemeToggle() {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
   };
-
-  if (!theme) return null;
 
   return (
     <button onClick={toggleTheme} className={styles.toggle} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
