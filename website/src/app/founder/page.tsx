@@ -6,21 +6,21 @@ import styles from './Founder.module.css';
 const timeline = [
   {
     year: 'Phase One',
-    title: 'Deep Strategy',
-    copy: 'Laying the true foundation for AI implementation by diving deep into the core vision and operations.',
-    tags: ['Brand Audit', 'AI Readiness', 'Vision Mapping']
+    title: 'Business Clarity',
+    copy: 'Understanding the brand, operations, and team rhythm before deciding what should be built.',
+    tags: ['Workflow audit', 'AI readiness', 'Priority map']
   },
   {
     year: 'Phase Two',
-    title: 'Agentic Infrastructure',
-    copy: 'Engineering custom workflows, agentic tools, and automated systems to seamlessly enhance daily operations.',
-    tags: ['Custom Workflows', 'Agentic Tools', 'System logic']
+    title: 'Practical Infrastructure',
+    copy: 'Designing custom workflows and internal tools that support daily operations without adding unnecessary complexity.',
+    tags: ['Custom workflows', 'Internal tools', 'System logic']
   },
   {
     year: 'Phase Three',
     title: 'Cinematic Content',
-    copy: 'Applying rigorous design thinking to the system\'s raw output to craft premium content that never feels like AI slop.',
-    tags: ['Design Thinking', 'High-End Production', 'Authenticity']
+    copy: 'Turning the clarity from those systems into premium communication that feels useful, human, and aligned.',
+    tags: ['Design thinking', 'High-end production', 'Authenticity']
   }
 ];
 
@@ -37,23 +37,23 @@ const proofPoints = [
   },
   {
     title: 'Nexocean',
-    label: 'Internal automation',
-    copy: 'Built internal workflow tools and produced content assets over a five-month contract engagement.'
+    label: 'Internal workflow support',
+    copy: 'Supported internal tools and content assets over a five-month contract engagement.'
   }
 ];
 
 const principles = [
   {
     title: 'A Single Pipeline',
-    copy: 'Unifying strategy, operational tech, and final creative output under one roof to ensure a totally coherent digital presence.'
+    copy: 'Unifying strategy, operational infrastructure, and final creative output so the brand presence stays coherent.'
   },
   {
-    title: 'Agentic Leverage',
-    copy: 'Deploying custom AI systems to handle operational scale without ever losing the human touch or authentic voice.'
+    title: 'Practical Leverage',
+    copy: 'Building the systems that remove friction while preserving human judgment, taste, and authentic voice.'
   },
   {
     title: 'Cinematic Standard',
-    copy: 'Refusing to settle for generic automated output. Every asset is held to the highest standard of rigorous design thinking.'
+    copy: 'Refusing to settle for generic output. Every asset is held to a high standard of design thinking.'
   }
 ];
 
@@ -99,7 +99,7 @@ export default function FounderPage() {
                   </div>
                   <div className={styles.imageMeta}>
                     <span className={styles.metaLabel}>Karan Chordia</span>
-                    <span className={styles.metaValue}>AI Architect / Founder</span>
+                    <span className={styles.metaValue}>Founder / Systems Partner</span>
                   </div>
                 </div>
 
@@ -138,13 +138,13 @@ export default function FounderPage() {
                   <h2>Bridging strategy, code, and cinema.</h2>
                   <div className={styles.bio}>
                     <p>
-                      Karan is a Bengaluru-based AI Architect and strategist who believes that true scale requires treating operations and creative as a single pipeline.
+                      Karan is a Bengaluru-based strategist and systems partner who believes that true scale requires treating operations and creative as a single pipeline.
                     </p>
                     <p>
-                      He started in commercial videography, documenting the rise of the Indian co-working ecosystem. But he realized that beautiful content without operational leverage couldn't scale.
+                      He started in commercial videography, documenting the rise of the Indian co-working ecosystem. But he realized that beautiful content without operational leverage couldn&apos;t scale.
                     </p>
                     <p>
-                      After a multi-year incubation period focused on workflow design and agentic systems, he now architects unified pipelines that allow brands to automate their operations while maintaining a premium, cinematic voice.
+                      After a multi-year incubation period focused on workflow design and systems thinking, he now builds connected pipelines that help brands improve operations while maintaining a premium, cinematic voice.
                     </p>
                   </div>
                 </article>
@@ -166,9 +166,9 @@ export default function FounderPage() {
 
                 <article className={styles.summaryCard}>
                   <span className="micro-label">Current Focus</span>
-                  <h3>Engineering pipelines that are highly automated, yet deeply authentic.</h3>
+                  <h3>Building pipelines that are practical, clear, and deeply authentic.</h3>
                   <p className="text-secondary caption">
-                    When strategy, operational tech, and final content are driven by the exact same vision, a brand&apos;s digital presence remains completely coherent and undeniably impactful.
+                    When strategy, operational infrastructure, and final content are driven by the same vision, a brand&apos;s digital presence remains coherent and useful.
                   </p>
                 </article>
               </div>
@@ -187,7 +187,7 @@ export default function FounderPage() {
               <span className="micro-label">The Pipeline</span>
               <h2>Three phases, one unified approach.</h2>
               <p className={styles.sectionLead}>
-                The philosophy remains consistent: lay a deep strategic foundation, engineer the agentic systems, and craft cinematic output.
+                The philosophy remains consistent: lay a clear strategic foundation, build practical systems, and craft cinematic output.
               </p>
             </div>
 
@@ -224,7 +224,7 @@ export default function FounderPage() {
               <span className="micro-label">Selected Proof</span>
               <h2>Client signals across the pipeline.</h2>
               <p className={styles.sectionLead}>
-                A track record of executing both high-end commercial media and complex internal automation.
+                A track record of executing high-end commercial media and internal workflow support.
               </p>
             </div>
 
@@ -251,7 +251,7 @@ export default function FounderPage() {
               <span className="micro-label">Working Style</span>
               <h2>The philosophy behind the architecture.</h2>
               <p className={styles.sectionLead}>
-                These core principles ensure that every system built delivers maximum operational leverage without compromising on premium quality.
+                These core principles ensure that every system built creates practical leverage without compromising on premium quality.
               </p>
             </div>
 

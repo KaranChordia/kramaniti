@@ -12,7 +12,7 @@
 
 .header {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1120px;
   background-color: rgba(20, 20, 24, 0.85);
   backdrop-filter: blur(48px);
   -webkit-backdrop-filter: blur(48px);
@@ -67,7 +67,7 @@
   .desktopNav {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 22px;
   }
   .ctaButton {
     display: inline-flex !important;

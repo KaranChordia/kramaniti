@@ -15,8 +15,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kramaniti | AI Architect & Technology Consulting",
-  description: "Bespoke AI agents and automated content engines for scaling founders and B2B SaaS firms.",
+  title: "Kramaniti | Practical AI Systems for Brand Growth",
+  description: "Kramaniti helps brands identify high-impact workflows, build practical AI infrastructure, and turn those systems into clear, cinematic communication.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

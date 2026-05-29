@@ -4,6 +4,33 @@ import styles from './Workflows.module.css';
 import { Card } from '../ui/Card';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
+const steps = [
+  {
+    title: 'Diagnose',
+    copy: 'Find the workflow, handoff, or decision loop creating the most friction.'
+  },
+  {
+    title: 'Design',
+    copy: 'Map the simplest operating path before choosing tools or integrations.'
+  },
+  {
+    title: 'Build',
+    copy: 'Create practical AI support around the processes that clearly matter.'
+  },
+  {
+    title: 'Train',
+    copy: 'Document usage, edge cases, and handoff notes so the team can adopt it.'
+  },
+  {
+    title: 'Communicate',
+    copy: 'Turn the new clarity into brand content that explains the value well.'
+  },
+  {
+    title: 'Improve',
+    copy: 'Review what is working, refine the workflow, and keep the system useful.'
+  }
+];
+
 export function Workflows() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1, freezeOnceVisible: true });
 
@@ -15,75 +42,51 @@ export function Workflows() {
       </div>
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
-          <span className="micro-label">Delivery System</span>
-          <h2>Why A Single Pipeline?</h2>
-          <p className="text-secondary">Ensuring your digital presence remains coherent, authentic, and impactful.</p>
+          <span className="micro-label">How it works</span>
+          <h2>A clear path from business problem to working system.</h2>
+          <p className="text-secondary">The engagement is designed to reduce confusion, build trust, and keep every output connected to the work your brand actually does.</p>
         </div>
 
         <div className={`${styles.flowShell} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.flowSummary}>
             <div className={styles.summaryItem}>
               <span className="micro-label">Input</span>
-              <span className={styles.summaryValue}>Brand Vision</span>
+              <span className={styles.summaryValue}>Business Reality</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
               <span className="micro-label">Process</span>
-              <span className={styles.summaryValue}>Unified Pipeline</span>
+              <span className={styles.summaryValue}>Focused Workflow</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
               <span className="micro-label">Output</span>
-              <span className={styles.summaryValue}>Authentic Impact</span>
+              <span className={styles.summaryValue}>Useful Growth System</span>
             </div>
           </div>
 
           <div className={styles.pipelineContainer}>
-            <div className={styles.pipelineNode}>
-              <div className={styles.nodeIconWrapper}>
-                <span className={styles.nodeIcon}>01</span>
+            {steps.map((step, index) => (
+              <div className={styles.pipelineNode} key={step.title}>
+                <div className={styles.nodeIconWrapper}>
+                  <span className={styles.nodeIcon}>{String(index + 1).padStart(2, '0')}</span>
+                </div>
+                <Card className={`${styles.nodeCard} ${index === 2 ? styles.primaryCard : ''}`}>
+                  {index === 2 && <div className={styles.glowOverlay}></div>}
+                  <div className={styles.nodeBar}></div>
+                  <h4>{step.title}</h4>
+                  <p className="text-secondary caption">{step.copy}</p>
+                </Card>
               </div>
-              <Card className={styles.nodeCard}>
-                <div className={styles.nodeBar}></div>
-                <h4>Align Vision</h4>
-                <p className="text-secondary caption">Map the core strategy so the technology serves the brand&apos;s unique identity, not the other way around.</p>
-              </Card>
-            </div>
-
-            <div className={styles.connector}></div>
-
-            <div className={styles.pipelineNode}>
-              <div className={styles.nodeIconWrapper}>
-                <span className={styles.nodeIcon}>02</span>
-              </div>
-              <Card className={`${styles.nodeCard} ${styles.primaryCard}`}>
-                <div className={styles.glowOverlay}></div>
-                <div className={styles.nodeBar}></div>
-                <h4>Engineer Systems</h4>
-                <p className="text-secondary caption">Deploy the exact agentic workflows needed to scale operations without losing the human touch.</p>
-              </Card>
-            </div>
-
-            <div className={styles.connector}></div>
-
-            <div className={styles.pipelineNode}>
-              <div className={styles.nodeIconWrapper}>
-                <span className={styles.nodeIcon}>03</span>
-              </div>
-              <Card className={styles.nodeCard}>
-                <div className={styles.nodeBar}></div>
-                <h4>Craft Content</h4>
-                <p className="text-secondary caption">Transform the system&apos;s output into high-end, design-driven content that resonates with your audience.</p>
-              </Card>
-            </div>
+            ))}
           </div>
 
           <div className={styles.outputStrip}>
-            <span className={styles.outputLabel}>System Output</span>
+            <span className={styles.outputLabel}>Audit outcome</span>
             <div className={styles.outputPills}>
-              <span className={styles.outputPill}>Coherent Strategy</span>
-              <span className={styles.outputPill}>Automated Operations</span>
-              <span className={styles.outputPill}>Cinematic Content</span>
+              <span className={styles.outputPill}>Workflow clarity</span>
+              <span className={styles.outputPill}>Build roadmap</span>
+              <span className={styles.outputPill}>Practical next step</span>
             </div>
           </div>
         </div>

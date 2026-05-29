@@ -26,9 +26,9 @@ export function Contact() {
       </div>
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
-          <span className="micro-label">Contact</span>
-          <h2>Let&apos;s Build the Pipeline</h2>
-          <p className="text-secondary">Reach out to align your strategy, systems, and content under one roof. We respond within 24 hours.</p>
+          <span className="micro-label">Start here</span>
+          <h2>Book an AI Workflow Audit.</h2>
+          <p className="text-secondary">Share the workflow, team handoff, or content bottleneck you want to make clearer. The first conversation is about finding the highest-impact system to build first.</p>
         </div>
 
         <div className={styles.grid}>
@@ -38,20 +38,23 @@ export function Contact() {
               <Input label="Work Email" type="email" placeholder="name@company.com" required />
               <Input label="Company / Brand" placeholder="Company or brand name" required />
               <Select label="Budget Range" options={budgetOptions} />
-              <Textarea label="Message" placeholder="Tell us briefly what you're looking for" />
+              <Textarea label="Workflow / Goal" placeholder="Tell us what feels messy, manual, unclear, or ready to improve" />
               <Button type="submit" variant="primary" className={styles.submitBtn}>
-                Send the Brief
+                Request Audit
               </Button>
             </form>
           </div>
 
           <div className={`${styles.calendlyColumn} ${isVisible ? styles.visible : ''}`}>
             <div className={styles.calendlyPlaceholder}>
-              <h3>Prefer a direct call?</h3>
-              <p className="text-secondary caption">Book time to review the audit, scope the build, or talk about a retainer.</p>
-              <Button variant="secondary" className={styles.placeholderBtn}>
-                Open Calendly
-              </Button>
+              <span className="micro-label">Audit focus</span>
+              <h3>Find the first system worth building.</h3>
+              <p className="text-secondary caption">A useful audit should leave you with business clarity, a workflow priority, and a practical next step. No platform shopping, no generic tool list, no pressure to replace every task.</p>
+              <div className={styles.auditList}>
+                <span>Workflow clarity</span>
+                <span>Implementation roadmap</span>
+                <span>Prototype specification</span>
+              </div>
             </div>
           </div>
         </div>

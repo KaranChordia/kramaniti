@@ -9,27 +9,27 @@ const tiers = [
   {
     id: 1,
     title: 'Foundation Strategy',
-    price: '₹75K - ₹1.5L',
-    label: 'DEEP ANALYSIS',
-    deliverables: ['Business deep-dive', 'AI implementation roadmap', 'Brand vision alignment'],
+    label: 'CLARITY',
+    summary: 'For brands that need clarity before building.',
+    deliverables: ['Business deep-dive', 'Workflow audit', 'AI readiness review', 'Implementation roadmap', 'Prototype specification'],
     ctaText: 'Book an Audit',
     isPopular: false
   },
   {
     id: 2,
     title: 'Systems Engineering',
-    price: '₹3L - ₹6L',
-    label: 'AGENTIC BUILD',
-    deliverables: ['Custom workflow creation', 'Agentic tool deployment', 'Operational tech integration'],
-    ctaText: 'Scope the Build',
+    label: 'PRACTICAL BUILD',
+    summary: 'For brands ready to turn workflows into internal tools.',
+    deliverables: ['Custom workflows', 'Practical AI tools', 'CRM and process integrations', 'Internal systems', 'Team handoff documentation'],
+    ctaText: 'Scope the Workflow',
     isPopular: true
   },
   {
     id: 3,
-    title: 'The Complete Lifecycle',
-    price: '₹1.2L - ₹2.5L/mo',
-    label: 'UNIFIED PIPELINE',
-    deliverables: ['Strategy & Systems maintenance', 'Cinematic content production', 'Coherent brand presence'],
+    title: 'Complete Lifecycle Retainer',
+    label: 'CONTINUITY',
+    summary: 'For brands that want strategy, systems, and content working together continuously.',
+    deliverables: ['System maintenance', 'Content production', 'Monthly optimization', 'Ongoing workflow improvements', 'Brand communication support'],
     ctaText: 'Explore Retainer',
     isPopular: false
   }
@@ -50,9 +50,9 @@ export function Services() {
       </div>
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
-          <span className="micro-label">Offer Ladder</span>
-          <h2>Engaging the Pipeline</h2>
-          <p className="text-secondary">Enter the pipeline at the stage your brand needs most.</p>
+          <span className="micro-label">Services</span>
+          <h2>Choose the right level of support.</h2>
+          <p className="text-secondary">Start with clarity, build the workflows that matter, or keep the full growth system improving month after month.</p>
         </div>
 
         <div className={styles.grid}>
@@ -67,7 +67,7 @@ export function Services() {
               <div className={styles.cardHeader}>
                 <span className="micro-label">{tier.label}</span>
                 <h4>{tier.title}</h4>
-                <div className={styles.price}>{tier.price}</div>
+                <p className={`${styles.summary} text-secondary caption`}>{tier.summary}</p>
               </div>
               
               <ul className={styles.deliverables}>

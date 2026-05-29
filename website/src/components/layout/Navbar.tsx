@@ -22,12 +22,12 @@ export function Navbar() {
             </Link>
             
             <nav className={styles.desktopNav}>
+              <Link href="/#method" className={styles.navLink}>Method</Link>
+              <Link href="/#services" className={styles.navLink}>Services</Link>
+              <Link href="/#workflows" className={styles.navLink}>Process</Link>
+              <Link href="/#credibility" className={styles.navLink}>Proof</Link>
               <Link href="/founder" className={styles.navLink}>Founder</Link>
               <Link href="/insights" className={styles.navLink}>Insights</Link>
-              <Link href="/#story" className={styles.navLink}>Story</Link>
-              <Link href="/#services" className={styles.navLink}>Services</Link>
-              <Link href="/#credibility" className={styles.navLink}>Proof</Link>
-              <Link href="/#workflows" className={styles.navLink}>Workflows</Link>
             </nav>
 
             <div className={styles.actions}>
@@ -39,7 +39,7 @@ export function Navbar() {
                   window.location.href = '/#contact';
                 }
               }}>
-                Book a Call
+                Book Audit
               </Button>
               <button className={styles.mobileMenuBtn} aria-label="Toggle Menu" onClick={toggleMobileMenu}>
                 {isMobileMenuOpen ? (
@@ -65,12 +65,12 @@ export function Navbar() {
         <div className={styles.mobileMenuOverlay}>
           <nav className={styles.mobileNavLinks}>
             <Link href="/" className={styles.mobileLink} onClick={closeMobileMenu}>Home</Link>
+            <Link href="/#method" className={styles.mobileLink} onClick={closeMobileMenu}>Method</Link>
+            <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
+            <Link href="/#workflows" className={styles.mobileLink} onClick={closeMobileMenu}>Process</Link>
+            <Link href="/#credibility" className={styles.mobileLink} onClick={closeMobileMenu}>Proof</Link>
             <Link href="/founder" className={styles.mobileLink} onClick={closeMobileMenu}>Founder</Link>
             <Link href="/insights" className={styles.mobileLink} onClick={closeMobileMenu}>Insights</Link>
-            <Link href="/#story" className={styles.mobileLink} onClick={closeMobileMenu}>Story</Link>
-            <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
-            <Link href="/#credibility" className={styles.mobileLink} onClick={closeMobileMenu}>Proof</Link>
-            <Link href="/#workflows" className={styles.mobileLink} onClick={closeMobileMenu}>Workflows</Link>
             <div style={{ marginTop: '24px' }}>
               <Button variant="primary" onClick={() => {
                 closeMobileMenu();
@@ -80,7 +80,7 @@ export function Navbar() {
                   window.location.href = '/#contact';
                 }
               }}>
-                Book a Call
+                Book Audit
               </Button>
             </div>
           </nav>

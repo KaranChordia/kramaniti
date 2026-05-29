@@ -115,7 +115,7 @@ export default function BrochureDocument() {
                 <p className="font-outfit uppercase tracking-[0.2em] text-[#C9A84C] text-[10px] font-bold mb-2">The Approach</p>
                 <h2 className="font-sora text-2xl text-[#C9A84C] font-semibold mb-4">Amplifying your story with logic.</h2>
                 <p className="text-sm text-[#F0F0F5] leading-[1.7] max-w-[500px]">
-                  We believe artificial intelligence shouldn't replace your story—it should amplify it. By combining great storytelling with smart automation, we build systems that scale your unique voice without losing its soul.
+                  We believe artificial intelligence shouldn&apos;t replace your story—it should amplify it. By combining great storytelling with smart automation, we build systems that scale your unique voice without losing its soul.
                 </p>
               </div>
 
@@ -354,7 +354,7 @@ export default function BrochureDocument() {
                 </div>
                 <h3 className="font-sora text-xl text-[#F0F0F5] font-semibold mb-2">The Founder Narrative Kit</h3>
                 <p className="text-xs text-[#9B9BA8] leading-[1.6]">
-                  We shoot a cinematic hero video (the source node), and our systems automatically expand it into a month's worth of scaled written documentation and social assets.
+                  We shoot a cinematic hero video (the source node), and our systems automatically expand it into a month&apos;s worth of scaled written documentation and social assets.
                 </p>
               </div>
             </div>
@@ -433,7 +433,7 @@ export default function BrochureDocument() {
             </div>
             <p className="font-outfit uppercase tracking-[0.3em] text-[#C9A84C] text-[10px] font-bold mb-6">The Standard</p>
             <p className="text-base text-[#9B9BA8] leading-[1.8] border-x border-[#2A2A32] px-8 py-4">
-              Our work is backed by years of commercial media production for global brands and a deep understanding of modern automation. We don't just guess what works; we engineer systems that deliver results.
+              Our work is backed by years of commercial media production for global brands and a deep understanding of modern automation. We don&apos;t just guess what works; we engineer systems that deliver results.
             </p>
           </div>
 
@@ -441,7 +441,7 @@ export default function BrochureDocument() {
 
           <div className="relative z-10 w-full max-w-[500px]">
             <h2 className="font-outfit text-5xl font-bold mb-10 leading-[1.2]">
-              Let's build a system<br/>
+              Let&apos;s build a system<br/>
               <span className="text-[#9B9BA8]">that works for you.</span>
             </h2>
             <div className="bg-[#141418] border border-[#C9A84C]/50 px-12 py-8 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-sm relative overflow-hidden flex flex-col items-center">

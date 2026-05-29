@@ -44,7 +44,7 @@ export function Hero() {
         <div className={styles.scanline}></div>
         <div className={styles.motifs}>
           <span className={`${styles.motif} ${styles.motifStrategy}`} data-text="Strategy">Strategy</span>
-          <span className={`${styles.motif} ${styles.motifAutomation}`} data-text="Automation">Automation</span>
+          <span className={`${styles.motif} ${styles.motifAutomation}`} data-text="Systems">Systems</span>
           <span className={`${styles.motif} ${styles.motifContent}`} data-text="Content">Content</span>
           <span className={`${styles.motifRing} ${styles.motifRingOne}`}></span>
           <span className={`${styles.motifRing} ${styles.motifRingTwo}`}></span>
@@ -56,8 +56,25 @@ export function Hero() {
       <div className={styles.container}>
         <div className={styles.split}>
           <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
-            <span className={styles.eyebrow}>Strategy / Infrastructure / Cinematic Content</span>
-            <h1 className={styles.headline}>We engineer brand growth as a single, connected pipeline.</h1>
+            <span className={styles.eyebrow}>Strategy / Systems / Cinematic Content</span>
+            <h1 className={styles.headline}>Build the AI systems your brand actually needs.</h1>
+            <p className={styles.subheading}>
+              Kramaniti helps brands identify high-impact workflows, build practical AI infrastructure, and turn those systems into clear, cinematic communication.
+            </p>
+            <div className={styles.ctaRow}>
+              <button
+                className={`${styles.heroButton} ${styles.primaryButton}`}
+                onClick={() => document.getElementById('contact')?.scrollIntoView()}
+              >
+                Book an AI Workflow Audit
+              </button>
+              <button
+                className={`${styles.heroButton} ${styles.secondaryButton}`}
+                onClick={() => document.getElementById('method')?.scrollIntoView()}
+              >
+                See the Method
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -68,7 +85,7 @@ export function Hero() {
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </div>
-        <div className={styles.footerNote}>Scroll to trace the system</div>
+        <div className={styles.footerNote}>Strategy before tools</div>
       </div>
     </section>
   );

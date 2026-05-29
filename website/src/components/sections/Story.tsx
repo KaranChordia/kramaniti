@@ -6,27 +6,27 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 const epochs = [
   {
     number: '01',
-    years: 'Phase One',
-    title: 'Deep Analysis & Strategy',
+    years: 'Strategy',
+    title: 'Understand the business first',
     flow: 'Foundation',
-    description: 'We dive deep into your business to create a strategy that lays the true foundation for AI implementation.',
-    tags: ['Brand Audit', 'AI Readiness', 'Vision Mapping']
+    description: 'We map the brand, team, workflows, bottlenecks, and growth goals before recommending any tool.',
+    tags: ['Business clarity', 'Workflow audit', 'Priority map']
   },
   {
     number: '02',
-    years: 'Phase Two',
-    title: 'Agentic Infrastructure',
-    flow: 'Engineering',
-    description: 'We build the actual infrastructure—custom workflows, agentic tools, and automated systems that seamlessly enhance daily operations.',
-    tags: ['Custom Workflows', 'Agentic Tools', 'Operational Tech']
+    years: 'Systems',
+    title: 'Build only what matters',
+    flow: 'Infrastructure',
+    description: 'We design practical AI workflows and internal tools around the processes with the clearest business value.',
+    tags: ['Internal tools', 'Process support', 'Team handoff']
   },
   {
     number: '03',
-    years: 'Phase Three',
+    years: 'Content',
     title: 'Cinematic Content',
-    flow: 'Creative',
-    description: 'We take the raw output from those systems and apply rigorous design thinking to craft premium content that never feels like \'AI slop.\'',
-    tags: ['Design Thinking', 'High-End Production', 'Authenticity']
+    flow: 'Communication',
+    description: 'We turn the clarity and system output into useful brand communication that sounds human and aligned.',
+    tags: ['Founder narrative', 'Content systems', 'Clear distribution']
   }
 ];
 
@@ -61,15 +61,16 @@ export function Story() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1, freezeOnceVisible: true });
 
   return (
-    <section className={styles.story} id="story" ref={ref as React.RefObject<HTMLDivElement>}>
+    <section className={styles.story} id="method" ref={ref as React.RefObject<HTMLDivElement>}>
       <div className={styles.atmosphere} aria-hidden="true">
-        <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Capture</span>
-        <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Build</span>
+        <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Sequence</span>
+        <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Clarity</span>
       </div>
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
-          <h2>The Unified Lifecycle</h2>
-          <p className="text-secondary">Strategy, systems, and content under one roof.</p>
+          <span className="micro-label">The method</span>
+          <h2>Strategy before systems. Systems before scale. Content after clarity.</h2>
+          <p className="text-secondary">Kramaniti connects the thinking, tools, and communication work into one operating pipeline.</p>
           <div className={styles.legend}>
             <span className={styles.legendPill}>Strategy</span>
             <span className={styles.legendArrow}>→</span>

@@ -7,18 +7,37 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 const cases = [
   {
     client: 'WeWork India',
-    type: 'Commercial Videography Vendor',
-    summary: 'Directed cinematic inaugural coverage for WeWork Galaxy, Vaishnavi Signature, ITI Limited, and RMZ Latitude locations across Bengaluru. Produced aerial drone mapping and brand content during the 2017-2019 Indian co-working expansion.'
+    type: 'Selected experience',
+    summary: 'Commercial media and spatial coverage connected to Bengaluru co-working expansion work, including inauguration and location-focused storytelling.'
   },
   {
     client: 'Hyatt Centric',
-    type: 'Commercial Content Production',
-    summary: 'Produced cinematic brand content and drone footage for the Hyatt Centric property, translating luxury hospitality aesthetics into digital distribution-ready video assets.'
+    type: 'Selected experience',
+    summary: 'Hospitality content production experience shaped around premium space, visual clarity, and distribution-ready brand assets.'
   },
   {
     client: 'Nexocean',
-    type: 'Internal Automation & Content',
-    summary: 'Built internal automation tools for the workforce consulting team and produced digital marketing assets over a 5-month contract engagement.'
+    type: 'Selected experience',
+    summary: 'Five-month contract support across internal workflow tools and brand content for a workforce consulting environment.'
+  }
+];
+
+const ecosystems = [
+  {
+    category: 'Co-working',
+    detail: 'Space-led storytelling and operational context'
+  },
+  {
+    category: 'Hospitality',
+    detail: 'Premium content standards and customer-facing communication'
+  },
+  {
+    category: 'Education',
+    detail: 'Clear knowledge packaging and digital communication'
+  },
+  {
+    category: 'Startup & B2B tech',
+    detail: 'Workflow clarity, internal tools, and founder-led messaging'
   }
 ];
 
@@ -47,8 +66,8 @@ export function Credibility() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Proof</span>
-          <h2>Trusted By</h2>
-          <p className="text-secondary">Verified work across media, automation, and internal tooling.</p>
+          <h2>Credibility without inflated claims.</h2>
+          <p className="text-secondary">Experience across co-working, hospitality, education, startup, and B2B technology ecosystems.</p>
         </div>
 
         <div className={`${styles.carouselWrapper} ${isVisible ? styles.visible : ''}`}>
@@ -76,25 +95,15 @@ export function Credibility() {
 
       <div className={`${styles.numbersStrip} ${isVisible ? styles.visible : ''}`}>
         <div className={styles.numbersContainer}>
-          <div className={styles.numberItem}>
-            <span className={styles.number}>1,050+</span>
-            <span className={styles.numberLabel}>YouTube subscribers</span>
-          </div>
-          <div className={styles.numberDivider}></div>
-          <div className={styles.numberItem}>
-            <span className={styles.number}>15K+</span>
-            <span className={styles.numberLabel}>Instagram followers</span>
-          </div>
-          <div className={styles.numberDivider}></div>
-          <div className={styles.numberItem}>
-            <span className={styles.number}>4+</span>
-            <span className={styles.numberLabel}>Years B2B media</span>
-          </div>
-          <div className={styles.numberDivider}></div>
-          <div className={styles.numberItem}>
-            <span className={styles.number}>3+</span>
-            <span className={styles.numberLabel}>Years R&D</span>
-          </div>
+          {ecosystems.map((item, index) => (
+            <React.Fragment key={item.category}>
+              <div className={styles.numberItem}>
+                <span className={styles.number}>{item.category}</span>
+                <span className={styles.numberLabel}>{item.detail}</span>
+              </div>
+              {index < ecosystems.length - 1 && <div className={styles.numberDivider}></div>}
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </section>

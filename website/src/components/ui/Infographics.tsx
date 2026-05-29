@@ -148,7 +148,7 @@ export function AgenticWorkflowsInfographic() {
             </tr>
             <tr>
               <td className={styles.matrixCellLabel}>Core Logic</td>
-              <td className={styles.matrixCell}>"If X happens, then do Y" (Rigid)</td>
+              <td className={styles.matrixCell}>&quot;If X happens, then do Y&quot; (Rigid)</td>
               <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Autonomous reasoning & execution plans</td>
             </tr>
             <tr>

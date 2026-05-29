@@ -120,7 +120,7 @@
   font-family: var(--font-outfit), sans-serif;
   font-size: clamp(56px, 11vw, 156px);
   font-weight: 700;
-  letter-spacing: -0.08em;
+  letter-spacing: 0;
   line-height: 0.9;
   color: transparent;
   -webkit-text-stroke: 2px rgba(201, 168, 76, 0.25);
@@ -178,7 +178,7 @@
   font-family: var(--font-outfit), sans-serif;
   font-size: clamp(44px, 6vw, 72px);
   line-height: 1.04;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
   color: var(--text-primary);
 }
 
@@ -442,7 +442,7 @@
   font-family: var(--font-outfit), sans-serif;
   font-size: clamp(30px, 4vw, 46px);
   line-height: 1.15;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .sectionLead {
