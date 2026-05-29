@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import styles from './Credibility.module.css';
 import { Card } from '../ui/Card';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 const cases = [
   {
@@ -66,7 +67,7 @@ export function Credibility() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Proof</span>
-          <h2>Credibility without inflated claims.</h2>
+          <AnimatedHeading isVisible={isVisible}>Credibility without inflated claims.</AnimatedHeading>
           <p className="text-secondary">Experience across co-working, hospitality, education, startup, and B2B technology ecosystems.</p>
         </div>
 

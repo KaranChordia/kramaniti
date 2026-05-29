@@ -8,6 +8,19 @@
   justify-content: center;
   padding: 0 24px;
   pointer-events: none; /* Let clicks pass through outside the header */
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 640ms ease, transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateY(-14px) scale(0.98);
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .header {
@@ -152,7 +165,7 @@
   display: flex;
   background: none;
   border: none;
-  color: var(--text-primary);
+  color: var(--color-burnished-gold);
   cursor: pointer;
   padding: 4px;
 }
@@ -195,6 +208,21 @@
   min-height: min-content;
 }
 
+.mobileNavLinks > * {
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: mobileMenuDrop 420ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.mobileNavLinks > *:nth-child(1) { animation-delay: 40ms; }
+.mobileNavLinks > *:nth-child(2) { animation-delay: 90ms; }
+.mobileNavLinks > *:nth-child(3) { animation-delay: 140ms; }
+.mobileNavLinks > *:nth-child(4) { animation-delay: 190ms; }
+.mobileNavLinks > *:nth-child(5) { animation-delay: 240ms; }
+.mobileNavLinks > *:nth-child(6) { animation-delay: 290ms; }
+.mobileNavLinks > *:nth-child(7) { animation-delay: 340ms; }
+.mobileNavLinks > *:nth-child(8) { animation-delay: 390ms; }
+
 .mobileLink {
   font-family: var(--font-outfit), sans-serif;
   font-size: 32px;
@@ -227,6 +255,17 @@
   gap: 12px;
   padding-right: 4px;
   height: 100%;
+}
+
+@keyframes mobileMenuDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes navBorderFlow {

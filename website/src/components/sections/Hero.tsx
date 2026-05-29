@@ -52,8 +52,8 @@ export function Hero() {
           <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
             <span className={styles.heroBrandText} data-text="Kramaniti">Kramaniti</span>
             <div className={styles.networkStage} aria-hidden="true">
-              <span className={`${styles.networkWord} ${styles.networkWordStrategy}`} data-text="Strategy">Strategy</span>
               <span className={`${styles.networkWord} ${styles.networkWordSystems}`} data-text="Systems">Systems</span>
+              <span className={`${styles.networkWord} ${styles.networkWordStrategy}`} data-text="Strategy">Strategy</span>
               <span className={`${styles.networkWord} ${styles.networkWordContent}`} data-text="Content">Content</span>
               <svg viewBox="0 0 900 240" className={styles.connectorSvg}>
                 <defs>
@@ -65,15 +65,20 @@ export function Hero() {
                     <stop offset="100%" stopColor="rgba(201,168,76,0)" />
                   </linearGradient>
                 </defs>
-                <path className={styles.connectorPathBase} d="M 450 8 L 450 88" />
-                <path className={styles.connectorPathBase} d="M 450 88 C 520 82, 628 70, 770 58" />
-                <path className={styles.connectorPathBase} d="M 450 88 C 378 102, 268 116, 132 128" />
-                <path className={styles.connectorPathBase} d="M 450 88 C 528 122, 634 156, 770 188" />
+                <path pathLength="1" className={`${styles.connectorPathBase} ${styles.connectorStemBase}`} d="M 450 8 L 450 88" />
+                <path pathLength="1" className={`${styles.connectorPathBase} ${styles.connectorOneBase}`} d="M 450 88 C 520 82, 628 70, 770 58" />
+                <path pathLength="1" className={`${styles.connectorPathBase} ${styles.connectorTwoBase}`} d="M 450 88 C 378 102, 268 116, 132 128" />
+                <path pathLength="1" className={`${styles.connectorPathBase} ${styles.connectorThreeBase}`} d="M 450 88 C 528 122, 634 156, 770 188" />
 
-                <path className={`${styles.connectorPathFlow} ${styles.connectorStem}`} d="M 450 8 L 450 88" />
-                <path className={`${styles.connectorPathFlow} ${styles.connectorOne}`} d="M 450 88 C 520 82, 628 70, 770 58" />
-                <path className={`${styles.connectorPathFlow} ${styles.connectorTwo}`} d="M 450 88 C 378 102, 268 116, 132 128" />
-                <path className={`${styles.connectorPathFlow} ${styles.connectorThree}`} d="M 450 88 C 528 122, 634 156, 770 188" />
+                <path pathLength="1" className={`${styles.connectorPathFlow} ${styles.connectorStem}`} d="M 450 8 L 450 88" />
+                <path pathLength="1" className={`${styles.connectorPathFlow} ${styles.connectorOne}`} d="M 450 88 C 520 82, 628 70, 770 58" />
+                <path pathLength="1" className={`${styles.connectorPathFlow} ${styles.connectorTwo}`} d="M 450 88 C 378 102, 268 116, 132 128" />
+                <path pathLength="1" className={`${styles.connectorPathFlow} ${styles.connectorThree}`} d="M 450 88 C 528 122, 634 156, 770 188" />
+
+                <path pathLength="1" className={`${styles.connectorPathPulse} ${styles.connectorStemPulse}`} d="M 450 8 L 450 88" />
+                <path pathLength="1" className={`${styles.connectorPathPulse} ${styles.connectorOnePulse}`} d="M 450 88 C 520 82, 628 70, 770 58" />
+                <path pathLength="1" className={`${styles.connectorPathPulse} ${styles.connectorTwoPulse}`} d="M 450 88 C 378 102, 268 116, 132 128" />
+                <path pathLength="1" className={`${styles.connectorPathPulse} ${styles.connectorThreePulse}`} d="M 450 88 C 528 122, 634 156, 770 188" />
               </svg>
             </div>
             <span className={styles.eyebrow}>Strategy / Systems / Cinematic Content</span>
@@ -85,31 +90,16 @@ export function Hero() {
             <p className={styles.subheading}>
               We turn strategic clarity into practical systems and cinematic communication that scales.
             </p>
-            <div className={styles.ctaRow}>
-              <button
-                className={`${styles.heroButton} ${styles.primaryButton}`}
-                onClick={() => document.getElementById('contact')?.scrollIntoView()}
-              >
-                Book an AI Workflow Audit
-              </button>
-              <button
-                className={`${styles.heroButton} ${styles.secondaryButton}`}
-                onClick={() => document.getElementById('method')?.scrollIntoView()}
-              >
-                See the Method
-              </button>
-            </div>
           </div>
         </div>
       </div>
 
       <div className={styles.heroFooter}>
         <div className={styles.scrollIndicator}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </div>
-        <div className={styles.footerNote}>Strategy before tools</div>
       </div>
     </section>
   );

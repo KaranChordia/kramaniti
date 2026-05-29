@@ -1,0 +1,224 @@
+.shell {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(201, 168, 76, 0.14), transparent 30%),
+    radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(180deg, #050508 0%, #0a0a0f 52%, #050508 100%);
+  pointer-events: none;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.overlay::before {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(255, 236, 173, 0.14), transparent 34%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03) 50%, transparent),
+    linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.06) 48%, transparent);
+  mask-image: radial-gradient(circle at center, black 32%, transparent 78%);
+  opacity: 0.38;
+  transform: translateY(-12px);
+  transition: opacity 860ms ease, transform 1100ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.overlay::after {
+  content: '';
+  position: absolute;
+  inset: auto 12% 16%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.42), rgba(255, 236, 173, 0.9), rgba(201, 168, 76, 0.42), transparent);
+  opacity: 0;
+  filter: blur(0.2px);
+  transform: scaleX(0.85);
+  transition: opacity 580ms ease, transform 580ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.overlayDark::after {
+  opacity: 0;
+}
+
+.overlayLogoIn::after {
+  opacity: 0.42;
+}
+
+.overlayLogoOut::after {
+  opacity: 0;
+  transform: scaleX(1.08);
+}
+
+.overlayLogoIn::before {
+  opacity: 0.72;
+  transform: translateY(0);
+}
+
+.overlayLogoOut::before {
+  opacity: 0.18;
+  transform: translateY(16px);
+}
+
+.logoStage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+
+.stageLight {
+  position: absolute;
+  width: min(78vw, 620px);
+  height: min(78vw, 620px);
+  border-radius: 999px;
+  background:
+    conic-gradient(
+      from 218deg at 50% 50%,
+      transparent 0deg,
+      rgba(255, 244, 203, 0.08) 34deg,
+      rgba(255, 236, 173, 0.45) 52deg,
+      rgba(201, 168, 76, 0.18) 72deg,
+      transparent 112deg,
+      transparent 360deg
+    );
+  filter: blur(18px);
+  opacity: 0;
+  transform: translate3d(-14%, -20%, 0) rotate(-18deg) scale(0.82);
+  transition:
+    opacity 900ms ease,
+    transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.logoHalo {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at center, rgba(255, 236, 173, 0.2), rgba(201, 168, 76, 0.12) 34%, transparent 70%);
+  filter: blur(12px);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 980ms ease, transform 1180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.logoMark {
+  position: relative;
+  display: block;
+  width: min(34vw, 176px);
+  height: auto;
+  background: transparent;
+  opacity: 0;
+  transform: translateY(24px) scale(0.92);
+  filter: blur(14px) drop-shadow(0 0 18px rgba(201, 168, 76, 0.22));
+  transition:
+    opacity 900ms ease,
+    transform 1180ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1180ms ease;
+}
+
+.overlayLogoIn .stageLight {
+  opacity: 0.88;
+  transform: translate3d(5%, -6%, 0) rotate(8deg) scale(1);
+}
+
+.overlayLogoOut .stageLight {
+  opacity: 0;
+  transform: translate3d(18%, 4%, 0) rotate(22deg) scale(1.08);
+}
+
+.overlayLogoIn .logoHalo {
+  opacity: 0.82;
+  transform: scale(1);
+}
+
+.overlayLogoIn .logoMark {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0) drop-shadow(0 0 28px rgba(201, 168, 76, 0.36));
+}
+
+.overlayLogoOut .logoHalo {
+  opacity: 0;
+  transform: scale(1.14);
+}
+
+.overlayLogoOut .logoMark {
+  opacity: 0;
+  transform: translateY(-18px) scale(1.04);
+  filter: blur(16px) drop-shadow(0 0 18px rgba(201, 168, 76, 0.08));
+}
+
+.chrome {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(8px);
+  animation: chromeReveal 720ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.chromeVisible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.main {
+  position: relative;
+}
+
+@keyframes chromeReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .logoStage {
+    transform: translateY(-6px);
+  }
+
+  .logoMark {
+    width: min(52vw, 164px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .overlay::after,
+  .stageLight,
+  .logoHalo,
+  .logoMark,
+  .chrome {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .logoMark {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .chrome {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}

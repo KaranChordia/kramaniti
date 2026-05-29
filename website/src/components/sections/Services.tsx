@@ -4,6 +4,7 @@ import styles from './Services.module.css';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 const tiers = [
   {
@@ -51,7 +52,7 @@ export function Services() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Services</span>
-          <h2>Choose the right level of support.</h2>
+          <AnimatedHeading isVisible={isVisible}>Choose the right level of support.</AnimatedHeading>
           <p className="text-secondary">Start with clarity, build the workflows that matter, or keep the full growth system improving month after month.</p>
         </div>
 

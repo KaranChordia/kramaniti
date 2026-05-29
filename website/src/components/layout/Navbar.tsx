@@ -10,15 +10,28 @@ const ThemeToggle = dynamic(() => import('../ui/ThemeToggle').then((mod) => mod.
   ssr: false,
 });
 
-export function Navbar() {
+interface NavbarProps {
+  isVisible?: boolean;
+}
+
+export function Navbar({ isVisible = true }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const scrollToContact = () => {
+    const isHomepage = window.location.pathname === '/' || window.location.pathname === '/kramaniti' || window.location.pathname === '/kramaniti/';
+
+    if (isHomepage) {
+      document.getElementById('contact')?.scrollIntoView();
+    } else {
+      window.location.href = '/kramaniti/#contact';
+    }
+  };
 
   return (
     <>
-      <div className={styles.navWrapper}>
+      <div className={`${styles.navWrapper} ${isVisible ? styles.visible : styles.hidden}`}>
         <header className={styles.header}>
           <div className={styles.container}>
             <Link href="/" className={styles.logoGroup} style={{ textDecoration: 'none' }} onClick={closeMobileMenu}>
@@ -43,13 +56,7 @@ export function Navbar() {
 
             <div className={styles.actions}>
               <ThemeToggle />
-              <Button variant="primary" className={styles.ctaButton} onClick={() => {
-                if (window.location.pathname === '/') {
-                  document.getElementById('contact')?.scrollIntoView();
-                } else {
-                  window.location.href = '/#contact';
-                }
-              }}>
+              <Button variant="primary" className={styles.ctaButton} onClick={scrollToContact}>
                 Book Audit
               </Button>
               <button className={styles.mobileMenuBtn} aria-label="Toggle Menu" onClick={toggleMobileMenu}>
@@ -85,11 +92,7 @@ export function Navbar() {
             <div style={{ marginTop: '24px' }}>
               <Button variant="primary" onClick={() => {
                 closeMobileMenu();
-                if (window.location.pathname === '/') {
-                  document.getElementById('contact')?.scrollIntoView();
-                } else {
-                  window.location.href = '/#contact';
-                }
+                scrollToContact();
               }}>
                 Book Audit
               </Button>

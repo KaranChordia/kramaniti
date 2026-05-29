@@ -2,6 +2,7 @@
 import React from 'react';
 import styles from './Problem.module.css';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 const signals = [
   {
@@ -31,7 +32,7 @@ export function Problem() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">The problem</span>
-          <h2>Most brands do not have an AI problem. They have a workflow clarity problem.</h2>
+          <AnimatedHeading isVisible={isVisible}>Most brands do not have an AI problem. They have a workflow clarity problem.</AnimatedHeading>
           <p className="text-secondary">
             Strategy, operations, and content often grow in separate directions. Kramaniti helps fix the foundation first, so every system you build has a clear business reason.
           </p>

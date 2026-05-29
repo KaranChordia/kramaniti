@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './Workflows.module.css';
 import { Card } from '../ui/Card';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 const steps = [
   {
@@ -43,7 +44,7 @@ export function Workflows() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">How it works</span>
-          <h2>A clear path from business problem to working system.</h2>
+          <AnimatedHeading isVisible={isVisible}>A clear path from business problem to working system.</AnimatedHeading>
           <p className="text-secondary">The engagement is designed to reduce confusion, build trust, and keep every output connected to the work your brand actually does.</p>
         </div>
 

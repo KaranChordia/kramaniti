@@ -1,10 +1,16 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './FounderPreview.module.css';
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 export function FounderPreview() {
+  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.18, freezeOnceVisible: true });
+
   return (
-    <section className={styles.founder} id="founder-preview">
+    <section className={styles.founder} id="founder-preview" ref={ref as React.RefObject<HTMLDivElement>}>
       <div className={styles.atmosphere} aria-hidden="true">
         <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Founder</span>
         <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Sequence</span>
@@ -23,7 +29,7 @@ export function FounderPreview() {
 
         <div className={styles.content}>
           <span className="micro-label">Founder-led</span>
-          <h2>Built by a strategist who understands systems and cinematic communication.</h2>
+          <AnimatedHeading isVisible={isVisible}>Built by a strategist who understands systems and cinematic communication.</AnimatedHeading>
           <p className="text-secondary">
             Kramaniti is shaped by Karan Chordia&apos;s path from commercial media and spatial storytelling into workflow design and practical AI infrastructure. The work stays grounded in first-principles thinking: understand the business, build what matters, and communicate clearly.
           </p>

@@ -2,6 +2,7 @@
 import React from 'react';
 import styles from './Story.module.css';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 const epochs = [
   {
@@ -69,7 +70,7 @@ export function Story() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">The method</span>
-          <h2>Kramaniti connects the thinking, tools, and communication work into one operating pipeline.</h2>
+          <AnimatedHeading isVisible={isVisible}>Kramaniti connects the thinking, tools, and communication work into one operating pipeline.</AnimatedHeading>
           <div className={styles.legend}>
             <span className={styles.legendPill}>Strategy</span>
             <span className={styles.legendArrow}>→</span>

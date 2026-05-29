@@ -4,6 +4,7 @@ import styles from './Contact.module.css';
 import { Input, Textarea, Select } from '../ui/Input';
 import { Button } from '../ui/Button';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 export function Contact() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1, freezeOnceVisible: true });
@@ -27,7 +28,7 @@ export function Contact() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Start here</span>
-          <h2>Book an AI Workflow Audit.</h2>
+          <AnimatedHeading isVisible={isVisible}>Book an AI Workflow Audit.</AnimatedHeading>
           <p className="text-secondary">Share the workflow, team handoff, or content bottleneck you want to make clearer. The first conversation is about finding the highest-impact system to build first.</p>
         </div>
 
