@@ -1,0 +1,179 @@
+{
+  "routing_matrix": [
+    {
+      "intent": "website_public_copy",
+      "lead_agent": "website_steward",
+      "supporting_agents": [
+        "brand_strategist",
+        "narrative_editor",
+        "proof_governance_auditor"
+      ],
+      "triggers": [
+        "update homepage",
+        "SEO update",
+        "change CTA",
+        "new landing page",
+        "website"
+      ]
+    },
+    {
+      "intent": "brand_strategy_positioning",
+      "lead_agent": "brand_strategist",
+      "supporting_agents": [
+        "narrative_editor",
+        "content_director"
+      ],
+      "triggers": [
+        "repositioning",
+        "ICP update",
+        "messaging map",
+        "brand identity",
+        "strategy"
+      ]
+    },
+    {
+      "intent": "founder_story_verification",
+      "lead_agent": "founder_archivist",
+      "supporting_agents": [
+        "narrative_editor",
+        "proof_governance_auditor"
+      ],
+      "triggers": [
+        "update bio",
+        "founder timeline",
+        "Karan's background",
+        "founder context"
+      ]
+    },
+    {
+      "intent": "service_offer_packaging",
+      "lead_agent": "offer_architect",
+      "supporting_agents": [
+        "brand_strategist",
+        "sales_operator",
+        "workflow_architect"
+      ],
+      "triggers": [
+        "new pricing",
+        "update service package",
+        "define deliverables",
+        "offer"
+      ]
+    },
+    {
+      "intent": "workflow_diagnosis_roadmaps",
+      "lead_agent": "workflow_architect",
+      "supporting_agents": [
+        "systems_designer",
+        "sales_operator"
+      ],
+      "triggers": [
+        "workflow audit",
+        "process map",
+        "AI readiness",
+        "diagnosis"
+      ]
+    },
+    {
+      "intent": "system_specs_documentation",
+      "lead_agent": "systems_designer",
+      "supporting_agents": [
+        "workflow_architect"
+      ],
+      "triggers": [
+        "build this system",
+        "integration map",
+        "handoff docs",
+        "prototype spec",
+        "systems delivery"
+      ]
+    },
+    {
+      "intent": "content_creation_planning",
+      "lead_agent": "content_director",
+      "supporting_agents": [
+        "narrative_editor",
+        "brand_strategist"
+      ],
+      "triggers": [
+        "LinkedIn post",
+        "newsletter",
+        "editorial calendar",
+        "video script",
+        "content"
+      ]
+    },
+    {
+      "intent": "sales_proposals",
+      "lead_agent": "sales_operator",
+      "supporting_agents": [
+        "offer_architect",
+        "workflow_architect"
+      ],
+      "triggers": [
+        "discovery call",
+        "client proposal",
+        "lead follow-up",
+        "sales"
+      ]
+    },
+    {
+      "intent": "business_operations_crm",
+      "lead_agent": "operations_lead",
+      "supporting_agents": [
+        "website_steward",
+        "sales_operator"
+      ],
+      "triggers": [
+        "launch checklist",
+        "setup CRM",
+        "domain config",
+        "client onboarding",
+        "operations"
+      ]
+    },
+    {
+      "intent": "proof_auditing_risk_review",
+      "lead_agent": "proof_governance_auditor",
+      "supporting_agents": [
+        "founder_archivist",
+        "asset_librarian"
+      ],
+      "triggers": [
+        "verify claim",
+        "check permissions",
+        "decision log",
+        "audit public proof",
+        "governance"
+      ]
+    },
+    {
+      "intent": "asset_management",
+      "lead_agent": "asset_librarian",
+      "supporting_agents": [
+        "website_steward",
+        "content_director"
+      ],
+      "triggers": [
+        "organize logos",
+        "find screenshot",
+        "label assets",
+        "assets"
+      ]
+    },
+    {
+      "intent": "agent_framework_updates",
+      "lead_agent": "agent_ops_architect",
+      "supporting_agents": [
+        "master_coordinator",
+        "proof_governance_auditor"
+      ],
+      "triggers": [
+        "create new agent",
+        "update system prompt",
+        "modify AGENTS.md",
+        "framework"
+      ]
+    }
+  ]
+}

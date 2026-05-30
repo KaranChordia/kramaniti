@@ -53,6 +53,7 @@ Use this file to choose the lead agent for a task. Then read the full agent card
 - `06_ai_agent_context/agent_roles/kramaniti_agent_roster.md`
 - the relevant local `AGENTS.md` file for the directory being changed
 - `06_ai_agent_context/system_prompts/master_context.md`
+- [Recommendation] Machine-readable configurations can be found in `06_ai_agent_context/agents/` and routing rules in `06_ai_agent_context/routing/`.
 
 ## Task Routing Matrix
 

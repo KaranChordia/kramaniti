@@ -223,3 +223,11 @@ For meaningful work, an agent should leave behind:
 - visible open questions if any remain
 - claim labels where factual material is involved
 - a decision-log update when the choice changes brand, offer, proof, or operating structure
+
+## 13. Agent Operating Framework
+
+[Recommendation] The operational framework of Kramaniti is located in `06_ai_agent_context/`. When executing workflows, agents must utilize:
+- **Agent Configs:** `06_ai_agent_context/agents/` for machine-readable JSON definitions.
+- **Routing Engine:** `06_ai_agent_context/routing/` for deciding which agents to involve.
+- **Protocols:** `06_ai_agent_context/protocols/` for communication, memory management, and quality gates.
+- **Working Memory:** `06_ai_agent_context/memory/` for transient, operational state and handoff tracking.

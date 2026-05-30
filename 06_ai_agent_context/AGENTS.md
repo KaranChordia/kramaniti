@@ -19,6 +19,10 @@ Memory to maintain:
 - `system_prompts/master_context.md`
 - `agent_roles/agent_roles.md`
 - `agent_roles/kramaniti_agent_roster.md`
+- `agents/` (JSON configurations)
+- `memory/` (Working memory)
+- `routing/` (Task router logic)
+- `protocols/` (Communication and memory protocols)
 
 ## Agent Definition Standard
 

@@ -70,8 +70,8 @@ This log registers the major strategic and structural decisions made during the 
 ### Decision 6: Execution of Project Cleanup and Executable Agentic Framework
 *   **Date:** 2026-05-30
 *   **Area:** Project structure, agent infrastructure, and frontend architecture
-*   **Status:** In Progress (`[Fact]`)
-*   **Decision:** Execute the approved 3-phase implementation plan: (1) structural cleanup (docs directory, unused code/SVGs, Tailwind removal), (2) transition from prose-based agents to an executable JSON-schema agentic framework, and (3) scaffolding the frontend integration for a founder-facing agent dashboard.
+*   **Status:** Implemented (`[Fact]`)
+*   **Decision:** Executed the approved 3-phase implementation plan: (1) structural cleanup (docs directory, unused code/SVGs, Tailwind removal), (2) transition from prose-based agents to an executable JSON-schema agentic framework, and (3) scaffolding the frontend integration for a founder-facing agent dashboard.
 *   **Rationale:** The previous prose-based agent roster (Decision 5) laid the strategic foundation, but an *executable* system requires machine-readable configurations (`agents/*.json`), dedicated memory directories for state tracking, formal routing logic, and standard communication protocols. Cleanup of the codebase was a necessary prerequisite.
 *   **Source or Evidence:** Founder request to "make this project agentic ready (some of the foundation is being done, but needs to be polished and should be more intelligent)" and "future proof when it comes to bringing them to front end too, so that the founder (me) can talk and manage the agents."
 *   **Affected Files:**

@@ -640,3 +640,11 @@ Agents do not rely on hidden memory. Their durable memory is the repository:
 - Website implementation context lives in `docs/` and `website/`.
 
 When an agent learns something important, it should update the relevant canonical file or create an implementation note. It should not rely on chat history as the only record.
+
+## Executable Framework
+
+[Recommendation] This roster is operationalized as machine-readable JSON configs and routing logic in the broader agent framework:
+- **Agent Configs:** `06_ai_agent_context/agents/` (uses `agent_schema.json`)
+- **Routing:** `06_ai_agent_context/routing/task_router.md`
+- **Memory:** `06_ai_agent_context/memory/`
+- **Protocols:** `06_ai_agent_context/protocols/`
