@@ -1,10 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* 
  * Kramaniti Global Styles
- * Adheres to brand_identity_guidelines.md 
+ * Adheres to brand_identity_guidelines.md
+ *
+ * Note: Tailwind is not used in this project.
+ * All styling uses CSS Modules and these global design tokens.
  */
 
 :root {

@@ -83,7 +83,7 @@ export function Hero() {
             </div>
             <span className={styles.eyebrow}>Strategy / Systems / Cinematic Content</span>
             <h1 className={styles.headline}>
-              <span className={styles.headlineLine}>Strategy before systems.</span>
+              <span className={styles.headlineLine}>Strategy before tools.</span>
               <span className={styles.headlineLine}>Systems before scale.</span>
               <span className={styles.headlineLine}>Content after clarity.</span>
             </h1>

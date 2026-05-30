@@ -21,6 +21,8 @@ Memory to maintain:
 - `screenshots/`: UI screenshots, website captures, proof snapshots.
 - `exports/`: generated PDFs, decks, handoff packages.
 
+**Note on Public Assets:** The actual website assets currently live in `website/public/assets/`. This directory (`08_assets/`) is for source files, references, and non-public assets.
+
 ## Responsibilities
 
 - Keep file names descriptive and snake_case.

@@ -66,3 +66,24 @@ This log registers the major strategic and structural decisions made during the 
     *   Which agents should become active recurring workflows first?
     *   Which memories should be promoted into structured templates for repeated work?
     *   Should public-facing proof approvals move into a dedicated proof database?
+
+### Decision 6: Execution of Project Cleanup and Executable Agentic Framework
+*   **Date:** 2026-05-30
+*   **Area:** Project structure, agent infrastructure, and frontend architecture
+*   **Status:** In Progress (`[Fact]`)
+*   **Decision:** Execute the approved 3-phase implementation plan: (1) structural cleanup (docs directory, unused code/SVGs, Tailwind removal), (2) transition from prose-based agents to an executable JSON-schema agentic framework, and (3) scaffolding the frontend integration for a founder-facing agent dashboard.
+*   **Rationale:** The previous prose-based agent roster (Decision 5) laid the strategic foundation, but an *executable* system requires machine-readable configurations (`agents/*.json`), dedicated memory directories for state tracking, formal routing logic, and standard communication protocols. Cleanup of the codebase was a necessary prerequisite.
+*   **Source or Evidence:** Founder request to "make this project agentic ready (some of the foundation is being done, but needs to be polished and should be more intelligent)" and "future proof when it comes to bringing them to front end too, so that the founder (me) can talk and manage the agents."
+*   **Affected Files:**
+    *   `docs/` (fixed from "untitled folder")
+    *   `website/public/` (removed boilerplate)
+    *   `website/src/app/globals.css` (removed dead Tailwind directives)
+    *   `website/src/components/sections/Hero.tsx` (copy alignment)
+    *   `06_ai_agent_context/agents/` (New structured configs)
+    *   `06_ai_agent_context/memory/` (New working state)
+    *   `06_ai_agent_context/routing/` (New routing rules)
+    *   `06_ai_agent_context/protocols/` (New operating procedures)
+    *   `website/src/data/agents.ts`, `agent_types.ts` (New frontend integration)
+*   **Open Questions:**
+    *   Will the `brochure-document` page be rewritten using CSS modules or deleted entirely?
+    *   Will the founder dashboard be integrated into the public website or hosted as a separate internal tool?

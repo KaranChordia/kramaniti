@@ -1,0 +1,230 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kramaniti.com/schemas/agent-config-v1.json",
+  "title": "Kramaniti Agent Configuration",
+  "description": "Schema for defining Kramaniti agent configurations. Each agent is modeled as a role-based contributor with clear memory, goals, tasks, boundaries, and accountability.",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "business_analogue",
+    "layer",
+    "personality",
+    "voice",
+    "goals",
+    "recurring_tasks",
+    "memory_sources",
+    "owned_files",
+    "inputs",
+    "outputs",
+    "supporting_agents",
+    "escalation_triggers",
+    "hard_constraints",
+    "status",
+    "frontend"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Unique snake_case identifier for this agent."
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable display name."
+    },
+    "business_analogue": {
+      "type": "string",
+      "description": "The equivalent company role this agent represents."
+    },
+    "layer": {
+      "type": "string",
+      "enum": ["leadership", "strategy", "delivery", "growth", "governance"],
+      "description": "Operating layer within the Kramaniti agent organization."
+    },
+    "personality": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Personality traits that shape the agent's behavior and communication style."
+    },
+    "voice": {
+      "type": "object",
+      "required": ["tone", "style", "avoids"],
+      "properties": {
+        "tone": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Tonal qualities the agent maintains."
+        },
+        "style": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Writing and communication style descriptors."
+        },
+        "avoids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Language patterns and terms the agent avoids."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Voice constraints governing the agent's language."
+    },
+    "role": {
+      "type": "string",
+      "description": "One-sentence description of the agent's core function."
+    },
+    "goals": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Strategic goals this agent pursues."
+    },
+    "recurring_tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["task", "frequency", "outputs"],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "Description of the recurring task."
+          },
+          "frequency": {
+            "type": "string",
+            "enum": ["per_request", "daily", "weekly", "monthly", "as_needed"],
+            "description": "How often this task should be performed."
+          },
+          "outputs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Expected deliverables from this task."
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Tasks the agent performs on a recurring basis."
+    },
+    "memory_sources": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Repository directories and files this agent reads for context."
+    },
+    "owned_files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Files this agent is accountable for maintaining."
+    },
+    "inputs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Types of information this agent consumes."
+    },
+    "outputs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Types of deliverables this agent produces."
+    },
+    "supporting_agents": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs of agents that support or collaborate with this agent."
+    },
+    "escalation_triggers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Conditions that require this agent to escalate to human review or Master Coordinator."
+    },
+    "success_metrics": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Measurable indicators of this agent performing well."
+    },
+    "hard_constraints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Actions this agent must never take."
+    },
+    "specialist_modes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "parent_agent", "personality", "role", "tasks"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "Unique snake_case identifier for the specialist mode."
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable name for this specialist mode."
+          },
+          "parent_agent": {
+            "type": "string",
+            "description": "ID of the parent agent that activates this mode."
+          },
+          "personality": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Personality traits specific to this specialist mode."
+          },
+          "memory": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Memory areas this specialist mode focuses on."
+          },
+          "role": {
+            "type": "string",
+            "description": "Focused role description for this specialist mode."
+          },
+          "tasks": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Tasks specific to this specialist mode."
+          },
+          "escalation_triggers": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Conditions that require escalation from this specialist mode."
+          },
+          "constraints": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Actions this specialist mode must never take."
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Optional specialist modes this agent can activate for narrower tasks."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "standby", "planned"],
+      "description": "Current operational status of this agent."
+    },
+    "frontend": {
+      "type": "object",
+      "required": ["icon", "color", "description"],
+      "properties": {
+        "icon": {
+          "type": "string",
+          "description": "Emoji or icon identifier for dashboard display."
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$",
+          "description": "Hex color code for dashboard display."
+        },
+        "description": {
+          "type": "string",
+          "description": "Short one-line description for dashboard cards."
+        }
+      },
+      "additionalProperties": false,
+      "description": "Frontend display metadata for dashboards."
+    }
+  },
+  "additionalProperties": false
+}

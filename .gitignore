@@ -1,5 +1,6 @@
 # macOS
 .DS_Store
+**/.DS_Store
 .AppleDouble
 .LSOverride
 ._*
@@ -15,11 +16,13 @@
 .env
 .env.local
 
-# Node (if website build is added later)
+# Node
 node_modules/
 dist/
 .next/
+out/
 .cache/
+tsconfig.tsbuildinfo
 
 # PDF exports (generated, not source)
 *.pdf
