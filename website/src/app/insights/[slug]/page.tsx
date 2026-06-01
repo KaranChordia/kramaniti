@@ -8,9 +8,34 @@ import {
   DisconnectedOpsInfographic, 
   AgenticWorkflowsInfographic, 
   CinematicStandardInfographic,
-  SpatialAcquisitionInfographic
+  SpatialAcquisitionInfographic,
+  WorkflowRedesignGapInfographic,
+  AgentOversightGapInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
+
+function formatPublishedMeta(date: string, publishedAt?: string) {
+  if (!publishedAt) {
+    return date;
+  }
+
+  const value = new Date(publishedAt);
+  const displayDate = new Intl.DateTimeFormat('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  }).format(value);
+  const displayTime = new Intl.DateTimeFormat('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).format(value);
+
+  return `${displayDate} · ${displayTime} IST`;
+}
 
 export function generateStaticParams() {
   return insights.map((post) => ({
@@ -43,8 +68,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <header className={styles.articleHeader}>
               <div className={styles.meta}>
                 <span className={styles.focus}>{post.focus}</span>
-                <span className={styles.metaInfo}>{post.date} &middot; {post.readTime}</span>
+                <span className={styles.metaInfo}>{formatPublishedMeta(post.date, post.publishedAt)} &middot; {post.readTime}</span>
               </div>
+              {post.author ? <p className={styles.author}>By {post.author}</p> : null}
               <h1 className={styles.title}>{post.title}</h1>
               <p className={styles.summary}>{post.summary}</p>
             </header>
@@ -65,6 +91,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:spatial-acquisition]') {
                   return <SpatialAcquisitionInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:workflow-redesign-gap]') {
+                  return <WorkflowRedesignGapInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:agent-oversight-gap]') {
+                  return <AgentOversightGapInfographic key={index} />;
                 }
                 
                 // Parse gold highlights

@@ -4,6 +4,29 @@ import { Footer } from '../../components/layout/Footer';
 import { insights } from '../../data/insights';
 import styles from './Insights.module.css';
 
+function getDisplayMeta(insight: (typeof insights)[number]) {
+  if (insight.publishedAt) {
+    const publishedAt = new Date(insight.publishedAt);
+    const date = new Intl.DateTimeFormat('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    }).format(publishedAt);
+    const time = new Intl.DateTimeFormat('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    }).format(publishedAt);
+
+    return `${date} · ${time} IST`;
+  }
+
+  return insight.date;
+}
+
 export default function InsightsPage() {
   return (
     <>
@@ -29,12 +52,14 @@ export default function InsightsPage() {
                 <Link href={`/insights/${insight.slug}`} key={insight.slug} className={styles.insightCard}>
                   <div className={styles.cardHeader}>
                     <span className={styles.focus}>{insight.focus}</span>
-                    <span className={styles.date}>{insight.date}</span>
+                    <span className={styles.date}>{getDisplayMeta(insight)}</span>
                   </div>
                   <h2>{insight.title}</h2>
                   <p className={styles.summary}>{insight.summary}</p>
                   <div className={styles.cardFooter}>
-                    <span className={styles.readTime}>{insight.readTime}</span>
+                    <span className={styles.readTime}>
+                      {insight.author ? `${insight.author} · ${insight.readTime}` : insight.readTime}
+                    </span>
                     <span className={styles.readMore}>
                       Read Essay
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

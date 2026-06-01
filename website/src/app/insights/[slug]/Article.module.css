@@ -84,6 +84,16 @@
   color: var(--text-secondary);
 }
 
+.author {
+  margin: 0 0 12px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-burnished-gold);
+}
+
 .title {
   margin: 0 0 24px;
   font-family: var(--font-outfit), sans-serif;

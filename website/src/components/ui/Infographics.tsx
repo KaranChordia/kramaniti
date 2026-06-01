@@ -6,7 +6,11 @@ import {
   ArrowRight, 
   Cpu, 
   Layers, 
-  Zap 
+  Zap,
+  ShieldCheck,
+  Workflow,
+  Radar,
+  CircleAlert
 } from 'lucide-react';
 import styles from './Infographics.module.css';
 
@@ -209,6 +213,78 @@ export function SpatialAcquisitionInfographic() {
           </div>
         </div>
 
+      </div>
+    </div>
+  );
+}
+
+export function WorkflowRedesignGapInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>The Workflow Redesign Gap</div>
+      <div className={styles.signalGrid}>
+        <div className={styles.signalCard}>
+          <div className={styles.signalIcon}>
+            <Radar size={20} />
+          </div>
+          <div className={styles.signalMetric}>82%</div>
+          <div className={styles.signalLabel}>Leadership urgency</div>
+          <p className={styles.signalCopy}>Leaders saying this is a pivotal year to rethink strategy and operations.</p>
+        </div>
+
+        <div className={styles.signalCard}>
+          <div className={styles.signalIcon}>
+            <Workflow size={20} />
+          </div>
+          <div className={styles.signalMetric}>21%</div>
+          <div className={styles.signalLabel}>Workflow redesign</div>
+          <p className={styles.signalCopy}>Organizations that say they have fundamentally redesigned at least some workflows.</p>
+        </div>
+
+        <div className={`${styles.signalCard} ${styles.signalCardHighlight}`}>
+          <div className={styles.signalIconHighlight}>
+            <Zap size={20} />
+          </div>
+          <div className={styles.signalMetricGold}>Biggest EBIT lever</div>
+          <div className={styles.signalLabelGold}>Workflow logic, not tool count</div>
+          <p className={styles.signalCopyGold}>The operating lift appears when AI is wired into redesigned execution paths.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function AgentOversightGapInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Agent Use vs. Oversight</div>
+      <div className={styles.oversightRail}>
+        <div className={styles.oversightPanel}>
+          <div className={styles.oversightHeading}>
+            <CircleAlert className={styles.labelIconDanger} size={18} />
+            Adoption pressure
+          </div>
+          <ul className={styles.oversightList}>
+            <li>Agents are moving from pilots into real workflow decisions.</li>
+            <li>Teams want faster routing, drafting, qualification, and follow-up.</li>
+            <li>Activation often happens before the business defines review rules.</li>
+          </ul>
+        </div>
+
+        <div className={styles.oversightDivider}>
+          <ArrowRight className={styles.arrowIconDesktop} size={18} />
+          <ArrowDown className={styles.arrowIconMobile} size={18} />
+        </div>
+
+        <div className={`${styles.oversightPanel} ${styles.oversightPanelHighlight}`}>
+          <div className={styles.oversightHeadingGold}>
+            <ShieldCheck className={styles.labelIconGold} size={18} />
+            Governance floor
+          </div>
+          <div className={styles.oversightMetric}>1 in 5</div>
+          <p className={styles.oversightCopy}>Companies reporting a mature governance model for autonomous AI agents.</p>
+          <div className={styles.oversightRule}>Define approvals, audit trails, fallback paths, and human override points before scale.</div>
+        </div>
       </div>
     </div>
   );

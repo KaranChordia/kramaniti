@@ -530,3 +530,194 @@
     display: none;
   }
 }
+
+.signalGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (min-width: 768px) {
+  .signalGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.signalCard {
+  padding: 22px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.signalCardHighlight {
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.12) 0%, rgba(20, 20, 24, 0.88) 100%);
+  border-color: rgba(201, 168, 76, 0.32);
+}
+
+.signalIcon,
+.signalIconHighlight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+
+.signalIcon {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.signalIconHighlight {
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.24);
+}
+
+.signalMetric,
+.signalMetricGold {
+  font-family: var(--font-outfit), sans-serif;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.signalMetric {
+  font-size: clamp(32px, 4vw, 42px);
+  color: var(--text-primary);
+}
+
+.signalMetricGold {
+  font-size: clamp(20px, 2.5vw, 28px);
+  color: var(--color-burnished-gold);
+}
+
+.signalLabel,
+.signalLabelGold {
+  display: block;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.signalLabel {
+  color: var(--text-secondary);
+}
+
+.signalLabelGold {
+  color: rgba(255, 248, 224, 0.9);
+}
+
+.signalCopy,
+.signalCopyGold {
+  margin: 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.signalCopy {
+  color: var(--text-secondary);
+}
+
+.signalCopyGold {
+  color: var(--text-primary);
+}
+
+.oversightRail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+@media (min-width: 900px) {
+  .oversightRail {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+}
+
+.oversightPanel {
+  padding: 24px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.oversightPanelHighlight {
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.12) 0%, rgba(20, 20, 24, 0.9) 100%);
+  border-color: rgba(201, 168, 76, 0.3);
+}
+
+.oversightHeading,
+.oversightHeadingGold {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.oversightHeading {
+  color: var(--text-secondary);
+}
+
+.oversightHeadingGold {
+  color: var(--color-burnished-gold);
+}
+
+.oversightList {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--text-primary);
+  display: grid;
+  gap: 12px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.oversightDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(201, 168, 76, 0.5);
+}
+
+.oversightMetric {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(36px, 5vw, 54px);
+  line-height: 1;
+  color: var(--color-burnished-gold);
+  margin-bottom: 12px;
+}
+
+.oversightCopy {
+  margin: 0 0 16px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-primary);
+}
+
+.oversightRule {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(201, 168, 76, 0.16);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 248, 224, 0.88);
+}

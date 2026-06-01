@@ -3,12 +3,51 @@ export interface Insight {
   title: string;
   focus: string;
   date: string;
+  author?: string;
+  publishedAt?: string;
   readTime: string;
   summary: string;
   content: string[];
 }
 
 export const insights: Insight[] = [
+  {
+    slug: 'ai-access-is-not-an-operating-model',
+    title: 'AI Access Is Not an Operating Model',
+    focus: 'Workflow Design',
+    date: '01 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-01T13:08:15+05:30',
+    readTime: '5 min read',
+    summary: 'Why the next AI bottleneck is not model availability, but the discipline to redesign workflows, define oversight, and connect tools to actual operating logic.',
+    content: [
+      'Most teams no longer have an AI access problem. They have an operating design problem.',
+      '[Fact] Microsoft&apos;s 2025 Work Trend Index says <gold>82% of leaders see this year as pivotal for rethinking strategy and operations</gold>, while 81% expect agents to be integrated into their AI strategy within the next 12 to 18 months.',
+      'That sounds like momentum. In practice, it often creates a dangerous illusion: once the licenses are bought, leadership assumes transformation is already underway.',
+      'It usually is not.',
+      '<h3>Access Is Rising Faster Than Architecture</h3>',
+      'What most organizations actually have today is scattered experimentation. One team is using AI for note summaries. Another is drafting outbound copy. A founder is testing an agent for research. Useful? Yes. Transformative? Not by default.',
+      '[Fact] McKinsey&apos;s 2025 global survey found that <gold>workflow redesign has the biggest effect on whether AI produces EBIT impact</gold>. The same survey says only 21% of respondents report that their organizations have fundamentally redesigned at least some workflows.',
+      '[infographic:workflow-redesign-gap]',
+      '[Inference] The market signal is clear: adoption is outrunning operational design. Companies are layering intelligence onto old habits, then wondering why the commercial result feels thin.',
+      '<h3>Why the Middle Layer Matters</h3>',
+      'The missing middle layer is workflow logic. Before an agent touches customer communication, lead routing, onboarding, or content production, someone has to define the handoffs. What triggers the workflow? Which decisions stay human? Which records must be updated? What quality threshold decides whether the output ships or loops back for review?',
+      'Without those answers, AI becomes a fast-moving patchwork. Teams save moments of effort, but the business does not gain a more coherent system.',
+      '<h3>Agents Without Oversight Create New Chaos</h3>',
+      '[Fact] Deloitte&apos;s 2026 State of AI in the Enterprise reports that <gold>only one in five companies has a mature governance model for autonomous AI agents</gold>, even as agentic AI usage is expected to rise sharply over the next two years.',
+      'This is where a lot of businesses make the same mistake they made with automation tools a decade ago: they confuse activation with readiness.',
+      '[infographic:agent-oversight-gap]',
+      '[Recommendation] If an autonomous workflow can make customer-facing decisions, update records, or trigger revenue actions, it needs explicit oversight rules before it needs scale.',
+      '<h3>What A Practical AI Operating Model Actually Looks Like</h3>',
+      'A durable operating model is much less glamorous than the average AI launch post. It usually starts with an audit, not a tool stack.',
+      'First, map the workflow that already exists. Second, identify where judgment is required and where repetition is draining your team. Third, decide what the system must protect: brand tone, client experience, approvals, data integrity, or turnaround speed. Only then should you decide whether the right mechanism is a prompt, an automation, an internal tool, or an autonomous agent.',
+      '[Recommendation] The right sequence is still the same: <gold>strategy before tools, systems before scale, content after clarity</gold>.',
+      '<h3>The Real Competitive Gap</h3>',
+      'The advantage will not come from access to the same models everyone else can buy. It will come from who can turn those models into a connected growth system without degrading trust, quality, or internal coherence.',
+      '[Fact] Microsoft, McKinsey, and Deloitte are all pointing to the same strategic pressure from different angles: AI is moving from experimentation into operating design, and leaders who fail to redesign workflows and governance will capture surface-level productivity but miss structural leverage.',
+      '[Recommendation] If your current AI effort lives in scattered prompts, isolated pilots, and undocumented handoffs, do not ask what else to automate yet. Ask which workflow is important enough to architect properly first.'
+    ]
+  },
   {
     slug: 'why-scaling-chaos-breaks-business',
     title: 'Why Scaling Your Chaos with AI Will Break Your Business First',
