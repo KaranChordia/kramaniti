@@ -34,7 +34,7 @@ export function Contact() {
 
         <div className={styles.grid}>
           <div className={`${styles.formColumn} ${isVisible ? styles.visible : ''}`}>
-            <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+            <form className={`glass-border-layer ${styles.form} ${styles.contactGlass}`} onSubmit={(e) => e.preventDefault()}>
               <Input label="Name" placeholder="Your full name" required />
               <Input label="Work Email" type="email" placeholder="name@company.com" required />
               <Input label="Company / Brand" placeholder="Company or brand name" required />
@@ -47,7 +47,7 @@ export function Contact() {
           </div>
 
           <div className={`${styles.calendlyColumn} ${isVisible ? styles.visible : ''}`}>
-            <div className={styles.calendlyPlaceholder}>
+            <div className={`glass-border-layer ${styles.calendlyPlaceholder} ${styles.contactGlass}`}>
               <span className="micro-label">Audit focus</span>
               <h3>Find the first system worth building.</h3>
               <p className="text-secondary caption">A useful audit should leave you with business clarity, a workflow priority, and a practical next step. No platform shopping, no generic tool list, no pressure to replace every task.</p>

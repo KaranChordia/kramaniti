@@ -78,7 +78,7 @@ export function Credibility() {
           
           <div className={styles.carousel} ref={scrollRef}>
             {cases.map((study, index) => (
-              <Card key={index} className={styles.caseCard}>
+              <Card key={index} className={`glass-border-layer ${styles.caseCard} ${styles.credibilityGlass}`}>
                 <div className={styles.caseHeader}>
                   <h3>{study.client}</h3>
                   <span className="micro-label">{study.type}</span>
@@ -94,7 +94,7 @@ export function Credibility() {
         </div>
       </div>
 
-      <div className={`${styles.numbersStrip} ${isVisible ? styles.visible : ''}`}>
+      <div className={`glass-border-layer ${styles.numbersStrip} ${styles.credibilityStripGlass} ${isVisible ? styles.visible : ''}`}>
         <div className={styles.numbersContainer}>
           {ecosystems.map((item, index) => (
             <React.Fragment key={item.category}>

@@ -72,7 +72,7 @@ export function Workflows() {
                 <div className={styles.nodeIconWrapper}>
                   <span className={styles.nodeIcon}>{String(index + 1).padStart(2, '0')}</span>
                 </div>
-                <Card className={`${styles.nodeCard} ${index === 2 ? styles.primaryCard : ''}`}>
+                <Card className={`glass-border-layer ${styles.nodeCard} ${styles.workflowGlass} ${index === 2 ? styles.primaryCard : ''}`}>
                   {index === 2 && <div className={styles.glowOverlay}></div>}
                   <div className={styles.nodeBar}></div>
                   <h4>{step.title}</h4>

@@ -60,7 +60,7 @@ export function Services() {
           {tiers.map((tier, index) => (
             <Card 
               key={tier.id} 
-              className={`${styles.tierCard} ${tier.isPopular ? styles.popularCard : ''} ${isVisible ? styles.visible : ''}`}
+              className={`glass-border-layer ${styles.tierCard} ${styles.serviceGlass} ${tier.isPopular ? styles.popularCard : ''} ${isVisible ? styles.visible : ''}`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
               {tier.isPopular && <div className={styles.popularBadge}>RECOMMENDED</div>}

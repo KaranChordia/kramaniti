@@ -1,89 +1,301 @@
 .footer {
-  background-color: var(--color-obsidian);
-  border-top: 1px solid var(--color-smoke);
-  padding: 48px 24px;
+  position: relative;
+  padding: 72px 0 34px;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(201, 168, 76, 0.08), transparent 30%),
+    radial-gradient(circle at 84% 76%, rgba(255, 255, 255, 0.04), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 18%),
+    var(--bg-primary);
+  border-top: 1px solid rgba(201, 168, 76, 0.12);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201, 168, 76, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 168, 76, 0.05) 1px, transparent 1px);
+  background-size: 140px 140px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.atmosWord {
+  position: absolute;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(64px, 13vw, 168px);
+  font-weight: 700;
+  line-height: 0.86;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.16);
+  opacity: 0.42;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.atmosWordOne {
+  left: -1%;
+  bottom: 14%;
+}
+
+.atmosWordTwo {
+  right: -1%;
+  top: 10%;
 }
 
 .container {
-  max-width: 1200px;
+  position: relative;
+  z-index: 1;
+  width: min(1120px, calc(100% - 48px));
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
 }
 
-@media (min-width: 768px) {
-  .container {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
+.shell {
+  display: block;
 }
 
-.brandGroup {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+.brandCard {
+  position: relative;
+  min-height: 100%;
+  padding: 28px;
+  border-radius: 26px;
+  background: var(--surface-panel-strong);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-elevation-2), var(--shadow-inset-soft);
+  overflow: hidden;
 }
 
-@media (min-width: 768px) {
-  .brandGroup {
-    align-items: flex-start;
-  }
+.brandCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 42%),
+    linear-gradient(180deg, rgba(201, 168, 76, 0.08), transparent 44%);
+  pointer-events: none;
 }
 
-.logoGroup {
-  font-family: var(--font-outfit), sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  letter-spacing: 0.06em;
-  display: flex;
-  align-items: center;
-  user-select: none;
-}
-
-.logoK {
-  color: var(--color-burnished-gold);
-}
-
-.logoRest {
-  color: var(--color-ice-white);
-}
-
-.tagline {
-  color: var(--color-silver-mist);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 14px;
-  margin: 0;
-}
-
-.socialGroup {
-  display: flex;
+.brandInner {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 24px;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
-.socialLink {
-  color: var(--color-silver-mist);
-  transition: color 200ms ease, transform 200ms ease;
+.brandTop {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logoLink {
+  position: relative;
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 74px;
+  height: 74px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    rgba(20, 20, 24, 0.28);
+  border: 1px solid rgba(201, 168, 76, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 18px 30px rgba(0, 0, 0, 0.16);
+  flex-shrink: 0;
 }
 
-.socialLink:hover {
-  color: var(--color-burnished-gold);
-  transform: translateY(-2px);
+.logoMark {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(201, 168, 76, 0.24));
 }
 
+.brandText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.brandName {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 700;
+  line-height: 0.95;
+  color: var(--text-primary);
+}
+
+.brandLabel {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(201, 168, 76, 0.78);
+}
+
+.ctaNote {
+  display: grid;
+  gap: 8px;
+  max-width: 36ch;
+}
+
+.ctaEyebrow {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(201, 168, 76, 0.78);
+}
+
+.ctaNote p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.bottomBar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding: 10px 6px 0;
+}
+
+.bottomNote,
 .copyright {
-  color: var(--color-slate-grey);
+  margin: 0;
   font-size: 13px;
+  line-height: 1.6;
   text-align: center;
 }
 
-@media (min-width: 768px) {
+.bottomNote {
+  color: var(--text-secondary);
+}
+
+.copyright {
+  color: var(--text-tertiary);
+}
+
+:global(html[data-theme='light']) .footer {
+  background:
+    radial-gradient(circle at 14% 16%, rgba(201, 168, 76, 0.14), transparent 28%),
+    radial-gradient(circle at 84% 74%, rgba(255, 255, 255, 0.3), transparent 22%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(250, 250, 252, 0.96)),
+    var(--bg-primary);
+  border-top-color: rgba(201, 168, 76, 0.18);
+}
+
+:global(html[data-theme='light']) .footer::before {
+  background-image:
+    linear-gradient(rgba(201, 168, 76, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 168, 76, 0.08) 1px, transparent 1px);
+}
+
+:global(html[data-theme='light']) .atmosWord {
+  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.36);
+  opacity: 0.62;
+}
+
+:global(html[data-theme='light']) .brandCard {
+  border-color: rgba(0, 0, 0, 0.07);
+}
+
+:global(html[data-theme='light']) .logoLink {
+  background: var(--surface-panel-strong);
+  border-color: rgba(201, 168, 76, 0.28);
+  box-shadow:
+    var(--shadow-elevation-1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+@media (min-width: 900px) {
+  .brandInner {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    gap: 28px;
+  }
+
+  .ctaNote {
+    justify-self: end;
+    text-align: left;
+  }
+
+  .bottomBar {
+    flex-direction: row;
+  }
+
+  .bottomNote,
+  .copyright {
+    text-align: left;
+  }
+
   .copyright {
     text-align: right;
+  }
+}
+
+@media (max-width: 767px) {
+  .footer {
+    padding: 64px 0 28px;
+  }
+
+  .container {
+    width: min(100% - 32px, 1120px);
+  }
+
+  .brandCard {
+    padding: 22px;
+    border-radius: 22px;
+  }
+
+  .brandTop {
+    align-items: flex-start;
+  }
+
+  .ctaNote {
+    max-width: none;
+  }
+
+  .logoLink {
+    width: 66px;
+    height: 66px;
+    border-radius: 18px;
+  }
+
+  .logoMark {
+    width: 50px;
+    height: 50px;
+  }
+
+  .atmosWordOne {
+    bottom: 8%;
+  }
+
+  .atmosWordTwo {
+    top: 6%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logoLink {
+    transition: none !important;
   }
 }

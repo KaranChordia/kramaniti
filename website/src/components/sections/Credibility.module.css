@@ -182,6 +182,19 @@
   transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
 }
 
+.credibilityGlass {
+  --glass-border-layer-inset: -8px;
+  --glass-border-layer-radius: 22px;
+  --glass-border-layer-blur: 18px;
+  --glass-border-layer-fill-top: rgba(255, 255, 255, 0.07);
+  --glass-border-layer-fill-bottom: rgba(255, 255, 255, 0.02);
+  --glass-border-layer-fill-solid: rgba(255, 255, 255, 0.03);
+  --glass-border-layer-border: rgba(255, 255, 255, 0.12);
+  --glass-border-layer-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 16px 34px rgba(0, 0, 0, 0.11);
+}
+
 .caseCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
@@ -250,6 +263,19 @@
   padding: 40px 0;
   opacity: 0;
   transition: opacity 800ms ease 400ms;
+}
+
+.credibilityStripGlass {
+  --glass-border-layer-inset: -8px;
+  --glass-border-layer-radius: 22px;
+  --glass-border-layer-blur: 18px;
+  --glass-border-layer-fill-top: rgba(255, 255, 255, 0.06);
+  --glass-border-layer-fill-bottom: rgba(255, 255, 255, 0.018);
+  --glass-border-layer-fill-solid: rgba(255, 255, 255, 0.028);
+  --glass-border-layer-border: rgba(255, 255, 255, 0.1);
+  --glass-border-layer-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 16px 34px rgba(0, 0, 0, 0.10);
 }
 
 .numbersStrip.visible {

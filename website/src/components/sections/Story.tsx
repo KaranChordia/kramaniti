@@ -57,7 +57,7 @@ export function Story() {
             {epochs.map((epoch, index) => (
               <article
                 key={epoch.number}
-                className={`${styles.stage} ${isVisible ? styles.visible : ''}`}
+                className={`glass-border-layer ${styles.stage} ${styles.methodGlass} ${isVisible ? styles.visible : ''}`}
                 style={{ transitionDelay: `${index * 180}ms` }}
               >
                 <div className={styles.stageHeader}>

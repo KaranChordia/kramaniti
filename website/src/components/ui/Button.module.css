@@ -83,6 +83,7 @@
     rgba(20, 20, 24, 0.32);
   color: var(--text-primary);
   border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-elevation-1);
 }
 
 .primary:hover {
@@ -98,16 +99,13 @@
     rgba(20, 20, 24, 0.18);
   color: var(--text-primary);
   border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-elevation-1);
 }
 
 :global(html[data-theme='light']) .secondary {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.46)),
-    rgba(255, 255, 255, 0.66);
+  background: var(--surface-panel-strong);
   border-color: rgba(0, 0, 0, 0.08);
-  box-shadow:
-    0 10px 24px rgba(20, 20, 24, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  box-shadow: var(--shadow-elevation-1), var(--shadow-inset-soft);
 }
 
 .secondary:hover {
@@ -133,14 +131,10 @@
 }
 
 :global(html[data-theme='light']) .primary {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.26)),
-    rgba(255, 255, 255, 0.62);
+  background: var(--surface-panel-strong);
   color: var(--text-primary);
   border-color: rgba(0, 0, 0, 0.08);
-  box-shadow:
-    0 12px 26px rgba(20, 20, 24, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  box-shadow: var(--shadow-elevation-1), var(--shadow-inset-soft);
 }
 
 :global(html[data-theme='light']) .primary:hover {
@@ -150,9 +144,8 @@
   color: #0A0A0F;
   box-shadow:
     0 0 0 1px rgba(201, 168, 76, 0.14),
-    0 12px 28px rgba(201, 168, 76, 0.14),
-    0 14px 28px rgba(20, 20, 24, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+    var(--shadow-elevation-2),
+    var(--shadow-inset-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {

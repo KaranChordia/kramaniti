@@ -42,7 +42,7 @@ export function Problem() {
           {signals.map((signal, index) => (
             <article
               key={signal.title}
-              className={`${styles.signal} ${isVisible ? styles.visible : ''}`}
+              className={`glass-border-layer ${styles.signal} ${styles.signalGlass} ${isVisible ? styles.visible : ''}`}
               style={{ transitionDelay: `${index * 140}ms` }}
             >
               <span className={styles.index}>{`0${index + 1}`}</span>

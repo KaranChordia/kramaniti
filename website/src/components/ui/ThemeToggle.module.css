@@ -1,17 +1,75 @@
 .toggle {
-  background: transparent;
-  border: none;
-  color: var(--text-tertiary);
+  position: relative;
+  min-width: 36px;
+  min-height: 36px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015)),
+    rgba(10, 10, 15, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
   padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  transition: color 200ms ease, background-color 200ms ease;
+  border-radius: 999px;
+  color: var(--text-secondary);
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.16),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  transition:
+    color 200ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease,
+    transform 200ms ease,
+    box-shadow 200ms ease;
+  isolation: isolate;
 }
 
 .toggle:hover {
   color: var(--color-burnished-gold);
-  background-color: var(--bg-surface);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    rgba(201, 168, 76, 0.08);
+  border-color: rgba(201, 168, 76, 0.32);
+  box-shadow:
+    0 16px 30px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(201, 168, 76, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.toggle:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(201, 168, 76, 0.42),
+    0 0 0 6px rgba(201, 168, 76, 0.12),
+    0 14px 28px rgba(0, 0, 0, 0.14);
+}
+
+.toggle svg {
+  position: relative;
+  z-index: 1;
+}
+
+:global(html[data-theme='light']) .toggle {
+  background: var(--surface-panel-strong);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(33, 33, 38, 0.76);
+  box-shadow:
+    var(--shadow-elevation-1),
+    0 2px 8px rgba(20, 20, 24, 0.06),
+    var(--shadow-inset-soft);
+}
+
+:global(html[data-theme='light']) .toggle:hover {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.4)),
+    rgba(201, 168, 76, 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle {
+    transition: none !important;
+  }
 }

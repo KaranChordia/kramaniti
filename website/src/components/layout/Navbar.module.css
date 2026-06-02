@@ -25,15 +25,26 @@
 
 .header {
   --nav-radius: 18px;
+  --glass-border-layer-inset: -8px;
+  --glass-border-layer-radius: 24px;
+  --glass-border-layer-blur: 26px;
+  --glass-border-layer-saturate: 1.12;
+  --glass-border-layer-border: rgba(255, 255, 255, 0.18);
+  --glass-border-layer-fill-top: rgba(255, 255, 255, 0.06);
+  --glass-border-layer-fill-bottom: rgba(255, 255, 255, 0.015);
+  --glass-border-layer-fill-solid: rgba(10, 10, 15, 0.08);
+  --glass-border-layer-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 18px 42px rgba(0, 0, 0, 0.18);
   position: relative;
   width: 100%;
   max-width: 1120px;
   background:
-    linear-gradient(180deg, rgba(28, 28, 34, 0.94), rgba(16, 16, 20, 0.94)),
-    rgba(18, 18, 24, 0.94);
+    linear-gradient(180deg, rgba(14, 14, 18, 0.96), rgba(10, 10, 15, 0.96)),
+    rgba(10, 10, 15, 0.94);
   backdrop-filter: blur(42px);
   -webkit-backdrop-filter: blur(42px);
-  border: 1.6px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--nav-radius);
   pointer-events: auto;
   box-shadow:
@@ -41,39 +52,53 @@
     0 4px 14px rgba(0, 0, 0, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
   transition: background-color 0.3s ease;
-  overflow: hidden;
+  overflow: visible;
 }
 
-.header::before {
+.header::after {
   content: '';
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1.6px;
+  inset: var(--glass-border-layer-inset);
+  border-radius: var(--glass-border-layer-radius);
+  padding: calc(var(--nav-radius) * 0.45);
   background:
     linear-gradient(
       110deg,
-      rgba(201, 168, 76, 0.08) 0%,
-      rgba(201, 168, 76, 0.16) 22%,
-      rgba(255, 236, 173, 0.95) 36%,
-      rgba(201, 168, 76, 0.22) 48%,
-      rgba(201, 168, 76, 0.1) 64%,
-      rgba(255, 236, 173, 0.9) 78%,
-      rgba(201, 168, 76, 0.1) 100%
+      rgba(201, 168, 76, 0) 0%,
+      rgba(201, 168, 76, 0.18) 16%,
+      rgba(232, 198, 102, 0.54) 30%,
+      rgba(255, 231, 154, 0.92) 40%,
+      rgba(255, 242, 198, 0.98) 46%,
+      rgba(212, 168, 67, 0.62) 54%,
+      rgba(201, 168, 76, 0.14) 66%,
+      rgba(201, 168, 76, 0) 100%
     );
-  background-size: 240% 100%;
+  background-size: 230% 100%;
   background-position: 140% 50%;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   mask-composite: exclude;
+  filter: blur(11px) saturate(1.18);
   pointer-events: none;
-  opacity: 0.82;
-  animation: navBorderFlow 5.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  opacity: 0.94;
+  z-index: 0;
+  animation: navGlassFlow 5.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 /* Light mode specific override */
 :global(html[data-theme='light']) .header {
+  --glass-border-layer-border: rgba(255, 255, 255, 0.84);
+  --glass-border-layer-fill-top: rgba(255, 255, 255, 0.68);
+  --glass-border-layer-fill-bottom: rgba(255, 255, 255, 0.24);
+  --glass-border-layer-fill-solid: rgba(255, 255, 255, 0.20);
+  --glass-border-layer-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 20px 40px rgba(20, 20, 24, 0.12);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 245, 248, 0.94)),
     rgba(250, 250, 252, 0.95);
@@ -84,6 +109,8 @@
 }
 
 .container {
+  position: relative;
+  z-index: 1;
   height: 52px;
   padding: 0 18px 0 24px;
   display: flex;
@@ -268,19 +295,19 @@
   }
 }
 
-@keyframes navBorderFlow {
+@keyframes navGlassFlow {
   0% {
     background-position: 140% 50%;
-    opacity: 0.45;
+    opacity: 0.42;
   }
   35% {
-    opacity: 0.9;
+    opacity: 0.96;
   }
   70% {
     opacity: 0.82;
   }
   100% {
     background-position: -70% 50%;
-    opacity: 0.45;
+    opacity: 0.42;
   }
 }

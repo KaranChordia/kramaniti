@@ -32,7 +32,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
   return (
     <>
       <div className={`${styles.navWrapper} ${isVisible ? styles.visible : styles.hidden}`}>
-        <header className={styles.header}>
+        <header className={`glass-border-layer ${styles.header}`}>
           <div className={styles.container}>
             <Link href="/" className={styles.logoGroup} style={{ textDecoration: 'none' }} onClick={closeMobileMenu}>
               <Image
