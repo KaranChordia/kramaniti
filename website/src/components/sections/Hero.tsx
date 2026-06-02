@@ -81,14 +81,14 @@ export function Hero() {
                 <path pathLength="1" className={`${styles.connectorPathPulse} ${styles.connectorThreePulse}`} d="M 450 88 C 528 122, 634 156, 770 188" />
               </svg>
             </div>
-            <span className={styles.eyebrow}>Strategy / Systems / Cinematic Content</span>
+            <span className={styles.eyebrow}>Strategy / Systems / Brand Communication</span>
             <h1 className={styles.headline}>
               <span className={styles.headlineLine}>Strategy before tools.</span>
               <span className={styles.headlineLine}>Systems before scale.</span>
               <span className={styles.headlineLine}>Content after clarity.</span>
             </h1>
             <p className={styles.subheading}>
-              We turn strategic clarity into practical systems and cinematic communication that scales.
+              We turn clear strategy into practical systems and stronger brand communication.
             </p>
           </div>
         </div>

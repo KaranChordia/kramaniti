@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Kramaniti | Practical AI Systems for Brand Growth",
-  description: "Kramaniti helps brands identify high-impact workflows, build practical AI infrastructure, and turn those systems into clear, cinematic communication.",
+  description: "Kramaniti helps brands identify high-impact workflows, build practical AI infrastructure, and turn those systems into clear brand communication.",
   manifest: "/manifest.json",
   icons: {
     icon: "/kramaniti/assets/brand/kramaniti-mark-gold.png",
@@ -45,19 +45,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning data-theme="dark" data-scroll-behavior="smooth">
       <head>
-        <meta name="color-scheme" content="light dark" />
+        <meta name="color-scheme" content="dark light" />
         <Script id="theme-init" strategy="beforeInteractive">
           {`
             try {
               const colorScheme = localStorage.getItem("kramaniti-theme");
-              if (colorScheme) {
-                document.documentElement.setAttribute("data-theme", colorScheme);
-              } else {
-                const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
-              }
+              document.documentElement.setAttribute("data-theme", colorScheme || "dark");
             } catch (e) {}
           `}
         </Script>
