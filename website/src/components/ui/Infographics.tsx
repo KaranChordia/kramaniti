@@ -10,7 +10,10 @@ import {
   ShieldCheck,
   Workflow,
   Radar,
-  CircleAlert
+  CircleAlert,
+  BrainCircuit,
+  DatabaseZap,
+  Settings2
 } from 'lucide-react';
 import styles from './Infographics.module.css';
 
@@ -284,6 +287,76 @@ export function AgentOversightGapInfographic() {
           <div className={styles.oversightMetric}>1 in 5</div>
           <p className={styles.oversightCopy}>Companies reporting a mature governance model for autonomous AI agents.</p>
           <div className={styles.oversightRule}>Define approvals, audit trails, fallback paths, and human override points before scale.</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function ReinventionPressureInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>The Reinvention Pressure Trap</div>
+      <div className={styles.pressureRail}>
+        <div className={styles.pressureCard}>
+          <div className={styles.pressureMetric}>65%</div>
+          <div className={styles.pressureLabel}>Pressure to adapt</div>
+          <p className={styles.pressureCopy}>AI users who fear falling behind if they do not adapt quickly.</p>
+        </div>
+
+        <div className={styles.pressureConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={18} />
+          <ArrowDown className={styles.arrowIconMobile} size={18} />
+        </div>
+
+        <div className={styles.pressureCard}>
+          <div className={styles.pressureMetric}>45%</div>
+          <div className={styles.pressureLabel}>Safety bias</div>
+          <p className={styles.pressureCopy}>Workers who say it feels safer to focus on current goals than redesign work with AI.</p>
+        </div>
+
+        <div className={styles.pressureConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={18} />
+          <ArrowDown className={styles.arrowIconMobile} size={18} />
+        </div>
+
+        <div className={`${styles.pressureCard} ${styles.pressureCardHighlight}`}>
+          <div className={styles.pressureMetricGold}>13%</div>
+          <div className={styles.pressureLabelGold}>Reinvention rewarded</div>
+          <p className={styles.pressureCopyGold}>Workers who say they are rewarded for reinventing work with AI even if results are not met yet.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function OperatingReadinessStackInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Operating Readiness Stack</div>
+      <div className={styles.readinessGrid}>
+        <div className={styles.readinessCard}>
+          <div className={styles.readinessIcon}>
+            <BrainCircuit size={20} />
+          </div>
+          <div className={styles.readinessHeading}>Strategic intent</div>
+          <p className={styles.readinessCopy}>Leadership can see the opportunity and often funds experimentation early.</p>
+        </div>
+
+        <div className={styles.readinessCard}>
+          <div className={styles.readinessIcon}>
+            <Settings2 size={20} />
+          </div>
+          <div className={styles.readinessHeading}>Workflow design</div>
+          <p className={styles.readinessCopy}>Roles, approvals, escalation paths, and quality thresholds have to be made explicit.</p>
+        </div>
+
+        <div className={`${styles.readinessCard} ${styles.readinessCardHighlight}`}>
+          <div className={styles.readinessIconHighlight}>
+            <DatabaseZap size={20} />
+          </div>
+          <div className={styles.readinessHeadingGold}>Operational spine</div>
+          <p className={styles.readinessCopyGold}>Data integrity, system controls, and governance determine whether AI can compound into leverage.</p>
         </div>
       </div>
     </div>

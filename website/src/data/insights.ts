@@ -12,6 +12,38 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'ai-training-wont-rewire-a-broken-workflow',
+    title: 'AI Training Won’t Rewire a Broken Workflow',
+    focus: 'Operating Readiness',
+    date: '02 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-02T13:40:36+05:30',
+    readTime: '5 min read',
+    summary: 'Why AI fluency matters less than operating design when the real bottleneck is unclear workflows, weak controls, and a business that has not been restructured for intelligent systems.',
+    content: [
+      'A lot of companies are responding to AI pressure by training people faster. That is useful, but it is not the same as redesigning how the business actually runs.',
+      '[Fact] Deloitte&apos;s 2026 State of AI in the Enterprise says the AI skills gap is seen as the biggest barrier to integration, and that education, not role or workflow redesign, was the number one way companies adjusted talent strategies due to AI.',
+      'That response is understandable. Training feels measurable. It gives leadership something visible to announce. But it can also become a decoy.',
+      '<h3>Fluency Helps. Operating Design Decides.</h3>',
+      '[Fact] Microsoft&apos;s May 5, 2026 Work Trend Index analysis says <gold>organizational factors such as culture, manager support, and talent practices account for more than two times the AI impact of individual factors</gold>.',
+      '[Fact] The same Microsoft analysis found that 65% of AI users fear falling behind if they do not adapt quickly, 45% say it feels safer to focus on current goals than redesign work with AI, and only 13% say they are rewarded for reinvention even if results are not met.',
+      '[infographic:reinvention-pressure-trap]',
+      '[Inference] The pattern is becoming easier to see: businesses are trying to create AI readiness at the edge of the organization while leaving the center of the operating model mostly untouched.',
+      '<h3>Why The Workflow Still Matters More Than The Workshop</h3>',
+      '[Fact] McKinsey&apos;s 2025 global survey says <gold>workflow redesign has the biggest effect on an organization&apos;s ability to see EBIT impact from gen AI</gold>, yet only 21% of respondents say their organizations have fundamentally redesigned at least some workflows.',
+      'You can train a team to prompt better, summarize faster, and draft more efficiently. But if approvals are still vague, source-of-truth systems are still fragmented, and no one has defined where judgment should stay human, the business does not become more coherent. It just becomes more active.',
+      '<h3>Strategic Confidence Often Hides Operational Weakness</h3>',
+      '[Fact] Deloitte also reports that 42% of companies believe their strategy is highly prepared for AI adoption, while they feel less prepared in infrastructure, data, risk, and talent.',
+      '[Recommendation] A practical AI operating model needs more than enthusiasm or workshops. It needs workflow ownership, escalation rules, review checkpoints, clean data paths, and explicit standards for what the system is allowed to do.',
+      '[infographic:operating-readiness-stack]',
+      '<h3>What To Fix Before You Scale</h3>',
+      'Start by choosing one workflow that matters commercially: lead qualification, proposal drafting, onboarding, reporting, or content production. Map the handoffs. Define which decisions require human review. Decide what context the system can access, what records it must update, and what quality threshold sends the work forward or loops it back.',
+      'Only after that should you expand training, tooling, or agent autonomy. Otherwise, the organization learns new software behaviors without gaining a stronger operating spine.',
+      '[Recommendation] The right sequence remains the same: <gold>strategy before tools, systems before scale, content after clarity</gold>.',
+      'AI fluency is valuable. But fluency without redesign produces more motion than leverage. The real advantage comes from turning intelligence into structure, not just familiarity into usage.'
+    ]
+  },
+  {
     slug: 'ai-access-is-not-an-operating-model',
     title: 'AI Access Is Not an Operating Model',
     focus: 'Workflow Design',

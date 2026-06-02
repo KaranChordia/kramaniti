@@ -10,7 +10,9 @@ import {
   CinematicStandardInfographic,
   SpatialAcquisitionInfographic,
   WorkflowRedesignGapInfographic,
-  AgentOversightGapInfographic
+  AgentOversightGapInfographic,
+  ReinventionPressureInfographic,
+  OperatingReadinessStackInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -97,6 +99,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:agent-oversight-gap]') {
                   return <AgentOversightGapInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:reinvention-pressure-trap]') {
+                  return <ReinventionPressureInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:operating-readiness-stack]') {
+                  return <OperatingReadinessStackInfographic key={index} />;
                 }
                 
                 // Parse gold highlights
