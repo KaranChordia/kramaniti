@@ -30,33 +30,21 @@
   --color-info: #4A90D9;
   --color-smoke: #2A2A32;
 
-  /* Theme mappings (Light) */
-  --bg-primary: var(--color-ice-white);
-  --bg-elevated: #ffffff;
-  --bg-surface: #f8f8f8;
-  --text-primary: var(--color-obsidian);
-  --text-secondary: var(--color-slate-grey);
-  --text-tertiary: var(--color-silver-mist);
-  --border-subtle: #e0e0e0;
+  /* Theme mappings default to dark before the client theme script runs. */
+  --bg-primary: var(--color-obsidian);
+  --bg-elevated: var(--color-graphite);
+  --bg-surface: var(--color-charcoal);
+  --text-primary: var(--color-ice-white);
+  --text-secondary: var(--color-silver-mist);
+  --text-tertiary: var(--color-slate-grey);
+  --border-subtle: var(--color-smoke);
   
   /* Gradients */
   --gradient-gold-horizon: linear-gradient(135deg, #C9A84C 0%, #A07D3A 50%, #7A5C2E 100%);
   --gradient-dark-depth: linear-gradient(180deg, #0A0A0F 0%, #141418 50%, #1E1E24 100%);
   --gradient-ambient-glow: radial-gradient(ellipse at center, rgba(201,168,76,0.08) 0%, transparent 70%);
 
-  /* Default mode is system dependent, but we define dark overrides */
-  @media (prefers-color-scheme: dark) {
-    --bg-primary: var(--color-obsidian);
-    --bg-elevated: var(--color-graphite);
-    --bg-surface: var(--color-charcoal);
-    --text-primary: var(--color-ice-white);
-    --text-secondary: var(--color-silver-mist);
-    --text-tertiary: var(--color-slate-grey);
-    --border-subtle: var(--color-smoke);
-  }
-
-  /* color-scheme allows system UI to adapt automatically */
-  color-scheme: light dark;
+  color-scheme: dark;
 }
 
 /* Explicit data-theme overrides for user toggle */
