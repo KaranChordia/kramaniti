@@ -13,7 +13,11 @@ import {
   CircleAlert,
   BrainCircuit,
   DatabaseZap,
-  Settings2
+  Settings2,
+  Scale,
+  FolderSync,
+  FileCheck2,
+  GitBranch
 } from 'lucide-react';
 import styles from './Infographics.module.css';
 
@@ -357,6 +361,127 @@ export function OperatingReadinessStackInfographic() {
           </div>
           <div className={styles.readinessHeadingGold}>Operational spine</div>
           <p className={styles.readinessCopyGold}>Data integrity, system controls, and governance determine whether AI can compound into leverage.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function ReadinessBalanceInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>The Readiness Balance</div>
+      <div className={styles.balanceGrid}>
+        <div className={styles.balanceCard}>
+          <div className={styles.balanceIcon}>
+            <Settings2 size={20} />
+          </div>
+          <div className={styles.balanceTitle}>Technology only</div>
+          <p className={styles.balanceCopy}>
+            More tools, pilots, and access, but weak adoption because the workflow owner,
+            review rules, and success metrics are still unclear.
+          </p>
+        </div>
+
+        <div className={styles.balanceCard}>
+          <div className={styles.balanceIcon}>
+            <ShieldCheck size={20} />
+          </div>
+          <div className={styles.balanceTitle}>Governance only</div>
+          <p className={styles.balanceCopy}>
+            Strong caution and policy language, but little operational lift because the
+            platform, data path, and build sequence never catch up.
+          </p>
+        </div>
+
+        <div className={`${styles.balanceCard} ${styles.balanceCardHighlight}`}>
+          <div className={styles.balanceIconHighlight}>
+            <Scale size={20} />
+          </div>
+          <div className={styles.balanceMetric}>17.7%</div>
+          <div className={styles.balanceLabel}>Balanced leaders</div>
+          <p className={styles.balanceCopyHighlight}>
+            The small share of organizations that align technology and organizational
+            readiness are the ones reporting materially higher AI value.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function OperatingSpineInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>The Operating Spine</div>
+      <div className={styles.spineGrid}>
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>01</div>
+          <div className={styles.spineTitle}>Context source</div>
+          <p className={styles.spineCopy}>
+            One trusted record for the workflow: CRM, project board, knowledge base, or
+            reporting sheet.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>02</div>
+          <div className={styles.spineTitle}>Decision rules</div>
+          <p className={styles.spineCopy}>
+            Define what AI can draft, what it can update, and which conditions force human
+            review.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>03</div>
+          <div className={styles.spineTitle}>Write-back path</div>
+          <p className={styles.spineCopy}>
+            The workflow must return updates to the system of record instead of leaving value
+            trapped in a chat thread.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.spineCard} ${styles.spineCardHighlight}`}>
+          <div className={styles.spineStepHighlight}>04</div>
+          <div className={styles.spineTitleHighlight}>Review signal</div>
+          <p className={styles.spineCopyHighlight}>
+            Quality checks, exceptions, and feedback loops keep the system useful as the
+            workflow scales.
+          </p>
+        </div>
+      </div>
+      <div className={styles.spineLegend}>
+        <div className={styles.spineLegendItem}>
+          <FolderSync size={16} />
+          System of record
+        </div>
+        <div className={styles.spineLegendItem}>
+          <GitBranch size={16} />
+          Escalation logic
+        </div>
+        <div className={styles.spineLegendItem}>
+          <FileCheck2 size={16} />
+          Output accountability
+        </div>
+        <div className={styles.spineLegendItem}>
+          <DatabaseZap size={16} />
+          Durable operating memory
         </div>
       </div>
     </div>

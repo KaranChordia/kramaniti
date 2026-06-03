@@ -12,6 +12,39 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'ai-readiness-is-a-balance-problem',
+    title: 'AI Readiness Is a Balance Problem',
+    focus: 'Readiness Design',
+    date: '03 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-03T13:06:44+05:30',
+    readTime: '5 min read',
+    summary: 'Why more AI access does not create operating leverage unless technology, workflow rules, and source-of-truth systems mature together.',
+    content: [
+      'A lot of businesses are now beyond basic AI curiosity. Licenses are active. Teams are experimenting. Early wins exist. And yet the operating lift still feels thinner than expected.',
+      '[Fact] Microsoft&apos;s 2026 Work Trend Index says only <gold>19% of AI users sit in the frontier zone where individual capability and organizational readiness reinforce each other</gold>, while 31% are misaligned and moving at different speeds from the systems around them.',
+      'That gap matters because AI value does not appear just because people can use the tools. It appears when the business is built to absorb the new way of working.',
+      '<h3>Readiness Breaks When One Side Moves Alone</h3>',
+      '[Fact] Microsoft&apos;s May 14, 2026 AI readiness analysis says <gold>only 17.7% of organizations qualify as AI leaders</gold>, meeting the threshold for both technology and organizational readiness, and those organizations realize 56% higher AI value.',
+      '[Fact] The same Microsoft analysis says organizations that overindex on technology often struggle with adoption and trust, while organizations that focus only on governance lack the platforms needed to scale.',
+      '[infographic:readiness-balance]',
+      '[Inference] This is the pattern many teams are living through right now: the tooling layer moves first, but workflow ownership, review logic, incentives, and record systems remain unresolved.',
+      '<h3>The Pilot Usually Fails At The Operating Spine</h3>',
+      '[Fact] Deloitte&apos;s March 2026 executive summary of its State of AI in the Enterprise research says <gold>63% of organizations lack confidence that their current infrastructure can support future AI demands</gold>, causing many initiatives to stall at the pilot stage.',
+      '[Fact] The same Deloitte summary says 47% of Canadian leaders feel confident in their AI strategy, but only 43% report high preparedness on infrastructure and just 38% on data.',
+      'That is the hidden bottleneck. A prompt can generate a decent answer. It cannot decide where the approved context lives, which record needs to be updated, what approval threshold applies, or how the team should learn from errors over time.',
+      '<h3>Chats Are Useful. Systems Of Record Are What Compound</h3>',
+      'If AI helps a salesperson prepare for a call but never updates the CRM, the value stays trapped in a window. If AI drafts a proposal but no one defines the source pricing logic, approval owner, or final record, speed goes up while coherence goes down.',
+      '[Recommendation] The practical question is not &quot;Which model should we add next?&quot; It is <gold>&quot;Which workflow needs a stronger operating spine so AI can create durable leverage?&quot;</gold>',
+      '[infographic:operating-spine]',
+      '<h3>Start Where Context Changes Money</h3>',
+      'Choose one workflow tied to revenue, delivery quality, or brand trust: lead qualification, proposal creation, onboarding, reporting, or content production. Then define four things before expanding the tool stack: the source of truth, the handoff rules, the write-back path, and the review signal.',
+      '[Recommendation] Once those four elements are clear, AI stops behaving like a fast assistant floating outside the business. It starts acting like part of the operating pipeline.',
+      'Readiness is not a tool decision. It is a balance decision.',
+      '[Recommendation] The sequence still holds: <gold>strategy before tools, systems before scale, content after clarity</gold>.'
+    ]
+  },
+  {
     slug: 'ai-training-wont-rewire-a-broken-workflow',
     title: 'AI Training Won’t Rewire a Broken Workflow',
     focus: 'Operating Readiness',

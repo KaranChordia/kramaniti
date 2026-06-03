@@ -722,6 +722,208 @@
   color: rgba(255, 248, 224, 0.88);
 }
 
+.balanceGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (min-width: 768px) {
+  .balanceGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.balanceCard {
+  padding: 24px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.balanceCardHighlight {
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.12) 0%, rgba(20, 20, 24, 0.88) 100%);
+  border-color: rgba(201, 168, 76, 0.32);
+}
+
+.balanceIcon,
+.balanceIconHighlight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+
+.balanceIcon {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.balanceIconHighlight {
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.28);
+}
+
+.balanceMetric {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(32px, 4vw, 42px);
+  line-height: 1;
+  color: var(--color-burnished-gold);
+  margin-bottom: 10px;
+}
+
+.balanceTitle,
+.balanceLabel {
+  display: block;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.balanceTitle {
+  color: var(--text-primary);
+}
+
+.balanceLabel {
+  color: rgba(255, 248, 224, 0.9);
+}
+
+.balanceCopy,
+.balanceCopyHighlight {
+  margin: 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.balanceCopy {
+  color: var(--text-secondary);
+}
+
+.balanceCopyHighlight {
+  color: var(--text-primary);
+}
+
+.spineGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .spineGrid {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.spineCard {
+  flex: 1;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.spineCardHighlight {
+  background: rgba(201, 168, 76, 0.08);
+  border-color: rgba(201, 168, 76, 0.3);
+  box-shadow: 0 8px 22px rgba(201, 168, 76, 0.08);
+}
+
+.spineStep,
+.spineStepHighlight {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.spineStep {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+}
+
+.spineStepHighlight {
+  background: var(--color-burnished-gold);
+  color: #0d0d0f;
+}
+
+.spineTitle,
+.spineTitleHighlight {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.spineTitle {
+  color: var(--text-primary);
+}
+
+.spineTitleHighlight {
+  color: var(--color-burnished-gold);
+}
+
+.spineCopy,
+.spineCopyHighlight {
+  margin: 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.spineCopy {
+  color: var(--text-secondary);
+}
+
+.spineCopyHighlight {
+  color: var(--text-primary);
+}
+
+.spineConnector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(201, 168, 76, 0.4);
+}
+
+.spineLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.spineLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
 .pressureRail {
   display: flex;
   flex-direction: column;

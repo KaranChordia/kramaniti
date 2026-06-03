@@ -12,7 +12,9 @@ import {
   WorkflowRedesignGapInfographic,
   AgentOversightGapInfographic,
   ReinventionPressureInfographic,
-  OperatingReadinessStackInfographic
+  OperatingReadinessStackInfographic,
+  ReadinessBalanceInfographic,
+  OperatingSpineInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -105,6 +107,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:operating-readiness-stack]') {
                   return <OperatingReadinessStackInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:readiness-balance]') {
+                  return <ReadinessBalanceInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:operating-spine]') {
+                  return <OperatingSpineInfographic key={index} />;
                 }
                 
                 // Parse gold highlights
