@@ -87,3 +87,39 @@ This log registers the major strategic and structural decisions made during the 
 *   **Open Questions:**
     *   Will the `brochure-document` page be rewritten using CSS modules or deleted entirely?
     *   Will the founder dashboard be integrated into the public website or hosted as a separate internal tool?
+
+### Decision 7: Nexocean Selected Work Page
+*   **Date:** 2026-06-03
+*   **Area:** Website, public proof, portfolio
+*   **Status:** Implemented (`[Fact]`)
+*   **Decision:** Add a dedicated `/work/nexocean` selected-work page that presents the five-month Nexocean engagement as internal recruiter workflow tooling plus brand content.
+*   **Rationale:** Nexocean is already approved as selected experience, and the founder supplied public video showcases. A focused page can communicate the depth of the work without turning the homepage into a broad client-claim surface.
+*   **Source or Evidence:** Founder confirmation of the engagement scope, existing master context note on Nexocean, local Wingman Dashboard reference repo, supplied YouTube videos, and the Kramaniti-channel unlisted tools walkthrough.
+*   **Affected Files:**
+    *   `website/src/app/work/nexocean/page.tsx`
+    *   `website/src/app/work/nexocean/Nexocean.module.css`
+    *   `website/src/components/layout/Navbar.tsx`
+    *   `website/src/components/sections/Credibility.tsx`
+    *   `website/src/components/sections/Credibility.module.css`
+    *   `docs/kramaniti_site_implementation_plan.md`
+*   **Claim Guardrails:**
+    *   Do not link the private/reference Wingman Dashboard repo publicly.
+    *   Do not claim quantified recruiter outcomes, testimonials, or client endorsement unless separately approved.
+    *   Keep the work framed around internal workflow tools, practical AI systems, and cinematic brand presence.
+    *   Use the Kramaniti-channel walkthrough as portfolio evidence for UI, UX, process flow, and tool design.
+
+### Decision 8: Remove Homepage Proof Section
+*   **Date:** 2026-06-03
+*   **Area:** Website, public proof, navigation
+*   **Status:** Implemented (`[Fact]`)
+*   **Decision:** Remove the homepage Proof/Credibility section and remove the Proof navigation link.
+*   **Rationale:** Selected work should live in dedicated Work pages rather than a homepage proof carousel. This keeps the homepage cleaner and avoids broad client-proof presentation on the first-impression surface.
+*   **Affected Files:**
+    *   `website/src/components/home/HomepageSequence.tsx`
+    *   `website/src/components/layout/Navbar.tsx`
+    *   `website/src/components/sections/Credibility.tsx`
+    *   `website/src/components/sections/Credibility.module.css`
+    *   `docs/kramaniti_site_implementation_plan.md`
+*   **Claim Guardrails:**
+    *   Keep Nexocean available through `/work/nexocean`.
+    *   Do not reintroduce homepage proof sections, client marquees, or proof anchors unless explicitly approved.

@@ -9,7 +9,6 @@ import { Problem } from '../sections/Problem';
 import { Story } from '../sections/Story';
 import { Services } from '../sections/Services';
 import { Workflows } from '../sections/Workflows';
-import { Credibility } from '../sections/Credibility';
 import { FounderPreview } from '../sections/FounderPreview';
 import { Contact } from '../sections/Contact';
 import { Footer } from '../layout/Footer';
@@ -119,7 +118,6 @@ export function HomepageSequence() {
             <Story />
             <Services />
             <Workflows />
-            <Credibility />
             <FounderPreview />
             <Contact />
           </main>

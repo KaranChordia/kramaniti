@@ -41,7 +41,6 @@ Updated homepage:
 - Method
 - Services
 - How It Works
-- Credibility
 - Founder Preview
 - Contact
 
@@ -52,7 +51,7 @@ Updated homepage:
 - Method: Reframed the old story/lifecycle section around Strategy, Systems, and Content.
 - Services: Rebuilt the offer cards around Foundation Strategy, Systems Engineering, and Complete Lifecycle Retainer. Public pricing remains removed.
 - How It Works: Rewrote the old pipeline section into a six-step process: Diagnose, Design, Build, Train, Communicate, Improve.
-- Credibility: Reframed as category-first proof with softened selected experience. Removed public audience metric strip from the homepage.
+- Credibility: Removed from the homepage in the later selected-work cleanup. Public proof should now be handled through dedicated Work pages and approved assets, not a homepage Proof section.
 - Founder Preview: Added a compact founder-led bridge to the full founder page.
 - Contact: Rewritten around "Book an AI Workflow Audit" and the first workflow worth systemizing.
 - Founder page: Lightly aligned linked founder copy to avoid old technical language immediately after the homepage.
@@ -77,8 +76,8 @@ Updated homepage:
 - `website/src/components/sections/Services.module.css`
 - `website/src/components/sections/Workflows.tsx`
 - `website/src/components/sections/Workflows.module.css`
-- `website/src/components/sections/Credibility.tsx`
-- `website/src/components/sections/Credibility.module.css`
+- `website/src/components/sections/Credibility.tsx` (removed later)
+- `website/src/components/sections/Credibility.module.css` (removed later)
 - `website/src/components/sections/FounderPreview.tsx`
 - `website/src/components/sections/FounderPreview.module.css`
 - `website/src/components/sections/Contact.tsx`
@@ -166,3 +165,13 @@ Flagged:
 - Create the AI Workflow Audit Blueprint lead magnet.
 - Add one detailed, verified case-study page once evidence and permission are cleared.
 - Review the insights archive separately so technical articles remain useful without shaping the homepage's first impression.
+
+## 11. Nexocean Portfolio Page
+
+- Added a dedicated selected-work page at `/work/nexocean`.
+- The page frames Nexocean as a five-month contract engagement across internal recruiter tools and brand content.
+- The private Wingman Dashboard repo is treated as reference material only and is not linked publicly from the site.
+- Public copy focuses on category-safe delivery: recruiter operating workflows, Wingman Assistants, resume intelligence, JD-to-sourcing workflows, outreach support, talent intelligence, and cinematic brand content.
+- YouTube showcases are embedded as public-facing proof assets while avoiding private repo exposure or unsupported performance claims.
+- A Kramaniti-channel unlisted walkthrough is featured first to show the internal tools, UI, UX, process flow, and design work without linking the source repository.
+- The homepage Proof/Credibility section and its navigation link were removed after the Nexocean work page became the cleaner proof surface.
