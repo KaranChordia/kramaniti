@@ -105,7 +105,6 @@ html, body {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 @media (max-width: 768px) {
@@ -311,3 +310,111 @@ input, textarea, select {
 * {
   -webkit-overflow-scrolling: touch;
 }
+
+/* =====================================================================
+   Theme Transition System
+   =====================================================================
+   Active ONLY when data-theme-transitioning is present on <html>.
+
+   Sequence:
+     1. Cards / UI containers / controls — surfaces shift first  (0 ms)
+     2. Page-level backgrounds                                   (250 ms)
+     3. ALL text across the entire page shifts last               (450 ms)
+
+   Because CSS `transition` is a single property (later rules override,
+   not merge), every rule must list BOTH its surface delay AND the
+   universal text delay in one declaration.
+   ===================================================================== */
+
+/* ---------- Universal text colour baseline (450 ms delay) ------------ */
+/* Catches every element so no text can snap. opacity & filter are        */
+/* included to prevent animated-heading elements from flashing during     */
+/* theme style recalculation (animation forwards fill recalc).            */
+:root[data-theme-transitioning] * {
+  transition:
+    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    -webkit-text-stroke-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    text-shadow 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    fill 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    stroke 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    opacity 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    filter 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+}
+
+/* ---------- Layer 1: Cards / containers / controls (0 ms surface) ---- */
+/* Surfaces shift immediately; text stays at 450 ms via combined list.   */
+:root[data-theme-transitioning] div,
+:root[data-theme-transitioning] article,
+:root[data-theme-transitioning] aside,
+:root[data-theme-transitioning] button,
+:root[data-theme-transitioning] input,
+:root[data-theme-transitioning] textarea,
+:root[data-theme-transitioning] select,
+:root[data-theme-transitioning] code,
+:root[data-theme-transitioning] img {
+  transition:
+    background-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    background 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    opacity 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    -webkit-text-stroke-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    fill 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    stroke 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms !important;
+}
+
+/* SVG inherits color but also needs fill/stroke with surface timing     */
+:root[data-theme-transitioning] svg {
+  transition:
+    background-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    opacity 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    fill 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    stroke 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms !important;
+}
+
+/* Pseudo-elements — surface layer, no text properties needed            */
+:root[data-theme-transitioning] *::before,
+:root[data-theme-transitioning] *::after {
+  transition:
+    background 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    background-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    opacity 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+}
+
+/* ---------- Layer 2: Page-level backgrounds (250 ms surface) --------- */
+:root[data-theme-transitioning],
+:root[data-theme-transitioning] body {
+  transition:
+    background-color 950ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
+    background 950ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
+    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms !important;
+}
+
+:root[data-theme-transitioning] header,
+:root[data-theme-transitioning] footer,
+:root[data-theme-transitioning] section,
+:root[data-theme-transitioning] nav,
+:root[data-theme-transitioning] main {
+  transition:
+    background-color 950ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
+    background 950ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
+    border-color 900ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
+    box-shadow 900ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
+    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
+    -webkit-text-stroke-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms !important;
+}
+
+/* ---------- Accessibility: honour reduced-motion preference ---------- */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme-transitioning] *,
+  :root[data-theme-transitioning] *::before,
+  :root[data-theme-transitioning] *::after {
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+

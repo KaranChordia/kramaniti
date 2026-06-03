@@ -19,7 +19,27 @@ export function ThemeToggle() {
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
+    const root = document.documentElement;
+
+    // Signal that a theme transition is starting so global CSS can
+    // apply smooth transition rules to every element.
+    root.setAttribute('data-theme-transitioning', '');
+
+    // Apply the new theme on the next frame so the browser picks up
+    // the transitioning attribute first, enabling the CSS transitions
+    // before any property values actually change.
+    requestAnimationFrame(() => {
+      setTheme(newTheme);
+
+      // Remove the transitioning flag after the longest staggered
+      // transition completes (950ms duration + 450ms text delay + buffer).
+      const cleanup = setTimeout(() => {
+        root.removeAttribute('data-theme-transitioning');
+      }, 1800);
+
+      // Ensure cleanup if the component unmounts mid-transition.
+      return () => clearTimeout(cleanup);
+    });
   };
 
   return (
