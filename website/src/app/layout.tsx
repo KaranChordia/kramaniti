@@ -42,14 +42,14 @@ export const metadata: Metadata = {
   },
   other: {
     "apple-mobile-web-app-capable": "yes",
-    "msapplication-TileColor": "#0A0A0F",
+    "msapplication-TileColor": "#C9A84C",
   }
 };
 
 export const viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#0A0A0F" },
-    { media: "(prefers-color-scheme: dark)", color: "#0A0A0F" },
+    { media: "(prefers-color-scheme: light)", color: "#C9A84C" },
+    { media: "(prefers-color-scheme: dark)", color: "#C9A84C" },
   ],
   width: "device-width",
   initialScale: 1,
