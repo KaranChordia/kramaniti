@@ -60,6 +60,7 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 1.5s ease;
+  will-change: transform;
 }
 
 .stackVisible {
@@ -71,11 +72,12 @@
   inset: 0;
   border-radius: 24px;
   border: 1px solid rgba(201, 168, 76, 0.2);
-  background: rgba(20, 20, 24, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(20, 20, 24, 0.95);
   transform-style: preserve-3d;
-  box-shadow: 0 24px 48px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.05);
+  /* Fade shadow opacity down to 0 during the massive zoom to save GPU */
+  box-shadow: 
+    0 24px 48px rgba(0, 0, 0, calc(0.6 * (1 - var(--exit-progress)))), 
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
@@ -365,8 +367,7 @@
   transform: translateY(calc(
     ((1 - var(--appear)) * 40px) + (var(--exit-final) * 30px)
   )) scale(calc(0.95 + (var(--appear) * 0.05)));
-  filter: blur(calc((1 - var(--appear)) * 12px));
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
 }
 
 .scrollStageDesc {
@@ -390,8 +391,7 @@
   transform: translateY(calc(
     ((1 - var(--appear)) * 30px) + (var(--exit-final) * 30px)
   )) scale(calc(0.97 + (var(--appear) * 0.03)));
-  filter: blur(calc((1 - var(--appear)) * 8px));
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
 }
 
 :global(html[data-theme='light']) .scrollStageTitle {
