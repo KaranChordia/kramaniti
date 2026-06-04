@@ -12,6 +12,34 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'ai-governance-has-to-live-inside-the-workflow',
+    title: 'AI Governance Has to Live Inside the Workflow',
+    focus: 'Governance Design',
+    date: '04 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-04T13:03:37+05:30',
+    readTime: '5 min read',
+    summary: 'Why AI oversight stops being useful when it sits in a policy deck instead of inside the actual handoff, approval, and write-back logic of the workflow.',
+    content: [
+      'A lot of businesses now understand that AI needs guardrails. The weaker assumption is that guardrails can live outside the workflow and still shape what happens inside it.',
+      '[Fact] Microsoft&apos;s June 2, 2026 enterprise AI note says the winners will not be the organizations with the most demos, but the ones that turn AI into a governed system for running real work, with identity, context, policy, and human oversight built into production use.',
+      '[Fact] McKinsey&apos;s 2025 State of AI report says <gold>workflow redesign has the biggest effect on an organization&apos;s ability to see EBIT impact from gen AI</gold>, yet only 21% of respondents say their organizations have fundamentally redesigned at least some workflows.',
+      '[infographic:governance-sidecar-gap]',
+      '[Inference] That combination exposes the real gap. Many teams are drafting policy language about AI while the actual workflow still has unclear approval owners, vague exception rules, weak audit trails, and no reliable write-back into the system of record.',
+      '<h3>Policy Outside The Workflow Fails At Runtime</h3>',
+      '[Fact] Deloitte&apos;s 2026 State of AI in the Enterprise says only <gold>one in five companies has a mature model for governance of autonomous AI agents</gold>, and that enterprises where senior leadership actively shapes AI governance achieve significantly greater business value than those that delegate it to technical teams alone.',
+      'This matters because governance is not just a committee function. It is an operating design function. If a system drafts proposals, qualifies leads, updates records, routes approvals, or touches customer communication, the workflow needs to define what the system may do, what it must record, when it must escalate, and how exceptions are reviewed.',
+      '<h3>Embedded Governance Is What Makes Automation Trustworthy</h3>',
+      '[Fact] Microsoft&apos;s May 21, 2026 WorkLab note argues that the practical starting point is one recurring workflow and three questions: where work stalls today, where humans intervene just to move things along, and what it would take for an agent to handle that work without being retaught every time.',
+      '[Recommendation] A useful governance layer should answer four operational questions before scale: <gold>Which record is the source of truth? Which actions can the system take on its own? What signal forces human review? What record of the decision remains after the task is done?</gold>',
+      '[infographic:workflow-governance-loop]',
+      '<h3>Start With A Workflow That Already Touches Trust Or Revenue</h3>',
+      'Choose one path that already matters commercially: lead qualification, proposal drafting, onboarding, reporting, or content production. Then wire the governance into the route itself. The approval logic should not live in a training deck while the workflow runs somewhere else. It should sit in the sequence, the tool permissions, the handoff design, and the write-back path.',
+      'That is the difference between AI that looks supervised and AI that is actually accountable.',
+      '[Recommendation] The sequence still applies: <gold>strategy before tools, systems before scale, content after clarity</gold>. Governance is not a sidecar to that sequence. It is part of the system that makes the sequence hold.'
+    ]
+  },
+  {
     slug: 'ai-readiness-is-a-balance-problem',
     title: 'AI Readiness Is a Balance Problem',
     focus: 'Readiness Design',

@@ -487,3 +487,114 @@ export function OperatingSpineInfographic() {
     </div>
   );
 }
+
+export function GovernanceSidecarGapInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Governance Placement Gap</div>
+      <div className={styles.comparisonGrid}>
+        <div className={styles.wrongWay}>
+          <div className={styles.wayLabel}>
+            <CircleAlert className={styles.labelIconDanger} size={16} />
+            Sidecar governance
+          </div>
+          <div className={styles.flow}>
+            <div className={`${styles.node} ${styles.nodeBroken}`}>Policy deck and workshop</div>
+            <ArrowDown className={styles.arrow} size={18} />
+            <div className={`${styles.node} ${styles.nodeBroken}`}>Workflow ships with vague handoffs</div>
+            <ArrowDown className={styles.arrow} size={18} />
+            <div className={`${styles.node} ${styles.nodeDanger}`}>Outputs move faster than oversight</div>
+          </div>
+        </div>
+
+        <div className={styles.rightWay}>
+          <div className={styles.wayLabel}>
+            <ShieldCheck className={styles.labelIconGold} size={16} />
+            Embedded governance
+          </div>
+          <div className={styles.flow}>
+            <div className={`${styles.node} ${styles.nodeGold}`}>Permissions and source of truth defined</div>
+            <ArrowDown className={styles.arrowGold} size={18} />
+            <div className={`${styles.node} ${styles.nodeGold}`}>Approval and exception rules in-route</div>
+            <ArrowDown className={styles.arrowGold} size={18} />
+            <div className={`${styles.node} ${styles.nodeSolid}`}>AI can move with accountable control</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function WorkflowGovernanceLoopInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Workflow Governance Loop</div>
+      <div className={styles.spineGrid}>
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>01</div>
+          <div className={styles.spineTitle}>Trusted record</div>
+          <p className={styles.spineCopy}>
+            Define the system of record the workflow reads from and writes back to.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>02</div>
+          <div className={styles.spineTitle}>Action boundary</div>
+          <p className={styles.spineCopy}>
+            Make explicit what the system may draft, decide, update, or trigger.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>03</div>
+          <div className={styles.spineTitle}>Review signal</div>
+          <p className={styles.spineCopy}>
+            Thresholds, exceptions, and approvals decide when humans re-enter the route.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.spineCard} ${styles.spineCardHighlight}`}>
+          <div className={styles.spineStepHighlight}>04</div>
+          <div className={styles.spineTitleHighlight}>Retained trace</div>
+          <p className={styles.spineCopyHighlight}>
+            Durable logs, updated records, and feedback signals keep the workflow governable over time.
+          </p>
+        </div>
+      </div>
+      <div className={styles.spineLegend}>
+        <div className={styles.spineLegendItem}>
+          <FolderSync size={16} />
+          System memory
+        </div>
+        <div className={styles.spineLegendItem}>
+          <ShieldCheck size={16} />
+          Human control
+        </div>
+        <div className={styles.spineLegendItem}>
+          <GitBranch size={16} />
+          Escalation path
+        </div>
+        <div className={styles.spineLegendItem}>
+          <FileCheck2 size={16} />
+          Auditability
+        </div>
+      </div>
+    </div>
+  );
+}

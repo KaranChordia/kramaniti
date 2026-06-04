@@ -14,7 +14,9 @@ import {
   ReinventionPressureInfographic,
   OperatingReadinessStackInfographic,
   ReadinessBalanceInfographic,
-  OperatingSpineInfographic
+  OperatingSpineInfographic,
+  GovernanceSidecarGapInfographic,
+  WorkflowGovernanceLoopInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -113,6 +115,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:operating-spine]') {
                   return <OperatingSpineInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:governance-sidecar-gap]') {
+                  return <GovernanceSidecarGapInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:workflow-governance-loop]') {
+                  return <WorkflowGovernanceLoopInfographic key={index} />;
                 }
                 
                 // Parse gold highlights
