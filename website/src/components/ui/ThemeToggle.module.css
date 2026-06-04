@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
+  border-radius: 10px;
   color: var(--text-secondary);
   box-shadow:
     0 12px 24px rgba(0, 0, 0, 0.16),

@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './ThemeToggle.module.css';
 
 export function ThemeToggle() {
@@ -12,7 +12,17 @@ export function ThemeToggle() {
     const currentTheme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark' | null;
     return storedTheme ?? currentTheme ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   });
+
+  // Track whether the toggle handler already applied the theme to the DOM
+  // so the useEffect doesn't redundantly call setAttribute (which triggers
+  // a full style recalculation and can flash animated-heading elements).
+  const appliedByToggle = useRef(false);
+
   useEffect(() => {
+    if (appliedByToggle.current) {
+      appliedByToggle.current = false;
+      return;
+    }
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('kramaniti-theme', theme);
   }, [theme]);
@@ -29,16 +39,36 @@ export function ThemeToggle() {
     // the transitioning attribute first, enabling the CSS transitions
     // before any property values actually change.
     requestAnimationFrame(() => {
+      // Apply theme SYNCHRONOUSLY to the DOM right here — this is
+      // critical.  React's useEffect is async (runs after paint) so
+      // deferring to it causes a second style recalculation one frame
+      // later, which re-triggers colour transitions on text elements.
+      appliedByToggle.current = true;
+      root.setAttribute('data-theme', newTheme);
+      localStorage.setItem('kramaniti-theme', newTheme);
+
+      // Update React state so the icon re-renders.
       setTheme(newTheme);
 
       // Remove the transitioning flag after the longest staggered
-      // transition completes (950ms duration + 450ms text delay + buffer).
+      // transition completes (950 ms duration + 450 ms text delay + buffer).
+      // To prevent the text "double-shift" glitch, we briefly suppress
+      // all transitions before removing the attribute so that component-
+      // level transition rules don't re-trigger a color animation.
       const cleanup = setTimeout(() => {
+        root.style.setProperty('--theme-transition-lock', '1');
+        root.setAttribute('data-theme-settling', '');
         root.removeAttribute('data-theme-transitioning');
-      }, 1800);
 
-      // Ensure cleanup if the component unmounts mid-transition.
-      return () => clearTimeout(cleanup);
+        // Allow one frame for the browser to apply the settled state
+        // with transitions suppressed, then remove the lock.
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            root.removeAttribute('data-theme-settling');
+            root.style.removeProperty('--theme-transition-lock');
+          });
+        });
+      }, 1800);
     });
   };
 
@@ -68,3 +98,4 @@ export function ThemeToggle() {
     </button>
   );
 }
+

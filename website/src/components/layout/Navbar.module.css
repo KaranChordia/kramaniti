@@ -23,6 +23,17 @@
   transform: translateY(0) scale(1);
 }
 
+/* --- Hero Birth Animation Sync --- */
+:global(html[data-home-sequence="true"]) .visible {
+  /* Read the global scroll broadcast from the Hero. 0.94 to 1.0 timeline. */
+  --nav-progress: clamp(0, (var(--global-hero-scroll, 0) - 0.94) * 16.666, 1);
+  
+  opacity: var(--nav-progress);
+  /* Start 40vh down (center of 3D stack) and scaled to 60%, flying up and expanding */
+  transform: translateY(calc((1 - var(--nav-progress)) * 40vh)) scale(calc(0.6 + (var(--nav-progress) * 0.4)));
+  transition: none; /* Let scroll math drive it perfectly smoothly at 120fps */
+}
+
 .header {
   --nav-radius: 18px;
   --glass-border-layer-inset: -8px;
@@ -70,7 +81,7 @@
       rgba(232, 198, 102, 0.54) 30%,
       rgba(255, 231, 154, 0.92) 40%,
       rgba(255, 242, 198, 0.98) 46%,
-      rgba(212, 168, 67, 0.62) 54%,
+      rgba(201, 168, 76, 0.62) 54%,
       rgba(201, 168, 76, 0.14) 66%,
       rgba(201, 168, 76, 0) 100%
     );
@@ -203,7 +214,7 @@
 .ctaButton:hover,
 .ctaButton:focus-visible {
   color: transparent !important;
-  background: linear-gradient(92deg, #c9a84c 0%, #f4de9f 52%, #c9a84c 100%) !important;
+  background: linear-gradient(92deg, #c9a84c 0%, #C9A84C 52%, #c9a84c 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   text-shadow: 0 0 18px rgba(201, 168, 76, 0.3);

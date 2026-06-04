@@ -1,16 +1,35 @@
-.hero {
+.heroSection {
   position: relative;
-  min-height: 100vh;
+  height: 600vh;
+  --hero-scroll: 0;
+}
+
+.heroFooter {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 24px;
+  pointer-events: none;
+  opacity: max(0, 1 - (var(--hero-scroll) * 8));
+}
+
+.stickyContainer {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   padding: 96px 0 64px;
   background: var(--gradient-dark-depth);
-  --hero-scroll: 0;
 }
 
-:global(html[data-theme='light']) .hero {
+:global(html[data-theme='light']) .stickyContainer {
   background: linear-gradient(180deg, #f8f8f8 0%, #ffffff 45%, #f0f0f5 100%);
 }
 
@@ -21,245 +40,257 @@
   pointer-events: none;
 }
 
-.grid {
+.layerStack {
   position: absolute;
-  inset: -20%;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 96px 96px;
-  opacity: 0.12;
-  transform:
-    perspective(1000px)
-    rotateX(66deg)
-    translateY(calc(var(--hero-scroll) * 18px));
-  mask-image: linear-gradient(180deg, transparent, black 18%, black 82%, transparent);
+  top: calc(50% + 40px);
+  left: 50%;
+  width: 55vw;
+  height: 55vw;
+  max-width: 600px;
+  max-height: 600px;
+  
+  /* Exit Choreography (0.94 to 1.0) */
+  --exit-progress: clamp(0, (var(--hero-scroll) - 0.94) * 16.666, 1);
+  --rx: calc(60deg - (var(--exit-progress) * 60deg));
+  --rz: calc(-45deg - (var(--exit-progress) * -45deg));
+  --scale: calc(1 + (var(--exit-progress) * 4)); /* Scales up by 5x to fill screen */
+  
+  transform: translate(-50%, -50%) perspective(1200px) rotateX(var(--rx)) rotateZ(var(--rz)) scale(var(--scale));
+  transform-style: preserve-3d;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.5s ease;
 }
 
-:global(html[data-theme='light']) .grid {
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px);
-  opacity: 0.18;
+.stackVisible {
+  opacity: 1;
 }
 
-.glow {
-  position: absolute;
-  border-radius: 999px;
-  filter: blur(18px);
-  opacity: 0.78;
-  animation: pulseGlow 12s ease-in-out infinite;
-}
-
-.glowLeft {
-  width: 34vw;
-  height: 34vw;
-  max-width: 460px;
-  max-height: 460px;
-  top: 10%;
-  left: -6%;
-  background: radial-gradient(circle at center, rgba(201, 168, 76, 0.18), transparent 68%);
-  transform: translate3d(calc((var(--hero-scroll) - 0.5) * -72px), calc(var(--hero-scroll) * 58px), 0) scale(1.08);
-}
-
-.glowRight {
-  width: 24vw;
-  height: 24vw;
-  max-width: 320px;
-  max-height: 320px;
-  right: 5%;
-  bottom: 8%;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.08), transparent 72%);
-  transform: translate3d(calc((var(--hero-scroll) - 0.5) * 56px), calc(var(--hero-scroll) * -44px), 0) scale(1.04);
-  animation-delay: -5s;
-}
-
-.scanline {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 20%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.5), transparent);
-  opacity: 0.45;
-  transform: translateY(calc(var(--hero-scroll) * 200px));
-}
-
-.motifs {
+.layer {
   position: absolute;
   inset: 0;
+  border-radius: 24px;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  background: rgba(20, 20, 24, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform-style: preserve-3d;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.05);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 32px;
   overflow: hidden;
+  will-change: transform, opacity;
 }
 
-.motif {
-  position: absolute;
+:global(html[data-theme='light']) .layer {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(201, 168, 76, 0.3);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.5);
+}
+
+.layerLabel {
   font-family: var(--font-outfit), sans-serif;
-  font-size: clamp(48px, 8vw, 120px);
-  font-weight: 700;
-  letter-spacing: 0;
-  color: transparent;
-  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.35);
-  text-shadow: 0 0 26px rgba(201, 168, 76, 0.12);
-  opacity: 0.7;
-  user-select: none;
-  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--color-burnished-gold);
+  transform: translateZ(24px);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
 }
 
-.motif::before {
-  content: attr(data-text);
+:global(html[data-theme='light']) .layerLabel {
+  text-shadow: none;
+  color: #a3822f;
+}
+
+/* --- Layer 1: Strategy (Appears 0.15 - 0.20) --- */
+.layerStrategy {
+  --progress-1: clamp(0, (var(--hero-scroll) - 0.15) * 20, 1);
+  opacity: var(--progress-1);
+  transform: translateZ(calc((-160px + (var(--progress-1) * 80px)) * (1 - var(--exit-progress))));
+}
+
+.layerGrid {
   position: absolute;
-  left: 0;
-  top: 0;
-  color: transparent;
-  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.65);
-  text-shadow: 0 0 8px rgba(201, 168, 76, 0.35);
+  inset: -10%;
+  background-image:
+    linear-gradient(rgba(201, 168, 76, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 168, 76, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: calc(0.5 * (1 - var(--exit-progress)));
+}
+
+/* --- Layer 2: Systems (Appears 0.45 - 0.50) --- */
+.layerSystems {
+  --progress-2: clamp(0, (var(--hero-scroll) - 0.45) * 20, 1);
+  opacity: var(--progress-2);
+  transform: translateZ(calc((-80px + (var(--progress-2) * 80px)) * (1 - var(--exit-progress))));
+  border-color: rgba(201, 168, 76, 0.4);
+}
+
+.layerNodes {
+  position: absolute;
+  inset: -10%;
+  background-image: radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.25) 2px, transparent 2px);
+  background-size: 64px 64px;
+  opacity: calc(1 - var(--exit-progress));
+}
+
+.layerNodesActive {
+  position: absolute;
+  inset: -10%;
+  background-image: 
+    radial-gradient(circle at 96px 96px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 352px 32px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 224px 288px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 416px 416px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 32px 352px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 160px 160px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 480px 224px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 288px 352px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 96px 480px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 544px 96px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 352px 480px, rgba(201, 168, 76, 1) 3px, transparent 4px),
+    radial-gradient(circle at 224px 32px, rgba(201, 168, 76, 1) 3px, transparent 4px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
   
-  -webkit-mask-image: linear-gradient(
-    110deg,
-    transparent 20%,
-    rgba(0,0,0,0.2) 40%,
-    rgba(0,0,0,0.85) 50%,
-    rgba(0,0,0,0.2) 60%,
-    transparent 80%
-  );
-  -webkit-mask-size: 200% 100%;
-  animation: goldShimmer 6s linear infinite;
-  pointer-events: none;
+  /* Dots illuminate AFTER subtext (0.60 to 0.65) */
+  --dots-progress: clamp(0, (var(--hero-scroll) - 0.60) * 20, 1);
+  opacity: calc(var(--dots-progress) * (1 - var(--exit-progress)));
 }
 
-@keyframes goldShimmer {
-  0% { -webkit-mask-position: 200% 0; }
-  100% { -webkit-mask-position: -200% 0; }
-}
-
-:global(html[data-theme='light']) .motif {
-  -webkit-text-stroke: 2px rgba(0, 0, 0, 0.25);
-  text-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
-}
-
-:global(html[data-theme='light']) .motif::before {
-  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.65);
-}
-
-.motifStrategy {
-  top: 10%;
-  right: -3%;
-  transform: translate3d(0, calc(var(--hero-scroll) * -64px), 0);
-}
-
-.motifAutomation {
-  top: 34%;
-  left: -2%;
-  transform: translate3d(0, calc(var(--hero-scroll) * 52px), 0);
-}
-
-.motifContent {
-  bottom: 14%;
-  right: 12%;
-  transform: translate3d(0, calc(var(--hero-scroll) * -42px), 0);
-}
-
-.motifRing {
+.layerNodes::before {
+  content: '';
   position: absolute;
-  border-radius: 999px;
-  border: 1px solid rgba(201, 168, 76, 0.18);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 0 32px rgba(201, 168, 76, 0.08);
-  opacity: 0.7;
+  top: 0; left: 0;
+  width: 96px; 
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 1));
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.8);
+  /* The snake path perfectly intersecting the dots (+32px offset) */
+  offset-path: path('M 32 32 L 224 32 L 224 160 L 352 160 L 352 96 L 480 96 L 480 352 L 160 352 L 160 224 L 32 224 Z');
+  animation: snakeMove 8s infinite linear;
+  
+  /* Snake appears AFTER title, BEFORE subtext (0.54 to 0.57) */
+  --snake-progress: clamp(0, (var(--hero-scroll) - 0.54) * 33, 1);
+  opacity: calc(var(--snake-progress) * (1 - var(--exit-progress)));
 }
 
-:global(html[data-theme='light']) .motifRing {
-  border-color: rgba(0, 0, 0, 0.08);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
-    0 0 28px rgba(20, 20, 24, 0.04);
-}
-
-.motifRingOne {
-  width: min(46vw, 560px);
-  height: min(46vw, 560px);
-  top: 16%;
-  right: -12%;
-  transform: translate3d(calc((var(--hero-scroll) - 0.5) * -60px), calc(var(--hero-scroll) * 50px), 0);
-}
-
-.motifRingTwo {
-  width: min(24vw, 280px);
-  height: min(24vw, 280px);
-  left: 10%;
-  bottom: 16%;
-  border-color: rgba(255, 255, 255, 0.1);
-  transform: translate3d(calc((var(--hero-scroll) - 0.5) * 38px), calc(var(--hero-scroll) * -34px), 0);
-}
-
-.motifLine {
+.layerNodes::after {
+  content: '';
   position: absolute;
-  background-color: rgba(201, 168, 76, 0.15);
-  background-image: linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.8), rgba(255, 255, 255, 0.9), rgba(201, 168, 76, 0.8), transparent);
-  background-size: 100% 300px;
-  background-repeat: no-repeat;
-  border-radius: 999px;
-  opacity: 0.85;
-  animation: flowVerticalLine 4s linear infinite;
+  top: 0; left: 0;
+  width: 72px; 
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 1));
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.8);
+  /* Second snake perfectly intersecting the dots */
+  offset-path: path('M 416 416 L 416 224 L 288 224 L 288 96 L 96 96 L 96 288 L 288 288 Z');
+  animation: snakeMove 11s infinite linear reverse;
+  
+  --snake-progress: clamp(0, (var(--hero-scroll) - 0.54) * 33, 1);
+  opacity: calc(var(--snake-progress) * (1 - var(--exit-progress)));
 }
 
-@keyframes flowVerticalLine {
-  0% { background-position: 0 -300px; }
-  100% { background-position: 0 calc(100% + 300px); }
+/* --- Layer 3: Content (Appears 0.75 - 0.80) --- */
+.layerContent {
+  --progress-3: clamp(0, (var(--hero-scroll) - 0.75) * 20, 1);
+  
+  /* Third layer gradient fades out midway through the zoom pan (0.96 to 1.00) */
+  --exit-layer-fade: clamp(0, 1 - (var(--hero-scroll) - 0.96) * 25, 1);
+  opacity: calc(var(--progress-3) * var(--exit-layer-fade));
+  
+  transform: translateZ(calc((0px + (var(--progress-3) * 80px)) * (1 - var(--exit-progress))));
+  border-color: rgba(201, 168, 76, 0.6);
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(20, 20, 24, 0.4));
 }
 
-.motifLineOne {
-  width: 2px;
-  height: 52vh;
-  top: 12%;
-  left: 14%;
-  transform: translateY(calc(var(--hero-scroll) * 120px));
+:global(html[data-theme='light']) .layerContent {
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(255, 255, 255, 0.4));
 }
 
-.motifLineTwo {
-  width: 2px;
-  height: 34vh;
-  right: 20%;
-  bottom: 8%;
-  transform: translateY(calc(var(--hero-scroll) * -96px));
+.layerGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.2), transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.layerGlow::before, .layerGlow::after {
+  content: '';
+  position: absolute;
+  border: 2px solid rgba(201, 168, 76, 0.6);
+  border-radius: 50%;
+  animation: rippleOut 3s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
+}
+
+.layerGlow::after {
+  animation-delay: 1.5s;
+}
+
+@keyframes snakeMove {
+  0% { offset-distance: 0%; }
+  100% { offset-distance: 100%; }
+}
+
+@keyframes rippleOut {
+  0% { width: 0; height: 0; opacity: 1; border-width: 3px; }
+  100% { width: 800px; height: 800px; opacity: 0; border-width: 0px; }
+}
+
+@media (max-width: 768px) {
+  .layerStack {
+    width: 80vw;
+    height: 80vw;
+  }
+}
+
+/* -------------------------------------
+   FOREGROUND TEXT (Chronological)
+   ------------------------------------- */
 
 .container {
-  position: relative;
-  z-index: 2;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   width: 100%;
-  max-width: 1200px;
-  padding: 0 24px;
+  padding-top: 18vh;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .split {
-  display: grid;
-  gap: 28px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: min(980px, 92vw);
   margin: 0 auto;
-}
-
-@media (min-width: 980px) {
-  .split {
-    max-width: 920px;
-    gap: 34px;
-  }
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: min(980px, 92vw);
-  opacity: 1;
   align-items: center;
+  justify-content: center;
+  gap: 20px;
   text-align: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
 }
 
 .content.visible {
-  opacity: 1;
+  /* Intro text fades completely by 0.10 (10% of scroll) */
+  opacity: max(0, 1 - (var(--hero-scroll) * 10));
 }
 
 .heroBrandText {
@@ -288,46 +319,89 @@
   animation: heroBrandEnter 520ms cubic-bezier(0.16, 1, 0.3, 1) 80ms forwards;
 }
 
-.networkStage {
-  position: relative;
+.scrollTextStage {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(8px, 1.4vw, 14px);
-  width: min(680px, 90vw);
-  min-height: 42px;
-  margin: 2px 0 4px;
-  opacity: 0;
-  transform: translateY(12px);
-  filter: blur(10px);
+  pointer-events: none;
+  z-index: 10;
 }
 
-.networkWord {
+.scrollTextItem {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: min(800px, 90vw);
+  text-align: center;
+  
+  --phase-start: calc(0.15 + (var(--stage) * 0.30));
+  --is-not-last: clamp(0, 2 - var(--stage), 1);
+  
+  /* Text fades out entirely during the massive 3D zoom exit (0.94 to 0.97) */
+  --exit-fade: clamp(0, (1 - (var(--hero-scroll) - 0.94) * 33.333), 1);
+}
+
+.scrollStageTitle {
   font-family: var(--font-outfit), sans-serif;
-  font-size: clamp(12px, 1.65vw, 17px);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.08em;
+  font-size: clamp(32px, 4.5vw, 54px);
+  font-weight: 800;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(246, 226, 166, 0.92);
-  border: 1px solid rgba(201, 168, 76, 0.22);
-  background: rgba(201, 168, 76, 0.08);
-  border-radius: 999px;
-  padding: 10px 14px;
-  box-shadow: inset 0 1px 0 rgba(255, 242, 194, 0.08);
-  user-select: none;
-  white-space: nowrap;
+  color: var(--color-burnished-gold);
+  text-shadow: 0 0 24px rgba(201, 168, 76, 0.4);
+  
+  /* Appears right after layer (local 0.05 to 0.10) */
+  --appear: clamp(0, (var(--hero-scroll) - (var(--phase-start) + 0.05)) * 20, 1);
+  /* Exits before the next layer (local 0.20 to 0.25) */
+  --exit-trigger: max(0, var(--hero-scroll) - (var(--phase-start) + 0.20));
+  --exit-amount: calc(var(--exit-trigger) * 20);
+  --exit-final: clamp(0, var(--exit-amount) * var(--is-not-last), 1);
+
+  opacity: calc((var(--appear) - var(--exit-final)) * var(--exit-fade));
+  transform: translateY(calc(
+    ((1 - var(--appear)) * 40px) + (var(--exit-final) * 30px)
+  )) scale(calc(0.95 + (var(--appear) * 0.05)));
+  filter: blur(calc((1 - var(--appear)) * 12px));
+  will-change: transform, opacity, filter;
 }
 
-.networkConnector {
-  display: block;
-  width: clamp(18px, 4vw, 54px);
-  height: 1px;
-  background: linear-gradient(90deg, rgba(201, 168, 76, 0.12), rgba(201, 168, 76, 0.72), rgba(201, 168, 76, 0.12));
+.scrollStageDesc {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: #fff;
+  margin: 0;
+  max-width: 600px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  
+  /* Appears with a clear interval after the title (local 0.13 to 0.18) */
+  --appear: clamp(0, (var(--hero-scroll) - (var(--phase-start) + 0.13)) * 20, 1);
+  /* Exits right after title exits (local 0.25 to 0.30) */
+  --exit-trigger: max(0, var(--hero-scroll) - (var(--phase-start) + 0.25));
+  --exit-amount: calc(var(--exit-trigger) * 20);
+  --exit-final: clamp(0, var(--exit-amount) * var(--is-not-last), 1);
+
+  opacity: calc((var(--appear) - var(--exit-final)) * var(--exit-fade));
+  transform: translateY(calc(
+    ((1 - var(--appear)) * 30px) + (var(--exit-final) * 30px)
+  )) scale(calc(0.97 + (var(--appear) * 0.03)));
+  filter: blur(calc((1 - var(--appear)) * 8px));
+  will-change: transform, opacity, filter;
 }
 
-.content.visible .networkStage {
-  animation: textBlurEnter 520ms cubic-bezier(0.16, 1, 0.3, 1) 180ms forwards;
+:global(html[data-theme='light']) .scrollStageTitle {
+  text-shadow: none;
+  color: #a3822f;
+}
+
+:global(html[data-theme='light']) .scrollStageDesc {
+  color: #1a1a1a;
+  text-shadow: none;
 }
 
 .connectorSvg {
@@ -413,7 +487,7 @@
   color: var(--color-burnished-gold);
   border: 1px solid rgba(201, 168, 76, 0.2);
   background: rgba(201, 168, 76, 0.08);
-  border-radius: 999px;
+  border-radius: 10px;
   padding: 8px 12px;
   margin-top: 2px;
   opacity: 0;

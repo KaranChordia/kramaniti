@@ -17,8 +17,8 @@
   --color-charcoal: #1E1E24;
   
   --color-burnished-gold: #C9A84C;
-  --color-aged-bronze: #A07D3A;
-  --color-muted-amber: #D4A843;
+  --color-aged-bronze: #C9A84C;
+  --color-muted-amber: #C9A84C;
   
   --color-ice-white: #F0F0F5;
   --color-silver-mist: #9B9BA8;
@@ -40,7 +40,7 @@
   --border-subtle: var(--color-smoke);
   
   /* Gradients */
-  --gradient-gold-horizon: linear-gradient(135deg, #C9A84C 0%, #A07D3A 50%, #7A5C2E 100%);
+  --gradient-gold-horizon: linear-gradient(135deg, #C9A84C 0%, #C9A84C 50%, #C9A84C 100%);
   --gradient-dark-depth: linear-gradient(180deg, #0A0A0F 0%, #141418 50%, #1E1E24 100%);
   --gradient-ambient-glow: radial-gradient(ellipse at center, rgba(201,168,76,0.08) 0%, transparent 70%);
   --surface-panel: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%), var(--bg-elevated);
@@ -314,41 +314,58 @@ input, textarea, select {
 /* =====================================================================
    Theme Transition System
    =====================================================================
-   Active ONLY when data-theme-transitioning is present on <html>.
-
-   Sequence:
-     1. Cards / UI containers / controls — surfaces shift first  (0 ms)
-     2. Page-level backgrounds                                   (250 ms)
-     3. ALL text across the entire page shifts last               (450 ms)
-
-   Because CSS `transition` is a single property (later rules override,
-   not merge), every rule must list BOTH its surface delay AND the
-   universal text delay in one declaration.
-   ===================================================================== */
-
-/* ---------- Universal text colour baseline (450 ms delay) ------------ */
-/* Catches every element so no text can snap. opacity & filter are        */
-/* included to prevent animated-heading elements from flashing during     */
-/* theme style recalculation (animation forwards fill recalc).            */
-:root[data-theme-transitioning] * {
-  transition:
-    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    -webkit-text-stroke-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    text-shadow 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    fill 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    stroke 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    opacity 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    filter 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
-}
-
-/* ---------- Layer 1: Cards / containers / controls (0 ms surface) ---- */
-/* Surfaces shift immediately; text stays at 450 ms via combined list.   */
-:root[data-theme-transitioning] div,
-:root[data-theme-transitioning] article,
-:root[data-theme-transitioning] aside,
+/* ---------- Layer 1: Text Colour Baseline (0 ms delay) --------------- */
+/* Text shifts first. We apply this ONLY to typography and interactive    */
+/* elements, NOT to '*' or 'div'. If we apply `transition: color` to both */
+/* a parent and a child, the child lags behind the parent (double shift). */
+/* By relying on CSS inheritance for inner spans, text transitions once.  */
+:root[data-theme-transitioning] body,
+:root[data-theme-transitioning] h1,
+:root[data-theme-transitioning] h2,
+:root[data-theme-transitioning] h3,
+:root[data-theme-transitioning] h4,
+:root[data-theme-transitioning] h5,
+:root[data-theme-transitioning] h6,
+:root[data-theme-transitioning] p,
+:root[data-theme-transitioning] a,
 :root[data-theme-transitioning] button,
 :root[data-theme-transitioning] input,
 :root[data-theme-transitioning] textarea,
+:root[data-theme-transitioning] label,
+:root[data-theme-transitioning] li,
+:root[data-theme-transitioning] strong,
+:root[data-theme-transitioning] b,
+:root[data-theme-transitioning] em,
+:root[data-theme-transitioning] svg {
+  transition:
+    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    -webkit-text-stroke-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    text-shadow 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    fill 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    stroke 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+}
+
+/* ---------- Layer 2: Page-level backgrounds (0 ms delay) --------- */
+/* Backgrounds shift simultaneously. Structural tags only transition background. */
+:root[data-theme-transitioning],
+:root[data-theme-transitioning] body,
+:root[data-theme-transitioning] header,
+:root[data-theme-transitioning] footer,
+:root[data-theme-transitioning] section,
+:root[data-theme-transitioning] nav,
+:root[data-theme-transitioning] main {
+  transition:
+    background-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    background 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+}
+
+/* ---------- Layer 3: Cards / containers / UI controls (0 ms delay) */
+/* UI surfaces shift simultaneously. No color transition here to prevent lag.    */
+:root[data-theme-transitioning] div,
+:root[data-theme-transitioning] article,
+:root[data-theme-transitioning] aside,
 :root[data-theme-transitioning] select,
 :root[data-theme-transitioning] code,
 :root[data-theme-transitioning] img {
@@ -356,22 +373,7 @@ input, textarea, select {
     background-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     background 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     border-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    box-shadow 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    opacity 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    -webkit-text-stroke-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    fill 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    stroke 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms !important;
-}
-
-/* SVG inherits color but also needs fill/stroke with surface timing     */
-:root[data-theme-transitioning] svg {
-  transition:
-    background-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    opacity 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    fill 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    stroke 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms !important;
+    box-shadow 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
 }
 
 /* Pseudo-elements — surface layer, no text properties needed            */
@@ -381,40 +383,23 @@ input, textarea, select {
     background 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     background-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     border-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    box-shadow 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    opacity 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
-}
-
-/* ---------- Layer 2: Page-level backgrounds (250 ms surface) --------- */
-:root[data-theme-transitioning],
-:root[data-theme-transitioning] body {
-  transition:
-    background-color 950ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
-    background 950ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
-    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms !important;
-}
-
-:root[data-theme-transitioning] header,
-:root[data-theme-transitioning] footer,
-:root[data-theme-transitioning] section,
-:root[data-theme-transitioning] nav,
-:root[data-theme-transitioning] main {
-  transition:
-    background-color 950ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
-    background 950ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
-    border-color 900ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
-    box-shadow 900ms cubic-bezier(0.4, 0, 0.2, 1) 250ms,
-    color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms,
-    -webkit-text-stroke-color 850ms cubic-bezier(0.4, 0, 0.2, 1) 450ms !important;
+    box-shadow 850ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
 }
 
 /* ---------- Accessibility: honour reduced-motion preference ---------- */
 @media (prefers-reduced-motion: reduce) {
-  :root[data-theme-transitioning] *,
-  :root[data-theme-transitioning] *::before,
-  :root[data-theme-transitioning] *::after {
+  :root[data-theme-transitioning] body,
+  :root[data-theme-transitioning] div,
+  :root[data-theme-transitioning] * {
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
   }
+}
+
+/* ---------- Settling phase: suppress re-triggers ---------------------- */
+:root[data-theme-settling] *,
+:root[data-theme-settling] *::before,
+:root[data-theme-settling] *::after {
+  transition: none !important;
 }
 

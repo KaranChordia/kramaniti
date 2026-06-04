@@ -20,9 +20,13 @@ export function Hero() {
 
     const updateScroll = () => {
       const rect = hero.getBoundingClientRect();
-      const scrollProgress = Math.min(Math.max((-rect.top) / 260, 0), 1);
+      const maxScroll = rect.height - window.innerHeight;
+      // Calculate progress from 0 to 1 over the 300vh scroll area
+      let scrollProgress = (-rect.top) / maxScroll;
+      scrollProgress = Math.min(Math.max(scrollProgress, 0), 1);
 
-      hero.style.setProperty('--hero-scroll', `${scrollProgress.toFixed(3)}`);
+      hero.style.setProperty('--hero-scroll', `${scrollProgress.toFixed(4)}`);
+      document.documentElement.style.setProperty('--global-hero-scroll', `${scrollProgress.toFixed(4)}`);
     };
 
     updateScroll();
@@ -36,57 +40,82 @@ export function Hero() {
   }, []);
 
   return (
-    <section ref={heroRef} className={styles.hero} id="hero">
-      <div className={styles.background} aria-hidden="true">
-        <div className={styles.grid}></div>
-        <div className={`${styles.glow} ${styles.glowLeft}`}></div>
-        <div className={`${styles.glow} ${styles.glowRight}`}></div>
-        <div className={styles.scanline}></div>
-        <div className={styles.motifs}>
-          <span className={`${styles.motifRing} ${styles.motifRingOne}`}></span>
-          <span className={`${styles.motifRing} ${styles.motifRingTwo}`}></span>
-          <span className={`${styles.motifLine} ${styles.motifLineOne}`}></span>
-          <span className={`${styles.motifLine} ${styles.motifLineTwo}`}></span>
-        </div>
-      </div>
-
-      <div className={styles.container}>
-        <div className={styles.split}>
-          <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
-            <span className={styles.heroBrandText} data-text="Kramaniti">Kramaniti</span>
-            <div className={styles.networkStage} aria-hidden="true">
-              <span className={styles.networkWord}>Strategy</span>
-              <span className={styles.networkConnector}></span>
-              <span className={styles.networkWord}>Systems</span>
-              <span className={styles.networkConnector}></span>
-              <span className={styles.networkWord}>Content</span>
+    <section ref={heroRef} className={styles.heroSection} id="hero">
+      <div className={styles.stickyContainer}>
+        
+        {/* Background Effects */}
+        <div className={styles.background} aria-hidden="true">
+          <div className={`${styles.glow} ${styles.glowLeft}`}></div>
+          <div className={`${styles.glow} ${styles.glowRight}`}></div>
+          
+          <div className={`${styles.layerStack} ${isIntroVisible ? styles.stackVisible : ''}`}>
+            {/* Layer 1: Strategy */}
+            <div className={`${styles.layer} ${styles.layerStrategy}`}>
+              <div className={styles.layerGrid}></div>
             </div>
-            <span className={styles.eyebrow}>AI systems partner for brand growth</span>
-            <h1 className={styles.headline}>
-              {heroHeadlineWords.map((word, index) => (
-                <span
-                  key={`${word}-${index}`}
-                  className={styles.headlineWord}
-                  style={{ '--word-index': index } as React.CSSProperties}
-                >
-                  {word}
-                  {index < heroHeadlineWords.length - 1 ? '\u00a0' : ''}
-                </span>
-              ))}
-            </h1>
-            <p className={styles.subheading}>
-              Kramaniti helps founders find the right workflows, build useful internal tools, and turn that clarity into stronger brand communication.
-            </p>
+            
+            {/* Layer 2: Systems */}
+            <div className={`${styles.layer} ${styles.layerSystems}`}>
+              <div className={styles.layerNodes}></div>
+              <div className={styles.layerNodesActive}></div>
+            </div>
+
+            {/* Layer 3: Content */}
+            <div className={`${styles.layer} ${styles.layerContent}`}>
+              <div className={styles.layerGlow}></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className={styles.heroFooter}>
-        <div className={styles.scrollIndicator}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
+        {/* 2D Floating Text Stage (Chronological) */}
+        <div className={styles.scrollTextStage} aria-hidden="true">
+          <div className={styles.scrollTextItem} style={{ '--stage': 0 } as React.CSSProperties}>
+            <div className={styles.scrollStageTitle}>Strategy</div>
+            <p className={styles.scrollStageDesc}>Map operations. Build absolute clarity.</p>
+          </div>
+          <div className={styles.scrollTextItem} style={{ '--stage': 1 } as React.CSSProperties}>
+            <div className={styles.scrollStageTitle}>Systems</div>
+            <p className={styles.scrollStageDesc}>Architect intelligent systems of sequence and logic.</p>
+          </div>
+          <div className={styles.scrollTextItem} style={{ '--stage': 2 } as React.CSSProperties}>
+            <div className={styles.scrollStageTitle}>Content</div>
+            <p className={styles.scrollStageDesc}>Scale cinematic brand presence.</p>
+          </div>
         </div>
+
+        {/* Foreground Content (Fades out completely) */}
+        <div className={styles.container}>
+          <div className={styles.split}>
+            <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
+              <span className={styles.heroBrandText} data-text="Kramaniti">Kramaniti</span>
+              <span className={styles.eyebrow}>AI systems partner for brand growth</span>
+              <h1 className={styles.headline}>
+                {heroHeadlineWords.map((word, index) => (
+                  <span
+                    key={`${word}-${index}`}
+                    className={styles.headlineWord}
+                    style={{ '--word-index': index } as React.CSSProperties}
+                  >
+                    {word}
+                    {index < heroHeadlineWords.length - 1 ? '\u00a0' : ''}
+                  </span>
+                ))}
+              </h1>
+              <p className={styles.subheading}>
+                Kramaniti helps founders find the right workflows, build useful internal tools, and turn that clarity into stronger brand communication.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.heroFooter}>
+          <div className={styles.scrollIndicator}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+
       </div>
     </section>
   );
