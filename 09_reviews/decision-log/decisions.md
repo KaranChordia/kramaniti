@@ -121,5 +121,19 @@ This log registers the major strategic and structural decisions made during the 
     *   `website/src/components/sections/Credibility.module.css`
     *   `docs/kramaniti_site_implementation_plan.md`
 *   **Claim Guardrails:**
-    *   Keep Nexocean available through `/work/nexocean`.
-    *   Do not reintroduce homepage proof sections, client marquees, or proof anchors unless explicitly approved.
+*   Keep Nexocean available through `/work/nexocean`.
+*   Do not reintroduce homepage proof sections, client marquees, or proof anchors unless explicitly approved.
+
+### Decision 9: Add Founder Advisory Support
+*   **Date:** 2026-06-04
+*   **Area:** Website, founder profile, advisory credibility
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Add a small founder-and-advisory section and update the founder preview to include a Legal & Compliance Advisor role for Kashiesh Chordia.
+*   **Rationale:** The site should communicate structure and compliance discipline without implying a co-founder, partner, director, employee, or formal legal appointment. An advisory designation preserves founder-led positioning while making the operational support layer visible.
+*   **Affected Files:**
+    *   `website/src/app/founder/page.tsx`
+    *   `website/src/components/sections/FounderPreview.tsx`
+*   **Claim Guardrails:**
+    *   Use the title "Legal & Compliance Advisor" only.
+    *   Frame the work as advisory and internal support, not a public legal service offering.
+    *   Avoid implying a formal company appointment beyond advisory support unless separately approved.

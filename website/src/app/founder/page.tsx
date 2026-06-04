@@ -24,21 +24,16 @@ const timeline = [
   }
 ];
 
-const proofPoints = [
+const advisoryTeam = [
   {
-    title: 'WeWork India',
-    label: 'Commercial video vendor',
-    copy: 'Directed inaugurals and spatial coverage for Galaxy, Vaishnavi Signature, ITI Limited, and RMZ Latitude locations across Bengaluru.'
+    name: 'Karan Chordia',
+    role: 'Founder',
+    copy: 'Karan leads Kramaniti’s strategy, AI workflow design, digital systems thinking, and client execution. He focuses on identifying meaningful operational workflows for brands and building practical AI-enabled systems around them.'
   },
   {
-    title: 'Hyatt Centric',
-    label: 'Hospitality content',
-    copy: 'Produced cinematic brand footage and drone assets shaped for premium hospitality distribution.'
-  },
-  {
-    title: 'Nexocean',
-    label: 'Internal workflow support',
-    copy: 'Supported internal tools and content assets over a five-month contract engagement.'
+    name: 'Kashiesh Chordia',
+    role: 'Legal & Compliance Advisor',
+    copy: 'Supports Kramaniti on agreements, documentation, compliance structure, governance practices, company-secretarial matters, filings, and regulatory paperwork. Her role helps ensure that client engagements and internal operations are supported with proper legal and compliance discipline.'
   }
 ];
 
@@ -188,25 +183,25 @@ export default function FounderPage() {
 
         <section className={styles.sectionBlock}>
           <div className={styles.atmosphere} aria-hidden="true">
-            <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Proof</span>
-            <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Trust</span>
+            <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Advisory</span>
+            <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Structure</span>
           </div>
 
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className="micro-label">Selected Proof</span>
-              <h2>Client signals across the pipeline.</h2>
+              <span className="micro-label">Founder & Advisory</span>
+              <h2>A small, serious structure around the founder.</h2>
               <p className={styles.sectionLead}>
-                A track record of executing high-end commercial media and internal workflow support.
+                Founder-led execution with targeted advisory support for legal and compliance discipline.
               </p>
             </div>
 
             <div className={styles.proofGrid}>
-              {proofPoints.map((proof) => (
-                <article key={proof.title} className={styles.proofCard}>
-                  <span className="micro-label">{proof.label}</span>
-                  <h3>{proof.title}</h3>
-                  <p className="text-secondary caption">{proof.copy}</p>
+              {advisoryTeam.map((member) => (
+                <article key={member.name} className={styles.proofCard}>
+                  <span className="micro-label">{member.role}</span>
+                  <h3>{member.name}</h3>
+                  <p className="text-secondary caption">{member.copy}</p>
                 </article>
               ))}
             </div>

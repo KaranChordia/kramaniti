@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
+import { PwaRuntime } from "@/components/pwa/PwaRuntime";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -16,23 +17,40 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  applicationName: "Kramaniti",
   title: "Kramaniti | Practical AI Systems for Brand Growth",
   description: "Kramaniti helps brands identify high-impact workflows, build practical AI infrastructure, and turn those systems into clear brand communication.",
-  manifest: "/manifest.json",
+  manifest: "/kramaniti/manifest.webmanifest",
   icons: {
-    icon: "/kramaniti/assets/brand/kramaniti-mark-gold.png",
-    apple: "/kramaniti/assets/brand/kramaniti-mark-gold.png",
-    shortcut: "/kramaniti/assets/brand/kramaniti-mark-gold.png",
+    icon: [
+      { url: "/kramaniti/assets/pwa/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/kramaniti/assets/pwa/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/kramaniti/assets/pwa/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/kramaniti/assets/pwa/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/kramaniti/assets/pwa/favicon-32.png",
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Kramaniti"
+    title: "Kramaniti",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+    "msapplication-TileColor": "#0A0A0F",
   }
 };
 
 export const viewport = {
-  themeColor: "#0A0A0F",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#0A0A0F" },
+    { media: "(prefers-color-scheme: dark)", color: "#0A0A0F" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -60,6 +78,7 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${jetbrainsMono.variable} antialiased`}
       >
+        <PwaRuntime />
         {children}
       </body>
     </html>

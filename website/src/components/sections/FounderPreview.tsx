@@ -33,6 +33,9 @@ export function FounderPreview() {
           <p className="text-secondary">
             Kramaniti is shaped by Karan Chordia&apos;s path from commercial media and spatial storytelling into workflow design and practical AI infrastructure. The work stays grounded in first-principles thinking: understand the business, build what matters, and communicate clearly.
           </p>
+          <p className="text-secondary">
+            Advisory support from Kashiesh Chordia adds legal and compliance discipline around agreements, documentation, governance practices, filings, and regulatory paperwork.
+          </p>
           <Link href="/founder" className={styles.link}>
             Read the Founder Story
           </Link>
