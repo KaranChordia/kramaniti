@@ -1,6 +1,6 @@
 .workflows {
   padding: 120px 0;
-  background-color: var(--bg-primary);
+  background: transparent;
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -11,9 +11,8 @@
   position: absolute;
   inset: -8% -4%;
   background:
-    radial-gradient(circle at 18% 24%, rgba(201, 168, 76, 0.08), transparent 26%),
-    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.035), transparent 22%),
-    linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.03) 52%, transparent);
+    radial-gradient(circle at 18% 24%, rgba(201, 168, 76, 0.065), transparent 26%),
+    radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.028), transparent 22%);
   pointer-events: none;
   z-index: 0;
 }
@@ -161,7 +160,7 @@
   border-radius: 18px;
   border: 1px solid var(--border-subtle);
   background:
-    radial-gradient(circle at top, rgba(201, 168, 76, 0.08), transparent 52%),
+    linear-gradient(90deg, rgba(201, 168, 76, 0.08), transparent 36%),
     var(--surface-panel);
   box-shadow: var(--shadow-elevation-1);
 }

@@ -1,7 +1,6 @@
 .contact {
   padding: 120px 0;
-  background-color: var(--bg-primary);
-  border-bottom: 1px solid var(--border-subtle);
+  background: transparent;
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -12,9 +11,8 @@
   position: absolute;
   inset: -8% -4%;
   background:
-    radial-gradient(circle at 16% 18%, rgba(201, 168, 76, 0.08), transparent 28%),
-    radial-gradient(circle at 86% 66%, rgba(255, 255, 255, 0.04), transparent 24%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.02) 50%, transparent);
+    radial-gradient(circle at 16% 18%, rgba(201, 168, 76, 0.065), transparent 28%),
+    radial-gradient(circle at 86% 66%, rgba(255, 255, 255, 0.03), transparent 24%);
   pointer-events: none;
   z-index: 0;
 }

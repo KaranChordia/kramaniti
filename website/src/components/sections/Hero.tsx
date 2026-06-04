@@ -2,6 +2,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './Hero.module.css';
 
+const heroHeadline = 'We build practical AI systems for growing brands.';
+const heroHeadlineWords = heroHeadline.split(' ');
+
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
   const [isIntroVisible, setIsIntroVisible] = useState(false);
@@ -52,43 +55,27 @@ export function Hero() {
           <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
             <span className={styles.heroBrandText} data-text="Kramaniti">Kramaniti</span>
             <div className={styles.networkStage} aria-hidden="true">
-              <span className={`${styles.networkWord} ${styles.networkWordSystems}`} data-text="Systems">Systems</span>
-              <span className={`${styles.networkWord} ${styles.networkWordStrategy}`} data-text="Strategy">Strategy</span>
-              <span className={`${styles.networkWord} ${styles.networkWordContent}`} data-text="Content">Content</span>
-              <svg viewBox="0 0 900 240" className={styles.connectorSvg}>
-                <defs>
-                  <linearGradient id="connectorFlowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="rgba(201,168,76,0)" />
-                    <stop offset="45%" stopColor="rgba(201,168,76,0.15)" />
-                    <stop offset="55%" stopColor="rgba(255,236,173,0.95)" />
-                    <stop offset="65%" stopColor="rgba(201,168,76,0.2)" />
-                    <stop offset="100%" stopColor="rgba(201,168,76,0)" />
-                  </linearGradient>
-                </defs>
-                <path pathLength="1" className={`${styles.connectorPathBase} ${styles.connectorStemBase}`} d="M 450 8 L 450 88" />
-                <path pathLength="1" className={`${styles.connectorPathBase} ${styles.connectorOneBase}`} d="M 450 88 C 520 82, 628 70, 770 58" />
-                <path pathLength="1" className={`${styles.connectorPathBase} ${styles.connectorTwoBase}`} d="M 450 88 C 378 102, 268 116, 132 128" />
-                <path pathLength="1" className={`${styles.connectorPathBase} ${styles.connectorThreeBase}`} d="M 450 88 C 528 122, 634 156, 770 188" />
-
-                <path pathLength="1" className={`${styles.connectorPathFlow} ${styles.connectorStem}`} d="M 450 8 L 450 88" />
-                <path pathLength="1" className={`${styles.connectorPathFlow} ${styles.connectorOne}`} d="M 450 88 C 520 82, 628 70, 770 58" />
-                <path pathLength="1" className={`${styles.connectorPathFlow} ${styles.connectorTwo}`} d="M 450 88 C 378 102, 268 116, 132 128" />
-                <path pathLength="1" className={`${styles.connectorPathFlow} ${styles.connectorThree}`} d="M 450 88 C 528 122, 634 156, 770 188" />
-
-                <path pathLength="1" className={`${styles.connectorPathPulse} ${styles.connectorStemPulse}`} d="M 450 8 L 450 88" />
-                <path pathLength="1" className={`${styles.connectorPathPulse} ${styles.connectorOnePulse}`} d="M 450 88 C 520 82, 628 70, 770 58" />
-                <path pathLength="1" className={`${styles.connectorPathPulse} ${styles.connectorTwoPulse}`} d="M 450 88 C 378 102, 268 116, 132 128" />
-                <path pathLength="1" className={`${styles.connectorPathPulse} ${styles.connectorThreePulse}`} d="M 450 88 C 528 122, 634 156, 770 188" />
-              </svg>
+              <span className={styles.networkWord}>Strategy</span>
+              <span className={styles.networkConnector}></span>
+              <span className={styles.networkWord}>Systems</span>
+              <span className={styles.networkConnector}></span>
+              <span className={styles.networkWord}>Content</span>
             </div>
-            <span className={styles.eyebrow}>Strategy / Systems / Brand Communication</span>
+            <span className={styles.eyebrow}>AI systems partner for brand growth</span>
             <h1 className={styles.headline}>
-              <span className={styles.headlineLine}>Strategy before tools.</span>
-              <span className={styles.headlineLine}>Systems before scale.</span>
-              <span className={styles.headlineLine}>Content after clarity.</span>
+              {heroHeadlineWords.map((word, index) => (
+                <span
+                  key={`${word}-${index}`}
+                  className={styles.headlineWord}
+                  style={{ '--word-index': index } as React.CSSProperties}
+                >
+                  {word}
+                  {index < heroHeadlineWords.length - 1 ? '\u00a0' : ''}
+                </span>
+              ))}
             </h1>
             <p className={styles.subheading}>
-              We turn clear strategy into practical systems and stronger brand communication.
+              Kramaniti helps founders find the right workflows, build useful internal tools, and turn that clarity into stronger brand communication.
             </p>
           </div>
         </div>

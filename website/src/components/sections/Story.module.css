@@ -1,8 +1,7 @@
 .story {
   padding: 120px 0;
-  background-color: var(--bg-primary);
+  background: transparent;
   position: relative;
-  overflow: hidden;
   isolation: isolate;
 }
 
@@ -11,9 +10,8 @@
   position: absolute;
   inset: -8% -4%;
   background:
-    radial-gradient(circle at 18% 18%, rgba(201, 168, 76, 0.08), transparent 28%),
-    radial-gradient(circle at 88% 74%, rgba(255, 255, 255, 0.035), transparent 22%),
-    linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.03) 48%, transparent);
+    radial-gradient(circle at 18% 18%, rgba(201, 168, 76, 0.065), transparent 28%),
+    radial-gradient(circle at 88% 74%, rgba(255, 255, 255, 0.028), transparent 22%);
   pointer-events: none;
   z-index: 0;
 }
@@ -223,6 +221,7 @@
 .stage {
   --stage-number-width: 32px;
   position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: 28px 22px 22px;

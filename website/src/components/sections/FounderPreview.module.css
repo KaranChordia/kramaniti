@@ -1,10 +1,9 @@
 .founder {
   padding: 110px 0;
-  background-color: var(--bg-primary);
+  background: transparent;
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  border-top: 1px solid var(--border-subtle);
 }
 
 .founder::before {

@@ -1,7 +1,62 @@
 .shell {
   position: relative;
   min-height: 100vh;
-  background: var(--bg-primary);
+  background:
+    radial-gradient(circle at 14% 12%, rgba(201, 168, 76, 0.13), transparent 28%),
+    radial-gradient(circle at 88% 36%, rgba(255, 255, 255, 0.055), transparent 24%),
+    radial-gradient(circle at 22% 78%, rgba(201, 168, 76, 0.08), transparent 30%),
+    linear-gradient(180deg, #0A0A0F 0%, #141418 42%, #0A0A0F 74%, #141418 100%);
+  overflow: clip;
+  isolation: isolate;
+}
+
+.shell::before {
+  content: '';
+  position: fixed;
+  inset: -18%;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 104px 104px;
+  opacity: 0.12;
+  transform: perspective(1000px) rotateX(66deg) translateY(-4%);
+  mask-image: linear-gradient(180deg, transparent, black 14%, black 86%, transparent);
+}
+
+.shell::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 11%, rgba(201, 168, 76, 0.18) 11.08%, transparent 11.16%),
+    linear-gradient(90deg, transparent 0 78%, rgba(201, 168, 76, 0.12) 78.08%, transparent 78.16%),
+    linear-gradient(180deg, transparent 0 18%, rgba(201, 168, 76, 0.16) 18.08%, transparent 18.16%),
+    linear-gradient(180deg, transparent 0 64%, rgba(201, 168, 76, 0.11) 64.08%, transparent 64.16%);
+  opacity: 0.42;
+  mask-image: linear-gradient(180deg, black, rgba(0, 0, 0, 0.72) 70%, transparent);
+}
+
+:global(html[data-theme='light']) .shell {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(201, 168, 76, 0.14), transparent 28%),
+    radial-gradient(circle at 88% 36%, rgba(20, 20, 24, 0.05), transparent 24%),
+    radial-gradient(circle at 22% 78%, rgba(201, 168, 76, 0.08), transparent 30%),
+    linear-gradient(180deg, #f8f8f8 0%, #ffffff 42%, #f0f0f5 74%, #ffffff 100%);
+}
+
+:global(html[data-theme='light']) .shell::before {
+  background-image:
+    linear-gradient(rgba(20, 20, 24, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 20, 24, 0.045) 1px, transparent 1px);
+  opacity: 0.18;
+}
+
+:global(html[data-theme='light']) .shell::after {
+  opacity: 0.26;
 }
 
 .overlay {
@@ -160,6 +215,8 @@
 }
 
 .chrome {
+  position: relative;
+  z-index: 1;
   opacity: 0;
   transform: translateY(16px);
   filter: blur(8px);
@@ -174,6 +231,7 @@
 
 .main {
   position: relative;
+  z-index: 1;
 }
 
 @keyframes chromeReveal {
