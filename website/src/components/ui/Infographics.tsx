@@ -708,3 +708,118 @@ export function ReviewOperatingLoopInfographic() {
     </div>
   );
 }
+
+export function PromptSprawlVsOrchestrationInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Prompt Sprawl vs. Orchestrated Work</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Dimension</th>
+              <th className={styles.matrixColHeader}>Prompt sprawl</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Orchestrated workflow</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Context</td>
+              <td className={styles.matrixCell}>Lives across chats, tabs, and personal notes.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Pulled from a defined source of truth at the right step.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Routing</td>
+              <td className={styles.matrixCell}>Humans keep deciding what happens next by memory.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Branching, approvals, and handoffs are explicit.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Memory</td>
+              <td className={styles.matrixCell}>Corrections stay trapped in one-off conversations.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Decisions and updates write back into the workflow.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Scale effect</td>
+              <td className={styles.matrixCell}>More output creates more coordination drag.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>More output compounds into a clearer operating pipeline.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export function OrchestrationControlPlaneInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>The Orchestration Control Plane</div>
+      <div className={styles.spineGrid}>
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>01</div>
+          <div className={styles.spineTitle}>Context intake</div>
+          <p className={styles.spineCopy}>
+            Pull the right records, references, and constraints into the route before work begins.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>02</div>
+          <div className={styles.spineTitle}>Routing logic</div>
+          <p className={styles.spineCopy}>
+            Define which step drafts, which step checks, and which condition escalates to a human owner.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>03</div>
+          <div className={styles.spineTitle}>System action</div>
+          <p className={styles.spineCopy}>
+            Let the workflow update the CRM, project board, report, or content queue instead of stopping at output.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.spineCard} ${styles.spineCardHighlight}`}>
+          <div className={styles.spineStepHighlight}>04</div>
+          <div className={styles.spineTitleHighlight}>Retained memory</div>
+          <p className={styles.spineCopyHighlight}>
+            Logs, corrections, and outcomes stay inside the operating system so the next cycle starts smarter.
+          </p>
+        </div>
+      </div>
+      <div className={styles.spineLegend}>
+        <div className={styles.spineLegendItem}>
+          <FolderSync size={16} />
+          Source of truth
+        </div>
+        <div className={styles.spineLegendItem}>
+          <GitBranch size={16} />
+          Routing rules
+        </div>
+        <div className={styles.spineLegendItem}>
+          <ShieldCheck size={16} />
+          Human override
+        </div>
+        <div className={styles.spineLegendItem}>
+          <DatabaseZap size={16} />
+          Durable memory
+        </div>
+      </div>
+    </div>
+  );
+}

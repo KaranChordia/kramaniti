@@ -18,7 +18,9 @@ import {
   GovernanceSidecarGapInfographic,
   WorkflowGovernanceLoopInfographic,
   ReviewCapacityGapInfographic,
-  ReviewOperatingLoopInfographic
+  ReviewOperatingLoopInfographic,
+  PromptSprawlVsOrchestrationInfographic,
+  OrchestrationControlPlaneInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -129,6 +131,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:review-operating-loop]') {
                   return <ReviewOperatingLoopInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:prompt-sprawl-vs-orchestration]') {
+                  return <PromptSprawlVsOrchestrationInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:orchestration-control-plane]') {
+                  return <OrchestrationControlPlaneInfographic key={index} />;
                 }
                 
                 // Parse gold highlights

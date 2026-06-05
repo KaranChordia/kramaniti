@@ -12,6 +12,34 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'prompt-sprawl-is-becoming-the-next-ai-bottleneck',
+    title: 'Prompt Sprawl Is Becoming the Next AI Bottleneck',
+    focus: 'Orchestration Design',
+    date: '05 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-05T18:34:01+05:30',
+    readTime: '5 min read',
+    summary: 'Why AI value stalls when teams scale prompts and agents faster than they design the routing, state, and source-of-truth logic that turns output into a working system.',
+    content: [
+      'A lot of businesses now have enough AI access to produce work quickly. The newer problem is that the work often lives across prompts, tabs, drafts, and partial automations that do not add up to one dependable operating path.',
+      '[Fact] Microsoft&apos;s June 2, 2026 enterprise AI note says the winners will be the organizations that turn AI into a governed, continuously improving system for running real work, and that success depends on <gold>the system around the AI</gold>.',
+      '[Fact] Microsoft&apos;s May 14, 2026 Conductor note says teams building multi-agent workflows kept rewriting glue code, relying on ad hoc retries, carrying manual state, and struggling to version-control the workflow itself.',
+      '[infographic:prompt-sprawl-vs-orchestration]',
+      '[Inference] That is the orchestration gap. The model may be capable. The prompt may even be good. But if context enters inconsistently, routing changes by memory, and corrections never return to the workflow, the business is still scaling coordination debt.',
+      '<h3>More Agents Can Create More Coordination Drag</h3>',
+      '[Fact] McKinsey&apos;s 2025 State of AI report says <gold>workflow redesign has the biggest effect on an organization&apos;s ability to see EBIT impact from gen AI</gold>, yet only 21% of respondents say their organizations have fundamentally redesigned at least some workflows.',
+      'That matters because prompt sprawl feels productive from the inside. Teams can draft proposals faster, summarize meetings faster, research faster, and prepare content faster. But if nobody has designed how the workflow should read context, branch, escalate, and write back, each gain arrives with more hidden coordination work around it.',
+      '<h3>Orchestration Is What Turns Output Into A System</h3>',
+      '[Fact] Deloitte&apos;s 2026 State of AI in the Enterprise says only <gold>one in five companies has a mature model for governance of autonomous AI agents</gold>, even as agentic AI usage is expected to rise sharply over the next two years.',
+      '[Recommendation] A useful orchestration layer should answer four practical questions before scale: <gold>Where does approved context enter? Which step owns routing? What action is allowed to update the business record? What trace remains after the work is done?</gold>',
+      '[infographic:orchestration-control-plane]',
+      '<h3>The Workflow Needs A Control Plane, Not More Prompt Volume</h3>',
+      'The point is not to force every task into a heavy platform. It is to define the control plane around the workflow that already matters. In some cases that means deterministic routing. In others it means a lighter review gate, a structured write-back rule, or a retained memory layer that stops the team from reteaching the system every week.',
+      'That is where orchestration becomes commercially relevant. It reduces operational drag, protects quality, and keeps AI work connected to the records and decisions the business actually runs on.',
+      '[Recommendation] Start with one workflow tied to revenue, delivery quality, or brand trust: proposal creation, lead qualification, onboarding, reporting, or content production. Then architect the orchestration before you multiply the agents. <gold>Strategy before tools, systems before scale, content after clarity</gold> still applies because prompt volume without orchestration is just faster fragmentation.'
+    ]
+  },
+  {
     slug: 'ai-review-is-becoming-the-operating-layer',
     title: 'AI Review Is Becoming the Operating Layer',
     focus: 'Execution Design',
