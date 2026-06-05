@@ -1,6 +1,6 @@
 .heroSection {
   position: relative;
-  height: 600vh;
+  height: 560vh;
   --hero-scroll: 0;
 }
 
@@ -42,24 +42,24 @@
 
 .layerStack {
   position: absolute;
-  top: calc(50% + 40px);
+  top: calc(58% + 36px);
   left: 50%;
-  width: 55vw;
-  height: 55vw;
-  max-width: 600px;
-  max-height: 600px;
+  width: 50vw;
+  height: 50vw;
+  max-width: 540px;
+  max-height: 540px;
   
-  /* Exit Choreography (0.94 to 1.0) */
-  --exit-progress: clamp(0, (var(--hero-scroll) - 0.94) * 16.666, 1);
-  --rx: calc(60deg - (var(--exit-progress) * 60deg));
-  --rz: calc(-45deg - (var(--exit-progress) * -45deg));
-  --scale: calc(1 + (var(--exit-progress) * 4)); /* Scales up by 5x to fill screen */
+  --stack-progress: clamp(0, (var(--hero-scroll) - 0.92) * 22.222, 1);
+  --exit-progress: clamp(0, (var(--hero-scroll) - 0.985) * 66.666, 1);
+  --rx: calc(60deg - (var(--stack-progress) * 28deg) - (var(--exit-progress) * 32deg));
+  --rz: calc(-45deg + (var(--stack-progress) * 22deg) + (var(--exit-progress) * 23deg));
+  --scale: calc(1 + (var(--stack-progress) * 0.12) + (var(--exit-progress) * 4.6));
   
-  transform: translate(-50%, -50%) perspective(1200px) rotateX(var(--rx)) rotateZ(var(--rz)) scale(var(--scale));
+  transform: translate(-50%, calc(-50% - (var(--stack-progress) * 30px))) perspective(1200px) rotateX(var(--rx)) rotateZ(var(--rz)) scale(var(--scale));
   transform-style: preserve-3d;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 1.5s ease;
+  transition: opacity 1.7s ease;
   will-change: transform;
 }
 
@@ -109,9 +109,11 @@
 
 /* --- Layer 1: Strategy (Appears 0.15 - 0.20) --- */
 .layerStrategy {
-  --progress-1: clamp(0, (var(--hero-scroll) - 0.15) * 20, 1);
+  --progress-1: clamp(0, (var(--hero-scroll) - 0.14) * 6.667, 1);
   opacity: var(--progress-1);
-  transform: translateZ(calc((-160px + (var(--progress-1) * 80px)) * (1 - var(--exit-progress))));
+  transform:
+    translateY(calc(var(--stack-progress) * -24px))
+    translateZ(calc((-320px + (var(--progress-1) * 120px)) * (1 - (var(--stack-progress) * 0.96))));
 }
 
 .layerGrid {
@@ -126,9 +128,11 @@
 
 /* --- Layer 2: Systems (Appears 0.45 - 0.50) --- */
 .layerSystems {
-  --progress-2: clamp(0, (var(--hero-scroll) - 0.45) * 20, 1);
+  --progress-2: clamp(0, (var(--hero-scroll) - 0.44) * 6.667, 1);
   opacity: var(--progress-2);
-  transform: translateZ(calc((-80px + (var(--progress-2) * 80px)) * (1 - var(--exit-progress))));
+  transform:
+    translateY(calc(var(--stack-progress) * -8px))
+    translateZ(calc((-120px + (var(--progress-2) * 110px)) * (1 - (var(--stack-progress) * 0.94))));
   border-color: rgba(201, 168, 76, 0.4);
 }
 
@@ -159,7 +163,7 @@
   background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
   
   /* Dots illuminate AFTER subtext (0.60 to 0.65) */
-  --dots-progress: clamp(0, (var(--hero-scroll) - 0.60) * 20, 1);
+  --dots-progress: clamp(0, (var(--hero-scroll) - 0.58) * 6.667, 1);
   opacity: calc(var(--dots-progress) * (1 - var(--exit-progress)));
 }
 
@@ -176,7 +180,7 @@
   animation: snakeMove 8s infinite linear;
   
   /* Snake appears AFTER title, BEFORE subtext (0.54 to 0.57) */
-  --snake-progress: clamp(0, (var(--hero-scroll) - 0.54) * 33, 1);
+  --snake-progress: clamp(0, (var(--hero-scroll) - 0.52) * 8.333, 1);
   opacity: calc(var(--snake-progress) * (1 - var(--exit-progress)));
 }
 
@@ -192,19 +196,20 @@
   offset-path: path('M 416 416 L 416 224 L 288 224 L 288 96 L 96 96 L 96 288 L 288 288 Z');
   animation: snakeMove 11s infinite linear reverse;
   
-  --snake-progress: clamp(0, (var(--hero-scroll) - 0.54) * 33, 1);
+  --snake-progress: clamp(0, (var(--hero-scroll) - 0.52) * 8.333, 1);
   opacity: calc(var(--snake-progress) * (1 - var(--exit-progress)));
 }
 
 /* --- Layer 3: Content (Appears 0.75 - 0.80) --- */
 .layerContent {
-  --progress-3: clamp(0, (var(--hero-scroll) - 0.75) * 20, 1);
+  --progress-3: clamp(0, (var(--hero-scroll) - 0.84) * 9.091, 1);
   
-  /* Third layer gradient fades out midway through the zoom pan (0.96 to 1.00) */
-  --exit-layer-fade: clamp(0, 1 - (var(--hero-scroll) - 0.96) * 25, 1);
+  --exit-layer-fade: clamp(0, 1 - (var(--hero-scroll) - 0.97) * 33.333, 1);
   opacity: calc(var(--progress-3) * var(--exit-layer-fade));
   
-  transform: translateZ(calc((0px + (var(--progress-3) * 80px)) * (1 - var(--exit-progress))));
+  transform:
+    translateY(calc(var(--stack-progress) * 14px))
+    translateZ(calc((80px + (var(--progress-3) * 140px)) * (1 - (var(--stack-progress) * 0.92))));
   border-color: rgba(201, 168, 76, 0.6);
   background: linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(20, 20, 24, 0.4));
 }
@@ -246,8 +251,14 @@
 
 @media (max-width: 768px) {
   .layerStack {
-    width: 80vw;
-    height: 80vw;
+    top: calc(60% + 24px);
+    width: 78vw;
+    height: 78vw;
+  }
+  .scrollTextStage {
+    top: calc(60% - 132px - (var(--stack-progress) * 32px));
+    width: 78vw;
+    height: auto;
   }
 }
 
@@ -263,7 +274,7 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding-top: 18vh;
+  padding-top: clamp(104px, 16vh, 156px);
   pointer-events: none;
   z-index: 10;
 }
@@ -291,8 +302,7 @@
 }
 
 .content.visible {
-  /* Intro text fades completely by 0.10 (10% of scroll) */
-  opacity: max(0, 1 - (var(--hero-scroll) * 10));
+  opacity: clamp(0, 1 - (var(--hero-scroll) * 12), 1);
 }
 
 .heroBrandText {
@@ -318,15 +328,17 @@
 }
 
 .content.visible .heroBrandText {
-  animation: heroBrandEnter 520ms cubic-bezier(0.16, 1, 0.3, 1) 80ms forwards;
+  animation: heroBrandEnter 360ms cubic-bezier(0.16, 1, 0.3, 1) 20ms forwards;
 }
 
 .scrollTextStage {
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: calc(58% - 176px - (var(--stack-progress) * 48px));
+  left: 50%;
+  width: 50vw;
+  height: auto;
+  max-width: 540px;
+  transform: translateX(-50%);
   pointer-events: none;
   z-index: 10;
 }
@@ -336,61 +348,57 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  width: min(800px, 90vw);
+  gap: 10px;
+  top: 0;
+  left: 50%;
+  width: min(360px, 72%);
   text-align: center;
-  
-  --phase-start: calc(0.15 + (var(--stage) * 0.30));
+  transform: translateX(-50%);
+  margin-top: var(--copy-y, 0px);
   --is-not-last: clamp(0, 2 - var(--stage), 1);
-  
-  /* Text fades out entirely during the massive 3D zoom exit (0.94 to 0.97) */
-  --exit-fade: clamp(0, (1 - (var(--hero-scroll) - 0.94) * 33.333), 1);
+  --exit-fade: clamp(0, (1 - (var(--hero-scroll) - 0.975) * 50), 1);
 }
 
 .scrollStageTitle {
   font-family: var(--font-outfit), sans-serif;
-  font-size: clamp(32px, 4.5vw, 54px);
+  font-size: clamp(24px, 2.8vw, 38px);
   font-weight: 800;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-burnished-gold);
-  text-shadow: 0 0 24px rgba(201, 168, 76, 0.4);
+  text-shadow: 0 0 18px rgba(201, 168, 76, 0.3);
   
-  /* Appears right after layer (local 0.05 to 0.10) */
-  --appear: clamp(0, (var(--hero-scroll) - (var(--phase-start) + 0.05)) * 20, 1);
-  /* Exits before the next layer (local 0.20 to 0.25) */
-  --exit-trigger: max(0, var(--hero-scroll) - (var(--phase-start) + 0.20));
-  --exit-amount: calc(var(--exit-trigger) * 20);
+  --appear: clamp(0, (var(--hero-scroll) - (var(--phase-start) + 0.03)) * 8.333, 1);
+  --exit-trigger: max(0, var(--hero-scroll) - var(--title-exit));
+  --exit-amount: calc(var(--exit-trigger) * 16.666);
   --exit-final: clamp(0, var(--exit-amount) * var(--is-not-last), 1);
 
   opacity: calc((var(--appear) - var(--exit-final)) * var(--exit-fade));
   transform: translateY(calc(
-    ((1 - var(--appear)) * 40px) + (var(--exit-final) * 30px)
-  )) scale(calc(0.95 + (var(--appear) * 0.05)));
+    ((1 - var(--appear)) * 26px) + (var(--exit-final) * 18px)
+  )) scale(calc(0.97 + (var(--appear) * 0.03)));
   will-change: transform, opacity;
 }
 
 .scrollStageDesc {
   font-family: var(--font-inter), sans-serif;
-  font-size: clamp(18px, 2vw, 24px);
+  font-size: clamp(14px, 1.35vw, 18px);
   font-weight: 400;
   line-height: 1.6;
   color: #fff;
   margin: 0;
-  max-width: 600px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  max-width: 30ch;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.55);
   
-  /* Appears with a clear interval after the title (local 0.13 to 0.18) */
-  --appear: clamp(0, (var(--hero-scroll) - (var(--phase-start) + 0.13)) * 20, 1);
-  /* Exits right after title exits (local 0.25 to 0.30) */
-  --exit-trigger: max(0, var(--hero-scroll) - (var(--phase-start) + 0.25));
-  --exit-amount: calc(var(--exit-trigger) * 20);
+  --appear: clamp(0, (var(--hero-scroll) - (var(--phase-start) + 0.09)) * 8.333, 1);
+  --exit-trigger: max(0, var(--hero-scroll) - var(--desc-exit));
+  --exit-amount: calc(var(--exit-trigger) * 16.666);
   --exit-final: clamp(0, var(--exit-amount) * var(--is-not-last), 1);
 
   opacity: calc((var(--appear) - var(--exit-final)) * var(--exit-fade));
   transform: translateY(calc(
-    ((1 - var(--appear)) * 30px) + (var(--exit-final) * 30px)
-  )) scale(calc(0.97 + (var(--appear) * 0.03)));
+    ((1 - var(--appear)) * 16px) + (var(--exit-final) * 16px)
+  )) scale(calc(0.985 + (var(--appear) * 0.015)));
   will-change: transform, opacity;
 }
 
@@ -496,7 +504,7 @@
 }
 
 .content.visible .eyebrow {
-  animation: textBlurEnter 520ms cubic-bezier(0.16, 1, 0.3, 1) 280ms forwards;
+  animation: textBlurEnter 360ms cubic-bezier(0.16, 1, 0.3, 1) 120ms forwards;
 }
 
 .headline {
@@ -512,14 +520,14 @@
 .headlineWord {
   display: inline-block;
   opacity: 0;
-  transform: translateY(18px);
-  filter: blur(16px);
+  transform: translateY(12px);
+  filter: blur(9px);
   will-change: opacity, transform, filter;
 }
 
 .content.visible .headlineWord {
-  animation: heroHeadingWordEnter 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: calc(360ms + 70ms * var(--word-index));
+  animation: heroHeadingWordEnter 360ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(160ms + 30ms * var(--word-index));
 }
 
 .subheading {
@@ -541,7 +549,7 @@
 }
 
 .content.visible .subheading {
-  animation: textBlurEnter 560ms cubic-bezier(0.16, 1, 0.3, 1) 560ms forwards;
+  animation: textBlurEnter 380ms cubic-bezier(0.16, 1, 0.3, 1) 250ms forwards;
 }
 
 .ctaRow {
@@ -799,7 +807,7 @@
   z-index: 2;
   transform: translateX(-50%);
   opacity: 0;
-  animation: footerFade 900ms ease 520ms forwards;
+  animation: footerFade 600ms ease 260ms forwards;
 }
 
 .scrollIndicator {
@@ -903,6 +911,9 @@
 }
 
 @media (max-width: 768px) {
+  .heroSection {
+    height: 420vh;
+  }
   .hero {
     min-height: auto;
     padding: 106px 0 54px;
@@ -935,8 +946,8 @@
     text-align: center;
   }
   .headline {
-    font-size: clamp(18px, 5.8vw, 24px);
-    line-height: 1.22;
+    font-size: clamp(18px, 6.2vw, 26px);
+    line-height: 1.18;
     max-width: 100%;
   }
   .headlineWord {
@@ -950,6 +961,27 @@
     padding: 0;
     white-space: normal;
     text-wrap: balance;
+  }
+  .scrollTextStage {
+    top: calc(60% - 132px - (var(--stack-progress) * 32px));
+    width: 78vw;
+    height: auto;
+  }
+  .scrollTextItem {
+    top: 0;
+    left: 50%;
+    width: min(230px, 76%);
+    transform: translateX(-50%);
+    gap: 8px;
+  }
+  .scrollStageTitle {
+    font-size: clamp(18px, 5.2vw, 24px);
+    letter-spacing: 0.12em;
+  }
+  .scrollStageDesc {
+    font-size: clamp(12px, 3.4vw, 14px);
+    line-height: 1.45;
+    max-width: 28ch;
   }
   .ctaRow {
     grid-template-columns: 1fr;

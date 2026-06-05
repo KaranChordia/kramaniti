@@ -15,9 +15,9 @@ import { Footer } from '../layout/Footer';
 
 type IntroPhase = 'dark' | 'logo-in' | 'logo-out' | 'done';
 
-const DARK_PHASE_MS = 500;
-const LOGO_IN_MS = 1200;
-const LOGO_OUT_MS = 900;
+const DARK_PHASE_MS = 220;
+const LOGO_IN_MS = 760;
+const LOGO_OUT_MS = 420;
 
 export function HomepageSequence() {
   const [phase, setPhase] = useState<IntroPhase>('dark');

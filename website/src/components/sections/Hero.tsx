@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './Hero.module.css';
 
-const heroHeadline = 'We build practical AI systems for growing brands.';
+const heroHeadline = 'We turn messy workflows into practical AI systems for growing brands.';
 const heroHeadlineWords = heroHeadline.split(' ');
 
 export function Hero() {
@@ -10,8 +10,8 @@ export function Hero() {
   const [isIntroVisible, setIsIntroVisible] = useState(false);
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => setIsIntroVisible(true), 80);
-    return () => window.clearTimeout(timeout);
+    const frame = window.requestAnimationFrame(() => setIsIntroVisible(true));
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
@@ -20,10 +20,10 @@ export function Hero() {
 
     const updateScroll = () => {
       const rect = hero.getBoundingClientRect();
-      const maxScroll = rect.height - window.innerHeight;
-      // Calculate progress from 0 to 1 over the 300vh scroll area
-      let scrollProgress = (-rect.top) / maxScroll;
-      scrollProgress = Math.min(Math.max(scrollProgress, 0), 1);
+      const maxScroll = Math.max(hero.offsetHeight - window.innerHeight, 1);
+      const rawProgress = Math.min(Math.max((-rect.top) / maxScroll, 0), 1);
+      // Keep scroll-driven motion continuous, but slightly slower than a 1:1 mapping.
+      const scrollProgress = Math.pow(rawProgress, 1.14);
 
       hero.style.setProperty('--hero-scroll', `${scrollProgress.toFixed(4)}`);
       document.documentElement.style.setProperty('--global-hero-scroll', `${scrollProgress.toFixed(4)}`);
@@ -69,17 +69,44 @@ export function Hero() {
 
         {/* 2D Floating Text Stage (Chronological) */}
         <div className={styles.scrollTextStage} aria-hidden="true">
-          <div className={styles.scrollTextItem} style={{ '--stage': 0 } as React.CSSProperties}>
+          <div
+            className={styles.scrollTextItem}
+            style={{
+              '--stage': 0,
+              '--phase-start': 0.22,
+              '--title-exit': 0.38,
+              '--desc-exit': 0.44,
+              '--copy-y': '-4px',
+            } as React.CSSProperties}
+          >
             <div className={styles.scrollStageTitle}>Strategy</div>
-            <p className={styles.scrollStageDesc}>Map operations. Build absolute clarity.</p>
+            <p className={styles.scrollStageDesc}>Find the workflows worth fixing first.</p>
           </div>
-          <div className={styles.scrollTextItem} style={{ '--stage': 1 } as React.CSSProperties}>
+          <div
+            className={styles.scrollTextItem}
+            style={{
+              '--stage': 1,
+              '--phase-start': 0.48,
+              '--title-exit': 0.66,
+              '--desc-exit': 0.72,
+              '--copy-y': '-28px',
+            } as React.CSSProperties}
+          >
             <div className={styles.scrollStageTitle}>Systems</div>
-            <p className={styles.scrollStageDesc}>Architect intelligent systems of sequence and logic.</p>
+            <p className={styles.scrollStageDesc}>Build internal tools that reduce operational drag.</p>
           </div>
-          <div className={styles.scrollTextItem} style={{ '--stage': 2 } as React.CSSProperties}>
+          <div
+            className={styles.scrollTextItem}
+            style={{
+              '--stage': 2,
+              '--phase-start': 0.74,
+              '--title-exit': 0.88,
+              '--desc-exit': 0.91,
+              '--copy-y': '-54px',
+            } as React.CSSProperties}
+          >
             <div className={styles.scrollStageTitle}>Content</div>
-            <p className={styles.scrollStageDesc}>Scale cinematic brand presence.</p>
+            <p className={styles.scrollStageDesc}>Turn operational clarity into stronger brand communication.</p>
           </div>
         </div>
 
@@ -88,7 +115,7 @@ export function Hero() {
           <div className={styles.split}>
             <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
               <span className={styles.heroBrandText} data-text="Kramaniti">Kramaniti</span>
-              <span className={styles.eyebrow}>AI systems partner for brand growth</span>
+              <span className={styles.eyebrow}>Strategy, systems, and content for brand growth</span>
               <h1 className={styles.headline}>
                 {heroHeadlineWords.map((word, index) => (
                   <span
@@ -102,7 +129,7 @@ export function Hero() {
                 ))}
               </h1>
               <p className={styles.subheading}>
-                Kramaniti helps founders find the right workflows, build useful internal tools, and turn that clarity into stronger brand communication.
+                Kramaniti helps founders identify what to fix, build the internal systems that reduce operational drag, and turn that clarity into stronger brand communication.
               </p>
             </div>
           </div>
