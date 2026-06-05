@@ -12,6 +12,34 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'ai-review-is-becoming-the-operating-layer',
+    title: 'AI Review Is Becoming the Operating Layer',
+    focus: 'Execution Design',
+    date: '05 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-05T13:04:44+05:30',
+    readTime: '5 min read',
+    summary: 'Why AI output stops compounding when the business scales generation faster than the checks, routing rules, and write-back signals that keep decisions trustworthy.',
+    content: [
+      'A lot of teams are now past the stage of asking whether AI can produce useful work. The better question is whether the business has built the review layer required to trust that work at operating scale.',
+      '[Fact] Microsoft&apos;s May 7, 2026 AI@Work analysis says <gold>accountability does not scale with delegation, so review infrastructure must</gold>, and describes the most valuable system as the checks, dashboards, and feedback signals that let one person stay confident across a large volume of parallel AI work.',
+      '[Fact] Deloitte&apos;s 2026 State of AI in the Enterprise says <gold>85% of companies expect to customize agents to fit the unique needs of their business</gold>, yet only 21% report a mature model for governance of autonomous AI agents.',
+      '[infographic:review-capacity-gap]',
+      '[Inference] That gap is not just a governance problem. It is an execution problem. Businesses are increasing AI output faster than they are increasing the capacity to evaluate, route, approve, and retain what the system actually did.',
+      '<h3>More Output Without More Review Creates Fragile Scale</h3>',
+      '[Fact] Microsoft&apos;s June 2, 2026 enterprise AI note says success is determined by the system around the AI: how agents are contextualized in the enterprise, governed and observed in production, and improved safely over time.',
+      'That framing matters because a weak review layer creates a dangerous illusion of progress. Proposals get drafted faster. Follow-ups get suggested faster. Research gets summarized faster. But if no one can see which output met the bar, which one triggered a human checkpoint, and which correction fed back into the workflow, the speed does not convert into durable leverage.',
+      '<h3>The Workflow Needs A Review Architecture, Not Just A Prompt</h3>',
+      '[Fact] McKinsey&apos;s 2025 State of AI report says <gold>workflow redesign has the biggest effect on an organization&apos;s ability to see EBIT impact from gen AI</gold>, and notes that having a mechanism to incorporate feedback on AI performance and improve it over time is one of the scaling practices associated with stronger adoption.',
+      '[Recommendation] The practical design question is not &quot;Who reviews the AI?&quot; in the abstract. It is <gold>&quot;What should be auto-approved, what should be scored, what should be escalated, and what must be written back into the system of record?&quot;</gold>',
+      '[infographic:review-operating-loop]',
+      '<h3>Review Is How Judgment Stays In The System</h3>',
+      'A good review layer does not mean slowing everything down with manual approvals. It means placing human judgment where it changes risk, revenue, or trust, and letting the rest of the workflow move with clear boundaries. In some routes that means confidence thresholds. In others it means spot checks, exception queues, or approval triggers tied to account value, content sensitivity, or workflow stage.',
+      'That is where the operating model becomes real. Review is the point where strategy enters execution, where governance becomes a live control instead of a policy document, and where corrections become future system memory instead of one-off fixes.',
+      '[Recommendation] Start with one workflow where mistakes are commercially visible: proposals, reporting, onboarding, lead qualification, or content production. Then define the review signals before you expand the tool stack. <gold>Strategy before tools, systems before scale, content after clarity</gold> still holds because scale without review is just faster drift.'
+    ]
+  },
+  {
     slug: 'ai-governance-has-to-live-inside-the-workflow',
     title: 'AI Governance Has to Live Inside the Workflow',
     focus: 'Governance Design',

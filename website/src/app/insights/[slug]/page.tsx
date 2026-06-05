@@ -16,7 +16,9 @@ import {
   ReadinessBalanceInfographic,
   OperatingSpineInfographic,
   GovernanceSidecarGapInfographic,
-  WorkflowGovernanceLoopInfographic
+  WorkflowGovernanceLoopInfographic,
+  ReviewCapacityGapInfographic,
+  ReviewOperatingLoopInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -121,6 +123,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:workflow-governance-loop]') {
                   return <WorkflowGovernanceLoopInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:review-capacity-gap]') {
+                  return <ReviewCapacityGapInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:review-operating-loop]') {
+                  return <ReviewOperatingLoopInfographic key={index} />;
                 }
                 
                 // Parse gold highlights

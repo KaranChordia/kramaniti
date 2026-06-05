@@ -598,3 +598,113 @@ export function WorkflowGovernanceLoopInfographic() {
     </div>
   );
 }
+
+export function ReviewCapacityGapInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Review Capacity Gap</div>
+      <div className={styles.signalGrid}>
+        <div className={styles.signalCard}>
+          <div className={styles.signalIcon}>
+            <Settings2 size={20} />
+          </div>
+          <div className={styles.signalMetric}>85%</div>
+          <div className={styles.signalLabel}>Agent customization</div>
+          <p className={styles.signalCopy}>Companies expecting to tailor agents to the unique needs of their business.</p>
+        </div>
+
+        <div className={styles.signalCard}>
+          <div className={styles.signalIcon}>
+            <ShieldCheck size={20} />
+          </div>
+          <div className={styles.signalMetric}>21%</div>
+          <div className={styles.signalLabel}>Mature governance</div>
+          <p className={styles.signalCopy}>Organizations reporting a mature model for autonomous agent governance.</p>
+        </div>
+
+        <div className={`${styles.signalCard} ${styles.signalCardHighlight}`}>
+          <div className={styles.signalIconHighlight}>
+            <FileCheck2 size={20} />
+          </div>
+          <div className={styles.signalMetricGold}>Review system</div>
+          <div className={styles.signalLabelGold}>What closes the gap</div>
+          <p className={styles.signalCopyGold}>Checks, dashboards, escalation logic, and write-back rules keep higher AI output commercially usable.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function ReviewOperatingLoopInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Review Operating Loop</div>
+      <div className={styles.spineGrid}>
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>01</div>
+          <div className={styles.spineTitle}>Draft at speed</div>
+          <p className={styles.spineCopy}>
+            Let AI handle the first pass where repetition is high and the commercial context is well defined.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>02</div>
+          <div className={styles.spineTitle}>Score and route</div>
+          <p className={styles.spineCopy}>
+            Use thresholds, dashboards, and exception rules to decide what advances and what needs human review.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>03</div>
+          <div className={styles.spineTitle}>Write back context</div>
+          <p className={styles.spineCopy}>
+            Approved decisions, corrections, and next actions return to the system of record instead of staying trapped in chat.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.spineCard} ${styles.spineCardHighlight}`}>
+          <div className={styles.spineStepHighlight}>04</div>
+          <div className={styles.spineTitleHighlight}>Improve the route</div>
+          <p className={styles.spineCopyHighlight}>
+            Feedback turns into stronger prompts, safer boundaries, and a more reliable operating pipeline over time.
+          </p>
+        </div>
+      </div>
+      <div className={styles.spineLegend}>
+        <div className={styles.spineLegendItem}>
+          <Radar size={16} />
+          Live monitoring
+        </div>
+        <div className={styles.spineLegendItem}>
+          <GitBranch size={16} />
+          Escalation rules
+        </div>
+        <div className={styles.spineLegendItem}>
+          <FolderSync size={16} />
+          System memory
+        </div>
+        <div className={styles.spineLegendItem}>
+          <DatabaseZap size={16} />
+          Continuous improvement
+        </div>
+      </div>
+    </div>
+  );
+}
