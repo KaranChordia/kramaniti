@@ -63,6 +63,22 @@ When writing new essays/insights, future agents or writers should choose the inf
 
 ---
 
+## 6. Tokenomics Tradeoff (Operating Economics Matrix)
+* **Component Name**: `TokenomicsTradeoffInfographic`
+* **Trigger String**: `[infographic:tokenomics-tradeoff]`
+* **Best Used For**: Contrasting software-budget thinking with workflow-economics thinking when a post is about AI cost, usage, or operating value.
+* **Visuals**: A highlighted comparison table showing how cost changes when the unit of analysis shifts from SaaS spend to end-to-end workflow performance.
+* **Selection Criteria**: Choose this when the essay needs to show that AI economics depend on routing, review, and write-back logic, not only model price.
+
+## 7. Cost Control Loop (Operating Control Spine)
+* **Component Name**: `CostControlLoopInfographic`
+* **Trigger String**: `[infographic:cost-control-loop]`
+* **Best Used For**: Showing the operating sequence required to keep AI usage commercially efficient over time.
+* **Visuals**: A four-step horizontal control spine with a highlighted final state focused on measurable write-back and retained savings.
+* **Selection Criteria**: Choose this when the post explains cost control as a workflow design system rather than a standalone procurement exercise.
+
+---
+
 ## Decision Flowchart for Content Creators
 
 Use the following mental model to choose the template:

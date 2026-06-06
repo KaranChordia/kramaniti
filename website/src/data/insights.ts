@@ -12,6 +12,33 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'token-spend-is-becoming-an-operating-design-problem',
+    title: 'Token Spend Is Becoming an Operating Design Problem',
+    focus: 'Operating Economics',
+    date: '06 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-06T18:51:29+05:30',
+    readTime: '5 min read',
+    summary: 'Why AI cost pressure is no longer just a software-budget issue, but a workflow design problem tied to routing, review, and measurable business value.',
+    content: [
+      'A lot of businesses are now past the question of whether AI can produce work. The harder question is whether the business has designed the workflow tightly enough for that work to stay economically sensible at scale.',
+      '[Fact] Microsoft&apos;s June 4, 2026 AI@Work note says <gold>tokenomics is the new headcount</gold>, which means AI cost should be compared to the cost of a human doing the same work across quality, time, and spend, not treated as a simple software line item.',
+      '[Fact] McKinsey&apos;s 2025 State of AI report says <gold>workflow redesign has the biggest effect on whether generative AI creates EBIT impact</gold>, yet more than 80% of respondents say their organizations still are not seeing tangible enterprise-level EBIT impact from gen AI.',
+      '[infographic:tokenomics-tradeoff]',
+      '[Inference] That combination exposes the commercial mistake many teams are making: they are tracking AI usage without redesigning the route that decides when AI should draft, when a human should review, and what action is valuable enough to justify the spend.',
+      '<h3>Cheap Outputs Can Still Create Expensive Systems</h3>',
+      '[Fact] Microsoft&apos;s June 2, 2026 enterprise AI note says the winners will be the organizations that turn AI into a <gold>governed, continuously improving system for running real work</gold>, rather than stopping at fragmented chat experiences.',
+      'That distinction matters because token cost is not only a model problem. It is a workflow problem. A proposal draft that has to be regenerated four times, reviewed in three different places, and never writes back to the CRM may look inexpensive per run while being commercially wasteful in aggregate.',
+      '<h3>Cost Discipline Starts With Routing Discipline</h3>',
+      '[Recommendation] The useful design question is not simply &quot;How do we lower token spend?&quot; It is <gold>&quot;Which tasks deserve AI execution, what context should enter the workflow, what threshold forces review, and where does the approved output get recorded?&quot;</gold>',
+      'If the route is vague, the system overuses expensive context, repeats the same reasoning, and keeps humans doing cleanup work outside the tracked workflow. If the route is clear, the business can use AI where the unit economics actually improve: repetitive drafting, first-pass analysis, structured follow-up, or governed internal support.',
+      '[infographic:cost-control-loop]',
+      '<h3>Operating Economics Need A Control Layer</h3>',
+      'This is where Kramaniti&apos;s sequence becomes commercially practical. <gold>Strategy before tools</gold> decides which workflow is worth systemizing. <gold>Systems before scale</gold> defines the routing, review, and write-back logic that keeps costs proportional. <gold>Content after clarity</gold> ensures the output reflects a real operating advantage instead of a temporary productivity spike.',
+      '[Recommendation] Start with one workflow tied to revenue, delivery quality, or brand trust. Measure the full path, not just the prompt. If AI output is not reducing friction inside the operating pipeline, lower token cost alone will not save the model. Better workflow design will.'
+    ]
+  },
+  {
     slug: 'the-forty-percent-defect-why-agentic-ai-stalls-in-execution',
     title: 'The 40% Defect: Why Agentic AI Stalls in the Last Mile',
     focus: 'Systems & Risk',

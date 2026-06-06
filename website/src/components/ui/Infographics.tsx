@@ -823,3 +823,118 @@ export function OrchestrationControlPlaneInfographic() {
     </div>
   );
 }
+
+export function TokenomicsTradeoffInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Tokenomics Tradeoff</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Dimension</th>
+              <th className={styles.matrixColHeader}>Software-budget view</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Operating-economics view</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Baseline</td>
+              <td className={styles.matrixCell}>Measured like another SaaS subscription.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Measured against the human time, quality, and delay it replaces.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Waste source</td>
+              <td className={styles.matrixCell}>Focus stays on model price alone.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Waste includes reruns, weak routing, duplicated review, and missing write-back.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Decision owner</td>
+              <td className={styles.matrixCell}>IT or procurement manages the line item.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Workflow owners decide where AI creates real operating leverage.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Success signal</td>
+              <td className={styles.matrixCell}>Usage rises and access expands.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>The workflow gets faster, safer, and commercially cheaper end to end.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export function CostControlLoopInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Cost Control Loop</div>
+      <div className={styles.spineGrid}>
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>01</div>
+          <div className={styles.spineTitle}>Choose the route</div>
+          <p className={styles.spineCopy}>
+            Start with one workflow where time, quality, or turnaround visibly affects revenue, delivery, or trust.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>02</div>
+          <div className={styles.spineTitle}>Constrain context</div>
+          <p className={styles.spineCopy}>
+            Pull in only the records, references, and rules the step actually needs instead of flooding every run with excess context.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>03</div>
+          <div className={styles.spineTitle}>Route review</div>
+          <p className={styles.spineCopy}>
+            Use thresholds and exception rules so humans review the expensive or risky outputs, not every routine draft.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.spineCard} ${styles.spineCardHighlight}`}>
+          <div className={styles.spineStepHighlight}>04</div>
+          <div className={styles.spineTitleHighlight}>Measure write-back</div>
+          <p className={styles.spineCopyHighlight}>
+            Track whether approved output updates the system of record and reduces repeat work in the next cycle.
+          </p>
+        </div>
+      </div>
+      <div className={styles.spineLegend}>
+        <div className={styles.spineLegendItem}>
+          <Workflow size={16} />
+          Workflow value
+        </div>
+        <div className={styles.spineLegendItem}>
+          <FolderSync size={16} />
+          Lean context
+        </div>
+        <div className={styles.spineLegendItem}>
+          <ShieldCheck size={16} />
+          Review thresholds
+        </div>
+        <div className={styles.spineLegendItem}>
+          <DatabaseZap size={16} />
+          Durable savings
+        </div>
+      </div>
+    </div>
+  );
+}

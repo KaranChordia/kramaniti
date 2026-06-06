@@ -20,7 +20,9 @@ import {
   ReviewCapacityGapInfographic,
   ReviewOperatingLoopInfographic,
   PromptSprawlVsOrchestrationInfographic,
-  OrchestrationControlPlaneInfographic
+  OrchestrationControlPlaneInfographic,
+  TokenomicsTradeoffInfographic,
+  CostControlLoopInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -137,6 +139,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:orchestration-control-plane]') {
                   return <OrchestrationControlPlaneInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:tokenomics-tradeoff]') {
+                  return <TokenomicsTradeoffInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:cost-control-loop]') {
+                  return <CostControlLoopInfographic key={index} />;
                 }
                 
                 // Parse gold highlights
