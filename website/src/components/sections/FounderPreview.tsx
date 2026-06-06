@@ -19,7 +19,7 @@ export function FounderPreview() {
       <div className={styles.container}>
         <div className={`glass-border-layer ${styles.imageWrap}`}>
           <Image
-            src="/kramaniti/assets/founder_real.jpg"
+            src="/assets/founder_real.jpg"
             alt="Karan Chordia, founder of Kramaniti"
             fill
             sizes="(min-width: 900px) 360px, 100vw"

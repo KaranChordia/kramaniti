@@ -19,11 +19,11 @@ export default function DashboardLayout({
       <div className="dashboard-sidebar" style={{ width: '250px', float: 'left', height: '100vh', borderRight: '1px solid var(--border-subtle)', padding: '2rem' }}>
         <h2>Kramaniti OS</h2>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '2rem' }}>
-          <a href="/kramaniti/dashboard">Overview</a>
-          <a href="/kramaniti/dashboard/agents">Agents</a>
-          <a href="/kramaniti/dashboard/chat">Chat</a>
-          <a href="/kramaniti/dashboard/tasks">Tasks</a>
-          <a href="/kramaniti/dashboard/approvals">Approvals</a>
+          <a href="/dashboard">Overview</a>
+          <a href="/dashboard/agents">Agents</a>
+          <a href="/dashboard/chat">Chat</a>
+          <a href="/dashboard/tasks">Tasks</a>
+          <a href="/dashboard/approvals">Approvals</a>
         </nav>
       </div>
       <div className="dashboard-content" style={{ marginLeft: '250px', padding: '2rem' }}>

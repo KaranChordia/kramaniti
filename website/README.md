@@ -8,7 +8,7 @@ First, make sure Node.js (version 20+) is installed, then run the development se
 npm run dev
 ```
 
-Open [http://localhost:3000/kramaniti/](http://localhost:3000/kramaniti/) with your browser to see the result. Note that the site is configured with a custom `basePath: '/kramaniti'`.
+Open [http://localhost:3000/](http://localhost:3000/) with your browser to see the result.
 
 ## Project Structure
 
@@ -16,9 +16,9 @@ Open [http://localhost:3000/kramaniti/](http://localhost:3000/kramaniti/) with y
 - `src/components`: Reusable layout and UI elements, including custom infographics.
 - `src/data`: Insights essays and portfolio datasets.
 
-## Deployment on GitHub Pages
+## Deployment on Vercel
 
-This project is configured for static export (`output: 'export'`) and automatically deploys to GitHub Pages via GitHub Actions:
+This project is configured for static export (`output: 'export'`) and deploys through Vercel from the repository root:
 
-- The build script is `npm run build`, which outputs static assets to the `website/out` directory.
-- The pipeline workflow is configured in `.github/workflows/nextjs.yml` and triggers on pushes to the `main` or `master` branch.
+- The root `vercel.json` installs dependencies in `website/`, runs `npm run build`, and publishes `website/out`.
+- The site is intended to serve from the custom domain root, not the old GitHub Pages `/kramaniti` subpath.

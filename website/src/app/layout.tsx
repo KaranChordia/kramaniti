@@ -20,17 +20,17 @@ export const metadata: Metadata = {
   applicationName: "Kramaniti",
   title: "Kramaniti | Practical AI Systems for Brand Growth",
   description: "Kramaniti helps brands identify high-impact workflows, build practical AI infrastructure, and turn those systems into clear brand communication.",
-  manifest: "/kramaniti/manifest.webmanifest",
+  manifest: "/manifest.webmanifest",
   icons: {
     icon: [
-      { url: "/kramaniti/assets/pwa/favicon-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/kramaniti/assets/pwa/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/kramaniti/assets/pwa/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/assets/pwa/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/assets/pwa/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/assets/pwa/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [
-      { url: "/kramaniti/assets/pwa/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/assets/pwa/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
-    shortcut: "/kramaniti/assets/pwa/favicon-32.png",
+    shortcut: "/assets/pwa/favicon-32.png",
   },
   appleWebApp: {
     capable: true,

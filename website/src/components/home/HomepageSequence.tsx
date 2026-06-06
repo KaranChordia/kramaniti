@@ -99,7 +99,7 @@ export function HomepageSequence() {
             <div className={styles.stageLight}></div>
             <div className={styles.logoHalo}></div>
             <Image
-              src="/kramaniti/assets/brand/kramaniti-mark-gold.png"
+              src="/assets/brand/kramaniti-mark-gold.png"
               alt=""
               width={176}
               height={176}

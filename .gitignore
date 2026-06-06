@@ -30,3 +30,4 @@ tsconfig.tsbuildinfo
 # Temporary
 *.tmp
 *.bak
+.vercel

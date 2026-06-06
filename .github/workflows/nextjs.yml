@@ -1,8 +1,6 @@
-name: Deploy Next.js site to Pages
+name: Manual GitHub Pages fallback
 
 on:
-  push:
-    branches: ["main", "master"]
   workflow_dispatch:
 
 permissions:

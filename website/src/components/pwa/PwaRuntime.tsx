@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 
-const BASE_PATH = "/kramaniti";
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
 
 export function PwaRuntime() {
@@ -18,7 +17,7 @@ export function PwaRuntime() {
         .then((registrations) =>
           Promise.all(
             registrations
-              .filter((registration) => registration.scope.includes(BASE_PATH))
+              .filter((registration) => registration.active?.scriptURL.endsWith("/sw.js"))
               .map((registration) => registration.unregister())
           )
         )
@@ -41,8 +40,8 @@ export function PwaRuntime() {
 
     const registerServiceWorker = async () => {
       try {
-        await navigator.serviceWorker.register(`${BASE_PATH}/sw.js`, {
-          scope: `${BASE_PATH}/`,
+        await navigator.serviceWorker.register("/sw.js", {
+          scope: "/",
           updateViaCache: "none",
         });
       } catch {

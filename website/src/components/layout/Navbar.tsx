@@ -20,12 +20,12 @@ export function Navbar({ isVisible = true }: NavbarProps) {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
   const scrollToContact = () => {
-    const isHomepage = window.location.pathname === '/' || window.location.pathname === '/kramaniti' || window.location.pathname === '/kramaniti/';
+    const isHomepage = window.location.pathname === '/';
 
     if (isHomepage) {
       document.getElementById('contact')?.scrollIntoView();
     } else {
-      window.location.href = '/kramaniti/#contact';
+      window.location.href = '/#contact';
     }
   };
 
@@ -36,7 +36,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
           <div className={styles.container}>
             <Link href="/" className={styles.logoGroup} style={{ textDecoration: 'none' }} onClick={closeMobileMenu}>
               <Image
-                src="/kramaniti/assets/brand/kramaniti-mark-gold.png"
+                src="/assets/brand/kramaniti-mark-gold.png"
                 alt="Kramaniti logo"
                 width={70}
                 height={70}

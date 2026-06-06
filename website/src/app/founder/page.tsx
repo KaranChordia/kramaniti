@@ -84,7 +84,7 @@ export default function FounderPage() {
                 <div className={styles.imageCard}>
                   <div className={styles.imageFrame}>
                     <Image
-                      src="/kramaniti/assets/founder_real.jpg"
+                      src="/assets/founder_real.jpg"
                       alt="Karan Chordia"
                       fill
                       priority

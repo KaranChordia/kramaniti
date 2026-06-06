@@ -12,7 +12,7 @@ The primary conversion path is "Book an AI Workflow Audit." All major homepage C
 
 ## 2. Current Website Audit
 
-The project is a Next.js 16 App Router site under `website/`, using React 19, CSS Modules, static export, and a `/kramaniti` base path. The existing site already had a strong visual direction: dark premium palette, gold accents, animated section atmospheres, modular homepage sections, a founder page, and an insights area.
+The project is a Next.js 16 App Router site under `website/`, using React 19, CSS Modules, static export, and a root custom-domain deployment path. The existing site already had a strong visual direction: dark premium palette, gold accents, animated section atmospheres, modular homepage sections, a founder page, and an insights area.
 
 The main issues found before refinement:
 

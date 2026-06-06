@@ -17,7 +17,7 @@ export function Footer() {
               <div className={styles.brandTop}>
                 <Link href="/" className={styles.logoLink} aria-label="Kramaniti home">
                   <Image
-                    src="/kramaniti/assets/brand/kramaniti-mark-gold.png"
+                    src="/assets/brand/kramaniti-mark-gold.png"
                     alt="Kramaniti logo"
                     width={72}
                     height={72}
