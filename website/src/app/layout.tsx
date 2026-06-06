@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import { PwaRuntime } from "@/components/pwa/PwaRuntime";
 import "./globals.css";
 
@@ -80,6 +81,7 @@ export default function RootLayout({
       >
         <PwaRuntime />
         {children}
+        <Analytics />
       </body>
     </html>
   );
