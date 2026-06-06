@@ -12,6 +12,33 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'the-forty-percent-defect-why-agentic-ai-stalls-in-execution',
+    title: 'The 40% Defect: Why Agentic AI Stalls in the Last Mile',
+    focus: 'Systems & Risk',
+    date: '06 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-06T12:05:00+05:30',
+    readTime: '5 min read',
+    summary: 'Why Gartner&apos;s prediction that 40% of enterprise agentic AI projects will fail by 2027 is a systems and risk calibration problem, not a technology limit.',
+    content: [
+      'Gartner&apos;s recent 2026 warning that <gold>over 40% of enterprise agentic AI projects will be canceled or decommissioned by 2027</gold> has sent a clear signal through the automation market. But for teams focused on first-principles system design, this is not a surprise. It is a predictable outcome of scaling tools faster than we calibrate risk and design workflows.',
+      '[Fact] Gartner&apos;s 2026 analysis attributes these failures to three primary drivers: escalating computational and token costs, unclear business value from hype-led projects, and <gold>inadequate risk controls that are only discovered after production-level failures</gold>.',
+      '[infographic:agent-oversight-gap]',
+      '[Inference] This &quot;last-mile defect&quot; occurs because organizations treat agentic governance as a binary choice—either completely locked down or fully autonomous. In reality, a premium operating system cannot survive on a binary model. It requires proportional governance, clear trust boundaries, and deterministic fallbacks.',
+      '<h3>The Silent Costs of Uncalibrated Agents</h3>',
+      '[Fact] Gartner reports that enterprises frequently underestimate the operational complexity of interconnected agents, leading to volatile token usage and API latency that erase the economic value of automation.',
+      'When an agent is deployed into a live environment without strict context window bounds or deterministic routing steps, it behaves like an uncalibrated trading algorithm. It loops, calls external APIs repeatedly, handles edge cases with expensive retries, and slowly leaks capital.',
+      '<h3>Risk Calibration: Borrowing from Quantitative Systems</h3>',
+      '[Recommendation] To build agentic systems that survive, we must borrow from quantitative risk management. In high-frequency trading, you never deploy an algorithm without <gold>hard risk boundaries, circuit breakers, and deterministic fallback routes</gold>.',
+      'The same logic applies to enterprise workflows. An autonomous agent should have clear guardrails: a maximum token budget per workflow run, a structured check to verify output confidence, a human-in-the-loop escalation trigger when a validation check fails, and an explicit write-back rule that updates the system of record rather than leaving state in memory.',
+      '[infographic:review-capacity-gap]',
+      '<h3>Systems Before Scale, Always</h3>',
+      '[Fact] McKinsey&apos;s 2025 global survey confirms that <gold>workflow redesign has the single biggest impact on whether generative AI delivers measurable EBIT results</gold>. Yet, the majority of companies continue to layer autonomous agents on top of messy, undocumented workflows.',
+      'If your underlying workflow relies on tribal knowledge or has undefined approval thresholds, automating it doesn&apos;t solve the problem. It simply executes a broken process at a terrifying speed.',
+      '[Recommendation] Before deploying your next agentic workflow, audit the underlying route. Define the exact input context, the human checkpoints, and the write-back rules. Keep the automation simple, proportional, and verifiable. <gold>Strategy before tools, systems before scale, content after clarity</gold> is not just a branding sequence—it is a risk-mitigation framework.'
+    ]
+  },
+  {
     slug: 'prompt-sprawl-is-becoming-the-next-ai-bottleneck',
     title: 'Prompt Sprawl Is Becoming the Next AI Bottleneck',
     focus: 'Orchestration Design',

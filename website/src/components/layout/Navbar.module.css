@@ -26,10 +26,10 @@
 
 /* --- Hero Birth Animation Sync --- */
 :global(html[data-home-sequence="true"]) .visible {
-  --nav-progress: clamp(0, (var(--global-hero-scroll, 0) - 0.982) * 55.555, 1);
+  --nav-progress: clamp(0, (var(--global-hero-scroll, 0) - 0.96) * 25, 1);
   
-  opacity: calc(var(--nav-progress) * var(--nav-progress));
-  transform: translateY(calc((1 - var(--nav-progress)) * 84px)) scale(calc(0.9 + (var(--nav-progress) * 0.1)));
+  opacity: var(--nav-progress);
+  transform: translateY(calc((1 - var(--nav-progress)) * 160px)) scale(calc(0.6 + (var(--nav-progress) * 0.4)));
   transition: none;
 }
 
