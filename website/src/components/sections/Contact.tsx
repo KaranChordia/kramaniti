@@ -28,8 +28,8 @@ export function Contact() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Start here</span>
-          <AnimatedHeading isVisible={isVisible}>Book an AI Workflow Audit.</AnimatedHeading>
-          <p className="text-secondary">Share the workflow, team handoff, or content bottleneck you want to make clearer. The first conversation is about finding the highest-impact system to build first.</p>
+          <AnimatedHeading isVisible={isVisible}>Start with an Alignment Audit.</AnimatedHeading>
+          <p className="text-secondary">Share the workflow, handoff, decision loop, or communication gap you want to clarify. The first conversation is about finding the highest-impact system to build first, not adding more tools for their own sake.</p>
         </div>
 
         <div className={styles.grid}>
@@ -41,20 +41,20 @@ export function Contact() {
               <Select label="Budget Range" options={budgetOptions} />
               <Textarea label="Workflow / Goal" placeholder="Tell us what feels messy, manual, unclear, or ready to improve" />
               <Button type="submit" variant="primary" className={styles.submitBtn}>
-                Request Audit
+                Request Alignment Audit
               </Button>
             </form>
           </div>
 
           <div className={`${styles.calendlyColumn} ${isVisible ? styles.visible : ''}`}>
             <div className={`glass-border-layer ${styles.calendlyPlaceholder} ${styles.contactGlass}`}>
-              <span className="micro-label">Audit focus</span>
+              <span className="micro-label">Alignment focus</span>
               <h3>Find the first system worth building.</h3>
-              <p className="text-secondary caption">A useful audit should leave you with business clarity, a workflow priority, and a practical next step. No platform shopping, no generic tool list, no pressure to replace every task.</p>
+              <p className="text-secondary caption">A useful audit should leave you with clearer business logic, a priority workflow, and a practical next step across operations, intelligence, and presence.</p>
               <div className={styles.auditList}>
-                <span>Workflow clarity</span>
-                <span>Implementation roadmap</span>
-                <span>Prototype specification</span>
+                <span>Operational clarity</span>
+                <span>Priority workflow</span>
+                <span>Practical next step</span>
               </div>
             </div>
           </div>

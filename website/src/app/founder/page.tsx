@@ -5,22 +5,19 @@ import styles from './Founder.module.css';
 
 const timeline = [
   {
-    year: 'Phase One',
-    title: 'Business Clarity',
-    copy: 'Understanding the brand, operations, and team rhythm before deciding what should be built.',
-    tags: ['Workflow audit', 'AI readiness', 'Priority map']
+    title: 'Operations',
+    copy: 'Understanding the brand, team rhythm, workflows, bottlenecks, decisions, and handoffs before recommending any tool or system.',
+    tags: ['Workflow clarity', 'Business logic', 'Priority map']
   },
   {
-    year: 'Phase Two',
-    title: 'Practical Infrastructure',
-    copy: 'Designing custom workflows and internal tools that support daily operations without adding unnecessary complexity.',
-    tags: ['Custom workflows', 'Internal tools', 'System logic']
+    title: 'Intelligence',
+    copy: 'Designing practical AI-assisted workflows, internal tools, documentation, and decision-support systems that make the business easier to run.',
+    tags: ['Practical systems', 'Internal tools', 'Decision support']
   },
   {
-    year: 'Phase Three',
-    title: 'Cinematic Content',
-    copy: 'Turning the clarity from those systems into premium communication that feels useful, human, and aligned.',
-    tags: ['Design thinking', 'High-end production', 'Authenticity']
+    title: 'Presence',
+    copy: 'Turning operational clarity into sharper communication, useful content, and a brand narrative that reflects how the business actually creates value.',
+    tags: ['Founder narrative', 'Content direction', 'Brand coherence']
   }
 ];
 
@@ -28,27 +25,27 @@ const advisoryTeam = [
   {
     name: 'Karan Chordia',
     role: 'Founder',
-    copy: 'Karan leads Kramaniti’s strategy, AI workflow design, digital systems thinking, and client execution. He focuses on identifying meaningful operational workflows for brands and building practical AI-enabled systems around them.'
+    copy: 'Karan leads Kramaniti’s strategy, operating diagnosis, intelligence-system design, and brand-presence direction. His role is to identify the workflows and decisions that matter, then design practical systems and communication around them.'
   },
   {
     name: 'Kashiesh Chordia',
     role: 'Legal & Compliance Advisor',
-    copy: 'Supports Kramaniti on agreements, documentation, compliance structure, governance practices, company-secretarial matters, filings, and regulatory paperwork. Her role helps ensure that client engagements and internal operations are supported with proper legal and compliance discipline.'
+    copy: 'Kashiesh supports Kramaniti on agreements, documentation, compliance structure, governance practices, company-secretarial matters, filings, and regulatory paperwork. Her advisory role brings legal and operational discipline to the way engagements are structured and delivered.'
   }
 ];
 
 const principles = [
   {
-    title: 'A Single Pipeline',
-    copy: 'Unifying strategy, operational infrastructure, and final creative output so the brand presence stays coherent.'
+    title: 'One Foundation',
+    copy: 'Operations, intelligence, and presence should not be built separately. The way the business works should inform the systems it uses and the way it communicates.'
   },
   {
     title: 'Practical Leverage',
-    copy: 'Building the systems that remove friction while preserving human judgment, taste, and authentic voice.'
+    copy: 'Systems should reduce friction, support better decisions, and preserve human judgment. Complexity is not a sign of sophistication.'
   },
   {
-    title: 'Cinematic Standard',
-    copy: 'Refusing to settle for generic output. Every asset is held to a high standard of design thinking.'
+    title: 'Coherent Presence',
+    copy: 'Content should not exist for volume alone. It should make the brand easier to understand, easier to trust, and more accurately connected to the value being created inside the business.'
   }
 ];
 
@@ -68,14 +65,14 @@ export default function FounderPage() {
           <div className={styles.container}>
             <div className={styles.heroIntro}>
               <span className={styles.eyebrow}>Founder Profile</span>
-              <h1>Building One Connected Growth System.</h1>
+              <h1>Building alignment between how brands work and how they are seen.</h1>
               <p className={styles.lead}>
-                Karan Chordia builds from the intersection of deep strategy, algorithmic systems, and cinematic storytelling.
+                Karan Chordia founded Kramaniti to help brands connect their internal operating reality with their external presence by turning workflows, systems, and communication into one coherent growth foundation.
               </p>
               <div className={styles.heroPills}>
-                <span className={styles.heroPill}>Strategy</span>
-                <span className={styles.heroPill}>Infrastructure</span>
-                <span className={styles.heroPill}>Cinematic Content</span>
+                <span className={styles.heroPill}>Operations</span>
+                <span className={styles.heroPill}>Intelligence</span>
+                <span className={styles.heroPill}>Presence</span>
               </div>
             </div>
 
@@ -103,40 +100,46 @@ export default function FounderPage() {
               <div className={styles.contentColumn}>
                 <article className={styles.storyCard}>
                   <span className="micro-label">Background</span>
-                  <h2>Bridging strategy, code, and cinema.</h2>
+                  <h2>Seeing both sides of brand growth.</h2>
                   <div className={styles.bio}>
                     <p>
-                      Karan is a Bengaluru-based strategist and systems partner who believes that true scale requires treating operations and creative as a single pipeline.
+                      Karan is a Bengaluru-based strategist and systems partner who began his work in commercial media, helping brands shape how they were seen.
                     </p>
                     <p>
-                      He started in commercial videography, documenting the rise of the Indian co-working ecosystem. But he realized that beautiful content without operational leverage couldn&apos;t scale.
+                      That experience revealed a deeper problem: strong content cannot compensate for unclear operations. When the internal workflow is scattered, the external message eventually becomes scattered too.
                     </p>
                     <p>
-                      After a multi-year incubation period focused on workflow design and systems thinking, he now builds connected pipelines that help brands improve operations while maintaining a premium, cinematic voice.
+                      Kramaniti was built from that realization.
+                    </p>
+                    <p>
+                      Today, Karan helps founder-led brands clarify how they operate, design practical intelligence systems around that reality, and translate the resulting clarity into a more coherent brand presence.
                     </p>
                   </div>
                 </article>
 
                 <div className={styles.statRow}>
                   <div className={styles.statCard}>
-                    <span className={styles.statValue}>4+</span>
-                    <span className={styles.statLabel}>Years B2B media</span>
+                    <span className={styles.statValue}>8+ Years</span>
+                    <span className={styles.statLabel}>Commercial media and brand storytelling</span>
                   </div>
                   <div className={styles.statCard}>
-                    <span className={styles.statValue}>3+</span>
-                    <span className={styles.statLabel}>Years R&D</span>
+                    <span className={styles.statValue}>3+ Years</span>
+                    <span className={styles.statLabel}>Workflow systems, AI tools, and operating design</span>
                   </div>
                   <div className={styles.statCard}>
-                    <span className={styles.statValue}>1</span>
-                    <span className={styles.statLabel}>System-led practice</span>
+                    <span className={styles.statValue}>1 Practice</span>
+                    <span className={styles.statLabel}>Built around operations, intelligence, and presence</span>
                   </div>
                 </div>
 
                 <article className={styles.summaryCard}>
                   <span className="micro-label">Current Focus</span>
-                  <h3>Building pipelines that are practical, clear, and deeply authentic.</h3>
+                  <h3>Making the inside and outside of the brand match.</h3>
+                  <p className="text-secondary caption" style={{ marginBottom: '1rem' }}>
+                    Kramaniti helps brands close the gap between internal reality and external perception.
+                  </p>
                   <p className="text-secondary caption">
-                    When strategy, operational infrastructure, and final content are driven by the same vision, a brand&apos;s digital presence remains coherent and useful.
+                    The work begins with how the business actually operates: its workflows, decisions, handoffs, bottlenecks, tools, and team rhythm. From there, Kramaniti builds practical intelligence systems and translates that clarity into a more coherent brand presence.
                   </p>
                 </article>
               </div>
@@ -146,25 +149,24 @@ export default function FounderPage() {
 
         <section className={styles.sectionBlock}>
           <div className={styles.atmosphere} aria-hidden="true">
-            <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Capture</span>
-            <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Build</span>
+            <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Operations</span>
+            <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Presence</span>
           </div>
 
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className="micro-label">The Pipeline</span>
-              <h2>Three phases, one unified approach.</h2>
+              <span className="micro-label">The Approach</span>
+              <h2>Three layers, one foundation.</h2>
               <p className={styles.sectionLead}>
-                The philosophy remains consistent: lay a clear strategic foundation, build practical systems, and craft cinematic output.
+                Kramaniti’s work is built around alignment: understanding how the business operates, designing intelligence systems around that reality, and shaping a brand presence that reflects the value being created inside.
               </p>
             </div>
 
             <div className={styles.timelineGrid}>
               {timeline.map((item, index) => (
-                <article key={item.year} className={styles.timelineCard}>
+                <article key={item.title} className={styles.timelineCard}>
                   <div className={styles.timelineTop}>
                     <span className={styles.timelineIndex}>{`0${index + 1}`}</span>
-                    <span className="micro-label">{item.year}</span>
                   </div>
                   <h3>{item.title}</h3>
                   <p className="text-secondary caption">{item.copy}</p>
@@ -183,16 +185,16 @@ export default function FounderPage() {
 
         <section className={styles.sectionBlock}>
           <div className={styles.atmosphere} aria-hidden="true">
-            <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Advisory</span>
-            <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Structure</span>
+            <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Founder</span>
+            <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Advisory</span>
           </div>
 
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <span className="micro-label">Founder & Advisory</span>
-              <h2>A small, serious structure around the founder.</h2>
+              <h2>A focused structure for serious work.</h2>
               <p className={styles.sectionLead}>
-                Founder-led execution with targeted advisory support for legal and compliance discipline.
+                Kramaniti is founder-led by design. Strategy, system architecture, and client execution stay close to the founder so the work remains coherent from diagnosis to delivery.
               </p>
             </div>
 
@@ -210,23 +212,24 @@ export default function FounderPage() {
 
         <section className={styles.sectionBlock}>
           <div className={styles.atmosphere} aria-hidden="true">
-            <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Flow</span>
-            <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Logic</span>
+            <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Alignment</span>
+            <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Clarity</span>
           </div>
 
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <span className="micro-label">Working Style</span>
-              <h2>The philosophy behind the architecture.</h2>
+              <h2>The principles behind the work.</h2>
               <p className={styles.sectionLead}>
-                These core principles ensure that every system built creates practical leverage without compromising on premium quality.
+                Every Kramaniti engagement is designed to create alignment, not noise. The goal is to make the business clearer internally and more coherent externally.
               </p>
             </div>
 
             <div className={styles.principleGrid}>
-              {principles.map((principle) => (
+              {principles.map((principle, index) => (
                 <article key={principle.title} className={styles.principleCard}>
                   <div className={styles.cardAccent}></div>
+                  <span className={styles.principleIndex}>{`0${index + 1}`}</span>
                   <h3>{principle.title}</h3>
                   <p className="text-secondary caption">{principle.copy}</p>
                 </article>

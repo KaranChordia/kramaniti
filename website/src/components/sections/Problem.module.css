@@ -4,6 +4,7 @@
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  --problem-scroll: 0;
 }
 
 .problem::before {
@@ -17,6 +18,7 @@
   z-index: 0;
 }
 
+/* ---- Atmosphere ---- */
 .atmosphere {
   position: absolute;
   inset: 0;
@@ -56,16 +58,8 @@
   animation: wordFloat 12s ease-in-out infinite;
 }
 
-.atmosWordOne {
-  top: 14%;
-  left: -2%;
-}
-
-.atmosWordTwo {
-  bottom: 18%;
-  right: -2%;
-  animation-delay: -5s;
-}
+.atmosWordOne { top: 14%; left: -2%; }
+.atmosWordTwo { bottom: 18%; right: -2%; animation-delay: -5s; }
 
 :global(html[data-theme='light']) .atmosWord {
   -webkit-text-stroke: 2px rgba(201, 168, 76, 0.58);
@@ -73,6 +67,7 @@
   opacity: 0.65;
 }
 
+/* ---- Container / Header ---- */
 .container {
   max-width: 1100px;
   margin: 0 auto;
@@ -88,15 +83,9 @@
   transition: opacity 600ms ease, transform 600ms ease;
 }
 
-.header.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+.header.visible { opacity: 1; transform: translateY(0); }
 
-.header h2 {
-  margin-top: 12px;
-  max-width: 760px;
-}
+.header h2 { margin-top: 12px; max-width: 760px; }
 
 .header p {
   margin: 0.75rem 0 0;
@@ -106,75 +95,219 @@
   line-height: 1.65;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
-  margin-top: 48px;
+/* =============================================
+   DIVERGING PATHS — NO CARDS
+   ============================================= */
+
+.divergeStage {
+  position: relative;
+  margin-top: 64px;
+  width: 100%;
+  /* The SVG aspect ratio drives the height */
+  aspect-ratio: 1000 / 400;
+  max-height: 440px;
 }
 
-@media (min-width: 820px) {
-  .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+.divergeSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
-.signal {
-  min-height: 220px;
-  padding: 28px 24px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 34%),
-    var(--bg-elevated);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
-  opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 650ms ease,
-    transform 650ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 240ms ease,
-    box-shadow 240ms ease;
-}
-
-.signalGlass {
-  --glass-border-layer-inset: -7px;
-  --glass-border-layer-radius: 14px;
-  --glass-border-layer-blur: 16px;
-  --glass-border-layer-fill-top: rgba(255, 255, 255, 0.06);
-  --glass-border-layer-fill-bottom: rgba(255, 255, 255, 0.018);
-  --glass-border-layer-fill-solid: rgba(255, 255, 255, 0.028);
-  --glass-border-layer-border: rgba(255, 255, 255, 0.12);
-  --glass-border-layer-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 16px 32px rgba(0, 0, 0, 0.10);
-}
-
-.signal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.signal:hover {
-  border-color: rgba(201, 168, 76, 0.32);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
-}
-
-.signal h3 {
-  margin: 18px 0 10px;
-}
-
-.signal p {
-  margin: 0;
-}
-
-.index {
-  display: inline-flex;
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 13px;
+/* ---- Origin ---- */
+.originLabel {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 11px;
   font-weight: 700;
-  color: var(--color-burnished-gold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  fill: var(--color-burnished-gold);
+  opacity: 0;
+  transition: opacity 500ms ease 200ms;
 }
+
+.stageVisible .originLabel { opacity: 0.6; }
+
+.originRing {
+  fill: none;
+  stroke: rgba(201, 168, 76, 0.15);
+  stroke-width: 1;
+  transform-origin: 56px 220px;
+  animation: ringPulse 4s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { r: 18; opacity: 0.12; }
+  50% { r: 28; opacity: 0.22; }
+}
+
+.originDot {
+  fill: rgba(201, 168, 76, 0.95);
+  opacity: 0;
+  transition: opacity 400ms ease 100ms;
+}
+.stageVisible .originDot { opacity: 1; }
+
+/* ---- Stem ---- */
+.stemLine {
+  stroke: rgba(201, 168, 76, 0.6);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  transition: stroke-dashoffset 700ms cubic-bezier(0.22, 1, 0.36, 1) 300ms;
+}
+.stageVisible .stemLine { stroke-dashoffset: 0; }
+
+/* ---- Fork dot ---- */
+.forkDot {
+  fill: rgba(201, 168, 76, 0.85);
+  opacity: 0;
+  transition: opacity 350ms ease 650ms;
+}
+.stageVisible .forkDot { opacity: 1; }
+
+/* ---- Branch paths ---- */
+.branchPath {
+  fill: none;
+  stroke: rgba(201, 168, 76, 0.4);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 700;
+  stroke-dashoffset: 700;
+  --branch-delay: 0;
+  transition: stroke-dashoffset 1100ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(750ms + var(--branch-delay) * 180ms);
+}
+.stageVisible .branchPath { stroke-dashoffset: 0; }
+
+/* ---- Terminal dots ---- */
+.terminalDot {
+  fill: rgba(201, 168, 76, 0.85);
+  --dot-delay: 0;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  transition-delay: calc(1400ms + var(--dot-delay) * 180ms);
+}
+.stageVisible .terminalDot { opacity: 1; }
+
+/* ---- Traveling beams ---- */
+.beamPath {
+  fill: none;
+  stroke: rgba(255, 236, 173, 0.65);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 50 700;
+  stroke-dashoffset: 50;
+  filter: drop-shadow(0 0 6px rgba(255, 236, 173, 0.5)) drop-shadow(0 0 14px rgba(201, 168, 76, 0.35));
+  --beam-delay: 0;
+  opacity: 0;
+}
+
+.stageVisible .beamPath {
+  animation: beamRun 3.2s linear infinite;
+  animation-delay: calc(1600ms + var(--beam-delay) * 400ms);
+  opacity: 1;
+}
+
+@keyframes beamRun {
+  0%   { stroke-dashoffset: 50; opacity: 0; }
+  6%   { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { stroke-dashoffset: -700; opacity: 0; }
+}
+
+/* =============================================
+   TEXT LAYER — positioned to align with paths
+   ============================================= */
+
+.textLayer {
+  position: absolute;
+  /* Sits to the right of the terminal dots at x=540 (54% of 1000) */
+  left: 57%;
+  top: 0;
+  width: 42%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 2;
+  pointer-events: none;
+  padding: 0;
+}
+
+.flowText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  --text-delay: 0;
+  opacity: 0;
+  transform: translateX(18px);
+  transition:
+    opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(1300ms + var(--text-delay) * 200ms);
+  pointer-events: auto;
+}
+
+/* Vertical alignment to match SVG y-coordinates */
+.flowText1 {
+  /* Path 1 terminates at y=60 in a viewBox of 400, so ~15% */
+  align-self: flex-start;
+  padding-top: 7%;
+}
+
+.flowText2 {
+  /* Path 2 terminates at y=220, ~55% — center */
+  align-self: flex-start;
+  /* offset to vertically center around the midpoint */
+}
+
+.flowText3 {
+  /* Path 3 terminates at y=370, ~92.5% */
+  align-self: flex-start;
+  padding-bottom: 0;
+}
+
+.flowTextVisible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.flowTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(16px, 1.8vw, 22px);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-burnished-gold);
+  letter-spacing: 0;
+}
+
+
+
+.flowDesc {
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(13px, 1.2vw, 15px);
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  max-width: 38ch;
+}
+
+/* ---- Light theme adjustments ---- */
+:global(html[data-theme='light']) .stemLine { stroke: rgba(201, 168, 76, 0.45); }
+:global(html[data-theme='light']) .branchPath { stroke: rgba(201, 168, 76, 0.3); }
+:global(html[data-theme='light']) .originDot,
+:global(html[data-theme='light']) .forkDot,
+:global(html[data-theme='light']) .terminalDot { fill: rgba(180, 148, 56, 0.8); }
+:global(html[data-theme='light']) .beamPath { stroke: rgba(201, 168, 76, 0.55); }
+:global(html[data-theme='light']) .originRing { stroke: rgba(201, 168, 76, 0.2); }
+
+/* =============================================
+   KEYFRAMES
+   ============================================= */
 
 @keyframes flowHorizontal {
   0% { background-position: -300px 0; }
@@ -182,41 +315,172 @@
 }
 
 @keyframes wordFloat {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, -10px, 0);
-  }
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -10px, 0); }
 }
+
+/* =============================================
+   REDUCED MOTION
+   ============================================= */
 
 @media (prefers-reduced-motion: reduce) {
   .atmosWord,
   .atmosphere::before,
-  .header,
-  .signal {
+  .originRing,
+  .beamPath {
     animation: none !important;
+  }
+
+  .header,
+  .flowText,
+  .stemLine,
+  .branchPath,
+  .originDot,
+  .forkDot,
+  .terminalDot,
+  .originLabel {
     transition: none !important;
   }
 
   .header,
-  .signal {
+  .flowText {
     opacity: 1;
     transform: none;
+  }
+
+  .stemLine,
+  .branchPath {
+    stroke-dashoffset: 0;
+  }
+
+  .originDot,
+  .forkDot,
+  .terminalDot,
+  .originLabel {
+    opacity: 1;
+  }
+
+  .beamPath { opacity: 0; }
+}
+
+/* =============================================
+   MOBILE — vertical timeline
+   ============================================= */
+
+@media (max-width: 900px) {
+  .divergeStage {
+    aspect-ratio: auto;
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Hide the horizontal SVG on mobile */
+  .divergeSvg {
+    display: none;
+  }
+
+  .textLayer {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    /* Vertical gold line running down the left side */
+    margin-left: 20px;
+    border-left: 1.5px solid rgba(201, 168, 76, 0.25);
+  }
+
+  /* "Your brand" origin label at top of the vertical line */
+  .textLayer::before {
+    content: 'Your brand';
+    position: absolute;
+    top: -32px;
+    left: -1px;
+    transform: translateX(-50%);
+    font-family: var(--font-outfit), sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-burnished-gold);
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+
+  /* Origin dot at the very top of the line */
+  .textLayer::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -1px;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(201, 168, 76, 0.9);
+    box-shadow: 0 0 10px rgba(201, 168, 76, 0.4), 0 0 20px rgba(201, 168, 76, 0.2);
+  }
+
+  .flowText {
+    position: relative;
+    padding: 24px 0 24px 28px;
+    transform: translateY(14px);
+  }
+
+  .flowText1,
+  .flowText2,
+  .flowText3 {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  /* Dot node on the vertical line for each item */
+  .flowText::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 32px;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(201, 168, 76, 0.75);
+    box-shadow: 0 0 8px rgba(201, 168, 76, 0.3);
+    z-index: 1;
+  }
+
+  /* Small horizontal connector from dot to text */
+  .flowText::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 35px;
+    width: 16px;
+    height: 1.5px;
+    background: linear-gradient(90deg, rgba(201, 168, 76, 0.4), rgba(201, 168, 76, 0.1));
+  }
+
+  .flowTextVisible {
+    transform: translateY(0);
   }
 }
 
 @media (max-width: 768px) {
-  .problem {
-    padding: 80px 0;
+  .problem { padding: 80px 0; }
+  .header p { font-size: 15px; }
+  .divergeStage { margin-top: 40px; }
+
+  .flowTitle {
+    font-size: 16px;
   }
 
-  .header p {
-    font-size: 15px;
-  }
-
-  .signal {
-    min-height: 0;
+  .flowDesc {
+    font-size: 13px;
+    line-height: 1.5;
   }
 }

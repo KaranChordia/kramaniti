@@ -517,6 +517,23 @@
   margin-bottom: 16px;
 }
 
+.principleIndex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.24);
+  color: var(--color-burnished-gold);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
 .proofCard:hover,
 .timelineCard:hover,
 .principleCard:hover,
@@ -529,7 +546,8 @@
 }
 
 .proofCard:hover .cardAccent,
-.timelineCard:hover .timelineIndex {
+.timelineCard:hover .timelineIndex,
+.principleCard:hover .principleIndex {
   border-color: rgba(201, 168, 76, 0.5);
 }
 

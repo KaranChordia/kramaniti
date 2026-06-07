@@ -1,6 +1,6 @@
 .footer {
   position: relative;
-  padding: 72px 0 34px;
+  padding: 80px 0 34px;
   background:
     radial-gradient(circle at 14% 18%, rgba(201, 168, 76, 0.08), transparent 30%),
     radial-gradient(circle at 84% 76%, rgba(255, 255, 255, 0.04), transparent 24%),
@@ -61,67 +61,38 @@
   margin: 0 auto;
 }
 
-.shell {
-  display: block;
-}
-
-.brandCard {
-  position: relative;
-  min-height: 100%;
-  padding: 28px;
-  border-radius: 26px;
-  background: var(--surface-panel-strong);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: var(--shadow-elevation-2), var(--shadow-inset-soft);
-  overflow: hidden;
-}
-
-.brandCard::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 42%),
-    linear-gradient(180deg, rgba(201, 168, 76, 0.08), transparent 44%);
-  pointer-events: none;
-}
-
-.brandInner {
+.grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
-  align-items: center;
-  position: relative;
-  z-index: 1;
+  gap: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
 }
 
-.brandTop {
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: 64px;
+  }
+}
+
+.leftSection {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 16px;
+  align-items: flex-start;
 }
 
-.logoLink {
-  position: relative;
+.logoGroup {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 74px;
-  height: 74px;
-  border-radius: 22px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
-    rgba(20, 20, 24, 0.28);
-  border: 1px solid rgba(201, 168, 76, 0.18);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 18px 30px rgba(0, 0, 0, 0.16);
-  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.logoGroup:hover {
+  transform: scale(1.04);
 }
 
 .logoMark {
-  width: 56px;
-  height: 56px;
   object-fit: contain;
   filter: drop-shadow(0 0 12px rgba(201, 168, 76, 0.24));
 }
@@ -129,7 +100,7 @@
 .brandText {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .brandName {
@@ -148,25 +119,69 @@
   color: rgba(201, 168, 76, 0.78);
 }
 
-.ctaNote {
-  display: grid;
-  gap: 8px;
-  max-width: 36ch;
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.ctaEyebrow {
+.contactItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
   font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.22em;
+  font-size: 11px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(201, 168, 76, 0.78);
+  color: var(--color-burnished-gold);
+  opacity: 0.85;
 }
 
-.ctaNote p {
-  margin: 0;
-  color: var(--text-secondary);
+.value {
+  font-family: var(--font-inter), sans-serif;
   font-size: 15px;
-  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.linkValue {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 15px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  width: fit-content;
+}
+
+.linkValue:hover {
+  color: var(--color-burnished-gold);
+}
+
+.legalLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+}
+
+.legalLink {
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.legalLink:hover {
+  color: var(--color-burnished-gold);
+}
+
+.separator {
+  color: rgba(201, 168, 76, 0.25);
+  user-select: none;
 }
 
 .bottomBar {
@@ -175,8 +190,8 @@
   gap: 10px;
   align-items: center;
   justify-content: space-between;
-  margin-top: 18px;
-  padding: 10px 6px 0;
+  margin-top: 24px;
+  padding: 10px 0 0;
 }
 
 .bottomNote,
@@ -193,6 +208,20 @@
 
 .copyright {
   color: var(--text-tertiary);
+}
+
+@media (min-width: 768px) {
+  .bottomBar {
+    flex-direction: row;
+  }
+
+  .bottomNote {
+    text-align: left;
+  }
+
+  .copyright {
+    text-align: right;
+  }
 }
 
 :global(html[data-theme='light']) .footer {
@@ -215,43 +244,6 @@
   opacity: 0.62;
 }
 
-:global(html[data-theme='light']) .brandCard {
-  border-color: rgba(0, 0, 0, 0.07);
-}
-
-:global(html[data-theme='light']) .logoLink {
-  background: var(--surface-panel-strong);
-  border-color: rgba(201, 168, 76, 0.28);
-  box-shadow:
-    var(--shadow-elevation-1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.88);
-}
-
-@media (min-width: 900px) {
-  .brandInner {
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
-    gap: 28px;
-  }
-
-  .ctaNote {
-    justify-self: end;
-    text-align: left;
-  }
-
-  .bottomBar {
-    flex-direction: row;
-  }
-
-  .bottomNote,
-  .copyright {
-    text-align: left;
-  }
-
-  .copyright {
-    text-align: right;
-  }
-}
-
 @media (max-width: 767px) {
   .footer {
     padding: 64px 0 28px;
@@ -261,41 +253,11 @@
     width: min(100% - 32px, 1120px);
   }
 
-  .brandCard {
-    padding: 22px;
-    border-radius: 22px;
-  }
-
-  .brandTop {
-    align-items: flex-start;
-  }
-
-  .ctaNote {
-    max-width: none;
-  }
-
-  .logoLink {
-    width: 66px;
-    height: 66px;
-    border-radius: 18px;
-  }
-
-  .logoMark {
-    width: 50px;
-    height: 50px;
-  }
-
   .atmosWordOne {
     bottom: 8%;
   }
 
   .atmosWordTwo {
     top: 6%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .logoLink {
-    transition: none !important;
   }
 }

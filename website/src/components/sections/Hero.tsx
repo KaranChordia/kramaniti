@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './Hero.module.css';
 
-const heroHeadline = 'We build the foundation and systems your brand needs to scale intelligently.';
+const heroHeadline = 'Align how your brand operates, thinks, and shows up.';
 const heroHeadlineWords = heroHeadline.split(' ');
 
 const COMET_DELAYS = [0, 0.5, 1.0];
@@ -165,7 +165,7 @@ export function Hero() {
           <div className={styles.split}>
             <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
               <span className={styles.heroBrandText} data-text="Kramaniti">Kramaniti</span>
-              <span className={styles.eyebrow}>Strategy before tools. Systems before scale.</span>
+              <span className={styles.eyebrow}>Kramaniti</span>
               <h1 className={styles.headline}>
                 {heroHeadlineWords.map((word, index) => (
                   <span
@@ -179,8 +179,9 @@ export function Hero() {
                 ))}
               </h1>
               <p className={styles.subheading}>
-                Kramaniti partners with founders to fix broken operations, design simpler daily workflows, and create content that drives real business growth.
+                Kramaniti helps founder-led brands turn operational reality into clearer systems, sharper intelligence, and a more coherent market presence—so what the business does and what the brand stands for move in the same direction.
               </p>
+              <a href="#contact" className={styles.heroCta}>Book a Strategic Audit</a>
             </div>
           </div>
         </div>

@@ -7,28 +7,32 @@ import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 const steps = [
   {
-    title: 'Diagnose',
-    copy: 'Find the workflow, handoff, or decision loop creating the most friction.'
+    title: 'Diagnose reality',
+    copy: 'Identify the workflow, handoff, decision loop, or message gap creating the most friction.'
   },
   {
-    title: 'Design',
-    copy: 'Map the simplest operating path before choosing tools or integrations.'
+    title: 'Define the operating logic',
+    copy: 'Clarify what the business needs to do consistently before choosing tools or formats.'
   },
   {
-    title: 'Build',
-    copy: 'Create practical AI support around the processes that clearly matter.'
+    title: 'Design the system',
+    copy: 'Map the simplest workflow, intelligence layer, and supporting process.'
   },
   {
-    title: 'Train',
-    copy: 'Document usage, edge cases, and handoff notes so the team can adopt it.'
+    title: 'Build practical support',
+    copy: 'Create the AI-assisted tools, documents, automations, or internal systems that make the workflow easier to run.'
   },
   {
-    title: 'Communicate',
-    copy: 'Turn the new clarity into brand content that explains the value well.'
+    title: 'Enable adoption',
+    copy: 'Document usage, edge cases, roles, and handoffs so the system becomes part of daily work.'
   },
   {
-    title: 'Improve',
-    copy: 'Review what is working, refine the workflow, and keep the system useful.'
+    title: 'Translate into presence',
+    copy: 'Turn internal clarity into sharper brand communication, founder narrative, and useful content.'
+  },
+  {
+    title: 'Refine continuously',
+    copy: 'Review what is working, remove complexity, and keep the system aligned as the brand evolves.'
   }
 ];
 
@@ -43,9 +47,9 @@ export function Workflows() {
       </div>
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
-          <span className="micro-label">How it works</span>
-          <AnimatedHeading isVisible={isVisible}>A clear path from business problem to working system.</AnimatedHeading>
-          <p className="text-secondary">The engagement is designed to reduce confusion, build trust, and keep every output connected to the work your brand actually does.</p>
+          <span className="micro-label">Process</span>
+          <AnimatedHeading isVisible={isVisible}>From business reality to aligned growth system.</AnimatedHeading>
+          <p className="text-secondary">Every engagement begins with how the business actually works. Only then do we design the systems, intelligence, and communication layer around it.</p>
         </div>
 
         <div className={`${styles.flowShell} ${isVisible ? styles.visible : ''}`}>
@@ -57,12 +61,12 @@ export function Workflows() {
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
               <span className="micro-label">Process</span>
-              <span className={styles.summaryValue}>Focused Workflow</span>
+              <span className={styles.summaryValue}>Aligned Systems</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
               <span className="micro-label">Output</span>
-              <span className={styles.summaryValue}>Useful Growth System</span>
+              <span className={styles.summaryValue}>Coherent Growth</span>
             </div>
           </div>
 
@@ -83,11 +87,11 @@ export function Workflows() {
           </div>
 
           <div className={styles.outputStrip}>
-            <span className={styles.outputLabel}>Audit outcome</span>
+            <span className={styles.outputLabel}>Engagement outcome</span>
             <div className={styles.outputPills}>
-              <span className={styles.outputPill}>Workflow clarity</span>
-              <span className={styles.outputPill}>Build roadmap</span>
-              <span className={styles.outputPill}>Practical next step</span>
+              <span className={styles.outputPill}>Operational clarity</span>
+              <span className={styles.outputPill}>Aligned systems</span>
+              <span className={styles.outputPill}>Coherent presence</span>
             </div>
           </div>
         </div>

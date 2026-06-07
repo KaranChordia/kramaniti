@@ -9,29 +9,29 @@ import { AnimatedHeading } from '../ui/AnimatedHeading';
 const tiers = [
   {
     id: 1,
-    title: 'Foundation Strategy',
+    title: 'Foundation Alignment Audit',
     label: 'CLARITY',
-    summary: 'For brands that need clarity before building.',
-    deliverables: ['Business deep-dive', 'Workflow audit', 'AI readiness review', 'Implementation roadmap', 'Prototype specification'],
-    ctaText: 'Book an Audit',
+    summary: 'For brands that need clarity before adding tools, AI, or content volume.',
+    deliverables: ['Business and workflow deep-dive', 'Operational bottleneck mapping', 'AI and tool readiness review', 'Alignment gaps across operations, intelligence, and presence', 'Practical roadmap for the first system worth building'],
+    ctaText: 'Book an Alignment Audit',
     isPopular: false
   },
   {
     id: 2,
-    title: 'Systems Engineering',
+    title: 'Intelligence System Build',
     label: 'PRACTICAL BUILD',
-    summary: 'For brands ready to turn workflows into internal tools.',
-    deliverables: ['Custom workflows', 'Practical AI tools', 'CRM and process integrations', 'Internal systems', 'Team handoff documentation'],
-    ctaText: 'Scope the Workflow',
+    summary: 'For brands ready to turn operational clarity into practical workflows, internal tools, and decision-support systems.',
+    deliverables: ['Workflow architecture', 'Practical AI-assisted systems', 'CRM, documentation, and process integrations', 'Internal tool design', 'Team handoff and usage documentation'],
+    ctaText: 'Scope the First System',
     isPopular: true
   },
   {
     id: 3,
-    title: 'Complete Lifecycle Retainer',
+    title: 'Alignment Retainer',
     label: 'CONTINUITY',
-    summary: 'For brands that want strategy, systems, and content working together continuously.',
-    deliverables: ['System maintenance', 'Content production', 'Monthly optimization', 'Ongoing workflow improvements', 'Brand communication support'],
-    ctaText: 'Explore Retainer',
+    summary: 'For brands that want their systems, workflows, and brand communication to keep improving together.',
+    deliverables: ['System refinement and maintenance', 'Workflow optimization', 'Content and narrative direction', 'Monthly alignment review', 'Brand communication support'],
+    ctaText: 'Explore Ongoing Alignment',
     isPopular: false
   }
 ];
@@ -52,8 +52,8 @@ export function Services() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Services</span>
-          <AnimatedHeading isVisible={isVisible}>Choose the right level of support.</AnimatedHeading>
-          <p className="text-secondary">Start with clarity, build the workflows that matter, or keep the full growth system improving month after month.</p>
+          <AnimatedHeading isVisible={isVisible}>Choose the level of alignment your brand needs.</AnimatedHeading>
+          <p className="text-secondary">Start by clarifying how the business works, then build the systems and communication layer that help it operate and grow with coherence.</p>
         </div>
 
         <div className={styles.grid}>

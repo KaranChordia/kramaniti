@@ -29,12 +29,12 @@ export function FounderPreview() {
 
         <div className={styles.content}>
           <span className="micro-label">Founder-led</span>
-          <AnimatedHeading isVisible={isVisible}>Built by a strategist who understands systems and cinematic communication.</AnimatedHeading>
+          <AnimatedHeading isVisible={isVisible}>Founder-led by someone who understands both systems and perception.</AnimatedHeading>
           <p className="text-secondary">
-            Kramaniti is shaped by Karan Chordia&apos;s path from commercial media and spatial storytelling into workflow design and practical AI infrastructure. The work stays grounded in first-principles thinking: understand the business, build what matters, and communicate clearly.
+            Kramaniti is shaped by Karan Chordia&apos;s path from commercial media and spatial storytelling into workflow design and practical AI infrastructure. That combination matters: the work is not only about making businesses more efficient, but making sure the brand&apos;s external presence reflects how the business actually creates value.
           </p>
           <p className="text-secondary">
-            Advisory support from Kashiesh Chordia adds legal and compliance discipline around agreements, documentation, governance practices, filings, and regulatory paperwork.
+            The approach stays grounded in first-principles thinking: understand the business, clarify the operating logic, build only what matters, and communicate with precision.
           </p>
           <Link href="/founder" className={styles.link}>
             Read the Founder Story
