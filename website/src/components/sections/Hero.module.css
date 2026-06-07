@@ -62,6 +62,7 @@
   opacity: 0;
   transition: opacity 1.7s ease;
   will-change: transform;
+  contain: layout paint style;
 }
 
 .scrollTextStage {
@@ -86,6 +87,7 @@
   opacity: 0;
   transition: opacity 1.7s ease;
   z-index: 20;
+  contain: layout paint style;
 }
 
 .stackVisible {
@@ -337,11 +339,15 @@
   .layer {
     backdrop-filter: none;
     background: rgba(20, 20, 24, 0.88);
+    box-shadow:
+      0 14px 28px rgba(0, 0, 0, calc(0.36 * (1 - var(--exit-progress)))),
+      inset 0 1px 1px rgba(255, 255, 255, 0.05);
   }
   .layerStack {
     top: calc(60% + 24px);
     width: 78vw;
     height: 78vw;
+    transform: translate3d(-50%, calc(-50% - (var(--stack-progress) * 24px)), 0) perspective(1000px) rotateX(var(--rx)) rotateZ(var(--rz)) scale(var(--scale));
   }
   .scrollTextStage {
     top: calc(60% + 24px);
@@ -349,6 +355,39 @@
     height: 78vw;
     --card-width: 78vw;
     --spread-unit: 0.65;
+    transform: translate3d(-50%, calc(-50% - (var(--stack-progress) * 24px)), 0) scale(var(--scale));
+  }
+  .goldenBorderHead,
+  .nodeBeam,
+  .connectorPathBase,
+  .connectorPathFlow,
+  .connectorPathPulse,
+  .layerGlow::before,
+  .layerGlow::after,
+  .scrollIndicator {
+    filter: none;
+  }
+  .goldenBorderHead {
+    stroke-width: 5;
+    stroke: rgba(255, 236, 173, 0.86);
+  }
+  .nodeBeam {
+    stroke-width: 2.4;
+    stroke: rgba(255, 236, 173, 0.68);
+  }
+  .glowNode {
+    fill: rgba(255, 231, 154, 0.86);
+  }
+  .layerGlow::before {
+    width: 560px;
+    height: 560px;
+    margin-top: -280px;
+    margin-left: -280px;
+    border-color: rgba(255, 242, 198, 0.3);
+    animation-duration: 3.8s;
+  }
+  .layerGlow::after {
+    display: none;
   }
 }
 
@@ -987,15 +1026,22 @@
   .heroSection {
     height: 420vh;
   }
+  .stickyContainer {
+    padding: 84px 0 50px;
+  }
   .hero {
     min-height: auto;
     padding: 106px 0 54px;
+  }
+  .container {
+    padding-top: clamp(96px, 16vh, 124px);
   }
   .content {
     gap: 14px;
   }
   .heroBrandText {
     font-size: clamp(28px, 10vw, 44px);
+    filter: blur(5px);
   }
   .networkStage {
     width: 100%;
@@ -1017,6 +1063,7 @@
     padding: 6px 10px;
     letter-spacing: 0.12em;
     text-align: center;
+    filter: blur(5px);
   }
   .headline {
     font-size: clamp(18px, 6.2vw, 26px);
@@ -1025,6 +1072,7 @@
   }
   .headlineWord {
     white-space: normal;
+    filter: blur(5px);
   }
   .subheading {
     font-size: clamp(12px, 3.8vw, 14px);
@@ -1034,6 +1082,7 @@
     padding: 0;
     white-space: normal;
     text-wrap: balance;
+    filter: blur(5px);
   }
   .layerTextItem {
     gap: 10px;
@@ -1046,6 +1095,9 @@
     font-size: clamp(12px, 3.4vw, 14px);
     line-height: 1.45;
     max-width: 28ch;
+  }
+  .scrollIndicator {
+    animation: none;
   }
   .ctaRow {
     grid-template-columns: 1fr;
@@ -1077,5 +1129,52 @@
   .motifLineTwo {
     right: 4%;
     opacity: 0.4;
+  }
+}
+
+@media (max-width: 768px) {
+  @keyframes heroBrandEnter {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.98);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes textBlurEnter {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes heroHeadingWordEnter {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes igniteNode {
+    0% { transform: scale(0.6); opacity: 0; filter: none; }
+    35% { transform: scale(1.18); opacity: 1; filter: none; }
+    100% { transform: scale(1); opacity: 0.86; filter: none; }
   }
 }
