@@ -77,6 +77,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: A four-step horizontal control spine with a highlighted final state focused on measurable write-back and retained savings.
 * **Selection Criteria**: Choose this when the post explains cost control as a workflow design system rather than a standalone procurement exercise.
 
+## 8. Agent Observability Gap (Governance Signal Grid)
+* **Component Name**: `AgentObservabilityGapInfographic`
+* **Trigger String**: `[infographic:agent-observability-gap]`
+* **Best Used For**: Showing the gap between agent adoption pressure and the governance or observability layer required to control it.
+* **Visuals**: A three-card signal grid with governance maturity, expected adoption, and a highlighted visibility-layer card.
+* **Selection Criteria**: Choose this when the post needs to explain why agents need traces, monitoring, review signals, and audit trails before broad production use.
+
+## 9. Trace To Trust Loop (Observability Control Spine)
+* **Component Name**: `TraceToTrustLoopInfographic`
+* **Trigger String**: `[infographic:trace-to-trust-loop]`
+* **Best Used For**: Showing how observable evidence moves from context intake to tool action, review, and trusted system write-back.
+* **Visuals**: A four-step horizontal control spine with a highlighted trusted write-back state and compact evidence legend.
+* **Selection Criteria**: Choose this when the post frames observability as an operating trust layer rather than a developer-only dashboard.
+
 ---
 
 ## Decision Flowchart for Content Creators

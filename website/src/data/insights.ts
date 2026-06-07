@@ -12,6 +12,36 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'ai-observability-is-becoming-the-trust-layer',
+    title: 'AI Observability Is Becoming the Trust Layer',
+    focus: 'Observability Design',
+    date: '07 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-07T18:32:47+05:30',
+    readTime: '5 min read',
+    summary: 'Why agent visibility is moving from a technical monitoring concern into the operating layer that protects trust, cost, and business accountability.',
+    content: [
+      'A lot of businesses are now preparing for AI agents that do more than answer questions. They route work, call tools, summarize records, update systems, and sit closer to live business decisions.',
+      'That shift creates a new operating question: if the system can act, can the business see what it did, why it did it, and whether the result should be trusted?',
+      '[Fact] Microsoft&apos;s June 2, 2026 enterprise AI note says success depends on <gold>the system around the AI</gold>: how agents are built, contextualized, governed, observed in production, and improved safely over time.',
+      '[Fact] Deloitte&apos;s April 2026 agentic AI analysis says only <gold>21% of surveyed enterprises report mature governance for agentic AI</gold>, while 74% expect to use AI agents at least moderately by 2027.',
+      '[infographic:agent-observability-gap]',
+      '[Inference] That gap points to the next bottleneck. Teams are moving from experimentation into execution, but many still lack the trace layer that shows decisions, tool calls, escalations, and write-backs as one accountable path.',
+      '<h3>Monitoring Uptime Is Not Enough For Agentic Work</h3>',
+      '[Fact] Microsoft&apos;s June 3, 2026 Foundry observability note says agents are non-deterministic: their behavior can shift when models update, tools change, and traffic patterns evolve, often silently after the demo.',
+      'Traditional software monitoring can tell a team whether a service is online. It usually does not explain whether an agent chose the right tool, used the right source of truth, skipped a required review, or wrote a flawed update back into a CRM.',
+      'That distinction matters because agent failures are not always outages. They can be quiet workflow errors: the wrong context pulled into a proposal, a customer reply routed without approval, a summary generated from stale records, or a follow-up action executed without an audit trail.',
+      '<h3>Observability Turns AI Output Into Operating Evidence</h3>',
+      '[Fact] PwC&apos;s February 2026 AI observability guidance says observability collects signals such as logs, traces, model outputs, and data flows so organizations can understand not only what happened, but why it happened.',
+      '[Recommendation] A practical observability layer should answer four questions before scale: <gold>What context entered the workflow? Which action did the agent choose? What review signal was triggered? What record changed after approval?</gold>',
+      '[infographic:trace-to-trust-loop]',
+      '<h3>The Trust Layer Has To Sit Inside The Workflow</h3>',
+      'Observability is often treated as a developer dashboard. For business workflows, it has to become more than that. It needs to connect IT, product, risk, and workflow owners around the same evidence: the route, the decision, the exception, and the retained record.',
+      'This is where Kramaniti&apos;s sequence becomes practical. <gold>Strategy before tools</gold> decides which workflow deserves agentic execution. <gold>Systems before scale</gold> defines the trace, review, and write-back logic. <gold>Content after clarity</gold> keeps external communication grounded in a process the business can actually defend.',
+      '[Recommendation] Start with one workflow where agent mistakes would be visible to revenue, delivery quality, or brand trust. Do not only ask whether the agent can perform the task. Ask whether the business can inspect the path, explain the decision, and improve the route after the work is done.'
+    ]
+  },
+  {
     slug: 'token-spend-is-becoming-an-operating-design-problem',
     title: 'Token Spend Is Becoming an Operating Design Problem',
     focus: 'Operating Economics',

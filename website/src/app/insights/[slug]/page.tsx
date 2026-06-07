@@ -22,7 +22,9 @@ import {
   PromptSprawlVsOrchestrationInfographic,
   OrchestrationControlPlaneInfographic,
   TokenomicsTradeoffInfographic,
-  CostControlLoopInfographic
+  CostControlLoopInfographic,
+  AgentObservabilityGapInfographic,
+  TraceToTrustLoopInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -145,6 +147,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:cost-control-loop]') {
                   return <CostControlLoopInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:agent-observability-gap]') {
+                  return <AgentObservabilityGapInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:trace-to-trust-loop]') {
+                  return <TraceToTrustLoopInfographic key={index} />;
                 }
                 
                 // Parse gold highlights

@@ -938,3 +938,113 @@ export function CostControlLoopInfographic() {
     </div>
   );
 }
+
+export function AgentObservabilityGapInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Agent Observability Gap</div>
+      <div className={styles.signalGrid}>
+        <div className={styles.signalCard}>
+          <div className={styles.signalIcon}>
+            <ShieldCheck size={20} />
+          </div>
+          <div className={styles.signalMetric}>21%</div>
+          <div className={styles.signalLabel}>Mature governance</div>
+          <p className={styles.signalCopy}>Enterprises reporting a mature governance model for agentic AI.</p>
+        </div>
+
+        <div className={styles.signalCard}>
+          <div className={styles.signalIcon}>
+            <Workflow size={20} />
+          </div>
+          <div className={styles.signalMetric}>74%</div>
+          <div className={styles.signalLabel}>Agent adoption</div>
+          <p className={styles.signalCopy}>Respondents expecting at least moderate agent use by 2027.</p>
+        </div>
+
+        <div className={`${styles.signalCard} ${styles.signalCardHighlight}`}>
+          <div className={styles.signalIconHighlight}>
+            <Radar size={20} />
+          </div>
+          <div className={styles.signalMetricGold}>Visibility layer</div>
+          <div className={styles.signalLabelGold}>What closes the gap</div>
+          <p className={styles.signalCopyGold}>Traces, monitoring, review signals, and audit trails turn agent activity into operating evidence.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function TraceToTrustLoopInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Trace To Trust Loop</div>
+      <div className={styles.spineGrid}>
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>01</div>
+          <div className={styles.spineTitle}>Context trace</div>
+          <p className={styles.spineCopy}>
+            Capture which source records, constraints, and references entered the workflow.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>02</div>
+          <div className={styles.spineTitle}>Action trace</div>
+          <p className={styles.spineCopy}>
+            Record the tool call, handoff, branch, or recommendation the agent selected.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>03</div>
+          <div className={styles.spineTitle}>Review trace</div>
+          <p className={styles.spineCopy}>
+            Show which threshold, exception, or human checkpoint shaped the final decision.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.spineCard} ${styles.spineCardHighlight}`}>
+          <div className={styles.spineStepHighlight}>04</div>
+          <div className={styles.spineTitleHighlight}>Trusted write-back</div>
+          <p className={styles.spineCopyHighlight}>
+            Approved outputs update the system of record with enough evidence to audit and improve the route.
+          </p>
+        </div>
+      </div>
+      <div className={styles.spineLegend}>
+        <div className={styles.spineLegendItem}>
+          <FolderSync size={16} />
+          Source evidence
+        </div>
+        <div className={styles.spineLegendItem}>
+          <GitBranch size={16} />
+          Decision path
+        </div>
+        <div className={styles.spineLegendItem}>
+          <FileCheck2 size={16} />
+          Review proof
+        </div>
+        <div className={styles.spineLegendItem}>
+          <DatabaseZap size={16} />
+          Durable record
+        </div>
+      </div>
+    </div>
+  );
+}
