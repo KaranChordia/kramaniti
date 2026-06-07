@@ -6,14 +6,11 @@ const heroHeadline = 'We build the foundation and systems your brand needs to sc
 const heroHeadlineWords = heroHeadline.split(' ');
 
 const COMET_DELAYS = [0, 0.5, 1.0];
-const MOBILE_COMET_DELAYS = [0, 0.72];
-const MOBILE_PERFORMANCE_QUERY = '(max-width: 768px), (pointer: coarse)';
 
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
   const [isIntroVisible, setIsIntroVisible] = useState(false);
   const [isSystemsActive, setIsSystemsActive] = useState(false);
-  const [isMobilePerformanceMode, setIsMobilePerformanceMode] = useState(false);
   const isSystemsActiveRef = useRef(false);
 
   useEffect(() => {
@@ -25,17 +22,12 @@ export function Hero() {
     const hero = heroRef.current;
     if (!hero) return;
 
-    let frameId: number | null = null;
-    let lastScrollProgress = '';
-
     const updateScroll = () => {
-      frameId = null;
       const rect = hero.getBoundingClientRect();
       const maxScroll = Math.max(hero.offsetHeight - window.innerHeight, 1);
       const rawProgress = Math.min(Math.max((-rect.top) / maxScroll, 0), 1);
       // Keep scroll-driven motion continuous, but slightly slower than a 1:1 mapping.
       const scrollProgress = Math.pow(rawProgress, 1.14);
-      const nextScrollProgress = scrollProgress.toFixed(4);
 
       if (scrollProgress >= 0.40 && !isSystemsActiveRef.current) {
         isSystemsActiveRef.current = true;
@@ -45,53 +37,22 @@ export function Hero() {
         setIsSystemsActive(false);
       }
 
-      if (nextScrollProgress === lastScrollProgress) return;
-
-      lastScrollProgress = nextScrollProgress;
-      hero.style.setProperty('--hero-scroll', nextScrollProgress);
-      document.documentElement.style.setProperty('--global-hero-scroll', nextScrollProgress);
-    };
-
-    const scheduleScrollUpdate = () => {
-      if (frameId !== null) return;
-      frameId = window.requestAnimationFrame(updateScroll);
+      hero.style.setProperty('--hero-scroll', `${scrollProgress.toFixed(4)}`);
+      document.documentElement.style.setProperty('--global-hero-scroll', `${scrollProgress.toFixed(4)}`);
     };
 
     updateScroll();
-    window.addEventListener('scroll', scheduleScrollUpdate, { passive: true });
-    window.addEventListener('resize', scheduleScrollUpdate);
+    window.addEventListener('scroll', updateScroll, { passive: true });
+    window.addEventListener('resize', updateScroll);
 
     return () => {
-      if (frameId !== null) {
-        window.cancelAnimationFrame(frameId);
-      }
-      window.removeEventListener('scroll', scheduleScrollUpdate);
-      window.removeEventListener('resize', scheduleScrollUpdate);
-      document.documentElement.style.removeProperty('--global-hero-scroll');
+      window.removeEventListener('scroll', updateScroll);
+      window.removeEventListener('resize', updateScroll);
     };
   }, []);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(MOBILE_PERFORMANCE_QUERY);
-    const updatePerformanceMode = () => setIsMobilePerformanceMode(mediaQuery.matches);
-
-    updatePerformanceMode();
-    mediaQuery.addEventListener('change', updatePerformanceMode);
-
-    return () => {
-      mediaQuery.removeEventListener('change', updatePerformanceMode);
-    };
-  }, []);
-
-  const cometDelays = isMobilePerformanceMode ? MOBILE_COMET_DELAYS : COMET_DELAYS;
 
   return (
-    <section
-      ref={heroRef}
-      className={styles.heroSection}
-      id="hero"
-      data-mobile-performance={isMobilePerformanceMode ? 'true' : undefined}
-    >
+    <section ref={heroRef} className={styles.heroSection} id="hero">
       <div className={styles.stickyContainer}>
         
         {/* Background Effects */}
@@ -120,7 +81,7 @@ export function Hero() {
                 <path d="M 96 480 L 96 368 Q 96 352 112 352 L 336 352 Q 352 352 352 336 L 352 112 Q 352 96 336 96 L 160 96" className={styles.nodeTrack} />
                 
                 {/* Path 1 Beams (3 Comets) */}
-                {cometDelays.map((cDelay, cIdx) => (
+                {COMET_DELAYS.map((cDelay, cIdx) => (
                   <path 
                     key={`p1-${cIdx}`}
                     d="M 32 32 L 32 208 Q 32 224 48 224 L 208 224 Q 224 224 224 240 L 224 400 Q 224 416 240 416 L 464 416 Q 480 416 480 400 L 480 288" 
@@ -130,7 +91,7 @@ export function Hero() {
                 ))}
 
                 {/* Path 2 Beams */}
-                {cometDelays.map((cDelay, cIdx) => (
+                {COMET_DELAYS.map((cDelay, cIdx) => (
                   <path 
                     key={`p2-${cIdx}`}
                     d="M 96 480 L 96 368 Q 96 352 112 352 L 336 352 Q 352 352 352 336 L 352 112 Q 352 96 336 96 L 160 96" 
