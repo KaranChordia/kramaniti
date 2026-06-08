@@ -105,6 +105,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: A four-step horizontal control spine with a highlighted write-back state and compact business-memory legend.
 * **Selection Criteria**: Choose this when the post frames context quality as a recurring operating system rather than a one-time knowledge-base setup.
 
+## 12. Work-As-Done Audit Map (Operational Reality Canvas)
+* **Component Name**: `WorkAsDoneAuditInfographic`
+* **Trigger String**: `[infographic:work-as-done-audit]`
+* **Best Used For**: Mapping the real route of a workflow before selecting tools, AI support, or automations.
+* **Visuals**: A centered audit focus surrounded by four operating signals: trigger, handoff, decision owner, and retained record.
+* **Selection Criteria**: Choose this when the essay explains that implementation should begin with observed business reality rather than a demo-led tool decision.
+
+## 13. Audit To Adoption Map (Implementation Decision Path)
+* **Component Name**: `AuditToAdoptionMapInfographic`
+* **Trigger String**: `[infographic:audit-to-adoption-map]`
+* **Best Used For**: Showing how an alignment audit turns into a small build and then proves adoption inside daily work.
+* **Visuals**: A three-stage implementation map that separates route mapping, smallest useful support, and adoption proof.
+* **Selection Criteria**: Choose this when the post needs to connect foundation alignment, practical support, and actual team adoption.
+
 ---
 
 ## Decision Flowchart for Content Creators

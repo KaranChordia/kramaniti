@@ -1163,3 +1163,100 @@ export function ContextQualityLoopInfographic() {
     </div>
   );
 }
+
+export function WorkAsDoneAuditInfographic() {
+  const auditSignals = [
+    {
+      label: 'Trigger',
+      title: 'Where work starts',
+      copy: 'The request, event, or friction point that actually begins the workflow.',
+      icon: <Radar size={18} />,
+    },
+    {
+      label: 'Handoff',
+      title: 'How work moves',
+      copy: 'The real route across people, tools, meetings, chats, and approvals.',
+      icon: <GitBranch size={18} />,
+    },
+    {
+      label: 'Decision',
+      title: 'Who owns judgment',
+      copy: 'The person, rule, or threshold that decides what can move forward.',
+      icon: <ShieldCheck size={18} />,
+    },
+    {
+      label: 'Record',
+      title: 'What is retained',
+      copy: 'The source of truth that stores the approved result for the next cycle.',
+      icon: <FolderSync size={18} />,
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Work-As-Done Audit Map</div>
+      <div className={styles.auditMapShell}>
+        <div className={styles.auditMapCenter}>
+          <span className={styles.auditCenterLabel}>Audit focus</span>
+          <strong>One workflow worth building</strong>
+          <p>Observed in the business before the tool is selected.</p>
+        </div>
+
+        {auditSignals.map((signal, index) => (
+          <div
+            key={signal.label}
+            className={`${styles.auditSignal} ${styles[`auditSignal${index + 1}` as keyof typeof styles] || ''}`}
+          >
+            <div className={styles.auditSignalIcon}>{signal.icon}</div>
+            <span className={styles.auditSignalLabel}>{signal.label}</span>
+            <strong>{signal.title}</strong>
+            <p>{signal.copy}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function AuditToAdoptionMapInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Audit To Adoption Map</div>
+      <div className={styles.adoptionMap}>
+        <div className={styles.adoptionColumn}>
+          <span className={styles.adoptionStep}>01</span>
+          <h4>Map the real route</h4>
+          <p>Capture the actual trigger, handoff, decision owner, source record, and exception path.</p>
+          <div className={styles.adoptionCheck}>
+            <FileCheck2 size={15} />
+            Work-as-done is visible.
+          </div>
+        </div>
+
+        <div className={styles.adoptionDivider}></div>
+
+        <div className={styles.adoptionColumn}>
+          <span className={styles.adoptionStep}>02</span>
+          <h4>Build the smallest support</h4>
+          <p>Add the document, workflow, AI assistance, intake form, or integration that removes one ambiguity.</p>
+          <div className={styles.adoptionCheck}>
+            <Workflow size={15} />
+            The build serves the route.
+          </div>
+        </div>
+
+        <div className={styles.adoptionDivider}></div>
+
+        <div className={`${styles.adoptionColumn} ${styles.adoptionColumnHighlight}`}>
+          <span className={styles.adoptionStepHighlight}>03</span>
+          <h4>Prove adoption</h4>
+          <p>Check whether people use the support layer, records improve, and external communication becomes clearer.</p>
+          <div className={styles.adoptionCheckHighlight}>
+            <CheckCircle2 size={15} />
+            The system becomes daily work.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

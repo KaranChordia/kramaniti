@@ -12,6 +12,38 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'map-the-work-as-done-before-you-build',
+    title: 'Map the Work-As-Done Before You Build',
+    focus: 'Alignment Audit',
+    date: '08 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-08T21:43:29+05:30',
+    readTime: '5 min read',
+    summary: 'An operator memo on why useful AI and workflow systems start with the real route of work: handoffs, decisions, records, adoption, and communication.',
+    content: [
+      'Most AI and workflow conversations start one step too late. The team begins by comparing tools, demos, agents, dashboards, or automations before it has mapped how the work actually moves through the business.',
+      'That is why the first useful artifact is not a platform shortlist. It is a work-as-done map: the real route of the workflow, including the inbox shortcuts, meeting decisions, manual handoffs, spreadsheet patches, approval gaps, and undocumented judgment calls that keep the business moving.',
+      '[Fact] Atlassian&apos;s 2026 State of Teams research says <gold>85% of knowledge workers use AI at work, but only 29% have embedded it in their flows of work</gold>. It also reports that 87% say execution mode leaves them without enough time or capacity to coordinate.',
+      '[Fact] Slack&apos;s 2025 Workforce Index says 60% of desk workers now use AI, with 42% using it at least weekly, while daily AI use rose 233% from November 2024 to April 2025.',
+      '[infographic:work-as-done-audit]',
+      '[Inference] The adoption gap is not only a training issue. It is an alignment issue. When the real workflow is scattered across people, tools, and memory, AI can make individual tasks faster while the shared route stays unclear.',
+      '<h3>An Alignment Audit Should Capture The Actual Route</h3>',
+      'A useful audit starts by observing the workflow as it runs today. Who starts the work? Which record is trusted? Where does the decision happen? Which approval is formal, which one is social, and which one exists only because someone experienced remembers the exception?',
+      '[Fact] NIST&apos;s AI Risk Management Framework says the Map function establishes the context for AI risks, including intended purpose, business value, deployment setting, relevant actors, system requirements, and how outputs are overseen by humans.',
+      '[Recommendation] Before building practical AI support, document four things: <gold>the trigger, the handoff, the decision owner, and the retained record</gold>. If any of those are vague, the build will inherit the vagueness.',
+      '<h3>The System Should Serve The Workflow, Not The Demo</h3>',
+      'The tempting move is to build around the most visible friction: summarizing meetings, drafting follow-ups, creating content, or answering internal questions. Those can be useful. But they only compound when the output returns to a trusted operating path.',
+      '[Fact] The World Economic Forum&apos;s 2025 AI playbook for India&apos;s MSMEs says MSMEs contribute nearly 30% of India&apos;s GDP and employ more than 230 million people, while persistent barriers include limited resources and scalability challenges.',
+      'That matters for founder-led brands because the system has to be small enough to adopt and clear enough to run. A lightweight source-of-truth update, a better intake form, a review checklist, or a documented handoff can create more leverage than a complex AI build that nobody uses after the first week.',
+      '[infographic:audit-to-adoption-map]',
+      '<h3>Presence Should Reflect The Operating Truth</h3>',
+      'The homepage sequence is useful here: operations, intelligence, presence. If operations are messy, intelligence stays scattered. If intelligence stays scattered, presence becomes disconnected. Content then describes an idealized business instead of the one customers actually experience.',
+      '[Recommendation] Use the audit to bridge internal systems and external communication. The question is not only &quot;What can we automate?&quot; It is <gold>&quot;What operating truth should the brand be able to explain, repeat, and prove through the way it works?&quot;</gold>',
+      'That is the practical role of an alignment audit. It slows the first decision just enough to make every later decision sharper: which workflow matters, what support should be built, how adoption will happen, and what story the brand can now tell with more confidence.',
+      '[Recommendation] Start with one workflow where misalignment is already visible: lead intake, proposal creation, onboarding, content approvals, customer follow-up, or internal reporting. Map the work-as-done, remove one ambiguity, build the smallest support layer, and document the route before scaling the system.'
+    ]
+  },
+  {
     slug: 'context-engineering-is-becoming-the-agent-operating-layer',
     title: 'Context Engineering Is Becoming the Agent Operating Layer',
     focus: 'Context Design',

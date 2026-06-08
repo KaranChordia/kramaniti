@@ -26,7 +26,9 @@ import {
   AgentObservabilityGapInfographic,
   TraceToTrustLoopInfographic,
   ContextSprawlVsEngineeringInfographic,
-  ContextQualityLoopInfographic
+  ContextQualityLoopInfographic,
+  WorkAsDoneAuditInfographic,
+  AuditToAdoptionMapInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -161,6 +163,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:context-quality-loop]') {
                   return <ContextQualityLoopInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:work-as-done-audit]') {
+                  return <WorkAsDoneAuditInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:audit-to-adoption-map]') {
+                  return <AuditToAdoptionMapInfographic key={index} />;
                 }
                 
                 // Parse gold highlights
