@@ -1048,3 +1048,118 @@ export function TraceToTrustLoopInfographic() {
     </div>
   );
 }
+
+export function ContextSprawlVsEngineeringInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Context Sprawl vs. Context Engineering</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Dimension</th>
+              <th className={styles.matrixColHeader}>Context sprawl</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Context engineering</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Knowledge source</td>
+              <td className={styles.matrixCell}>Lives across chats, docs, tickets, CRM notes, and personal memory.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Pulled from defined systems of record at the moment of work.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Permission model</td>
+              <td className={styles.matrixCell}>Access is handled ad hoc by whoever is prompting the system.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Context respects role, workflow, and data-boundary rules.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Agent behavior</td>
+              <td className={styles.matrixCell}>The agent guesses, overreads, or asks humans to rebuild context.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>The agent retrieves the right facts, constraints, and recent decisions.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Scale effect</td>
+              <td className={styles.matrixCell}>More agents create more context debt and review burden.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Each approved cycle strengthens business memory and future routing.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export function ContextQualityLoopInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Context Quality Loop</div>
+      <div className={styles.spineGrid}>
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>01</div>
+          <div className={styles.spineTitle}>Map the work</div>
+          <p className={styles.spineCopy}>
+            Identify the workflow where better context changes speed, judgment, or client trust.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>02</div>
+          <div className={styles.spineTitle}>Define the source</div>
+          <p className={styles.spineCopy}>
+            Decide which CRM, knowledge base, project board, or approved document owns each fact.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>03</div>
+          <div className={styles.spineTitle}>Retrieve with rules</div>
+          <p className={styles.spineCopy}>
+            Give agents only the records, constraints, and permissions the workflow step needs.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.spineCard} ${styles.spineCardHighlight}`}>
+          <div className={styles.spineStepHighlight}>04</div>
+          <div className={styles.spineTitleHighlight}>Write back learning</div>
+          <p className={styles.spineCopyHighlight}>
+            Corrections, approvals, and outcomes return to the system so context improves over time.
+          </p>
+        </div>
+      </div>
+      <div className={styles.spineLegend}>
+        <div className={styles.spineLegendItem}>
+          <Workflow size={16} />
+          Workflow context
+        </div>
+        <div className={styles.spineLegendItem}>
+          <FolderSync size={16} />
+          Source of truth
+        </div>
+        <div className={styles.spineLegendItem}>
+          <ShieldCheck size={16} />
+          Permission boundary
+        </div>
+        <div className={styles.spineLegendItem}>
+          <DatabaseZap size={16} />
+          Business memory
+        </div>
+      </div>
+    </div>
+  );
+}

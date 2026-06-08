@@ -12,6 +12,36 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'context-engineering-is-becoming-the-agent-operating-layer',
+    title: 'Context Engineering Is Becoming the Agent Operating Layer',
+    focus: 'Context Design',
+    date: '08 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-08T21:25:36+05:30',
+    readTime: '5 min read',
+    summary: 'Why enterprise AI value now depends less on model access and more on the context layer that connects agents to trusted work, data, and business memory.',
+    content: [
+      'A lot of businesses are now learning that an agent is only as useful as the context it can safely understand. The model may be strong. The workflow may be promising. But if the agent keeps rebuilding context from scattered documents, chats, tickets, CRM notes, and human memory, the operating lift stays fragile.',
+      '[Fact] Microsoft&apos;s June 2026 Microsoft IQ material says <gold>data, knowledge, and workflows are spread across systems</gold>, forcing teams to rebuild context for every agent, and positions Microsoft IQ as a shared intelligence layer for agents and Copilots.',
+      '[Fact] Microsoft&apos;s June 2, 2026 Work IQ note describes an agent-first workplace intelligence layer that lets agents access and reason over organizational data, context, and tools with <gold>permission-aware governance</gold>.',
+      '[infographic:context-sprawl-vs-engineering]',
+      '[Inference] That is the context-engineering shift. The competitive question is moving from &quot;Which model can we access?&quot; to &quot;Which business context can the system trust, retrieve, govern, and improve while work is happening?&quot;',
+      '<h3>Agents Fail When Context Lives Outside The Route</h3>',
+      '[Fact] Microsoft&apos;s Build 2026 Foundry note says every tool and data source can become its own integration with a different auth flow, protocol, and lifecycle, while grounding agents in enterprise knowledge often means building retrieval pipelines from scratch.',
+      'That is why context sprawl creates more than inconvenience. A proposal agent that reads yesterday&apos;s pricing, a support agent that misses the latest account note, or a content workflow that pulls old positioning can all look productive while quietly weakening trust.',
+      'The problem is not that the agent cannot write. The problem is that the business has not designed the context boundary: what the agent should know, where that knowledge lives, who owns it, what permission applies, and how corrections return to the operating system.',
+      '<h3>Context Is A Business System, Not A Prompt Ingredient</h3>',
+      '[Fact] Deloitte&apos;s 2026 AI agent orchestration analysis says the context layer is a <gold>knowledge engineering foundation</gold> for scalable agent architecture, translating raw and diverse data into structured, well-governed knowledge representations.',
+      '[Fact] McKinsey&apos;s 2025 State of AI report says AI high performers are nearly three times as likely as others to redesign workflows, and that enterprise-wide bottom-line impact remains rare outside disciplined operating redesign.',
+      '[infographic:context-quality-loop]',
+      '<h3>The Context Layer Has To Compound</h3>',
+      'A useful context layer does not mean dumping more files into a vector database. It means designing a live operating memory around the workflow: the source records, business semantics, permission rules, review feedback, and write-back path that let the next run start with better ground truth.',
+      '[Recommendation] The practical design question is <gold>&quot;Which context must be present for this workflow to make a trustworthy decision, and where should the approved result be retained?&quot;</gold>',
+      'This is where Kramaniti&apos;s sequence stays useful. <gold>Strategy before tools</gold> decides which context actually matters. <gold>Systems before scale</gold> turns that context into governed infrastructure. <gold>Content after clarity</gold> ensures the external output reflects the business as it really operates.',
+      '[Recommendation] Start with one workflow where stale or missing context would hurt revenue, delivery quality, or brand trust. Define the source of truth, permission boundary, retrieval moment, review signal, and write-back record before you add more agents.'
+    ]
+  },
+  {
     slug: 'ai-observability-is-becoming-the-trust-layer',
     title: 'AI Observability Is Becoming the Trust Layer',
     focus: 'Observability Design',

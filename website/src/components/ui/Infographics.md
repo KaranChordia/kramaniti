@@ -91,6 +91,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: A four-step horizontal control spine with a highlighted trusted write-back state and compact evidence legend.
 * **Selection Criteria**: Choose this when the post frames observability as an operating trust layer rather than a developer-only dashboard.
 
+## 10. Context Sprawl vs. Context Engineering (Context Matrix)
+* **Component Name**: `ContextSprawlVsEngineeringInfographic`
+* **Trigger String**: `[infographic:context-sprawl-vs-engineering]`
+* **Best Used For**: Contrasting scattered business context with a designed context layer for agent workflows.
+* **Visuals**: A comparison matrix across knowledge source, permission model, agent behavior, and scale effect.
+* **Selection Criteria**: Choose this when the post explains that AI agents need governed context architecture, not more prompt input volume.
+
+## 11. Context Quality Loop (Business Memory Spine)
+* **Component Name**: `ContextQualityLoopInfographic`
+* **Trigger String**: `[infographic:context-quality-loop]`
+* **Best Used For**: Showing how context becomes durable operating memory through source-of-truth, retrieval, permissions, and write-back design.
+* **Visuals**: A four-step horizontal control spine with a highlighted write-back state and compact business-memory legend.
+* **Selection Criteria**: Choose this when the post frames context quality as a recurring operating system rather than a one-time knowledge-base setup.
+
 ---
 
 ## Decision Flowchart for Content Creators

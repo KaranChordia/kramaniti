@@ -24,7 +24,9 @@ import {
   TokenomicsTradeoffInfographic,
   CostControlLoopInfographic,
   AgentObservabilityGapInfographic,
-  TraceToTrustLoopInfographic
+  TraceToTrustLoopInfographic,
+  ContextSprawlVsEngineeringInfographic,
+  ContextQualityLoopInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -153,6 +155,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:trace-to-trust-loop]') {
                   return <TraceToTrustLoopInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:context-sprawl-vs-engineering]') {
+                  return <ContextSprawlVsEngineeringInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:context-quality-loop]') {
+                  return <ContextQualityLoopInfographic key={index} />;
                 }
                 
                 // Parse gold highlights
