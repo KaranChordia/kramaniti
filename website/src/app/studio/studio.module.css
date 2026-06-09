@@ -10,22 +10,31 @@
   --color-success: #3ecf8e;
   
   /* Glass Surfaces */
-  --glass-bg-heavy: rgba(15, 15, 18, 0.65);
-  --glass-bg-medium: rgba(15, 15, 18, 0.4);
-  --glass-bg-light: rgba(255, 255, 255, 0.02);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-bg-heavy: linear-gradient(145deg, rgba(24, 24, 29, 0.78), rgba(8, 8, 11, 0.58));
+  --glass-bg-medium: linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.024));
+  --glass-bg-light: linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.012));
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-edge: rgba(255, 255, 255, 0.18);
+  --glass-depth: rgba(0, 0, 0, 0.42);
+  --glass-gold-sheen: linear-gradient(120deg, rgba(255, 236, 164, 0.16), transparent 38%, rgba(255, 255, 255, 0.045) 64%, transparent);
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-nav: 18px;
   
   /* Depth Shadows - Dark Mode */
-  --shadow-elevation-low: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  --shadow-elevation-medium: 0 12px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  --shadow-elevation-high: 0 24px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  --shadow-inner: inset 0 2px 6px rgba(0, 0, 0, 0.4);
-  --button-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  --button-hover-shadow: 0 8px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --shadow-elevation-low: 0 10px 22px rgba(0, 0, 0, 0.34), 0 1px 0 rgba(255, 255, 255, 0.04), inset 0 1px 0 var(--glass-edge), inset 0 -1px 0 rgba(0, 0, 0, 0.28);
+  --shadow-elevation-medium: 0 18px 42px rgba(0, 0, 0, 0.46), 0 6px 16px rgba(0, 0, 0, 0.24), inset 0 1px 0 var(--glass-edge), inset 0 -1px 0 rgba(0, 0, 0, 0.32);
+  --shadow-elevation-high: 0 34px 78px rgba(0, 0, 0, 0.58), 0 12px 32px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(0, 0, 0, 0.36);
+  --shadow-inner: inset 0 2px 10px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --button-shadow: 0 10px 24px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+  --button-hover-shadow: 0 16px 34px rgba(0, 0, 0, 0.48), 0 0 0 1px rgba(201, 168, 76, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.24), inset 0 -1px 0 rgba(0, 0, 0, 0.26);
   
   /* Inputs */
-  --input-bg: rgba(0, 0, 0, 0.4);
-  --input-focus-bg: rgba(0, 0, 0, 0.6);
+  --input-bg: linear-gradient(145deg, rgba(0, 0, 0, 0.46), rgba(255, 255, 255, 0.025));
+  --input-focus-bg: linear-gradient(145deg, rgba(0, 0, 0, 0.6), rgba(255, 255, 255, 0.035));
 
   display: flex;
   flex-direction: column;
@@ -54,22 +63,25 @@
   --color-success: #2b9d68;
   
   /* Glass Surfaces - Light */
-  --glass-bg-heavy: rgba(255, 255, 255, 0.85);
-  --glass-bg-medium: rgba(255, 255, 255, 0.6);
-  --glass-bg-light: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-bg-heavy: linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.62));
+  --glass-bg-medium: linear-gradient(145deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.44));
+  --glass-bg-light: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.36));
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-edge: rgba(255, 255, 255, 0.95);
+  --glass-depth: rgba(85, 74, 42, 0.12);
+  --glass-gold-sheen: linear-gradient(120deg, rgba(201, 168, 76, 0.18), transparent 40%, rgba(255, 255, 255, 0.46) 68%, transparent);
 
   /* Depth Shadows - Light Mode */
-  --shadow-elevation-low: 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  --shadow-elevation-medium: 0 12px 24px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  --shadow-elevation-high: 0 24px 48px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 1);
-  --shadow-inner: inset 0 2px 6px rgba(0, 0, 0, 0.06);
-  --button-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  --button-hover-shadow: 0 8px 16px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --shadow-elevation-low: 0 10px 24px rgba(90, 78, 44, 0.11), inset 0 1px 0 var(--glass-edge), inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+  --shadow-elevation-medium: 0 18px 46px rgba(70, 58, 30, 0.15), 0 6px 18px rgba(0, 0, 0, 0.06), inset 0 1px 0 var(--glass-edge), inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  --shadow-elevation-high: 0 34px 78px rgba(70, 58, 30, 0.18), 0 14px 34px rgba(0, 0, 0, 0.08), inset 0 1px 0 var(--glass-edge), inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+  --shadow-inner: inset 0 2px 10px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  --button-shadow: 0 10px 24px rgba(70, 58, 30, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+  --button-hover-shadow: 0 16px 36px rgba(70, 58, 30, 0.18), 0 0 0 1px rgba(201, 168, 76, 0.12), inset 0 1px 0 rgba(255, 255, 255, 1), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
 
   /* Inputs - Light */
-  --input-bg: rgba(0, 0, 0, 0.03);
-  --input-focus-bg: #ffffff;
+  --input-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.74), rgba(0, 0, 0, 0.025));
+  --input-focus-bg: linear-gradient(145deg, #ffffff, rgba(255, 255, 255, 0.72));
 }
 
 /* Floating Pill Navigation */
@@ -89,16 +101,70 @@
   align-items: center;
   justify-content: space-between;
   background: var(--glass-bg-heavy);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(34px) saturate(1.35);
+  -webkit-backdrop-filter: blur(34px) saturate(1.35);
   border: 1px solid var(--glass-border);
-  border-radius: 100px;
+  border-radius: var(--radius-nav);
   padding: 0.5rem 1rem;
   width: 95%;
   max-width: 1400px;
   box-shadow: var(--shadow-elevation-high);
   pointer-events: auto;
   transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.floatingPill::before,
+.contextSidebar::before,
+.intakeForm::before,
+.card::before,
+.systemCard::before,
+.approvalBar::before,
+.modeCard::before,
+.bottleneckItem::before,
+.projectMetaCard::before,
+.entryCard::before,
+.projectPlanner::before,
+.signalCard::before,
+.contentCard::before,
+.dossierCard::before,
+.miniToolCard::before,
+.entryColumn::before,
+.agentFoundation::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--glass-gold-sheen);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.72;
+  mix-blend-mode: screen;
+}
+
+.floatingPill::after,
+.contextSidebar::after,
+.intakeForm::after,
+.card::after,
+.systemCard::after,
+.approvalBar::after,
+.modeCard::after,
+.bottleneckItem::after,
+.projectMetaCard::after,
+.entryCard::after,
+.projectPlanner::after,
+.signalCard::after,
+.contentCard::after,
+.dossierCard::after,
+.miniToolCard::after,
+.entryColumn::after,
+.agentFoundation::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  pointer-events: none;
 }
 
 /* Left Zone */
@@ -130,7 +196,7 @@
   letter-spacing: 0.1em;
   border: 1px solid rgba(201, 168, 76, 0.3);
   padding: 0.15rem 0.4rem;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   box-shadow: 0 2px 8px rgba(201, 168, 76, 0.15);
 }
 
@@ -138,7 +204,7 @@
   display: flex;
   background: var(--input-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 100px;
+  border-radius: var(--radius-md);
   padding: 0.2rem;
   gap: 0.2rem;
   align-items: center;
@@ -151,7 +217,7 @@
   letter-spacing: 0.05em;
   font-weight: 600;
   padding: 0.3rem 0.8rem;
-  border-radius: 100px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   color: var(--text-secondary);
   transition: all 0.2s ease;
@@ -170,7 +236,7 @@
   justify-content: center;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   color: var(--text-secondary);
   transition: all 0.2s ease;
@@ -227,7 +293,7 @@
 
 .navItem {
   padding: 0.5rem 1rem;
-  border-radius: 100px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 600;
   color: var(--text-secondary);
@@ -259,7 +325,7 @@
 
 .contextualAction {
   padding: 0.4rem 1rem;
-  border-radius: 100px;
+  border-radius: var(--radius-sm);
   font-size: 12px;
   font-weight: 700;
   background: rgba(201, 168, 76, 0.1);
@@ -271,6 +337,8 @@
   align-items: center;
   gap: 0.5rem;
   box-shadow: var(--button-shadow);
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
 }
 
 .contextualAction:hover {
@@ -288,7 +356,7 @@
 .clientLogo {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
   background: var(--glass-bg-medium);
   border: 1px solid var(--glass-border);
   display: flex;
@@ -300,6 +368,8 @@
   margin-left: 0.5rem;
   transition: all 0.2s ease;
   box-shadow: var(--shadow-elevation-low);
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
 }
 
 .clientLogoContainer:hover .clientLogo {
@@ -312,10 +382,10 @@
   top: calc(100% + 1rem);
   right: 0;
   background: var(--glass-bg-heavy);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px) saturate(1.35);
+  -webkit-backdrop-filter: blur(32px) saturate(1.35);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 0.5rem;
   min-width: 220px;
   opacity: 0;
@@ -336,7 +406,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 500;
   color: var(--text-secondary);
@@ -360,7 +430,7 @@
 .miniLogo {
   width: 24px;
   height: 24px;
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
   background: var(--glass-bg-medium);
   display: flex;
   align-items: center;
@@ -391,14 +461,18 @@
   padding-left: 2rem;
 }
 
+.toolsWorkspaceGrid {
+  padding-left: 0;
+}
+
 /* --- FLOATING PILL SIDEBAR REFACTOR --- */
 .contextSidebar {
   width: 260px;
   background: var(--glass-bg-heavy);
   border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  border-radius: var(--radius-nav);
+  backdrop-filter: blur(32px) saturate(1.35);
+  -webkit-backdrop-filter: blur(32px) saturate(1.35);
   display: flex;
   flex-direction: column;
   padding: 1.5rem 1rem;
@@ -407,6 +481,8 @@
   height: calc(100vh - 9rem);
   box-shadow: var(--shadow-elevation-medium);
   transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .sidebarHeader {
@@ -430,7 +506,7 @@
 
 .sidebarItem {
   padding: 0.75rem 1rem;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 600;
   color: var(--text-secondary);
@@ -475,6 +551,12 @@
   background: radial-gradient(circle at top right, rgba(201, 168, 76, 0.05) 0%, transparent 40%);
 }
 
+.toolsMainContent {
+  background:
+    radial-gradient(circle at top left, rgba(201, 168, 76, 0.08) 0%, transparent 34%),
+    radial-gradient(circle at top right, rgba(62, 207, 142, 0.04) 0%, transparent 36%);
+}
+
 .pageContainer {
   flex: 1;
   overflow-y: auto;
@@ -487,6 +569,10 @@
   max-width: 900px;
   margin: 0 auto;
   animation: fadeIn 0.5s ease forwards;
+}
+
+.toolsContentWrapper {
+  max-width: 1480px;
 }
 
 @keyframes fadeIn {
@@ -528,15 +614,27 @@
 /* Interactive Cards */
 .card {
   background: var(--glass-bg-heavy);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px) saturate(1.35);
+  -webkit-backdrop-filter: blur(32px) saturate(1.35);
   border: 1px solid var(--glass-border);
-  border-radius: 24px;
+  border-radius: var(--radius-lg);
   padding: 3rem;
   position: relative;
   overflow: hidden;
   box-shadow: var(--shadow-elevation-medium);
   transition: all 0.4s ease;
+}
+
+.card:hover,
+.systemCard:hover,
+.signalCard:hover,
+.contentCard:hover,
+.dossierCard:hover,
+.miniToolCard:hover,
+.entryColumn:hover,
+.projectPlanner:hover {
+  border-color: rgba(201, 168, 76, 0.28);
+  box-shadow: var(--shadow-elevation-high);
 }
 
 .cardGlow {
@@ -572,7 +670,7 @@
   color: var(--color-success);
   border: 1px solid rgba(62, 207, 142, 0.3);
   padding: 0.3rem 0.8rem;
-  border-radius: 100px;
+  border-radius: var(--radius-sm);
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -601,12 +699,14 @@
   line-height: 1.6;
   padding: 1.25rem;
   background: var(--glass-bg-medium);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   border-left: 4px solid rgba(201, 168, 76, 0.6);
   border-top: 1px solid var(--glass-border);
   border-right: 1px solid var(--glass-border);
   border-bottom: 1px solid var(--glass-border);
   box-shadow: var(--shadow-elevation-low);
+  backdrop-filter: blur(18px) saturate(1.18);
+  -webkit-backdrop-filter: blur(18px) saturate(1.18);
 }
 
 .readOnlyHighlight {
@@ -616,22 +716,26 @@
   line-height: 1.6;
   padding: 1.25rem;
   background: rgba(201, 168, 76, 0.05);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   border: 1px solid rgba(201, 168, 76, 0.3);
   box-shadow: var(--shadow-elevation-low);
+  backdrop-filter: blur(18px) saturate(1.18);
+  -webkit-backdrop-filter: blur(18px) saturate(1.18);
 }
 
 .input, .textarea {
   width: 100%;
   background: var(--input-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   padding: 1rem 1.25rem;
   color: var(--text-primary);
   font-family: inherit;
   font-size: 15px;
   transition: all 0.3s ease;
   box-shadow: var(--shadow-inner);
+  backdrop-filter: blur(16px) saturate(1.12);
+  -webkit-backdrop-filter: blur(16px) saturate(1.12);
 }
 
 .layoutContainer[data-theme="light"] .input,
@@ -661,7 +765,7 @@
   color: var(--color-success);
   border: 1px solid rgba(62, 207, 142, 0.3);
   padding: 0.6rem 1.25rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -686,11 +790,14 @@
 .systemCard {
   background: var(--glass-bg-heavy);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   padding: 2rem;
   transition: all 0.3s ease;
   position: relative;
   box-shadow: var(--shadow-elevation-medium);
+  backdrop-filter: blur(28px) saturate(1.28);
+  -webkit-backdrop-filter: blur(28px) saturate(1.28);
+  overflow: hidden;
 }
 
 .systemCard:hover {
@@ -707,11 +814,13 @@
   text-align: center;
   border: 2px dashed var(--glass-border);
   background: var(--input-bg);
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   color: var(--text-tertiary);
   min-height: 200px;
   box-shadow: var(--shadow-inner);
+  backdrop-filter: blur(22px) saturate(1.18);
+  -webkit-backdrop-filter: blur(22px) saturate(1.18);
   transition: all 0.3s ease;
 }
 
@@ -730,7 +839,7 @@
 .addIcon {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
   background: var(--glass-bg-light);
   border: 1px solid var(--glass-border);
   display: flex;
@@ -751,7 +860,7 @@
 .systemIcon {
   width: 48px;
   height: 48px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   background: rgba(201, 168, 76, 0.1);
   color: var(--color-burnished-gold);
   border: 1px solid rgba(201, 168, 76, 0.2);
@@ -783,7 +892,7 @@
   font-size: 12px;
   font-weight: 700;
   padding: 0.4rem 0.8rem;
-  border-radius: 20px;
+  border-radius: var(--radius-sm);
   background: rgba(62, 207, 142, 0.1);
   color: var(--color-success);
   border: 1px solid rgba(62, 207, 142, 0.2);
@@ -809,7 +918,7 @@
   flex: 1;
   background: var(--input-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   padding: 0.6rem;
   font-size: 11px;
   text-transform: uppercase;
@@ -832,7 +941,7 @@
   width: 100%;
   aspect-ratio: 16/9;
   background: #000;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
@@ -865,7 +974,7 @@
 .playButton {
   width: 64px;
   height: 64px;
-  border-radius: 50%;
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255,255,255,0.2);
@@ -897,7 +1006,7 @@
   background: var(--text-primary);
   color: var(--bg-primary); 
   border: none;
-  border-radius: 100px;
+  border-radius: var(--radius-sm);
   padding: 1rem 2.5rem;
   font-size: 15px;
   font-weight: 700;
@@ -907,6 +1016,8 @@
   gap: 0.75rem;
   cursor: pointer;
   box-shadow: var(--button-shadow);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
 }
 
 .primaryButton:hover {
@@ -918,7 +1029,7 @@
   background: transparent;
   color: var(--text-primary);
   border: 1px solid var(--glass-border);
-  border-radius: 100px;
+  border-radius: var(--radius-sm);
   padding: 1rem 2.5rem;
   font-size: 15px;
   font-weight: 700;
@@ -928,9 +1039,917 @@
   gap: 0.75rem;
   cursor: pointer;
   box-shadow: var(--shadow-elevation-low);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
 }
 
 .secondaryButton:hover {
   background: var(--glass-bg-heavy);
   box-shadow: var(--shadow-elevation-medium);
+}
+
+.brandName,
+.roleOption,
+.themeToggle,
+.navItem,
+.contextualAction,
+.sidebarItem,
+.modeCard {
+  border: 0;
+  font-family: inherit;
+}
+
+.brandName {
+  background: transparent;
+}
+
+.roleOption,
+.themeToggle,
+.navItem,
+.sidebarItem,
+.modeCard {
+  background: transparent;
+}
+
+.navItem:disabled,
+.sidebarItem:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.screenGrid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.85fr) minmax(360px, 1.15fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.intakeHero {
+  min-height: calc(100vh - 12rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 3rem 0;
+}
+
+.intakeHero > svg {
+  color: var(--color-burnished-gold);
+  filter: drop-shadow(0 0 18px rgba(201, 168, 76, 0.35));
+}
+
+.intakeHero h1 {
+  color: var(--text-primary);
+  font-size: clamp(36px, 5vw, 68px);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  max-width: 640px;
+  margin: 0;
+}
+
+.intakeHero p {
+  color: var(--text-secondary);
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0;
+}
+
+.heroActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.intakeForm {
+  background: var(--glass-bg-heavy);
+  backdrop-filter: blur(32px) saturate(1.35);
+  -webkit-backdrop-filter: blur(32px) saturate(1.35);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-elevation-medium);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.intakeForm label {
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.sidebarItem {
+  width: 100%;
+  text-align: left;
+}
+
+.sidebarItem span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sidebarItem small {
+  color: var(--text-tertiary);
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.sidebarPanel {
+  border-top: 1px solid var(--glass-border);
+  padding-top: 1.25rem;
+  margin-top: 1rem;
+}
+
+.modeCard {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 0.65rem;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-inner);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(18px) saturate(1.16);
+  -webkit-backdrop-filter: blur(18px) saturate(1.16);
+}
+
+.modeCard:hover,
+.activeModeCard {
+  color: var(--color-burnished-gold);
+  border-color: rgba(201, 168, 76, 0.28);
+  background: rgba(201, 168, 76, 0.08);
+  box-shadow: var(--shadow-elevation-low);
+}
+
+.generationOverlay {
+  min-height: calc(100vh - 12rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.25rem;
+}
+
+.orbitalLoader {
+  width: 88px;
+  height: 88px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(201, 168, 76, 0.28);
+  background: rgba(201, 168, 76, 0.08);
+  color: var(--color-burnished-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 44px rgba(201, 168, 76, 0.18), var(--shadow-elevation-medium);
+  animation: pulseGlow 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+  from { transform: scale(0.98); opacity: 0.8; }
+  to { transform: scale(1.04); opacity: 1; }
+}
+
+.generationOverlay h2 {
+  color: var(--text-primary);
+  font-size: 34px;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.generationOverlay p {
+  color: var(--text-secondary);
+  max-width: 620px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.generationSteps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(110px, 1fr));
+  gap: 0.75rem;
+  width: min(820px, 100%);
+  margin-top: 1rem;
+}
+
+.generationSteps div {
+  border: 1px solid var(--glass-border);
+  background: var(--input-bg);
+  color: var(--text-tertiary);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.generationSteps .stepComplete {
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.08);
+  border-color: rgba(201, 168, 76, 0.28);
+}
+
+.layerScreen {
+  padding: 1rem 0 3rem;
+}
+
+.eyebrow {
+  color: var(--color-burnished-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 800;
+  font-size: 12px;
+  margin-bottom: 0.85rem;
+}
+
+.signalGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.signalCard,
+.contentCard,
+.dossierCard {
+  background: var(--glass-bg-heavy);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-elevation-low);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(28px) saturate(1.26);
+  -webkit-backdrop-filter: blur(28px) saturate(1.26);
+}
+
+.signalCard span,
+.orderLabel,
+.dossierCard span {
+  display: inline-flex;
+  color: var(--color-burnished-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 10px;
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+}
+
+.signalCard h3,
+.contentCard h3,
+.dossierCard h3 {
+  color: var(--text-primary);
+  font-size: 18px;
+  line-height: 1.25;
+  margin: 0 0 0.65rem;
+}
+
+.signalCard p,
+.contentCard p,
+.dossierCard p {
+  color: var(--text-secondary);
+  line-height: 1.55;
+  font-size: 14px;
+  margin: 0;
+}
+
+.bottleneckList {
+  display: grid;
+  gap: 1rem;
+}
+
+.bottleneckItem {
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--input-bg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-inner);
+  backdrop-filter: blur(18px) saturate(1.14);
+  -webkit-backdrop-filter: blur(18px) saturate(1.14);
+  position: relative;
+  overflow: hidden;
+}
+
+.bottleneckItem div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.7rem;
+}
+
+.bottleneckItem span {
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.65rem;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.bottleneckItem h3 {
+  color: var(--text-primary);
+  font-size: 17px;
+  margin: 0;
+}
+
+.bottleneckItem p,
+.bottleneckItem strong {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0 0 0.75rem;
+}
+
+.bottleneckItem strong {
+  color: var(--text-primary);
+  margin-bottom: 0;
+}
+
+.systemMeta {
+  border-top: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  padding-top: 0.9rem;
+  margin-top: 0.9rem;
+}
+
+.systemMeta strong {
+  display: block;
+  color: var(--text-primary);
+  margin-bottom: 0.3rem;
+}
+
+.sequenceList {
+  color: var(--text-secondary);
+  display: grid;
+  gap: 0.85rem;
+  line-height: 1.5;
+  padding-left: 1.25rem;
+  margin: 1rem 0 0;
+}
+
+.contentDirectionGrid,
+.dossierGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.contentCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.contentCard > svg,
+.dossierCard > svg {
+  color: var(--color-burnished-gold);
+}
+
+.formatRow,
+.agentRail {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.formatRow span,
+.agentRail span {
+  color: var(--text-primary);
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.65rem;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.contentCard strong {
+  color: var(--color-burnished-gold);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.dossierGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dossierCard h3 {
+  font-size: 21px;
+}
+
+.agentFoundation {
+  background:
+    linear-gradient(135deg, rgba(201, 168, 76, 0.12), transparent),
+    var(--glass-bg-heavy);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-elevation-medium);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(30px) saturate(1.28);
+  -webkit-backdrop-filter: blur(30px) saturate(1.28);
+}
+
+.agentFoundation h3 {
+  color: var(--text-primary);
+  margin: 0 0 0.75rem;
+  font-size: 22px;
+}
+
+.agentFoundation p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 760px;
+  margin: 0 0 1.25rem;
+}
+
+.toolsShell {
+  display: grid;
+  grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.projectPlanner,
+.toolWorkspace {
+  display: grid;
+  gap: 1rem;
+}
+
+.toolsContentWrapper .header {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.toolsContentWrapper .subtitle {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.projectPlanner {
+  position: sticky;
+  top: 7rem;
+  background: var(--glass-bg-heavy);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-elevation-medium);
+  overflow: hidden;
+  backdrop-filter: blur(32px) saturate(1.35);
+  -webkit-backdrop-filter: blur(32px) saturate(1.35);
+}
+
+.toolHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.toolHeader > svg {
+  color: var(--color-burnished-gold);
+  flex: 0 0 auto;
+}
+
+.toolHeader h3 {
+  color: var(--text-primary);
+  font-size: 18px;
+  margin: 0 0 0.35rem;
+}
+
+.toolHeader p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.toolLabel {
+  color: var(--text-secondary);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.projectMetaCard {
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  background: rgba(201, 168, 76, 0.07);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  box-shadow: var(--shadow-elevation-low);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+}
+
+.projectMetaCard span {
+  display: inline-flex;
+  color: var(--color-burnished-gold);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+  margin-bottom: 0.55rem;
+}
+
+.projectMetaCard h3 {
+  color: var(--text-primary);
+  font-size: 18px;
+  margin: 0 0 0.45rem;
+}
+
+.projectMetaCard p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.inlineCreate {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  gap: 0.65rem;
+}
+
+.iconButton {
+  width: 44px;
+  min-height: 44px;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--button-shadow);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+}
+
+.iconButton:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--button-hover-shadow);
+}
+
+.entryComposer {
+  border-top: 1px solid var(--glass-border);
+  padding-top: 1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.entryComposer .textarea {
+  min-height: 96px;
+}
+
+.toolGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.miniToolCard {
+  background: var(--glass-bg-heavy);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  box-shadow: var(--shadow-elevation-low);
+  min-height: 168px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(28px) saturate(1.26);
+  -webkit-backdrop-filter: blur(28px) saturate(1.26);
+}
+
+.miniToolIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: rgba(201, 168, 76, 0.1);
+  color: var(--color-burnished-gold);
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.9rem;
+}
+
+.miniToolCard span {
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.miniToolCard h3 {
+  color: var(--text-primary);
+  font-size: 20px;
+  line-height: 1.15;
+  margin: 0.45rem 0 0.6rem;
+}
+
+.miniToolCard p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.entryBoard {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(230px, 1fr));
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.entryColumn {
+  background: var(--glass-bg-heavy);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  box-shadow: var(--shadow-elevation-low);
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(28px) saturate(1.26);
+  -webkit-backdrop-filter: blur(28px) saturate(1.26);
+}
+
+.entryColumnHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  min-height: 30px;
+}
+
+.entryColumnHeader h3 {
+  color: var(--text-primary);
+  font-size: 15px;
+  margin: 0;
+}
+
+.entryColumnHeader span {
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  border-radius: var(--radius-sm);
+  min-width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.emptyEntry {
+  color: var(--text-tertiary);
+  font-size: 13px;
+  border: 1px dashed var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  margin: 0;
+}
+
+.entryCard {
+  border: 1px solid var(--glass-border);
+  background: var(--input-bg);
+  border-radius: var(--radius-md);
+  padding: 0.95rem;
+  margin-bottom: 0.8rem;
+  display: grid;
+  gap: 0.85rem;
+  box-shadow: var(--shadow-inner);
+  min-height: 150px;
+  backdrop-filter: blur(16px) saturate(1.14);
+  -webkit-backdrop-filter: blur(16px) saturate(1.14);
+}
+
+.entryCard h4 {
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.3;
+  margin: 0 0 0.4rem;
+}
+
+.entryCard p {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.statusSelect {
+  width: 100%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-medium);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.75rem;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: var(--shadow-inner);
+  backdrop-filter: blur(16px) saturate(1.14);
+  -webkit-backdrop-filter: blur(16px) saturate(1.14);
+}
+
+.approvalBar {
+  margin-top: 1.5rem;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-heavy);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: var(--shadow-elevation-low);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(28px) saturate(1.24);
+  -webkit-backdrop-filter: blur(28px) saturate(1.24);
+}
+
+.approvalBar span {
+  color: var(--color-burnished-gold);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+}
+
+.approvalBar p {
+  color: var(--text-secondary);
+  margin: 0.35rem 0 0;
+  font-size: 14px;
+}
+
+.approvalActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.errorBox {
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  background: rgba(248, 113, 113, 0.08);
+  color: #fca5a5;
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 1180px) {
+  .floatingPill {
+    border-radius: var(--radius-nav);
+    align-items: flex-start;
+  }
+
+  .pillLeft,
+  .pillCenter,
+  .pillRight {
+    gap: 0.75rem;
+  }
+
+  .screenGrid,
+  .signalGrid,
+  .contentDirectionGrid,
+  .toolGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .toolsShell {
+    grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  }
+
+  .projectPlanner {
+    position: static;
+  }
+
+  .intakeHero {
+    min-height: auto;
+    padding: 2rem 0 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .layoutContainer {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .floatingNavContainer {
+    position: sticky;
+    top: 0;
+    padding: 0.75rem;
+    background: var(--bg-primary);
+  }
+
+  .floatingPill {
+    width: 100%;
+    flex-wrap: wrap;
+    border-radius: var(--radius-nav);
+  }
+
+  .pillLeft,
+  .pillCenter,
+  .pillRight {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .workspaceGrid {
+    display: block;
+    height: auto;
+    padding: 1rem;
+  }
+
+  .toolsWorkspaceGrid {
+    padding: 1rem;
+  }
+
+  .contextSidebar {
+    width: 100%;
+    height: auto;
+    margin: 0 0 1rem;
+  }
+
+  .pageContainer {
+    padding: 1rem 0 7rem;
+  }
+
+  .formRow,
+  .dossierGrid,
+  .generationSteps,
+  .entryBoard,
+  .toolsShell {
+    grid-template-columns: 1fr;
+  }
+
+  .approvalBar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }

@@ -1,519 +1,954 @@
 'use client';
 
-import { useState } from 'react';
+import type { FormEvent, ReactNode } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  BadgeCheck,
+  Brain,
+  CheckCircle2,
+  ClipboardList,
+  FileText,
+  FolderKanban,
+  Gauge,
+  Layers3,
+  Loader2,
+  Moon,
+  PenLine,
+  Plus,
+  RadioTower,
+  RefreshCw,
+  Search,
+  Send,
+  ShieldCheck,
+  Sparkles,
+  Sun,
+  Target,
+} from 'lucide-react';
 import styles from './studio.module.css';
 import { ChatbotWidget } from '../../components/studio/ChatbotWidget';
+import type { StudioIntake, StudioLayerId, StudioPlan } from '../../lib/studio/types';
 
-// --- MOCK DATA ENGINE: KRAMANITI METHODOLOGY ---
-
-type SystemNode = { name: string; desc: string; status: 'active' | 'pending' };
-
-interface ClientWorkflow {
-  id: string;
-  name: string;
-  initial: string;
-  description: string;
-  
-  diagnose: { friction: string; };
-  define: { operatingLogic: string; };
-  design: { architecture: string; };
-  build: { systems: SystemNode[]; };
-  enable: { adoptionPlan: string; };
-  translate: { campaignTitle: string; campaignDesc: string; };
-  refine: { optimizationLog: string; };
-}
-
-const CLIENTS: ClientWorkflow[] = [
-  {
-    id: 'nexocean',
-    name: 'Nexocean',
-    initial: 'N',
-    description: 'Recruitment Operations',
-    diagnose: {
-      friction: "Recruiters are spending up to 4 hours a day manually reading through hundreds of PDF resumes to identify technical requirements. Once found, they write generic emails that don't get replies."
-    },
-    define: {
-      operatingLogic: "Nexocean needs to instantly score unstructured PDF resumes against highly specific technical matrices, and use the exact extracted skills to draft hyper-personalized outreach before human review."
-    },
-    design: {
-      architecture: "Architect the 'Wingman Assistants' suite: A multi-agent orchestration where Atlas (Intake) feeds parsed JSON arrays to Zephyr (Outreach), tracked centrally by Radar."
-    },
-    build: {
-      systems: [
-        { name: 'Atlas: Resume Intelligence', desc: 'PDF and text intake, structured ATS-oriented scoring, and recruiter follow-up planning.', status: 'active' },
-        { name: 'Zephyr: Outreach Copilot', desc: "Drafting hyper-personalized emails and LinkedIn messages using candidates' specific skills.", status: 'active' },
-        { name: 'Radar: Talent Database', desc: 'Candidate filtering, role matching, and AI-driven quality checks across profiles.', status: 'pending' }
-      ]
-    },
-    enable: {
-      adoptionPlan: "Deployed custom Chrome Extension 'Wingman UI' directly into recruiters' browser workflows. Provided 1-page cheat sheet for triggering Zephyr sequences."
-    },
-    translate: {
-      campaignTitle: '"Great Hire Begins Here"',
-      campaignDesc: "Brand film highlighting Nexocean's new AI-augmented recruiting power, emphasizing human connection supported by invisible technology."
-    },
-    refine: {
-      optimizationLog: "Reduced Zephyr token usage by 14% via prompt restructuring. Adjusted Atlas scoring matrix for senior engineering roles."
-    }
-  },
-  {
-    id: 'hyatt',
-    name: 'Hyatt Centric',
-    initial: 'H',
-    description: 'Hospitality Management',
-    diagnose: {
-      friction: "Front desk staff and event coordinators are manually consolidating guest preferences from multiple inbox streams into spreadsheets, causing delayed personalized experiences."
-    },
-    define: {
-      operatingLogic: "Property operations must centralize all asynchronous communication streams into a single structured guest intelligence profile before check-in."
-    },
-    design: {
-      architecture: "Implement a centralized Guest Intelligence Router to unify incoming email data, triggering automated preference tagging in the local PMS."
-    },
-    build: {
-      systems: [
-        { name: 'Concierge AI', desc: 'Automated extraction of dietary and stay preferences from unstructured guest emails.', status: 'active' },
-        { name: 'Event Sync', desc: 'Synchronizes B2B event itineraries with operations schedules dynamically.', status: 'pending' }
-      ]
-    },
-    enable: {
-      adoptionPlan: "Zero-UI deployment. System runs completely in the background via webhooks, updating existing dashboard tags automatically."
-    },
-    translate: {
-      campaignTitle: '"The Centric Experience"',
-      campaignDesc: "A digital showcase of hyper-personalized hospitality powered by seamless backend infrastructure."
-    },
-    refine: {
-      optimizationLog: "Fine-tuned Concierge AI to correctly parse multi-lingual email requests. Expanded Event Sync to capture flight arrival delays."
-    }
-  }
-];
-
-const PHASES = [
-  { id: 'clarity', label: 'Clarity' },
-  { id: 'build', label: 'Build' },
-  { id: 'growth', label: 'Growth' },
-];
-
-const SUB_MENUS = {
-  clarity: [
-    { id: 'diagnose', label: 'Diagnose Reality' },
-    { id: 'define', label: 'Define Operating Logic' }
-  ],
-  build: [
-    { id: 'design', label: 'Design the System' },
-    { id: 'build', label: 'Build Practical Support' },
-    { id: 'enable', label: 'Enable Adoption' }
-  ],
-  growth: [
-    { id: 'translate', label: 'Translate into Presence' },
-    { id: 'refine', label: 'Refine Continuously' }
-  ]
+const DEFAULT_INTAKE: StudioIntake = {
+  companyName: '',
+  website: '',
+  industry: '',
+  companyStage: '',
+  knownContext: '',
+  currentTools: '',
+  priorityQuestion: '',
+  researchMode: 'manual',
 };
 
+const SAMPLE_INTAKE: StudioIntake = {
+  companyName: 'Nexocean',
+  website: 'https://nexocean.com',
+  industry: 'Recruitment operations and B2B talent services',
+  companyStage: 'Growth-stage service business',
+  knownContext:
+    'Recruiters work across resume PDFs, job descriptions, outreach messages, and founder-led relationship context. The planning need is to identify where intelligence support would reduce manual review without removing human judgment.',
+  currentTools: 'PDF resumes, spreadsheets, email, LinkedIn, internal candidate notes',
+  priorityQuestion:
+    'Which workflow should Kramaniti clarify first before proposing an AI-enabled recruiting support system?',
+  researchMode: 'mock-web',
+};
+
+const GENERATION_STEPS = [
+  'Reading company context',
+  'Mapping operating friction',
+  'Designing practical systems',
+  'Translating into content direction',
+  'Assembling planning dossier',
+];
+
+type StudioProcessKey = 'clarity' | 'systems' | 'content' | 'delivery';
+
+type ProjectEntry = {
+  id: string;
+  process: StudioProcessKey;
+  title: string;
+  note: string;
+  status: 'Open' | 'In review' | 'Approved';
+};
+
+type StudioProject = {
+  id: string;
+  name: string;
+  branch: string;
+  company: string;
+  objective: string;
+  updatedAt: string;
+  entries: ProjectEntry[];
+};
+
+const STORAGE_KEY = 'kramaniti-studio-projects-v1';
+
+const PROCESS_LABELS: Record<StudioProcessKey, string> = {
+  clarity: 'Clarity',
+  systems: 'Systems',
+  content: 'Content',
+  delivery: 'Delivery',
+};
+
+const PROJECT_SEED: StudioProject[] = [
+  {
+    id: 'project-nexocean',
+    name: 'Nexocean planning pass',
+    branch: 'nexocean-recruiter-workflow',
+    company: 'Nexocean',
+    objective: 'Clarify recruiter workflow bottlenecks before designing internal intelligence tools.',
+    updatedAt: '2026-06-09T00:00:00.000Z',
+    entries: [
+      {
+        id: 'entry-clarity-1',
+        process: 'clarity',
+        title: 'Resume review friction',
+        note: 'Map where recruiters lose time between PDF review, role matching, and outreach decisions.',
+        status: 'Open',
+      },
+      {
+        id: 'entry-systems-1',
+        process: 'systems',
+        title: 'Workflow blueprint',
+        note: 'Plan intake, scoring, outreach drafting, and human approval points before any build.',
+        status: 'In review',
+      },
+      {
+        id: 'entry-content-1',
+        process: 'content',
+        title: 'Founder-led operating story',
+        note: 'Frame the work as practical recruiting infrastructure, not automation for its own sake.',
+        status: 'Open',
+      },
+    ],
+  },
+];
+
+const readStoredProjects = () => {
+  if (typeof window === 'undefined') return PROJECT_SEED;
+
+  try {
+    const storedProjects = window.localStorage.getItem(STORAGE_KEY);
+    if (!storedProjects) return PROJECT_SEED;
+
+    const parsedProjects = JSON.parse(storedProjects) as StudioProject[];
+    return Array.isArray(parsedProjects) && parsedProjects.length > 0 ? parsedProjects : PROJECT_SEED;
+  } catch (storageError) {
+    console.warn('Could not load Studio projects from local storage.', storageError);
+    return PROJECT_SEED;
+  }
+};
+
+const LAYERS: Array<{
+  id: StudioLayerId;
+  label: string;
+  shortLabel: string;
+  description: string;
+}> = [
+  {
+    id: 'intake',
+    label: 'Company Intake',
+    shortLabel: 'Intake',
+    description: 'Capture the founder brief and research boundary.',
+  },
+  {
+    id: 'clarity',
+    label: 'Layer 1: Clarity',
+    shortLabel: 'Clarity',
+    description: 'Find bottlenecks, gaps, assumptions, and operating logic.',
+  },
+  {
+    id: 'systems',
+    label: 'Layer 2: Systems',
+    shortLabel: 'Systems',
+    description: 'Plan practical intelligence systems around the bottlenecks.',
+  },
+  {
+    id: 'content',
+    label: 'Layer 3: Content',
+    shortLabel: 'Content',
+    description: 'Turn clarity and systems into aligned brand communication.',
+  },
+  {
+    id: 'tools',
+    label: 'Studio Tools',
+    shortLabel: 'Tools',
+    description: 'Maintain projects, entry points, research queues, and approval gates.',
+  },
+  {
+    id: 'dossier',
+    label: 'Planning Dossier',
+    shortLabel: 'Dossier',
+    description: 'Package the plan for proposal, audit, or next action.',
+  },
+];
+
 export default function KramanitiStudio() {
-  const [activeClientId, setActiveClientId] = useState<string>(CLIENTS[0].id);
-  const [activePhaseIndex, setActivePhaseIndex] = useState(0);
-  const [activeSubMenuId, setActiveSubMenuId] = useState<string>('diagnose');
-  
-  // ROLE ARCHITECTURE
-  const [userRole, setUserRole] = useState<'admin' | 'client'>('admin');
-
-  // THEME ARCHITECTURE
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [mode, setMode] = useState<'planner' | 'agent-foundation'>('planner');
+  const [activeLayer, setActiveLayer] = useState<StudioLayerId>('intake');
+  const [intake, setIntake] = useState<StudioIntake>(DEFAULT_INTAKE);
+  const [plan, setPlan] = useState<StudioPlan | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationIndex, setGenerationIndex] = useState(0);
+  const [approvedLayers, setApprovedLayers] = useState<Record<string, boolean>>({});
+  const [error, setError] = useState('');
+  const [projects, setProjects] = useState<StudioProject[]>(readStoredProjects);
+  const [activeProjectId, setActiveProjectId] = useState(() => readStoredProjects()[0]?.id ?? PROJECT_SEED[0].id);
+  const [newProjectName, setNewProjectName] = useState('');
+  const [newEntry, setNewEntry] = useState({
+    process: 'clarity' as StudioProcessKey,
+    title: '',
+    note: '',
+  });
 
-  const activeClient = CLIENTS.find(c => c.id === activeClientId) || CLIENTS[0];
-  const activePhase = PHASES[activePhaseIndex];
-  
-  const currentSubMenus = SUB_MENUS[activePhase.id as keyof typeof SUB_MENUS];
+  const activeLayerIndex = LAYERS.findIndex((layer) => layer.id === activeLayer);
+  const completedCount = plan ? 5 : activeLayer === 'intake' ? 0 : activeLayerIndex;
 
-  const handlePhaseChange = (idx: number) => {
-    setActivePhaseIndex(idx);
-    const newPhaseId = PHASES[idx].id as keyof typeof SUB_MENUS;
-    setActiveSubMenuId(SUB_MENUS[newPhaseId][0].id);
+  const currentStep = useMemo(
+    () => GENERATION_STEPS[Math.min(generationIndex, GENERATION_STEPS.length - 1)],
+    [generationIndex]
+  );
+
+  const activeProject = projects.find((project) => project.id === activeProjectId) ?? projects[0];
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+    } catch (storageError) {
+      console.warn('Could not save Studio projects to local storage.', storageError);
+    }
+  }, [projects]);
+
+  const updateIntake = (key: keyof StudioIntake, value: string) => {
+    setIntake((current) => ({ ...current, [key]: value }));
   };
 
-  const selectClient = (id: string) => {
-    setActiveClientId(id);
-    handlePhaseChange(0);
+  const runMockPlanner = async (event?: FormEvent) => {
+    event?.preventDefault();
+    setError('');
+    setIsGenerating(true);
+    setGenerationIndex(0);
+    setApprovedLayers({});
+    setActiveLayer('clarity');
+
+    const interval = window.setInterval(() => {
+      setGenerationIndex((current) => Math.min(current + 1, GENERATION_STEPS.length - 1));
+    }, 520);
+
+    try {
+      await new Promise((resolve) => window.setTimeout(resolve, 2200));
+      const response = await fetch('/api/studio/plan/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(intake),
+      });
+
+      if (!response.ok) {
+        throw new Error('Studio planner failed.');
+      }
+
+      const data = (await response.json()) as { plan: StudioPlan };
+      setPlan(data.plan);
+      setActiveLayer('clarity');
+    } catch (plannerError) {
+      console.error(plannerError);
+      setError('The mock planning engine could not assemble a dossier. Please retry the planning pass.');
+      setActiveLayer('intake');
+    } finally {
+      window.clearInterval(interval);
+      setIsGenerating(false);
+      setGenerationIndex(0);
+    }
   };
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  const approveLayer = (layer: StudioLayerId) => {
+    setApprovedLayers((current) => ({ ...current, [layer]: true }));
+  };
+
+  const loadSample = () => {
+    setIntake(SAMPLE_INTAKE);
+    setPlan(null);
+    setApprovedLayers({});
+    setActiveLayer('intake');
+    setError('');
+  };
+
+  const addProject = () => {
+    const name = newProjectName.trim();
+    if (!name) return;
+
+    const id = `project-${Date.now()}`;
+    const project: StudioProject = {
+      id,
+      name,
+      branch: name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'new-project',
+      company: intake.companyName || name,
+      objective: intake.priorityQuestion || 'Clarify the company before planning systems or content.',
+      updatedAt: new Date().toISOString(),
+      entries: [],
+    };
+
+    setProjects((current) => [project, ...current]);
+    setActiveProjectId(id);
+    setNewProjectName('');
+    setActiveLayer('tools');
+  };
+
+  const addEntry = () => {
+    if (!activeProject || !newEntry.title.trim()) return;
+
+    const entry: ProjectEntry = {
+      id: `entry-${Date.now()}`,
+      process: newEntry.process,
+      title: newEntry.title.trim(),
+      note: newEntry.note.trim() || 'Manual entry added from Studio tools.',
+      status: 'Open',
+    };
+
+    setProjects((current) =>
+      current.map((project) =>
+        project.id === activeProject.id
+          ? { ...project, entries: [entry, ...project.entries], updatedAt: new Date().toISOString() }
+          : project
+      )
+    );
+    setNewEntry({ process: 'clarity', title: '', note: '' });
+  };
+
+  const updateEntryStatus = (entryId: string, status: ProjectEntry['status']) => {
+    if (!activeProject) return;
+
+    setProjects((current) =>
+      current.map((project) =>
+        project.id === activeProject.id
+          ? {
+              ...project,
+              entries: project.entries.map((entry) => (entry.id === entryId ? { ...entry, status } : entry)),
+              updatedAt: new Date().toISOString(),
+            }
+          : project
+      )
+    );
   };
 
   const renderContextualAction = () => {
-    if (userRole === 'admin') {
-      switch (activePhaseIndex) {
-        case 0: return <div className={styles.contextualAction}>Export Audit</div>;
-        case 1: return <div className={styles.contextualAction}>Deploy Agents</div>;
-        case 2: return <div className={styles.contextualAction}>Publish Assets</div>;
-      }
-    } else {
-      switch (activePhaseIndex) {
-        case 0: return <div className={styles.contextualAction}>View Blueprint</div>;
-        case 1: return <div className={styles.contextualAction}>System Status</div>;
-        case 2: return <div className={styles.contextualAction}>Share Link</div>;
-      }
+    if (isGenerating) {
+      return (
+        <div className={styles.contextualAction}>
+          <Loader2 size={14} className={styles.spin} />
+          Planning
+        </div>
+      );
     }
-    return null;
+
+    if (!plan) {
+      return (
+        <button className={styles.contextualAction} onClick={() => void runMockPlanner()}>
+          <Sparkles size={14} />
+          Run Mock Plan
+        </button>
+      );
+    }
+
+    return (
+      <button className={styles.contextualAction} onClick={() => setActiveLayer('dossier')}>
+        <FileText size={14} />
+        View Dossier
+      </button>
+    );
   };
 
   return (
     <div className={styles.layoutContainer} data-theme={theme}>
-      
-      {/* Floating Pill Navigation */}
       <div className={styles.floatingNavContainer}>
         <nav className={styles.floatingPill}>
           <div className={styles.pillLeft}>
-            <div className={styles.brandName}>
+            <button className={styles.brandName} onClick={() => setActiveLayer('intake')}>
               Kramaniti <span className={styles.studioBadge}>Studio</span>
-            </div>
-            
+            </button>
+
             <div className={styles.roleSwitcher}>
-              <div 
-                className={`${styles.roleOption} ${userRole === 'admin' ? styles.activeRole : ''}`}
-                onClick={() => setUserRole('admin')}
+              <button
+                className={`${styles.roleOption} ${mode === 'planner' ? styles.activeRole : ''}`}
+                onClick={() => setMode('planner')}
               >
-                Admin
-              </div>
-              <div 
-                className={`${styles.roleOption} ${userRole === 'client' ? styles.activeRole : ''}`}
-                onClick={() => setUserRole('client')}
+                Planner
+              </button>
+              <button
+                className={`${styles.roleOption} ${mode === 'agent-foundation' ? styles.activeRole : ''}`}
+                onClick={() => setMode('agent-foundation')}
               >
-                Client
-              </div>
+                Agents
+              </button>
             </div>
 
-            {/* THEME TOGGLE */}
-            <div className={styles.themeToggle} onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}>
-              {theme === 'dark' ? (
-                // Sun Icon for Dark Mode (click to go light)
-                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              ) : (
-                // Moon Icon for Light Mode (click to go dark)
-                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              )}
-            </div>
+            <button
+              className={styles.themeToggle}
+              onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
 
             <div className={styles.progressContainer}>
-              {PHASES.map((_, idx) => (
-                <div 
-                  key={idx} 
-                  className={`${styles.progressSegment} ${idx < activePhaseIndex ? styles.completed : ''} ${idx === activePhaseIndex ? styles.active : ''}`} 
+            {LAYERS.slice(1).map((layer, index) => (
+                <div
+                  key={layer.id}
+                  className={`${styles.progressSegment} ${index < completedCount ? styles.completed : ''} ${
+                    layer.id === activeLayer ? styles.active : ''
+                  }`}
                 />
               ))}
             </div>
           </div>
 
           <div className={styles.pillCenter}>
-            {PHASES.map((phase, idx) => (
-              <div key={phase.id} className={styles.navItemContainer}>
-                <div 
-                  className={`${styles.navItem} ${idx === activePhaseIndex ? styles.active : ''}`}
-                  onClick={() => handlePhaseChange(idx)}
-                >
-                  {phase.label}
-                </div>
-              </div>
+            {LAYERS.slice(1).map((layer) => (
+              <button
+                key={layer.id}
+                className={`${styles.navItem} ${activeLayer === layer.id ? styles.active : ''}`}
+                onClick={() => setActiveLayer(layer.id)}
+                disabled={!plan && layer.id !== 'tools' && layer.id !== 'intake'}
+              >
+                {layer.shortLabel}
+              </button>
             ))}
           </div>
 
           <div className={styles.pillRight}>
             {renderContextualAction()}
-            
             <div className={styles.clientLogoContainer}>
-              <div className={styles.clientLogo} title={activeClient.name}>
-                {activeClient.initial}
-              </div>
-              
-              <div className={styles.clientSwitcher}>
-                <div style={{ padding: '0.5rem 1rem', fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-tertiary)', letterSpacing: '0.1em', fontWeight: 600 }}>
-                  Switch Workspace
-                </div>
-                {CLIENTS.map(client => (
-                  <div 
-                    key={client.id} 
-                    className={`${styles.clientOption} ${client.id === activeClientId ? styles.activeClient : ''}`}
-                    onClick={() => selectClient(client.id)}
-                  >
-                    <div className={styles.miniLogo}>{client.initial}</div>
-                    {client.name}
-                  </div>
-                ))}
+              <div className={styles.clientLogo} title={intake.companyName || 'New plan'}>
+                {(intake.companyName || 'K').slice(0, 1).toUpperCase()}
               </div>
             </div>
           </div>
         </nav>
       </div>
 
-      <div className={styles.workspaceGrid}>
-        
-        {/* FLOATING Contextual Sub-Navigation Sidebar */}
-        <aside className={styles.contextSidebar}>
-          <div className={styles.sidebarHeader}>
-            {activePhase.label} Workflow
-          </div>
-          <div className={styles.sidebarMenu}>
-            {currentSubMenus.map(menu => (
-              <div 
-                key={menu.id} 
-                className={`${styles.sidebarItem} ${activeSubMenuId === menu.id ? styles.activeSubMenu : ''}`}
-                onClick={() => setActiveSubMenuId(menu.id)}
+      <div className={`${styles.workspaceGrid} ${activeLayer === 'tools' ? styles.toolsWorkspaceGrid : ''}`}>
+        {activeLayer !== 'tools' && (
+          <aside className={styles.contextSidebar}>
+            <div className={styles.sidebarHeader}>Planning Flow</div>
+            <div className={styles.sidebarMenu}>
+              {LAYERS.map((layer) => {
+                const isLocked = layer.id !== 'intake' && layer.id !== 'tools' && !plan;
+                return (
+                  <button
+                    key={layer.id}
+                    className={`${styles.sidebarItem} ${activeLayer === layer.id ? styles.activeSubMenu : ''}`}
+                    onClick={() => setActiveLayer(layer.id)}
+                    disabled={isLocked}
+                  >
+                    <span className={styles.sidebarItemIcon}>
+                      {approvedLayers[layer.id] ? <CheckCircle2 size={16} /> : <Layers3 size={16} />}
+                    </span>
+                    <span>
+                      {layer.label}
+                      <small>{layer.description}</small>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className={styles.sidebarPanel}>
+              <div className={styles.sidebarHeader}>Inference Mode</div>
+              <button
+                className={`${styles.modeCard} ${intake.researchMode === 'manual' ? styles.activeModeCard : ''}`}
+                onClick={() => updateIntake('researchMode', 'manual')}
               >
-                <svg className={styles.sidebarItemIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-                {menu.label}
-              </div>
-            ))}
-          </div>
-        </aside>
+                <PenLine size={16} />
+                Manual brief
+              </button>
+              <button
+                className={`${styles.modeCard} ${intake.researchMode === 'mock-web' ? styles.activeModeCard : ''}`}
+                onClick={() => updateIntake('researchMode', 'mock-web')}
+              >
+                <RadioTower size={16} />
+                Mock web pass
+              </button>
+            </div>
+          </aside>
+        )}
 
-        {/* Main Content Workspace */}
-        <main className={styles.mainContent}>
+        <main className={`${styles.mainContent} ${activeLayer === 'tools' ? styles.toolsMainContent : ''}`}>
           <div className={styles.pageContainer}>
-            <div className={styles.contentWrapper} key={`${activeClientId}-${activeSubMenuId}-${userRole}`}>
-              
-              {/* --- CLARITY PHASE --- */}
-              {activeSubMenuId === 'diagnose' && (
-                <>
-                  <header className={styles.header}>
-                    <h1 className={styles.title}>Diagnose <strong>Reality</strong></h1>
-                    <p className={styles.subtitle}>
-                      Identify the workflow, handoff, decision loop, or message gap creating the most friction for {activeClient.name}.
-                    </p>
-                  </header>
-                  <div className={styles.card}>
-                    {userRole === 'admin' && <div className={styles.adminOverlayBadge}>Audit Active</div>}
-                    <div className={styles.cardGlow} />
-                    <div className={styles.cardTitle}>Operational Friction</div>
-                    <div className={styles.formGroup}>
-                      {userRole === 'admin' ? (
-                        <textarea className={styles.textarea} defaultValue={activeClient.diagnose.friction} />
-                      ) : (
-                        <div className={styles.readOnlyText}>{activeClient.diagnose.friction}</div>
-                      )}
-                    </div>
+            <div className={`${styles.contentWrapper} ${activeLayer === 'tools' ? styles.toolsContentWrapper : ''}`}>
+              {isGenerating && (
+                <div className={styles.generationOverlay}>
+                  <div className={styles.orbitalLoader}>
+                    <Brain size={28} />
                   </div>
-                </>
-              )}
-
-              {activeSubMenuId === 'define' && (
-                <>
-                  <header className={styles.header}>
-                    <h1 className={styles.title}>Define <strong>Operating Logic</strong></h1>
-                    <p className={styles.subtitle}>
-                      Clarify what the business needs to do consistently before choosing tools or formats.
-                    </p>
-                  </header>
-                  <div className={styles.card}>
-                    {userRole === 'admin' && <div className={styles.adminOverlayBadge}>Logic Editor</div>}
-                    <div className={styles.cardGlow} />
-                    <div className={styles.cardTitle}>First Principles Alignment</div>
-                    <div className={styles.formGroup}>
-                      {userRole === 'admin' ? (
-                        <>
-                          <textarea className={styles.textarea} defaultValue={activeClient.define.operatingLogic} />
-                          <button className={styles.inlineBuilderAction}>
-                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
-                            Synthesize Logic from Friction
-                          </button>
-                        </>
-                      ) : (
-                        <div className={styles.readOnlyHighlight}>{activeClient.define.operatingLogic}</div>
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* --- BUILD PHASE --- */}
-              {activeSubMenuId === 'design' && (
-                <>
-                  <header className={styles.header}>
-                    <h1 className={styles.title}>Design the <strong>System</strong></h1>
-                    <p className={styles.subtitle}>
-                      Map the simplest workflow, intelligence layer, and supporting process.
-                    </p>
-                  </header>
-                  <div className={styles.card}>
-                    {userRole === 'admin' && <div className={styles.adminOverlayBadge}>Blueprint Draft</div>}
-                    <div className={styles.cardGlow} />
-                    <div className={styles.cardTitle}>System Architecture Blueprint</div>
-                    <div className={styles.formGroup}>
-                      {userRole === 'admin' ? (
-                        <textarea className={styles.textarea} defaultValue={activeClient.design.architecture} />
-                      ) : (
-                        <div className={styles.readOnlyText}>{activeClient.design.architecture}</div>
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {activeSubMenuId === 'build' && (
-                <>
-                  <header className={styles.header}>
-                    <h1 className={styles.title}>Build <strong>Practical Support</strong></h1>
-                    <p className={styles.subtitle}>
-                      Create the AI-assisted tools, documents, or internal systems that make the workflow easier to run.
-                    </p>
-                  </header>
-                  <div className={styles.systemGrid}>
-                    {activeClient.build.systems.map((system, i) => (
-                      <div key={i} className={styles.systemCard}>
-                        <div className={styles.systemIcon}>
-                          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                        </div>
-                        <h3>{system.name}</h3>
-                        <p>{system.desc}</p>
-                        <div className={`${styles.systemStatus} ${system.status === 'pending' ? styles.pending : ''}`}>
-                          {system.status === 'active' ? <><div className={styles.dot} /> Fully Integrated</> : 'Deploying...'}
-                        </div>
-
-                        {userRole === 'admin' && (
-                          <div className={styles.adminSystemActions}>
-                            <button className={styles.adminSystemBtn}>Configure Node</button>
-                            <button className={styles.adminSystemBtn}>Edit Prompt</button>
-                          </div>
-                        )}
+                  <h2>{currentStep}</h2>
+                  <p>Mock intelligence pass in progress. The real provider layer can later swap in Groq, Cerebras, web search, and routed agents.</p>
+                  <div className={styles.generationSteps}>
+                    {GENERATION_STEPS.map((step, index) => (
+                      <div key={step} className={index <= generationIndex ? styles.stepComplete : ''}>
+                        {step}
                       </div>
                     ))}
+                  </div>
+                </div>
+              )}
 
-                    {userRole === 'admin' && (
-                      <div className={styles.addSystemCard}>
-                        <div className={styles.addIcon}>
-                          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                          </svg>
+              {!isGenerating && activeLayer === 'intake' && (
+                <section className={styles.screenGrid}>
+                  <div className={styles.intakeHero}>
+                    <Search size={28} />
+                    <h1>
+                      Build the planning layer before building the system.
+                    </h1>
+                    <p>
+                      Capture company context, create a mock clarity diagnosis, then turn that into systems and content plans.
+                    </p>
+                    <div className={styles.heroActions}>
+                      <button className={styles.primaryButton} onClick={() => void runMockPlanner()}>
+                        <Sparkles size={16} />
+                        Run Mock Plan
+                      </button>
+                      <button className={styles.secondaryButton} onClick={loadSample}>
+                        <RefreshCw size={16} />
+                        Load Sample
+                      </button>
+                    </div>
+                  </div>
+
+                  <form className={styles.intakeForm} onSubmit={runMockPlanner}>
+                    <div className={styles.formRow}>
+                      <label>
+                        Company
+                        <input
+                          className={styles.input}
+                          value={intake.companyName}
+                          onChange={(event) => updateIntake('companyName', event.target.value)}
+                          placeholder="Company name"
+                        />
+                      </label>
+                      <label>
+                        Website
+                        <input
+                          className={styles.input}
+                          value={intake.website}
+                          onChange={(event) => updateIntake('website', event.target.value)}
+                          placeholder="https://"
+                        />
+                      </label>
+                    </div>
+                    <div className={styles.formRow}>
+                      <label>
+                        Industry
+                        <input
+                          className={styles.input}
+                          value={intake.industry}
+                          onChange={(event) => updateIntake('industry', event.target.value)}
+                          placeholder="Hospitality, recruiting, SaaS, education..."
+                        />
+                      </label>
+                      <label>
+                        Stage
+                        <input
+                          className={styles.input}
+                          value={intake.companyStage}
+                          onChange={(event) => updateIntake('companyStage', event.target.value)}
+                          placeholder="Early, growth, mature, turnaround..."
+                        />
+                      </label>
+                    </div>
+                    <label>
+                      Founder Context
+                      <textarea
+                        className={styles.textarea}
+                        value={intake.knownContext}
+                        onChange={(event) => updateIntake('knownContext', event.target.value)}
+                        placeholder="What do you already know about the company, workflow, team, clients, or constraints?"
+                      />
+                    </label>
+                    <label>
+                      Current Tools / Surfaces
+                      <input
+                        className={styles.input}
+                        value={intake.currentTools}
+                        onChange={(event) => updateIntake('currentTools', event.target.value)}
+                        placeholder="CRM, spreadsheets, WhatsApp, email, PDFs, Notion..."
+                      />
+                    </label>
+                    <label>
+                      Priority Question
+                      <input
+                        className={styles.input}
+                        value={intake.priorityQuestion}
+                        onChange={(event) => updateIntake('priorityQuestion', event.target.value)}
+                        placeholder="What should this planning pass answer?"
+                      />
+                    </label>
+                    {error && <div className={styles.errorBox}>{error}</div>}
+                    <button className={styles.primaryButton} type="submit">
+                      <Send size={16} />
+                      Create Planning Dossier
+                    </button>
+                  </form>
+                </section>
+              )}
+
+              {!isGenerating && activeLayer === 'clarity' && plan && (
+                <section className={styles.layerScreen}>
+                  <Header eyebrow="Layer 1" title="Clarity Diagnosis" subtitle={plan.clarity.summary} />
+                  <div className={styles.signalGrid}>
+                    {plan.researchSignals.map((signal) => (
+                      <article key={signal.label} className={styles.signalCard}>
+                        <span>{signal.confidence}</span>
+                        <h3>{signal.label}</h3>
+                        <p>{signal.detail}</p>
+                      </article>
+                    ))}
+                  </div>
+                  <div className={styles.card}>
+                    <div className={styles.cardGlow} />
+                    <div className={styles.cardTitle}>Operating Bottlenecks</div>
+                    <div className={styles.bottleneckList}>
+                      {plan.clarity.bottlenecks.map((bottleneck) => (
+                        <article key={bottleneck.title} className={styles.bottleneckItem}>
+                          <div>
+                            <span>{bottleneck.priority}</span>
+                            <h3>{bottleneck.title}</h3>
+                          </div>
+                          <p>{bottleneck.observation}</p>
+                          <strong>{bottleneck.impact}</strong>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                  <ApprovalBar layer="clarity" approved={approvedLayers.clarity} onApprove={() => approveLayer('clarity')} onNext={() => setActiveLayer('systems')} />
+                </section>
+              )}
+
+              {!isGenerating && activeLayer === 'systems' && plan && (
+                <section className={styles.layerScreen}>
+                  <Header eyebrow="Layer 2" title="Systems Blueprint" subtitle={plan.systems.thesis} />
+                  <div className={styles.systemGrid}>
+                    {plan.systems.blueprints.map((system) => (
+                      <article key={system.name} className={styles.systemCard}>
+                        <div className={styles.systemIcon}>
+                          <Brain size={22} />
                         </div>
-                        <span style={{ fontWeight: 600 }}>Create New Tool</span>
-                        <span style={{ fontSize: '12px', marginTop: '0.5rem', opacity: 0.7 }}>Add to infrastructure</span>
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-
-              {activeSubMenuId === 'enable' && (
-                <>
-                  <header className={styles.header}>
-                    <h1 className={styles.title}>Enable <strong>Adoption</strong></h1>
-                    <p className={styles.subtitle}>
-                      Document usage, edge cases, roles, and handoffs so the system becomes part of daily work.
-                    </p>
-                  </header>
-                  <div className={styles.card}>
-                    {userRole === 'admin' && <div className={styles.adminOverlayBadge}>Docs Editor</div>}
-                    <div className={styles.cardGlow} />
-                    <div className={styles.cardTitle}>Integration & Handoff</div>
-                    <div className={styles.formGroup}>
-                      {userRole === 'admin' ? (
-                        <textarea className={styles.textarea} defaultValue={activeClient.enable.adoptionPlan} />
-                      ) : (
-                        <div className={styles.readOnlyText}>{activeClient.enable.adoptionPlan}</div>
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* --- GROWTH PHASE --- */}
-              {activeSubMenuId === 'translate' && (
-                <>
-                  <header className={styles.header}>
-                    <h1 className={styles.title}>Translate into <strong>Presence</strong></h1>
-                    <p className={styles.subtitle}>
-                      Turn internal clarity into sharper brand communication and useful content.
-                    </p>
-                  </header>
-                  <div className={styles.card}>
-                    {userRole === 'admin' && <div className={styles.adminOverlayBadge}>Campaign Editor</div>}
-                    <div className={styles.cardGlow} />
-                    
-                    {userRole === 'admin' ? (
-                      <input className={styles.input} defaultValue={activeClient.translate.campaignTitle} style={{ fontSize: '24px', fontWeight: 600, marginBottom: '0.75rem' }} />
-                    ) : (
-                      <div className={styles.cardTitle}>{activeClient.translate.campaignTitle}</div>
-                    )}
-
-                    {userRole === 'admin' ? (
-                      <textarea className={styles.textarea} defaultValue={activeClient.translate.campaignDesc} style={{ minHeight: '80px', marginBottom: '2rem' }} />
-                    ) : (
-                      <p className={styles.cardSubtitle}>{activeClient.translate.campaignDesc}</p>
-                    )}
-                    
-                    <div className={styles.videoPlaceholder}>
-                      <div className={styles.playButton}>
-                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                      <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                        Cinematic Rollout Active
-                      </span>
-
-                      {userRole === 'admin' && (
-                        <div className={styles.adminUploadOverlay}>
-                          <button className={styles.primaryButton} style={{ background: 'var(--color-success)', color: '#fff' }}>
-                            Upload Asset
-                          </button>
+                        <span className={styles.orderLabel}>Build {system.buildOrder}</span>
+                        <h3>{system.name}</h3>
+                        <p>{system.purpose}</p>
+                        <div className={styles.systemMeta}>
+                          <strong>Workflow change</strong>
+                          {system.workflowChange}
                         </div>
-                      )}
-                    </div>
+                        <div className={styles.systemMeta}>
+                          <strong>Human approval</strong>
+                          {system.humanApproval}
+                        </div>
+                      </article>
+                    ))}
                   </div>
-                </>
-              )}
-
-              {activeSubMenuId === 'refine' && (
-                <>
-                  <header className={styles.header}>
-                    <h1 className={styles.title}>Refine <strong>Continuously</strong></h1>
-                    <p className={styles.subtitle}>
-                      Review what is working, remove complexity, and keep the system aligned as the brand evolves.
-                    </p>
-                  </header>
                   <div className={styles.card}>
-                    {userRole === 'admin' && <div className={styles.adminOverlayBadge}>Alignment Retainer</div>}
-                    <div className={styles.cardGlow} />
-                    <div className={styles.cardTitle}>Optimization Logs</div>
-                    <div className={styles.formGroup}>
-                      {userRole === 'admin' ? (
-                        <>
-                          <textarea className={styles.textarea} defaultValue={activeClient.refine.optimizationLog} />
-                          <button className={styles.inlineBuilderAction}>
-                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
-                            Log New Optimization
-                          </button>
-                        </>
-                      ) : (
-                        <div className={styles.readOnlyText}>{activeClient.refine.optimizationLog}</div>
-                      )}
-                    </div>
+                    <div className={styles.cardTitle}>Build Sequence</div>
+                    <ol className={styles.sequenceList}>
+                      {plan.systems.sequence.map((step) => (
+                        <li key={step}>{step}</li>
+                      ))}
+                    </ol>
                   </div>
-                </>
+                  <ApprovalBar layer="systems" approved={approvedLayers.systems} onApprove={() => approveLayer('systems')} onNext={() => setActiveLayer('content')} />
+                </section>
               )}
 
+              {!isGenerating && activeLayer === 'content' && plan && (
+                <section className={styles.layerScreen}>
+                  <Header eyebrow="Layer 3" title="Content Alignment" subtitle={plan.content.narrative} />
+                  <div className={styles.contentDirectionGrid}>
+                    {plan.content.directions.map((direction) => (
+                      <article key={direction.title} className={styles.contentCard}>
+                        <ClipboardList size={20} />
+                        <h3>{direction.title}</h3>
+                        <p>{direction.angle}</p>
+                        <div className={styles.formatRow}>
+                          {direction.formats.map((format) => (
+                            <span key={format}>{format}</span>
+                          ))}
+                        </div>
+                        <strong>{direction.proofNeeded}</strong>
+                      </article>
+                    ))}
+                  </div>
+                  <div className={styles.readOnlyHighlight}>{plan.content.approvalGate}</div>
+                  <ApprovalBar layer="content" approved={approvedLayers.content} onApprove={() => approveLayer('content')} onNext={() => setActiveLayer('dossier')} />
+                </section>
+              )}
+
+              {!isGenerating && activeLayer === 'tools' && (
+                <section className={styles.layerScreen}>
+                  <Header
+                    eyebrow="Studio Tools"
+                    title="Project Operating Tools"
+                    subtitle="Use local browser storage to maintain planning projects, entry points, bottlenecks, proof checks, approvals, and content seeds before a real database is selected."
+                  />
+                  <div className={styles.toolsShell}>
+                    <aside className={styles.projectPlanner}>
+                      <div className={styles.toolHeader}>
+                        <FolderKanban size={20} />
+                        <div>
+                          <h3>Project Planner</h3>
+                          <p>Select a planning branch and maintain the crucial process entries.</p>
+                        </div>
+                      </div>
+
+                      <label className={styles.toolLabel}>
+                        Project branch
+                        <select
+                          className={styles.input}
+                          value={activeProject?.id ?? ''}
+                          onChange={(event) => setActiveProjectId(event.target.value)}
+                        >
+                          {projects.map((project) => (
+                            <option key={project.id} value={project.id}>
+                              {project.name}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <div className={styles.projectMetaCard}>
+                        <span>{activeProject?.branch}</span>
+                        <h3>{activeProject?.company}</h3>
+                        <p>{activeProject?.objective}</p>
+                      </div>
+
+                      <div className={styles.inlineCreate}>
+                        <input
+                          className={styles.input}
+                          value={newProjectName}
+                          onChange={(event) => setNewProjectName(event.target.value)}
+                          placeholder="New project name"
+                        />
+                        <button className={styles.iconButton} onClick={addProject} title="Create project">
+                          <Plus size={16} />
+                        </button>
+                      </div>
+
+                      <div className={styles.entryComposer}>
+                        <label className={styles.toolLabel}>
+                          Process
+                          <select
+                            className={styles.input}
+                            value={newEntry.process}
+                            onChange={(event) =>
+                              setNewEntry((current) => ({ ...current, process: event.target.value as StudioProcessKey }))
+                            }
+                          >
+                            {Object.entries(PROCESS_LABELS).map(([key, label]) => (
+                              <option key={key} value={key}>
+                                {label}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        <input
+                          className={styles.input}
+                          value={newEntry.title}
+                          onChange={(event) => setNewEntry((current) => ({ ...current, title: event.target.value }))}
+                          placeholder="Crucial entry point"
+                        />
+                        <textarea
+                          className={styles.textarea}
+                          value={newEntry.note}
+                          onChange={(event) => setNewEntry((current) => ({ ...current, note: event.target.value }))}
+                          placeholder="Why this matters, what is blocked, or what should be clarified."
+                        />
+                        <button className={styles.primaryButton} onClick={addEntry}>
+                          <Plus size={16} />
+                          Add Entry
+                        </button>
+                      </div>
+                    </aside>
+
+                    <div className={styles.toolWorkspace}>
+                      <div className={styles.toolGrid}>
+                        <MiniToolCard
+                          icon={<Gauge size={20} />}
+                          title="Bottleneck Radar"
+                          value={`${activeProject?.entries.filter((entry) => entry.process === 'clarity').length ?? 0} clarity signals`}
+                          detail="Tracks what must be diagnosed before systems are planned."
+                        />
+                        <MiniToolCard
+                          icon={<Search size={20} />}
+                          title="Research Queue"
+                          value={`${activeProject?.entries.filter((entry) => entry.status === 'Open').length ?? 0} open items`}
+                          detail="Holds manual research questions until web research is connected."
+                        />
+                        <MiniToolCard
+                          icon={<ShieldCheck size={20} />}
+                          title="Proof Guardrails"
+                          value="Claim-safe"
+                          detail="Keeps unverified claims behind review before content or proposals."
+                        />
+                        <MiniToolCard
+                          icon={<Target size={20} />}
+                          title="Approval Queue"
+                          value={`${activeProject?.entries.filter((entry) => entry.status === 'In review').length ?? 0} in review`}
+                          detail="Models the human gate before any future agentic action."
+                        />
+                      </div>
+
+                      <div className={styles.entryBoard}>
+                        {Object.entries(PROCESS_LABELS).map(([process, label]) => {
+                          const entries = activeProject?.entries.filter((entry) => entry.process === process) ?? [];
+                          return (
+                            <section key={process} className={styles.entryColumn}>
+                              <div className={styles.entryColumnHeader}>
+                                <h3>{label}</h3>
+                                <span>{entries.length}</span>
+                              </div>
+                              {entries.length === 0 ? (
+                                <p className={styles.emptyEntry}>No entries yet.</p>
+                              ) : (
+                                entries.map((entry) => (
+                                  <article key={entry.id} className={styles.entryCard}>
+                                    <div>
+                                      <h4>{entry.title}</h4>
+                                      <p>{entry.note}</p>
+                                    </div>
+                                    <select
+                                      className={styles.statusSelect}
+                                      value={entry.status}
+                                      onChange={(event) => updateEntryStatus(entry.id, event.target.value as ProjectEntry['status'])}
+                                    >
+                                      <option>Open</option>
+                                      <option>In review</option>
+                                      <option>Approved</option>
+                                    </select>
+                                  </article>
+                                ))
+                              )}
+                            </section>
+                          );
+                        })}
+                      </div>
+
+                      <div className={styles.agentFoundation}>
+                        <h3>Mini Tools Roadmap</h3>
+                        <p>
+                          Next deployable tools should include a source collector, workflow map canvas, prompt/spec builder, content calendar, proposal assembler, and agent task queue. The local project model is the bridge to those tools.
+                        </p>
+                        <div className={styles.agentRail}>
+                          {['Source Collector', 'Workflow Map', 'Spec Builder', 'Content Calendar', 'Proposal Assembler'].map((tool) => (
+                            <span key={tool}>{tool}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {!isGenerating && activeLayer === 'dossier' && plan && (
+                <section className={styles.layerScreen}>
+                  <Header eyebrow="Final Plan" title="Planning Dossier" subtitle={plan.dossier.executiveSummary} />
+                  <div className={styles.dossierGrid}>
+                    <article className={styles.dossierCard}>
+                      <BadgeCheck size={22} />
+                      <span>Recommended Offer</span>
+                      <h3>{plan.dossier.recommendedOffer}</h3>
+                    </article>
+                    <article className={styles.dossierCard}>
+                      <FileText size={22} />
+                      <span>Next Step</span>
+                      <h3>{plan.dossier.nextStep}</h3>
+                    </article>
+                  </div>
+                  <div className={styles.agentFoundation}>
+                    <h3>Future Agent Foundation</h3>
+                    <p>
+                      This dossier can later trigger proposal drafting, content generation, agreement preparation, invoice creation, and delivery handoff agents. Each action should remain behind a human approval gate.
+                    </p>
+                    <div className={styles.agentRail}>
+                      {['Proposal Agent', 'Content Agent', 'Agreement Agent', 'Invoice Agent'].map((agent) => (
+                        <span key={agent}>{agent}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={styles.actionBar}>
+                    <button className={styles.primaryButton} onClick={() => setActiveLayer('intake')}>
+                      Start New Plan
+                    </button>
+                    <button className={styles.secondaryButton} onClick={() => void runMockPlanner()}>
+                      Regenerate Mock
+                    </button>
+                  </div>
+                </section>
+              )}
             </div>
           </div>
         </main>
-
       </div>
-      
-      {/* AI Intelligence Copilot */}
+
       <ChatbotWidget />
-      
     </div>
+  );
+}
+
+function Header({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) {
+  return (
+    <header className={styles.header}>
+      <div className={styles.eyebrow}>{eyebrow}</div>
+      <h1 className={styles.title}>{title}</h1>
+      <p className={styles.subtitle}>{subtitle}</p>
+    </header>
+  );
+}
+
+function ApprovalBar({
+  layer,
+  approved,
+  onApprove,
+  onNext,
+}: {
+  layer: StudioLayerId;
+  approved?: boolean;
+  onApprove: () => void;
+  onNext: () => void;
+}) {
+  return (
+    <div className={styles.approvalBar}>
+      <div>
+        <span>{approved ? 'Approved' : 'Human approval required'}</span>
+        <p>{approved ? `${layer} layer is ready for the next planning step.` : 'Keep the plan reviewable before any future agent takes action.'}</p>
+      </div>
+      <div className={styles.approvalActions}>
+        <button className={styles.secondaryButton} onClick={onApprove}>
+          <CheckCircle2 size={16} />
+          Approve
+        </button>
+        <button className={styles.primaryButton} onClick={onNext}>
+          Continue
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function MiniToolCard({
+  icon,
+  title,
+  value,
+  detail,
+}: {
+  icon: ReactNode;
+  title: string;
+  value: string;
+  detail: string;
+}) {
+  return (
+    <article className={styles.miniToolCard}>
+      <div className={styles.miniToolIcon}>{icon}</div>
+      <span>{title}</span>
+      <h3>{value}</h3>
+      <p>{detail}</p>
+    </article>
   );
 }
