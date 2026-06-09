@@ -1,0 +1,262 @@
+.widgetContainer {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Floating Trigger Button */
+.triggerButton {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--gradient-gold-horizon);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(201, 168, 76, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  color: #000;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.triggerButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(201, 168, 76, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.triggerButton.isOpen {
+  background: var(--glass-bg-heavy);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-elevation-medium);
+  transform: scale(0.9);
+}
+
+.icon {
+  transition: transform 0.3s ease;
+}
+
+.triggerButton.isOpen .icon {
+  transform: rotate(90deg);
+}
+
+/* Chat Window Panel */
+.chatWindow {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 380px;
+  height: 600px;
+  max-height: calc(100vh - 120px);
+  background: var(--bg-primary); /* Fully opaque in dark mode */
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-elevation-high);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.95);
+  transform-origin: bottom right;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Light theme overrides for Chat Window */
+:global([data-theme="light"]) .chatWindow {
+  background: var(--glass-bg-heavy);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+.chatWindow.isOpen {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* Chat Header */
+.header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(0,0,0,0.2);
+}
+
+.headerIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-burnished-gold);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  box-shadow: var(--shadow-inner);
+}
+
+.headerText h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.headerText p {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+/* Messages Area */
+.messagesArea {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  scroll-behavior: smooth;
+}
+
+.messageWrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
+}
+
+.messageWrapper.user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.messageWrapper.ai {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.messageBubble {
+  padding: 0.8rem 1.2rem;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-elevation-low);
+}
+
+.messageWrapper.user .messageBubble {
+  background: var(--input-focus-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px 16px 4px 16px;
+}
+
+.messageWrapper.ai .messageBubble {
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 16px 16px 16px 4px;
+}
+
+.messageLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  margin-top: 0.4rem;
+  font-weight: 600;
+}
+
+/* Typing Indicator */
+.typingIndicator {
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.5rem;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-burnished-gold);
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Input Area */
+.inputArea {
+  padding: 1.25rem;
+  border-top: 1px solid var(--glass-border);
+  background: rgba(0,0,0,0.1);
+}
+
+.inputForm {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 100px;
+  padding: 0.4rem 0.4rem 0.4rem 1.25rem;
+  box-shadow: var(--shadow-inner);
+  transition: all 0.3s ease;
+}
+
+.inputForm:focus-within {
+  border-color: rgba(201, 168, 76, 0.4);
+  box-shadow: var(--shadow-inner), 0 0 0 3px rgba(201, 168, 76, 0.1);
+  background: var(--input-focus-bg);
+}
+
+.inputField {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+}
+
+.inputField::placeholder {
+  color: var(--text-tertiary);
+}
+
+.sendButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--glass-bg-heavy);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-elevation-low);
+}
+
+.sendButton:hover:not(:disabled) {
+  background: var(--gradient-gold-horizon);
+  color: #000;
+  border-color: transparent;
+  transform: scale(1.05);
+}
+
+.sendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
