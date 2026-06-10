@@ -12,6 +12,41 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'when-internal-intelligence-should-become-public',
+    title: 'When Internal Intelligence Should Become Public',
+    focus: 'Content Systems',
+    date: '10 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-10T16:48:44+05:30',
+    readTime: '5 min read',
+    summary: 'A founder advisory on turning operational learning into trustworthy brand presence only after the workflow, owner, and retained record are clear.',
+    content: [
+      'Most founder-led brands do not suffer because they have nothing to say. They suffer because the useful intelligence inside the business is scattered across sales calls, delivery notes, founder memory, customer questions, team chats, and half-finished documents.',
+      'That is why content often becomes disconnected from operations. The business is learning every week, but the learning never becomes a usable internal record. So the external presence starts leaning on generic claims, trend commentary, or production volume instead of the specific operating truth the brand is actually earning.',
+      'Kramaniti&apos;s homepage sequence is a useful test: operations, intelligence, presence. If the operational signal has not been captured, the intelligence layer stays vague. If the intelligence layer stays vague, presence turns into performance rather than clarity.',
+      '[Fact] Content Marketing Institute&apos;s 2026 B2B content research says that among marketers using AI for content creation, <gold>87% report improved productivity and 80% report improved operational efficiency</gold>, but only 39% report improved content performance.',
+      '[Inference] Speed is not the scarce asset anymore. The scarce asset is a trustworthy route from what the business knows internally to what the market should hear externally.',
+      '[infographic:presence-readiness-gate]',
+      '<h3>The Signal Has To Survive Internal Use First</h3>',
+      'Before a founder turns a lesson into a post, a page, a deck, or a campaign, the lesson should be useful inside the business. Can the team use it to make a clearer decision? Can sales explain it without improvising? Can delivery point to the workflow behind it? Can the founder defend it without reaching for a vague story?',
+      '[Fact] Asana&apos;s State of Work Innovation research, based on more than 13,000 knowledge workers across six countries, reports that <gold>53% of workers&apos; time is spent on busywork</gold> such as communicating about work, searching for information, and chasing task status. It also says only 12% of workers say new information flows quickly between departments.',
+      'That matters because public communication is often downstream of the same internal drag. If the team has to hunt for the latest source of truth, the market will eventually hear old positioning, loose promises, or content that sounds polished but no longer matches the operating reality.',
+      '[Fact] APQC&apos;s 2026 content management guidance says outdated, hard-to-find, or unclear content causes employees to lose time and recreate existing work, and that strong content management depends on ownership, accurate information, and fresh lifecycles.',
+      '[Recommendation] Treat every serious content idea as a small knowledge-management decision before it becomes a publishing decision: what triggered this insight, which record proves it, who owns the interpretation, and where will the approved version live after publication?',
+      '<h3>A Point Of View Is A Handoff, Not A Caption</h3>',
+      'The strongest founder content does not simply express personality. It transfers judgment. It shows how the business sees a problem, what it has learned from real work, and what decision it would make differently because of that learning.',
+      '[Fact] The 2025 Edelman-LinkedIn B2B Thought Leadership Impact Report says <gold>91% of hidden decision-makers associate quality thought leadership with uncovering challenges or needs they had not recognized</gold>. It also reports that 86% of hidden decision-makers prefer ideas that challenge assumptions rather than only validate existing thinking.',
+      'That is the bridge from internal systems to external communication. A good content system is not just a calendar. It is the operating path that turns customer questions, workflow friction, delivery lessons, product decisions, and founder judgment into a clear public point of view.',
+      '[infographic:intelligence-to-presence-brief]',
+      '<h3>The Decision Guide</h3>',
+      '[Recommendation] Publish the insight when four conditions are true: the signal came from real operations, the evidence is retained somewhere the team trusts, the claim has an owner, and the content points back to a business capability the brand can actually support.',
+      'Hold the insight when any one of those conditions is missing. A loose observation can still become a note, a backlog item, a research question, or a founder memo. It does not need to become public before the system around it is ready.',
+      'This is where practical AI can help, but only after the logic is clear. It can summarize sales calls, cluster customer questions, extract delivery patterns, maintain a content backlog, and draft first-pass briefs. But the business still needs a route for deciding which intelligence is true, useful, ownable, and ready for the market.',
+      '[Recommendation] Start with one recurring source of internal intelligence: discovery calls, proposal objections, onboarding questions, project retrospectives, support requests, or founder voice notes. Create a retained record, tag the recurring patterns, choose one message owner, and publish only the insights that can survive that path.',
+      'Content after clarity is not a slogan. It is an operating discipline. The brand should not sound busy. It should sound aligned.'
+    ]
+  },
+  {
     slug: 'map-the-work-as-done-before-you-build',
     title: 'Map the Work-As-Done Before You Build',
     focus: 'Alignment Audit',

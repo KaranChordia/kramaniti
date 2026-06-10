@@ -119,6 +119,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: A three-stage implementation map that separates route mapping, smallest useful support, and adoption proof.
 * **Selection Criteria**: Choose this when the post needs to connect foundation alignment, practical support, and actual team adoption.
 
+## 14. Presence Readiness Gate (Publishing Decision Gate)
+* **Component Name**: `PresenceReadinessGateInfographic`
+* **Trigger String**: `[infographic:presence-readiness-gate]`
+* **Best Used For**: Deciding whether an internal operational insight is ready to become public-facing brand communication.
+* **Visuals**: A three-part gate that separates held insights, the publish decision, and ready-for-presence signals.
+* **Selection Criteria**: Choose this when the post explains that content should wait until ownership, evidence, and operating truth are clear.
+
+## 15. Intelligence To Presence Brief (Content System Handoff)
+* **Component Name**: `IntelligenceToPresenceBriefInfographic`
+* **Trigger String**: `[infographic:intelligence-to-presence-brief]`
+* **Best Used For**: Showing how internal learning becomes a publishable article, sales note, deck, or website message.
+* **Visuals**: A four-card brief board moving from operational signal to retained evidence, owned interpretation, and public presence.
+* **Selection Criteria**: Choose this when the essay needs to bridge operations, documentation, founder judgment, and external communication.
+
 ---
 
 ## Decision Flowchart for Content Creators

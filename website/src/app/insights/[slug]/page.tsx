@@ -28,7 +28,9 @@ import {
   ContextSprawlVsEngineeringInfographic,
   ContextQualityLoopInfographic,
   WorkAsDoneAuditInfographic,
-  AuditToAdoptionMapInfographic
+  AuditToAdoptionMapInfographic,
+  PresenceReadinessGateInfographic,
+  IntelligenceToPresenceBriefInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -169,6 +171,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:audit-to-adoption-map]') {
                   return <AuditToAdoptionMapInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:presence-readiness-gate]') {
+                  return <PresenceReadinessGateInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:intelligence-to-presence-brief]') {
+                  return <IntelligenceToPresenceBriefInfographic key={index} />;
                 }
                 
                 // Parse gold highlights

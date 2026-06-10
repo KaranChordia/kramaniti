@@ -17,7 +17,9 @@ import {
   Scale,
   FolderSync,
   FileCheck2,
-  GitBranch
+  GitBranch,
+  Megaphone,
+  MessageSquareText
 } from 'lucide-react';
 import styles from './Infographics.module.css';
 
@@ -1256,6 +1258,97 @@ export function AuditToAdoptionMapInfographic() {
             The system becomes daily work.
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+export function PresenceReadinessGateInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Presence Readiness Gate</div>
+      <div className={styles.presenceGate}>
+        <div className={styles.gatePanel}>
+          <div className={styles.gatePanelLabel}>
+            <CircleAlert className={styles.labelIconDanger} size={16} />
+            Hold the insight
+          </div>
+          <div className={styles.gateIssue}>Only lives in a call, chat, or founder memory</div>
+          <div className={styles.gateIssue}>No retained source of truth</div>
+          <div className={styles.gateIssue}>Claim owner is unclear</div>
+        </div>
+
+        <div className={styles.gateCore}>
+          <div className={styles.gateCoreIcon}>
+            <FileCheck2 size={22} />
+          </div>
+          <div className={styles.gateCoreTitle}>Publish?</div>
+          <p className={styles.gateCoreCopy}>Only after the signal can survive operational review.</p>
+        </div>
+
+        <div className={`${styles.gatePanel} ${styles.gatePanelReady}`}>
+          <div className={styles.gatePanelLabelGold}>
+            <CheckCircle2 className={styles.labelIconGold} size={16} />
+            Ready for presence
+          </div>
+          <div className={styles.gateReadyItem}>Signal came from real work</div>
+          <div className={styles.gateReadyItem}>Evidence is retained and current</div>
+          <div className={styles.gateReadyItem}>Message has a clear owner</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function IntelligenceToPresenceBriefInfographic() {
+  const stages = [
+    {
+      icon: Radar,
+      label: 'Operational signal',
+      copy: 'A repeated question, objection, bottleneck, or delivery lesson appears in real work.',
+    },
+    {
+      icon: FolderSync,
+      label: 'Retained evidence',
+      copy: 'The team can point to the record, source, or documented workflow behind the insight.',
+    },
+    {
+      icon: MessageSquareText,
+      label: 'Owned interpretation',
+      copy: 'A founder or subject owner decides what the signal means and what claim is safe.',
+    },
+    {
+      icon: Megaphone,
+      label: 'Public presence',
+      copy: 'The approved insight becomes a post, article, sales note, deck, or website message.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Intelligence To Presence Brief</div>
+      <div className={styles.briefBoard}>
+        {stages.map((stage, index) => {
+          const Icon = stage.icon;
+
+          return (
+            <React.Fragment key={stage.label}>
+              <div className={`${styles.briefCard} ${index === stages.length - 1 ? styles.briefCardHighlight : ''}`}>
+                <div className={index === stages.length - 1 ? styles.briefIconHighlight : styles.briefIcon}>
+                  <Icon size={18} />
+                </div>
+                <div className={index === stages.length - 1 ? styles.briefLabelGold : styles.briefLabel}>{stage.label}</div>
+                <p className={index === stages.length - 1 ? styles.briefCopyGold : styles.briefCopy}>{stage.copy}</p>
+              </div>
+              {index < stages.length - 1 ? (
+                <div className={styles.briefConnector}>
+                  <ArrowRight className={styles.arrowIconDesktop} size={18} />
+                  <ArrowDown className={styles.arrowIconMobile} size={18} />
+                </div>
+              ) : null}
+            </React.Fragment>
+          );
+        })}
       </div>
     </div>
   );
