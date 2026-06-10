@@ -2,6 +2,8 @@
 
 This document establishes the step-by-step operational workflows for executing the consultancy’s services, ensuring high quality, low friction, and structured delivery.
 
+Core delivery principle: Kramaniti designs human-collaborative systems. Some workflow steps should be automated, some should be AI-assisted, and some must remain human-led. Every delivery workflow should make usage, review, override, and handoff responsibilities explicit.
+
 ---
 
 ## 1. Client Onboarding Workflow
@@ -44,13 +46,14 @@ graph TD
 ### Stage 3: Delivery & Blueprint Handover (Days 11 - 14)
 *   **Step 3.1**: Create the AI Integration Playbook (PDF document).
 *   **Step 3.2**: Host the Blueprint Presentation Call: Walk the client through the recommendations and present the prototype.
-*   **Step 3.3**: Pitch Tier 2 (Narrative Kit) or Tier 3 (Automation Build) for implementation.
+*   **Step 3.3**: Add AI Enablement & Adoption notes: define what can be automated, what should be AI-assisted, what requires human review, and which team role owns each handoff.
+*   **Step 3.4**: Pitch Tier 2 (Narrative Kit) or Tier 3 (Intelligence System Build) for implementation.
 
 ---
 
 ## 3. AI-Powered Content Repurposing Workflow
 
-*   **Objective:** Convert raw, unedited video assets (Loom, Zoom recordings) into structured, multi-platform written campaigns.
+*   **Objective:** Convert raw, unedited video assets (Loom, Zoom recordings) into structured, multi-platform written campaigns with AI-assisted drafting and human editorial review.
 
 ```mermaid
 sequenceDiagram
@@ -58,14 +61,14 @@ sequenceDiagram
     participant Transcribe as Transcription Engine (Whisper)
     participant AI as Semantic Processor (Claude)
     participant Human as Karan (Review & Edit)
-    participant Publish as Multi-Platform Distribution
+    participant Publish as Reviewed Distribution
 
     Founder->>Transcribe: Ingest raw audio/video
     Transcribe->>AI: Structured text transcript
     AI->>AI: Extract core themes & context
     AI->>AI: Draft Blog Post, Newsletter, & LinkedIn drafts
     AI->>Human: Draft campaign package
-    Human->>Publish: Polish and schedule post
+    Human->>Publish: Approve, polish, and schedule post
 ```
 
 ### Steps & Checklist
@@ -84,9 +87,9 @@ sequenceDiagram
 
 ---
 
-## 4. Bespoke Automation & Agent Workflow (Custom Builds)
+## 4. Intelligence System Build Workflow (Custom Builds)
 
-*   **Objective:** Develop, test, and deploy custom-trained AI agents and automated API-driven workflows.
+*   **Objective:** Develop, test, and deploy practical AI-assisted systems and controlled API-driven workflows that support human decision-making instead of replacing it by default.
 
 ### Steps & Checklist
 1.  **API Schema & Database Setup**: Map endpoints (e.g. Slack Webhook, HubSpot API). Structure vectors/knowledge databases for RAG.
@@ -94,4 +97,6 @@ sequenceDiagram
 3.  **Logical Flow Implementation**: Build routing nodes in Make.com/Zapier (e.g. IF email is spam, ignore; IF it contains booking query, send Calendly).
 4.  **Context & Token Optimization**: Test context window boundaries, system latency, and API rate limits.
 5.  **Edge Case Testing**: Run adversarial tests (prompt injection, incorrect data formats) to ensure stability.
-6.  **Handoff & Maintenance Setup**: Document setup requirements and deploy monitoring loops.
+6.  **Human Review Design**: Define approval gates, override rules, exception paths, and the exact conditions that require a person to intervene.
+7.  **AI Enablement & Adoption**: Train the team on usage, limits, review habits, and how the system fits into daily operations.
+8.  **Handoff & Maintenance Setup**: Document setup requirements and deploy monitoring loops.

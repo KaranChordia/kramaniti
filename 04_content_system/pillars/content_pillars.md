@@ -2,6 +2,8 @@
 
 This document outlines the strategic content pillars designed to establish thought leadership, generate inbound leads, and position Karan Chordia as a premium B2B AI consultant.
 
+Current editorial principle: Kramaniti content should not frame full automation as the default aspiration. The strongest point of view is human-collaborative system design: AI should assist, humans should lead, and workflows should define what is automated, assisted, reviewed, or kept human-led.
+
 ---
 
 ## 1. Content Pillars Overview
@@ -17,10 +19,10 @@ mindmap
       Cinematic prompts
       Focal lengths in AI
       FCPX + LLM workflows
-    Pillar 3: Content Automation
-      Make.com pipelines
+    Pillar 3: AI Enablement & Adoption
+      Human-collaborative workflows
       Repurposing blueprints
-      Slack agent builds
+      Review and override habits
     Pillar 4: Systems & Risk
       Trading frameworks
       B2B retainer models
@@ -49,12 +51,12 @@ mindmap
     *   *Twitter/X Thread:* "I shot commercial films for Hyatt Centric. Here is how I translate camera angles, focal lengths (35mm vs 85mm), and lighting dynamics (Rembrandt, chiaroscuro) into Midjourney and Runway prompts for high-fidelity brand assets."
     *   *Video Reel:* "Setting up a local LLM to speed up my Final Cut Pro video logging by 400%."
 
-### Pillar 3: Automated Content Engines
-*   **Purpose:** Creates demand for the core "AI Content Engine" retainer by explaining the system's architecture.
-*   **Audience Value:** Demonstrates how founders can save 20 hours a week by building automated pipelines that ingest raw footage and output multi-platform assets.
+### Pillar 3: AI Enablement & Adoption
+*   **Purpose:** Creates demand for Kramaniti's systems work by explaining how intelligent workflows become useful inside a real team.
+*   **Audience Value:** Teaches founders how to decide what should be automated, what should be AI-assisted, what requires review, and how to build adoption habits around new systems.
 *   **Content Examples:**
-    *   *LinkedIn Post:* "The 'One-to-Many' blueprint: How to take a 5-minute raw loom video from a founder, run it through a Claude API automation, and output a blog post, a newsletter, and 3 high-impact LinkedIn drafts."
-    *   *Twitter/X Screenshot:* "Behind the scenes of my Make.com + Slack workspace connection that automates article editing and SEO keyword clustering."
+    *   *LinkedIn Post:* "The human-collaborative workflow: how to decide what AI drafts, what the team reviews, and what the founder still owns."
+    *   *Newsletter:* "Why adoption fails after the demo: usage rules, override points, and the team habits that make an AI-assisted system stick."
 
 ### Pillar 4: Systems, Risk, & Quantitative Logic
 *   **Purpose:** Highlights analytical rigor, building confidence with enterprise buyers who want logical systems, not just creative fluff.

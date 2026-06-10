@@ -24,7 +24,7 @@ const steps = [
   },
   {
     title: 'Enable adoption',
-    copy: 'Document usage, edge cases, roles, and handoffs so the system becomes part of daily work.'
+    copy: 'Train the team on usage, edge cases, override points, and handoffs so AI assists clearly while humans continue to lead the work.'
   },
   {
     title: 'Translate into presence',

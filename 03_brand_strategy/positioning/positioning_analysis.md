@@ -29,7 +29,7 @@ Karan is positioned at the intersection of two distinct markets:
 ```
 
 ### The Core Positioning Statement
-*   `[Recommendation]`: **"We architect intelligent media systems. By bridging the gap between cinematic storytelling and algorithmic automation, we empower modern enterprises to scale their digital realities with precision, creativity, and autonomous AI infrastructure."**
+*   `[Recommendation]`: **"We architect human-collaborative intelligence systems. By bridging cinematic storytelling, operating clarity, and practical AI infrastructure, we help modern enterprises make better decisions, execute cleaner workflows, and communicate with more coherence."**
 
 ---
 
@@ -52,7 +52,7 @@ Karan is positioned at the intersection of two distinct markets:
 
 ### Vertical 2: B2B SaaS & Tech Startups (Seed to Series B)
 *   **ICP:** Founders and marketing heads of tech companies who have complex products but lack emotional storytelling or the internal developer capacity to design automation workflows.
-*   **Core Offer:** Building automated content engines, custom-trained customer service bots, and AI strategy blueprints.
+*   **Core Offer:** Building AI-assisted content workflows, practical decision-support systems, adoption playbooks, and AI strategy blueprints.
 
 ### Vertical 3: Legacy Creative & Marketing Agencies
 *   **ICP:** Traditional Indian marketing agencies who want to offer AI services to their clients but lack prompt engineering or API integration talent.

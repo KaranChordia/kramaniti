@@ -44,6 +44,10 @@ const principles = [
     copy: 'Systems should reduce friction, support better decisions, and preserve human judgment. Complexity is not a sign of sophistication.'
   },
   {
+    title: 'Human-Collaborative Systems',
+    copy: 'AI should assist. Humans should lead. Some steps can be automated, some should be AI-assisted, and some must stay with the people closest to the context.'
+  },
+  {
     title: 'Coherent Presence',
     copy: 'Content should not exist for volume alone. It should make the brand easier to understand, easier to trust, and more accurately connected to the value being created inside the business.'
   }

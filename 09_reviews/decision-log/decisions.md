@@ -137,3 +137,32 @@ This log registers the major strategic and structural decisions made during the 
     *   Use the title "Legal & Compliance Advisor" only.
     *   Frame the work as advisory and internal support, not a public legal service offering.
     *   Avoid implying a formal company appointment beyond advisory support unless separately approved.
+
+### Decision 10: Integrate AI Enablement & Adoption as a Service Layer
+*   **Date:** 2026-06-11
+*   **Area:** Website, service architecture, internal positioning
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Add AI Enablement & Adoption as an explicit capability layer inside the existing Kramaniti service architecture, while preserving the homepage's three primary service cards.
+*   **Rationale:** Kramaniti should not communicate full automation as the default outcome. The service architecture now makes adoption, training, usage documentation, override rules, and human review checkpoints part of systems delivery without repositioning the brand as a generic automation agency.
+*   **Source or Evidence:** Founder direction to integrate AI Enablement & Adoption carefully, preserve existing messaging, and reflect the principle: AI should assist, humans should lead.
+*   **Affected Files:**
+    *   `website/src/components/sections/Services.tsx`
+    *   `website/src/components/sections/Services.module.css`
+    *   `website/src/components/sections/Workflows.tsx`
+    *   `website/src/app/founder/page.tsx`
+    *   `06_ai_agent_context/system_prompts/master_context.md`
+    *   `06_ai_agent_context/system_prompts/studio_knowledge_base.md`
+    *   `03_brand_strategy/narrative/brand_narrative.md`
+    *   `03_brand_strategy/offers/service_packages.md`
+    *   `03_brand_strategy/positioning/positioning_analysis.md`
+    *   `04_content_system/drafts/why_scaling_chaos_breaks_business.md`
+    *   `05_ai_strategy/workflows/ai_service_workflows.md`
+    *   `04_content_system/pillars/content_pillars.md`
+    *   `docs/kramaniti_site_implementation_plan.md`
+    *   `website/src/data/insights.ts`
+*   **Alternatives Rejected:**
+    1.  *Adding a fourth homepage service card:* Rejected because the current website rules and service architecture keep the homepage centered on three primary offers.
+    2.  *Keeping Enablement internal only:* Rejected because adoption is now part of the public service promise, but should remain secondary to the existing offer architecture.
+*   **Claim Guardrails:**
+    *   Do not imply hands-free operations, replacing teams with AI, or full automation by default.
+    *   Keep public copy focused on human-collaborative systems, operating clarity, decision support, and team adoption.

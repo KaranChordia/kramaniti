@@ -22,6 +22,8 @@ The default sequence is:
 
 Kramaniti should communicate that a brand does not need automation everywhere. It needs better thinking, better workflows, and better systems in the right places.
 
+Kramaniti should also communicate that AI adoption is a human-collaborative design problem, not a blind automation mandate. Some workflow steps should be automated. Some should be AI-assisted. Some must remain human-led. AI should assist; humans should lead.
+
 ## 3. What Kramaniti Does
 
 Kramaniti works across three layers:
@@ -54,6 +56,8 @@ Possible deliverables:
 - Automation pipelines
 - API-based workflow integrations
 - Team handoff documentation
+- AI Enablement & Adoption guidance
+- Usage documentation, override rules, and human review checkpoints
 
 ### Layer 3: Content
 
@@ -81,11 +85,13 @@ Public service architecture should center on:
 
 2. Systems Engineering
    - For brands ready to turn workflows into internal tools.
-   - Typical outputs: custom workflows, practical AI tools, CRM/process integrations, internal systems, team handoff documentation.
+   - Typical outputs: custom workflows, practical AI tools, CRM/process integrations, internal systems, team handoff documentation, adoption guidance, override rules, and human review checkpoints.
 
 3. Complete Lifecycle Retainer
    - For brands that want strategy, systems, and content working together continuously.
-   - Typical outputs: system maintenance, content production, monthly optimization, workflow improvements, brand communication support.
+   - Typical outputs: system maintenance, adoption support, content production, monthly optimization, workflow improvements, brand communication support.
+
+AI Enablement & Adoption should be treated as a capability layer inside the service architecture rather than a replacement for the three public offers. Its purpose is to help teams understand how to use intelligent systems, when to rely on AI, when to override it, and how to bring the ecosystem into daily operations with clarity.
 
 Do not reintroduce public homepage pricing unless the founder explicitly approves it.
 

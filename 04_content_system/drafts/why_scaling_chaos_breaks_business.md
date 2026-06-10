@@ -24,7 +24,7 @@ Once you know where the bottlenecks are, the instinct is to build a massive, com
 
 Don't. 
 
-Scale requires stable infrastructure. A robust business architecture isn't built by downloading twenty different AI wrappers. It’s built by designing an [Autonomous Agent Architecture](../../03_brand_strategy/offers/service_packages.md) that connects your core customer touchpoints directly to your database. Whether that's an internal agent that scores leads or a pipeline that handles onboarding, the system must be tailored to *your* data, not a generic template. 
+Scale requires stable infrastructure. A robust business architecture isn't built by downloading twenty different AI wrappers. It’s built by designing an [Intelligence System Build](../../03_brand_strategy/offers/service_packages.md) that connects your core customer touchpoints to the right records, review points, and handoffs. Whether that's an internal system that scores leads or a pipeline that supports onboarding, the workflow must be tailored to *your* data, your team, and the decisions that should remain human-led.
 
 If you try to scale before your internal systems are rock solid, the friction will compound, and your customer experience will fracture.
 

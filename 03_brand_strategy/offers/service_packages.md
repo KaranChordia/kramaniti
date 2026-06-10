@@ -2,6 +2,8 @@
 
 This document structures the core commercial services offered by the consultancy, outlining the scope, deliverables, pricing, and strategic purpose of each tier.
 
+Current positioning note: Kramaniti does not sell blind automation as the default outcome. AI Enablement & Adoption is a capability layer across the offer ladder: the work should define what can be automated, what should be AI-assisted, what requires human review, and how the client team will use the system in daily operations.
+
 ---
 
 ## 1. The Offer Ladder Overview
@@ -12,7 +14,7 @@ This document structures the core commercial services offered by the consultancy
                       │  AI-Powered Content Engine (₹1.2L - ₹2.5L/mo)
                       │
                       │  [Tier 3: Premium Build]
-                      │  Autonomous Agent Architecture (₹3L - ₹6L build)
+                      │  Intelligence System Build (₹3L - ₹6L build)
                       │
                       │  [Tier 2: Core Project]
                       │  Founder Narrative Kit (₹1.5L - ₹3L project)
@@ -35,6 +37,7 @@ This document structures the core commercial services offered by the consultancy
 *   **Deliverables:**
     *   **AI Stack Map:** Tool recommendations (LLMs, scraping engines, automation pipelines).
     *   **1 Prototype Specification:** Detailed plan for one high-impact custom GPT or automation workflow.
+    *   **Adoption Readiness Notes:** Where AI should assist, where human review is required, and what team habits or documentation are needed before implementation.
 *   **Pricing Shape:** Flat fee: **₹75,000 – ₹1,50,000** ($1,000 – $2,000 USD) (`[Recommendation]`).
 *   **Timeline:** 2 – 3 weeks.
 
@@ -51,28 +54,31 @@ This document structures the core commercial services offered by the consultancy
 *   **Pricing Shape:** Project fee: **₹1,50,000 – ₹3,00,000** ($2,000 – $4,000 USD) (`[Recommendation]`).
 *   **Timeline:** 4 – 6 weeks.
 
-### Tier 3: Autonomous Agent Architecture (Premium Build)
-*   **Purpose:** High-ticket, technical implementation of AI agents and custom-coded automations integrated directly into company databases or Slack/CRM.
+### Tier 3: Intelligence System Build (Premium Build)
+*   **Purpose:** High-ticket implementation of practical AI-assisted systems, internal tools, and controlled workflow support integrated into company databases or Slack/CRM.
 *   **Target Client:** Series-A/B SaaS startups, larger recruiting/workforce consulting firms.
 *   **Scope:**
-    *   Design and development of custom-trained internal AI agents (fine-tuned on company data or utilizing advanced RAG architectures).
-    *   Integration of LLM APIs with internal tools (e.g., automated Slack bots, HubSpot lead scoring, email drafting tools).
+    *   Design and development of internal AI support systems, with clear limits on what AI can draft, recommend, update, or escalate.
+    *   Integration of LLM APIs with internal tools (e.g., Slack support flows, HubSpot lead scoring, email drafting tools with human review).
+    *   AI Enablement & Adoption guidance so team members understand usage, override points, and handoff responsibilities.
 *   **Deliverables:**
-    *   **1 Custom AI Agent System:** Operational code / cloud-hosted agent.
-    *   **1 API Automation Pipeline:** Connects customer touchpoints to the database.
-    *   **User Training & Handoff Playbook.**
+    *   **1 Custom Intelligence System:** Operational code, workflow support, or cloud-hosted internal tool.
+    *   **1 Controlled Workflow Pipeline:** Connects customer touchpoints to the database with review, exception, and escalation logic.
+    *   **User Training & Handoff Playbook:** Includes usage documentation, override rules, human review checkpoints, and maintenance notes.
 *   **Pricing Shape:** Project build fee: **₹3,00,000 – ₹6,00,000** ($4,000 – $8,000 USD) + optional support fee (`[Recommendation]`).
 *   **Timeline:** 6 – 8 weeks.
 
-### Tier 4: AI-Powered Content Engine (Monthly Retainer)
-*   **Purpose:** Long-term recurring revenue. Karan’s practice acts as the external "AI Content Director," managing and executing the brand's continuous distribution engine.
+### Tier 4: AI-Assisted Content & Alignment Retainer (Monthly Retainer)
+*   **Purpose:** Long-term recurring revenue. Karan’s practice acts as an external strategy, systems, and content partner, helping the brand keep its operating systems and communication aligned.
 *   **Target Client:** Premium co-working networks, prop-tech platforms, agency partners.
 *   **Scope:**
     *   Ongoing content strategy, video editing direction, and script coaching.
     *   Maintenance and optimization of custom AI repurposing pipelines.
+    *   Monthly adoption review: what the team is using, what needs clarification, and what should remain human-led.
 *   **Deliverables:**
-    *   **Weekly Content Assets:** Automated generation and scheduling of newsletters, articles, and short-form video cutdowns.
-    *   **Monthly Analytics Dashboard & Strategy Iteration.**
+    *   **Weekly Content Assets:** AI-assisted drafting, repurposing, and scheduling support for newsletters, articles, and short-form video cutdowns.
+    *   **Monthly Alignment Dashboard & Strategy Iteration.**
+    *   **Adoption Support:** Usage notes, workflow refinements, and human review checkpoints for any recurring system.
 *   **Pricing Shape:** Monthly retainer: **₹1,20,000 – ₹2,50,000/month** ($1,500 – $3,000 USD) (`[Recommendation]`).
     *   *Constraint:* Minimum 3-month commitment, billed upfront.
 *   **Timeline:** Ongoing.

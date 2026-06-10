@@ -20,8 +20,8 @@ const tiers = [
     id: 2,
     title: 'Intelligence System Build',
     label: 'PRACTICAL BUILD',
-    summary: 'For brands ready to turn operational clarity into practical workflows, internal tools, and decision-support systems.',
-    deliverables: ['Workflow architecture', 'Practical AI-assisted systems', 'CRM, documentation, and process integrations', 'Internal tool design', 'Team handoff and usage documentation'],
+    summary: 'For brands ready to turn operational clarity into practical workflows, internal tools, and decision-support systems people can actually use.',
+    deliverables: ['Workflow architecture', 'Practical AI-assisted systems', 'CRM, documentation, and process integrations', 'Internal tool design', 'Usage documentation, override rules, and human review checkpoints'],
     ctaText: 'Scope the First System',
     isPopular: true
   },
@@ -29,8 +29,8 @@ const tiers = [
     id: 3,
     title: 'Alignment Retainer',
     label: 'CONTINUITY',
-    summary: 'For brands that want their systems, workflows, and brand communication to keep improving together.',
-    deliverables: ['System refinement and maintenance', 'Workflow optimization', 'Content and narrative direction', 'Monthly alignment review', 'Brand communication support'],
+    summary: 'For brands that want their systems, workflows, adoption habits, and brand communication to keep improving together.',
+    deliverables: ['System refinement and maintenance', 'Workflow optimization', 'Adoption support and team enablement', 'Content and narrative direction', 'Monthly alignment review'],
     ctaText: 'Explore Ongoing Alignment',
     isPopular: false
   }
@@ -93,6 +93,21 @@ export function Services() {
               </div>
             </Card>
           ))}
+        </div>
+
+        <div className={`glass-border-layer ${styles.enablementLayer} ${styles.serviceGlass} ${isVisible ? styles.visible : ''}`}>
+          <div className={styles.enablementCopy}>
+            <span className="micro-label">AI Enablement & Adoption</span>
+            <h4>Human-collaborative, not fully automated.</h4>
+            <p className="text-secondary caption">
+              We help your team understand, adopt, and use the intelligent systems created for your brand. The work defines when AI should assist, when people should override it, and which decisions must remain human-led.
+            </p>
+          </div>
+          <div className={styles.enablementPrinciples} aria-label="AI enablement principles">
+            <span>Automated where useful</span>
+            <span>AI-assisted where judgment needs support</span>
+            <span>Human-led where trust, context, or taste matters</span>
+          </div>
         </div>
       </div>
     </section>

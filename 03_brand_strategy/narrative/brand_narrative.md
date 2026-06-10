@@ -12,7 +12,7 @@ This document outlines the core storytelling narrative, bios of varying lengths,
 > 
 > But as the digital landscape evolved, so did our methodology. Recognizing that the future of media was not just captured, but generated, we underwent a rigorous period of technological evolution. We spent years deep within complex algorithmic data, high-frequency market systems, and the foundational models of the AI boom. 
 > 
-> Today, we bring that empirical rigor back to the creative process. We don't just create content; we build the AI agents, the autonomous workflows, and the generative pipelines that allow the world's most innovative companies to scale their narratives infinitely."
+> Today, we bring that empirical rigor back to the creative process. We do not just create content; we design the AI-assisted systems, review loops, and generative workflows that help modern companies communicate with more clarity and consistency."
 
 ---
 
@@ -22,7 +22,7 @@ This document outlines the core storytelling narrative, bios of varying lengths,
 > "I help founders and tech brands turn complex ideas into cinematic stories and AI-powered content engines."
 
 ### 100-Word Professional Bio (`[Fact]` / `[Recommendation]`)
-> "Karan Chordia is a Bengaluru-based AI Architect and Technology Consultant who bridges the gap between cinematic storytelling and computational logic. Originally a Content Director who mapped the rise of WeWork India and premium hospitality brands, Karan spent years studying algorithmic systems, trading markets, and generative frameworks. Today, he operates at the intersection of media and code, designing custom AI agents, workflow automations, and high-impact brand kits for startups, co-working networks, and B2B tech organizations looking to automate and scale their digital operations."
+> "Karan Chordia is a Bengaluru-based AI Architect and Technology Consultant who bridges the gap between cinematic storytelling and computational logic. Originally a Content Director who mapped the rise of WeWork India and premium hospitality brands, Karan spent years studying algorithmic systems, trading markets, and generative frameworks. Today, he operates at the intersection of media and code, designing practical AI-assisted systems, workflow support, and high-impact brand kits for startups, co-working networks, and B2B tech organizations looking to improve how their operations and communication work together."
 
 ### 250-Word Executive Bio (`[Fact]` / `[Recommendation]`)
 > "Karan Chordia is a Bengaluru-based AI Architect, storyteller, and systems consultant with a decade-long track record of operating at the frontier of emerging technologies. 
@@ -33,7 +33,7 @@ This document outlines the core storytelling narrative, bios of varying lengths,
 > 
 > With the rise of generative artificial intelligence, Karan transitioned this computational rigor into tool-building. As AI Architect at Aimpact Space, he designed custom GPT architectures and became an active contributor to OpenAI developer discussions on knowledge retrieval and automation workflows. Following a successful engagement building internal automation tools and brand assets for Nexocean, Karan launched a productized consultancy via `karan.pop.site`.
 > 
-> Today, he partners with scaling founders, B2B SaaS firms, and real estate developers to audit their operations, build bespoke AI agents, and implement automated content engines that drive inbound growth and efficiency."
+> Today, he partners with scaling founders, B2B SaaS firms, and real estate developers to audit their operations, build practical intelligence systems, and implement AI-assisted content workflows that support clearer decisions, stronger adoption, and more coherent brand growth."
 
 ---
 

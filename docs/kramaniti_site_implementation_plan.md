@@ -10,6 +10,8 @@ The website has been refined around the foundation document's central positionin
 
 The primary conversion path is "Book an AI Workflow Audit." All major homepage CTAs point to the contact/audit section rather than assuming a live Calendly or backend webhook.
 
+2026-06-11 update: AI Enablement & Adoption is now integrated as a visible capability layer inside the existing three-service architecture. It does not replace the homepage service structure. The public principle is human-collaborative systems: AI should assist, humans should lead, and each workflow should clarify what is automated, AI-assisted, reviewed, or kept human-led.
+
 ## 2. Current Website Audit
 
 The project is a Next.js 16 App Router site under `website/`, using React 19, CSS Modules, static export, and a root custom-domain deployment path. The existing site already had a strong visual direction: dark premium palette, gold accents, animated section atmospheres, modular homepage sections, a founder page, and an insights area.
@@ -49,8 +51,8 @@ Updated homepage:
 - Hero: Rewritten with the approved headline, foundation-document subheading, primary audit CTA, and secondary method CTA.
 - Problem: Added a new section replacing the client marquee. It explains that most brands have a workflow clarity problem, not an AI problem.
 - Method: Reframed the old story/lifecycle section around Strategy, Systems, and Content.
-- Services: Rebuilt the offer cards around Foundation Strategy, Systems Engineering, and Complete Lifecycle Retainer. Public pricing remains removed.
-- How It Works: Rewrote the old pipeline section into a six-step process: Diagnose, Design, Build, Train, Communicate, Improve.
+- Services: Rebuilt the offer cards around Foundation Strategy, Systems Engineering, and Complete Lifecycle Retainer. Public pricing remains removed. AI Enablement & Adoption now appears as a supporting layer beneath the three-card architecture, not as a fourth primary card.
+- How It Works: Rewrote the old pipeline section into a six-step process: Diagnose, Design, Build, Train, Communicate, Improve. The adoption step now clarifies usage, edge cases, override points, handoffs, and human-led review.
 - Credibility: Removed from the homepage in the later selected-work cleanup. Public proof should now be handled through dedicated Work pages and approved assets, not a homepage Proof section.
 - Founder Preview: Added a compact founder-led bridge to the full founder page.
 - Contact: Rewritten around "Book an AI Workflow Audit" and the first workflow worth systemizing.
@@ -92,6 +94,8 @@ Primary homepage language now emphasizes:
 - Workflow audits
 - Practical AI infrastructure
 - Internal systems
+- AI Enablement & Adoption
+- Human-collaborative systems
 - Connected growth pipelines
 - Cinematic communication
 - Founder-led, first-principles thinking
@@ -104,6 +108,7 @@ Removed or reduced on first-impression surfaces:
 - "Trusted By"
 - Broad automation-first positioning
 - Technical-first descriptions of delivery
+- Fully automated or hands-free outcomes as the default promise
 
 ## 7. Credibility and Client-Claim Audit
 
