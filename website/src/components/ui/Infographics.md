@@ -133,6 +133,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: A four-card brief board moving from operational signal to retained evidence, owned interpretation, and public presence.
 * **Selection Criteria**: Choose this when the essay needs to bridge operations, documentation, founder judgment, and external communication.
 
+## 16. Adoption Packet Checklist (Enablement Checklist)
+* **Component Name**: `AdoptionPacketChecklistInfographic`
+* **Trigger String**: `[infographic:adoption-packet-checklist]`
+* **Best Used For**: Showing the minimum adoption documentation needed before an AI-assisted workflow becomes daily work.
+* **Visuals**: A two-by-two checklist of workflow purpose, human owner, override rule, and retained record.
+* **Selection Criteria**: Choose this when the essay explains enablement, rollout readiness, operating documentation, or human-AI responsibility boundaries.
+
+## 17. Assist, Lead, Override Map (Human-AI Boundary Map)
+* **Component Name**: `AssistLeadOverrideMapInfographic`
+* **Trigger String**: `[infographic:assist-lead-override-map]`
+* **Best Used For**: Separating automated, AI-assisted, and human-led work inside a workflow.
+* **Visuals**: A three-column responsibility map with an emphasized human-led standard.
+* **Selection Criteria**: Choose this when the essay needs to explain where AI should assist, where systems can automate, and where people must remain accountable.
+
 ---
 
 ## Decision Flowchart for Content Creators

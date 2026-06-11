@@ -1353,3 +1353,86 @@ export function IntelligenceToPresenceBriefInfographic() {
     </div>
   );
 }
+
+export function AdoptionPacketChecklistInfographic() {
+  const packetItems = [
+    {
+      icon: Radar,
+      label: 'Workflow purpose',
+      copy: 'Which recurring route is being supported, and why it matters commercially.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Human owner',
+      copy: 'Who remains accountable for quality, judgment, exceptions, and approval.',
+    },
+    {
+      icon: GitBranch,
+      label: 'Override rule',
+      copy: 'The condition that stops the system and brings a person back into the route.',
+    },
+    {
+      icon: FolderSync,
+      label: 'Retained record',
+      copy: 'Where the approved output, correction, or next action is stored for reuse.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Adoption Packet Checklist</div>
+      <div className={styles.packetChecklist}>
+        {packetItems.map((item, index) => {
+          const Icon = item.icon;
+
+          return (
+            <div className={`${styles.packetItem} ${index === packetItems.length - 1 ? styles.packetItemHighlight : ''}`} key={item.label}>
+              <div className={index === packetItems.length - 1 ? styles.packetIconHighlight : styles.packetIcon}>
+                <Icon size={18} />
+              </div>
+              <div className={styles.packetContent}>
+                <span className={styles.packetNumber}>{String(index + 1).padStart(2, '0')}</span>
+                <h4>{item.label}</h4>
+                <p>{item.copy}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function AssistLeadOverrideMapInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Assist, Lead, Override Map</div>
+      <div className={styles.boundaryMap}>
+        <div className={styles.boundaryColumn}>
+          <span className={styles.boundaryStep}>01</span>
+          <h4>Automated where useful</h4>
+          <p>Repetitive routing, formatting, reminders, extraction, and low-risk updates can move without adding judgment debt.</p>
+          <div className={styles.boundaryTag}>System handles repetition</div>
+        </div>
+
+        <div className={styles.boundaryDivider}></div>
+
+        <div className={`${styles.boundaryColumn} ${styles.boundaryColumnAssist}`}>
+          <span className={styles.boundaryStepAssist}>02</span>
+          <h4>AI-assisted where judgment needs support</h4>
+          <p>Drafting, summarizing, classification, proposal prep, research, and content planning should support a human decision owner.</p>
+          <div className={styles.boundaryTagAssist}>AI supports the decision</div>
+        </div>
+
+        <div className={styles.boundaryDivider}></div>
+
+        <div className={`${styles.boundaryColumn} ${styles.boundaryColumnHighlight}`}>
+          <span className={styles.boundaryStepHighlight}>03</span>
+          <h4>Human-led where trust matters</h4>
+          <p>Pricing judgment, client promises, sensitive communication, taste, exceptions, and final approvals stay with accountable people.</p>
+          <div className={styles.boundaryTagHighlight}>People own the standard</div>
+        </div>
+      </div>
+    </div>
+  );
+}

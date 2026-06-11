@@ -30,7 +30,9 @@ import {
   WorkAsDoneAuditInfographic,
   AuditToAdoptionMapInfographic,
   PresenceReadinessGateInfographic,
-  IntelligenceToPresenceBriefInfographic
+  IntelligenceToPresenceBriefInfographic,
+  AdoptionPacketChecklistInfographic,
+  AssistLeadOverrideMapInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -177,6 +179,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:intelligence-to-presence-brief]') {
                   return <IntelligenceToPresenceBriefInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:adoption-packet-checklist]') {
+                  return <AdoptionPacketChecklistInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:assist-lead-override-map]') {
+                  return <AssistLeadOverrideMapInfographic key={index} />;
                 }
                 
                 // Parse gold highlights

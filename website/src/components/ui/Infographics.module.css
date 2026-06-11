@@ -1515,3 +1515,190 @@
   justify-content: center;
   color: rgba(201, 168, 76, 0.42);
 }
+
+.packetChecklist {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 820px) {
+  .packetChecklist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.packetItem {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 164px;
+}
+
+.packetItemHighlight {
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.11), rgba(20, 20, 24, 0.88));
+  border-color: rgba(201, 168, 76, 0.32);
+  box-shadow: 0 10px 26px rgba(201, 168, 76, 0.08);
+}
+
+.packetIcon,
+.packetIconHighlight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.packetIcon {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.packetIconHighlight {
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.28);
+}
+
+.packetContent {
+  min-width: 0;
+}
+
+.packetNumber {
+  display: block;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--color-burnished-gold);
+  margin-bottom: 8px;
+}
+
+.packetContent h4,
+.boundaryColumn h4 {
+  margin: 0;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 19px;
+  line-height: 1.18;
+  color: var(--text-primary);
+}
+
+.packetContent p,
+.boundaryColumn p {
+  margin: 10px 0 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  line-height: 1.62;
+  color: var(--text-secondary);
+}
+
+.boundaryMap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 860px) {
+  .boundaryMap {
+    grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr) 1px minmax(0, 1fr);
+  }
+}
+
+.boundaryColumn {
+  padding: 22px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.boundaryColumnAssist {
+  background: rgba(201, 168, 76, 0.045);
+  border-color: rgba(201, 168, 76, 0.18);
+}
+
+.boundaryColumnHighlight {
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.12), rgba(20, 20, 24, 0.88));
+  border-color: rgba(201, 168, 76, 0.34);
+  box-shadow: 0 10px 26px rgba(201, 168, 76, 0.08);
+}
+
+.boundaryStep,
+.boundaryStepAssist,
+.boundaryStepHighlight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.boundaryStep {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.boundaryStepAssist {
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.11);
+  border: 1px solid rgba(201, 168, 76, 0.24);
+}
+
+.boundaryStepHighlight {
+  color: #0d0d0f;
+  background: var(--color-burnished-gold);
+}
+
+.boundaryTag,
+.boundaryTagAssist,
+.boundaryTagHighlight {
+  display: inline-flex;
+  margin-top: 18px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.boundaryTag {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.boundaryTagAssist {
+  color: rgba(255, 248, 224, 0.9);
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.18);
+}
+
+.boundaryTagHighlight {
+  color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.11);
+  border: 1px solid rgba(201, 168, 76, 0.24);
+}
+
+.boundaryDivider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.28), transparent);
+}
+
+@media (min-width: 860px) {
+  .boundaryDivider {
+    width: 1px;
+    height: auto;
+    background: linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.28), transparent);
+  }
+}
