@@ -147,6 +147,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: A three-column responsibility map with an emphasized human-led standard.
 * **Selection Criteria**: Choose this when the essay needs to explain where AI should assist, where systems can automate, and where people must remain accountable.
 
+## 18. Frontstage / Backstage Alignment (Promise Delivery Bridge)
+* **Component Name**: `FrontstageBackstageBridgeInfographic`
+* **Trigger String**: `[infographic:frontstage-backstage-bridge]`
+* **Best Used For**: Showing whether a public promise, sales message, or brand claim is supported by the internal workflow behind it.
+* **Visuals**: A three-part decision bridge from frontstage promise to handoff check to backstage operating support.
+* **Selection Criteria**: Choose this when the essay connects customer-facing communication with the hidden service route, owner, record, and exception path.
+
+## 19. Alignment Review Rhythm (Operating Review Loop)
+* **Component Name**: `AlignmentReviewRhythmInfographic`
+* **Trigger String**: `[infographic:alignment-review-rhythm]`
+* **Best Used For**: Turning observed friction into updated operating standards and sharper brand presence.
+* **Visuals**: A four-card sequence that moves from observed friction to backstage route, updated standard, and public presence.
+* **Selection Criteria**: Choose this when the essay frames alignment as a recurring review rhythm rather than a one-time audit.
+
 ---
 
 ## Decision Flowchart for Content Creators

@@ -1436,3 +1436,94 @@ export function AssistLeadOverrideMapInfographic() {
     </div>
   );
 }
+
+export function FrontstageBackstageBridgeInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Frontstage / Backstage Alignment</div>
+      <div className={styles.presenceGate}>
+        <div className={styles.gatePanel}>
+          <div className={styles.gatePanelLabel}>
+            <Megaphone className={styles.labelIconDanger} size={16} />
+            Frontstage promise
+          </div>
+          <div className={styles.gateIssue}>Website message</div>
+          <div className={styles.gateIssue}>Sales conversation</div>
+          <div className={styles.gateIssue}>Customer expectation</div>
+        </div>
+
+        <div className={styles.gateCore}>
+          <div className={styles.gateCoreIcon}>
+            <GitBranch size={22} />
+          </div>
+          <div className={styles.gateCoreTitle}>Handoff?</div>
+          <p className={styles.gateCoreCopy}>The promise is only safe when the internal route can support it.</p>
+        </div>
+
+        <div className={`${styles.gatePanel} ${styles.gatePanelReady}`}>
+          <div className={styles.gatePanelLabelGold}>
+            <CheckCircle2 className={styles.labelIconGold} size={16} />
+            Backstage system
+          </div>
+          <div className={styles.gateReadyItem}>Workflow owner is clear</div>
+          <div className={styles.gateReadyItem}>Source record is current</div>
+          <div className={styles.gateReadyItem}>Exception path is known</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function AlignmentReviewRhythmInfographic() {
+  const stages = [
+    {
+      icon: Radar,
+      label: 'Observed friction',
+      copy: 'A customer question, handoff delay, repeated correction, or unclear promise appears in real work.',
+    },
+    {
+      icon: Workflow,
+      label: 'Backstage route',
+      copy: 'The team maps which workflow, owner, record, and decision point created the visible issue.',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Updated standard',
+      copy: 'The operating note, review rule, intake field, or handoff is revised where the work actually runs.',
+    },
+    {
+      icon: Megaphone,
+      label: 'Sharper presence',
+      copy: 'The brand message, sales language, or content angle now reflects a route the business can repeat.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Alignment Review Rhythm</div>
+      <div className={styles.briefBoard}>
+        {stages.map((stage, index) => {
+          const Icon = stage.icon;
+
+          return (
+            <React.Fragment key={stage.label}>
+              <div className={`${styles.briefCard} ${index === stages.length - 1 ? styles.briefCardHighlight : ''}`}>
+                <div className={index === stages.length - 1 ? styles.briefIconHighlight : styles.briefIcon}>
+                  <Icon size={18} />
+                </div>
+                <div className={index === stages.length - 1 ? styles.briefLabelGold : styles.briefLabel}>{stage.label}</div>
+                <p className={index === stages.length - 1 ? styles.briefCopyGold : styles.briefCopy}>{stage.copy}</p>
+              </div>
+              {index < stages.length - 1 ? (
+                <div className={styles.briefConnector}>
+                  <ArrowRight className={styles.arrowIconDesktop} size={18} />
+                  <ArrowDown className={styles.arrowIconMobile} size={18} />
+                </div>
+              ) : null}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

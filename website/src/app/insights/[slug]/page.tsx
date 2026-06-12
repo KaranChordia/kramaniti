@@ -32,7 +32,9 @@ import {
   PresenceReadinessGateInfographic,
   IntelligenceToPresenceBriefInfographic,
   AdoptionPacketChecklistInfographic,
-  AssistLeadOverrideMapInfographic
+  AssistLeadOverrideMapInfographic,
+  FrontstageBackstageBridgeInfographic,
+  AlignmentReviewRhythmInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -185,6 +187,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:assist-lead-override-map]') {
                   return <AssistLeadOverrideMapInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:frontstage-backstage-bridge]') {
+                  return <FrontstageBackstageBridgeInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:alignment-review-rhythm]') {
+                  return <AlignmentReviewRhythmInfographic key={index} />;
                 }
                 
                 // Parse gold highlights
