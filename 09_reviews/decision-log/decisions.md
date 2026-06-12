@@ -166,3 +166,77 @@ This log registers the major strategic and structural decisions made during the 
 *   **Claim Guardrails:**
     *   Do not imply hands-free operations, replacing teams with AI, or full automation by default.
     *   Keep public copy focused on human-collaborative systems, operating clarity, decision support, and team adoption.
+
+### Decision 11: Create Digital Presence Orchestrator
+*   **Date:** 2026-06-11
+*   **Area:** Agent operating system, brand presence, content operations, governance
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Create the Digital Presence Orchestrator as the master growth agent for Kramaniti's public presence, supported by recurring specialist sub-agents for brand identity and distribution analytics plus the existing Brand Strategist, Content Director, Narrative Editor, Website Steward, Asset Librarian, and Proof and Governance Auditor.
+*   **Rationale:** Kramaniti needs the role a company would normally hire for when starting a serious digital presence: someone responsible for brand system, strategy, content, website direction, distribution, asset hygiene, performance review, and governance. The role should not be a generic marketing agent because Kramaniti's positioning requires strategy before tools, systems before scale, and content after clarity.
+*   **Source or Evidence:** Founder direction on 2026-06-11 to create a master Digital Presence Orchestrator with sub-agent delegation; existing master context and root `AGENTS.md` positioning.
+*   **Affected Files:**
+    *   `03_brand_strategy/AGENTS.md`
+    *   `03_brand_strategy/brand_system/brand_operating_kit.md`
+    *   `03_brand_strategy/brand_system/brand_decisions.md`
+    *   `04_content_system/AGENTS.md`
+    *   `04_content_system/calendar/content_calendar.md`
+    *   `04_content_system/campaigns/campaign_briefs.md`
+    *   `04_content_system/backlog/content_ideas_backlog.md`
+    *   `04_content_system/distribution/publishing_checklist.md`
+    *   `04_content_system/distribution/analytics_log.md`
+    *   `06_ai_agent_context/AGENTS.md`
+    *   `06_ai_agent_context/agents/digital_presence_orchestrator.json`
+    *   `06_ai_agent_context/agents/brand_identity_agent.json`
+    *   `06_ai_agent_context/agents/distribution_analytics_agent.json`
+    *   `06_ai_agent_context/agent_roles/agent_roles.md`
+    *   `06_ai_agent_context/agent_roles/kramaniti_agent_roster.md`
+    *   `06_ai_agent_context/routing/task_router.md`
+    *   `06_ai_agent_context/routing/task_router.json`
+    *   `06_ai_agent_context/system_prompts/master_context.md`
+    *   `06_ai_agent_context/memory/digital_presence_orchestrator/`
+    *   `08_assets/AGENTS.md`
+    *   `08_assets/asset_registry.md`
+    *   `09_reviews/AGENTS.md`
+    *   `09_reviews/proof_register.md`
+*   **Alternatives Rejected:**
+    1.  *Creating a generic marketing agent:* Rejected because it would dilute Kramaniti's first-principles systems positioning and likely push content before clarity.
+    2.  *Creating 15 new active agents at once:* Rejected because the system should feel like a small brand team with clear ownership, not an agent maze.
+    3.  *Leaving brand identity and distribution analytics as unnamed support tasks:* Rejected because both now need recurring files, cadence, and accountability inside the digital presence workflow.
+*   **Claim Guardrails:**
+    *   The orchestrator may draft, structure, audit, and recommend but may not publish without founder approval.
+    *   Proof-sensitive claims must be routed through `09_reviews/proof_register.md` and the Proof and Governance Auditor.
+    *   Client names, logos, testimonials, metrics, case studies, pricing changes, and public commitments require explicit approval.
+*   **Open Questions:**
+    *   Which public channels should be active first?
+    *   What approval cadence should the founder use for content and campaign review?
+    *   Which assets should be approved for repeated public use across social posts, decks, and website updates?
+
+### Decision 12: Build Studio Agent OS With LM Studio Local Model Bridge
+*   **Date:** 2026-06-11
+*   **Area:** Studio frontend, agent operations, local model infrastructure
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Add an Agent OS mode to Kramaniti Studio so the founder can manage agents, route tasks, inspect the roster, test a local LM Studio server, and send local-model prompts through a localhost-only Studio bridge.
+*   **Rationale:** The agent roster is now a recurring operating layer. It needs a frontend surface that feels like Kramaniti Studio, keeps work local-first, and lets the founder experiment with local models before adding durable backend infrastructure.
+*   **Source or Evidence:** Founder request on 2026-06-11 to build an operating system for managing agents in the frontend, powered by a local model downloaded through LM Studio.
+*   **Affected Files:**
+    *   `website/src/app/studio/page.tsx`
+    *   `website/src/app/studio/studio.module.css`
+    *   `website/src/lib/studio/agentOS.ts`
+    *   `website/src/lib/studio/lmStudio.ts`
+    *   `website/src/app/api/studio/lm-studio/models/route.ts`
+    *   `website/src/app/api/studio/lm-studio/chat/route.ts`
+    *   `docs/lm_studio_agent_os_setup.md`
+    *   `docs/kramaniti_site_implementation_plan.md`
+    *   `09_reviews/decision-log/decisions.md`
+*   **Alternatives Rejected:**
+    1.  *Creating a separate dashboard visual system:* Rejected because the founder asked for the frontend design to match the existing Kramaniti Studio page.
+    2.  *Adding a full backend workspace immediately:* Rejected for this iteration because the local bridge is enough for model calls; saved conversations, audit logs, and permissions can wait until the operating model stabilizes.
+    3.  *Trying to launch LM Studio from the website:* Rejected because the frontend should only call the local LM Studio server after the founder starts it in LM Studio.
+*   **Guardrails:**
+    *   Do not store secrets, client data, or private API keys in the repository.
+    *   Do not let the local model publish, approve proof, change pricing, or create external commitments.
+    *   Public-facing agent output remains behind Proof and Governance review and founder approval.
+*   **Open Questions:**
+    *   Nemotron 3 Nano 4B is the current local default for Studio Agent OS testing.
+    *   Should the next iteration add a backend audit log for conversations and task decisions?
+    *   Should Agent OS tasks eventually write back to repo files, a local database, or a hosted workspace?

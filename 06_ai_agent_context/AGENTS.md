@@ -24,6 +24,13 @@ Memory to maintain:
 - `routing/` (Task router logic)
 - `protocols/` (Communication and memory protocols)
 
+## Current Growth-Orchestration Agents
+
+- `agents/digital_presence_orchestrator.json`
+- `agents/brand_identity_agent.json`
+- `agents/distribution_analytics_agent.json`
+- `memory/digital_presence_orchestrator/`
+
 ## Agent Definition Standard
 
 Every major agent should define:

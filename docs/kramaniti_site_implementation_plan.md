@@ -171,6 +171,39 @@ Flagged:
 - Add one detailed, verified case-study page once evidence and permission are cleared.
 - Review the insights archive separately so technical articles remain useful without shaping the homepage's first impression.
 
+## 10.1 Kramaniti Studio Agent OS
+
+2026-06-11 update: Kramaniti Studio now includes an Agent OS mode inside `/studio`.
+
+[Recommendation] Agent management should stay inside Studio's existing planning workbench rather than becoming a disconnected admin dashboard. The mode keeps the same liquid-glass visual system, rectangular radius scale, and local-first operating pattern established for Studio tools.
+
+Added frontend capabilities:
+
+- Planner / Agents mode switch inside the floating Studio nav.
+- Agent OS tabs: Orchestrator, Roster, Tasks, LM Studio, and Runbook.
+- Local browser task queue stored under `kramaniti-agent-os-tasks-v1`.
+- Agent roster and routing data in `website/src/lib/studio/agentOS.ts`.
+- Task composer that routes founder goals to a lead agent, supporting agents, and approval gate.
+- Task board with Draft, Routed, In review, and Approved states.
+- LM Studio bridge that tests a local OpenAI-compatible server and can send a prompt through `/api/studio/lm-studio/chat/`.
+- Runbook panel with local model setup and governance constraints.
+
+Local model direction:
+
+- [Recommendation] The frontend should not try to launch LM Studio. The founder starts the local server from LM Studio's Developer tab or with `lms server start`.
+- [Recommendation] The Studio frontend should call the local Studio bridge, and the bridge should call LM Studio at `http://127.0.0.1:1234/v1` once the server is running.
+- [Constraint] The Agent OS may draft, route, and summarize, but it must not publish, invent proof, change pricing, or make external commitments.
+
+Related files:
+
+- `website/src/app/studio/page.tsx`
+- `website/src/app/studio/studio.module.css`
+- `website/src/lib/studio/agentOS.ts`
+- `website/src/lib/studio/lmStudio.ts`
+- `website/src/app/api/studio/lm-studio/models/route.ts`
+- `website/src/app/api/studio/lm-studio/chat/route.ts`
+- `docs/lm_studio_agent_os_setup.md`
+
 ## 11. Nexocean Portfolio Page
 
 - Added a dedicated selected-work page at `/work/nexocean`.

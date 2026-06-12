@@ -13,6 +13,8 @@ When a new task or request is received, the Master Coordinator evaluates the pri
 
 | Task Intent / Category | Lead Agent | Supporting Agents | Triggering Keywords / Scenarios |
 | :--- | :--- | :--- | :--- |
+| **Digital Presence Orchestration** | Digital Presence Orchestrator | Brand Strategist, Brand Identity Agent, Content Director, Website Steward, Distribution & Analytics Agent, Proof and Governance Auditor | "digital presence", "brand design kit", "public presence", "campaign plan", "content calendar", "brand system", "distribution plan" |
+| **Brand Identity System** | Brand Identity Agent | Brand Strategist, Asset Librarian, Website Steward | "brand kit", "logo usage", "visual identity", "typography", "color palette", "design consistency" |
 | **Website & Public Copy** | Website Steward | Brand Strategist, Narrative Editor, Proof and Governance Auditor | "update homepage", "SEO update", "change CTA", "new landing page" |
 | **Brand Strategy & Positioning** | Brand Strategist | Narrative Editor, Content Director | "repositioning", "ICP update", "messaging map", "brand identity" |
 | **Founder Story & Verification** | Founder Archivist | Narrative Editor, Proof and Governance Auditor | "update bio", "founder timeline", "Karan's background" |
@@ -20,6 +22,7 @@ When a new task or request is received, the Master Coordinator evaluates the pri
 | **Workflow Diagnosis & Roadmaps** | Workflow Architect | Systems Designer, Sales Operator | "workflow audit", "process map", "AI readiness" |
 | **System Specs & Documentation** | Systems Designer | Workflow Architect, Handoff QA Agent | "build this system", "integration map", "handoff docs", "prototype spec" |
 | **Content Creation & Planning** | Content Director | Narrative Editor, Brand Strategist | "LinkedIn post", "newsletter", "editorial calendar", "video script" |
+| **Distribution & Analytics** | Distribution & Analytics Agent | Content Director, Website Steward, Proof and Governance Auditor | "publishing checklist", "analytics log", "performance review", "distribution", "repeat revise stop" |
 | **Sales & Proposals** | Sales Operator | Offer Architect, Workflow Architect | "discovery call", "client proposal", "lead follow-up" |
 | **Business Operations & CRM** | Operations Lead | Website Steward, Sales Operator | "launch checklist", "setup CRM", "domain config", "client onboarding" |
 | **Proof Auditing & Risk Review** | Proof and Governance Auditor | Founder Archivist, Asset Librarian | "verify claim", "check permissions", "decision log", "audit public proof" |
@@ -30,4 +33,5 @@ When a new task or request is received, the Master Coordinator evaluates the pri
 
 - Do not create a new agent unless the work is recurring and clearly falls outside these defined routes.
 - If a task spans more than 3 categories, the Master Coordinator must break it down into smaller sequential tasks before routing.
+- If a task spans brand identity, strategy, content, website, distribution, assets, and proof, route it to the Digital Presence Orchestrator as the lead rather than treating it as a generic marketing task.
 - Any public-facing task must involve the Proof and Governance Auditor.

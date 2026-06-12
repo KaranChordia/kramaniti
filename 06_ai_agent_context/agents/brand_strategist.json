@@ -72,8 +72,10 @@
   "supporting_agents": [
     "narrative_editor",
     "offer_architect",
+    "brand_identity_agent",
     "website_steward",
-    "content_director"
+    "content_director",
+    "digital_presence_orchestrator"
   ],
   "escalation_triggers": [
     "Claims that require proof.",

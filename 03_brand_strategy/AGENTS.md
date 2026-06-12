@@ -18,11 +18,15 @@ Memory to maintain:
 
 - Narrative Editor: owns founder story, website copy direction, bios, and pitch language.
 - Offer Architect: owns service packaging, pricing logic, outcomes, and engagement ladders.
+- Brand Identity Agent: owns recurring brand design kit maintenance, logo usage rules, typography, color, and design consistency.
 - Identity Steward: owns visual identity rules, tone, color, typography, and brand consistency.
 - Digital Asset Strategist: owns naming, domains, handles, and public namespace planning.
+- Digital Presence Orchestrator: coordinates brand strategy with content, website, distribution, assets, and proof review when a task crosses public-presence areas.
 
 ## Core Files
 
+- `brand_system/brand_operating_kit.md`
+- `brand_system/brand_decisions.md`
 - `positioning/positioning_analysis.md`
 - `positioning/brand_identity_guidelines.md`
 - `positioning/visual_system_palette.md`

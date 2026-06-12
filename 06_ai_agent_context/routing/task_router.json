@@ -1,6 +1,44 @@
 {
   "routing_matrix": [
     {
+      "intent": "digital_presence_orchestration",
+      "lead_agent": "digital_presence_orchestrator",
+      "supporting_agents": [
+        "brand_strategist",
+        "brand_identity_agent",
+        "content_director",
+        "website_steward",
+        "distribution_analytics_agent",
+        "proof_governance_auditor"
+      ],
+      "triggers": [
+        "digital presence",
+        "brand design kit",
+        "public presence",
+        "campaign plan",
+        "content calendar",
+        "brand system",
+        "distribution plan"
+      ]
+    },
+    {
+      "intent": "brand_identity_system",
+      "lead_agent": "brand_identity_agent",
+      "supporting_agents": [
+        "brand_strategist",
+        "asset_librarian",
+        "website_steward"
+      ],
+      "triggers": [
+        "brand kit",
+        "logo usage",
+        "visual identity",
+        "typography",
+        "color palette",
+        "design consistency"
+      ]
+    },
+    {
       "intent": "website_public_copy",
       "lead_agent": "website_steward",
       "supporting_agents": [
@@ -101,6 +139,22 @@
         "editorial calendar",
         "video script",
         "content"
+      ]
+    },
+    {
+      "intent": "distribution_analytics",
+      "lead_agent": "distribution_analytics_agent",
+      "supporting_agents": [
+        "content_director",
+        "website_steward",
+        "proof_governance_auditor"
+      ],
+      "triggers": [
+        "publishing checklist",
+        "analytics log",
+        "performance review",
+        "distribution",
+        "repeat revise stop"
       ]
     },
     {

@@ -3,29 +3,56 @@
 import type { FormEvent, ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import {
+  Activity,
+  Bot,
+  Cable,
   BadgeCheck,
   Brain,
   CheckCircle2,
+  CircleAlert,
+  ClipboardCheck,
   ClipboardList,
+  Compass,
   FileText,
   FolderKanban,
   Gauge,
+  GitBranch,
   Layers3,
   Loader2,
   Moon,
   PenLine,
+  Play,
   Plus,
   RadioTower,
   RefreshCw,
   Search,
   Send,
+  Settings2,
   ShieldCheck,
   Sparkles,
   Sun,
   Target,
+  Terminal,
+  Users,
 } from 'lucide-react';
 import styles from './studio.module.css';
 import { ChatbotWidget } from '../../components/studio/ChatbotWidget';
+import {
+  AGENT_OS_ROSTER,
+  AGENT_OS_SEED_TASKS,
+  AGENT_OS_STORAGE_KEY,
+  AGENT_STATUS_COLUMNS,
+  AGENT_TASK_TYPES,
+  DEFAULT_LM_STUDIO_BASE_URL,
+  DEFAULT_LM_STUDIO_MODEL,
+  LM_STUDIO_CONFIG_STORAGE_KEY,
+  LM_STUDIO_PROMPT_TEMPLATE,
+  LM_STUDIO_SETUP_STEPS,
+  getAgentById,
+  getTaskTypeById,
+} from '../../lib/studio/agentOS';
+import { normalizeLMStudioBaseUrl } from '../../lib/studio/lmStudio';
+import type { AgentOSAgent, AgentTask, AgentTaskStatus } from '../../lib/studio/agentOS';
 import type { StudioIntake, StudioLayerId, StudioPlan } from '../../lib/studio/types';
 
 const DEFAULT_INTAKE: StudioIntake = {
@@ -80,7 +107,59 @@ type StudioProject = {
   entries: ProjectEntry[];
 };
 
+type StudioMode = 'planner' | 'agent-os';
+
+type AgentTabKey = 'orchestrator' | 'roster' | 'tasks' | 'lm-studio' | 'runbook';
+
+type LMStudioConfig = {
+  baseUrl: string;
+  model: string;
+};
+
+type LMStudioStatus = {
+  state: 'idle' | 'checking' | 'ready' | 'error' | 'generating';
+  message: string;
+};
+
+type AgentTaskDraft = {
+  title: string;
+  goal: string;
+  context: string;
+};
+
 const STORAGE_KEY = 'kramaniti-studio-projects-v1';
+
+const AGENT_TABS: Array<{
+  id: AgentTabKey;
+  shortLabel: string;
+  label: string;
+  description: string;
+}> = [
+  {
+    id: 'orchestrator',
+    shortLabel: 'Plan',
+    label: 'Plan',
+    description: 'Scope goals, select agents, and keep approvals visible.',
+  },
+  {
+    id: 'roster',
+    shortLabel: 'Roster',
+    label: 'Agent Roster',
+    description: 'Inspect standing agents, ownership, memory, and constraints.',
+  },
+  {
+    id: 'tasks',
+    shortLabel: 'Tasks',
+    label: 'Task Queue',
+    description: 'Route requests and move work through review states.',
+  },
+  {
+    id: 'lm-studio',
+    shortLabel: 'Model',
+    label: 'Model',
+    description: 'Connect to the LM Studio localhost server.',
+  },
+];
 
 const PROCESS_LABELS: Record<StudioProcessKey, string> = {
   clarity: 'Clarity',
@@ -138,6 +217,49 @@ const readStoredProjects = () => {
   }
 };
 
+const readStoredAgentTasks = () => {
+  if (typeof window === 'undefined') return AGENT_OS_SEED_TASKS;
+
+  try {
+    const storedTasks = window.localStorage.getItem(AGENT_OS_STORAGE_KEY);
+    if (!storedTasks) return AGENT_OS_SEED_TASKS;
+
+    const parsedTasks = JSON.parse(storedTasks) as AgentTask[];
+    return Array.isArray(parsedTasks) && parsedTasks.length > 0 ? parsedTasks : AGENT_OS_SEED_TASKS;
+  } catch (storageError) {
+    console.warn('Could not load Agent OS tasks from local storage.', storageError);
+    return AGENT_OS_SEED_TASKS;
+  }
+};
+
+const readStoredLMStudioConfig = (): LMStudioConfig => {
+  if (typeof window === 'undefined') {
+    return { baseUrl: DEFAULT_LM_STUDIO_BASE_URL, model: DEFAULT_LM_STUDIO_MODEL };
+  }
+
+  try {
+    const storedConfig = window.localStorage.getItem(LM_STUDIO_CONFIG_STORAGE_KEY);
+    if (!storedConfig) return { baseUrl: DEFAULT_LM_STUDIO_BASE_URL, model: DEFAULT_LM_STUDIO_MODEL };
+
+    const parsedConfig = JSON.parse(storedConfig) as Partial<LMStudioConfig>;
+    const storedBaseUrl = parsedConfig.baseUrl?.includes('localhost:1234')
+      ? DEFAULT_LM_STUDIO_BASE_URL
+      : parsedConfig.baseUrl;
+
+    return {
+      baseUrl: storedBaseUrl || DEFAULT_LM_STUDIO_BASE_URL,
+      model: parsedConfig.model || DEFAULT_LM_STUDIO_MODEL,
+    };
+  } catch (storageError) {
+    console.warn('Could not load LM Studio config from local storage.', storageError);
+    return { baseUrl: DEFAULT_LM_STUDIO_BASE_URL, model: DEFAULT_LM_STUDIO_MODEL };
+  }
+};
+
+const createAgentTaskId = () => `agent-task-${Date.now()}`;
+
+const formatAgentName = (agentId: string) => getAgentById(agentId)?.name ?? agentId.replace(/_/g, ' ');
+
 const LAYERS: Array<{
   id: StudioLayerId;
   label: string;
@@ -184,8 +306,9 @@ const LAYERS: Array<{
 
 export default function KramanitiStudio() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [mode, setMode] = useState<'planner' | 'agent-foundation'>('planner');
+  const [mode, setMode] = useState<StudioMode>('planner');
   const [activeLayer, setActiveLayer] = useState<StudioLayerId>('intake');
+  const [activeAgentTab, setActiveAgentTab] = useState<AgentTabKey>('orchestrator');
   const [intake, setIntake] = useState<StudioIntake>(DEFAULT_INTAKE);
   const [plan, setPlan] = useState<StudioPlan | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -200,7 +323,27 @@ export default function KramanitiStudio() {
     title: '',
     note: '',
   });
+  const [agentTasks, setAgentTasks] = useState<AgentTask[]>(readStoredAgentTasks);
+  const [selectedAgentId, setSelectedAgentId] = useState('digital_presence_orchestrator');
+  const [selectedTaskTypeId, setSelectedTaskTypeId] = useState('digital_presence_plan');
+  const [agentTaskDraft, setAgentTaskDraft] = useState({
+    title: 'Plan Kramaniti digital presence for the next month',
+    goal: 'Create a practical operating plan with owner agents, proof gates, and publishing approval steps.',
+    context: 'Start from the Digital Presence Orchestrator structure. Keep strategy before tools, systems before scale, and content after clarity.',
+  });
+  const [lmConfig, setLmConfig] = useState<LMStudioConfig>(readStoredLMStudioConfig);
+  const [lmApiKey, setLmApiKey] = useState('');
+  const [lmStatus, setLmStatus] = useState<LMStudioStatus>({
+    state: 'idle',
+    message: 'LM Studio server has not been checked in this browser session.',
+  });
+  const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [lmPrompt, setLmPrompt] = useState(
+    'Route this goal through the Kramaniti agent team and give me a concise operating plan.'
+  );
+  const [lmResponse, setLmResponse] = useState('');
 
+  const isAgentMode = mode === 'agent-os';
   const activeLayerIndex = LAYERS.findIndex((layer) => layer.id === activeLayer);
   const completedCount = plan ? 5 : activeLayer === 'intake' ? 0 : activeLayerIndex;
 
@@ -210,6 +353,12 @@ export default function KramanitiStudio() {
   );
 
   const activeProject = projects.find((project) => project.id === activeProjectId) ?? projects[0];
+  const selectedAgent = getAgentById(selectedAgentId) ?? AGENT_OS_ROSTER[0];
+  const selectedTaskType = getTaskTypeById(selectedTaskTypeId) ?? AGENT_TASK_TYPES[0];
+  const routedTaskCount = agentTasks.filter((task) => task.status !== 'Draft').length;
+  const proofReviewCount = agentTasks.filter((task) =>
+    task.supportingAgentIds.includes('proof_governance_auditor')
+  ).length;
 
   useEffect(() => {
     try {
@@ -219,8 +368,37 @@ export default function KramanitiStudio() {
     }
   }, [projects]);
 
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(AGENT_OS_STORAGE_KEY, JSON.stringify(agentTasks));
+    } catch (storageError) {
+      console.warn('Could not save Agent OS tasks to local storage.', storageError);
+    }
+  }, [agentTasks]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        LM_STUDIO_CONFIG_STORAGE_KEY,
+        JSON.stringify({
+          baseUrl: normalizeLMStudioBaseUrl(lmConfig.baseUrl),
+          model: lmConfig.model,
+        })
+      );
+    } catch (storageError) {
+      console.warn('Could not save LM Studio config to local storage.', storageError);
+    }
+  }, [lmConfig]);
+
   const updateIntake = (key: keyof StudioIntake, value: string) => {
     setIntake((current) => ({ ...current, [key]: value }));
+  };
+
+  const switchMode = (nextMode: StudioMode) => {
+    setMode(nextMode);
+    if (nextMode === 'agent-os') {
+      setActiveAgentTab('orchestrator');
+    }
   };
 
   const runMockPlanner = async (event?: FormEvent) => {
@@ -331,7 +509,170 @@ export default function KramanitiStudio() {
     );
   };
 
+  const routeAgentTask = () => {
+    const task: AgentTask = {
+      id: createAgentTaskId(),
+      title: agentTaskDraft.title.trim() || selectedTaskType.label,
+      goal: agentTaskDraft.goal.trim() || 'Route this request through the Kramaniti agent team.',
+      context: agentTaskDraft.context.trim() || 'No additional context supplied.',
+      taskTypeId: selectedTaskType.id,
+      leadAgentId: selectedTaskType.leadAgentId,
+      supportingAgentIds: selectedTaskType.supportingAgentIds,
+      status: 'Routed',
+      createdAt: new Date().toISOString(),
+      lastUpdatedAt: new Date().toISOString(),
+    };
+
+    setAgentTasks((current) => [task, ...current]);
+    setSelectedAgentId(task.leadAgentId);
+    setActiveAgentTab('tasks');
+  };
+
+  const updateAgentTaskStatus = (taskId: string, status: AgentTaskStatus) => {
+    setAgentTasks((current) =>
+      current.map((task) =>
+        task.id === taskId
+          ? {
+              ...task,
+              status,
+              lastUpdatedAt: new Date().toISOString(),
+            }
+          : task
+      )
+    );
+  };
+
+  const buildAgentPrompt = (agent: AgentOSAgent) => {
+    const taskContext = `${agentTaskDraft.title}\n\nGoal: ${agentTaskDraft.goal}\n\nContext: ${agentTaskDraft.context}`;
+    const routeLead = formatAgentName(selectedTaskType.leadAgentId);
+    const routeSupport = selectedTaskType.supportingAgentIds.map(formatAgentName).join(', ');
+
+    return `${LM_STUDIO_PROMPT_TEMPLATE}
+
+Active agent: ${agent.name}
+Agent role: ${agent.description}
+Hard constraints: ${agent.constraints.join('; ')}
+Selected route: ${selectedTaskType.label}
+Route lead agent: ${routeLead}
+Supporting agents: ${routeSupport}
+Approval gate: ${selectedTaskType.approvalGate}
+
+Use exact Kramaniti agent names from the selected route. Do not invent alternate role names.
+
+Founder request:
+${taskContext}`;
+  };
+
+  const testLMStudioServer = async () => {
+    const baseUrl = normalizeLMStudioBaseUrl(lmConfig.baseUrl);
+    setLmConfig((current) => ({ ...current, baseUrl }));
+    setLmStatus({ state: 'checking', message: `Checking ${baseUrl}/models` });
+    setAvailableModels([]);
+
+    try {
+      const response = await fetch('/api/studio/lm-studio/models/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ baseUrl, apiKey: lmApiKey.trim() || undefined }),
+      });
+
+      const data = (await response.json()) as {
+        error?: string;
+        models?: string[];
+      };
+
+      if (!response.ok) {
+        throw new Error(data.error ?? `LM Studio returned ${response.status}`);
+      }
+
+      const modelIds = data.models ?? [];
+
+      setAvailableModels(modelIds as string[]);
+      setLmStatus({
+        state: 'ready',
+        message: modelIds.length > 0 ? `Connected. Found ${modelIds.length} model entries.` : 'Connected. No models were listed yet.',
+      });
+      if (!lmConfig.model && modelIds[0]) {
+        setLmConfig((current) => ({ ...current, model: modelIds[0] as string }));
+      }
+    } catch (serverError) {
+      setLmStatus({
+        state: 'error',
+        message:
+          serverError instanceof Error
+            ? `${serverError.message}. Start the LM Studio server in the Developer tab and confirm the base URL.`
+            : 'Could not reach LM Studio. Start the local server and retry.',
+      });
+    }
+  };
+
+  const sendLMStudioPrompt = async () => {
+    const baseUrl = normalizeLMStudioBaseUrl(lmConfig.baseUrl);
+    const model = lmConfig.model.trim();
+
+    if (!model) {
+      setLmStatus({ state: 'error', message: 'Enter the loaded LM Studio model identifier before running a prompt.' });
+      return;
+    }
+
+    setLmConfig((current) => ({ ...current, baseUrl }));
+    setLmStatus({ state: 'generating', message: `Sending prompt to ${model}` });
+    setLmResponse('');
+
+    try {
+      const response = await fetch('/api/studio/lm-studio/chat/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          baseUrl,
+          apiKey: lmApiKey.trim() || undefined,
+          model,
+          messages: [
+            {
+              role: 'system',
+              content: buildAgentPrompt(selectedAgent),
+            },
+            {
+              role: 'user',
+              content: lmPrompt,
+            },
+          ],
+        }),
+      });
+
+      const data = (await response.json()) as {
+        content?: string;
+        error?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(data.error ?? `LM Studio returned ${response.status}`);
+      }
+
+      const content = data.content ?? 'LM Studio responded, but no assistant content was returned.';
+      setLmResponse(content);
+      setLmStatus({ state: 'ready', message: 'Local model response received.' });
+    } catch (promptError) {
+      setLmStatus({
+        state: 'error',
+        message:
+          promptError instanceof Error
+            ? `${promptError.message}. Confirm the server, model identifier, and browser access to localhost.`
+            : 'Could not complete the local model request.',
+      });
+    }
+  };
+
   const renderContextualAction = () => {
+    if (isAgentMode) {
+      return (
+        <button className={styles.contextualAction} onClick={() => setActiveAgentTab('tasks')}>
+          <GitBranch size={14} />
+          Route Task
+        </button>
+      );
+    }
+
     if (isGenerating) {
       return (
         <div className={styles.contextualAction}>
@@ -359,7 +700,7 @@ export default function KramanitiStudio() {
   };
 
   return (
-    <div className={styles.layoutContainer} data-theme={theme}>
+    <div className={`${styles.layoutContainer} ${isAgentMode ? styles.agentModeContainer : ''}`} data-theme={theme}>
       <div className={styles.floatingNavContainer}>
         <nav className={styles.floatingPill}>
           <div className={styles.pillLeft}>
@@ -370,13 +711,13 @@ export default function KramanitiStudio() {
             <div className={styles.roleSwitcher}>
               <button
                 className={`${styles.roleOption} ${mode === 'planner' ? styles.activeRole : ''}`}
-                onClick={() => setMode('planner')}
+                onClick={() => switchMode('planner')}
               >
                 Planner
               </button>
               <button
-                className={`${styles.roleOption} ${mode === 'agent-foundation' ? styles.activeRole : ''}`}
-                onClick={() => setMode('agent-foundation')}
+                className={`${styles.roleOption} ${mode === 'agent-os' ? styles.activeRole : ''}`}
+                onClick={() => switchMode('agent-os')}
               >
                 Agents
               </button>
@@ -391,28 +732,38 @@ export default function KramanitiStudio() {
             </button>
 
             <div className={styles.progressContainer}>
-            {LAYERS.slice(1).map((layer, index) => (
-                <div
-                  key={layer.id}
-                  className={`${styles.progressSegment} ${index < completedCount ? styles.completed : ''} ${
-                    layer.id === activeLayer ? styles.active : ''
-                  }`}
-                />
-              ))}
+              {(isAgentMode ? AGENT_TABS : LAYERS.slice(1)).map((item, index) => (
+                  <div
+                    key={item.id}
+                    className={`${styles.progressSegment} ${
+                      !isAgentMode && index < completedCount ? styles.completed : ''
+                    } ${item.id === (isAgentMode ? activeAgentTab : activeLayer) ? styles.active : ''}`}
+                  />
+                ))}
             </div>
           </div>
 
           <div className={styles.pillCenter}>
-            {LAYERS.slice(1).map((layer) => (
-              <button
-                key={layer.id}
-                className={`${styles.navItem} ${activeLayer === layer.id ? styles.active : ''}`}
-                onClick={() => setActiveLayer(layer.id)}
-                disabled={!plan && layer.id !== 'tools' && layer.id !== 'intake'}
-              >
-                {layer.shortLabel}
-              </button>
-            ))}
+            {isAgentMode
+              ? AGENT_TABS.map((tab) => (
+                  <button
+                    key={tab.id}
+                    className={`${styles.navItem} ${activeAgentTab === tab.id ? styles.active : ''}`}
+                    onClick={() => setActiveAgentTab(tab.id)}
+                  >
+                    {tab.shortLabel}
+                  </button>
+                ))
+              : LAYERS.slice(1).map((layer) => (
+                  <button
+                    key={layer.id}
+                    className={`${styles.navItem} ${activeLayer === layer.id ? styles.active : ''}`}
+                    onClick={() => setActiveLayer(layer.id)}
+                    disabled={!plan && layer.id !== 'tools' && layer.id !== 'intake'}
+                  >
+                    {layer.shortLabel}
+                  </button>
+                ))}
           </div>
 
           <div className={styles.pillRight}>
@@ -426,8 +777,12 @@ export default function KramanitiStudio() {
         </nav>
       </div>
 
-      <div className={`${styles.workspaceGrid} ${activeLayer === 'tools' ? styles.toolsWorkspaceGrid : ''}`}>
-        {activeLayer !== 'tools' && (
+      <div
+        className={`${styles.workspaceGrid} ${activeLayer === 'tools' || isAgentMode ? styles.toolsWorkspaceGrid : ''} ${
+          isAgentMode ? styles.agentWorkspaceGrid : ''
+        }`}
+      >
+        {activeLayer !== 'tools' && !isAgentMode && (
           <aside className={styles.contextSidebar}>
             <div className={styles.sidebarHeader}>Planning Flow</div>
             <div className={styles.sidebarMenu}>
@@ -472,9 +827,13 @@ export default function KramanitiStudio() {
           </aside>
         )}
 
-        <main className={`${styles.mainContent} ${activeLayer === 'tools' ? styles.toolsMainContent : ''}`}>
-          <div className={styles.pageContainer}>
-            <div className={`${styles.contentWrapper} ${activeLayer === 'tools' ? styles.toolsContentWrapper : ''}`}>
+        <main className={`${styles.mainContent} ${activeLayer === 'tools' || isAgentMode ? styles.toolsMainContent : ''}`}>
+          <div className={`${styles.pageContainer} ${isAgentMode ? styles.agentPageContainer : ''}`}>
+            <div
+              className={`${styles.contentWrapper} ${
+                activeLayer === 'tools' || isAgentMode ? styles.toolsContentWrapper : ''
+              } ${isAgentMode ? styles.agentContentWrapper : ''}`}
+            >
               {isGenerating && (
                 <div className={styles.generationOverlay}>
                   <div className={styles.orbitalLoader}>
@@ -492,7 +851,38 @@ export default function KramanitiStudio() {
                 </div>
               )}
 
-              {!isGenerating && activeLayer === 'intake' && (
+              {!isGenerating && isAgentMode && (
+                <AgentOSScreen
+                  activeTab={activeAgentTab}
+                  selectedAgent={selectedAgent}
+                  selectedAgentId={selectedAgentId}
+                  selectedTaskTypeId={selectedTaskTypeId}
+                  selectedTaskType={selectedTaskType}
+                  agentTasks={agentTasks}
+                  routedTaskCount={routedTaskCount}
+                  proofReviewCount={proofReviewCount}
+                  availableModels={availableModels}
+                  lmConfig={lmConfig}
+                  lmApiKey={lmApiKey}
+                  lmPrompt={lmPrompt}
+                  lmResponse={lmResponse}
+                  lmStatus={lmStatus}
+                  agentTaskDraft={agentTaskDraft}
+                  onSelectAgent={setSelectedAgentId}
+                  onSelectTaskType={setSelectedTaskTypeId}
+                  onTaskDraftChange={setAgentTaskDraft}
+                  onRouteTask={routeAgentTask}
+                  onUpdateTaskStatus={updateAgentTaskStatus}
+                  onLMConfigChange={setLmConfig}
+                  onLMApiKeyChange={setLmApiKey}
+                  onLMPromptChange={setLmPrompt}
+                  onTestLMStudio={testLMStudioServer}
+                  onSendLMStudioPrompt={sendLMStudioPrompt}
+                  onSwitchTab={setActiveAgentTab}
+                />
+              )}
+
+              {!isAgentMode && !isGenerating && activeLayer === 'intake' && (
                 <section className={styles.screenGrid}>
                   <div className={styles.intakeHero}>
                     <Search size={28} />
@@ -591,7 +981,7 @@ export default function KramanitiStudio() {
                 </section>
               )}
 
-              {!isGenerating && activeLayer === 'clarity' && plan && (
+              {!isAgentMode && !isGenerating && activeLayer === 'clarity' && plan && (
                 <section className={styles.layerScreen}>
                   <Header eyebrow="Layer 1" title="Clarity Diagnosis" subtitle={plan.clarity.summary} />
                   <div className={styles.signalGrid}>
@@ -623,7 +1013,7 @@ export default function KramanitiStudio() {
                 </section>
               )}
 
-              {!isGenerating && activeLayer === 'systems' && plan && (
+              {!isAgentMode && !isGenerating && activeLayer === 'systems' && plan && (
                 <section className={styles.layerScreen}>
                   <Header eyebrow="Layer 2" title="Systems Blueprint" subtitle={plan.systems.thesis} />
                   <div className={styles.systemGrid}>
@@ -658,7 +1048,7 @@ export default function KramanitiStudio() {
                 </section>
               )}
 
-              {!isGenerating && activeLayer === 'content' && plan && (
+              {!isAgentMode && !isGenerating && activeLayer === 'content' && plan && (
                 <section className={styles.layerScreen}>
                   <Header eyebrow="Layer 3" title="Content Alignment" subtitle={plan.content.narrative} />
                   <div className={styles.contentDirectionGrid}>
@@ -681,7 +1071,7 @@ export default function KramanitiStudio() {
                 </section>
               )}
 
-              {!isGenerating && activeLayer === 'tools' && (
+              {!isAgentMode && !isGenerating && activeLayer === 'tools' && (
                 <section className={styles.layerScreen}>
                   <Header
                     eyebrow="Studio Tools"
@@ -846,7 +1236,7 @@ export default function KramanitiStudio() {
                 </section>
               )}
 
-              {!isGenerating && activeLayer === 'dossier' && plan && (
+              {!isAgentMode && !isGenerating && activeLayer === 'dossier' && plan && (
                 <section className={styles.layerScreen}>
                   <Header eyebrow="Final Plan" title="Planning Dossier" subtitle={plan.dossier.executiveSummary} />
                   <div className={styles.dossierGrid}>
@@ -887,9 +1277,493 @@ export default function KramanitiStudio() {
         </main>
       </div>
 
-      <ChatbotWidget />
+      {!isAgentMode && <ChatbotWidget />}
     </div>
   );
+}
+
+function AgentOSScreen({
+  activeTab,
+  selectedAgent,
+  selectedAgentId,
+  selectedTaskTypeId,
+  selectedTaskType,
+  agentTasks,
+  routedTaskCount,
+  proofReviewCount,
+  availableModels,
+  lmConfig,
+  lmApiKey,
+  lmPrompt,
+  lmResponse,
+  lmStatus,
+  agentTaskDraft,
+  onSelectAgent,
+  onSelectTaskType,
+  onTaskDraftChange,
+  onRouteTask,
+  onUpdateTaskStatus,
+  onLMConfigChange,
+  onLMApiKeyChange,
+  onLMPromptChange,
+  onTestLMStudio,
+  onSendLMStudioPrompt,
+  onSwitchTab,
+}: {
+  activeTab: AgentTabKey;
+  selectedAgent: AgentOSAgent;
+  selectedAgentId: string;
+  selectedTaskTypeId: string;
+  selectedTaskType: (typeof AGENT_TASK_TYPES)[number];
+  agentTasks: AgentTask[];
+  routedTaskCount: number;
+  proofReviewCount: number;
+  availableModels: string[];
+  lmConfig: LMStudioConfig;
+  lmApiKey: string;
+  lmPrompt: string;
+  lmResponse: string;
+  lmStatus: LMStudioStatus;
+  agentTaskDraft: AgentTaskDraft;
+  onSelectAgent: (agentId: string) => void;
+  onSelectTaskType: (taskTypeId: string) => void;
+  onTaskDraftChange: (draft: AgentTaskDraft) => void;
+  onRouteTask: () => void;
+  onUpdateTaskStatus: (taskId: string, status: AgentTaskStatus) => void;
+  onLMConfigChange: (config: LMStudioConfig) => void;
+  onLMApiKeyChange: (apiKey: string) => void;
+  onLMPromptChange: (prompt: string) => void;
+  onTestLMStudio: () => void;
+  onSendLMStudioPrompt: () => void;
+  onSwitchTab: (tab: AgentTabKey) => void;
+}) {
+  return (
+    <section className={`${styles.layerScreen} ${styles.agentLayerScreen}`}>
+      <div className={styles.agentOpsShell}>
+        <aside className={styles.agentCommandPanel}>
+          <div className={styles.toolHeader}>
+            <Bot size={20} />
+            <div>
+              <h3>Agent Control</h3>
+            </div>
+          </div>
+
+          <label className={styles.toolLabel}>
+            Active agent
+            <select className={styles.input} value={selectedAgentId} onChange={(event) => onSelectAgent(event.target.value)}>
+              {AGENT_OS_ROSTER.map((agent) => (
+                <option key={agent.id} value={agent.id}>
+                  {agent.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <div className={styles.agentIdentityCard}>
+            <div className={styles.agentAvatar}>{getAgentInitials(selectedAgent.name)}</div>
+            <div>
+              <span>{selectedAgent.layer}</span>
+              <h3>{selectedAgent.name}</h3>
+              <p>{selectedAgent.analogue}</p>
+            </div>
+          </div>
+
+          <div className={styles.agentStatGrid}>
+            <div>
+              <span>Tasks</span>
+              <strong>{agentTasks.length}</strong>
+            </div>
+            <div>
+              <span>Routed</span>
+              <strong>{routedTaskCount}</strong>
+            </div>
+            <div>
+              <span>Proof</span>
+              <strong>{proofReviewCount}</strong>
+            </div>
+            <div>
+              <span>Model</span>
+              <strong>{lmConfig.model ? 'Set' : 'Open'}</strong>
+            </div>
+          </div>
+
+          <div className={styles.agentTabStack}>
+            {AGENT_TABS.map((tab) => (
+              <button
+                key={tab.id}
+                className={`${styles.sidebarItem} ${activeTab === tab.id ? styles.activeSubMenu : ''}`}
+                onClick={() => onSwitchTab(tab.id)}
+              >
+                <span className={styles.sidebarItemIcon}>{getAgentTabIcon(tab.id)}</span>
+                <span>{tab.shortLabel}</span>
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        <div className={styles.agentOpsWorkspace}>
+          {activeTab === 'orchestrator' && (
+            <>
+              <div className={styles.agentOverviewStrip}>
+                {[
+                  ['Route', selectedTaskType.label],
+                  ['Lead', formatAgentName(selectedTaskType.leadAgentId)],
+                  ['Support', `${selectedTaskType.supportingAgentIds.length} agents`],
+                  ['Gate', 'Founder approval'],
+                ].map(([label, value]) => (
+                  <div key={label}>
+                    <span>{label}</span>
+                    <strong>{value}</strong>
+                  </div>
+                ))}
+              </div>
+
+              <TaskComposer
+                selectedTaskTypeId={selectedTaskTypeId}
+                draft={agentTaskDraft}
+                onSelectTaskType={onSelectTaskType}
+                onDraftChange={onTaskDraftChange}
+                onRouteTask={onRouteTask}
+              />
+            </>
+          )}
+
+          {activeTab === 'roster' && (
+            <div className={styles.agentRosterGrid}>
+              {AGENT_OS_ROSTER.map((agent) => (
+                <button
+                  key={agent.id}
+                  className={`${styles.agentRosterCard} ${agent.id === selectedAgentId ? styles.activeAgentCard : ''}`}
+                  onClick={() => onSelectAgent(agent.id)}
+                >
+                  <div className={styles.agentRosterHeader}>
+                    <div className={styles.agentAvatar}>{getAgentInitials(agent.name)}</div>
+                    <div>
+                      <span>{agent.layer}</span>
+                      <h3>{agent.name}</h3>
+                    </div>
+                    <strong>{agent.status}</strong>
+                  </div>
+                  <p>{agent.description}</p>
+                  <div className={styles.agentMiniList}>
+                    {agent.outputs.slice(0, 3).map((output) => (
+                      <span key={output}>{output}</span>
+                    ))}
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {activeTab === 'tasks' && (
+            <>
+              <TaskComposer
+                selectedTaskTypeId={selectedTaskTypeId}
+                draft={agentTaskDraft}
+                onSelectTaskType={onSelectTaskType}
+                onDraftChange={onTaskDraftChange}
+                onRouteTask={onRouteTask}
+              />
+              <AgentTaskBoard tasks={agentTasks} onUpdateTaskStatus={onUpdateTaskStatus} />
+            </>
+          )}
+
+          {activeTab === 'lm-studio' && (
+            <div className={styles.localModelGrid}>
+              <div className={styles.localModelPanel}>
+                <div className={styles.toolHeader}>
+                  <Cable size={20} />
+                  <div>
+                    <h3>LM Studio Bridge</h3>
+                  </div>
+                </div>
+
+                <label className={styles.toolLabel}>
+                  Base URL
+                  <input
+                    className={styles.input}
+                    value={lmConfig.baseUrl}
+                    onChange={(event) => onLMConfigChange({ ...lmConfig, baseUrl: event.target.value })}
+                    placeholder={DEFAULT_LM_STUDIO_BASE_URL}
+                  />
+                </label>
+
+                <label className={styles.toolLabel}>
+                  Model identifier
+                  <input
+                    className={styles.input}
+                    value={lmConfig.model}
+                    onChange={(event) => onLMConfigChange({ ...lmConfig, model: event.target.value })}
+                    placeholder="Copy from LM Studio"
+                  />
+                </label>
+
+                <label className={styles.toolLabel}>
+                  Optional API token
+                  <input
+                    className={styles.input}
+                    value={lmApiKey}
+                    onChange={(event) => onLMApiKeyChange(event.target.value)}
+                    placeholder="Leave blank unless LM Studio auth is enabled"
+                    type="password"
+                  />
+                </label>
+
+                <div className={`${styles.localModelStatus} ${styles[lmStatus.state] ?? ''}`}>
+                  {getLMStatusIcon(lmStatus.state)}
+                  <span>{lmStatus.message}</span>
+                </div>
+
+                <div className={styles.agentHeroActions}>
+                  <button className={styles.secondaryButton} onClick={onTestLMStudio}>
+                    <Activity size={16} />
+                    Test Server
+                  </button>
+                  <button className={styles.primaryButton} onClick={onSendLMStudioPrompt}>
+                    <Play size={16} />
+                    Run Agent Prompt
+                  </button>
+                </div>
+
+                {availableModels.length > 0 && (
+                  <div className={styles.modelList}>
+                    {availableModels.slice(0, 6).map((model) => (
+                      <button key={model} onClick={() => onLMConfigChange({ ...lmConfig, model })}>
+                        {model}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.localPromptPanel}>
+                <div className={styles.toolHeader}>
+                  <Terminal size={20} />
+                  <div>
+                    <h3>Agent Prompt Console</h3>
+                  </div>
+                </div>
+                <textarea className={styles.textarea} value={lmPrompt} onChange={(event) => onLMPromptChange(event.target.value)} />
+                <div className={styles.localResponse}>
+                  {lmResponse ? <pre>{lmResponse}</pre> : <p>Local model output will appear here after the LM Studio server responds.</p>}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'runbook' && (
+            <div className={styles.runbookGrid}>
+              <div className={styles.runbookPanel}>
+                <div className={styles.toolHeader}>
+                  <Settings2 size={20} />
+                  <div>
+                    <h3>LM Studio Setup</h3>
+                    <p>Use the GUI Developer tab first. The frontend uses the server after it is running.</p>
+                  </div>
+                </div>
+                <ol className={styles.setupList}>
+                  {LM_STUDIO_SETUP_STEPS.map((step) => (
+                    <li key={step}>{step}</li>
+                  ))}
+                </ol>
+              </div>
+
+              <div className={styles.runbookPanel}>
+                <div className={styles.toolHeader}>
+                  <ClipboardCheck size={20} />
+                  <div>
+                    <h3>Governance Gate</h3>
+                    <p>Local inference can draft and route. Public action stays approval-gated.</p>
+                  </div>
+                </div>
+                <div className={styles.governanceChecklist}>
+                  {[
+                    'No direct publishing from the Agent OS.',
+                    'No invented proof, testimonials, metrics, or outcomes.',
+                    'No pricing, contracts, credentials, or external commitments without approval.',
+                    'Public claims route through Proof and Governance.',
+                    'Private client data stays out unless explicitly approved.',
+                  ].map((item) => (
+                    <div key={item}>
+                      <CheckCircle2 size={16} />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TaskComposer({
+  selectedTaskTypeId,
+  draft,
+  onSelectTaskType,
+  onDraftChange,
+  onRouteTask,
+}: {
+  selectedTaskTypeId: string;
+  draft: AgentTaskDraft;
+  onSelectTaskType: (taskTypeId: string) => void;
+  onDraftChange: (draft: AgentTaskDraft) => void;
+  onRouteTask: () => void;
+}) {
+  const route = getTaskTypeById(selectedTaskTypeId) ?? AGENT_TASK_TYPES[0];
+
+  return (
+    <div className={styles.taskComposer}>
+      <div className={styles.toolHeader}>
+        <GitBranch size={20} />
+        <div>
+          <h3>Route Task</h3>
+        </div>
+      </div>
+
+      <div className={styles.taskComposerGrid}>
+        <label className={styles.toolLabel}>
+          Task route
+          <select className={styles.input} value={selectedTaskTypeId} onChange={(event) => onSelectTaskType(event.target.value)}>
+            {AGENT_TASK_TYPES.map((taskType) => (
+              <option key={taskType.id} value={taskType.id}>
+                {taskType.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className={styles.routePreview}>
+          <span>Lead</span>
+          <strong>{formatAgentName(route.leadAgentId)}</strong>
+          <p>{route.approvalGate}</p>
+        </div>
+      </div>
+
+      <label className={styles.toolLabel}>
+        Task title
+        <input
+          className={styles.input}
+          value={draft.title}
+          onChange={(event) => onDraftChange({ ...draft, title: event.target.value })}
+          placeholder="Task title"
+        />
+      </label>
+      <label className={styles.toolLabel}>
+        Goal
+        <textarea
+          className={styles.textarea}
+          value={draft.goal}
+          onChange={(event) => onDraftChange({ ...draft, goal: event.target.value })}
+          placeholder="What should the agent team achieve?"
+        />
+      </label>
+      <label className={styles.toolLabel}>
+        Context
+        <textarea
+          className={styles.textarea}
+          value={draft.context}
+          onChange={(event) => onDraftChange({ ...draft, context: event.target.value })}
+          placeholder="Context, constraints, and approval needs"
+        />
+      </label>
+
+      <div className={styles.supportingAgentStrip}>
+        {route.supportingAgentIds.map((agentId) => (
+          <span key={agentId}>{formatAgentName(agentId)}</span>
+        ))}
+      </div>
+
+      <button className={styles.primaryButton} onClick={onRouteTask}>
+        <GitBranch size={16} />
+        Route Task
+      </button>
+    </div>
+  );
+}
+
+function AgentTaskBoard({
+  tasks,
+  onUpdateTaskStatus,
+}: {
+  tasks: AgentTask[];
+  onUpdateTaskStatus: (taskId: string, status: AgentTaskStatus) => void;
+}) {
+  return (
+    <div className={styles.agentTaskBoard}>
+      {AGENT_STATUS_COLUMNS.map((status) => {
+        const matchingTasks = tasks.filter((task) => task.status === status);
+        return (
+          <section key={status} className={styles.entryColumn}>
+            <div className={styles.entryColumnHeader}>
+              <h3>{status}</h3>
+              <span>{matchingTasks.length}</span>
+            </div>
+            {matchingTasks.length === 0 ? (
+              <p className={styles.emptyEntry}>No tasks in this state.</p>
+            ) : (
+              matchingTasks.map((task) => (
+                <article key={task.id} className={styles.agentTaskCard}>
+                  <div>
+                    <span>{formatAgentName(task.leadAgentId)}</span>
+                    <h4>{task.title}</h4>
+                    <p>{task.goal}</p>
+                  </div>
+                  <div className={styles.supportingAgentStrip}>
+                    {task.supportingAgentIds.slice(0, 3).map((agentId) => (
+                      <span key={agentId}>{formatAgentName(agentId)}</span>
+                    ))}
+                  </div>
+                  <select
+                    className={styles.statusSelect}
+                    value={task.status}
+                    onChange={(event) => onUpdateTaskStatus(task.id, event.target.value as AgentTaskStatus)}
+                  >
+                    {AGENT_STATUS_COLUMNS.map((column) => (
+                      <option key={column}>{column}</option>
+                    ))}
+                  </select>
+                </article>
+              ))
+            )}
+          </section>
+        );
+      })}
+    </div>
+  );
+}
+
+function getAgentInitials(name: string) {
+  return name
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+function getAgentTabIcon(tabId: AgentTabKey) {
+  const iconProps = { size: 16 };
+  switch (tabId) {
+    case 'orchestrator':
+      return <Compass {...iconProps} />;
+    case 'roster':
+      return <Users {...iconProps} />;
+    case 'tasks':
+      return <GitBranch {...iconProps} />;
+    case 'lm-studio':
+      return <Cable {...iconProps} />;
+    case 'runbook':
+      return <ClipboardCheck {...iconProps} />;
+  }
+}
+
+function getLMStatusIcon(state: LMStudioStatus['state']) {
+  if (state === 'checking' || state === 'generating') return <Loader2 size={16} className={styles.spin} />;
+  if (state === 'ready') return <CheckCircle2 size={16} />;
+  if (state === 'error') return <CircleAlert size={16} />;
+  return <Activity size={16} />;
 }
 
 function Header({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) {

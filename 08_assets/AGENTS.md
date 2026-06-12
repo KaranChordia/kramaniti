@@ -20,6 +20,7 @@ Memory to maintain:
 - `references/`: visual references, evidence assets, client-safe reference material.
 - `screenshots/`: UI screenshots, website captures, proof snapshots.
 - `exports/`: generated PDFs, decks, handoff packages.
+- `asset_registry.md`: asset source, usage, and public-permission tracker.
 
 **Note on Public Assets:** The actual website assets currently live in `website/public/assets/`. This directory (`08_assets/`) is for source files, references, and non-public assets.
 
@@ -29,6 +30,7 @@ Memory to maintain:
 - Add context notes when assets need provenance or permission tracking.
 - Avoid dumping unclassified assets.
 - Prefer source files plus export files when both matter.
+- Register reusable public assets in `asset_registry.md`.
 
 ## Constraints
 

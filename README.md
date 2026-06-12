@@ -15,12 +15,17 @@ This workspace is designed to be **human-readable** (for the founder, clients, a
 │   ├── skills/                # Core skill clusters and verification levels
 │   └── timeline/              # Career timeline files
 ├── 03_brand_strategy/         # Strategic brand layer
+│   ├── brand_system/          # Brand operating kit and digital-presence decisions
 │   ├── positioning/           # Competitive analyses, differentiators, brand identity guidelines
 │   ├── narrative/             # Brand storytelling copy
 │   ├── offers/                # Offer ladder, packaging, pricing structures
 │   └── naming/                # Brand name evaluation and domain/handles registry
 ├── 04_content_system/         # Inbound content engine
-│   └── pillars/               # Core storytelling themes
+│   ├── pillars/               # Core storytelling themes
+│   ├── calendar/              # Planned content calendar
+│   ├── campaigns/             # Campaign briefs
+│   ├── backlog/               # Content ideas backlog
+│   └── distribution/          # Publishing checklist and analytics log
 ├── 05_ai_strategy/            # Strategic delivery blueprints
 │   └── workflows/             # Delivery workflows & sequence diagrams
 ├── 06_ai_agent_context/       # System contexts for brand agents
@@ -107,16 +112,26 @@ To maintain strict data integrity, every file must clearly label its claims usin
 | **Identity** | [career_timeline.md](02_founder_context/timeline/career_timeline.md) | Five-epoch career progression with evidence tags |
 | **Identity** | [skill_clusters.md](02_founder_context/skills/skill_clusters.md) | Competency trees across Visual, Algorithmic, Quantitative, and B2B domains |
 | **Brand** | [positioning_analysis.md](03_brand_strategy/positioning/positioning_analysis.md) | Market positioning, differentiators, and target ICPs |
+| **Brand** | [brand_operating_kit.md](03_brand_strategy/brand_system/brand_operating_kit.md) | Digital presence brand kit and operating workflow |
+| **Brand** | [brand_decisions.md](03_brand_strategy/brand_system/brand_decisions.md) | Working brand-presence decisions and open questions |
 | **Brand** | [brand_identity_guidelines.md](03_brand_strategy/positioning/brand_identity_guidelines.md) | Color palette, typography, voice rules, and visual standards |
 | **Brand** | [brand_narrative.md](03_brand_strategy/narrative/brand_narrative.md) | Core storytelling copy, bios, and strategic angles |
 | **Brand** | [company_name_ideas.md](03_brand_strategy/naming/company_name_ideas.md) | Naming evaluation and selection rationale |
 | **Brand** | [domain_and_handles_registry.md](03_brand_strategy/naming/domain_and_handles_registry.md) | Domain and social handle acquisition tracker |
 | **Offers** | [service_packages.md](03_brand_strategy/offers/service_packages.md) | 4-tier offer ladder with pricing and deliverables |
 | **Content** | [content_pillars.md](04_content_system/pillars/content_pillars.md) | 5 core content pillars with post examples |
+| **Content** | [content_calendar.md](04_content_system/calendar/content_calendar.md) | Planned content calendar with proof and approval status |
+| **Content** | [campaign_briefs.md](04_content_system/campaigns/campaign_briefs.md) | Campaign brief template and campaign plans |
+| **Content** | [content_ideas_backlog.md](04_content_system/backlog/content_ideas_backlog.md) | Future content ideas before calendar approval |
+| **Content** | [publishing_checklist.md](04_content_system/distribution/publishing_checklist.md) | Public-content approval checklist |
+| **Content** | [analytics_log.md](04_content_system/distribution/analytics_log.md) | Publishing performance and repeat/revise/stop log |
 | **Delivery** | [ai_service_workflows.md](05_ai_strategy/workflows/ai_service_workflows.md) | Onboarding, audit, content, and agent build workflows |
 | **AI Agents** | [master_context.md](06_ai_agent_context/system_prompts/master_context.md) | System prompt context, constraints, and operating rules |
 | **AI Agents** | [agent_roles.md](06_ai_agent_context/agent_roles/agent_roles.md) | Agent role index and task routing matrix |
 | **AI Agents** | [kramaniti_agent_roster.md](06_ai_agent_context/agent_roles/kramaniti_agent_roster.md) | Full company-style agent roster |
+| **Studio** | [lm_studio_agent_os_setup.md](docs/lm_studio_agent_os_setup.md) | Local LM Studio setup for the Studio Agent OS |
 | **Launch** | [website_structure_and_wireframe.md](07_business_build/company-ideas/website_structure_and_wireframe.md) | Historical one-page portfolio wireframe reference |
 | **Launch** | [launch_operations_checklist.md](07_business_build/delivery/launch_operations_checklist.md) | Business registration, payments, invoicing, and CRM setup |
+| **Assets** | [asset_registry.md](08_assets/asset_registry.md) | Asset source, usage, and public-permission tracker |
 | **Governance** | [decisions.md](09_reviews/decision-log/decisions.md) | Decision log with rejected alternatives |
+| **Governance** | [proof_register.md](09_reviews/proof_register.md) | Public-claim, permission, and proof status tracker |

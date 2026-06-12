@@ -70,10 +70,12 @@
     }
   ],
   "memory_sources": [
-    "08_assets/"
+    "08_assets/",
+    "08_assets/asset_registry.md"
   ],
   "owned_files": [
-    "08_assets/"
+    "08_assets/",
+    "08_assets/asset_registry.md"
   ],
   "inputs": [
     "logos",
@@ -90,7 +92,9 @@
   "supporting_agents": [
     "website_steward",
     "content_director",
-    "proof_governance_auditor"
+    "proof_governance_auditor",
+    "brand_identity_agent",
+    "digital_presence_orchestrator"
   ],
   "escalation_triggers": [
     "third-party logos",

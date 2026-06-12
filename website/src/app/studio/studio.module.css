@@ -131,7 +131,18 @@
 .dossierCard::before,
 .miniToolCard::before,
 .entryColumn::before,
-.agentFoundation::before {
+.agentFoundation::before,
+.agentCommandPanel::before,
+.agentHeroPanel::before,
+.orchestrationNode::before,
+.agentIdentityCard::before,
+.agentRosterCard::before,
+.taskComposer::before,
+.routePreview::before,
+.localModelPanel::before,
+.localPromptPanel::before,
+.runbookPanel::before,
+.agentTaskCard::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -158,7 +169,18 @@
 .dossierCard::after,
 .miniToolCard::after,
 .entryColumn::after,
-.agentFoundation::after {
+.agentFoundation::after,
+.agentCommandPanel::after,
+.agentHeroPanel::after,
+.orchestrationNode::after,
+.agentIdentityCard::after,
+.agentRosterCard::after,
+.taskComposer::after,
+.routePreview::after,
+.localModelPanel::after,
+.localPromptPanel::after,
+.runbookPanel::after,
+.agentTaskCard::after {
   content: "";
   position: absolute;
   inset: 1px;
@@ -465,6 +487,10 @@
   padding-left: 0;
 }
 
+.agentWorkspaceGrid {
+  min-height: 0;
+}
+
 /* --- FLOATING PILL SIDEBAR REFACTOR --- */
 .contextSidebar {
   width: 260px;
@@ -565,6 +591,11 @@
   scroll-behavior: smooth;
 }
 
+.agentPageContainer {
+  overflow: hidden;
+  padding: 1rem 2rem 1.25rem;
+}
+
 .contentWrapper {
   max-width: 900px;
   margin: 0 auto;
@@ -573,6 +604,11 @@
 
 .toolsContentWrapper {
   max-width: 1480px;
+}
+
+.agentContentWrapper {
+  height: 100%;
+  min-height: 0;
 }
 
 @keyframes fadeIn {
@@ -736,6 +772,28 @@
   box-shadow: var(--shadow-inner);
   backdrop-filter: blur(16px) saturate(1.12);
   -webkit-backdrop-filter: blur(16px) saturate(1.12);
+}
+
+select.input,
+.statusSelect {
+  color-scheme: dark;
+}
+
+.input option,
+.statusSelect option {
+  background: #141419;
+  color: #ffffff;
+}
+
+.layoutContainer[data-theme="light"] select.input,
+.layoutContainer[data-theme="light"] .statusSelect {
+  color-scheme: light;
+}
+
+.layoutContainer[data-theme="light"] .input option,
+.layoutContainer[data-theme="light"] .statusSelect option {
+  background: #ffffff;
+  color: #1a1a1a;
 }
 
 .layoutContainer[data-theme="light"] .input,
@@ -1859,6 +1917,592 @@
   line-height: 1.5;
 }
 
+.agentOpsShell {
+  display: grid;
+  grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: stretch;
+  height: 100%;
+  min-height: 0;
+}
+
+.agentCommandPanel,
+.agentHeroPanel,
+.taskComposer,
+.localModelPanel,
+.localPromptPanel,
+.runbookPanel {
+  background: var(--glass-bg-heavy);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevation-medium);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(32px) saturate(1.35);
+  -webkit-backdrop-filter: blur(32px) saturate(1.35);
+}
+
+.agentCommandPanel {
+  position: sticky;
+  top: 0;
+  height: 100%;
+  max-height: calc(100vh - 7.5rem);
+  padding: 1.1rem;
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  gap: 0.85rem;
+}
+
+.agentOpsWorkspace {
+  display: grid;
+  align-content: start;
+  gap: 0.85rem;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 0.35rem 0.25rem 0;
+}
+
+.agentLayerScreen {
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+}
+
+.agentLayerScreen .toolHeader {
+  align-items: center;
+  padding-bottom: 0.75rem;
+}
+
+.agentLayerScreen .toolHeader p {
+  display: none;
+}
+
+.agentLayerScreen .input,
+.agentLayerScreen .textarea {
+  padding: 0.72rem 0.9rem;
+  font-size: 13px;
+}
+
+.agentLayerScreen .textarea {
+  min-height: 78px;
+}
+
+.agentLayerScreen .primaryButton,
+.agentLayerScreen .secondaryButton {
+  min-height: 42px;
+  padding: 0.72rem 1rem;
+  font-size: 13px;
+}
+
+.agentIdentityCard,
+.orchestrationNode,
+.routePreview,
+.agentTaskCard {
+  position: relative;
+  overflow: hidden;
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inner);
+  backdrop-filter: blur(18px) saturate(1.16);
+  -webkit-backdrop-filter: blur(18px) saturate(1.16);
+}
+
+.agentIdentityCard {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.85rem;
+}
+
+.agentAvatar {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  color: var(--color-burnished-gold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  flex: 0 0 auto;
+  box-shadow: var(--shadow-elevation-low);
+}
+
+.agentIdentityCard span,
+.agentRosterHeader span,
+.routePreview span,
+.agentTaskCard span,
+.localModelStatus span:first-child {
+  color: var(--color-burnished-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.agentIdentityCard h3 {
+  color: var(--text-primary);
+  font-size: 16px;
+  margin: 0.2rem 0;
+}
+
+.agentIdentityCard p {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin: 0;
+}
+
+.agentStatGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.agentStatGrid div {
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 0.68rem;
+  box-shadow: var(--shadow-inner);
+}
+
+.agentStatGrid span {
+  display: block;
+  color: var(--text-tertiary);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.agentStatGrid strong {
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.agentTabStack {
+  border-top: 1px solid var(--glass-border);
+  padding-top: 0.75rem;
+  display: grid;
+  align-content: start;
+  gap: 0.45rem;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.15rem;
+}
+
+.agentOverviewStrip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.agentOverviewStrip div {
+  border: 1px solid var(--glass-border);
+  background: var(--input-bg);
+  border-radius: var(--radius-md);
+  padding: 0.9rem;
+  box-shadow: var(--shadow-inner);
+}
+
+.agentOverviewStrip span {
+  display: block;
+  color: var(--text-tertiary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.agentOverviewStrip strong {
+  color: var(--text-primary);
+  display: block;
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.agentHeroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.agentHeroPanel {
+  padding: 2rem;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.agentHeroPanel > svg {
+  color: var(--color-burnished-gold);
+  margin-bottom: 1.2rem;
+  filter: drop-shadow(0 0 18px rgba(201, 168, 76, 0.35));
+}
+
+.agentHeroPanel h2 {
+  color: var(--text-primary);
+  font-size: clamp(32px, 4vw, 58px);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  max-width: 680px;
+  margin: 0 0 1rem;
+}
+
+.agentHeroPanel p {
+  color: var(--text-secondary);
+  font-size: 17px;
+  line-height: 1.6;
+  max-width: 640px;
+  margin: 0;
+}
+
+.agentHeroActions {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-top: 1.4rem;
+}
+
+.orchestrationMap {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.orchestrationNode {
+  padding: 1.25rem;
+  min-height: 78px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.orchestrationNode span {
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 10px;
+  font-weight: 800;
+  margin-bottom: 0.45rem;
+}
+
+.orchestrationNode strong {
+  color: var(--text-primary);
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.taskComposer {
+  padding: 1.1rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.taskComposer .textarea {
+  min-height: 78px;
+}
+
+.taskComposerGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.7fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.routePreview {
+  padding: 0.85rem;
+}
+
+.routePreview strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: 16px;
+  margin: 0.4rem 0;
+}
+
+.routePreview p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.supportingAgentStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.supportingAgentStrip span {
+  color: var(--text-primary);
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.5rem;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.agentRosterGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.agentRosterCard {
+  text-align: left;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-heavy);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+  min-height: 260px;
+  box-shadow: var(--shadow-elevation-low);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(28px) saturate(1.26);
+  -webkit-backdrop-filter: blur(28px) saturate(1.26);
+}
+
+.agentRosterCard:hover,
+.activeAgentCard {
+  border-color: rgba(201, 168, 76, 0.34);
+  box-shadow: var(--shadow-elevation-high);
+  transform: translateY(-2px);
+}
+
+.agentRosterHeader {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  gap: 0.8rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.agentRosterHeader h3 {
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.25;
+  margin: 0.25rem 0 0;
+}
+
+.agentRosterHeader strong {
+  color: var(--text-secondary);
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.55rem;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.agentRosterCard p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+}
+
+.agentMiniList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.agentMiniList span {
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  background: var(--input-bg);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.55rem;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.agentTaskBoard {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(230px, 1fr));
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.agentTaskCard {
+  padding: 0.95rem;
+  margin-bottom: 0.8rem;
+  display: grid;
+  gap: 0.85rem;
+  min-height: 180px;
+}
+
+.agentTaskCard > div:first-child > span {
+  display: inline-flex;
+  margin-bottom: 0.5rem;
+}
+
+.agentTaskCard h4 {
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.3;
+  margin: 0 0 0.45rem;
+}
+
+.agentTaskCard p {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.localModelGrid,
+.runbookGrid {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.localModelPanel,
+.localPromptPanel,
+.runbookPanel {
+  padding: 1.1rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.localModelStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid var(--glass-border);
+  background: var(--input-bg);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  font-size: 13px;
+  line-height: 1.45;
+  box-shadow: var(--shadow-inner);
+}
+
+.localModelStatus svg {
+  flex: 0 0 auto;
+}
+
+.localModelStatus.ready {
+  color: var(--color-success);
+  border-color: rgba(62, 207, 142, 0.35);
+  background: rgba(62, 207, 142, 0.08);
+}
+
+.localModelStatus.error {
+  color: #fca5a5;
+  border-color: rgba(248, 113, 113, 0.35);
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.localModelStatus.checking,
+.localModelStatus.generating {
+  color: var(--color-burnished-gold);
+  border-color: rgba(201, 168, 76, 0.32);
+  background: rgba(201, 168, 76, 0.08);
+}
+
+.modelList {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.modelList button {
+  border: 1px solid var(--glass-border);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.75rem;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--shadow-inner);
+}
+
+.localPromptPanel .textarea {
+  min-height: 180px;
+}
+
+.localResponse {
+  min-height: 260px;
+  border: 1px solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  box-shadow: var(--shadow-inner);
+  overflow: auto;
+}
+
+.layoutContainer[data-theme="light"] .localResponse {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.localResponse p,
+.localResponse pre {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: inherit;
+}
+
+.setupList {
+  display: grid;
+  gap: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+.setupList li::marker {
+  color: var(--color-burnished-gold);
+  font-weight: 800;
+}
+
+.governanceChecklist {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.governanceChecklist div {
+  display: flex;
+  gap: 0.7rem;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.45;
+  border: 1px solid var(--glass-border);
+  background: var(--input-bg);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  box-shadow: var(--shadow-inner);
+}
+
+.governanceChecklist svg {
+  color: var(--color-success);
+  flex: 0 0 auto;
+}
+
 @media (max-width: 1180px) {
   .floatingPill {
     border-radius: var(--radius-nav);
@@ -1874,16 +2518,26 @@
   .screenGrid,
   .signalGrid,
   .contentDirectionGrid,
-  .toolGrid {
+  .toolGrid,
+  .agentRosterGrid {
     grid-template-columns: 1fr;
   }
 
-  .toolsShell {
+  .toolsShell,
+  .agentOpsShell {
     grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
   }
 
-  .projectPlanner {
+  .projectPlanner,
+  .agentCommandPanel {
     position: static;
+  }
+
+  .agentHeroGrid,
+  .localModelGrid,
+  .runbookGrid,
+  .taskComposerGrid {
+    grid-template-columns: 1fr;
   }
 
   .intakeHero {
@@ -1897,6 +2551,12 @@
     height: auto;
     min-height: 100vh;
     overflow-y: auto;
+  }
+
+  .agentModeContainer {
+    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
   }
 
   .floatingNavContainer {
@@ -1930,6 +2590,19 @@
     padding: 1rem;
   }
 
+  .agentWorkspaceGrid {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .agentWorkspaceGrid .mainContent {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
   .contextSidebar {
     width: 100%;
     height: auto;
@@ -1940,16 +2613,114 @@
     padding: 1rem 0 7rem;
   }
 
+  .agentPageContainer {
+    height: calc(100vh - 10rem);
+    overflow: hidden;
+    padding: 0.75rem 1rem 1rem;
+  }
+
+  .agentContentWrapper,
+  .agentLayerScreen {
+    height: 100%;
+    min-height: 0;
+  }
+
   .formRow,
   .dossierGrid,
   .generationSteps,
   .entryBoard,
-  .toolsShell {
+  .toolsShell,
+  .agentOpsShell,
+  .agentTaskBoard,
+  .agentHeroGrid,
+  .localModelGrid,
+  .runbookGrid,
+  .taskComposerGrid {
     grid-template-columns: 1fr;
   }
 
   .approvalBar {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .agentOpsShell {
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 0.7rem;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .agentCommandPanel {
+    position: relative;
+    top: auto;
+    height: auto;
+    max-height: none;
+    padding: 0.8rem;
+    grid-template-rows: auto auto;
+    gap: 0.65rem;
+  }
+
+  .agentCommandPanel .toolHeader {
+    padding-bottom: 0.55rem;
+  }
+
+  .agentIdentityCard,
+  .agentStatGrid {
+    display: none;
+  }
+
+  .agentTabStack {
+    display: none;
+  }
+
+  .agentOpsWorkspace {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 0;
+  }
+
+  .agentOverviewStrip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    order: 2;
+  }
+
+  .taskComposer {
+    order: 1;
+  }
+
+  .agentOverviewStrip div {
+    padding: 0.7rem;
+  }
+
+  .agentOverviewStrip strong {
+    font-size: 13px;
+  }
+
+  .taskComposer,
+  .localModelPanel,
+  .localPromptPanel,
+  .runbookPanel {
+    padding: 0.85rem;
+  }
+
+  .taskComposerGrid {
+    gap: 0.65rem;
+  }
+
+  .taskComposer .routePreview {
+    display: none;
+  }
+
+  .agentLayerScreen .input,
+  .agentLayerScreen .textarea {
+    padding: 0.62rem 0.75rem;
+  }
+
+  .agentLayerScreen .textarea,
+  .taskComposer .textarea {
+    min-height: 62px;
   }
 }

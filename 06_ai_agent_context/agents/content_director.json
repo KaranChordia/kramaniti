@@ -75,12 +75,18 @@
   ],
   "memory_sources": [
     "04_content_system/pillars/content_pillars.md",
+    "04_content_system/calendar/content_calendar.md",
+    "04_content_system/campaigns/campaign_briefs.md",
+    "04_content_system/backlog/content_ideas_backlog.md",
+    "04_content_system/distribution/publishing_checklist.md",
     "03_brand_strategy/",
     "02_founder_context/",
     "05_ai_strategy/"
   ],
   "owned_files": [
-    "04_content_system/pillars/content_pillars.md"
+    "04_content_system/pillars/content_pillars.md",
+    "04_content_system/calendar/content_calendar.md",
+    "04_content_system/backlog/content_ideas_backlog.md"
   ],
   "inputs": [
     "foundation strategy",
@@ -100,7 +106,9 @@
     "narrative_editor",
     "brand_strategist",
     "asset_librarian",
-    "website_steward"
+    "website_steward",
+    "digital_presence_orchestrator",
+    "distribution_analytics_agent"
   ],
   "escalation_triggers": [
     "public metrics",

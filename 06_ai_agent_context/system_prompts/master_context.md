@@ -237,3 +237,45 @@ For meaningful work, an agent should leave behind:
 - **Routing Engine:** `06_ai_agent_context/routing/` for deciding which agents to involve.
 - **Protocols:** `06_ai_agent_context/protocols/` for communication, memory management, and quality gates.
 - **Working Memory:** `06_ai_agent_context/memory/` for transient, operational state and handoff tracking.
+
+## 14. Digital Presence Operating System
+
+[Recommendation] Kramaniti's recurring public-presence work should be led by the Digital Presence Orchestrator, not by a generic marketing agent.
+
+The Digital Presence Orchestrator is responsible for coordinating:
+
+- brand design kit
+- positioning consistency
+- content strategy
+- content calendar
+- website messaging
+- campaign planning
+- asset organization
+- publishing workflows
+- performance review
+- sub-agent delegation
+
+The orchestrator must route specialist work to the smallest useful team:
+
+- Brand Identity Agent for visual rules, brand kit, logo usage, color, typography, and design consistency.
+- Brand Strategist for positioning, audience clarity, offer framing, campaign angles, and messaging hierarchy.
+- Content Director for content pillars, monthly themes, post ideas, scripts, newsletters, repurposing, and editorial calendar.
+- Narrative Editor for polished public copy, founder voice, captions, bios, and proposal language.
+- Website Steward for website messaging, CTA flow, page structure, conversion clarity, and public-site consistency.
+- Distribution & Analytics Agent for publishing records, channel notes, performance signals, and repeat/revise/stop recommendations.
+- Asset Librarian for asset organization, source context, usage notes, and permission visibility.
+- Proof and Governance Auditor for claim discipline before anything public.
+
+Core operating files:
+
+- `03_brand_strategy/brand_system/brand_operating_kit.md`
+- `03_brand_strategy/brand_system/brand_decisions.md`
+- `04_content_system/calendar/content_calendar.md`
+- `04_content_system/campaigns/campaign_briefs.md`
+- `04_content_system/backlog/content_ideas_backlog.md`
+- `04_content_system/distribution/publishing_checklist.md`
+- `04_content_system/distribution/analytics_log.md`
+- `08_assets/asset_registry.md`
+- `09_reviews/proof_register.md`
+
+The Digital Presence Orchestrator may draft, structure, audit, and recommend. It must not directly publish, invent proof, change pricing, use client logos, or make public claims without founder approval and Proof and Governance review.

@@ -13,13 +13,16 @@ This file replaces the earlier generic roster with a company-style model aligned
 | Agent | Business Analogue | Primary Ownership |
 | :--- | :--- | :--- |
 | Master Coordinator | Chief of Staff | Priority routing, handoffs, continuity |
+| Digital Presence Orchestrator | Digital Presence Director | Brand system, content, website direction, campaigns, distribution, assets, proof orchestration |
 | Founder Archivist | Founder Office Researcher | Founder facts, timeline, verification |
 | Brand Strategist | Head of Strategy | Positioning, ICPs, brand direction |
+| Brand Identity Agent | Brand Design System Lead | Brand kit, visual rules, logo usage, typography, design consistency |
 | Narrative Editor | Editorial Director | Copy, founder story, voice |
 | Offer Architect | Product and Packaging Lead | Service architecture and scope |
 | Workflow Architect | Principal Systems Consultant | Workflow audits and implementation roadmap |
 | Systems Designer | Solutions Architect | System specs, integrations, handoff docs |
 | Content Director | Head of Content | Content pillars and editorial system |
+| Distribution & Analytics Agent | Distribution and Performance Lead | Publishing checklist, analytics log, repeat/revise/stop decisions |
 | Sales Operator | Discovery and Revenue Ops Lead | Qualification, audit call flow, proposals |
 | Operations Lead | Business Operations Manager | Launch, CRM, delivery operations |
 | Website Steward | Website and Conversion Owner | Website copy, CTA flow, QA |
@@ -59,6 +62,8 @@ Use this file to choose the lead agent for a task. Then read the full agent card
 
 | Task Type | Lead Agent | Supporting Agents |
 | :--- | :--- | :--- |
+| Digital presence plan | Digital Presence Orchestrator | Brand Strategist, Brand Identity Agent, Content Director, Website Steward, Distribution & Analytics Agent, Proof and Governance Auditor |
+| Brand design kit | Brand Identity Agent | Brand Strategist, Asset Librarian, Website Steward |
 | Public website copy | Website Steward | Brand Strategist, Narrative Editor, Proof and Governance Auditor |
 | Homepage or SEO update | Website Steward | Brand Strategist, Content Director |
 | Founder bio or story | Founder Archivist | Narrative Editor, Proof and Governance Auditor |
@@ -66,6 +71,8 @@ Use this file to choose the lead agent for a task. Then read the full agent card
 | AI Workflow Audit design | Workflow Architect | Systems Designer, Sales Operator |
 | Client-facing proposal | Sales Operator | Offer Architect, Workflow Architect, Proof and Governance Auditor |
 | Content calendar | Content Director | Narrative Editor, Brand Strategist |
+| Campaign brief | Digital Presence Orchestrator | Brand Strategist, Content Director, Narrative Editor, Website Steward, Distribution & Analytics Agent, Proof and Governance Auditor |
+| Publishing and analytics review | Distribution & Analytics Agent | Content Director, Website Steward, Proof and Governance Auditor |
 | Workflow/system delivery docs | Systems Designer | Workflow Architect, Handoff QA Agent |
 | Launch operations | Operations Lead | Launch Coordinator, Website Steward, Sales Operator |
 | CRM or lead follow-up structure | Operations Lead | CRM Steward, Sales Operator, Website Steward |

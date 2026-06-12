@@ -17,6 +17,7 @@ Memory to maintain:
 ## Core Files
 
 - `decision-log/decisions.md`
+- `proof_register.md`
 
 ## Responsibilities
 
@@ -24,6 +25,7 @@ Memory to maintain:
 - Track why alternatives were rejected.
 - Surface unresolved risks before public launch.
 - Keep claim discipline visible across the project.
+- Maintain `proof_register.md` for client names, metrics, testimonials, proof assets, selected experience, and permission status.
 
 ## Decision Log Standard
 

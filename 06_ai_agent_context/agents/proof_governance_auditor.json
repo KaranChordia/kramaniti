@@ -71,10 +71,12 @@
     }
   ],
   "memory_sources": [
-    "09_reviews/decision-log/decisions.md"
+    "09_reviews/decision-log/decisions.md",
+    "09_reviews/proof_register.md"
   ],
   "owned_files": [
-    "09_reviews/decision-log/decisions.md"
+    "09_reviews/decision-log/decisions.md",
+    "09_reviews/proof_register.md"
   ],
   "inputs": [
     "proposed public copy",
@@ -92,7 +94,9 @@
     "founder_archivist",
     "website_steward",
     "brand_strategist",
-    "sales_operator"
+    "sales_operator",
+    "digital_presence_orchestrator",
+    "distribution_analytics_agent"
   ],
   "escalation_triggers": [
     "any public proof claim without evidence or permission",

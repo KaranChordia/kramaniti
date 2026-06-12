@@ -20,10 +20,17 @@ Memory to maintain:
 - Repurposing Producer: converts one idea into posts, newsletters, scripts, and article outlines.
 - Cinematic Scriptwriter: writes founder-led scripts and video outlines.
 - Distribution Editor: adapts copy for LinkedIn, X, Medium, email, and short-form video.
+- Distribution & Analytics Agent: owns recurring publishing checklist, analytics log, and repeat/revise/stop recommendations.
+- Digital Presence Orchestrator: coordinates content with brand strategy, website direction, distribution, assets, and proof review when the work is campaign-level.
 
 ## Core Files
 
 - `pillars/content_pillars.md`
+- `calendar/content_calendar.md`
+- `campaigns/campaign_briefs.md`
+- `backlog/content_ideas_backlog.md`
+- `distribution/publishing_checklist.md`
+- `distribution/analytics_log.md`
 
 ## Responsibilities
 
@@ -32,6 +39,7 @@ Memory to maintain:
 - Keep content connected to Kramaniti's offers and founder story.
 - Preserve a human voice even when using AI-assisted drafting.
 - Mark claims with the correct data label when drafting evidence-based content.
+- Keep calendar and campaign work tied to strategy, offer fit, and proof status rather than volume.
 
 ## Constraints
 
