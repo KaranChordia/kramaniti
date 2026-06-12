@@ -16,7 +16,7 @@ Memory to maintain:
 
 ## Core Files
 
-- `decision-log/decisions.md`
+- `decisions.md`
 - `proof_register.md`
 
 ## Responsibilities

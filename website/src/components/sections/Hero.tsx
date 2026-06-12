@@ -22,6 +22,8 @@ export function Hero() {
     const hero = heroRef.current;
     if (!hero) return;
 
+    let isListenerBound = false;
+
     const updateScroll = () => {
       const rect = hero.getBoundingClientRect();
       const maxScroll = Math.max(hero.offsetHeight - window.innerHeight, 1);
@@ -41,13 +43,32 @@ export function Hero() {
       document.documentElement.style.setProperty('--global-hero-scroll', `${scrollProgress.toFixed(4)}`);
     };
 
-    updateScroll();
-    window.addEventListener('scroll', updateScroll, { passive: true });
-    window.addEventListener('resize', updateScroll);
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) {
+        if (isListenerBound) {
+          window.removeEventListener('scroll', updateScroll);
+          isListenerBound = false;
+        }
+        hero.style.setProperty('--hero-scroll', '0');
+        document.documentElement.style.setProperty('--global-hero-scroll', '0');
+      } else {
+        if (!isListenerBound) {
+          window.addEventListener('scroll', updateScroll, { passive: true });
+          isListenerBound = true;
+        }
+        updateScroll();
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('scroll', updateScroll);
-      window.removeEventListener('resize', updateScroll);
+      window.removeEventListener('resize', handleResize);
+      if (isListenerBound) {
+        window.removeEventListener('scroll', updateScroll);
+      }
     };
   }, []);
 
@@ -59,6 +80,17 @@ export function Hero() {
         <div className={styles.background} aria-hidden="true">
           <div className={`${styles.glow} ${styles.glowLeft}`}></div>
           <div className={`${styles.glow} ${styles.glowRight}`}></div>
+          
+          <div className={styles.atmosphere} aria-hidden="true">
+            <div className={`${styles.flowLine} ${styles.flowHorizontal} ${styles.flowPos1}`}></div>
+            <div className={`${styles.flowLine} ${styles.flowHorizontal} ${styles.flowPos2}`}></div>
+            <div className={`${styles.flowLine} ${styles.flowHorizontal} ${styles.flowPos3}`}></div>
+            <div className={`${styles.flowLine} ${styles.flowHorizontal} ${styles.flowPos4}`}></div>
+            <div className={`${styles.flowLine} ${styles.flowVertical} ${styles.flowPos5}`}></div>
+            <div className={`${styles.flowLine} ${styles.flowVertical} ${styles.flowPos6}`}></div>
+            <div className={`${styles.flowLine} ${styles.flowVertical} ${styles.flowPos7}`}></div>
+            <div className={`${styles.flowLine} ${styles.flowVertical} ${styles.flowPos8}`}></div>
+          </div>
           
           <div className={`${styles.layerStack} ${isIntroVisible ? styles.stackVisible : ''}`}>
             {/* Golden Flow Trace for Layer 1 */}

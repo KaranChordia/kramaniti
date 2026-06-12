@@ -55,7 +55,7 @@ export function ThemeToggle() {
       // To prevent the text "double-shift" glitch, we briefly suppress
       // all transitions before removing the attribute so that component-
       // level transition rules don't re-trigger a color animation.
-      const cleanup = setTimeout(() => {
+      setTimeout(() => {
         root.style.setProperty('--theme-transition-lock', '1');
         root.setAttribute('data-theme-settling', '');
         root.removeAttribute('data-theme-transitioning');
@@ -98,4 +98,3 @@ export function ThemeToggle() {
     </button>
   );
 }
-

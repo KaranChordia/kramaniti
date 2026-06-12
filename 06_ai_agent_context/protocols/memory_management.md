@@ -12,8 +12,8 @@ This document defines how agents maintain state within the repository.
 1. **During a task:** Update your `active_context.md` in WM so other agents know what you are doing.
 2. **When passing work:** Update `handoff_log.md` in WM.
 3. **When a decision is finalized:** 
-   - Update the relevant KB file (e.g., `03_brand_strategy/offers/service_packages.md`).
-   - If it changes the business trajectory, add an entry to `09_reviews/decision-log/decisions.md`.
+   - Update the relevant KB file (e.g., `03_brand_strategy/service_packages.md`).
+   - If it changes the business trajectory, add an entry to `09_reviews/decisions.md`.
    - Clear the item from WM.
 
 ## Conflict Avoidance

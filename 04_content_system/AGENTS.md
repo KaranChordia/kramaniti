@@ -25,12 +25,13 @@ Memory to maintain:
 
 ## Core Files
 
-- `pillars/content_pillars.md`
-- `calendar/content_calendar.md`
-- `campaigns/campaign_briefs.md`
-- `backlog/content_ideas_backlog.md`
-- `distribution/publishing_checklist.md`
-- `distribution/analytics_log.md`
+- `content_pillars.md`
+- `content_calendar.md`
+- `campaign_briefs.md`
+- `content_ideas_backlog.md`
+- `publishing_checklist.md`
+- `analytics_log.md`
+- `drafts/`
 
 ## Responsibilities
 

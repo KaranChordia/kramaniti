@@ -7,7 +7,7 @@
 **Related Files:**
 *   [company_name_ideas.md](file:///Users/k.c/kramaniti/03_brand_strategy/naming/company_name_ideas.md) — Original naming evaluation and scoring
 *   [positioning_analysis.md](file:///Users/k.c/kramaniti/03_brand_strategy/positioning/positioning_analysis.md) — Market positioning context
-*   [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/narrative/brand_narrative.md) — Core brand story and bios
+*   [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/brand_narrative.md) — Core brand story and bios
 
 ---
 
@@ -51,7 +51,7 @@
 
 | Asset | Current Status | Action Required | Priority |
 | :--- | :--- | :--- | :--- |
-| **Company Page** (`linkedin.com/company/kramaniti`) | `[Unverified]` — Not yet created | Create a LinkedIn Company Page under the name "Kramaniti". Requires a personal LinkedIn account as admin. Upload logo, banner, and populate the "About" section with the 100-word professional bio from [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/narrative/brand_narrative.md). Set industry to "Technology, Information and Internet" or "IT Services and IT Consulting". | 🔴 Critical |
+| **Company Page** (`linkedin.com/company/kramaniti`) | `[Unverified]` — Not yet created | Create a LinkedIn Company Page under the name "Kramaniti". Requires a personal LinkedIn account as admin. Upload logo, banner, and populate the "About" section with the 100-word professional bio from [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/brand_narrative.md). Set industry to "Technology, Information and Internet" or "IT Services and IT Consulting". | 🔴 Critical |
 | **Personal Handle** (`linkedin.com/in/karanchordia` or similar) | `[Inference]` — Karan likely has an existing personal profile | Update the personal profile headline to align with the new positioning: **"AI Architect · Founder, Kramaniti · Building intelligent media systems for modern enterprises"**. Link the Company Page. Update the "Experience" section to list Kramaniti as the current primary role. | 🔴 Critical |
 
 **LinkedIn Configuration Notes:**
@@ -64,7 +64,7 @@
 
 | Asset | Current Status | Action Required | Priority |
 | :--- | :--- | :--- | :--- |
-| **@kramaniti** | `[Unverified]` — Likely available (coined term) | Register the handle immediately. Set display name to "Kramaniti". Populate bio with the 1-sentence elevator pitch from [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/narrative/brand_narrative.md): *"We help founders and tech brands turn complex ideas into cinematic stories and AI-powered content engines."* Pin a launch announcement tweet. | 🔴 Critical |
+| **@kramaniti** | `[Unverified]` — Likely available (coined term) | Register the handle immediately. Set display name to "Kramaniti". Populate bio with the 1-sentence elevator pitch from [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/brand_narrative.md): *"We help founders and tech brands turn complex ideas into cinematic stories and AI-powered content engines."* Pin a launch announcement tweet. | 🔴 Critical |
 
 **X/Twitter Configuration Notes:**
 *   `[Recommendation]`: Secure the handle before any public domain registration (WHOIS alerts can trigger squatters on social platforms).
@@ -84,11 +84,11 @@
 1.  **Handle Update:** Change the YouTube handle from `@HowDramaTech` (or current custom URL) to `@kramaniti`. YouTube allows one handle change every 14 days (`[Fact]`).
 2.  **Channel Name Update:** Rename the channel from "HowDramaTech" to "Kramaniti" via YouTube Studio → Customization → Basic Info.
 3.  **Channel Art Refresh:** Replace the existing banner and profile image with the new Kramaniti brand identity assets (see [brand_identity_guidelines.md](file:///Users/k.c/kramaniti/03_brand_strategy/positioning/brand_identity_guidelines.md)).
-4.  **Channel Description Rewrite:** Replace the existing description with the 100-word bio from [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/narrative/brand_narrative.md), appending a link to the new website and Calendly booking page.
+4.  **Channel Description Rewrite:** Replace the existing description with the 100-word bio from [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/brand_narrative.md), appending a link to the new website and Calendly booking page.
 5.  **Legacy Content Strategy:**
-    *   `[Recommendation]`: Do NOT unlist or delete the old WeWork/drone/tech vlogs. They serve as verifiable proof of the B2B media track record referenced in the [career_timeline.md](file:///Users/k.c/kramaniti/02_founder_context/timeline/career_timeline.md).
+    *   `[Recommendation]`: Do NOT unlist or delete the old WeWork/drone/tech vlogs. They serve as verifiable proof of the B2B media track record referenced in the [career_timeline.md](file:///Users/k.c/kramaniti/02_founder_context/career_timeline.md).
     *   `[Recommendation]`: Create a "Legacy Archive (2017-2019)" playlist to organize old content. Pin a new "Welcome to Kramaniti" channel trailer as the featured video for non-subscribers.
-6.  **Community Post:** Publish a YouTube Community post explaining the rebrand to existing subscribers. Frame it using Angle C ("The Incubation Reframe") from the [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/narrative/brand_narrative.md).
+6.  **Community Post:** Publish a YouTube Community post explaining the rebrand to existing subscribers. Frame it using Angle C ("The Incubation Reframe") from the [brand_narrative.md](file:///Users/k.c/kramaniti/03_brand_strategy/brand_narrative.md).
 
 ---
 
@@ -99,7 +99,7 @@
 | **@kramaniti** (or `/kramaniti`) | `[Unverified]` — Likely available | Register the Medium handle. Link it to the Kramaniti website. Publish a launch essay using the core brand narrative as the first post. | 🟡 Medium |
 
 **Medium Configuration Notes:**
-*   `[Recommendation]`: Use Medium as a long-form thought leadership platform (Pillar 4: Systems & Risk content from [content_pillars.md](file:///Users/k.c/kramaniti/04_content_system/pillars/content_pillars.md) maps well here).
+*   `[Recommendation]`: Use Medium as a long-form thought leadership platform (Pillar 4: Systems & Risk content from [content_pillars.md](file:///Users/k.c/kramaniti/04_content_system/content_pillars.md) maps well here).
 *   `[Inference]`: Karan has an existing Medium presence from the 2017-2019 era with published articles on professional philosophies. If the existing account uses the `HowDramaTech` or personal handle, update the username to `kramaniti` and add a bio redirect.
 *   `[Recommendation]`: Consider importing Medium articles into a self-hosted blog on the Kramaniti website (via canonical URL tags) once the site is live, to consolidate SEO equity.
 
@@ -149,4 +149,4 @@
 1.  Execute domain registrations per the priority sequence in Section 1.
 2.  Secure all 🔴 Critical social handles within 24 hours.
 3.  Update this registry with confirmed acquisition statuses (move `[Unverified]` → `[Fact]` as each asset is secured).
-4.  Log all registrations in [decisions.md](file:///Users/k.c/kramaniti/09_reviews/decision-log/decisions.md).
+4.  Log all registrations in [decisions.md](file:///Users/k.c/kramaniti/09_reviews/decisions.md).

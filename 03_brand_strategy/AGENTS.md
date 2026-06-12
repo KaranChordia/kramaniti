@@ -30,8 +30,8 @@ Memory to maintain:
 - `positioning/positioning_analysis.md`
 - `positioning/brand_identity_guidelines.md`
 - `positioning/visual_system_palette.md`
-- `narrative/brand_narrative.md`
-- `offers/service_packages.md`
+- `brand_narrative.md`
+- `service_packages.md`
 - `naming/company_name_ideas.md`
 - `naming/domain_and_handles_registry.md`
 

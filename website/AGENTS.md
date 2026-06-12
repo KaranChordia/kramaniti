@@ -26,8 +26,9 @@ Memory to maintain:
 - React 19.
 - CSS Modules.
 - Static export.
-- Public base path: `/kramaniti`.
-- Public asset prefix: `/kramaniti/`.
+- Public deployment path: custom domain root (`/`).
+- Public assets use root-relative paths such as `/assets/...`.
+- The old GitHub Pages `/kramaniti` subpath is not the active Vercel deployment model.
 
 Before changing framework behavior, read the local Next.js docs in `node_modules/next/dist/docs/`.
 

@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import styles from './Services.module.css';
-import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
@@ -43,6 +42,15 @@ export function Services() {
     document.getElementById('contact')?.scrollIntoView();
   };
 
+  const getCoordinate = (id: number) => {
+    switch (id) {
+      case 1: return '[01/CLARITY]';
+      case 2: return '[02/BUILD]';
+      case 3: return '[03/CONTINUITY]';
+      default: return `[0${id}/SYSTEM]`;
+    }
+  };
+
   return (
     <section className={styles.services} id="services" ref={ref as React.RefObject<HTMLDivElement>}>
       <div className={styles.atmosphere} aria-hidden="true">
@@ -56,33 +64,34 @@ export function Services() {
           <p className="text-secondary">Start by clarifying how the business works, then build the systems and communication layer that help it operate and grow with coherence.</p>
         </div>
 
-        <div className={styles.grid}>
+        <div className={styles.servicesGrid}>
           {tiers.map((tier, index) => (
-            <Card 
+            <div 
               key={tier.id} 
-              className={`glass-border-layer ${styles.tierCard} ${styles.serviceGlass} ${tier.isPopular ? styles.popularCard : ''} ${isVisible ? styles.visible : ''}`}
+              className={`${styles.tierColumn} ${tier.isPopular ? styles.popularTier : ''} ${isVisible ? styles.visible : ''}`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
               {tier.isPopular && <div className={styles.popularBadge}>RECOMMENDED</div>}
               
-              <div className={styles.cardHeader}>
+              <div className={styles.tierHeader}>
+                <span className={styles.tierCoordinate}>{getCoordinate(tier.id)}</span>
                 <span className="micro-label">{tier.label}</span>
                 <h4>{tier.title}</h4>
                 <p className={`${styles.summary} text-secondary caption`}>{tier.summary}</p>
               </div>
               
+              <div className={styles.dividerLine}></div>
+              
               <ul className={styles.deliverables}>
                 {tier.deliverables.map((item, i) => (
                   <li key={i}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-burnished-gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
+                    <span className={styles.deliverableBullet}>+</span>
                     <span className="text-secondary caption">{item}</span>
                   </li>
                 ))}
               </ul>
               
-              <div className={styles.cardFooter}>
+              <div className={styles.tierFooter}>
                 <Button 
                   variant={tier.isPopular ? 'primary' : 'secondary'} 
                   className={styles.tierCta}
@@ -91,11 +100,11 @@ export function Services() {
                   {tier.ctaText}
                 </Button>
               </div>
-            </Card>
+            </div>
           ))}
         </div>
 
-        <div className={`glass-border-layer ${styles.enablementLayer} ${styles.serviceGlass} ${isVisible ? styles.visible : ''}`}>
+        <div className={`${styles.enablementPanel} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.enablementCopy}>
             <span className="micro-label">AI Enablement & Adoption</span>
             <h4>Human-collaborative, not fully automated.</h4>
@@ -113,3 +122,4 @@ export function Services() {
     </section>
   );
 }
+

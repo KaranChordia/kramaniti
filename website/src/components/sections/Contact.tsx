@@ -34,12 +34,12 @@ export function Contact() {
 
         <div className={styles.grid}>
           <div className={`${styles.formColumn} ${isVisible ? styles.visible : ''}`}>
-            <form className={`glass-border-layer ${styles.form} ${styles.contactGlass}`} onSubmit={(e) => e.preventDefault()}>
-              <Input label="Name" placeholder="Your full name" required />
-              <Input label="Work Email" type="email" placeholder="name@company.com" required />
-              <Input label="Company / Brand" placeholder="Company or brand name" required />
-              <Select label="Budget Range" options={budgetOptions} />
-              <Textarea label="Workflow / Goal" placeholder="Tell us what feels messy, manual, unclear, or ready to improve" />
+            <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+              <Input label="Name" placeholder="Your full name" required className={styles.contactInput} />
+              <Input label="Work Email" type="email" placeholder="name@company.com" required className={styles.contactInput} />
+              <Input label="Company / Brand" placeholder="Company or brand name" required className={styles.contactInput} />
+              <Select label="Budget Range" options={budgetOptions} className={styles.contactInput} />
+              <Textarea label="Workflow / Goal" placeholder="Tell us what feels messy, manual, unclear, or ready to improve" className={styles.contactInput} />
               <Button type="submit" variant="primary" className={styles.submitBtn}>
                 Request Alignment Audit
               </Button>
@@ -47,7 +47,7 @@ export function Contact() {
           </div>
 
           <div className={`${styles.calendlyColumn} ${isVisible ? styles.visible : ''}`}>
-            <div className={`glass-border-layer ${styles.calendlyPlaceholder} ${styles.contactGlass}`}>
+            <div className={styles.calendlyPlaceholder}>
               <span className="micro-label">Alignment focus</span>
               <h3>Find the first system worth building.</h3>
               <p className="text-secondary caption">A useful audit should leave you with clearer business logic, a priority workflow, and a practical next step across operations, intelligence, and presence.</p>

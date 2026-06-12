@@ -71,11 +71,11 @@
     }
   ],
   "memory_sources": [
-    "09_reviews/decision-log/decisions.md",
+    "09_reviews/decisions.md",
     "09_reviews/proof_register.md"
   ],
   "owned_files": [
-    "09_reviews/decision-log/decisions.md",
+    "09_reviews/decisions.md",
     "09_reviews/proof_register.md"
   ],
   "inputs": [

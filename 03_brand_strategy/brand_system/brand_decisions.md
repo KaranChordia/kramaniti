@@ -1,6 +1,6 @@
 # Brand Decisions
 
-**Purpose:** Track working brand-presence decisions that guide the Digital Presence Orchestrator. This file supports the main decision log; it does not replace `09_reviews/decision-log/decisions.md`.
+**Purpose:** Track working brand-presence decisions that guide the Digital Presence Orchestrator. This file supports the main decision log; it does not replace `09_reviews/decisions.md`.
 
 **Key Findings:** [Recommendation] Brand decisions should stay close to the brand operating kit so future agents can understand what was accepted, what remains open, and what should not be revived without approval.
 
@@ -8,7 +8,7 @@
 
 **Interpretation:** [Inference] The recurring digital presence role is broad enough to need its own operating kit, but public proof and final publishing authority remain governed.
 
-**Implications:** Small brand-presence choices can live here. Major strategic or structural decisions must also be logged in `09_reviews/decision-log/decisions.md`.
+**Implications:** Small brand-presence choices can live here. Major strategic or structural decisions must also be logged in `09_reviews/decisions.md`.
 
 **Open Questions:** Which social channels should become active first? Which cadence is realistic for the founder to approve?
 
@@ -29,4 +29,4 @@
 | :--- | :--- | :--- | :--- |
 | Which channels are active for the first operating cycle? | Digital Presence Orchestrator | Open | Candidate channels should be chosen before filling the content calendar. |
 | What approval rhythm should be used for public publishing? | Digital Presence Orchestrator | Open | Weekly batch approval is the simplest starting model. |
-| Which visual assets are approved for repeated public use? | Asset Librarian | Open | Track decisions in `08_assets/asset_registry.md`. |
+| Which visual assets are approved for repeated public use? | Asset Librarian | Open | Track decisions in `08_brand_assets/asset_registry.md`. |

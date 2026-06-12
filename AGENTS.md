@@ -19,7 +19,7 @@ Before making strategic, copy, website, offer, content, or agent changes, inspec
 - `docs/Kramaniti Foundation Document.pdf`
 - `06_ai_agent_context/system_prompts/master_context.md`
 - `06_ai_agent_context/agent_roles/kramaniti_agent_roster.md`
-- `09_reviews/decision-log/decisions.md`
+- `09_reviews/decisions.md`
 
 For website work, also read:
 
@@ -67,7 +67,7 @@ Technical terms can appear in internal docs or deeper technical pages when usefu
 - Keep the workspace human-readable and AI-agent-ready.
 - Prefer small, intentional document updates over broad rewrites.
 - Preserve existing strategic context unless a newer canonical document clearly supersedes it.
-- When a major strategic decision changes, update `09_reviews/decision-log/decisions.md`.
+- When a major strategic decision changes, update `09_reviews/decisions.md`.
 - Do not store secrets, credentials, private API keys, client data, or private personal information in this repository.
 - If a task crosses multiple work areas, identify the lead agent from the roster and the supporting agents before editing.
 
@@ -79,7 +79,7 @@ Technical terms can appear in internal docs or deeper technical pages when usefu
 - `05_ai_strategy/`: workflow audits, systems delivery, implementation blueprints.
 - `06_ai_agent_context/`: agent definitions, prompts, memory, operating model.
 - `07_business_build/`: launch operations, sales, CRM, delivery operations.
-- `08_assets/`: brand assets, references, exports, screenshots.
+- `08_brand_assets/`: brand assets, references, exports, screenshots.
 - `09_reviews/`: decisions, governance, review logs.
 - `docs/`: implementation plans, handoff notes, cross-functional documentation.
 - `website/`: public Next.js website.

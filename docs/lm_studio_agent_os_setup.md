@@ -47,7 +47,7 @@ nvidia/nemotron-3-nano-4b
 http://localhost:3000/studio/
 ```
 
-For a hosted static build that uses the public base path, the equivalent public route may be `/kramaniti/studio/`.
+For the current Vercel custom-domain deployment, the hosted route is `/studio/`. A legacy GitHub Pages subpath should be used only if the website config is intentionally changed back to a repository base path.
 
 8. Switch to Agents, then open the LM Studio tab.
 9. Enter the base URL and model identifier.

@@ -175,6 +175,8 @@ Flagged:
 
 2026-06-11 update: Kramaniti Studio now includes an Agent OS mode inside `/studio`.
 
+2026-06-12 structure update: the superseded root-level `studio/` prototype app was removed. The canonical Studio implementation now lives only inside the active website app under `website/src/app/studio/`, with supporting code under `website/src/lib/studio/` and `website/src/app/api/studio/`.
+
 [Recommendation] Agent management should stay inside Studio's existing planning workbench rather than becoming a disconnected admin dashboard. The mode keeps the same liquid-glass visual system, rectangular radius scale, and local-first operating pattern established for Studio tools.
 
 Added frontend capabilities:

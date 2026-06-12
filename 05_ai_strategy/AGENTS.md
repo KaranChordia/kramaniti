@@ -23,7 +23,7 @@ Memory to maintain:
 
 ## Core Files
 
-- `workflows/ai_service_workflows.md`
+- `ai_service_workflows.md`
 
 ## Responsibilities
 

@@ -10,12 +10,12 @@
 
 - `03_brand_strategy/brand_system/brand_operating_kit.md`
 - `03_brand_strategy/brand_system/brand_decisions.md`
-- `04_content_system/calendar/content_calendar.md`
-- `04_content_system/campaigns/campaign_briefs.md`
-- `04_content_system/backlog/content_ideas_backlog.md`
-- `04_content_system/distribution/publishing_checklist.md`
-- `04_content_system/distribution/analytics_log.md`
-- `08_assets/asset_registry.md`
+- `04_content_system/content_calendar.md`
+- `04_content_system/campaign_briefs.md`
+- `04_content_system/content_ideas_backlog.md`
+- `04_content_system/publishing_checklist.md`
+- `04_content_system/analytics_log.md`
+- `08_brand_assets/asset_registry.md`
 - `09_reviews/proof_register.md`
 
 **Next Review:** Fill the first active channel plan and monthly content theme after founder channel/cadence approval.

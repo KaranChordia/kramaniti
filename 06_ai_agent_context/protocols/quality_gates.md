@@ -20,4 +20,4 @@ Before an agent considers a task "Done" and hands it off or presents it for huma
 - [ ] Was the relevant `AGENTS.md` read before executing?
 - [ ] Were the correct files updated?
 - [ ] Is the next step clear for the human or the next agent?
-- [ ] If a strategic decision was made, is it logged in `09_reviews/decision-log/decisions.md`?
+- [ ] If a strategic decision was made, is it logged in `09_reviews/decisions.md`?

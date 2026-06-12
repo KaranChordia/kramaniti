@@ -22,12 +22,15 @@ dist/
 .next/
 out/
 .cache/
-tsconfig.tsbuildinfo
+coverage/
+*.tsbuildinfo
+next-env.d.ts
 
 # PDF exports (generated, not source)
 *.pdf
+!08_brand_assets/exports/*.pdf
 
 # Temporary
 *.tmp
 *.bak
-.vercel
+.vercel/

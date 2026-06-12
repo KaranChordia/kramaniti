@@ -15,9 +15,9 @@ Memory to maintain:
 
 ## Core Files
 
-- `background/founder_background.md`
-- `timeline/career_timeline.md`
-- `skills/skill_clusters.md`
+- `founder_background.md`
+- `career_timeline.md`
+- `skill_clusters.md`
 
 ## Responsibilities
 

@@ -44,15 +44,15 @@
     }
   ],
   "memory_sources": [
-    "02_founder_context/background/founder_background.md",
-    "02_founder_context/timeline/career_timeline.md",
-    "02_founder_context/skills/skill_clusters.md",
+    "02_founder_context/founder_background.md",
+    "02_founder_context/career_timeline.md",
+    "02_founder_context/skill_clusters.md",
     "06_ai_agent_context/system_prompts/master_context.md"
   ],
   "owned_files": [
-    "02_founder_context/background/founder_background.md",
-    "02_founder_context/timeline/career_timeline.md",
-    "02_founder_context/skills/skill_clusters.md"
+    "02_founder_context/founder_background.md",
+    "02_founder_context/career_timeline.md",
+    "02_founder_context/skill_clusters.md"
   ],
   "inputs": [
     "founder notes",

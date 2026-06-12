@@ -47,14 +47,14 @@
     "docs/Kramaniti Foundation Document.pdf",
     "03_brand_strategy/positioning/positioning_analysis.md",
     "03_brand_strategy/positioning/brand_identity_guidelines.md",
-    "03_brand_strategy/narrative/brand_narrative.md",
+    "03_brand_strategy/brand_narrative.md",
     "06_ai_agent_context/system_prompts/master_context.md",
     "06_ai_agent_context/memory/brand_strategist/"
   ],
   "owned_files": [
     "03_brand_strategy/positioning/positioning_analysis.md",
     "03_brand_strategy/positioning/brand_identity_guidelines.md",
-    "03_brand_strategy/narrative/brand_narrative.md"
+    "03_brand_strategy/brand_narrative.md"
   ],
   "inputs": [
     "foundation document",

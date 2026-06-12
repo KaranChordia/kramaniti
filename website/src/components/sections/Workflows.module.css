@@ -199,136 +199,141 @@
   }
 }
 
-.pipelineContainer {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
-  opacity: 1;
-  transform: none;
+.pipelineRailSequence {
+  position: relative;
+  padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 48px;
 }
 
 @media (min-width: 768px) {
-  .pipelineContainer {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .pipelineRailSequence {
+    padding-left: 48px;
   }
 }
 
-@media (min-width: 1024px) {
-  .pipelineContainer {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+.railLine {
+  position: absolute;
+  left: 20px; /* Centered in nodePoint column (container padding + node size) */
+  top: 16px;
+  bottom: 16px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(201, 168, 76, 0.12) 0%, rgba(201, 168, 76, 0.8) 50%, rgba(201, 168, 76, 0.12) 100%);
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .railLine {
+    left: 16px;
   }
 }
 
-.pipelineNode {
-  --workflow-step-width: 36px;
+.railNodeRow {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  gap: 16px;
-  text-align: center;
+  align-items: flex-start;
+  gap: 20px;
+  position: relative;
+  transition: opacity 300ms ease, transform 300ms ease;
 }
 
-.nodeIconWrapper {
+@media (min-width: 768px) {
+  .railNodeRow {
+    gap: 28px;
+  }
+}
+
+.nodePointContainer {
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 2;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .nodePointContainer {
+    width: 42px;
+  }
+}
+
+.nodePoint {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 1px solid rgba(201, 168, 76, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--workflow-step-width);
+  position: relative;
+  transition: border-color 300ms ease, box-shadow 300ms ease, background-color 300ms ease;
 }
 
-.nodeIcon {
-  font-family: var(--font-jetbrains-mono), monospace;
-  display: block;
-  font-size: 18px;
+.nodeNumber {
+  font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), monospace;
+  font-size: 11px;
   font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.04em;
   color: var(--color-burnished-gold);
-  transform: translateY(-1px);
+  line-height: 1;
 }
 
-.nodeCard {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  background: var(--surface-panel);
-  border-radius: 18px;
-  box-shadow: var(--shadow-elevation-1);
-  transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.workflowGlass {
-  --glass-border-layer-inset: -4px;
-  --glass-border-layer-radius: 20px;
-  --glass-border-layer-blur: 12px;
-  --glass-border-layer-fill-top: rgba(255, 255, 255, 0.05);
-  --glass-border-layer-fill-bottom: rgba(255, 255, 255, 0.012);
-  --glass-border-layer-fill-solid: rgba(255, 255, 255, 0.018);
-  --glass-border-layer-border: rgba(255, 255, 255, 0.08);
-  --glass-border-layer-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 10px 22px rgba(0, 0, 0, 0.09);
-}
-
-.nodeCard p {
-  margin: 0;
-}
-
-.nodeCard h4 {
-  margin: 0;
-}
-
-.nodeCard:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-elevation-2);
-}
-
-.nodeBar {
-  width: 42px;
-  height: 4px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(201, 168, 76, 0.9), rgba(201, 168, 76, 0.18));
-  margin-bottom: 8px;
-}
-
-.primaryCard {
-  position: relative;
-  border-color: rgba(201, 168, 76, 0.4);
-}
-
-.primaryCard:hover {
-  border-color: rgba(201, 168, 76, 0.55);
-}
-
-.glowOverlay {
+.nodeGlowRing {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, rgba(201, 168, 76, 0.1) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transform: scale(0.9);
+  transition: border-color 300ms ease, transform 300ms ease;
 }
 
-.connector {
-  width: 2px;
-  height: 40px;
-  background: linear-gradient(180deg, rgba(201, 168, 76, 0.15), rgba(201, 168, 76, 0.7), rgba(201, 168, 76, 0.15));
-  margin: 8px 0;
+.railNodeRow:hover .nodePoint {
+  border-color: var(--color-burnished-gold);
+  box-shadow: 0 0 10px rgba(201, 168, 76, 0.25);
+  background: rgba(201, 168, 76, 0.05);
 }
 
-@media (min-width: 768px) {
-  .connector {
-    width: 40px;
-    height: 2px;
-    margin: 48px 16px 0;
-  }
+.railNodeRow:hover .nodeGlowRing {
+  border-color: rgba(201, 168, 76, 0.2);
+  transform: scale(1);
+}
+
+.nodeContent {
+  flex: 1;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.06);
+}
+
+.railNodeRow:last-child .nodeContent {
+  border-bottom: none;
+}
+
+.nodeContent h4 {
+  margin: 0 0 6px 0;
+  font-size: 18px;
+  font-weight: 600;
+  transition: color 300ms ease;
+}
+
+.railNodeRow:hover .nodeContent h4 {
+  color: var(--color-burnished-gold);
+}
+
+.activeNodeRow .nodePoint {
+  border-color: var(--color-burnished-gold);
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.15) 0%, transparent 100%), var(--bg-primary);
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.35);
+}
+
+.activeNodeRow .nodeGlowRing {
+  border-color: rgba(201, 168, 76, 0.25);
+  transform: scale(1);
+}
+
+.activeNodeRow .nodeContent h4 {
+  color: var(--color-burnished-gold);
 }
 
 .outputStrip {

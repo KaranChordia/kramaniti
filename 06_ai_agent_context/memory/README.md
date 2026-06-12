@@ -16,7 +16,7 @@ Agents refer to these files to understand strategy and rules, and they update th
 - `04_content_system/`: Pillars and editorial systems.
 - `05_ai_strategy/`: Workflows and system blueprints.
 - `07_business_build/`: Operations and CRM setup.
-- `09_reviews/decision-log/`: Major strategic choices.
+- `09_reviews/`: Major strategic choices.
 
 ### 2. Working Memory (Short-term / Operational)
 

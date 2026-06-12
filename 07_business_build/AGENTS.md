@@ -23,8 +23,8 @@ Memory to maintain:
 
 ## Core Files
 
-- `delivery/launch_operations_checklist.md`
-- `company-ideas/website_structure_and_wireframe.md`
+- `launch_operations_checklist.md`
+- `website_structure_and_wireframe.md`
 
 ## Responsibilities
 

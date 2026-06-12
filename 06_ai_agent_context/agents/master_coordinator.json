@@ -33,7 +33,7 @@
       "outputs": ["project status summary"]
     },
     {
-      "task": "Check whether a decision needs to be recorded in 09_reviews/decision-log/decisions.md.",
+      "task": "Check whether a decision needs to be recorded in 09_reviews/decisions.md.",
       "frequency": "per_request",
       "outputs": ["decision-log prompts"]
     },
@@ -47,14 +47,14 @@
     "06_ai_agent_context/system_prompts/master_context.md",
     "06_ai_agent_context/agent_roles/kramaniti_agent_roster.md",
     "06_ai_agent_context/agent_roles/agent_roles.md",
-    "09_reviews/decision-log/decisions.md",
+    "09_reviews/decisions.md",
     "AGENTS.md",
     "06_ai_agent_context/memory/master_coordinator/"
   ],
   "owned_files": [
     "AGENTS.md",
     "06_ai_agent_context/agent_roles/kramaniti_agent_roster.md",
-    "09_reviews/decision-log/decisions.md"
+    "09_reviews/decisions.md"
   ],
   "inputs": [
     "founder requests",

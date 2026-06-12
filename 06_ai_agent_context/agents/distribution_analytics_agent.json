@@ -63,16 +63,16 @@
     }
   ],
   "memory_sources": [
-    "04_content_system/calendar/content_calendar.md",
-    "04_content_system/campaigns/campaign_briefs.md",
-    "04_content_system/distribution/publishing_checklist.md",
-    "04_content_system/distribution/analytics_log.md",
-    "04_content_system/pillars/content_pillars.md",
+    "04_content_system/content_calendar.md",
+    "04_content_system/campaign_briefs.md",
+    "04_content_system/publishing_checklist.md",
+    "04_content_system/analytics_log.md",
+    "04_content_system/content_pillars.md",
     "09_reviews/proof_register.md"
   ],
   "owned_files": [
-    "04_content_system/distribution/publishing_checklist.md",
-    "04_content_system/distribution/analytics_log.md"
+    "04_content_system/publishing_checklist.md",
+    "04_content_system/analytics_log.md"
   ],
   "inputs": [
     "approved content drafts",

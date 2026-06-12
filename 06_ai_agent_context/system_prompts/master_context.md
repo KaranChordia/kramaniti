@@ -191,7 +191,7 @@ Before editing, agents should:
 2. Read the local `AGENTS.md` file in the folder being changed.
 3. Read this master context.
 4. Read `06_ai_agent_context/agent_roles/kramaniti_agent_roster.md` when role ownership matters.
-5. Read `09_reviews/decision-log/decisions.md` when making meaningful strategic choices.
+5. Read `09_reviews/decisions.md` when making meaningful strategic choices.
 
 Agents should keep durable memory in repository files, not only in chat history.
 
@@ -270,12 +270,12 @@ Core operating files:
 
 - `03_brand_strategy/brand_system/brand_operating_kit.md`
 - `03_brand_strategy/brand_system/brand_decisions.md`
-- `04_content_system/calendar/content_calendar.md`
-- `04_content_system/campaigns/campaign_briefs.md`
-- `04_content_system/backlog/content_ideas_backlog.md`
-- `04_content_system/distribution/publishing_checklist.md`
-- `04_content_system/distribution/analytics_log.md`
-- `08_assets/asset_registry.md`
+- `04_content_system/content_calendar.md`
+- `04_content_system/campaign_briefs.md`
+- `04_content_system/content_ideas_backlog.md`
+- `04_content_system/publishing_checklist.md`
+- `04_content_system/analytics_log.md`
+- `08_brand_assets/asset_registry.md`
 - `09_reviews/proof_register.md`
 
 The Digital Presence Orchestrator may draft, structure, audit, and recommend. It must not directly publish, invent proof, change pricing, use client logos, or make public claims without founder approval and Proof and Governance review.

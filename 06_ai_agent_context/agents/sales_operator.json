@@ -71,11 +71,11 @@
   ],
   "memory_sources": [
     "07_business_build/",
-    "03_brand_strategy/offers/service_packages.md",
-    "05_ai_strategy/workflows/"
+    "03_brand_strategy/service_packages.md",
+    "05_ai_strategy/"
   ],
   "owned_files": [
-    "07_business_build/delivery/launch_operations_checklist.md"
+    "07_business_build/launch_operations_checklist.md"
   ],
   "inputs": [
     "inquiry notes",

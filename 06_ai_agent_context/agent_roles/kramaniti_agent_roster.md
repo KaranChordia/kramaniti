@@ -49,7 +49,7 @@ Recurring tasks:
 
 - Review new requests and assign the lead agent.
 - Maintain a project status summary.
-- Check whether a decision needs to be recorded in `09_reviews/decision-log/decisions.md`.
+- Check whether a decision needs to be recorded in `09_reviews/decisions.md`.
 - Identify blockers, dependencies, and follow-up owners.
 
 Inputs: founder requests, implementation plans, decision logs, current repo state.
@@ -60,7 +60,7 @@ Owned files:
 
 - `AGENTS.md`
 - `06_ai_agent_context/agent_roles/kramaniti_agent_roster.md`
-- `09_reviews/decision-log/decisions.md`
+- `09_reviews/decisions.md`
 
 Supporting agents: all agents.
 
@@ -99,9 +99,9 @@ Outputs: founder bios, timeline updates, proof summaries, verification notes.
 
 Owned files:
 
-- `02_founder_context/background/founder_background.md`
-- `02_founder_context/timeline/career_timeline.md`
-- `02_founder_context/skills/skill_clusters.md`
+- `02_founder_context/founder_background.md`
+- `02_founder_context/career_timeline.md`
+- `02_founder_context/skill_clusters.md`
 
 Supporting agents: Narrative Editor, Proof and Governance Auditor, Website Steward.
 
@@ -142,7 +142,7 @@ Owned files:
 
 - `03_brand_strategy/positioning/positioning_analysis.md`
 - `03_brand_strategy/positioning/brand_identity_guidelines.md`
-- `03_brand_strategy/narrative/brand_narrative.md`
+- `03_brand_strategy/brand_narrative.md`
 
 Supporting agents: Narrative Editor, Offer Architect, Website Steward, Content Director.
 
@@ -181,7 +181,7 @@ Outputs: polished copy blocks, voice notes, rewrite suggestions, headline option
 
 Owned files:
 
-- `03_brand_strategy/narrative/brand_narrative.md`
+- `03_brand_strategy/brand_narrative.md`
 - Relevant copy sections in `website/src/components/sections/`
 
 Supporting agents: Brand Strategist, Founder Archivist, Content Director.
@@ -221,7 +221,7 @@ Outputs: offer briefs, scope notes, proposal modules, pricing guardrails.
 
 Owned files:
 
-- `03_brand_strategy/offers/service_packages.md`
+- `03_brand_strategy/service_packages.md`
 - Offer-related sections in `docs/` and `website/`
 
 Supporting agents: Sales Operator, Workflow Architect, Operations Lead.
@@ -261,7 +261,7 @@ Outputs: workflow audits, system maps, AI readiness reviews, implementation road
 
 Owned files:
 
-- `05_ai_strategy/workflows/ai_service_workflows.md`
+- `05_ai_strategy/ai_service_workflows.md`
 
 Supporting agents: Audit Specialist, Systems Designer, Integration Planner, Delivery Operator.
 
@@ -300,7 +300,7 @@ Outputs: system specs, integration maps, build checklists, handoff docs.
 
 Owned files:
 
-- `05_ai_strategy/workflows/ai_service_workflows.md`
+- `05_ai_strategy/ai_service_workflows.md`
 - Technical delivery notes in `docs/`
 
 Supporting agents: Workflow Architect, Integration Planner, Handoff QA Agent.
@@ -340,7 +340,7 @@ Outputs: editorial calendars, post drafts, scripts, article outlines, repurposin
 
 Owned files:
 
-- `04_content_system/pillars/content_pillars.md`
+- `04_content_system/content_pillars.md`
 
 Supporting agents: Narrative Editor, Brand Strategist, Asset Librarian, Website Steward.
 
@@ -379,7 +379,7 @@ Outputs: discovery scripts, lead qualification notes, proposal drafts, follow-up
 
 Owned files:
 
-- `07_business_build/delivery/launch_operations_checklist.md`
+- `07_business_build/launch_operations_checklist.md`
 - Sales-related docs in `07_business_build/`
 
 Supporting agents: Offer Architect, Operations Lead, Workflow Architect.
@@ -419,7 +419,7 @@ Outputs: checklists, runbooks, operating notes, setup backlogs.
 
 Owned files:
 
-- `07_business_build/delivery/launch_operations_checklist.md`
+- `07_business_build/launch_operations_checklist.md`
 
 Supporting agents: Sales Operator, Delivery Operator, Website Steward.
 
@@ -501,7 +501,7 @@ Outputs: claim audits, decision-log entries, risk notes, approval checklists.
 
 Owned files:
 
-- `09_reviews/decision-log/decisions.md`
+- `09_reviews/decisions.md`
 
 Supporting agents: Founder Archivist, Website Steward, Brand Strategist, Sales Operator.
 
@@ -540,7 +540,7 @@ Outputs: organized asset folders, source notes, public-use flags.
 
 Owned files:
 
-- `08_assets/`
+- `08_brand_assets/`
 
 Supporting agents: Website Steward, Content Director, Proof and Governance Auditor.
 
@@ -625,7 +625,7 @@ Owned files:
 
 - `03_brand_strategy/brand_system/brand_operating_kit.md`
 - `03_brand_strategy/brand_system/brand_decisions.md`
-- `04_content_system/campaigns/campaign_briefs.md`
+- `04_content_system/campaign_briefs.md`
 - `06_ai_agent_context/memory/digital_presence_orchestrator/`
 
 Supporting agents: Brand Identity Agent, Brand Strategist, Content Director, Narrative Editor, Website Steward, Distribution & Analytics Agent, Asset Librarian, Proof and Governance Auditor.
@@ -704,8 +704,8 @@ Outputs: channel adaptation notes, publishing checklists, analytics log entries,
 
 Owned files:
 
-- `04_content_system/distribution/publishing_checklist.md`
-- `04_content_system/distribution/analytics_log.md`
+- `04_content_system/publishing_checklist.md`
+- `04_content_system/analytics_log.md`
 
 Supporting agents: Content Director, Narrative Editor, Website Steward, Proof and Governance Auditor, Digital Presence Orchestrator.
 
@@ -766,8 +766,8 @@ Agents do not rely on hidden memory. Their durable memory is the repository:
 - Agent behavior lives in `06_ai_agent_context/`.
 - Digital Presence Orchestrator working memory lives in `06_ai_agent_context/memory/digital_presence_orchestrator/`.
 - Business operations live in `07_business_build/`.
-- Assets live in `08_assets/`.
-- Assets that may be reused publicly should be tracked in `08_assets/asset_registry.md`.
+- Assets live in `08_brand_assets/`.
+- Assets that may be reused publicly should be tracked in `08_brand_assets/asset_registry.md`.
 - Decisions and claim audits live in `09_reviews/`.
 - Proof-sensitive claims should be tracked in `09_reviews/proof_register.md`.
 - Website implementation context lives in `docs/` and `website/`.

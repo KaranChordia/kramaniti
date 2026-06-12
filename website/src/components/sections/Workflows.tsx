@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import styles from './Workflows.module.css';
-import { Card } from '../ui/Card';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
 
@@ -70,18 +69,23 @@ export function Workflows() {
             </div>
           </div>
 
-          <div className={styles.pipelineContainer}>
+          <div className={styles.pipelineRailSequence}>
+            <div className={styles.railLine}></div>
             {steps.map((step, index) => (
-              <div className={styles.pipelineNode} key={step.title}>
-                <div className={styles.nodeIconWrapper}>
-                  <span className={styles.nodeIcon}>{String(index + 1).padStart(2, '0')}</span>
+              <div 
+                className={`${styles.railNodeRow} ${index === 2 ? styles.activeNodeRow : ''}`} 
+                key={step.title}
+              >
+                <div className={styles.nodePointContainer}>
+                  <div className={styles.nodePoint}>
+                    <span className={styles.nodeNumber}>{String(index + 1).padStart(2, '0')}</span>
+                    <div className={styles.nodeGlowRing}></div>
+                  </div>
                 </div>
-                <Card className={`glass-border-layer ${styles.nodeCard} ${styles.workflowGlass} ${index === 2 ? styles.primaryCard : ''}`}>
-                  {index === 2 && <div className={styles.glowOverlay}></div>}
-                  <div className={styles.nodeBar}></div>
+                <div className={styles.nodeContent}>
                   <h4>{step.title}</h4>
                   <p className="text-secondary caption">{step.copy}</p>
-                </Card>
+                </div>
               </div>
             ))}
           </div>

@@ -70,12 +70,12 @@
     }
   ],
   "memory_sources": [
-    "08_assets/",
-    "08_assets/asset_registry.md"
+    "08_brand_assets/",
+    "08_brand_assets/asset_registry.md"
   ],
   "owned_files": [
-    "08_assets/",
-    "08_assets/asset_registry.md"
+    "08_brand_assets/",
+    "08_brand_assets/asset_registry.md"
   ],
   "inputs": [
     "logos",

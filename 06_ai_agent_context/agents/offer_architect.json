@@ -43,12 +43,12 @@
     }
   ],
   "memory_sources": [
-    "03_brand_strategy/offers/service_packages.md",
+    "03_brand_strategy/service_packages.md",
     "docs/",
     "06_ai_agent_context/system_prompts/master_context.md"
   ],
   "owned_files": [
-    "03_brand_strategy/offers/service_packages.md"
+    "03_brand_strategy/service_packages.md"
   ],
   "inputs": [
     "service docs",

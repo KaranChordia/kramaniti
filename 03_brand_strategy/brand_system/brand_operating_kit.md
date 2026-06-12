@@ -4,7 +4,7 @@
 
 **Key Findings:** [Fact] Kramaniti's public presence must follow the sequence: strategy before tools, systems before scale, content after clarity. [Recommendation] Brand work should be managed as one connected growth system instead of separate design, copy, and content tasks.
 
-**Evidence:** `06_ai_agent_context/system_prompts/master_context.md`, `03_brand_strategy/positioning/brand_identity_guidelines.md`, `03_brand_strategy/positioning/positioning_analysis.md`, `03_brand_strategy/narrative/brand_narrative.md`, `04_content_system/pillars/content_pillars.md`, and `09_reviews/decision-log/decisions.md`.
+**Evidence:** `06_ai_agent_context/system_prompts/master_context.md`, `03_brand_strategy/positioning/brand_identity_guidelines.md`, `03_brand_strategy/positioning/positioning_analysis.md`, `03_brand_strategy/brand_narrative.md`, `04_content_system/content_pillars.md`, and `09_reviews/decisions.md`.
 
 **Interpretation:** [Inference] Kramaniti needs the operating discipline of an early brand team: strategy, identity, content, website, distribution, assets, and proof review moving through one governed workflow.
 
@@ -64,12 +64,12 @@ The Digital Presence Orchestrator may draft, structure, audit, and recommend. It
 | :--- | :--- | :--- |
 | `03_brand_strategy/brand_system/brand_operating_kit.md` | Digital Presence Orchestrator | Master brand presence kit |
 | `03_brand_strategy/brand_system/brand_decisions.md` | Brand Strategist | Brand-level working decisions and open questions |
-| `04_content_system/calendar/content_calendar.md` | Content Director | Planned content calendar |
-| `04_content_system/campaigns/campaign_briefs.md` | Digital Presence Orchestrator | Campaign strategy briefs |
-| `04_content_system/backlog/content_ideas_backlog.md` | Content Director | Future ideas and content opportunities |
-| `04_content_system/distribution/publishing_checklist.md` | Distribution & Analytics Agent | Pre-publish review checklist |
-| `04_content_system/distribution/analytics_log.md` | Distribution & Analytics Agent | Performance notes and repeat/stop decisions |
-| `08_assets/asset_registry.md` | Asset Librarian | Asset source, usage, and permission tracking |
+| `04_content_system/content_calendar.md` | Content Director | Planned content calendar |
+| `04_content_system/campaign_briefs.md` | Digital Presence Orchestrator | Campaign strategy briefs |
+| `04_content_system/content_ideas_backlog.md` | Content Director | Future ideas and content opportunities |
+| `04_content_system/publishing_checklist.md` | Distribution & Analytics Agent | Pre-publish review checklist |
+| `04_content_system/analytics_log.md` | Distribution & Analytics Agent | Performance notes and repeat/stop decisions |
+| `08_brand_assets/asset_registry.md` | Asset Librarian | Asset source, usage, and permission tracking |
 | `09_reviews/proof_register.md` | Proof and Governance Auditor | Claim, permission, and proof status tracking |
 
 ## 6. Default Workflow
@@ -91,5 +91,5 @@ Before public-facing output leaves draft status, confirm:
 - The language is specific to Kramaniti, not generic AI-agency copy.
 - Claims are labeled or softened.
 - Proof-sensitive material is registered in `09_reviews/proof_register.md`.
-- Assets are listed in `08_assets/asset_registry.md` when reused publicly.
+- Assets are listed in `08_brand_assets/asset_registry.md` when reused publicly.
 - Publishing is explicitly approved by the founder.

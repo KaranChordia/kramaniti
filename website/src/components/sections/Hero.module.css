@@ -41,6 +41,109 @@
   pointer-events: none;
 }
 
+/* ---- Background Atmosphere Flow Lines ---- */
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.flowLine {
+  position: absolute;
+  pointer-events: none;
+}
+
+.flowHorizontal {
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background-color: rgba(201, 168, 76, 0.12);
+  background-image: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.72), rgba(255, 255, 255, 0.85), rgba(201, 168, 76, 0.72), transparent);
+  background-size: 300px 100%;
+  background-repeat: no-repeat;
+  animation: flowHorizontal 7s linear infinite;
+}
+
+.flowVertical {
+  top: 5%;
+  bottom: 5%;
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.04);
+  background-image: linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.54), rgba(255, 255, 255, 0.8), rgba(201, 168, 76, 0.54), transparent);
+  background-size: 100% 300px;
+  background-repeat: no-repeat;
+  animation: flowVertical 8s linear infinite;
+}
+
+/* Line Positions, Speeds, and Opacities */
+.flowPos1 {
+  top: 15%;
+  animation-duration: 5s;
+  animation-delay: -1.5s;
+  opacity: 0.45;
+}
+
+.flowPos2 {
+  top: 38%;
+  animation-duration: 7.2s;
+  animation-delay: -0.4s;
+  opacity: 0.32;
+}
+
+.flowPos3 {
+  top: 62%;
+  animation-duration: 6.4s;
+  animation-delay: -2.8s;
+  opacity: 0.38;
+}
+
+.flowPos4 {
+  top: 85%;
+  animation-duration: 9s;
+  animation-delay: -4.2s;
+  opacity: 0.35;
+}
+
+.flowPos5 {
+  left: 8%;
+  animation-duration: 6.2s;
+  animation-delay: -3s;
+  opacity: 0.38;
+}
+
+.flowPos6 {
+  left: 32%;
+  animation-duration: 8s;
+  animation-delay: -1.2s;
+  opacity: 0.32;
+}
+
+.flowPos7 {
+  right: 32%;
+  animation-duration: 7s;
+  animation-delay: -4.8s;
+  opacity: 0.42;
+}
+
+.flowPos8 {
+  right: 8%;
+  animation-duration: 9.5s;
+  animation-delay: -2.1s;
+  opacity: 0.36;
+}
+
+@keyframes flowHorizontal {
+  0% { background-position: -300px 0; }
+  100% { background-position: calc(100% + 300px) 0; }
+}
+
+@keyframes flowVertical {
+  0% { background-position: 0 -300px; }
+  100% { background-position: 0 calc(100% + 300px); }
+}
+
 .layerStack {
   position: absolute;
   top: calc(58% + 36px);
@@ -334,21 +437,9 @@
 }
 
 @media (max-width: 768px) {
-  .layer {
-    backdrop-filter: none;
-    background: rgba(20, 20, 24, 0.88);
-  }
-  .layerStack {
-    top: calc(60% + 24px);
-    width: 78vw;
-    height: 78vw;
-  }
+  .layerStack,
   .scrollTextStage {
-    top: calc(60% + 24px);
-    width: 78vw;
-    height: 78vw;
-    --card-width: 78vw;
-    --spread-unit: 0.65;
+    display: none !important;
   }
 }
 
@@ -1043,6 +1134,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .flowLine,
   .glow,
   .content,
   .heroBrandText,
@@ -1097,11 +1189,14 @@
 
 @media (max-width: 768px) {
   .heroSection {
-    height: 420vh;
+    height: auto;
+    min-height: 100vh;
   }
-  .hero {
-    min-height: auto;
-    padding: 106px 0 54px;
+  .stickyContainer {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+    padding: 106px 20px 64px;
   }
   .content {
     gap: 14px;

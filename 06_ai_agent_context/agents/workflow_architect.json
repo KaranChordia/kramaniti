@@ -44,12 +44,12 @@
     }
   ],
   "memory_sources": [
-    "05_ai_strategy/workflows/ai_service_workflows.md",
+    "05_ai_strategy/ai_service_workflows.md",
     "06_ai_agent_context/system_prompts/master_context.md",
     "06_ai_agent_context/memory/workflow_architect/"
   ],
   "owned_files": [
-    "05_ai_strategy/workflows/ai_service_workflows.md"
+    "05_ai_strategy/ai_service_workflows.md"
   ],
   "inputs": [
     "client discovery notes",

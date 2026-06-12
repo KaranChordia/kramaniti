@@ -71,11 +71,11 @@
     }
   ],
   "memory_sources": [
-    "07_business_build/delivery/launch_operations_checklist.md",
-    "09_reviews/decision-log/decisions.md"
+    "07_business_build/launch_operations_checklist.md",
+    "09_reviews/decisions.md"
   ],
   "owned_files": [
-    "07_business_build/delivery/launch_operations_checklist.md"
+    "07_business_build/launch_operations_checklist.md"
   ],
   "inputs": [
     "founder decisions",
