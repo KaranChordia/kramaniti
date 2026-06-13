@@ -307,3 +307,42 @@ This log registers the major strategic and structural decisions made during the 
 *   **Open Questions:**
     *   Which founder-media assets are approved for repeated public use?
     *   Should future social/deck exports get their own subfolder under `08_brand_assets/exports/` once they exist?
+
+### Decision 15: Add KCS - Kramaniti Content Studio Inside the Website App
+*   **Date:** 2026-06-13
+*   **Area:** Website, Studio tooling, content production
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Add a local `/KCS` route inside the active `website/` app for KCS - Kramaniti Content Studio, a chat-planned and browser-rendered surface for premium Kramaniti infographic videos.
+*   **Rationale:** Kramaniti needs a practical way to turn founder ideas, strategic messages, and content briefs into scene-by-scene infographic video plans using the brand design kit. The founder clarified that the existing `/design-studio` surface is a separate prototype and should not be used for this tool. Keeping KCS inside `website/` preserves the one-active-app boundary from Decision 13 while giving the founder a distinct local page for IDE-driven content planning and browser preview.
+*   **Source or Evidence:** Founder request on 2026-06-13 to create a separate tool named KCS - Kramaniti Content Studio, plus a reusable IDE skill that first understands the video query, strategizes scene by scene, and chooses diverse premium infographic designs aligned with the brand.
+*   **Affected Files:**
+    *   `website/src/app/KCS/page.tsx`
+    *   `website/src/components/KCS/KcsWorkbench.tsx`
+    *   `website/src/components/KCS/KcsWorkbench.module.css`
+    *   `website/src/lib/KCS/sceneSequence.ts`
+    *   `docs/kcs_content_studio.md`
+    *   `docs/kramaniti_site_implementation_plan.md`
+    *   `/Users/karanchordia/.codex/skills/kramaniti-content-studio/`
+*   **Alternatives Rejected:**
+    1.  *Using the `/design-studio` prototype:* Rejected because the founder clarified it was built separately and should not define KCS.
+    2.  *Creating a second root-level app:* Rejected because Decision 13 keeps `website/` as the only active web app.
+    3.  *Building MP4 export before the KCS model stabilizes:* Rejected because the first useful workflow is a high-quality local strategy, preview, and screen-capture surface.
+    4.  *Making the tool a public marketing page:* Rejected because this is an internal production workbench, not a first-impression public sales surface.
+*   **Guardrails:**
+    *   Do not invent public claims, client names, metrics, testimonials, or proof while creating scenes.
+    *   Keep scene language aligned with strategy before tools, systems before scale, and content after clarity.
+    *   Make scene designs diverse according to the user's query instead of repeating one visual template.
+    *   Keep generated video exports under `08_brand_assets/exports/` unless explicitly serving them from the website.
+    *   Do not store secrets, client data, or private source files in scene definitions.
+*   **Founder Clarification Update (2026-06-13):**
+    *   **Status:** Implemented (`[Fact]`)
+    *   **Clarification:** The KCS UI should not show the video brief, strategy notes, scene-planning cards, implementation checklists, capture plan, copied IDE prompt, or similar planning information. The intended workflow is chat-first: the founder opens Codex in this repository, says `Design`, provides the idea, reviews the scene-by-scene draft in Codex chat, approves it, and only then the agent builds the connected premium scene sequence in `/KCS`.
+    *   **Implementation Impact:** KCS was revised from an on-screen planning cockpit into a render-only scene player using `website/src/lib/KCS/sceneSequence.ts`. The reusable `kramaniti-content-studio` skill now carries the planning workflow and approval gate.
+    *   **Additional Affected Files:**
+        *   `website/src/lib/KCS/sceneSequence.ts`
+        *   `/Users/karanchordia/.codex/skills/kramaniti-content-studio/SKILL.md`
+        *   `/Users/karanchordia/.codex/skills/kramaniti-content-studio/references/storyboard.md`
+        *   `/Users/karanchordia/.codex/skills/kramaniti-content-studio/references/visual-diversity.md`
+*   **Open Questions:**
+    *   Should automated MP4 export use browser frame capture plus `ffmpeg`, Playwright screenshots plus `ffmpeg`, or a dedicated rendering library?
+    *   Should KCS later add a real frame timeline, voiceover timing, and audio bed controls?

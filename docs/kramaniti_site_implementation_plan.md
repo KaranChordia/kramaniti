@@ -206,6 +206,37 @@ Related files:
 - `website/src/app/api/studio/lm-studio/chat/route.ts`
 - `docs/lm_studio_agent_os_setup.md`
 
+## 10.2 KCS - Kramaniti Content Studio
+
+2026-06-13 update: KCS now has a local content-production route at `/KCS`.
+
+[Recommendation] KCS should be the intended IDE-assisted workflow for Kramaniti infographic-video creation. It should not use the older `/design-studio` prototype as its source of truth. Planning happens in Codex chat through the reusable skill; the `/KCS` browser route is only the approved scene-rendering surface.
+
+[Fact] The current KCS implementation includes:
+
+- A clean local `/KCS` scene player.
+- A rendered starter sequence built from `website/src/lib/KCS/sceneSequence.ts`.
+- Premium dark Kramaniti visual language with thin technical lines, burnished-gold motion accents, and minimal icon controls.
+- A reusable Codex skill at `/Users/karanchordia/.codex/skills/kramaniti-content-studio`.
+
+[Fact] The founder clarified that KCS should not show briefing forms, strategy notes, planning cards, implementation checklists, copied IDE prompts, or capture instructions inside the UI. The intended workflow is:
+
+1. Open Codex in this repository and say `Design`.
+2. Provide the video idea or message.
+3. Let Codex read the brand design/context docs and propose a scene-by-scene draft in chat.
+4. Approve or revise the draft.
+5. After approval, Codex builds the connected premium scene sequence in `/KCS`.
+
+[Recommendation] MP4 export should wait until the approved-scene renderer stabilizes. The likely path is deterministic playback, fixed viewport and FPS capture, then `ffmpeg` encoding into MP4. Generated export files should live under `08_brand_assets/exports/` unless a file is meant to be publicly served.
+
+Related files:
+
+- `website/src/app/KCS/page.tsx`
+- `website/src/components/KCS/KcsWorkbench.tsx`
+- `website/src/components/KCS/KcsWorkbench.module.css`
+- `website/src/lib/KCS/sceneSequence.ts`
+- `docs/kcs_content_studio.md`
+
 ## 11. Nexocean Portfolio Page
 
 - Added a dedicated selected-work page at `/work/nexocean`.

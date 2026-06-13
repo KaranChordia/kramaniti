@@ -1,0 +1,262 @@
+/* ─── QuoteHighlight – Scene Builder Template ─── */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 3rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Ambient glow ───────────────────────────────────────────── */
+
+.ambientGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 520px;
+  height: 520px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(201, 168, 76, 0.06) 0%,
+    rgba(201, 168, 76, 0.02) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 1.2s ease;
+}
+
+.animate .ambientGlow {
+  opacity: 1;
+}
+
+/* ── Content wrapper ────────────────────────────────────────── */
+
+.quoteWrapper {
+  position: relative;
+  max-width: 800px;
+  z-index: 1;
+}
+
+/* ── Decorative quotation mark ──────────────────────────────── */
+
+.decorativeMark {
+  position: absolute;
+  top: -56px;
+  left: -24px;
+  font-family: var(--font-outfit);
+  font-size: 7.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-burnished-gold);
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  will-change: opacity, transform;
+}
+
+/* ── Quote text ─────────────────────────────────────────────── */
+
+.quoteText {
+  font-family: var(--font-outfit);
+  font-size: 2rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: 0.005em;
+}
+
+.quoteWord {
+  display: inline-block;
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+.quoteWordSpace {
+  display: inline-block;
+  width: 0.3em;
+}
+
+/* Non-stagger: entire quote as one block */
+.quoteBlock {
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+/* ── Attribution & role ─────────────────────────────────────── */
+
+.attribution {
+  font-family: var(--font-outfit);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-burnished-gold);
+  margin-top: 2rem;
+  line-height: 1;
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+.role {
+  font-family: var(--font-outfit);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  margin-top: 0.5rem;
+  line-height: 1.4;
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+/* ── Keyframes ──────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blurIn {
+  from {
+    opacity: 0;
+    filter: blur(16px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes staggerWord {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes markReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(20px);
+  }
+  to {
+    opacity: 0.12;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ── Animated state classes ─────────────────────────────────── */
+
+/* Decorative mark always uses its own reveal */
+.animate .decorativeMark {
+  animation-name: markReveal;
+  animation-fill-mode: both;
+}
+
+/* ── Non-stagger entrances (quote as single block) ─────────── */
+
+.animate[data-entrance='fade-up'] .quoteBlock,
+.animate[data-entrance='fade-up'] .attribution,
+.animate[data-entrance='fade-up'] .role {
+  animation-name: fadeUp;
+  animation-fill-mode: both;
+}
+
+.animate[data-entrance='blur-in'] .quoteBlock,
+.animate[data-entrance='blur-in'] .attribution,
+.animate[data-entrance='blur-in'] .role {
+  animation-name: blurIn;
+  animation-fill-mode: both;
+}
+
+.animate[data-entrance='scale-in'] .quoteBlock,
+.animate[data-entrance='scale-in'] .attribution,
+.animate[data-entrance='scale-in'] .role {
+  animation-name: scaleIn;
+  animation-fill-mode: both;
+}
+
+.animate[data-entrance='slide-left'] .quoteBlock,
+.animate[data-entrance='slide-left'] .attribution,
+.animate[data-entrance='slide-left'] .role {
+  animation-name: slideLeft;
+  animation-fill-mode: both;
+}
+
+/* ── Stagger-words entrance ─────────────────────────────────── */
+
+.animate[data-entrance='stagger-words'] .quoteWord {
+  animation-name: staggerWord;
+  animation-fill-mode: both;
+}
+
+/* Attribution/role still fade-up after words finish */
+.animate[data-entrance='stagger-words'] .attribution,
+.animate[data-entrance='stagger-words'] .role {
+  animation-name: fadeUp;
+  animation-fill-mode: both;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .quoteBlock,
+  .quoteWord,
+  .decorativeMark,
+  .attribution,
+  .role,
+  .ambientGlow {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .decorativeMark {
+    opacity: 0.12 !important;
+  }
+}

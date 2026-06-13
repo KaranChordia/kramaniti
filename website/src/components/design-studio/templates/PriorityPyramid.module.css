@@ -1,0 +1,259 @@
+/* PriorityPyramid – vertical stack with decreasing widths */
+
+/* ── Container ────────────────────────────────────────────── */
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Vertical connector line ──────────────────────────────── */
+
+.connectorWrapper {
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.connectorLine {
+  width: 100%;
+  height: 100%;
+}
+
+.connectorStroke {
+  stroke: rgba(201, 168, 76, 0.3);
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  transition: none;
+}
+
+.animate .connectorStroke {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--line-draw-duration, 500ms) cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ── Layer stack ──────────────────────────────────────────── */
+
+.layerStack {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+/* ── Individual layer ─────────────────────────────────────── */
+
+.layer {
+  width: var(--layer-width, 60%);
+  max-width: 640px;
+  padding: 20px 28px;
+  border-radius: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+  will-change: transform, opacity, filter;
+}
+
+/* Foundation layer — gold emphasis */
+.layer.foundation {
+  border-color: rgba(201, 168, 76, 0.4);
+  box-shadow:
+    0 0 60px rgba(201, 168, 76, 0.06),
+    0 0 30px rgba(201, 168, 76, 0.04),
+    0 8px 32px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(
+    180deg,
+    rgba(201, 168, 76, 0.06) 0%,
+    rgba(201, 168, 76, 0.02) 100%
+  );
+}
+
+.layer.foundation .numberBadge {
+  background: rgba(201, 168, 76, 0.2);
+  color: var(--color-burnished-gold);
+  border-color: rgba(201, 168, 76, 0.4);
+}
+
+.layer.foundation .layerTitle {
+  color: var(--color-burnished-gold);
+}
+
+/* ── Layer content ────────────────────────────────────────── */
+
+.layerContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.numberBadge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.layerText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.layerTitle {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.layerDescription {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ── Entrance animations ──────────────────────────────────── */
+
+/* Shared pre-animation state */
+.fade-up,
+.blur-in,
+.scale-in,
+.slide-left {
+  opacity: 0;
+}
+
+/* fade-up */
+.fade-up {
+  transform: translateY(30px);
+}
+
+.animate .fade-up {
+  animation: fadeUp var(--anim-duration, 700ms) var(--anim-easing, cubic-bezier(0.25, 0.46, 0.45, 0.94)) forwards;
+  animation-delay: var(--layer-delay, 0ms);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* blur-in */
+.blur-in {
+  filter: blur(16px);
+}
+
+.animate .blur-in {
+  animation: blurIn var(--anim-duration, 700ms) var(--anim-easing, cubic-bezier(0.25, 0.46, 0.45, 0.94)) forwards;
+  animation-delay: var(--layer-delay, 0ms);
+}
+
+@keyframes blurIn {
+  from {
+    opacity: 0;
+    filter: blur(16px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* scale-in */
+.scale-in {
+  transform: scale(0.85);
+}
+
+.animate .scale-in {
+  animation: scaleIn var(--anim-duration, 700ms) var(--anim-easing, cubic-bezier(0.25, 0.46, 0.45, 0.94)) forwards;
+  animation-delay: var(--layer-delay, 0ms);
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* slide-left */
+.slide-left {
+  transform: translateX(-40px);
+}
+
+.animate .slide-left {
+  animation: slideLeft var(--anim-duration, 700ms) var(--anim-easing, cubic-bezier(0.25, 0.46, 0.45, 0.94)) forwards;
+  animation-delay: var(--layer-delay, 0ms);
+}
+
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── Reduced motion ───────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .blur-in,
+  .scale-in,
+  .slide-left {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none !important;
+  }
+
+  .connectorStroke {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+}

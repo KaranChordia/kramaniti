@@ -127,6 +127,7 @@ To maintain strict data integrity, every file must clearly label its claims usin
 | **AI Agents** | [agent_roles.md](06_ai_agent_context/agent_roles/agent_roles.md) | Agent role index and task routing matrix |
 | **AI Agents** | [kramaniti_agent_roster.md](06_ai_agent_context/agent_roles/kramaniti_agent_roster.md) | Full company-style agent roster |
 | **Studio** | [lm_studio_agent_os_setup.md](docs/lm_studio_agent_os_setup.md) | Local LM Studio setup for the Studio Agent OS |
+| **Studio** | [kcs_content_studio.md](docs/kcs_content_studio.md) | KCS chat-first infographic-video workflow and `/KCS` renderer |
 | **Structure** | [repo_organization_audit.md](docs/repo_organization_audit.md) | Current cleanup record and file-boundary recommendations |
 | **Launch** | [website_structure_and_wireframe.md](07_business_build/website_structure_and_wireframe.md) | Historical one-page portfolio wireframe reference |
 | **Launch** | [launch_operations_checklist.md](07_business_build/launch_operations_checklist.md) | Business registration, payments, invoicing, and CRM setup |

@@ -1,30 +1,12 @@
-.story {
-  padding: 120px 0;
-  background: transparent;
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  isolation: isolate;
-}
-
-.story::before {
-  content: '';
-  position: absolute;
-  inset: -8% -4%;
-  background:
-    radial-gradient(circle at 18% 18%, rgba(201, 168, 76, 0.065), transparent 28%),
-    radial-gradient(circle at 88% 74%, rgba(255, 255, 255, 0.028), transparent 22%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.story::after {
-  content: '';
-  position: absolute;
-  inset: auto -5% 8% -5%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.22), transparent);
-  opacity: 0.48;
-  pointer-events: none;
-  z-index: 0;
+  overflow: hidden;
 }
 
 /* ---- Atmosphere ---- */
@@ -86,55 +68,47 @@
 .atmosWordOne { top: 18%; left: -2%; }
 .atmosWordTwo { bottom: 22%; right: -2%; animation-delay: -5s; }
 
-:global(html[data-theme='light']) .atmosWord {
-  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.6);
-  text-shadow: 0 0 18px rgba(201, 168, 76, 0.2);
-  opacity: 0.7;
-}
-
-/* ---- Container / Header ---- */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
+.content {
   position: relative;
   z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 clamp(18px, 4vw, 42px);
 }
 
+/* Header */
 .header {
   text-align: center;
-  margin-bottom: 72px;
+  margin-bottom: clamp(18px, 4vh, 40px);
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 600ms ease, transform 600ms ease;
+}
+.isPlaying .header {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 800ms ease, transform 800ms ease;
 }
 
-.header.visible { opacity: 1; transform: translateY(0); }
-
-.header p {
-  margin: 0.75rem auto 0;
-  max-width: 680px;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 18px;
-  line-height: 1.65;
-  text-align: center;
+.title {
+  font-family: var(--font-outfit);
+  font-size: clamp(26px, 4.2vw, 44px);
+  line-height: 1.08;
+  color: var(--text-primary);
+  margin-top: 8px;
 }
 
-/* =============================================
-   ORBIT VISUALIZATION
-   ============================================= */
-
+/* Orbit Stage */
 .orbitStage {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(190px, 0.9fr) minmax(220px, 1fr);
   align-items: center;
-  gap: 48px;
+  gap: clamp(22px, 4vw, 52px);
 }
 
 .orbitVisual {
   position: relative;
   width: 100%;
-  max-width: 460px;
+  max-width: min(360px, 100%);
   margin: 0 auto;
   aspect-ratio: 1 / 1;
 }
@@ -144,7 +118,6 @@
   height: 100%;
 }
 
-/* ---- Rings ---- */
 .ring {
   fill: none;
   stroke-width: 1;
@@ -154,24 +127,12 @@
   transition: stroke-dashoffset 1400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.ring1 {
-  stroke: rgba(201, 168, 76, 0.2);
-  transition-delay: 200ms;
-}
-
-.ring2 {
-  stroke: rgba(201, 168, 76, 0.28);
-  transition-delay: 500ms;
-}
-
-.ring3 {
-  stroke: rgba(201, 168, 76, 0.35);
-  transition-delay: 800ms;
-}
+.ring1 { stroke: rgba(201, 168, 76, 0.2); transition-delay: 200ms; }
+.ring2 { stroke: rgba(201, 168, 76, 0.28); transition-delay: 500ms; }
+.ring3 { stroke: rgba(201, 168, 76, 0.35); transition-delay: 800ms; }
 
 .stageVisible .ring { stroke-dashoffset: 0; }
 
-/* Glowing beam arc on each ring */
 .ringBeam {
   fill: none;
   stroke: rgba(255, 236, 173, 0.45);
@@ -193,7 +154,6 @@
   100% { stroke-dashoffset: -1400; }
 }
 
-/* Orbiting dots */
 .orbitDot {
   fill: rgba(255, 236, 173, 0.9);
   opacity: 0;
@@ -206,7 +166,6 @@
 
 .stageVisible .orbitDot { opacity: 1; }
 
-/* ---- Center core ---- */
 .corePulse {
   fill: rgba(201, 168, 76, 0.06);
   animation: corePulseAnim 4s ease-in-out infinite;
@@ -245,7 +204,7 @@
 
 .stageVisible .coreLabel { opacity: 0.7; }
 
-/* ---- Ring labels overlaid on the visual ---- */
+/* Ring Labels */
 .ringLabel {
   position: absolute;
   font-family: var(--font-inter), sans-serif;
@@ -259,45 +218,13 @@
   pointer-events: none;
 }
 
-.ringLabel1 {
-  /* Top of outermost ring */
-  top: 2%;
-  left: 50%;
-  transform: translateX(-50%);
-  transition-delay: 1000ms;
-}
-
-.ringLabel2 {
-  /* Right side of middle ring */
-  top: 50%;
-  right: 6%;
-  transform: translateY(-50%);
-  transition-delay: 1300ms;
-}
-
-.ringLabel3 {
-  /* Bottom of inner ring */
-  bottom: 26%;
-  left: 50%;
-  transform: translateX(-50%);
-  transition-delay: 1600ms;
-}
+.ringLabel1 { top: 2%; left: 50%; transform: translateX(-50%); transition-delay: 1000ms; }
+.ringLabel2 { top: 50%; right: 6%; transform: translateY(-50%); transition-delay: 1300ms; }
+.ringLabel3 { bottom: 26%; left: 50%; transform: translateX(-50%); transition-delay: 1600ms; }
 
 .ringLabelVisible { opacity: 0.55; }
 
-/* ---- Light theme ---- */
-:global(html[data-theme='light']) .ring1 { stroke: rgba(201, 168, 76, 0.18); }
-:global(html[data-theme='light']) .ring2 { stroke: rgba(201, 168, 76, 0.24); }
-:global(html[data-theme='light']) .ring3 { stroke: rgba(201, 168, 76, 0.32); }
-:global(html[data-theme='light']) .ringBeam { stroke: rgba(201, 168, 76, 0.5); }
-:global(html[data-theme='light']) .orbitDot { fill: rgba(180, 148, 56, 0.9); }
-:global(html[data-theme='light']) .coreOuter { fill: rgba(201, 168, 76, 0.12); }
-:global(html[data-theme='light']) .coreInner { fill: rgba(201, 168, 76, 0.7); }
-
-/* =============================================
-   LAYER TEXT ROWS — no cards
-   ============================================= */
-
+/* Text Rows */
 .layerTexts {
   display: flex;
   flex-direction: column;
@@ -307,18 +234,15 @@
 .layerRow {
   display: flex;
   align-items: flex-start;
-  gap: 18px;
-  padding: 28px 0;
+  gap: clamp(12px, 2vw, 20px);
+  padding: clamp(12px, 2.2vh, 22px) 0;
   border-bottom: 1px solid rgba(201, 168, 76, 0.08);
   --row-delay: 0;
   opacity: 0;
   transform: translateY(16px);
-  cursor: default;
   transition:
-    opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
-    padding-left 280ms ease;
-  transition-delay: 0s;
+    opacity var(--anim-duration) cubic-bezier(0.22, 1, 0.36, 1),
+    transform var(--anim-duration) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .layerRow:last-child { border-bottom: none; }
@@ -326,62 +250,42 @@
 .layerRowVisible {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: calc(400ms + var(--row-delay) * 180ms);
+  transition-delay: calc(400ms + var(--row-delay) * var(--anim-stagger-base));
 }
 
 .layerNumber {
-  font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), monospace;
-  font-size: 14px;
+  font-family: var(--font-jetbrains-mono, monospace);
+  font-size: clamp(12px, 1.4vw, 15px);
   font-weight: 700;
   color: var(--color-burnished-gold);
   line-height: 1.4;
   opacity: 0.5;
   flex-shrink: 0;
-  padding-top: 2px;
+  padding-top: 4px;
 }
 
 .layerContent {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .layerTitle {
   font-family: var(--font-outfit), sans-serif;
-  font-size: 20px;
+  font-size: clamp(17px, 2.2vw, 25px);
+  line-height: 1.18;
   font-weight: 600;
-  line-height: 1.3;
   color: var(--text-primary);
 }
 
 .layerDesc {
   font-family: var(--font-inter), sans-serif;
-  font-size: 15px;
+  font-size: clamp(12px, 1.35vw, 16px);
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.45;
   color: var(--text-secondary);
-  max-width: 44ch;
+  max-width: 38ch;
 }
-
-
-
-.layerRow:hover {
-  padding-left: 8px;
-}
-
-.layerRow:hover .layerNumber {
-  opacity: 1;
-  transition: opacity 280ms ease;
-}
-
-.layerRow:hover .layerTitle {
-  color: var(--color-burnished-gold);
-  transition: color 280ms ease;
-}
-
-/* =============================================
-   KEYFRAMES
-   ============================================= */
 
 @keyframes flowHorizontal {
   0% { background-position: -300px 0; }
@@ -398,67 +302,63 @@
   50% { transform: translate3d(0, -10px, 0); }
 }
 
-/* =============================================
-   REDUCED MOTION
-   ============================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .atmosWord,
-  .atmosphere::before,
-  .atmosphere::after,
-  .corePulse,
-  .ringBeam,
-  .orbitDot circle {
-    animation: none !important;
+@media (max-width: 760px) {
+  .content {
+    padding: 0 16px;
   }
 
-  .header,
-  .ring,
-  .coreOuter,
-  .coreInner,
-  .coreLabel,
-  .ringLabel,
-  .orbitDot,
+  .header {
+    margin-bottom: 14px;
+  }
+
+  .orbitStage {
+    grid-template-columns: minmax(120px, 0.8fr) minmax(140px, 1fr);
+    gap: 14px;
+  }
+
   .layerRow {
-    transition: none !important;
+    padding: 9px 0;
   }
 
-  .header,
-  .layerRow { opacity: 1; transform: none; }
-  .ring { stroke-dashoffset: 0; }
-  .coreOuter, .coreInner, .coreLabel, .ringLabel, .orbitDot { opacity: 1; }
-  .ringBeam { opacity: 0; }
+  .layerDesc {
+    display: none;
+  }
+
+  .ringLabel {
+    font-size: 9px;
+  }
 }
 
-/* =============================================
-   MOBILE
-   ============================================= */
+@media (max-height: 820px) {
+  .content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-@media (max-width: 900px) {
+  .header {
+    margin-bottom: 12px;
+  }
+
+  .title {
+    font-size: clamp(22px, 3.2vw, 32px);
+  }
+
   .orbitStage {
-    grid-template-columns: 1fr;
-    gap: 40px;
+    grid-template-columns: minmax(180px, 0.85fr) minmax(180px, 1fr);
+    gap: 18px;
   }
 
   .orbitVisual {
-    max-width: 320px;
-  }
-}
-
-@media (max-width: 768px) {
-  .story { padding: 80px 0; }
-
-  .header {
-    margin-bottom: 48px;
+    max-width: 210px;
   }
 
-  .header p { font-size: 15px; }
+  .layerRow {
+    padding: 9px 0;
+  }
 
-  .orbitVisual { max-width: 280px; }
-
-  .ringLabel { font-size: 9px; }
-
-  .layerRow { padding: 20px 0; gap: 14px; }
-  .layerTitle { font-size: 17px; }
-  .layerDesc { font-size: 13px; line-height: 1.5; }
+  .layerDesc {
+    display: none;
+  }
 }

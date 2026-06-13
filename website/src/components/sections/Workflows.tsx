@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Workflows.module.css';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
@@ -36,7 +36,8 @@ const steps = [
 ];
 
 export function Workflows() {
-  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1, freezeOnceVisible: true });
+  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <section className={styles.workflows} id="workflows" ref={ref as React.RefObject<HTMLDivElement>}>
@@ -71,33 +72,51 @@ export function Workflows() {
 
           <div className={styles.pipelineRailSequence}>
             <div className={styles.railLine}></div>
-            {steps.map((step, index) => (
-              <div 
-                className={`${styles.railNodeRow} ${index === 2 ? styles.activeNodeRow : ''}`} 
-                key={step.title}
-              >
-                <div className={styles.nodePointContainer}>
-                  <div className={styles.nodePoint}>
-                    <span className={styles.nodeNumber}>{String(index + 1).padStart(2, '0')}</span>
-                    <div className={styles.nodeGlowRing}></div>
+            {steps.map((step, index) => {
+              const isHidden = index >= 3 && !isExpanded;
+              const isBlurred = index === 2 && !isExpanded;
+
+              return (
+                <div 
+                  className={`${styles.railNodeRow} ${index === 2 ? styles.activeNodeRow : ''} ${isVisible ? styles.visible : ''} ${isHidden ? styles.hiddenStep : ''} ${isBlurred ? styles.blurred : ''}`} 
+                  key={step.title}
+                  style={{ 
+                    transitionDelay: isVisible 
+                      ? (isExpanded && index >= 3 
+                          ? `${(index - 3) * 120}ms` 
+                          : (index < 3 ? `${index * 80}ms` : '0ms'))
+                      : '0ms'
+                  }}
+                >
+                  <div className={styles.nodePointContainer}>
+                    <div className={styles.nodePoint}>
+                      <span className={styles.nodeNumber}>{String(index + 1).padStart(2, '0')}</span>
+                      <div className={styles.nodeGlowRing}></div>
+                    </div>
+                  </div>
+                  <div className={styles.nodeContent}>
+                    <h4>{step.title}</h4>
+                    <p className="text-secondary caption">{step.copy}</p>
                   </div>
                 </div>
-                <div className={styles.nodeContent}>
-                  <h4>{step.title}</h4>
-                  <p className="text-secondary caption">{step.copy}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          <div className={styles.outputStrip}>
-            <span className={styles.outputLabel}>Engagement outcome</span>
-            <div className={styles.outputPills}>
-              <span className={styles.outputPill}>Operational clarity</span>
-              <span className={styles.outputPill}>Aligned systems</span>
-              <span className={styles.outputPill}>Coherent presence</span>
+          {!isExpanded && (
+            <div className={styles.revealButtonContainer}>
+              <button 
+                className={styles.revealButton} 
+                onClick={() => setIsExpanded(true)}
+                aria-label="Reveal full process steps"
+              >
+                <span>Reveal Full Process</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.chevronIcon}>
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

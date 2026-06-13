@@ -36,7 +36,7 @@ const tiers = [
 ];
 
 export function Services() {
-  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1, freezeOnceVisible: true });
+  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
 
   const handleCtaClick = () => {
     document.getElementById('contact')?.scrollIntoView();
@@ -69,7 +69,7 @@ export function Services() {
             <div 
               key={tier.id} 
               className={`${styles.tierColumn} ${tier.isPopular ? styles.popularTier : ''} ${isVisible ? styles.visible : ''}`}
-              style={{ transitionDelay: `${index * 150}ms` }}
+              style={{ transitionDelay: isVisible ? `${index * 120}ms` : '0ms' }}
             >
               {tier.isPopular && <div className={styles.popularBadge}>RECOMMENDED</div>}
               

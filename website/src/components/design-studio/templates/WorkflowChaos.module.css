@@ -1,0 +1,145 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 60px;
+}
+
+.textContainer {
+  text-align: center;
+  z-index: 10;
+  margin-bottom: 60px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--anim-duration) ease, transform var(--anim-duration) ease;
+}
+
+.isPlaying .textContainer {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.headline {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: #ef4444; /* Muted red to show error/friction */
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 20px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.chaosStage {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  height: 400px;
+}
+
+.chaosLines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.line {
+  fill: none;
+  stroke: rgba(239, 68, 68, 0.3); /* Muted red */
+  stroke-width: 2;
+  stroke-dasharray: 10 15;
+  stroke-dashoffset: 0;
+}
+
+.isPlaying .line {
+  animation: march 20s linear infinite, glitch 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.glitchDot {
+  fill: rgba(239, 68, 68, 0.8);
+  opacity: 0;
+}
+
+.isPlaying .glitchDot {
+  animation: pop 2s ease-in-out infinite alternate;
+}
+
+.isPlaying .glitchDot:nth-child(2) { animation-delay: 0.5s; }
+.isPlaying .glitchDot:nth-child(3) { animation-delay: 1.2s; }
+.isPlaying .glitchDot:nth-child(4) { animation-delay: 0.8s; }
+.isPlaying .glitchDot:nth-child(5) { animation-delay: 1.5s; }
+
+.toolNode {
+  position: absolute;
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px dashed rgba(239, 68, 68, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 16px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 14px;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity var(--anim-duration) ease, transform var(--anim-duration) ease;
+}
+
+.isPlaying .toolNode {
+  opacity: 1;
+  transform: scale(1);
+  animation: float 6s ease-in-out infinite;
+}
+
+.nodeIcon {
+  width: 24px;
+  height: 24px;
+  color: rgba(239, 68, 68, 0.8);
+}
+
+/* Hardcoded random-looking positions for chaos */
+.pos0 { top: 10%; left: 10%; animation-delay: 0s; transition-delay: calc(var(--anim-stagger-base) * 1); }
+.pos1 { top: 60%; left: 20%; animation-delay: 1s; transition-delay: calc(var(--anim-stagger-base) * 2); }
+.pos2 { top: 20%; left: 50%; animation-delay: 2s; transition-delay: calc(var(--anim-stagger-base) * 3); }
+.pos3 { top: 70%; left: 60%; animation-delay: 0.5s; transition-delay: calc(var(--anim-stagger-base) * 4); }
+.pos4 { top: 30%; left: 80%; animation-delay: 1.5s; transition-delay: calc(var(--anim-stagger-base) * 5); }
+
+@keyframes march {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); stroke-width: 2; opacity: 1; }
+  20% { transform: translate(-2px, 2px); stroke-width: 3; opacity: 0.8; }
+  21% { transform: translate(2px, -2px); stroke-width: 1; opacity: 0.5; }
+  22% { transform: translate(0); stroke-width: 2; opacity: 1; }
+  100% { transform: translate(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(2deg); }
+  66% { transform: translateY(10px) rotate(-1deg); }
+}
+
+@keyframes pop {
+  0% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(0.5); }
+}

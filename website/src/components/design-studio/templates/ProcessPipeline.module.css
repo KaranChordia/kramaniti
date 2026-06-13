@@ -1,0 +1,296 @@
+/* ProcessPipeline – Scene Builder Template
+   Horizontal left-to-right pipeline with numbered steps,
+   connecting lines, gold accents, and cinematic entrance */
+
+/* ── Layout ──────────────────────────────────────────────── */
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 3.5rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.pipeline {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1040px;
+  position: relative;
+}
+
+/* ── Step wrapper (step + connector) ─────────────────────── */
+
+.stepGroup {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.stepGroup:last-child {
+  flex: 0 0 auto;
+}
+
+/* ── Step card ───────────────────────────────────────────── */
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.625rem;
+  padding: 1.5rem 1rem 1.25rem;
+  border-radius: 12px;
+  min-width: 140px;
+  max-width: 180px;
+  flex-shrink: 0;
+
+  /* glassmorphism */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.01)
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  /* initial hidden */
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* ── Number badge ────────────────────────────────────────── */
+
+.badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1.5px solid rgba(201, 168, 76, 0.55);
+  color: var(--color-burnished-gold);
+  font-family: var(--font-jetbrains-mono, var(--font-outfit));
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  background: rgba(201, 168, 76, 0.06);
+  flex-shrink: 0;
+  transition: box-shadow 400ms ease;
+}
+
+/* ── Step title ──────────────────────────────────────────── */
+
+.stepTitle {
+  font-family: var(--font-outfit);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+/* ── Step description ────────────────────────────────────── */
+
+.stepDescription {
+  font-family: var(--font-outfit);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: var(--text-tertiary);
+  max-width: 160px;
+}
+
+/* ── Connector line between steps ────────────────────────── */
+
+.connector {
+  flex: 1;
+  height: 1px;
+  position: relative;
+  min-width: 24px;
+  margin: 0 0.25rem;
+  overflow: visible;
+}
+
+.connectorLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(201, 168, 76, 0.3);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+/* Arrow head at the end of each connector */
+.connectorLine::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid rgba(201, 168, 76, 0.5);
+  border-top: 1.5px solid rgba(201, 168, 76, 0.5);
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+/* Connector glow */
+.connectorGlow {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 100%;
+  height: 7px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 168, 76, 0.08) 30%,
+    rgba(201, 168, 76, 0.12) 50%,
+    rgba(201, 168, 76, 0.08) 70%,
+    transparent 100%
+  );
+  filter: blur(3px);
+  transform-origin: left center;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+/* ── Destination glow (last step) ────────────────────────── */
+
+.destination {
+  box-shadow:
+    0 0 48px rgba(201, 168, 76, 0.08),
+    0 0 96px rgba(201, 168, 76, 0.04);
+  border-color: rgba(201, 168, 76, 0.25);
+}
+
+.destination .badge {
+  border-color: rgba(201, 168, 76, 0.8);
+  background: rgba(201, 168, 76, 0.12);
+  box-shadow:
+    0 0 20px rgba(201, 168, 76, 0.15),
+    0 0 48px rgba(201, 168, 76, 0.08);
+}
+
+.destination .stepTitle {
+  color: var(--color-burnished-gold);
+  text-shadow: 0 0 20px rgba(201, 168, 76, 0.2);
+}
+
+/* ── Keyframes ───────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blurIn {
+  from {
+    opacity: 0;
+    filter: blur(16px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes drawRight {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes arrowReveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Playing state ───────────────────────────────────────── */
+
+.animate .step {
+  animation-name: var(--entrance-anim, fadeUp);
+  animation-duration: var(--anim-duration, 700ms);
+  animation-timing-function: var(--anim-easing, cubic-bezier(0.25, 0.46, 0.45, 0.94));
+  animation-fill-mode: both;
+  animation-delay: var(--delay, 0ms);
+}
+
+.animate .connectorLine,
+.animate .connectorGlow {
+  animation: drawRight var(--connector-duration, 500ms) var(--anim-easing, cubic-bezier(0.25, 0.46, 0.45, 0.94)) both;
+  animation-delay: var(--connector-delay, 0ms);
+}
+
+.animate .connectorLine::after {
+  animation: arrowReveal 200ms ease both;
+  animation-delay: calc(var(--connector-delay, 0ms) + var(--connector-duration, 500ms));
+}
+
+/* ── Reduced motion ──────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .step {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
+
+  .connectorLine,
+  .connectorGlow {
+    transform: scaleX(1) !important;
+    animation: none !important;
+  }
+
+  .connectorLine::after {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+}

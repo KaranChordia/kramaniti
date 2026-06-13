@@ -1,0 +1,137 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+}
+
+.chartWrapper {
+  width: 100%;
+  padding: 48px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 20px;
+}
+
+.chartTitle {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.segments {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.segmentRow {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.labelCol {
+  flex: 0 0 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.labelHighlight {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.description {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}
+
+.barCol {
+  flex: 1;
+}
+
+.barTrack {
+  width: 100%;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background: var(--text-tertiary);
+  border-radius: 8px;
+}
+
+.barHighlight {
+  background: var(--gradient-gold-horizon);
+  box-shadow: 0 0 16px rgba(201, 168, 76, 0.3);
+}
+
+.valueCol {
+  flex: 0 0 80px;
+  text-align: right;
+}
+
+.value {
+  font-size: 24px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+.valueHighlight {
+  font-size: 28px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-burnished-gold);
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blur-in {
+  from { opacity: 0; filter: blur(16px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-left {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes grow-bar {
+  from { width: 0; opacity: 0; }
+  to { width: var(--target-width); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segmentRow, .barFill, .chartTitle {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}

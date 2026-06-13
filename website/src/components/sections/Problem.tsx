@@ -20,7 +20,7 @@ const signals = [
 ];
 
 export function Problem() {
-  const [intersectionRef, isVisible] = useIntersectionObserver({ threshold: 0.05, freezeOnceVisible: true });
+  const [intersectionRef, isVisible] = useIntersectionObserver({ threshold: 0.05 });
   const sectionRef = intersectionRef as React.RefObject<HTMLElement | null>;
   const [scrollProgress, setScrollProgress] = useState(0);
 

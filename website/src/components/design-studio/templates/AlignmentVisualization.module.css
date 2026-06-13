@@ -1,0 +1,251 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Atmosphere */
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.atmosphere::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.4), transparent);
+  opacity: 0.5;
+}
+
+.atmosWord {
+  position: absolute;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(60px, 12vw, 180px);
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(201, 168, 76, 0.15);
+  text-shadow: 0 0 30px rgba(201, 168, 76, 0.05);
+  opacity: 0.3;
+  animation: wordFloat 12s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+.atmosWordOne { top: 15%; left: 5%; }
+.atmosWordTwo { bottom: 15%; right: 5%; animation-delay: -6s; }
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 48px;
+}
+
+.alignmentStage {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  padding: 40px 0;
+}
+
+/* Nodes */
+.node {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--anim-duration) ease, transform var(--anim-duration) ease;
+}
+
+.nodeOperations { transition-delay: 200ms; }
+.nodeIntelligence { transition-delay: calc(200ms + var(--anim-stagger-base)); }
+.nodePresence { transition-delay: calc(200ms + var(--anim-stagger-base) * 2); }
+
+.stageVisible .node {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nodeIcon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(14, 14, 14, 0.6);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+  position: relative;
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.1);
+  backdrop-filter: blur(10px);
+  color: var(--color-burnished-gold);
+}
+
+.nodeIcon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.nodeText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 280px;
+}
+
+.nodeLabel {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+}
+
+.nodeTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.nodeDesc {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* Specific Node Styles */
+.nodeOperations .nodeIcon {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-secondary);
+  box-shadow: none;
+}
+
+.coreGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(201, 168, 76, 0.4), transparent 70%);
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+.nodePresence .nodeIcon {
+  border-color: rgba(201, 168, 76, 0.8);
+  box-shadow: 0 0 30px rgba(201, 168, 76, 0.3);
+  background: rgba(201, 168, 76, 0.1);
+}
+
+/* Connections */
+.connection {
+  position: absolute;
+  top: 40px;
+  right: -50%;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: -1;
+  overflow: hidden;
+}
+
+.connToIntel {
+  right: -50%;
+  width: 100%;
+}
+
+.connToPresence {
+  right: -50%;
+  width: 100%;
+}
+
+.beam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, var(--color-burnished-gold), transparent);
+  opacity: 0;
+  box-shadow: 0 0 10px var(--color-burnished-gold);
+}
+
+.stageVisible .connToIntel .beam {
+  animation: runBeam 3s linear infinite;
+  animation-delay: 800ms;
+  opacity: 1;
+}
+
+.stageVisible .connToPresence .beam {
+  animation: runBeam 3s linear infinite;
+  animation-delay: calc(800ms + var(--anim-stagger-base));
+  opacity: 1;
+}
+
+@keyframes runBeam {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+/* Projection Rings */
+.projectionRings {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid var(--color-burnished-gold);
+  opacity: 0;
+}
+
+.stageVisible .ring {
+  animation: radiate 4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.stageVisible .ring:nth-child(1) { animation-delay: calc(1000ms + var(--anim-stagger-base) * 2); }
+.stageVisible .ring:nth-child(2) { animation-delay: calc(2333ms + var(--anim-stagger-base) * 2); }
+.stageVisible .ring:nth-child(3) { animation-delay: calc(3666ms + var(--anim-stagger-base) * 2); }
+
+@keyframes radiate {
+  0% { width: 80px; height: 80px; opacity: 0.6; }
+  100% { width: 300px; height: 300px; opacity: 0; }
+}
+
+@keyframes wordFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -10px, 0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
+}

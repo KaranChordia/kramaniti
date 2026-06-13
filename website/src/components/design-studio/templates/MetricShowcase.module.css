@@ -1,0 +1,308 @@
+/* ─────────────────────────────────────────────────────────────
+   MetricShowcase – CSS Module
+   Premium animated metrics with glassmorphism cards
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Layout ────────────────────────────────────────────────── */
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 3rem 2.5rem;
+}
+
+.metricsRow {
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* When exactly 4 metrics, switch to 2×2 grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* ── Individual Metric Card ────────────────────────────────── */
+
+.metricCard {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+
+  /* Glassmorphism */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+
+  /* Gold top border glow */
+  border-top: 2px solid rgba(201, 168, 76, 0.4);
+  box-shadow:
+    0 0 60px rgba(201, 168, 76, 0.06),
+    0 16px 36px rgba(0, 0, 0, 0.12);
+
+  /* Pre-animation state */
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+/* ── Entrance States (before animation) ────────────────────── */
+
+.entranceFadeUp {
+  transform: translateY(30px);
+}
+
+.entranceBlurIn {
+  filter: blur(16px);
+}
+
+.entranceScaleIn {
+  transform: scale(0.85);
+}
+
+.entranceSlideLeft {
+  transform: translateX(-40px);
+}
+
+/* ── Animate-in: triggered when isPlaying ──────────────────── */
+
+.animate .metricCard {
+  animation-name: revealCard;
+  animation-fill-mode: both;
+}
+
+.animate .entranceFadeUp {
+  animation-name: fadeUp;
+  animation-fill-mode: both;
+}
+
+.animate .entranceBlurIn {
+  animation-name: blurIn;
+  animation-fill-mode: both;
+}
+
+.animate .entranceScaleIn {
+  animation-name: scaleIn;
+  animation-fill-mode: both;
+}
+
+.animate .entranceSlideLeft {
+  animation-name: slideLeft;
+  animation-fill-mode: both;
+}
+
+/* ── Value ─────────────────────────────────────────────────── */
+
+.value {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: clamp(3rem, 5vw, 6.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-burnished-gold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  padding-bottom: 0.5rem;
+}
+
+/* ── Animated Gold Underline ───────────────────────────────── */
+
+.value::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-burnished-gold),
+    transparent
+  );
+  border-radius: 1px;
+  transform: translateX(-50%);
+  transition: width 0s;
+}
+
+.animate .value::after {
+  animation-name: expandUnderline;
+  animation-fill-mode: both;
+  /* Delay slightly after card entrance */
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ── Value Scale Pulse (counting feel) ─────────────────────── */
+
+.animate .value {
+  animation-name: valuePop;
+  animation-fill-mode: both;
+}
+
+/* ── Label ─────────────────────────────────────────────────── */
+
+.label {
+  margin-top: 1rem;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  opacity: 0;
+}
+
+.animate .label {
+  animation-name: fadeIn;
+  animation-fill-mode: both;
+}
+
+/* ── Description ───────────────────────────────────────────── */
+
+.description {
+  margin-top: 0.5rem;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-tertiary);
+  max-width: 22ch;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+}
+
+.animate .description {
+  animation-name: fadeIn;
+  animation-fill-mode: both;
+}
+
+/* ── Keyframes ─────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blurIn {
+  0% {
+    opacity: 0;
+    filter: blur(16px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes revealCard {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes valuePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  80% {
+    transform: scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes expandUnderline {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 80%;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Reduced Motion ────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .metricCard,
+  .value,
+  .label,
+  .description {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .value::after {
+    animation: none !important;
+    width: 80%;
+  }
+}

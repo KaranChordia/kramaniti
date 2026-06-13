@@ -1,0 +1,307 @@
+/* ─── TitleCard – Scene Builder Template ─── */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 3rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Elements ───────────────────────────────────────────────── */
+
+.label {
+  font-family: var(--font-outfit);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-burnished-gold);
+  margin-bottom: 1.5rem;
+  line-height: 1;
+  /* pre-animation state */
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+.headline {
+  font-family: var(--font-outfit);
+  font-size: clamp(2.05rem, 5.6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.08;
+  color: var(--text-primary);
+  margin: 0;
+  max-width: 960px;
+  letter-spacing: -0.02em;
+  /* pre-animation state */
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+.headlineWord {
+  display: inline-block;
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+.headlineWordSpace {
+  display: inline-block;
+  width: 0.3em;
+}
+
+.goldShimmer {
+  background: linear-gradient(
+    135deg,
+    var(--color-burnished-gold) 0%,
+    #e8d48b 45%,
+    var(--color-burnished-gold) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+}
+
+.divider {
+  width: 0;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 168, 76, 0.7) 30%,
+    var(--color-burnished-gold) 50%,
+    rgba(201, 168, 76, 0.7) 70%,
+    transparent 100%
+  );
+  margin: 1.75rem 0;
+  border: none;
+  border-radius: 1px;
+  /* pre-animation state — width animates */
+  opacity: 0;
+  will-change: width, opacity;
+}
+
+.subtitle {
+  font-family: var(--font-outfit);
+  font-size: clamp(0.9rem, 2.1vw, 1.5rem);
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 720px;
+  /* pre-animation state */
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+.tagline {
+  font-family: var(--font-outfit);
+  font-size: clamp(0.7rem, 1.4vw, 0.875rem);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-tertiary);
+  margin-top: 1.25rem;
+  letter-spacing: 0.02em;
+  max-width: 480px;
+  /* pre-animation state */
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+/* ── Keyframes ──────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blurIn {
+  from {
+    opacity: 0;
+    filter: blur(16px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes staggerWord {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes dividerExpand {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 120px;
+    opacity: 1;
+  }
+}
+
+@keyframes shimmerSlide {
+  from {
+    background-position: 200% center;
+  }
+  to {
+    background-position: -200% center;
+  }
+}
+
+/* ── Animated state classes ─────────────────────────────────── */
+
+.animate .label {
+  animation-name: fadeUp;
+  animation-fill-mode: both;
+}
+
+.animate .headline {
+  animation-fill-mode: both;
+}
+
+.animate .divider {
+  animation-name: dividerExpand;
+  animation-fill-mode: both;
+}
+
+.animate .subtitle {
+  animation-fill-mode: both;
+}
+
+.animate .tagline {
+  animation-fill-mode: both;
+}
+
+/* Entrance-specific overrides — applied via inline style or data-attr */
+.animate[data-entrance='fade-up'] .label,
+.animate[data-entrance='fade-up'] .headline,
+.animate[data-entrance='fade-up'] .subtitle,
+.animate[data-entrance='fade-up'] .tagline {
+  animation-name: fadeUp;
+}
+
+.animate[data-entrance='blur-in'] .label,
+.animate[data-entrance='blur-in'] .headline,
+.animate[data-entrance='blur-in'] .subtitle,
+.animate[data-entrance='blur-in'] .tagline {
+  animation-name: blurIn;
+}
+
+.animate[data-entrance='scale-in'] .label,
+.animate[data-entrance='scale-in'] .headline,
+.animate[data-entrance='scale-in'] .subtitle,
+.animate[data-entrance='scale-in'] .tagline {
+  animation-name: scaleIn;
+}
+
+.animate[data-entrance='slide-left'] .label,
+.animate[data-entrance='slide-left'] .headline,
+.animate[data-entrance='slide-left'] .subtitle,
+.animate[data-entrance='slide-left'] .tagline {
+  animation-name: slideLeft;
+}
+
+/* Stagger-words: headline words animate individually */
+.animate[data-entrance='stagger-words'] .headlineWord {
+  animation-name: staggerWord;
+  animation-fill-mode: both;
+}
+
+/* For stagger-words the headline container itself stays visible */
+.animate[data-entrance='stagger-words'] .headline {
+  opacity: 1;
+}
+
+/* Non-headline elements still fade-up for stagger-words */
+.animate[data-entrance='stagger-words'] .label,
+.animate[data-entrance='stagger-words'] .subtitle,
+.animate[data-entrance='stagger-words'] .tagline {
+  animation-name: fadeUp;
+}
+
+/* Gold shimmer slide for highlighted words (post-entrance) */
+.animate .goldShimmer {
+  animation: shimmerSlide 3s ease-in-out 2s infinite;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .label,
+  .headline,
+  .headlineWord,
+  .divider,
+  .subtitle,
+  .tagline {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .divider {
+    width: 120px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .container {
+    padding: 1.25rem 1rem;
+  }
+
+  .label {
+    margin-bottom: 0.75rem;
+  }
+
+  .divider {
+    margin: 0.85rem 0;
+  }
+
+  .tagline {
+    display: none;
+  }
+}

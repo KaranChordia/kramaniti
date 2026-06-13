@@ -197,7 +197,6 @@ export function Hero() {
           <div className={styles.split}>
             <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
               <span className={styles.heroBrandText} data-text="Kramaniti">Kramaniti</span>
-              <span className={styles.eyebrow}>Kramaniti</span>
               <h1 className={styles.headline}>
                 {heroHeadlineWords.map((word, index) => (
                   <span
@@ -211,20 +210,13 @@ export function Hero() {
                 ))}
               </h1>
               <p className={styles.subheading}>
-                Kramaniti helps founder-led brands turn operational reality into clearer systems, sharper intelligence, and a more coherent market presence—so what the business does and what the brand stands for move in the same direction.
+                Kramaniti aligns your operations, intelligence systems, and brand presence into one coherent growth pipeline.
               </p>
               <a href="#contact" className={styles.heroCta}>Book a Strategic Audit</a>
             </div>
           </div>
         </div>
 
-        <div className={styles.heroFooter}>
-          <div className={styles.scrollIndicator}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </div>
-        </div>
 
       </div>
     </section>

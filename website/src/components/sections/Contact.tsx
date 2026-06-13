@@ -7,7 +7,7 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 export function Contact() {
-  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1, freezeOnceVisible: true });
+  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
 
   const budgetOptions = [
     { value: '', label: 'Select budget range' },

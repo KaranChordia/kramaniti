@@ -7,7 +7,7 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 export function FounderPreview() {
-  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.18, freezeOnceVisible: true });
+  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.18 });
 
   return (
     <section className={styles.founder} id="founder-preview" ref={ref as React.RefObject<HTMLDivElement>}>

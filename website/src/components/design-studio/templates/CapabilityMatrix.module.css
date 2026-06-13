@@ -1,0 +1,254 @@
+/* ─────────────────────────────────────────────────────────────
+   CapabilityMatrix – CSS Module
+   Clean comparison grid with gold-highlighted column
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Layout ────────────────────────────────────────────────── */
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 3rem 2.5rem;
+}
+
+.tableWrapper {
+  width: 100%;
+  max-width: 860px;
+  border-radius: 16px;
+  overflow: hidden;
+
+  /* Glassmorphism */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 60px rgba(201, 168, 76, 0.06),
+    0 16px 36px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Table ─────────────────────────────────────────────────── */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* ── Header Row ────────────────────────────────────────────── */
+
+.headerRow {
+  opacity: 0;
+  will-change: opacity, transform, filter;
+}
+
+.headerCell {
+  padding: 1.25rem 1.5rem;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border-bottom: 2px solid rgba(201, 168, 76, 0.35);
+  position: relative;
+}
+
+/* Empty corner cell for the dimension column */
+.headerCorner {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 2px solid rgba(201, 168, 76, 0.35);
+  width: 30%;
+}
+
+/* Highlighted column header */
+.headerCellHighlight {
+  color: var(--color-burnished-gold);
+}
+
+/* Animated gold bottom border on header */
+.headerRow::after {
+  content: '';
+  display: block;
+  height: 0;
+}
+
+/* ── Body Row ──────────────────────────────────────────────── */
+
+.bodyRow {
+  opacity: 0;
+  will-change: opacity, transform, filter;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background-color 0.3s ease;
+}
+
+.bodyRow:last-child {
+  border-bottom: none;
+}
+
+.bodyRow:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* ── Entrance states (before animation) ────────────────────── */
+
+.entranceFadeUp {
+  transform: translateY(30px);
+}
+
+.entranceBlurIn {
+  filter: blur(16px);
+}
+
+.entranceScaleIn {
+  transform: scale(0.85);
+}
+
+.entranceSlideLeft {
+  transform: translateX(-40px);
+}
+
+/* ── Animate-in ────────────────────────────────────────────── */
+
+.animate .headerRow,
+.animate .bodyRow {
+  animation-fill-mode: both;
+}
+
+.animate .entranceFadeUp {
+  animation-name: fadeUp;
+  animation-fill-mode: both;
+}
+
+.animate .entranceBlurIn {
+  animation-name: blurIn;
+  animation-fill-mode: both;
+}
+
+.animate .entranceScaleIn {
+  animation-name: scaleIn;
+  animation-fill-mode: both;
+}
+
+.animate .entranceSlideLeft {
+  animation-name: slideLeft;
+  animation-fill-mode: both;
+}
+
+/* ── Dimension Cell (first column – labels) ────────────────── */
+
+.dimensionCell {
+  padding: 1rem 1.5rem;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  vertical-align: middle;
+  width: 30%;
+}
+
+/* ── Value Cell ────────────────────────────────────────────── */
+
+.valueCell {
+  padding: 1rem 1.5rem;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text-tertiary);
+  vertical-align: middle;
+}
+
+/* ── Highlighted Column ────────────────────────────────────── */
+
+.valueCellHighlight {
+  background: linear-gradient(
+    180deg,
+    rgba(201, 168, 76, 0.06) 0%,
+    rgba(201, 168, 76, 0.02) 100%
+  );
+  color: var(--text-primary);
+  border-left: 2px solid rgba(201, 168, 76, 0.4);
+  font-weight: 500;
+  position: relative;
+}
+
+/* Subtle gold shimmer on highlighted cells */
+.valueCellHighlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 168, 76, 0.03) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* ── Keyframes ─────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blurIn {
+  0% {
+    opacity: 0;
+    filter: blur(16px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── Reduced Motion ────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .headerRow,
+  .bodyRow {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}

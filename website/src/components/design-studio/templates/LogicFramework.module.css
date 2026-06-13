@@ -1,0 +1,179 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 60px;
+}
+
+.gridBackground {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.vLine, .hLine {
+  position: absolute;
+  background: rgba(201, 168, 76, 0.1);
+}
+
+.vLine {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform-origin: top;
+  transform: scaleY(0);
+}
+
+.hLine {
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.isPlaying .vLine {
+  animation: scaleIn var(--anim-duration) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.isPlaying .hLine {
+  animation: scaleIn var(--anim-duration) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--anim-stagger-base) * 0.5);
+}
+
+.textContainer {
+  text-align: center;
+  z-index: 10;
+  margin-bottom: 60px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--anim-duration) ease, transform var(--anim-duration) ease;
+  transition-delay: calc(var(--anim-stagger-base) * 1);
+}
+
+.isPlaying .textContainer {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.headline {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--color-burnished-gold);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 20px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.frameworkStage {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  height: 400px;
+}
+
+.logicPaths {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.pathLine {
+  fill: none;
+  stroke: var(--color-burnished-gold);
+  stroke-width: 2;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+.logicDot {
+  fill: var(--color-burnished-gold);
+  opacity: 0;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.isPlaying .pathLine {
+  animation: drawPath calc(var(--anim-duration) * 1.5) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: calc(var(--anim-stagger-base) * 1.5);
+}
+
+.isPlaying .logicDot {
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.isPlaying .logicDot:nth-child(3) { animation-delay: calc(var(--anim-stagger-base) * 2); }
+.isPlaying .logicDot:nth-child(4) { animation-delay: calc(var(--anim-stagger-base) * 2.5); }
+.isPlaying .logicDot:nth-child(5) { animation-delay: calc(var(--anim-stagger-base) * 3); }
+.isPlaying .logicDot:nth-child(6) { animation-delay: calc(var(--anim-stagger-base) * 3.5); }
+
+.nodesGrid {
+  position: absolute;
+  inset: 0;
+}
+
+.logicNode {
+  position: absolute;
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(201, 168, 76, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  padding: 16px 32px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  transform: translate(-50%, -50%) scale(0.9);
+  opacity: 0;
+  transition: opacity var(--anim-duration) ease, transform var(--anim-duration) cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nodeCore {
+  width: 32px;
+  height: 4px;
+  background: var(--color-burnished-gold);
+  border-radius: 2px;
+  box-shadow: 0 0 10px var(--color-burnished-gold);
+}
+
+.isPlaying .logicNode {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.gridPos0 { top: 50%; left: 20%; transition-delay: calc(var(--anim-stagger-base) * 2); }
+.gridPos1 { top: 50%; left: 50%; transition-delay: calc(var(--anim-stagger-base) * 2.5); }
+.gridPos2 { top: 50%; left: 80%; transition-delay: calc(var(--anim-stagger-base) * 3); }
+.gridPos3 { top: 87.5%; left: 50%; transition-delay: calc(var(--anim-stagger-base) * 3.5); }
+
+@keyframes scaleIn {
+  to { transform: scale(1); }
+}
+
+@keyframes drawPath {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
