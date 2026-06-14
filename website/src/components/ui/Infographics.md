@@ -161,6 +161,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: A four-card sequence that moves from observed friction to backstage route, updated standard, and public presence.
 * **Selection Criteria**: Choose this when the essay frames alignment as a recurring review rhythm rather than a one-time audit.
 
+## 20. Decision Route Map (Decision Logic Spine)
+* **Component Name**: `DecisionRouteMapInfographic`
+* **Trigger String**: `[infographic:decision-route-map]`
+* **Best Used For**: Making a decision path visible before building tools, AI support, dashboards, or workflow systems.
+* **Visuals**: A five-step horizontal spine that moves from trigger to owner, options, reversal path, and retained record.
+* **Selection Criteria**: Choose this when the essay explains that system design needs explicit decision logic before implementation.
+
+## 21. Decision Record Card (Operating Memory Checklist)
+* **Component Name**: `DecisionRecordCardInfographic`
+* **Trigger String**: `[infographic:decision-record-card]`
+* **Best Used For**: Showing the minimum decision record that protects a build from founder memory and repeated debate.
+* **Visuals**: A two-by-two checklist covering current friction, chosen standard, accepted tradeoff, and retained rationale.
+* **Selection Criteria**: Choose this when the essay needs a lightweight documentation artifact rather than a full process map.
+
 ---
 
 ## Decision Flowchart for Content Creators

@@ -34,7 +34,9 @@ import {
   AdoptionPacketChecklistInfographic,
   AssistLeadOverrideMapInfographic,
   FrontstageBackstageBridgeInfographic,
-  AlignmentReviewRhythmInfographic
+  AlignmentReviewRhythmInfographic,
+  DecisionRouteMapInfographic,
+  DecisionRecordCardInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -193,6 +195,23 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 }
                 if (paragraph === '[infographic:alignment-review-rhythm]') {
                   return <AlignmentReviewRhythmInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:decision-route-map]') {
+                  return <DecisionRouteMapInfographic key={index} />;
+                }
+                if (paragraph === '[infographic:decision-record-card]') {
+                  return <DecisionRecordCardInfographic key={index} />;
+                }
+
+                const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
+                if (headingMatch) {
+                  return (
+                    <h3
+                      key={index}
+                      className={styles.articleSubheading}
+                      dangerouslySetInnerHTML={{ __html: headingMatch[1] }}
+                    />
+                  );
                 }
                 
                 // Parse gold highlights

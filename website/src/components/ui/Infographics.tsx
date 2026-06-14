@@ -1527,3 +1527,115 @@ export function AlignmentReviewRhythmInfographic() {
     </div>
   );
 }
+
+export function DecisionRouteMapInfographic() {
+  const routeSteps = [
+    {
+      label: '01',
+      title: 'Trigger',
+      copy: 'What event, gap, risk, or opportunity forces the decision now.',
+    },
+    {
+      label: '02',
+      title: 'Owner',
+      copy: 'The person accountable for judgment, tradeoffs, and final call.',
+    },
+    {
+      label: '03',
+      title: 'Options',
+      copy: 'The real alternatives compared before the route is locked.',
+    },
+    {
+      label: '04',
+      title: 'Reversal',
+      copy: 'Whether the choice is easy to unwind or expensive to change.',
+    },
+    {
+      label: '05',
+      title: 'Record',
+      copy: 'Where the rationale, standard, and approved next step are retained.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Decision Route Map</div>
+      <div className={styles.spineGrid}>
+        {routeSteps.map((step, index) => (
+          <React.Fragment key={step.title}>
+            <div className={`${styles.spineCard} ${index === routeSteps.length - 1 ? styles.spineCardHighlight : ''}`}>
+              <span className={index === routeSteps.length - 1 ? styles.spineStepHighlight : styles.spineStep}>{step.label}</span>
+              <div className={index === routeSteps.length - 1 ? styles.spineTitleHighlight : styles.spineTitle}>{step.title}</div>
+              <p className={index === routeSteps.length - 1 ? styles.spineCopyHighlight : styles.spineCopy}>{step.copy}</p>
+            </div>
+            {index < routeSteps.length - 1 ? (
+              <div className={styles.spineConnector}>
+                <ArrowRight className={styles.arrowIconDesktop} size={18} />
+                <ArrowDown className={styles.arrowIconMobile} size={18} />
+              </div>
+            ) : null}
+          </React.Fragment>
+        ))}
+      </div>
+      <div className={styles.spineLegend}>
+        <span className={styles.spineLegendItem}>
+          <GitBranch size={14} />
+          Decision logic before system logic
+        </span>
+        <span className={styles.spineLegendItem}>
+          <FolderSync size={14} />
+          Reasoning retained for the next cycle
+        </span>
+      </div>
+    </div>
+  );
+}
+
+export function DecisionRecordCardInfographic() {
+  const recordItems = [
+    {
+      icon: Radar,
+      label: 'Current friction',
+      copy: 'The repeated debate, delay, exception, or handoff issue that exposes the decision gap.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Chosen standard',
+      copy: 'The operating rule the business will use until new evidence says it should change.',
+    },
+    {
+      icon: Scale,
+      label: 'Accepted tradeoff',
+      copy: 'The cost, constraint, risk, or slower path the team knowingly accepts.',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Retained rationale',
+      copy: 'The short record that lets future work understand why the route exists.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Decision Record Card</div>
+      <div className={styles.packetChecklist}>
+        {recordItems.map((item, index) => {
+          const Icon = item.icon;
+
+          return (
+            <div className={`${styles.packetItem} ${index === recordItems.length - 1 ? styles.packetItemHighlight : ''}`} key={item.label}>
+              <div className={index === recordItems.length - 1 ? styles.packetIconHighlight : styles.packetIcon}>
+                <Icon size={18} />
+              </div>
+              <div className={styles.packetContent}>
+                <span className={styles.packetNumber}>{String(index + 1).padStart(2, '0')}</span>
+                <h4>{item.label}</h4>
+                <p>{item.copy}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
