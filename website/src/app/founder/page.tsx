@@ -37,7 +37,7 @@ const advisoryTeam = [
     copy: 'Kashiesh supports Kramaniti on agreements, documentation, compliance structure, governance practices, company-secretarial matters, filings, and regulatory paperwork. Her advisory role brings legal and operational discipline to the way engagements are structured and delivered.'
   },
   {
-    name: 'Sachin Chougale',
+    name: 'Sachin Chougule',
     role: 'Business & Strategy Advisor',
     initials: 'SC',
     image: null,
