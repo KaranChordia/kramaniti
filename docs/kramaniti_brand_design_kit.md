@@ -57,10 +57,12 @@ Used sparingly for CTAs, active states, key focal points, and indicator elements
 
 ### 3.1 Font Stack
 
-*   **Headings (H1 - H3)**: **Outfit** (`Outfit, Sora, system-ui, sans-serif`) — Clean, geometric sans-serif with a technical yet modern feel.
-*   **Subheadings & Cards (H4)**: **Sora** (`Sora, Outfit, sans-serif`) — Medium-weight, distinct vertical rhythm.
-*   **Body Copy**: **Inter** (`Inter, Roboto, sans-serif`) — High-readability neutral geometric sans-serif.
-*   **Monospace**: **JetBrains Mono** (`JetBrains Mono, Fira Code, monospace`) — Used for status labels, numbers, and technical annotation accents.
+*   **Headings (H1 - H3)**: **Outfit** (`var(--font-outfit), system-ui, sans-serif`) — Clean, geometric sans-serif with a technical yet modern feel.
+*   **Subheadings & Cards (H4 - H6)**: **Outfit** (`var(--font-outfit), system-ui, sans-serif`) — Consistent brand typography across section and card headings.
+*   **Body Copy**: **Outfit** (`var(--font-outfit), system-ui, -apple-system, sans-serif`) — Live website body and interface text currently resolve to Outfit for a unified brand feel.
+*   **Monospace**: **JetBrains Mono** (`var(--font-jetbrains-mono), monospace`) — Used for status labels, numbers, and technical annotation accents.
+
+Implementation note: the live website imports **Outfit** and **JetBrains Mono** from `next/font/google` in `website/src/app/layout.tsx`. Legacy token names such as `--font-inter`, `--font-sora`, and `--font-geist-sans` are mapped back to `--font-outfit` in `website/src/app/globals.css`.
 
 ### 3.2 Type Scale (Desktop & Mobile)
 
@@ -69,10 +71,10 @@ Used sparingly for CTAs, active states, key focal points, and indicator elements
 | **H1 — Hero Headline** | Outfit | `56px` / `3.5rem` | `36px` / `2.25rem` | `1.1` | `-0.02em` | `700` |
 | **H2 — Section Title** | Outfit | `40px` / `2.5rem` | `28px` / `1.75rem` | `1.2` | `-0.01em` | `600` |
 | **H3 — Subsection** | Outfit | `28px` / `1.75rem` | `22px` / `1.375rem` | `1.3` | `0` | `600` |
-| **H4 — Card Heading** | Sora | `20px` / `1.25rem` | `18px` / `1.125rem` | `1.4` | `0` | `500` |
-| **Body Large** | Inter | `18px` / `1.125rem` | `16px` / `1rem` | `1.7` | `0` | `400` |
-| **Body Regular** | Inter | `16px` / `1rem` | `15px` / `0.9375rem` | `1.7` | `0` | `400` |
-| **Caption** | Inter | `13px` / `0.8125rem` | `12px` / `0.75rem` | `1.5` | `0.02em` | `400` |
+| **H4 — Card Heading** | Outfit | `20px` / `1.25rem` | `18px` / `1.125rem` | `1.4` | `0` | `500` |
+| **Body Large** | Outfit | `18px` / `1.125rem` | `16px` / `1rem` | `1.7` | `0` | `400` |
+| **Body Regular** | Outfit | `16px` / `1rem` | `15px` / `0.9375rem` | `1.7` | `0` | `400` |
+| **Caption** | Outfit | `13px` / `0.8125rem` | `12px` / `0.75rem` | `1.5` | `0.02em` | `400` |
 | **Micro-labels** | JetBrains Mono | `11px` | `10px` | `1.5` | `0.18em` | `700` |
 
 ### 3.3 Typography Rules

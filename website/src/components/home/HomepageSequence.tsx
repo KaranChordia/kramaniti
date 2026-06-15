@@ -7,6 +7,7 @@ import { Navbar } from '../layout/Navbar';
 import { Hero } from '../sections/Hero';
 import { Problem } from '../sections/Problem';
 import { Story } from '../sections/Story';
+import { BrandFilm } from '../sections/BrandFilm';
 import { Services } from '../sections/Services';
 import { Workflows } from '../sections/Workflows';
 import { FounderPreview } from '../sections/FounderPreview';
@@ -116,6 +117,7 @@ export function HomepageSequence() {
             <Hero />
             <Problem />
             <Story />
+            <BrandFilm />
             <Services />
             <Workflows />
             <FounderPreview />
