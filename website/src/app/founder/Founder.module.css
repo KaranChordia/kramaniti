@@ -482,10 +482,10 @@
 }
 
 .tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 32px;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+min-height: 32px;
   padding: 0 10px;
   border-radius: 10px;
   border: 1px solid var(--border-subtle);
@@ -493,14 +493,52 @@
   color: var(--text-secondary);
   font-family: var(--font-inter), sans-serif;
   font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+}
+
+.teamPhotoFrame {
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100%;
+aspect-ratio: 4 / 3;
+margin-bottom: 18px;
+border-radius: 16px;
+overflow: hidden;
+border: 1px solid rgba(201, 168, 76, 0.24);
+background:
+linear-gradient(135deg, rgba(201, 168, 76, 0.18), rgba(255, 255, 255, 0.04)),
+rgba(255, 255, 255, 0.03);
+box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.teamPhoto {
+object-fit: cover;
+filter: contrast(1.04) saturate(0.92);
+}
+
+.teamInitials {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 72px;
+height: 72px;
+border-radius: 50%;
+border: 1px solid rgba(201, 168, 76, 0.34);
+background: rgba(10, 10, 12, 0.42);
+color: var(--color-burnished-gold);
+font-family: var(--font-outfit), sans-serif;
+font-size: 26px;
+font-weight: 700;
+letter-spacing: 0;
 }
 
 .proofCard h3,
 .principleCard h3 {
-  margin-top: 10px;
-  font-size: 22px;
+margin-top: 10px;
+font-size: 22px;
   line-height: 1.25;
 }
 

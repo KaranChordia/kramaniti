@@ -25,12 +25,23 @@ const advisoryTeam = [
   {
     name: 'Karan Chordia',
     role: 'Founder',
+    initials: 'KC',
+    image: '/assets/founder_real.jpg',
     copy: 'Karan leads Kramaniti’s strategy, operating diagnosis, intelligence-system design, and brand-presence direction. His role is to identify the workflows and decisions that matter, then design practical systems and communication around them.'
   },
   {
     name: 'Kashiesh Chordia',
     role: 'Legal & Compliance Advisor',
+    initials: 'KC',
+    image: null,
     copy: 'Kashiesh supports Kramaniti on agreements, documentation, compliance structure, governance practices, company-secretarial matters, filings, and regulatory paperwork. Her advisory role brings legal and operational discipline to the way engagements are structured and delivered.'
+  },
+  {
+    name: 'Sachin Chougale',
+    role: 'Business & Strategy Advisor',
+    initials: 'SC',
+    image: null,
+    copy: 'Sachin supports Kramaniti on business direction, strategic judgment, and advisory perspective as the practice grows. His role strengthens the commercial thinking behind how opportunities are assessed, structured, and developed.'
   }
 ];
 
@@ -195,7 +206,7 @@ export default function FounderPage() {
 
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className="micro-label">Founder & Advisory</span>
+<span className="micro-label">Team</span>
               <h2>A focused structure for serious work.</h2>
               <p className={styles.sectionLead}>
                 Kramaniti is founder-led by design. Strategy, system architecture, and client execution stay close to the founder so the work remains coherent from diagnosis to delivery.
@@ -203,12 +214,25 @@ export default function FounderPage() {
             </div>
 
             <div className={styles.proofGrid}>
-              {advisoryTeam.map((member) => (
-                <article key={member.name} className={styles.proofCard}>
-                  <span className="micro-label">{member.role}</span>
-                  <h3>{member.name}</h3>
-                  <p className="text-secondary caption">{member.copy}</p>
-                </article>
+{advisoryTeam.map((member) => (
+<article key={member.name} className={styles.proofCard}>
+<div className={styles.teamPhotoFrame}>
+{member.image ? (
+<Image
+src={member.image}
+alt={member.name}
+fill
+sizes="(min-width: 900px) 320px, 100vw"
+className={styles.teamPhoto}
+/>
+) : (
+<span className={styles.teamInitials}>{member.initials}</span>
+)}
+</div>
+<span className="micro-label">{member.role}</span>
+<h3>{member.name}</h3>
+<p className="text-secondary caption">{member.copy}</p>
+</article>
               ))}
             </div>
           </div>
