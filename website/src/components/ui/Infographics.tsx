@@ -63,6 +63,106 @@ export function DisconnectedOpsInfographic() {
   );
 }
 
+export function OperatingSignalLedgerInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Operating Signal Ledger</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Signal in work</th>
+              <th className={styles.matrixColHeader}>Evidence to retain</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Presence move</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Repeated question</td>
+              <td className={styles.matrixCell}>Sales note, call pattern, objection log.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Clarifying founder post or FAQ line.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Delivery friction</td>
+              <td className={styles.matrixCell}>Workflow map, handoff gap, owner comment.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Service explanation grounded in real route.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Client language</td>
+              <td className={styles.matrixCell}>Approved phrase, category-safe insight, source context.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Sharper deck, article, or sales narrative.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>System learning</td>
+              <td className={styles.matrixCell}>Correction, review threshold, write-back record.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Public claim only after proof route is stable.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export function PresenceBriefCanvasInfographic() {
+  const briefItems = [
+    {
+      icon: Radar,
+      label: 'Signal',
+      copy: 'The recurring market, workflow, or delivery pattern noticed in real work.',
+    },
+    {
+      icon: Workflow,
+      label: 'Workflow source',
+      copy: 'The route, handoff, call, report, or system where signal actually appeared.',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Evidence retained',
+      copy: 'The record that lets future content point back to operating truth.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Claim boundary',
+      copy: 'What can be said publicly, what needs softer language, and what stays internal.',
+    },
+    {
+      icon: MessageSquareText,
+      label: 'Owner interpretation',
+      copy: 'Founder or subject owner decides what signal means for the business.',
+    },
+    {
+      icon: Megaphone,
+      label: 'Presence format',
+      copy: 'The safest useful output: post, article, deck line, sales note, or internal doc.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Presence Brief Canvas</div>
+      <div className={styles.packetChecklist}>
+        {briefItems.map((item, index) => {
+          const Icon = item.icon;
+
+          return (
+            <div className={`${styles.packetItem} ${index === briefItems.length - 1 ? styles.packetItemHighlight : ''}`} key={item.label}>
+              <div className={index === briefItems.length - 1 ? styles.packetIconHighlight : styles.packetIcon}>
+                <Icon size={18} />
+              </div>
+              <div className={styles.packetContent}>
+                <span className={styles.packetNumber}>{String(index + 1).padStart(2, '0')}</span>
+                <h4>{item.label}</h4>
+                <p>{item.copy}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // 2. The Priority Pyramid (Layered Stack)
 export function TechStackInfographic() {
   return (

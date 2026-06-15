@@ -177,6 +177,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 
 ---
 
+## 22. Operating Signal Ledger (Evidence-to-Presence Matrix)
+* **Component Name**: `OperatingSignalLedgerInfographic`
+* **Trigger String**: `[infographic:operating-signal-ledger]`
+* **Best Used For**: Showing how recurring operational signals become retained evidence and then safer public presence.
+* **Visuals**: matrix with signal, evidence, and presence move columns.
+* **Selection Criteria**: Choose when essay connects real workflow signals to claim-safe content or sales language.
+
+## 23. Presence Brief Canvas (Content-System Checklist)
+* **Component Name**: `PresenceBriefCanvasInfographic`
+* **Trigger String**: `[infographic:presence-brief-canvas]`
+* **Best Used For**: Defining the minimum brief needed before internal intelligence becomes external communication.
+* **Visuals**: six-item checklist for signal, source workflow, retained evidence, claim boundary, owner interpretation, and presence format.
+* **Selection Criteria**: Choose when post explains documentation as brand infrastructure or bridges internal systems into public content.
+
 ## Decision Flowchart for Content Creators
 
 Use the following mental model to choose the template:

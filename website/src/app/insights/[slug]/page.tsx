@@ -36,7 +36,9 @@ import {
   FrontstageBackstageBridgeInfographic,
   AlignmentReviewRhythmInfographic,
   DecisionRouteMapInfographic,
-  DecisionRecordCardInfographic
+  DecisionRecordCardInfographic,
+  OperatingSignalLedgerInfographic,
+  PresenceBriefCanvasInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -199,11 +201,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 if (paragraph === '[infographic:decision-route-map]') {
                   return <DecisionRouteMapInfographic key={index} />;
                 }
-                if (paragraph === '[infographic:decision-record-card]') {
-                  return <DecisionRecordCardInfographic key={index} />;
-                }
+        if (paragraph === '[infographic:decision-record-card]') {
+          return <DecisionRecordCardInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:operating-signal-ledger]') {
+          return <OperatingSignalLedgerInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:presence-brief-canvas]') {
+          return <PresenceBriefCanvasInfographic key={index} />;
+        }
 
-                const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
+        const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
                 if (headingMatch) {
                   return (
                     <h3
