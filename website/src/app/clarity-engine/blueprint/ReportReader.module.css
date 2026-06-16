@@ -61,6 +61,16 @@
   margin: 0;
 }
 
+.kramanitiLogo {
+  filter: drop-shadow(0 0 10px rgba(201, 168, 76, 0.2));
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .agentIcon {
   width: 40px;
   height: 40px;
@@ -86,8 +96,8 @@
 .readerContent {
   width: 100%;
   max-width: 800px;
-  font-family: var(--font-inter), sans-serif;
-  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-outfit), sans-serif;
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.8;
   font-size: 16px;
   animation: slideUpFade 0.8s ease forwards 0.2s;
@@ -104,9 +114,11 @@
 
 .readerContent h1, .readerContent h2, .readerContent h3 {
   font-family: var(--font-outfit), sans-serif;
-  color: #fff;
+  color: var(--color-burnished-gold, #C9A84C);
   margin-top: 2em;
   margin-bottom: 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
 .readerContent h1:first-child, .readerContent h2:first-child, .readerContent h3:first-child {
@@ -124,6 +136,15 @@
 
 .readerContent li {
   margin-bottom: 0.8em;
+}
+
+.readerContent ul li::marker {
+  color: var(--color-burnished-gold, #C9A84C);
+}
+
+.readerContent strong {
+  color: var(--color-ice-white, #F0F0F5);
+  font-weight: 600;
 }
 
 .readerContent blockquote {
