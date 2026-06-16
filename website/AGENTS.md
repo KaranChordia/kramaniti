@@ -25,7 +25,7 @@ Memory to maintain:
 - Next.js 16 App Router.
 - React 19.
 - CSS Modules.
-- Static export.
+- Route handlers are available for server-side integrations.
 - Public deployment path: custom domain root (`/`).
 - Public assets use root-relative paths such as `/assets/...`.
 - The old GitHub Pages `/kramaniti` subpath is not the active Vercel deployment model.

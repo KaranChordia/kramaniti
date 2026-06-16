@@ -14,7 +14,7 @@ The primary conversion path is "Book an AI Workflow Audit." All major homepage C
 
 ## 2. Current Website Audit
 
-The project is a Next.js 16 App Router site under `website/`, using React 19, CSS Modules, static export, and a root custom-domain deployment path. The existing site already had a strong visual direction: dark premium palette, gold accents, animated section atmospheres, modular homepage sections, a founder page, and an insights area.
+The project is a Next.js 16 App Router site under `website/`, using React 19, CSS Modules, route handlers, and a root custom-domain deployment path. The existing site already had a strong visual direction: dark premium palette, gold accents, animated section atmospheres, modular homepage sections, a founder page, and an insights area.
 
 The main issues found before refinement:
 
@@ -236,6 +236,31 @@ Related files:
 - `website/src/components/KCS/KcsWorkbench.module.css`
 - `website/src/lib/KCS/sceneSequence.ts`
 - `docs/kcs_content_studio.md`
+
+## 10.3 Clarity Engine
+
+2026-06-16 update: the website now includes a separate `/clarity-engine` route for founders, freelancers, and early operators who need to turn a raw idea or AI curiosity into a practical operating blueprint.
+
+[Recommendation] Clarity Engine should stay separate from `/studio`. The founder explicitly rejected using the current Studio surface for this use case because it feels too cluttered. This tool should feel like a focused interactive UX: guided questions, live synthesis, a suggested workflow route, brand presence ideas, and a portable brief.
+
+[Fact] The current implementation includes:
+
+- A standalone route at `/clarity-engine`.
+- A full-screen assistant flow that asks one question at a time instead of using a dashboard layout.
+- Adaptive follow-up questions shaped by the user's prior answers.
+- A futuristic conversational surface with an atmospheric background scene, luminous signal paths, and floating synthesis layers.
+- A server route at `/api/clarity-engine/chat` for Groq-backed streaming when `GROQ_API_KEY` is configured.
+- A local fallback synthesis path so the interaction still works when the server route is unavailable.
+
+[Constraint] The tool must preserve the Kramaniti operating sequence: strategy before tools, systems before scale, and content after clarity. It should not lead with technical language, generic AI agency claims, fake metrics, client logos, testimonials, or unsupported proof.
+
+Related files:
+
+- `website/src/app/clarity-engine/page.tsx`
+- `website/src/app/clarity-engine/ClarityEngine.module.css`
+- `website/src/app/api/clarity-engine/chat/route.ts`
+- `website/src/lib/clarity-engine/assistant.ts`
+- `website/src/components/layout/Navbar.tsx`
 
 ## 11. Nexocean Portfolio Page
 

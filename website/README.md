@@ -18,7 +18,8 @@ Open [http://localhost:3000/](http://localhost:3000/) with your browser to see t
 
 ## Deployment on Vercel
 
-This project is configured for static export (`output: 'export'`) and deploys through Vercel from the repository root:
+This project deploys through Vercel from the repository root as a standard Next.js app:
 
-- The root `vercel.json` installs dependencies in `website/`, runs `npm run build`, and publishes `website/out`.
+- The root `vercel.json` installs dependencies in `website/` and runs `npm run build`.
+- Route handlers under `src/app/api/` are part of the runtime surface and can be used for server-side integrations such as the Clarity Engine assistant.
 - The site is intended to serve from the custom domain root, not the old GitHub Pages `/kramaniti` subpath.

@@ -1,0 +1,654 @@
+'use client';
+
+import Link from 'next/link';
+import { startTransition, useDeferredValue, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  ArrowRight,
+  CornerDownLeft,
+  Download,
+  Home,
+  Loader2,
+  RefreshCw,
+  Sparkles,
+  X,
+  MessageSquare,
+  BrainCircuit,
+  ChevronDown,
+  ChevronUp,
+  Compass,
+  Layers,
+  Megaphone
+} from 'lucide-react';
+import styles from './ClarityEngine.module.css';
+import BlueprintStreamer from './BlueprintStreamer';
+import {
+  DEFAULT_ANSWERS,
+  INITIAL_ASSISTANT_REPLY,
+  INITIAL_SYNTHESIS,
+  buildFallbackResponse,
+  createInitialSessionEnvelope,
+  type AssistantEnvelope,
+  type ClarityAnswers,
+  type ConversationTurn,
+  type QuestionId,
+} from '@/lib/clarity-engine/assistant';
+
+type SessionState = {
+  answers: ClarityAnswers;
+  assistantReply: string;
+  currentQuestion: string;
+  currentQuestionKey: QuestionId;
+  currentQuestionLabel: string;
+  currentQuestionPlaceholder: string;
+  transcript: ConversationTurn[];
+  contextLog: string[];
+  aiTasks: { label: string; question: string }[];
+  synthesis: Omit<
+    AssistantEnvelope,
+    'assistantReply' | 'nextQuestion' | 'nextQuestionKey' | 'nextQuestionLabel' | 'nextQuestionPlaceholder' | 'source'
+  >;
+  source: 'groq' | 'local';
+};
+
+const STORAGE_KEY = 'kramaniti-clarity-engine-v2';
+
+const SAMPLE_ANSWER =
+  'Founders and freelancers in co-working spaces keep collecting tools, prompts, and advice, but they do not have a clear operating framework that turns repeated demand into a first paid workflow.';
+
+const createInitialSession = (): SessionState => {
+  const initial = createInitialSessionEnvelope();
+
+  return {
+    answers: { ...DEFAULT_ANSWERS },
+    assistantReply: initial.assistantReply,
+    currentQuestion: initial.nextQuestion,
+    currentQuestionKey: initial.nextQuestionKey,
+    currentQuestionLabel: initial.nextQuestionLabel || 'Core Question',
+    currentQuestionPlaceholder: initial.nextQuestionPlaceholder || 'Provide your thoughts...',
+    transcript: [
+      {
+        role: 'assistant',
+        content: INITIAL_ASSISTANT_REPLY,
+        createdAt: new Date().toISOString(),
+      },
+    ],
+    contextLog: [],
+    aiTasks: [],
+    synthesis: { ...INITIAL_SYNTHESIS },
+    source: 'local',
+  };
+};
+
+const readStoredSession = (): SessionState => {
+  if (typeof window === 'undefined') return createInitialSession();
+
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+
+    if (!stored) return createInitialSession();
+
+    const parsed = JSON.parse(stored) as Partial<SessionState>;
+    const base = createInitialSession();
+
+    return {
+      ...base,
+      ...parsed,
+      answers: { ...base.answers, ...(parsed.answers ?? {}) },
+      synthesis: { ...base.synthesis, ...(parsed.synthesis ?? {}) },
+      contextLog: Array.isArray(parsed.contextLog) ? parsed.contextLog : base.contextLog,
+      aiTasks: Array.isArray(parsed.aiTasks) ? parsed.aiTasks : base.aiTasks,
+      transcript:
+        Array.isArray(parsed.transcript) && parsed.transcript.length > 0
+          ? parsed.transcript
+          : base.transcript,
+    };
+  } catch {
+    return createInitialSession();
+  }
+};
+
+const exportBrief = (session: SessionState) => {
+  const blob = new Blob(
+    [
+      JSON.stringify(
+        {
+          exportedAt: new Date().toISOString(),
+          source: session.source,
+          answers: session.answers,
+          transcript: session.transcript,
+          synthesis: session.synthesis,
+        },
+        null,
+        2
+      ),
+    ],
+    { type: 'application/json' }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = 'kramaniti-clarity-engine-brief.json';
+  anchor.click();
+  URL.revokeObjectURL(url);
+};
+
+// --- Custom Blur Typing Text Component ---
+function BlurTypingText({ text, activeKey }: { text: string, activeKey: string }) {
+  // We split by space to get individual words
+  const words = text.split(' ');
+
+  return (
+    <h1 className={styles.questionTitle} key={activeKey}>
+      {words.map((word, index) => (
+        <span
+          key={`${index}-${word}`}
+          className={styles.word}
+          style={{ animationDelay: `${index * 80}ms` }}
+        >
+          {word}
+        </span>
+      ))}
+    </h1>
+  );
+}
+
+export default function ClarityEnginePage() {
+  const router = useRouter();
+  const [session, setSession] = useState<SessionState>(readStoredSession);
+  const [draft, setDraft] = useState('');
+  const [streamedAssistant, setStreamedAssistant] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [statusText, setStatusText] = useState('Awaiting your signal.');
+  const [stagePhase, setStagePhase] = useState<'idle' | 'exit' | 'enter'>('idle');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInputActive, setIsInputActive] = useState(false);
+  const [isTypingPulse, setIsTypingPulse] = useState(false);
+  const [isTasksOpen, setIsTasksOpen] = useState(false);
+  const transitionTimers = useRef<number[]>([]);
+  const typingTimer = useRef<number | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const deferredDraft = useDeferredValue(draft);
+  const completion = session.synthesis.completion;
+  const hasExport = completion >= 35 || session.transcript.length > 1;
+
+  const hasSynthesis =
+    session.synthesis.clarityContext ||
+    session.synthesis.workflowDirection ||
+    session.synthesis.presenceIdeas.length > 0;
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+  }, [session]);
+
+  useEffect(() => {
+    return () => {
+      transitionTimers.current.forEach((timer) => window.clearTimeout(timer));
+      if (typingTimer.current) window.clearTimeout(typingTimer.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isInputActive && textareaRef.current) {
+      const timer = setTimeout(() => {
+        textareaRef.current?.focus();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isInputActive]);
+
+  const handleDraftChange = (value: string) => {
+    setDraft(value);
+    
+    // Trigger realtime pulse feedback
+    if (value.trim().length > 0) {
+      setIsTypingPulse(true);
+      if (typingTimer.current) window.clearTimeout(typingTimer.current);
+      typingTimer.current = window.setTimeout(() => {
+        setIsTypingPulse(false);
+      }, 300); // Pulse decays after 300ms of no typing
+    }
+  };
+
+  const applyEnvelope = (
+    nextTranscript: ConversationTurn[],
+    envelope: AssistantEnvelope,
+    nextAnswers: ClarityAnswers
+  ) => {
+    const assistantTurn: ConversationTurn = {
+      role: 'assistant',
+      content: envelope.assistantReply,
+      createdAt: new Date().toISOString(),
+    };
+
+    setStreamedAssistant('');
+    setIsStreaming(false);
+    setStatusText('Framing the next question...');
+    setStagePhase('exit');
+    setIsInputActive(false);
+
+    transitionTimers.current.forEach((timer) => window.clearTimeout(timer));
+    transitionTimers.current = [];
+
+    const swapTimer = window.setTimeout(() => {
+      startTransition(() => {
+        setSession((prev) => {
+          const newContextLog = envelope.latestSummary 
+            ? [...prev.contextLog, envelope.latestSummary] 
+            : prev.contextLog;
+
+          return {
+            answers: nextAnswers,
+            assistantReply: envelope.assistantReply,
+            currentQuestion: envelope.nextQuestion,
+            currentQuestionKey: envelope.nextQuestionKey,
+            currentQuestionLabel: envelope.nextQuestionLabel || 'Next Step',
+            currentQuestionPlaceholder: envelope.nextQuestionPlaceholder || 'Provide your thoughts...',
+            transcript: [...nextTranscript, assistantTurn],
+            contextLog: newContextLog,
+            aiTasks: prev.aiTasks,
+            synthesis: {
+              completion: envelope.completion,
+              statusLabel: envelope.statusLabel,
+              clarityContext: envelope.clarityContext,
+              workflowDirection: envelope.workflowDirection,
+              presenceIdeas: envelope.presenceIdeas,
+              signalTrail: envelope.signalTrail,
+              focusTags: envelope.focusTags,
+            },
+            source: envelope.source,
+          };
+        });
+      });
+
+      setStagePhase('enter');
+      setStatusText(
+        envelope.nextQuestionKey === 'complete'
+          ? 'Blueprint signal is ready.'
+          : 'Next question ready.'
+      );
+
+      const settleTimer = window.setTimeout(() => {
+        setStagePhase('idle');
+      }, 1000); // Wait for the enter animation
+
+      transitionTimers.current.push(settleTimer);
+    }, 600); // Wait for exit animation
+
+    transitionTimers.current.push(swapTimer);
+  };
+
+  const submitAnswer = async (overrideAnswer?: string) => {
+    const answer = (overrideAnswer || draft).trim();
+
+    if (!answer || isStreaming || session.currentQuestionKey === 'complete') return;
+
+    const isAiTask = answer.startsWith('[AI Task]');
+
+    const nextAnswers: ClarityAnswers = {
+      ...session.answers,
+      [session.currentQuestionKey]: answer,
+    };
+
+    const userTurn: ConversationTurn = {
+      role: 'user',
+      content: answer,
+      createdAt: new Date().toISOString(),
+    };
+
+    const nextTranscript = [...session.transcript, userTurn];
+
+    setSession((current) => {
+      const updatedTasks = isAiTask 
+        ? [...current.aiTasks, { label: current.currentQuestionLabel, question: current.currentQuestion }] 
+        : current.aiTasks;
+
+      return {
+        ...current,
+        answers: nextAnswers,
+        transcript: nextTranscript,
+        aiTasks: updatedTasks,
+      };
+    });
+    setDraft('');
+    setStreamedAssistant('');
+    setIsStreaming(true);
+    setStatusText('Listening through the answer...');
+    setIsInputActive(false); // Collapse input while loading next step
+
+    try {
+      const response = await fetch('/api/clarity-engine/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          answers: nextAnswers,
+          transcript: nextTranscript,
+          currentQuestionKey: session.currentQuestionKey,
+          currentQuestion: session.currentQuestion,
+          latestAnswer: answer,
+        }),
+      });
+
+      if (!response.ok || !response.body) {
+        throw new Error('Stream unavailable');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let finalEnvelope: AssistantEnvelope | null = null;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        buffer += decoder.decode(value ?? new Uint8Array(), { stream: !done });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() ?? '';
+
+        for (const line of lines) {
+          if (!line.trim()) continue;
+
+          const event = JSON.parse(line) as
+            | { type: 'token'; value: string }
+            | { type: 'final'; data: AssistantEnvelope };
+
+          if (event.type === 'token') {
+            setStatusText('Thinking through the route...');
+            setStreamedAssistant((current) => current + event.value);
+          }
+
+          if (event.type === 'final') {
+            finalEnvelope = event.data;
+          }
+        }
+
+        if (done) break;
+      }
+
+      if (!finalEnvelope) {
+        throw new Error('No final state returned');
+      }
+
+      applyEnvelope(nextTranscript, finalEnvelope, nextAnswers);
+    } catch {
+      const fallback = buildFallbackResponse({
+        answers: nextAnswers,
+        currentQuestionKey: session.currentQuestionKey,
+        latestAnswer: answer,
+      });
+
+      applyEnvelope(nextTranscript, fallback, nextAnswers);
+    }
+  };
+
+  const seedExample = () => {
+    setDraft(SAMPLE_ANSWER);
+    setStatusText('Example response loaded.');
+    setIsInputActive(true);
+  };
+
+  const resetSession = () => {
+    transitionTimers.current.forEach((timer) => window.clearTimeout(timer));
+    transitionTimers.current = [];
+    const next = createInitialSession();
+    setSession(next);
+    setDraft('');
+    setStreamedAssistant('');
+    setIsStreaming(false);
+    setIsInputActive(false);
+    setIsTypingPulse(false);
+    setStagePhase('enter');
+    setStatusText('Session reset.');
+    const resetTimer = window.setTimeout(() => {
+      setStagePhase('idle');
+    }, 1000);
+    transitionTimers.current.push(resetTimer);
+  };
+
+  // Determine Character State
+  let charStateClass = styles.charIdle;
+  if (isStreaming) {
+    charStateClass = styles.charThinking;
+  } else if (isTypingPulse) {
+    charStateClass = styles.charTypingPulse;
+  } else if (isInputActive) {
+    charStateClass = styles.charListening;
+  } else if (stagePhase === 'exit' || stagePhase === 'enter') {
+    charStateClass = styles.charThinking; // Keep it active while moving layers
+  }
+
+  const panelClassName = [
+    styles.glassPanel,
+    stagePhase === 'exit' ? styles.stageExit : '',
+    stagePhase === 'enter' ? styles.stageEnter : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const handleMorphClick = () => {
+    if (!isInputActive) {
+      setIsInputActive(true);
+    }
+  };
+
+  return (
+    <main className={styles.canvas}>
+      {/* Background Ambience */}
+      <div className={styles.canvasBgGlow} />
+      <div className={styles.canvasNoise} />
+
+      {/* Header */}
+      <header className={styles.header}>
+        <Link href="/" className={styles.brand}>
+          <Home size={14} />
+          <span>Kramaniti</span>
+          <strong>Clarity Engine</strong>
+        </Link>
+        <div className={styles.headerActions}>
+          <button className={styles.actionBtn} onClick={resetSession}>
+            <RefreshCw size={14} />
+            Reset
+          </button>
+          {hasSynthesis && (
+            <button 
+              className={`${styles.actionBtn} ${styles.synthesisBtn} ${completion > 10 ? styles.synthesisBtnPulse : ''}`} 
+              onClick={() => setIsModalOpen(true)}
+            >
+              View Synthesis ({completion}%)
+            </button>
+          )}
+        </div>
+      </header>
+
+      {/* Dual Column Layout */}
+      <div className={styles.layoutWrapper}>
+        
+        {/* Left Column: Interaction */}
+        <div className={styles.interactionColumn}>
+          {/* Central Character Entity */}
+          <div className={styles.characterContainer}>
+            <div className={`${styles.blobWrapper} ${charStateClass}`}>
+              <div className={styles.orbit1} />
+              <div className={styles.orbit2} />
+              <div className={styles.assistantBlob} />
+            </div>
+          </div>
+
+          {/* Main Stage (Glass Panel with Questions & Input) */}
+          <section className={styles.mainStage}>
+            <div className={panelClassName}>
+              
+              {/* Active Question with Blur-Typing Effect */}
+              <div className={styles.questionBlock}>
+                <span className={styles.questionLabel}>
+                  {session.currentQuestionLabel || 'Next Step'}
+                </span>
+                <BlurTypingText 
+                  text={session.currentQuestion} 
+                  activeKey={session.currentQuestionKey} 
+                />
+              </div>
+
+              {/* Morphing Input */}
+              {session.currentQuestionKey !== 'complete' && (
+                <div className={styles.morphContainer}>
+                  <div className={styles.actionRow}>
+                    
+                    {/* Primary Signal Button / Input Field */}
+                    <div 
+                      className={`${styles.morphElement} ${isInputActive ? styles.morphStateField : styles.morphStateBtn}`}
+                      onClick={handleMorphClick}
+                    >
+                      <div className={styles.btnContent} data-hidden={isInputActive}>
+                        <span>Provide Signal</span>
+                      </div>
+                      
+                      <div className={styles.fieldContent} style={{ display: isInputActive ? 'flex' : 'none' }}>
+                        <textarea
+                          ref={textareaRef}
+                          className={styles.glassInput}
+                          value={draft}
+                          onChange={(event) => handleDraftChange(event.target.value)}
+                          onKeyDown={(event) => {
+                            if (event.key === 'Enter' && !event.shiftKey) {
+                              event.preventDefault();
+                              void submitAnswer();
+                            }
+                          }}
+                          placeholder={session.currentQuestionPlaceholder || 'Provide your thoughts...'}
+                        />
+                        <div className={styles.inputFooter}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(201, 168, 76, 0.8)' }} />
+                            {deferredDraft ? `${deferredDraft.length}/900` : statusText}
+                          </div>
+                          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                            <button className={styles.actionBtn} onClick={(e) => { e.stopPropagation(); seedExample(); }}>
+                              Load example
+                            </button>
+                            <button className={styles.submitBtn} onClick={(e) => { e.stopPropagation(); void submitAnswer(); }} disabled={isStreaming || !draft.trim()}>
+                              {isStreaming ? 'Mapping...' : 'Submit'}
+                              {isStreaming ? <Loader2 size={12} className={styles.spin} /> : null}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Secondary AI Task Button */}
+                    {!isInputActive && (
+                      <button 
+                        className={`${styles.morphElement} ${styles.secondaryActionBtn}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          void submitAnswer("[AI Task] I am not sure about this yet. Please mark this as a task for the AI to figure out and move to the next step.");
+                        }}
+                      >
+                        <span>I don&apos;t know</span>
+                      </button>
+                    )}
+
+                  </div>
+                </div>
+              )}
+
+              {session.currentQuestionKey === 'complete' && (
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
+                  <button 
+                    className={styles.submitBtn} 
+                    style={{ height: '48px', padding: '0 32px', fontSize: '14px', borderRadius: '24px' }}
+                    onClick={() => {
+                      const payload = {
+                        answers: session.answers,
+                        transcript: session.transcript,
+                        aiTasks: session.aiTasks,
+                        contextLog: session.contextLog
+                      };
+                      sessionStorage.setItem('kramaniti-blueprint-session', JSON.stringify(payload));
+                      router.push('/clarity-engine/blueprint');
+                    }}
+                  >
+                    Generate Blueprint
+                  </button>
+                </div>
+              )}
+
+            </div>
+          </section>
+        </div>
+
+        {/* Right Column: Context Gathering */}
+        <aside className={styles.contextSidebar}>
+          <div className={styles.contextHeader}>
+            <span className={styles.contextTitle}>Gathered Context</span>
+            <div className={styles.focusTags}>
+              {session.synthesis.focusTags.map(tag => (
+                <span key={tag} className={styles.tagBadge}>{tag}</span>
+              ))}
+            </div>
+          </div>
+          
+          <div className={styles.contextBody}>
+            <p className={styles.assistantCopy}>
+              {streamedAssistant || session.assistantReply}
+              {isStreaming && <span className={styles.cursor} />}
+            </p>
+            
+            <div className={styles.signalList}>
+              {session.contextLog.map((log, idx) => (
+                <div key={idx} className={styles.signalItem}>
+                  <span>{log}</span>
+                </div>
+              ))}
+            </div>
+
+            {session.aiTasks.length > 0 && (
+              <div className={styles.tasksAccordion}>
+                <button 
+                  className={styles.tasksHeader} 
+                  onClick={() => setIsTasksOpen(!isTasksOpen)}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span>AI Tasks ({session.aiTasks.length})</span>
+                  </div>
+                  {isTasksOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+                
+                {isTasksOpen && (
+                  <div className={styles.tasksBody}>
+                    {session.aiTasks.map((task, idx) => (
+                      <div key={idx} className={styles.taskItem}>
+                        <span className={styles.taskLabel}>{task.label}</span>
+                        <p className={styles.taskQuestion}>{task.question}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </aside>
+
+      </div>
+
+      {/* Footer */}
+      <footer className={styles.footer}>
+        <div className={styles.footerLeft}>
+          <span className={styles.footerText}>
+            <CornerDownLeft size={12} />
+            Your clarity stays private inside this session.
+          </span>
+        </div>
+        <div className={styles.footerRight}>
+          {hasExport && (
+            <button className={styles.actionBtn} onClick={() => exportBrief(session)}>
+              <Download size={14} />
+              Export Brief
+            </button>
+          )}
+        </div>
+      </footer>
+    </main>
+  );
+}

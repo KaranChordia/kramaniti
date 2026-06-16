@@ -1,0 +1,136 @@
+.mainTree {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+/* Animations */
+@keyframes fadeInScale {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes drawLine {
+  0% { stroke-dasharray: 0, 1000; opacity: 0; }
+  100% { stroke-dasharray: 6, 6; opacity: 1; }
+}
+
+@keyframes fadeUpItem {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Orchestrator Hub */
+.hubContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 120px;
+  animation: fadeInScale 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.hubTitle {
+  margin-top: 16px;
+  font-family: var(--font-outfit), sans-serif;
+  color: rgba(201, 168, 76, 0.9);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUpItem 0.8s ease forwards;
+  animation-delay: 0.5s;
+}
+
+/* Connector Lines SVG Overlay */
+.connectorLines {
+  position: absolute;
+  top: 160px; 
+  left: 0;
+  width: 100%;
+  height: 100px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.connectorLinePath {
+  opacity: 0;
+  animation: drawLine 1.5s ease-out forwards;
+}
+
+/* Agents Grid */
+.agentsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.agentSlot {
+  opacity: 0;
+  animation: fadeUpItem 0.8s ease forwards;
+}
+
+.agentSlot:nth-child(1) { animation-delay: 2.2s; }
+.agentSlot:nth-child(2) { animation-delay: 2.7s; }
+.agentSlot:nth-child(3) { animation-delay: 3.2s; }
+
+@media (max-width: 1024px) {
+  .agentsGrid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+  .connectorLines {
+    display: none; /* Hide SVG lines on mobile, use simple borders instead if needed */
+  }
+}
+
+/* Header Adjustments */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 40px;
+  position: relative;
+  z-index: 50;
+}
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.backBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 1);
+  transform: translateX(-2px);
+}
+.headerTitle {
+  font-family: var(--font-outfit);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: rgba(201, 168, 76, 0.9);
+  text-transform: uppercase;
+  margin: 0;
+}

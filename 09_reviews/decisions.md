@@ -346,3 +346,56 @@ This log registers the major strategic and structural decisions made during the 
 *   **Open Questions:**
     *   Should automated MP4 export use browser frame capture plus `ffmpeg`, Playwright screenshots plus `ffmpeg`, or a dedicated rendering library?
     *   Should KCS later add a real frame timeline, voiceover timing, and audio bed controls?
+
+### Decision 16: Add Clarity Engine as a Focused Public Interactive Tool
+*   **Date:** 2026-06-16
+*   **Area:** Website, interactive tooling, offer entry point
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Add a standalone `/clarity-engine` route that helps founders, freelancers, and early operators clarify an idea, identify workflow friction, choose a practical AI-assisted system path, and generate initial brand presence directions.
+*   **Rationale:** The founder observed that many people in co-working environments want to start companies, freelance around a problem, or use AI to create something, but lack a structured clarity context and operating path. Kramaniti can serve them through an interactive tool that reflects the brand method without forcing them into a cluttered internal Studio surface.
+*   **Source or Evidence:** Founder request on 2026-06-16 to create a premium interactive web app with Kramaniti characteristics, crucial questions, clarity context, workflow suggestions, and brand presence ideas. Founder clarification that the tool should not use Studio because Studio is too cluttered.
+*   **Affected Files:**
+    *   `website/src/app/clarity-engine/page.tsx`
+    *   `website/src/app/clarity-engine/ClarityEngine.module.css`
+    *   `website/src/components/layout/Navbar.tsx`
+    *   `docs/kramaniti_site_implementation_plan.md`
+    *   `09_reviews/decisions.md`
+*   **Alternatives Rejected:**
+    1.  *Extending `/studio`:* Rejected because the founder clarified Studio is too cluttered for this user-facing tool.
+    2.  *Waiting for Groq integration before building the UX:* Rejected because the interactive experience, question architecture, and local synthesis can be useful before provider-backed generation is wired.
+    3.  *Making it a marketing landing page:* Rejected because the requested value is an interactive working tool, not a static pitch.
+*   **Guardrails:**
+    *   Keep the tool business-first and aligned to strategy before tools, systems before scale, and content after clarity.
+    *   Do not invent client names, testimonials, metrics, case studies, or permission-sensitive proof.
+    *   Keep AI as an assistance layer with explicit human judgment gates.
+    *   Treat future Groq calls as a generation layer behind the existing intake and blueprint model, not as the product experience itself.
+*   **Open Questions:**
+    *   Should the first live Groq version save submissions to a database, email the exported brief, or remain browser-local?
+    *   Should this become the primary lead magnet before the AI Workflow Audit, or stay a secondary tool in navigation?
+
+### Decision 17: Retire Static Export To Support Clarity Engine AI Runtime
+*   **Date:** 2026-06-16
+*   **Area:** Website, deployment architecture, AI runtime
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Remove the website's `output: 'export'` static-export setting and treat the site as a standard Next.js deployment so route handlers can power the Clarity Engine assistant.
+*   **Rationale:** The redesigned Clarity Engine now depends on a server-side Groq integration. Static export cannot compile or serve route handlers, so keeping the export-only deployment model would make the assistant cosmetic only. The website already had API routes in the codebase, which made the static-only setup an architectural mismatch.
+*   **Source or Evidence:** Founder request on 2026-06-16 to implement a genuine AI-driven assistant flow plus Groq integration; build-time failure showing `export const dynamic = "force-dynamic"` cannot be used with `output: export`.
+*   **Affected Files:**
+    *   `website/next.config.ts`
+    *   `vercel.json`
+    *   `website/README.md`
+    *   `website/CLAUDE.md`
+    *   `website/AGENTS.md`
+    *   `docs/kramaniti_site_implementation_plan.md`
+    *   `09_reviews/decisions.md`
+*   **Alternatives Rejected:**
+    1.  *Keeping static export and adding a same-repo Groq route:* Rejected because Next.js export mode does not support route handlers.
+    2.  *Calling Groq directly from the browser:* Rejected because it would expose credentials and break the repo's no-secrets rule.
+    3.  *Leaving the assistant entirely local and heuristic-only:* Rejected because the founder explicitly asked for Groq integration.
+*   **Guardrails:**
+    *   Keep AI credentials server-side only.
+    *   Preserve the custom-domain root deployment path.
+    *   Maintain a local fallback interaction path when the runtime endpoint or key is unavailable.
+*   **Open Questions:**
+    *   Should the production deployment keep all route handlers inside the website app, or should heavier inference move to a separate backend later?
+    *   Should the Clarity Engine store sessions, or remain ephemeral by default?

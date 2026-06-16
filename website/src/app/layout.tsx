@@ -68,18 +68,22 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning data-theme="dark" data-scroll-behavior="smooth">
       <head>
         <meta name="color-scheme" content="dark light" />
-        <Script id="theme-init" strategy="beforeInteractive">
-          {`
-            try {
-              const colorScheme = localStorage.getItem("kramaniti-theme");
-              document.documentElement.setAttribute("data-theme", colorScheme || "dark");
-            } catch (e) {}
-          `}
-        </Script>
       </head>
       <body
         className={`${outfit.variable} ${jetbrainsMono.variable} antialiased`}
       >
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const colorScheme = localStorage.getItem("kramaniti-theme");
+                document.documentElement.setAttribute("data-theme", colorScheme || "dark");
+              } catch (e) {}
+            `,
+          }}
+        />
         <PwaRuntime />
         {children}
         <Analytics />
