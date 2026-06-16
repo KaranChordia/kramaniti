@@ -677,23 +677,14 @@ export default function ClarityEnginePage() {
                               void submitAnswer();
                             }
                           }}
-                          placeholder={session.currentQuestionPlaceholder || 'Provide your thoughts...'}
+                          placeholder={`${session.currentQuestionPlaceholder || 'Provide your thoughts...'} (Press Enter to submit)`}
                         />
-                        <div className={styles.inputFooter}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(201, 168, 76, 0.8)' }} />
-                            {deferredDraft ? `${deferredDraft.length}/900` : statusText}
+                        {isStreaming && (
+                          <div style={{ position: 'absolute', bottom: 16, right: 24, display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(201, 168, 76, 0.8)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                            <Loader2 size={12} className={styles.spin} />
+                            <span>Mapping...</span>
                           </div>
-                          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                            <button className={styles.actionBtn} onClick={(e) => { e.stopPropagation(); playClick(); seedExample(); }}>
-                              Load example
-                            </button>
-                            <button className={styles.submitBtn} onClick={(e) => { e.stopPropagation(); playClick(); void submitAnswer(); }} disabled={isStreaming || !draft.trim()}>
-                              {isStreaming ? 'Mapping...' : 'Submit'}
-                              {isStreaming ? <Loader2 size={12} className={styles.spin} /> : null}
-                            </button>
-                          </div>
-                        </div>
+                        )}
                       </div>
                     </div>
 
