@@ -111,11 +111,33 @@
 @media (max-width: 1024px) {
   .agentsGrid {
     grid-template-columns: 1fr;
-    gap: 60px;
+    gap: 40px;
+    padding: 0 16px;
   }
   .connectorLines {
-    display: none; /* Hide SVG lines on mobile, use simple borders instead if needed */
+    display: none;
   }
+
+  /* Mobile spawn animations (vertical drop from the single centered Hub) */
+  .agentSlot:nth-child(1) :global(.blobContainer) { animation: spawnBlobMobile1 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 1.0s; }
+  .agentSlot:nth-child(2) :global(.blobContainer) { animation: spawnBlobMobile2 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 1.2s; }
+  .agentSlot:nth-child(3) :global(.blobContainer) { animation: spawnBlobMobile3 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 1.4s; }
+}
+
+@keyframes spawnBlobMobile1 {
+  0% { transform: translate(0, -140px) scale(0); opacity: 0; }
+  20% { opacity: 1; transform: translate(0, -140px) scale(0.4); }
+  100% { transform: translate(0, 0) scale(1); opacity: 1; }
+}
+@keyframes spawnBlobMobile2 {
+  0% { transform: translate(0, -280px) scale(0); opacity: 0; }
+  20% { opacity: 1; transform: translate(0, -280px) scale(0.4); }
+  100% { transform: translate(0, 0) scale(1); opacity: 1; }
+}
+@keyframes spawnBlobMobile3 {
+  0% { transform: translate(0, -420px) scale(0); opacity: 0; }
+  20% { opacity: 1; transform: translate(0, -420px) scale(0.4); }
+  100% { transform: translate(0, 0) scale(1); opacity: 1; }
 }
 
 /* Header Adjustments */

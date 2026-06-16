@@ -260,4 +260,22 @@
   color: rgba(201, 168, 76, 0.5);
 }
 
+@media (max-width: 768px) {
+  .streamerCard {
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+  
+  .fullWidthBtn {
+    margin: 20px -20px -24px -20px;
+    padding: 20px 20px;
+    border-radius: 0 0 20px 20px;
+  }
+  
+  .agentBlobWrapper {
+    top: 24px !important;
+    left: 20px !important;
+  }
+}
+
 
