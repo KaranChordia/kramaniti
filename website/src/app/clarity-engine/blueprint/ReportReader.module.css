@@ -9,9 +9,9 @@
   justify-content: center;
   animation: fadeIn 0.6s ease forwards;
   z-index: 100;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(48px);
-  -webkit-backdrop-filter: blur(48px);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(80px);
+  -webkit-backdrop-filter: blur(80px);
   padding: 40px;
 }
 
@@ -141,7 +141,7 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-.markdownWrapper h1, .markdownWrapper h2, .markdownWrapper h3 {
+.markdownWrapper h1, .markdownWrapper h2, .markdownWrapper h3, .markdownWrapper h4, .markdownWrapper h5, .markdownWrapper h6 {
   font-family: var(--font-outfit), sans-serif;
   color: var(--color-burnished-gold, #C9A84C);
   margin-top: 2.5em;
@@ -150,7 +150,7 @@
   letter-spacing: 0.02em;
 }
 
-.markdownWrapper h1:first-child, .markdownWrapper h2:first-child, .markdownWrapper h3:first-child {
+.markdownWrapper h1:first-child, .markdownWrapper h2:first-child, .markdownWrapper h3:first-child, .markdownWrapper h4:first-child {
   margin-top: 0;
 }
 
