@@ -231,15 +231,19 @@
 }
 
 .fullWidthBtn {
-  width: 100%;
+  align-self: stretch;
+  margin: 24px -24px -32px -24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  margin-top: 16px;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 24px;
   background: rgba(201, 168, 76, 0.05);
-  border: 1px solid rgba(201, 168, 76, 0.2);
-  border-radius: 8px;
+  border-top: 1px solid rgba(201, 168, 76, 0.2);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 0 0 24px 24px;
   color: rgba(201, 168, 76, 0.9);
   font-family: var(--font-outfit), sans-serif;
   font-size: 14px;
@@ -252,13 +256,13 @@
 
 .fullWidthBtn:hover {
   background: rgba(201, 168, 76, 0.15);
-  border-color: rgba(201, 168, 76, 0.4);
+  border-top-color: rgba(201, 168, 76, 0.4);
   color: rgba(201, 168, 76, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .fullWidthBtn:active {
-  transform: scale(0.98);
+  background: rgba(201, 168, 76, 0.1);
 }
 
 
