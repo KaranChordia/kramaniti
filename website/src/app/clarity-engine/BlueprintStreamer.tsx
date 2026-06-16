@@ -173,11 +173,11 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
           const isDone = !isCurrentLog || (!isActive && isCurrentLog);
 
           return (
-            <div 
-              key={i} 
-              className={`${styles.logItem} ${isDone ? styles.logItemDone : styles.logItemActive}`}
-            >
-              <div className={styles.logStatusIcon}>
+            <div key={i} className={styles.logItemWrapper}>
+              <div 
+                className={`${styles.logItem} ${isDone ? styles.logItemDone : styles.logItemActive}`}
+              >
+                <div className={styles.logStatusIcon}>
                 {isDone ? (
                   <Check size={14} strokeWidth={3} className={styles.checkIcon} />
                 ) : (
@@ -188,6 +188,7 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
               </div>
               <span>{log}</span>
             </div>
+          </div>
           );
         })}
       </div>
