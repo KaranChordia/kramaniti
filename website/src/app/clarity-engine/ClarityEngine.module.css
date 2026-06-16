@@ -469,8 +469,8 @@
 .glassPanel {
   width: 100%;
   max-width: 800px;
-  height: 45vh;
-  min-height: 320px;
+  height: 50vh;
+  min-height: 380px;
   max-height: 100%;
   display: flex;
   flex-direction: column;
@@ -578,7 +578,7 @@
 }
 
 .questionTitle {
-  font-size: clamp(18px, 2.5vw, 28px);
+  font-size: clamp(16px, 2.2vw, 24px);
   font-weight: 300;
   color: #ffffff;
   line-height: 1.3;
