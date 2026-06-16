@@ -19,7 +19,19 @@ interface ActiveReport {
 
 export default function BlueprintPage() {
   const router = useRouter();
-  const [payload, setPayload] = useState<BlueprintRequestBody | null>(null);
+  const [payload] = useState<BlueprintRequestBody | null>(() => {
+    if (typeof window === 'undefined') return null;
+
+    const sessionData = sessionStorage.getItem('kramaniti-blueprint-session');
+    if (!sessionData) return null;
+
+    try {
+      return JSON.parse(sessionData) as BlueprintRequestBody;
+    } catch (err) {
+      console.error("Failed to parse blueprint session data", err);
+      return null;
+    }
+  });
   const [completedAgents, setCompletedAgents] = useState(0);
   const [activeReport, setActiveReport] = useState<ActiveReport | null>(null);
   const { playSuccess, startAmbient, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
@@ -29,17 +41,10 @@ export default function BlueprintPage() {
   }, [startAmbient]);
 
   useEffect(() => {
-    const sessionData = sessionStorage.getItem('kramaniti-blueprint-session');
-    if (sessionData) {
-      try {
-        setPayload(JSON.parse(sessionData));
-      } catch (err) {
-        console.error("Failed to parse blueprint session data", err);
-      }
-    } else {
+    if (!payload) {
       router.push('/clarity-engine');
     }
-  }, [router]);
+  }, [payload, router]);
 
   const handleAgentComplete = useCallback(() => {
     setCompletedAgents(prev => {

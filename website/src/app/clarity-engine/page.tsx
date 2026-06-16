@@ -4,27 +4,18 @@ import Link from 'next/link';
 import { startTransition, useDeferredValue, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  ArrowRight,
   CornerDownLeft,
   Download,
   Home,
   Loader2,
   RefreshCw,
-  Sparkles,
-  X,
-  MessageSquare,
-  BrainCircuit,
   ChevronDown,
   ChevronUp,
-  Compass,
-  Layers,
-  Megaphone,
   Volume2,
   VolumeX,
   Wand2
 } from 'lucide-react';
 import styles from './ClarityEngine.module.css';
-import BlueprintStreamer from './BlueprintStreamer';
 import {
   DEFAULT_ANSWERS,
   INITIAL_ASSISTANT_REPLY,
@@ -36,6 +27,7 @@ import {
   type ConversationTurn,
   type QuestionId,
 } from '@/lib/clarity-engine/assistant';
+import { type MockScenario } from '@/lib/clarity-engine/mockData';
 
 type SessionState = {
   answers: ClarityAnswers;
@@ -168,7 +160,6 @@ export default function ClarityEnginePage() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [statusText, setStatusText] = useState('Awaiting your signal.');
   const [stagePhase, setStagePhase] = useState<'idle' | 'exit' | 'enter'>('idle');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInputActive, setIsInputActive] = useState(false);
   const [isTypingPulse, setIsTypingPulse] = useState(false);
   const [isTasksOpen, setIsTasksOpen] = useState(false);
@@ -176,8 +167,8 @@ export default function ClarityEnginePage() {
   const transitionTimers = useRef<number[]>([]);
   const typingTimer = useRef<number | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  
-  const { startAmbient, stopAmbient, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
+
+  const { startAmbient, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
 
   // Attempt to start ambient audio immediately upon component mount.
   // This will succeed if the user navigated from another page (due to browser autoplay policies),
@@ -226,7 +217,7 @@ export default function ClarityEnginePage() {
 
   const handleDraftChange = (value: string) => {
     setDraft(value);
-    
+
     // Trigger realtime pulse feedback
     if (value.trim().length > 0) {
       setIsTypingPulse(true);
@@ -260,8 +251,8 @@ export default function ClarityEnginePage() {
     const swapTimer = window.setTimeout(() => {
       startTransition(() => {
         setSession((prev) => {
-          const newContextLog = envelope.latestSummary 
-            ? [...prev.contextLog, envelope.latestSummary] 
+          const newContextLog = envelope.latestSummary
+            ? [...prev.contextLog, envelope.latestSummary]
             : prev.contextLog;
 
           return {
@@ -306,7 +297,7 @@ export default function ClarityEnginePage() {
   };
 
   const [isDemoMode, setIsDemoMode] = useState(false);
-  const demoScenarioRef = useRef<any>(null);
+  const demoScenarioRef = useRef<MockScenario | null>(null);
 
   const resetSession = (preserveMockId?: string) => {
     transitionTimers.current.forEach((timer) => window.clearTimeout(timer));
@@ -338,46 +329,7 @@ export default function ClarityEnginePage() {
     });
   };
 
-  // Demo Mode Automation Driver
-  useEffect(() => {
-    let timeoutId: number;
-
-    if (!isDemoMode || isStreaming || session.currentQuestionKey === 'complete') {
-      if (session.currentQuestionKey === 'complete' && isDemoMode) {
-        setIsDemoMode(false);
-      }
-      return;
-    }
-
-    const scenario = demoScenarioRef.current;
-    if (!scenario) return;
-
-    const key = session.currentQuestionKey;
-    let targetAnswer = '';
-    if (key === 'phase1_clarity_goal') targetAnswer = scenario.answers.context;
-    else if (key === 'phase2_workflow') targetAnswer = scenario.answers.workflow;
-    else if (key === 'phase3_presence') targetAnswer = scenario.answers.presence;
-
-    setIsInputActive(true);
-    let i = 0;
-    
-    const typeChar = () => {
-      if (i < targetAnswer.length) {
-        setDraft(targetAnswer.substring(0, i + 3)); // Type 3 chars at a time
-        i += 3;
-        timeoutId = window.setTimeout(typeChar, 10);
-      } else {
-        timeoutId = window.setTimeout(() => {
-          submitAnswer(targetAnswer);
-        }, 500);
-      }
-    };
-
-    timeoutId = window.setTimeout(typeChar, 1000);
-    return () => window.clearTimeout(timeoutId);
-  }, [isDemoMode, isStreaming, session.currentQuestionKey]);
-
-  const submitAnswer = async (overrideAnswer?: string) => {
+  async function submitAnswer(overrideAnswer?: string) {
     const answer = (overrideAnswer || draft).trim();
 
     if (!answer || isStreaming || session.currentQuestionKey === 'complete') return;
@@ -398,8 +350,8 @@ export default function ClarityEnginePage() {
     const nextTranscript = [...session.transcript, userTurn];
 
     setSession((current) => {
-      const updatedTasks = isAiTask 
-        ? [...current.aiTasks, { label: current.currentQuestionLabel, question: current.currentQuestion }] 
+      const updatedTasks = isAiTask
+        ? [...current.aiTasks, { label: current.currentQuestionLabel, question: current.currentQuestion }]
         : current.aiTasks;
 
       return {
@@ -426,7 +378,7 @@ export default function ClarityEnginePage() {
         let nextQKey: QuestionId = 'complete';
         let nextQ = scenario.questions.complete;
         let nextLabel = 'Synthesis Complete';
-        
+
         if (session.currentQuestionKey === 'phase1_clarity_goal') {
           nextQKey = 'phase2_workflow';
           nextQ = scenario.questions.workflow;
@@ -525,7 +477,46 @@ export default function ClarityEnginePage() {
 
       applyEnvelope(nextTranscript, fallback, nextAnswers);
     }
-  };
+  }
+
+  // Demo Mode Automation Driver
+  useEffect(() => {
+    let timeoutId: number;
+
+    if (!isDemoMode || isStreaming || session.currentQuestionKey === 'complete') {
+      if (session.currentQuestionKey === 'complete' && isDemoMode) {
+        timeoutId = window.setTimeout(() => setIsDemoMode(false), 0);
+      }
+      return () => window.clearTimeout(timeoutId);
+    }
+
+    const scenario = demoScenarioRef.current;
+    if (!scenario) return;
+
+    const key = session.currentQuestionKey;
+    let targetAnswer = '';
+    if (key === 'phase1_clarity_goal') targetAnswer = scenario.answers.context;
+    else if (key === 'phase2_workflow') targetAnswer = scenario.answers.workflow;
+    else if (key === 'phase3_presence') targetAnswer = scenario.answers.presence;
+
+    setIsInputActive(true);
+    let i = 0;
+
+    const typeChar = () => {
+      if (i < targetAnswer.length) {
+        setDraft(targetAnswer.substring(0, i + 3)); // Type 3 chars at a time
+        i += 3;
+        timeoutId = window.setTimeout(typeChar, 10);
+      } else {
+        timeoutId = window.setTimeout(() => {
+          void submitAnswer(targetAnswer);
+        }, 500);
+      }
+    };
+
+    timeoutId = window.setTimeout(typeChar, 1000);
+    return () => window.clearTimeout(timeoutId);
+  }, [isDemoMode, isStreaming, session.currentQuestionKey]);
 
   const seedExample = () => {
     setDraft(SAMPLE_ANSWER);
@@ -573,27 +564,27 @@ export default function ClarityEnginePage() {
           <strong>Clarity Engine</strong>
         </Link>
         <div className={styles.headerActions}>
-          <button 
-            className={styles.actionBtn} 
-            onClick={(e) => { 
+          <button
+            className={styles.actionBtn}
+            onClick={(e) => {
               e.stopPropagation();
-              playClick(); 
-              toggleAmbientMute(); 
+              playClick();
+              toggleAmbientMute();
             }}
             title={isAmbientMuted ? "Unmute Ambient Audio" : "Mute Ambient Audio"}
           >
             {isAmbientMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
           </button>
-          <button 
-            className={`${styles.actionBtn} no-shockwave`} 
+          <button
+            className={`${styles.actionBtn} no-shockwave`}
             onClick={(e) => { e.stopPropagation(); playClick(); resetSession(); }}
             disabled={isDemoMode}
           >
             <RefreshCw size={14} />
             Reset
           </button>
-          <button 
-            className={`${styles.actionBtn} shockwave-btn`} 
+          <button
+            className={`${styles.actionBtn} shockwave-btn`}
             onClick={(e) => { e.stopPropagation(); playClick(); loadSample(); }}
             disabled={isDemoMode}
             style={{ borderColor: 'rgba(201, 168, 76, 0.4)', color: '#C9A84C' }}
@@ -602,15 +593,15 @@ export default function ClarityEnginePage() {
             Load Sample
           </button>
           {hasSynthesis && (
-            <div className={styles.progressContainer} onClick={() => { playClick(); setIsModalOpen(true); }}>
+            <div className={styles.progressContainer} onClick={playClick}>
               <div className={styles.progressBarWrapper}>
-                <div 
-                  className={styles.progressBarFill} 
-                  style={{ width: `${Math.min(100, Math.max(10, completion))}%` }} 
+                <div
+                  className={styles.progressBarFill}
+                  style={{ width: `${Math.min(100, Math.max(10, completion))}%` }}
                 />
               </div>
-              <button 
-                className={`${styles.actionBtn} ${styles.synthesisBtn} ${completion > 10 ? styles.synthesisBtnPulse : ''}`} 
+              <button
+                className={`${styles.actionBtn} ${styles.synthesisBtn} ${completion > 10 ? styles.synthesisBtnPulse : ''}`}
               >
                 Synthesis ({completion}%)
               </button>
@@ -621,7 +612,7 @@ export default function ClarityEnginePage() {
 
       {/* Dual Column Layout */}
       <div className={styles.layoutWrapper}>
-        
+
         {/* Left Column: Interaction */}
         <div className={styles.interactionColumn}>
           {/* Central Character Entity */}
@@ -636,16 +627,16 @@ export default function ClarityEnginePage() {
           {/* Main Stage (Glass Panel with Questions & Input) */}
           <section className={styles.mainStage} style={{ opacity: isBlobLoaded ? 1 : 0, transition: 'opacity 0.8s ease', pointerEvents: isBlobLoaded ? 'auto' : 'none' }}>
             <div className={panelClassName}>
-              
+
               {/* Active Question with Blur-Typing Effect */}
               <div className={styles.questionBlock}>
                 <div className={styles.questionContentWrapper}>
                   <span className={styles.questionLabel}>
                     {session.currentQuestionLabel || 'Next Step'}
                   </span>
-                  <BlurTypingText 
-                    text={session.currentQuestion} 
-                    activeKey={session.currentQuestionKey} 
+                  <BlurTypingText
+                    text={session.currentQuestion}
+                    activeKey={session.currentQuestionKey}
                   />
                 </div>
               </div>
@@ -654,16 +645,16 @@ export default function ClarityEnginePage() {
               {session.currentQuestionKey !== 'complete' && (
                 <div className={styles.morphContainer}>
                   <div className={styles.actionRow}>
-                    
+
                     {/* Primary Signal Button / Input Field */}
-                    <div 
+                    <div
                       className={`${styles.morphElement} shockwave-btn ${isInputActive ? styles.morphStateField : styles.morphStateBtn}`}
                       onClick={() => { playClick(); handleMorphClick(); }}
                     >
                       <div className={styles.btnContent} data-hidden={isInputActive}>
                         <span>Provide Signal</span>
                       </div>
-                      
+
                       <div className={styles.fieldContent} style={{ display: isInputActive ? 'flex' : 'none' }}>
                         <textarea
                           ref={textareaRef}
@@ -699,7 +690,7 @@ export default function ClarityEnginePage() {
 
                     {/* Secondary AI Task Button */}
                     {!isInputActive && (
-                      <button 
+                      <button
                         className={`${styles.morphElement} ${styles.secondaryActionBtn}`}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -717,8 +708,8 @@ export default function ClarityEnginePage() {
 
               {session.currentQuestionKey === 'complete' && (
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
-                  <button 
-                    className={styles.submitBtn} 
+                  <button
+                    className={styles.submitBtn}
                     style={{ height: '48px', padding: '0 32px', fontSize: '14px', borderRadius: '24px' }}
                     onClick={() => {
                       playClick();
@@ -752,13 +743,13 @@ export default function ClarityEnginePage() {
               ))}
             </div>
           </div>
-          
+
           <div className={styles.contextBody}>
             <p className={styles.assistantCopy}>
               {streamedAssistant || session.assistantReply}
               {isStreaming && <span className={styles.cursor} />}
             </p>
-            
+
             <div className={styles.signalList}>
               {session.contextLog.map((log, idx) => (
                 <div key={idx} className={styles.signalItem}>
@@ -769,8 +760,8 @@ export default function ClarityEnginePage() {
 
             {session.aiTasks.length > 0 && (
               <div className={styles.tasksAccordion}>
-                <button 
-                  className={styles.tasksHeader} 
+                <button
+                  className={styles.tasksHeader}
                   onClick={() => setIsTasksOpen(!isTasksOpen)}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -778,7 +769,7 @@ export default function ClarityEnginePage() {
                   </div>
                   {isTasksOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </button>
-                
+
                 {isTasksOpen && (
                   <div className={styles.tasksBody}>
                     {session.aiTasks.map((task, idx) => (

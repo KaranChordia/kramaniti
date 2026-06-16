@@ -1,11 +1,9 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './BlueprintStreamer.module.css';
 import { type BlueprintRequestBody } from '@/lib/clarity-engine/blueprintStreamer';
-import { Loader2, X, Check, ArrowRight } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 import { useAudioEngine } from '@/hooks/useAudioEngine';
 
 interface BlueprintStreamerProps {
@@ -47,7 +45,7 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
   const [content, setContent] = useState<string>('');
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [currentLogIndex, setCurrentLogIndex] = useState(0);
-  const logs = useRef(getSimulatedLogs(title));
+  const logs = useMemo(() => getSimulatedLogs(title), [title]);
   const { playClick } = useAudioEngine();
   
   // Wait to start simulation until agent card appears
@@ -58,7 +56,7 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
     const timeout = setTimeout(() => {
       interval = setInterval(() => {
         setCurrentLogIndex((prev) => {
-          if (prev >= logs.current.length - 1) {
+          if (prev >= logs.length - 1) {
             clearInterval(interval);
             return prev;
           }
@@ -71,9 +69,9 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
       clearTimeout(timeout);
       clearInterval(interval);
     };
-  }, [delayStartMs]);
+  }, [delayStartMs, logs.length]);
 
-  const isSimulating = currentLogIndex < logs.current.length - 1;
+  const isSimulating = currentLogIndex < logs.length - 1;
   const isActive = isFetching || isSimulating;
 
   useEffect(() => {
@@ -148,7 +146,7 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
       isMounted = false;
       abortController.abort();
     };
-  }, [endpoint, payload, delayStartMs, onComplete]);
+  }, [endpoint, payload, delayStartMs, onComplete, agentId]);
 
   const blobClass = agentId === 'strategy' 
     ? styles.blobStrategy 
@@ -167,12 +165,14 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
       <div className={`${styles.streamerCard} ${isActive ? styles.isActive : ''} cardContainer`} style={{ width: '100%' }}>
         <div className={styles.header}>
           {/* Spacer to reserve room for the absolutely positioned blob */}
-          <div style={{ width: '48px', height: '48px' }} />
+          <div style={{ width: '48px', height: '48px', opacity: 0 }} aria-hidden="true">
+            {icon}
+          </div>
           <h3 className={styles.title}>{title}</h3>
         </div>
       
       <div className={styles.logList}>
-        {logs.current.slice(0, currentLogIndex + 1).map((log, i) => {
+        {logs.slice(0, currentLogIndex + 1).map((log, i) => {
           const isCurrentLog = i === currentLogIndex;
           const isDone = !isCurrentLog || (!isActive && isCurrentLog);
 

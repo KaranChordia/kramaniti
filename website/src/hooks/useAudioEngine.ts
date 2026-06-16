@@ -22,6 +22,14 @@ function notifyMute() {
   muteListeners.forEach(l => l());
 }
 
+type BrowserAudioContext = typeof AudioContext;
+type WindowWithWebkitAudio = Window & {
+  webkitAudioContext?: BrowserAudioContext;
+};
+
+const getAudioContextClass = (): BrowserAudioContext | undefined =>
+  window.AudioContext || (window as WindowWithWebkitAudio).webkitAudioContext;
+
 export function useAudioEngine() {
   const [isAmbientMuted, setIsAmbientMuted] = useState(globalIsAmbientMuted);
 
@@ -32,60 +40,12 @@ export function useAudioEngine() {
     return () => { muteListeners.delete(listener); };
   }, []);
 
-  // Load the audio files globally once
-  useEffect(() => {
-    if (globalBuffersLoaded) return;
-    
-    const loadSounds = async () => {
-      try {
-        const [clickRes, ambientRes, successRes] = await Promise.all([
-          fetch('/assets/audio/click.aac'),
-          fetch('/assets/audio/ambient.aac'),
-          fetch('/assets/audio/success.aac')
-        ]);
-        
-        const clickArrayBuffer = await clickRes.arrayBuffer();
-        const ambientArrayBuffer = await ambientRes.arrayBuffer();
-        const successArrayBuffer = await successRes.arrayBuffer();
-        
-        // Ensure context exists before decoding
-        if (!globalCtx) {
-          const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-          if (AudioContextClass) {
-            globalCtx = new AudioContextClass();
-          }
-        }
-        
-        if (globalCtx) {
-          const [clickBuf, ambientBuf, successBuf] = await Promise.all([
-            globalCtx.decodeAudioData(clickArrayBuffer),
-            globalCtx.decodeAudioData(ambientArrayBuffer),
-            globalCtx.decodeAudioData(successArrayBuffer)
-          ]);
-          globalClickBuffer = clickBuf;
-          globalAmbientBuffer = ambientBuf;
-          globalSuccessBuffer = successBuf;
-          globalBuffersLoaded = true;
-          
-          // Re-trigger ambient if it was requested before buffers loaded
-          if (globalShouldPlayAmbient && !globalAmbientGain) {
-            startAmbient();
-          }
-        }
-      } catch (err) {
-        console.error('Failed to load audio files:', err);
-      }
-    };
-    
-    loadSounds();
-  }, []);
-
   // Initialize audio context only after user interaction
   const initAudio = useCallback(() => {
     if (isInitialized) return;
-    
+
     if (!globalCtx) {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContextClass = getAudioContextClass();
       if (!AudioContextClass) return;
       globalCtx = new AudioContextClass();
     }
@@ -101,7 +61,7 @@ export function useAudioEngine() {
     globalShouldPlayAmbient = true;
     initAudio();
     if (!globalCtx || !globalAmbientBuffer) return;
-    
+
     if (globalCtx.state === 'suspended') {
       globalCtx.resume().catch(() => {});
     }
@@ -110,39 +70,87 @@ export function useAudioEngine() {
     if (globalAmbientGain) return;
 
     const ctx = globalCtx;
-    
+
     const source = ctx.createBufferSource();
     source.buffer = globalAmbientBuffer;
     source.loop = true;
-    
+
     const masterGain = ctx.createGain();
     masterGain.gain.value = 0; // Start silent
-    
+
     source.connect(masterGain);
     masterGain.connect(ctx.destination);
-    
+
     source.start();
 
     masterGain.gain.setValueAtTime(0, ctx.currentTime);
     const targetVolume = globalIsAmbientMuted ? 0 : 0.4;
     masterGain.gain.linearRampToValueAtTime(targetVolume, ctx.currentTime + 10);
-    
+
     globalAmbientGain = masterGain;
     globalAmbientSource = source;
   }, [initAudio]);
 
+  // Load the audio files globally once
+  useEffect(() => {
+    if (globalBuffersLoaded) return;
+
+    const loadSounds = async () => {
+      try {
+        const [clickRes, ambientRes, successRes] = await Promise.all([
+          fetch('/assets/audio/click.aac'),
+          fetch('/assets/audio/ambient.aac'),
+          fetch('/assets/audio/success.aac')
+        ]);
+
+        const clickArrayBuffer = await clickRes.arrayBuffer();
+        const ambientArrayBuffer = await ambientRes.arrayBuffer();
+        const successArrayBuffer = await successRes.arrayBuffer();
+
+        // Ensure context exists before decoding
+        if (!globalCtx) {
+          const AudioContextClass = getAudioContextClass();
+          if (AudioContextClass) {
+            globalCtx = new AudioContextClass();
+          }
+        }
+
+        if (globalCtx) {
+          const [clickBuf, ambientBuf, successBuf] = await Promise.all([
+            globalCtx.decodeAudioData(clickArrayBuffer),
+            globalCtx.decodeAudioData(ambientArrayBuffer),
+            globalCtx.decodeAudioData(successArrayBuffer)
+          ]);
+          globalClickBuffer = clickBuf;
+          globalAmbientBuffer = ambientBuf;
+          globalSuccessBuffer = successBuf;
+          globalBuffersLoaded = true;
+
+          // Re-trigger ambient if it was requested before buffers loaded
+          if (globalShouldPlayAmbient && !globalAmbientGain) {
+            startAmbient();
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load audio files:', err);
+      }
+    };
+
+    void loadSounds();
+  }, [startAmbient]);
+
   const stopAmbient = useCallback(() => {
     if (!globalCtx || !globalAmbientGain || !globalAmbientSource) return;
     const ctx = globalCtx;
-    
+
     // Fade out safely
     const currentGain = globalAmbientGain.gain.value;
     globalAmbientGain.gain.setValueAtTime(currentGain, ctx.currentTime);
     globalAmbientGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 5);
-    
+
     const sourceToStop = globalAmbientSource;
     const gainToStop = globalAmbientGain;
-    
+
     globalAmbientGain = null;
     globalAmbientSource = null;
 
@@ -157,14 +165,14 @@ export function useAudioEngine() {
     initAudio();
     if (!globalCtx || !globalClickBuffer) return;
     const ctx = globalCtx;
-    
+
     if (ctx.state === 'suspended') {
       ctx.resume().catch(() => {});
     }
 
     const source = ctx.createBufferSource();
     source.buffer = globalClickBuffer;
-    
+
     const gain = ctx.createGain();
     gain.gain.value = 0.5; // Adjust volume if needed
 
@@ -187,7 +195,7 @@ export function useAudioEngine() {
 
     const source = ctx.createBufferSource();
     source.buffer = globalSuccessBuffer;
-    
+
     const gain = ctx.createGain();
     gain.gain.value = 0.8; // A bit louder for completion
 
@@ -202,25 +210,25 @@ export function useAudioEngine() {
     if (globalAmbientGain && globalCtx) {
       const currentTime = globalCtx.currentTime;
       const currentGain = globalAmbientGain.gain.value;
-      
+
       // Cancel scheduled ramps and anchor current value
       globalAmbientGain.gain.cancelScheduledValues(currentTime);
       globalAmbientGain.gain.setValueAtTime(currentGain, currentTime);
-      
+
       // Linear ramp over 1 second to avoid popping
       globalAmbientGain.gain.linearRampToValueAtTime(
-        globalIsAmbientMuted ? 0 : 0.4, 
+        globalIsAmbientMuted ? 0 : 0.4,
         currentTime + 1.0
       );
     }
     notifyMute();
   }, []);
 
-  return { 
-    initAudio, 
-    startAmbient, 
-    stopAmbient, 
-    playClick, 
+  return {
+    initAudio,
+    startAmbient,
+    stopAmbient,
+    playClick,
     playSuccess,
     isAmbientMuted,
     toggleAmbientMute
