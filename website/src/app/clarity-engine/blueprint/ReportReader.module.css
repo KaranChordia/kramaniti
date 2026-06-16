@@ -199,18 +199,86 @@
 
 @media (max-width: 768px) {
   .readerCanvasOverlay {
-    padding: 20px;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: calc(14px + env(safe-area-inset-top)) 12px calc(14px + env(safe-area-inset-bottom));
   }
+
   .closeFloatingBtn {
-    top: 20px;
-    right: 20px;
-    width: 44px;
-    height: 44px;
+    top: calc(18px + env(safe-area-inset-top));
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
   }
+
+  .floatingReportCard {
+    max-height: none;
+    height: 100%;
+    border-radius: 20px;
+  }
+
   .cardBody {
-    padding: 30px 24px;
+    padding: 24px 18px 32px;
   }
+
   .cardHeader {
-    padding: 30px 24px 20px;
+    padding: 26px 56px 18px 18px;
+    align-items: flex-start;
+    text-align: left;
+    gap: 10px;
+  }
+
+  .kramanitiLogo {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 0;
+  }
+
+  .agentIcon {
+    margin: 4px 0;
+  }
+
+  .agentIcon svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .cardHeader h2 {
+    font-size: clamp(20px, 6vw, 26px);
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+  }
+
+  .markdownWrapper {
+    max-width: none;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .markdownWrapper h1,
+  .markdownWrapper h2,
+  .markdownWrapper h3,
+  .markdownWrapper h4,
+  .markdownWrapper h5,
+  .markdownWrapper h6 {
+    margin-top: 2em;
+    line-height: 1.2;
+  }
+
+  .markdownWrapper p,
+  .markdownWrapper ul,
+  .markdownWrapper ol {
+    margin-bottom: 1.35em;
+  }
+}
+
+@media (max-width: 420px) {
+  .readerCanvasOverlay {
+    padding-inline: 10px;
+  }
+
+  .cardBody {
+    padding-inline: 16px;
   }
 }

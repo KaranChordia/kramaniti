@@ -12,6 +12,10 @@
   z-index: 10;
 }
 
+.blueprintCanvas {
+  overflow: hidden;
+}
+
 /* Animations */
 @keyframes fadeInScale {
   0% { opacity: 0; transform: scale(0.7); }
@@ -180,4 +184,94 @@
   color: rgba(201, 168, 76, 0.9);
   text-transform: uppercase;
   margin: 0;
+}
+
+@media (max-width: 900px) {
+  .blueprintCanvas {
+    min-height: 100dvh;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
+    background: linear-gradient(180deg, rgba(5, 4, 2, 0.96), rgba(5, 4, 2, 0.76));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+  }
+
+  .headerLeft {
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .backBtn {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 14px;
+  }
+
+  .headerTitle {
+    min-width: 0;
+    font-size: clamp(14px, 4vw, 18px);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mainTree {
+    height: auto;
+    min-height: calc(100dvh - 76px);
+    justify-content: flex-start;
+    padding: 18px 16px calc(28px + env(safe-area-inset-bottom));
+    overflow: visible;
+  }
+
+  .hubContainer {
+    margin-bottom: 22px;
+    transform-origin: top center;
+  }
+
+  .hubTitle {
+    margin-top: 10px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-align: center;
+  }
+
+  .agentsGrid {
+    gap: 18px;
+    padding: 0;
+  }
+
+  .agentSlot:nth-child(1) :global(.blobContainer),
+  .agentSlot:nth-child(2) :global(.blobContainer),
+  .agentSlot:nth-child(3) :global(.blobContainer) {
+    animation: fadeUpItem 0.7s ease forwards;
+    animation-delay: 0.2s;
+  }
+
+  .agentSlot:nth-child(1) :global(.cardContainer),
+  .agentSlot:nth-child(2) :global(.cardContainer),
+  .agentSlot:nth-child(3) :global(.cardContainer) {
+    animation: fadeUpItem 0.7s ease forwards;
+    animation-delay: 0.35s;
+  }
+}
+
+@media (max-width: 420px) {
+  .header {
+    padding-inline: 12px;
+  }
+
+  .mainTree {
+    padding-inline: 12px;
+  }
 }

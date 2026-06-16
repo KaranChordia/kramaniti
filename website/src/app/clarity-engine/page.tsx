@@ -647,15 +647,21 @@ export default function ClarityEnginePage() {
                   <div className={styles.actionRow}>
 
                     {/* Primary Signal Button / Input Field */}
-                    <div
-                      className={`${styles.morphElement} shockwave-btn ${isInputActive ? styles.morphStateField : styles.morphStateBtn}`}
-                      onClick={() => { playClick(); handleMorphClick(); }}
-                    >
-                      <div className={styles.btnContent} data-hidden={isInputActive}>
-                        <span>Provide Signal</span>
-                      </div>
-
-                      <div className={styles.fieldContent} style={{ display: isInputActive ? 'flex' : 'none' }}>
+                    {!isInputActive ? (
+                      <button
+                        type="button"
+                        className={`${styles.morphElement} shockwave-btn ${styles.morphStateBtn}`}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          playClick();
+                          handleMorphClick();
+                        }}
+                      >
+                        <span className={styles.btnContent}>Provide Signal</span>
+                      </button>
+                    ) : (
+                      <div className={`${styles.morphElement} ${styles.morphStateField}`}>
+                        <div className={styles.fieldContent}>
                         <textarea
                           ref={textareaRef}
                           className={styles.glassInput}
@@ -685,8 +691,9 @@ export default function ClarityEnginePage() {
                             </button>
                           </div>
                         </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Secondary AI Task Button */}
                     {!isInputActive && (

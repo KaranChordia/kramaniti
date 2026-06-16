@@ -1022,37 +1022,351 @@
 }
 
 /* Responsiveness */
-@media (max-width: 768px) {
-  .header, .footer {
-    padding: 16px 20px;
+@media (max-width: 900px) {
+  .canvas {
+    min-height: 100dvh;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
-  
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
+    background: linear-gradient(180deg, rgba(5, 4, 2, 0.94), rgba(5, 4, 2, 0.72));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+  }
+
+  .brand {
+    min-width: 0;
+    justify-content: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+
+  .brand strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .headerActions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .headerActions > .actionBtn {
+    flex: 0 0 auto;
+    min-width: 40px;
+    min-height: 40px;
+    justify-content: center;
+    padding: 0 12px;
+    border-radius: 14px;
+    font-size: 0;
+    letter-spacing: 0;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .headerActions > .actionBtn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .progressContainer {
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 4px 8px;
+    border-radius: 14px;
+  }
+
+  .progressBarWrapper {
+    width: 54px;
+  }
+
+  .synthesisBtn {
+    min-height: 30px;
+    padding: 0 10px;
+    border-radius: 10px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .layoutWrapper {
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    padding: 14px 16px 24px;
+    gap: 18px;
+  }
+
+  .interactionColumn {
+    flex: none;
+    height: auto;
+    min-height: 0;
+  }
+
   .characterContainer {
-    top: 5vh;
+    margin-top: 2px;
+    margin-bottom: 4px;
   }
-  
+
+  .blobWrapper {
+    width: 72px;
+    height: 72px;
+  }
+
+  .assistantBlob {
+    width: 58px;
+    height: 58px;
+  }
+
+  @keyframes orbitRotate1 {
+    0% { transform: rotate(0deg) translateX(36px) rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) translateX(40px) rotate(-180deg) scale(1.15); }
+    100% { transform: rotate(360deg) translateX(36px) rotate(-360deg) scale(1); }
+  }
+
+  @keyframes orbitRotate2 {
+    0% { transform: rotate(0deg) translateX(32px) rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) translateX(36px) rotate(-180deg) scale(0.85); }
+    100% { transform: rotate(360deg) translateX(32px) rotate(-360deg) scale(1); }
+  }
+
+  .mainStage {
+    flex: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .glassPanel {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: min(440px, calc(100dvh - 210px));
+    max-height: none;
+    margin: 0;
+    padding: 24px 18px 18px;
+    border-radius: 20px;
+    overflow: visible;
+  }
+
+  .questionBlock {
+    flex: none;
+    min-height: 168px;
+    overflow: visible;
+    padding-right: 0;
+    justify-content: center;
+  }
+
+  .questionContentWrapper {
+    margin: 0;
+    justify-content: center;
+  }
+
+  .questionLabel {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    margin-bottom: 10px;
+  }
+
+  .questionTitle {
+    font-size: clamp(21px, 6.2vw, 28px);
+    line-height: 1.22;
+    letter-spacing: 0;
+    gap: 0.18em;
+  }
+
+  .morphContainer {
+    margin-top: 22px;
+  }
+
+  .actionRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .morphStateBtn,
+  .secondaryActionBtn {
+    width: 100%;
+    height: 50px;
+    border-radius: 16px;
+  }
+
+  .morphStateField {
+    width: 100%;
+    min-height: 230px;
+    border-radius: 18px;
+    padding: 18px;
+  }
+
+  .glassInput {
+    min-height: 132px;
+    font-size: 17px;
+    line-height: 1.45;
+  }
+
+  .inputFooter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    margin-top: 14px;
+    padding-top: 16px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .inputFooter > div {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .inputFooter > div:last-child {
+    gap: 10px !important;
+  }
+
+  .inputFooter .actionBtn,
+  .submitBtn {
+    min-height: 42px;
+    justify-content: center;
+    border-radius: 14px;
+  }
+
+  .inputFooter .actionBtn {
+    flex: 1;
+    padding: 0 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .submitBtn {
+    flex: 1;
+    padding: 0 14px;
+  }
+
+  .contextSidebar {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    max-height: none;
+    padding: 18px 0 0;
+    border-left: none;
+    border-top: 1px solid rgba(201, 168, 76, 0.16);
+    overflow: visible;
+  }
+
+  .contextHeader {
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .contextBody {
+    max-height: none;
+    overflow: visible;
+    gap: 18px;
+    padding-right: 0;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
   .assistantCopy {
     font-size: 13px;
-    padding: 0 16px;
-    line-height: 1.5;
+    line-height: 1.55;
+    padding: 0;
   }
-  
-  .glassPanel {
-    padding: 24px 20px;
-    margin: 0 16px;
+
+  .signalList {
+    gap: 12px;
   }
-  
-  .questionTitle {
-    font-size: 22px;
+
+  .signalItem {
+    font-size: 13px;
   }
-  
-  .glassInput {
-    font-size: 16px;
+
+  .tasksAccordion {
+    margin-top: 4px;
+    border-radius: 14px;
   }
-  
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 8px 16px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .footerLeft,
+  .footerRight {
+    width: 100%;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .footerText {
+    justify-content: center;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .footerRight .actionBtn {
+    min-height: 42px;
+    justify-content: center;
+    padding: 0 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
   .modalContent {
+    max-height: calc(100dvh - 32px);
     padding: 24px 20px;
     border-radius: 20px;
     margin: 0 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .brand {
+    font-size: 9px;
+    gap: 6px;
+  }
+
+  .headerActions {
+    justify-content: flex-start;
+  }
+
+  .layoutWrapper {
+    padding-inline: 12px;
+  }
+
+  .glassPanel {
+    padding: 22px 16px 16px;
+    border-radius: 18px;
+  }
+
+  .questionTitle {
+    font-size: clamp(20px, 6.8vw, 26px);
+  }
+
+  .inputFooter > div:last-child {
+    flex-direction: column;
   }
 }

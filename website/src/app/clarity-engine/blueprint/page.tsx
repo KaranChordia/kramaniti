@@ -70,7 +70,7 @@ export default function BlueprintPage() {
   }
 
   return (
-    <div className={engineStyles.canvas} style={{ overflow: 'hidden' }} onClick={startAmbient}>
+    <div className={`${engineStyles.canvas} ${styles.blueprintCanvas}`} onClick={startAmbient}>
       <div className={engineStyles.canvasBgGlow} />
       <div className={engineStyles.canvasNoise} />
       

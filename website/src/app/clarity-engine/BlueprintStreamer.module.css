@@ -262,20 +262,74 @@
 
 @media (max-width: 768px) {
   .streamerCard {
-    padding: 24px 20px;
-    border-radius: 20px;
+    min-width: 0;
+    padding: 22px 16px 18px;
+    border-radius: 18px;
+  }
+
+  .header {
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .header > div:first-child {
+    width: 42px !important;
+    height: 42px !important;
+    flex: 0 0 42px;
+  }
+
+  .title {
+    font-size: 16px;
+    line-height: 1.25;
+    min-width: 0;
+  }
+
+  .logList {
+    margin-bottom: 18px;
+  }
+
+  .logItem {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 12px;
+    font-size: 12px;
+    line-height: 1.35;
+    border-radius: 10px;
+  }
+
+  .logStatusIcon {
+    flex: 0 0 16px;
+    margin-top: 1px;
   }
   
   .fullWidthBtn {
-    margin: 20px -20px -24px -20px;
-    padding: 20px 20px;
-    border-radius: 0 0 20px 20px;
+    min-height: 54px;
+    margin: 18px -16px -18px -16px;
+    padding: 18px 16px;
+    border-radius: 0 0 18px 18px;
+    font-size: 12px;
   }
   
   .agentBlobWrapper {
+    width: 42px;
+    height: 42px;
     top: 24px !important;
-    left: 20px !important;
+    left: 16px !important;
+  }
+
+  .agentBlob {
+    width: 34px;
+    height: 34px;
   }
 }
 
+@media (max-width: 420px) {
+  .streamerCard {
+    padding: 20px 14px 16px;
+  }
+
+  .fullWidthBtn {
+    margin: 16px -14px -16px -14px;
+  }
+}
 
