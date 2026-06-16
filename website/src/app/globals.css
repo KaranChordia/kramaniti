@@ -423,3 +423,29 @@ input, textarea, select {
   transition: none !important;
 }
 
+/* ---------- Global Shockwave Effect ---------- */
+@keyframes shockwave-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(201, 168, 76, 0);
+  }
+}
+
+.shockwave-active {
+  animation: shockwave-pulse 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+}
+
+/* ---------- Button Push Effect ---------- */
+button:not(.no-shockwave), 
+[role="button"]:not(.no-shockwave),
+.shockwave-btn:not(.no-shockwave) {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:not(.no-shockwave):active, 
+[role="button"]:not(.no-shockwave):active,
+.shockwave-btn:not(.no-shockwave):active {
+  transform: scale(0.96) !important;
+}

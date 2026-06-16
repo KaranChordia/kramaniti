@@ -5,7 +5,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styles from './BlueprintStreamer.module.css';
 import { type BlueprintRequestBody } from '@/lib/clarity-engine/blueprintStreamer';
-import { Loader2, X } from 'lucide-react';
+import { Loader2, X, Check } from 'lucide-react';
+import { useAudioEngine } from '@/hooks/useAudioEngine';
 
 interface BlueprintStreamerProps {
   title: string;
@@ -14,48 +15,40 @@ interface BlueprintStreamerProps {
   payload: BlueprintRequestBody;
   agentId: 'strategy' | 'systems' | 'presence';
   onComplete?: () => void;
+  onViewReport?: (content: string) => void;
 }
 
 const getSimulatedLogs = (title: string) => {
   if (title.includes('Strategy')) {
     return [
-      'Establishing connection to orchestration core...',
-      'Analyzing initial founder signal & market position...',
-      'Cross-referencing historical workflows...',
-      'Synthesizing core business problem...',
-      'Structuring audience clarity definitions...',
-      'Generating value proposition architecture...',
-      'Finalizing strategic direction...'
+      'Scanning transcript history...',
+      'Isolating primary business workflow...',
+      'Deriving target audience patterns...',
+      'Generating strategic foundation...'
     ];
   }
   if (title.includes('Systems')) {
     return [
-      'Initializing system architecture audit...',
-      'Mapping current operational friction points...',
-      'Identifying repetitive tasks and bottlenecks...',
-      'Drafting proposed AI agent integrations...',
-      'Designing streamlined delivery mechanisms...',
-      'Compiling operational toolstack...',
-      'Finalizing workflow blueprint...'
+      'Analyzing current workarounds...',
+      'Identifying high-friction touchpoints...',
+      'Designing system architecture...',
+      'Orchestrating agent workflows...'
     ];
   }
   return [
-    'Connecting to brand presence matrix...',
-    'Evaluating optimal content distribution platforms...',
-    'Structuring cinematic narrative pillars...',
-    'Designing audience engagement loops...',
-    'Drafting content repurposing pipeline...',
-    'Aligning visual identity guidelines...',
-    'Finalizing presence brief...'
+    'Mapping presence goals...',
+    'Reviewing preferred content channels...',
+    'Synthesizing brand authority angles...',
+    'Compiling 30-day presence plan...'
   ];
 };
 
-export default function BlueprintStreamer({ title, endpoint, icon, payload, agentId, onComplete }: BlueprintStreamerProps) {
+export default function BlueprintStreamer({ title, endpoint, icon, payload, agentId, onComplete, onViewReport }: BlueprintStreamerProps) {
   const [content, setContent] = useState<string>('');
   const [isFetching, setIsFetching] = useState<boolean>(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentLogIndex, setCurrentLogIndex] = useState(0);
   const logs = useRef(getSimulatedLogs(title));
+  const { playClick } = useAudioEngine();
   
   // Wait to start simulation until agent appears (CSS animation delay is ~2-3s)
   const delayStartMs = agentId === 'strategy' ? 2200 : agentId === 'systems' ? 2700 : 3200;
@@ -92,6 +85,24 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
       await new Promise(r => setTimeout(r, delayStartMs));
       
       try {
+        if (payload.mockScenarioId) {
+          const { mockScenarios } = await import('@/lib/clarity-engine/mockData');
+          const scenario = mockScenarios.find(s => s.id === payload.mockScenarioId);
+          if (scenario) {
+            const mockMarkdown = scenario.blueprint[agentId as keyof typeof scenario.blueprint];
+            if (mockMarkdown) {
+              // Simulate streaming chunks
+              const chunks = mockMarkdown.match(/.{1,15}/g) || [];
+              for (const chunk of chunks) {
+                if (!isMounted || abortController.signal.aborted) break;
+                setContent((prev) => prev + chunk);
+                await new Promise(r => setTimeout(r, 20)); // fast typewriter
+              }
+              return; // Bypass actual fetch
+            }
+          }
+        }
+
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -146,56 +157,47 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
       : styles.blobPresence;
 
   return (
-    <>
-      <div className={`${styles.streamerCard} ${isActive ? styles.isActive : ''}`}>
-        <div className={styles.header}>
-          <div className={styles.agentBlobWrapper}>
-            <div className={`${styles.agentBlob} ${blobClass}`} />
-          </div>
-          <h3 className={styles.title}>{title}</h3>
-          <div className={`${styles.statusIndicator} ${isActive ? styles.pulse : ''}`} />
+    <div className={`${styles.streamerCard} ${isActive ? styles.isActive : ''}`}>
+      <div className={styles.header}>
+        <div className={styles.agentBlobWrapper}>
+          <div className={`${styles.agentBlob} ${blobClass}`} />
         </div>
-        
-        {isActive ? (
-          <div className={styles.simulatedLog}>
-            <Loader2 size={14} className={styles.spin} />
-            <span>{logs.current[currentLogIndex]}</span>
-          </div>
-        ) : (
-          <div className={styles.simulatedLog}>
-            <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Task completed.</span>
-          </div>
-        )}
+        <h3 className={styles.title}>{title}</h3>
+        <div className={`${styles.statusIndicator} ${isActive ? styles.pulse : ''}`} />
+      </div>
+      
+      <div className={styles.logList}>
+        {logs.current.slice(0, currentLogIndex + 1).map((log, i) => {
+          const isCurrentLog = i === currentLogIndex;
+          const isDone = !isCurrentLog || (!isActive && isCurrentLog);
 
-        {!isActive && (
-          <div className={styles.actions}>
-            <button className={styles.viewBtn} onClick={() => setIsModalOpen(true)}>
-              View Report
-            </button>
-          </div>
-        )}
+          return (
+            <div 
+              key={i} 
+              className={`${styles.logItem} ${isDone ? styles.logItemDone : styles.logItemActive}`}
+            >
+              <div className={styles.logStatusIcon}>
+                {isDone ? (
+                  <Check size={14} strokeWidth={3} className={styles.checkIcon} />
+                ) : (
+                  <div className={styles.miniProgressBar}>
+                    <div className={styles.miniProgressFill} />
+                  </div>
+                )}
+              </div>
+              <span>{log}</span>
+            </div>
+          );
+        })}
       </div>
 
-      {isModalOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
-          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-            <header className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>
-                {icon}
-                {title} Report
-              </h2>
-              <button className={styles.closeBtn} onClick={() => setIsModalOpen(false)}>
-                <X size={24} />
-              </button>
-            </header>
-            <div className={styles.modalBody}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {content}
-              </ReactMarkdown>
-            </div>
-          </div>
+      {!isActive && (
+        <div className={styles.actions}>
+          <button className={styles.viewBtn} onClick={(e) => { e.stopPropagation(); playClick(); onViewReport?.(content); }}>
+            View Report
+          </button>
         </div>
       )}
-    </>
+    </div>
   );
 }

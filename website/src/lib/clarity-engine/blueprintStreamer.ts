@@ -11,6 +11,7 @@ export type BlueprintRequestBody = {
   transcript: Array<{ role: string; content: string }>;
   aiTasks: Array<{ label: string; question: string }>;
   contextLog: string[];
+  mockScenarioId?: string;
 };
 
 export function createStreamingBlueprintRoute(systemPrompt: string) {

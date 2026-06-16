@@ -4,6 +4,7 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PwaRuntime } from "@/components/pwa/PwaRuntime";
+import { GlobalShockwave } from "@/components/GlobalShockwave";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -72,8 +73,8 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        <Script
-          id="theme-init"
+        <Script 
+          id="theme-init" 
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
@@ -81,9 +82,10 @@ export default function RootLayout({
                 const colorScheme = localStorage.getItem("kramaniti-theme");
                 document.documentElement.setAttribute("data-theme", colorScheme || "dark");
               } catch (e) {}
-            `,
+            `
           }}
         />
+        <GlobalShockwave />
         <PwaRuntime />
         {children}
         <Analytics />
