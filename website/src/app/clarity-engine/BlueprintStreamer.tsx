@@ -200,5 +200,6 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
         </div>
       )}
     </div>
+    </div>
   );
 }
