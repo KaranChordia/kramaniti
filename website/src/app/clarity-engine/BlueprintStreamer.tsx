@@ -158,7 +158,7 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
 
   return (
     <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <div className={`${styles.agentBlobWrapper} blobContainer`} style={{ marginBottom: '-24px', zIndex: 10 }}>
+      <div className={`${styles.agentBlobWrapper} blobContainer ${isActive ? styles.blobActive : ''}`} style={{ marginBottom: '-24px', zIndex: 10 }}>
         <div className={`${styles.agentBlob} ${blobClass}`} />
       </div>
       <div className={`${styles.streamerCard} ${isActive ? styles.isActive : ''} cardContainer`} style={{ width: '100%', paddingTop: '40px' }}>
