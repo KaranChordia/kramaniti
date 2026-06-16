@@ -230,28 +230,35 @@
   to { transform: rotate(360deg); }
 }
 
-.actions {
+.fullWidthBtn {
+  width: 100%;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
   margin-top: 16px;
-}
-
-.viewBtn {
-  background: rgba(201, 168, 76, 0.1);
-  color: rgba(201, 168, 76, 1);
-  border: 1px solid rgba(201, 168, 76, 0.3);
-  padding: 10px 20px;
+  background: rgba(201, 168, 76, 0.05);
+  border: 1px solid rgba(201, 168, 76, 0.2);
   border-radius: 8px;
+  color: rgba(201, 168, 76, 0.9);
   font-family: var(--font-outfit), sans-serif;
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.viewBtn:hover {
-  background: rgba(201, 168, 76, 0.2);
-  border-color: rgba(201, 168, 76, 0.5);
-  transform: translateY(-1px);
+.fullWidthBtn:hover {
+  background: rgba(201, 168, 76, 0.15);
+  border-color: rgba(201, 168, 76, 0.4);
+  color: rgba(201, 168, 76, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.fullWidthBtn:active {
+  transform: scale(0.98);
 }
 
 

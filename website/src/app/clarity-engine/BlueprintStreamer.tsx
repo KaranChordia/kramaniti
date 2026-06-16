@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styles from './BlueprintStreamer.module.css';
 import { type BlueprintRequestBody } from '@/lib/clarity-engine/blueprintStreamer';
-import { Loader2, X, Check } from 'lucide-react';
+import { Loader2, X, Check, ArrowRight } from 'lucide-react';
 import { useAudioEngine } from '@/hooks/useAudioEngine';
 
 interface BlueprintStreamerProps {
@@ -198,11 +198,13 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
       </div>
 
       {!isActive && (
-        <div className={styles.actions}>
-          <button className={styles.viewBtn} onClick={(e) => { e.stopPropagation(); playClick(); onViewReport?.(content); }}>
-            View Report
-          </button>
-        </div>
+        <button 
+          className={styles.fullWidthBtn} 
+          onClick={(e) => { e.stopPropagation(); playClick(); onViewReport?.(content); }}
+        >
+          <span>View Detailed Report</span>
+          <ArrowRight size={16} />
+        </button>
       )}
     </div>
     </div>
