@@ -416,7 +416,7 @@ export default function ClarityEnginePage() {
         // -------------------------
         // REAL API CALL
         // -------------------------
-        const response = await fetch('/api/clarity-engine/chat', {
+        const response = await fetch('/api/clarity-engine/chat/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

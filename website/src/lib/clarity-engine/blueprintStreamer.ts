@@ -14,6 +14,77 @@ export type BlueprintRequestBody = {
   mockScenarioId?: string;
 };
 
+function buildLocalBlueprintFallback(systemPrompt: string, body: BlueprintRequestBody) {
+  const answerValues = Object.values(body.answers).filter(Boolean);
+  const strongestSignal =
+    answerValues[answerValues.length - 1] ||
+    body.contextLog[body.contextLog.length - 1] ||
+    'The user is still clarifying the first useful business signal.';
+
+  if (systemPrompt.includes('Strategy Director')) {
+    return `### Strategy & Clarity Pillar
+
+**Current signal:** ${strongestSignal}
+
+#### Positioning
+- Start with the clearest customer, problem, and outcome before naming tools or channels.
+- Frame the offer around one practical transformation the buyer can understand quickly.
+
+#### Core Problem
+- Identify the repeated friction behind the idea: unclear buyer, scattered workflow, weak offer definition, or inconsistent follow-through.
+- Treat unknowns as assumptions to test, not as claims to publish.
+
+#### Audience Clarity
+- Define who feels this problem often enough to pay for a better operating route.
+- Capture the moment when they actively search for help.
+
+#### Strategic Direction
+- Write a one-line promise, a first paid workflow, and the proof needed before scaling the offer.
+- Keep the sequence: strategy before tools, systems before scale, content after clarity.`;
+  }
+
+  if (systemPrompt.includes('Operations & Systems Architect')) {
+    return `### Systems & Workflow Pillar
+
+**Current signal:** ${strongestSignal}
+
+#### Workflow Route
+- Map the work from first signal to delivered outcome.
+- Separate the steps that need human judgment from the steps that can be assisted by AI.
+
+#### Friction Points
+- Look for repeated manual collection, unclear decisions, scattered notes, and missing handoffs.
+- Turn the first recurring bottleneck into a small operating system before adding more tools.
+
+#### Human + AI Boundary
+- Let AI draft, summarize, classify, and prepare options.
+- Keep positioning, promises, approvals, and sensitive decisions human-led.
+
+#### First Build
+- Create one reusable intake, one synthesis view, and one handoff artifact that can be used repeatedly.`;
+  }
+
+  return `### Content & Presence Pillar
+
+**Current signal:** ${strongestSignal}
+
+#### Starting Platform
+- Begin where the buyer already looks for context, trust, or proof.
+- Choose one primary channel before spreading the message across formats.
+
+#### Cinematic Narrative
+- Show the before-state, the operating logic, and the sharper after-state.
+- Avoid tool-led claims. Make the business clarity visible.
+
+#### Content Engine
+- Turn the clarified workflow into founder posts, short explainers, proof-safe walkthroughs, and a practical offer page.
+- Reuse the same strategic spine across channels so presence follows the work instead of inventing a separate story.
+
+#### 30-Day Direction
+- Publish from the problem, the process, and the first operating artifact.
+- Keep every public claim grounded in what the system can actually deliver.`;
+}
+
 export function createStreamingBlueprintRoute(systemPrompt: string) {
   return async function POST(request: Request) {
     let body: BlueprintRequestBody;
@@ -44,7 +115,7 @@ export function createStreamingBlueprintRoute(systemPrompt: string) {
 
         try {
           if (!process.env.GROQ_API_KEY) {
-            pushToken("Error: GROQ_API_KEY is not configured.");
+            pushToken(buildLocalBlueprintFallback(systemPrompt, body));
             safeClose();
             return;
           }
