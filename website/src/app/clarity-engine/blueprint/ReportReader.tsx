@@ -20,16 +20,19 @@ export default function ReportReader({ report, onClose }: ReportReaderProps) {
   const { playClick } = useAudioEngine();
 
   return (
-    <div className={styles.readerCanvasOverlay}>
+    <div 
+      className={styles.readerCanvasOverlay} 
+      onClick={() => { playClick(); onClose(); }}
+    >
       <button 
         className={styles.closeFloatingBtn} 
-        onClick={() => { playClick(); onClose(); }}
+        onClick={(e) => { e.stopPropagation(); playClick(); onClose(); }}
         aria-label="Close report"
       >
         <X size={24} />
       </button>
 
-      <div className={styles.floatingReportCard}>
+      <div className={styles.floatingReportCard} onClick={(e) => e.stopPropagation()}>
         <div className={styles.cardHeader}>
           <Image 
             src="/assets/brand/kramaniti-mark-gold.png" 
@@ -38,7 +41,7 @@ export default function ReportReader({ report, onClose }: ReportReaderProps) {
             height={48} 
             className={styles.kramanitiLogo} 
           />
-          <div className={`${styles.agentIcon} ${styles[`blob${report.agentId}`]}`}>
+          <div className={styles.agentIcon}>
             {report.icon}
           </div>
           <h2>{report.title} Blueprint</h2>
