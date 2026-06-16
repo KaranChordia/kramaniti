@@ -541,9 +541,16 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   padding-right: 8px; /* For scrollbar breathing room */
+}
+
+.questionContentWrapper {
+  margin: auto 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Custom scrollbar for question block */

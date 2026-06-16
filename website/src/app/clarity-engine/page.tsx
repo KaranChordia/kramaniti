@@ -639,13 +639,15 @@ export default function ClarityEnginePage() {
               
               {/* Active Question with Blur-Typing Effect */}
               <div className={styles.questionBlock}>
-                <span className={styles.questionLabel}>
-                  {session.currentQuestionLabel || 'Next Step'}
-                </span>
-                <BlurTypingText 
-                  text={session.currentQuestion} 
-                  activeKey={session.currentQuestionKey} 
-                />
+                <div className={styles.questionContentWrapper}>
+                  <span className={styles.questionLabel}>
+                    {session.currentQuestionLabel || 'Next Step'}
+                  </span>
+                  <BlurTypingText 
+                    text={session.currentQuestion} 
+                    activeKey={session.currentQuestionKey} 
+                  />
+                </div>
               </div>
 
               {/* Morphing Input */}
