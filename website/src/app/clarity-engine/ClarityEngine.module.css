@@ -469,7 +469,7 @@
 .glassPanel {
   width: 100%;
   max-width: 800px;
-  height: 55vh;
+  height: 45vh;
   min-height: 320px;
   max-height: 100%;
   display: flex;
