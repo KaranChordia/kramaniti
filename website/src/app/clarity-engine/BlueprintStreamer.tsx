@@ -50,8 +50,8 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
   const logs = useRef(getSimulatedLogs(title));
   const { playClick } = useAudioEngine();
   
-  // Wait to start simulation until agent appears (CSS animation delay is ~2-3s)
-  const delayStartMs = agentId === 'strategy' ? 2200 : agentId === 'systems' ? 2700 : 3200;
+  // Wait to start simulation until agent card appears
+  const delayStartMs = agentId === 'strategy' ? 3600 : agentId === 'systems' ? 3800 : 4000;
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -157,14 +157,15 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
       : styles.blobPresence;
 
   return (
-    <div className={`${styles.streamerCard} ${isActive ? styles.isActive : ''}`}>
-      <div className={styles.header}>
-        <div className={styles.agentBlobWrapper}>
-          <div className={`${styles.agentBlob} ${blobClass}`} />
-        </div>
-        <h3 className={styles.title}>{title}</h3>
-        <div className={`${styles.statusIndicator} ${isActive ? styles.pulse : ''}`} />
+    <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div className={`${styles.agentBlobWrapper} blobContainer`} style={{ marginBottom: '-24px', zIndex: 10 }}>
+        <div className={`${styles.agentBlob} ${blobClass}`} />
       </div>
+      <div className={`${styles.streamerCard} ${isActive ? styles.isActive : ''} cardContainer`} style={{ width: '100%', paddingTop: '40px' }}>
+        <div className={styles.header}>
+          <h3 className={styles.title}>{title}</h3>
+          <div className={`${styles.statusIndicator} ${isActive ? styles.pulse : ''}`} />
+        </div>
       
       <div className={styles.logList}>
         {logs.current.slice(0, currentLogIndex + 1).map((log, i) => {

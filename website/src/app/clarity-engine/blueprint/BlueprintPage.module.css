@@ -19,10 +19,10 @@
 }
 
 @keyframes drawLine {
-  0% { stroke-dasharray: 0, 1000; opacity: 0; }
-  30% { stroke-dasharray: 6, 6; opacity: 1; }
-  70% { stroke-dasharray: 6, 6; opacity: 1; }
-  100% { stroke-dasharray: 6, 6; opacity: 0; }
+  0% { stroke-dashoffset: 1000; opacity: 1; }
+  30% { stroke-dashoffset: 0; opacity: 1; }
+  80% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
 }
 
 @keyframes fadeUpItem {
@@ -64,8 +64,10 @@
 }
 
 .connectorLinePath {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
   opacity: 0;
-  animation: drawLine 3s ease-in-out forwards;
+  animation: drawLine 3.5s ease-in-out forwards;
 }
 
 /* Agents Grid */
@@ -79,13 +81,22 @@
 }
 
 .agentSlot {
-  opacity: 0;
-  animation: fadeUpItem 0.8s ease forwards;
+  /* Container is fully transparent to layout, children animate themselves */
 }
 
-.agentSlot:nth-child(1) { animation-delay: 2.2s; }
-.agentSlot:nth-child(2) { animation-delay: 2.7s; }
-.agentSlot:nth-child(3) { animation-delay: 3.2s; }
+/* Sequential Animation logic:
+   Lines finish drawing at 1.2s+ (0.4 * 3.5) = ~2.6s
+   Blobs appear as lines hit them
+   Cards appear shortly after blobs */
+
+.agentSlot:nth-child(1) :global(.blobContainer) { opacity: 0; animation: fadeUpItem 0.8s ease forwards; animation-delay: 2.6s; }
+.agentSlot:nth-child(1) :global(.cardContainer) { opacity: 0; animation: fadeUpItem 0.8s ease forwards; animation-delay: 3.4s; }
+
+.agentSlot:nth-child(2) :global(.blobContainer) { opacity: 0; animation: fadeUpItem 0.8s ease forwards; animation-delay: 2.8s; }
+.agentSlot:nth-child(2) :global(.cardContainer) { opacity: 0; animation: fadeUpItem 0.8s ease forwards; animation-delay: 3.6s; }
+
+.agentSlot:nth-child(3) :global(.blobContainer) { opacity: 0; animation: fadeUpItem 0.8s ease forwards; animation-delay: 3.0s; }
+.agentSlot:nth-child(3) :global(.cardContainer) { opacity: 0; animation: fadeUpItem 0.8s ease forwards; animation-delay: 3.8s; }
 
 @media (max-width: 1024px) {
   .agentsGrid {
