@@ -82,20 +82,20 @@
    Cards materialize beneath them once they settle */
 
 @keyframes spawnBlob1 {
-  0% { transform: translate(380px, -220px) scale(0); opacity: 0; }
-  20% { opacity: 1; transform: translate(380px, -220px) scale(0.4); }
+  0% { transform: translate(540px, -220px) scale(0); opacity: 0; }
+  20% { opacity: 1; transform: translate(540px, -220px) scale(0.4); }
   100% { transform: translate(0, 0) scale(1); opacity: 1; }
 }
 
 @keyframes spawnBlob2 {
-  0% { transform: translate(0, -220px) scale(0); opacity: 0; }
-  20% { opacity: 1; transform: translate(0, -220px) scale(0.4); }
+  0% { transform: translate(160px, -220px) scale(0); opacity: 0; }
+  20% { opacity: 1; transform: translate(160px, -220px) scale(0.4); }
   100% { transform: translate(0, 0) scale(1); opacity: 1; }
 }
 
 @keyframes spawnBlob3 {
-  0% { transform: translate(-380px, -220px) scale(0); opacity: 0; }
-  20% { opacity: 1; transform: translate(-380px, -220px) scale(0.4); }
+  0% { transform: translate(-220px, -220px) scale(0); opacity: 0; }
+  20% { opacity: 1; transform: translate(-220px, -220px) scale(0.4); }
   100% { transform: translate(0, 0) scale(1); opacity: 1; }
 }
 

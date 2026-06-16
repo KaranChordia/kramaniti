@@ -157,14 +157,18 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
       : styles.blobPresence;
 
   return (
-    <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <div className={`${styles.agentBlobWrapper} blobContainer ${isActive ? styles.blobActive : ''}`} style={{ marginBottom: '-24px', zIndex: 10 }}>
+    <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div 
+        className={`${styles.agentBlobWrapper} blobContainer ${isActive ? styles.blobActive : ''}`} 
+        style={{ position: 'absolute', top: '24px', left: '24px', zIndex: 10 }}
+      >
         <div className={`${styles.agentBlob} ${blobClass}`} />
       </div>
-      <div className={`${styles.streamerCard} ${isActive ? styles.isActive : ''} cardContainer`} style={{ width: '100%', paddingTop: '40px' }}>
+      <div className={`${styles.streamerCard} ${isActive ? styles.isActive : ''} cardContainer`} style={{ width: '100%' }}>
         <div className={styles.header}>
+          {/* Spacer to reserve room for the absolutely positioned blob */}
+          <div style={{ width: '48px', height: '48px' }} />
           <h3 className={styles.title}>{title}</h3>
-          <div className={`${styles.statusIndicator} ${isActive ? styles.pulse : ''}`} />
         </div>
       
       <div className={styles.logList}>
