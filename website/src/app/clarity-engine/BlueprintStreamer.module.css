@@ -237,8 +237,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 24px 24px;
-  background: radial-gradient(ellipse at bottom, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+  padding: 28px 24px 20px 24px;
+  background: radial-gradient(100% 100% at bottom center, rgba(201, 168, 76, 0.2) 0%, rgba(201, 168, 76, 0.05) 50%, transparent 100%);
   border: none;
   border-radius: 0 0 24px 24px;
   color: rgba(201, 168, 76, 0.8);
@@ -252,7 +252,7 @@
 }
 
 .fullWidthBtn:hover {
-  background: radial-gradient(ellipse at bottom, rgba(201, 168, 76, 0.25) 0%, transparent 80%);
+  background: radial-gradient(100% 100% at bottom center, rgba(201, 168, 76, 0.35) 0%, rgba(201, 168, 76, 0.1) 60%, transparent 100%);
   color: rgba(201, 168, 76, 1);
 }
 
