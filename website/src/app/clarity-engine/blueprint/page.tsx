@@ -102,18 +102,7 @@ export default function BlueprintPage() {
           <span className={styles.hubTitle}>Clarity Engine Orchestrator</span>
         </div>
 
-        {/* Desktop Connector Lines */}
-        <svg className={styles.connectorLines} viewBox="0 0 1200 100" preserveAspectRatio="xMidYMax slice">
-          <defs>
-            <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(201, 168, 76, 0.6)" />
-              <stop offset="100%" stopColor="rgba(201, 168, 76, 0.1)" />
-            </linearGradient>
-          </defs>
-          <path className={styles.connectorLinePath} style={{ animationDelay: '1.2s' }} d="M 600 0 L 200 100" fill="none" stroke="url(#lineGrad)" strokeWidth="2" />
-          <path className={styles.connectorLinePath} style={{ animationDelay: '1.4s' }} d="M 600 0 L 600 100" fill="none" stroke="url(#lineGrad)" strokeWidth="2" />
-          <path className={styles.connectorLinePath} style={{ animationDelay: '1.6s' }} d="M 600 0 L 1000 100" fill="none" stroke="url(#lineGrad)" strokeWidth="2" />
-        </svg>
+        {/* Connector Lines Removed - Replaced by Blob Spawn Animation */}
 
         {/* 3 Agents */}
         <div className={styles.agentsGrid}>
