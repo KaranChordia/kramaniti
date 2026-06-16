@@ -215,9 +215,9 @@
 
 @keyframes fastHeartbeat {
   0% { transform: scale(1); filter: brightness(1); }
-  14% { transform: scale(1.2); filter: brightness(1.4); }
+  14% { transform: scale(1.1); filter: brightness(1.2); }
   28% { transform: scale(1); filter: brightness(1); }
-  42% { transform: scale(1.2); filter: brightness(1.4); }
+  42% { transform: scale(1.1); filter: brightness(1.2); }
   70% { transform: scale(1); filter: brightness(1); }
   100% { transform: scale(1); filter: brightness(1); }
 }

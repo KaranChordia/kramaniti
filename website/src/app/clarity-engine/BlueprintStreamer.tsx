@@ -160,7 +160,7 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
     <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column' }}>
       <div 
         className={`${styles.agentBlobWrapper} blobContainer ${isActive ? styles.blobActive : ''}`} 
-        style={{ position: 'absolute', top: '24px', left: '24px', zIndex: 10 }}
+        style={{ position: 'absolute', top: '32px', left: '24px', zIndex: 10 }}
       >
         <div className={`${styles.agentBlob} ${blobClass}`} />
       </div>

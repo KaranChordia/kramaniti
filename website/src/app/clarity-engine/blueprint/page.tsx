@@ -94,7 +94,7 @@ export default function BlueprintPage() {
       <main className={styles.mainTree}>
         {/* Central Hub / AI Blob */}
         <div className={styles.hubContainer}>
-          <div className={`${engineStyles.blobWrapper} ${engineStyles.charThinking}`}>
+          <div className={`${engineStyles.blobWrapper} ${completedAgents < 3 ? engineStyles.charThinking : ''}`}>
             <div className={engineStyles.orbit1} />
             <div className={engineStyles.orbit2} />
             <div className={engineStyles.assistantBlob} />
