@@ -334,7 +334,7 @@
 
 .contextSidebar {
   flex: 1;
-  max-width: 380px;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
   padding: 40px 0 40px 40px;
@@ -469,6 +469,8 @@
 .glassPanel {
   width: 100%;
   max-width: 800px;
+  height: 45vh;
+  min-height: 320px;
   max-height: 100%;
   display: flex;
   flex-direction: column;
@@ -535,6 +537,28 @@
   text-align: center;
   position: relative;
   width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-right: 8px; /* For scrollbar breathing room */
+}
+
+/* Custom scrollbar for question block */
+.questionBlock::-webkit-scrollbar {
+  width: 4px;
+}
+.questionBlock::-webkit-scrollbar-track {
+  background: transparent;
+}
+.questionBlock::-webkit-scrollbar-thumb {
+  background: rgba(201, 168, 76, 0.2);
+  border-radius: 4px;
+}
+.questionBlock::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 168, 76, 0.4);
 }
 
 .questionLabel {
@@ -585,6 +609,7 @@
   align-items: center;
   position: relative;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .actionRow {
