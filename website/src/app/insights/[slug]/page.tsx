@@ -38,7 +38,9 @@ import {
   DecisionRouteMapInfographic,
   DecisionRecordCardInfographic,
   OperatingSignalLedgerInfographic,
-  PresenceBriefCanvasInfographic
+  PresenceBriefCanvasInfographic,
+  ShadowAiRouteInfographic,
+  WorkflowAdoptionRhythmInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -209,6 +211,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         }
         if (paragraph === '[infographic:presence-brief-canvas]') {
           return <PresenceBriefCanvasInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:shadow-ai-route]') {
+          return <ShadowAiRouteInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:workflow-adoption-rhythm]') {
+          return <WorkflowAdoptionRhythmInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);

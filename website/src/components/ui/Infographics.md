@@ -191,6 +191,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: six-item checklist for signal, source workflow, retained evidence, claim boundary, owner interpretation, and presence format.
 * **Selection Criteria**: Choose when post explains documentation as brand infrastructure or bridges internal systems into public content.
 
+## 24. Shadow AI Route (Visible Adoption Comparison)
+* **Component Name**: `ShadowAiRouteInfographic`
+* **Trigger String**: `[infographic:shadow-ai-route]`
+* **Best Used For**: Contrasting private AI shortcuts with named, reviewable workflow adoption.
+* **Visuals**: two vertical flows comparing shadow usage against visible workflow route, owner, review rule, and write-back.
+* **Selection Criteria**: Choose when post explains that AI use needs workflow visibility before it becomes shared adoption.
+
+## 25. Workflow Adoption Rhythm (Adoption Pipeline)
+* **Component Name**: `WorkflowAdoptionRhythmInfographic`
+* **Trigger String**: `[infographic:workflow-adoption-rhythm]`
+* **Best Used For**: Showing how informal AI use becomes a repeatable workflow support pattern.
+* **Visuals**: four-step horizontal pipeline from workflow naming to allowed support, boundary review, and write-back.
+* **Selection Criteria**: Choose when post needs a lightweight operating rhythm for team adoption, enablement, or AI-assisted work.
+
 ## Decision Flowchart for Content Creators
 
 Use the following mental model to choose the template:

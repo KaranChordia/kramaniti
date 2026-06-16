@@ -163,6 +163,99 @@ export function PresenceBriefCanvasInfographic() {
   );
 }
 
+export function ShadowAiRouteInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Shadow Use vs. Visible Route</div>
+      <div className={styles.comparisonGrid}>
+        <div className={styles.wrongWay}>
+          <div className={styles.wayLabel}>
+            <CircleAlert className={styles.labelIconDanger} size={16} />
+            Shadow AI use
+          </div>
+          <div className={styles.flow}>
+            <div className={`${styles.node} ${styles.nodeBroken}`}>Private prompt</div>
+            <ArrowDown className={styles.arrow} size={18} />
+            <div className={`${styles.node} ${styles.nodeBroken}`}>Unreviewed output</div>
+            <ArrowDown className={styles.arrow} size={18} />
+            <div className={`${styles.node} ${styles.nodeDanger}`}>No retained route</div>
+          </div>
+        </div>
+
+        <div className={styles.rightWay}>
+          <div className={styles.wayLabel}>
+            <ShieldCheck className={styles.labelIconGold} size={16} />
+            Visible workflow route
+          </div>
+          <div className={styles.flow}>
+            <div className={`${styles.node} ${styles.nodeGold}`}>Named workflow</div>
+            <ArrowDown className={styles.arrowGold} size={18} />
+            <div className={`${styles.node} ${styles.nodeGold}`}>Human owner and review rule</div>
+            <ArrowDown className={styles.arrowGold} size={18} />
+            <div className={`${styles.node} ${styles.nodeSolid}`}>Approved write-back record</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function WorkflowAdoptionRhythmInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Workflow Adoption Rhythm</div>
+      <div className={styles.pipelineContainer}>
+        <div className={styles.pipelineNode}>
+          <div className={styles.pipelineStep}>01</div>
+          <div className={styles.pipelineContent}>
+            <div className={styles.pipelineNodeTitle}>Name the workflow</div>
+            <p className={styles.pipelineNodeDesc}>Make the business route visible before tool usage spreads.</p>
+          </div>
+        </div>
+
+        <div className={styles.pipelineArrow}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.pipelineNode}>
+          <div className={styles.pipelineStep}>02</div>
+          <div className={styles.pipelineContent}>
+            <div className={styles.pipelineNodeTitle}>Define allowed support</div>
+            <p className={styles.pipelineNodeDesc}>Clarify what AI may draft, summarize, check, or suggest.</p>
+          </div>
+        </div>
+
+        <div className={styles.pipelineArrow}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.pipelineNode}>
+          <div className={styles.pipelineStep}>03</div>
+          <div className={styles.pipelineContent}>
+            <div className={styles.pipelineNodeTitle}>Review the boundary</div>
+            <p className={styles.pipelineNodeDesc}>Keep judgment, exception handling, and approval with a person.</p>
+          </div>
+        </div>
+
+        <div className={styles.pipelineArrow}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.pipelineNode} ${styles.pipelineNodeHighlight}`}>
+          <div className={styles.pipelineStepHighlight}>04</div>
+          <div className={styles.pipelineContent}>
+            <div className={styles.pipelineNodeTitleHighlight}>Write back learning</div>
+            <p className={styles.pipelineNodeDescHighlight}>Return approved outputs and exceptions to the system of record.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // 2. The Priority Pyramid (Layered Stack)
 export function TechStackInfographic() {
   return (
