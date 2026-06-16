@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft } from 'lucide-react';
+import { X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import styles from './ReportReader.module.css';
@@ -20,36 +20,36 @@ export default function ReportReader({ report, onClose }: ReportReaderProps) {
   const { playClick } = useAudioEngine();
 
   return (
-    <div className={styles.readerContainer}>
-      <div className={styles.readerHeader}>
-        <button 
-          className={styles.backButton} 
-          onClick={() => { playClick(); onClose(); }}
-        >
-          <ChevronLeft size={20} />
-          <span>Back to Blueprint Grid</span>
-        </button>
-        <div className={styles.agentInfo}>
+    <div className={styles.readerCanvasOverlay}>
+      <button 
+        className={styles.closeFloatingBtn} 
+        onClick={() => { playClick(); onClose(); }}
+        aria-label="Close report"
+      >
+        <X size={24} />
+      </button>
+
+      <div className={styles.floatingReportCard}>
+        <div className={styles.cardHeader}>
           <Image 
             src="/assets/brand/kramaniti-mark-gold.png" 
             alt="Kramaniti" 
-            width={32} 
-            height={32} 
+            width={48} 
+            height={48} 
             className={styles.kramanitiLogo} 
           />
-          <div className={styles.divider} />
           <div className={`${styles.agentIcon} ${styles[`blob${report.agentId}`]}`}>
             {report.icon}
           </div>
-          <h2>{report.title} Report</h2>
+          <h2>{report.title} Blueprint</h2>
         </div>
-      </div>
 
-      <div className={styles.readerContentWrapper}>
-        <div className={styles.readerContent}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {report.content}
-          </ReactMarkdown>
+        <div className={styles.cardBody}>
+          <div className={styles.markdownWrapper}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {report.content}
+            </ReactMarkdown>
+          </div>
         </div>
       </div>
     </div>
