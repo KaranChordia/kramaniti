@@ -426,15 +426,21 @@ input, textarea, select {
 /* ---------- Global Shockwave Effect ---------- */
 @keyframes shockwave-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.8);
+    box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.4), 
+                0 0 0 0 rgba(201, 168, 76, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 10px 15px rgba(201, 168, 76, 0.1), 
+                0 0 5px 5px rgba(201, 168, 76, 0.2);
   }
   100% {
-    box-shadow: 0 0 0 20px rgba(201, 168, 76, 0);
+    box-shadow: 0 0 20px 30px rgba(201, 168, 76, 0), 
+                0 0 10px 15px rgba(201, 168, 76, 0);
   }
 }
 
 .shockwave-active {
-  animation: shockwave-pulse 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+  animation: shockwave-pulse 1s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
 }
 
 /* ---------- Button Push Effect ---------- */
