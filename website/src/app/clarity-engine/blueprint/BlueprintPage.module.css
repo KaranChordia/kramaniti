@@ -20,7 +20,9 @@
 
 @keyframes drawLine {
   0% { stroke-dasharray: 0, 1000; opacity: 0; }
-  100% { stroke-dasharray: 6, 6; opacity: 1; }
+  30% { stroke-dasharray: 6, 6; opacity: 1; }
+  70% { stroke-dasharray: 6, 6; opacity: 1; }
+  100% { stroke-dasharray: 6, 6; opacity: 0; }
 }
 
 @keyframes fadeUpItem {
@@ -63,7 +65,7 @@
 
 .connectorLinePath {
   opacity: 0;
-  animation: drawLine 1.5s ease-out forwards;
+  animation: drawLine 3s ease-in-out forwards;
 }
 
 /* Agents Grid */

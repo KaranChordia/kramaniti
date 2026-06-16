@@ -110,9 +110,9 @@ export default function BlueprintPage() {
               <stop offset="100%" stopColor="rgba(201, 168, 76, 0.1)" />
             </linearGradient>
           </defs>
-          <path className={styles.connectorLinePath} style={{ animationDelay: '1.2s' }} d="M 600 0 C 600 50, 200 50, 200 100" fill="none" stroke="url(#lineGrad)" strokeWidth="2" strokeDasharray="6 6" />
+          <path className={styles.connectorLinePath} style={{ animationDelay: '1.2s' }} d="M 600 0 L 200 100" fill="none" stroke="url(#lineGrad)" strokeWidth="2" strokeDasharray="6 6" />
           <path className={styles.connectorLinePath} style={{ animationDelay: '1.4s' }} d="M 600 0 L 600 100" fill="none" stroke="url(#lineGrad)" strokeWidth="2" strokeDasharray="6 6" />
-          <path className={styles.connectorLinePath} style={{ animationDelay: '1.6s' }} d="M 600 0 C 600 50, 1000 50, 1000 100" fill="none" stroke="url(#lineGrad)" strokeWidth="2" strokeDasharray="6 6" />
+          <path className={styles.connectorLinePath} style={{ animationDelay: '1.6s' }} d="M 600 0 L 1000 100" fill="none" stroke="url(#lineGrad)" strokeWidth="2" strokeDasharray="6 6" />
         </svg>
 
         {/* 3 Agents */}
