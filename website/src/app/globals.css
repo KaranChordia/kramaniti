@@ -440,7 +440,7 @@ input, textarea, select {
 }
 
 .shockwave-active {
-  animation: shockwave-pulse 1s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+  animation: shockwave-pulse 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
 }
 
 /* ---------- Button Push Effect ---------- */
