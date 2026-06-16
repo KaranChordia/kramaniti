@@ -202,7 +202,7 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
           className={styles.fullWidthBtn} 
           onClick={(e) => { e.stopPropagation(); playClick(); onViewReport?.(content); }}
         >
-          <span>View Detailed Report</span>
+          <span>Read Report</span>
           <ArrowRight size={16} />
         </button>
       )}
