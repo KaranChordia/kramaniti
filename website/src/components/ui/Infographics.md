@@ -205,6 +205,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: four-step horizontal pipeline from workflow naming to allowed support, boundary review, and write-back.
 * **Selection Criteria**: Choose when post needs a lightweight operating rhythm for team adoption, enablement, or AI-assisted work.
 
+## 26. Escalation Clarity Map (Customer Handoff Comparison)
+* **Component Name**: `EscalationClarityMapInfographic`
+* **Trigger String**: `[infographic:escalation-clarity-map]`
+* **Best Used For**: Contrasting assistant-first customer support with an escalation-ready service route.
+* **Visuals**: two vertical flows comparing thin AI handoff against issue threshold, human owner, context transfer, and resolution write-back.
+* **Selection Criteria**: Choose when a post explains customer-facing AI, service handoffs, human escalation, or trust recovery.
+
+## 27. Service Recovery Loop (Escalation Control Spine)
+* **Component Name**: `ServiceRecoveryLoopInfographic`
+* **Trigger String**: `[infographic:service-recovery-loop]`
+* **Best Used For**: Showing how customer-service escalation turns into retained operating learning.
+* **Visuals**: four-step horizontal spine from escalation detection to context transfer, human recovery, and system write-back.
+* **Selection Criteria**: Choose when the essay needs a recovery loop for customer-facing workflows, support operations, or service-quality reviews.
+
 ## Decision Flowchart for Content Creators
 
 Use the following mental model to choose the template:

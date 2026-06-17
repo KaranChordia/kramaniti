@@ -256,6 +256,99 @@ export function WorkflowAdoptionRhythmInfographic() {
   );
 }
 
+export function EscalationClarityMapInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Escalation Clarity Map</div>
+      <div className={styles.comparisonGrid}>
+        <div className={styles.wrongWay}>
+          <div className={styles.wayLabel}>
+            <CircleAlert className={styles.labelIconDanger} size={16} />
+            Assistant-first launch
+          </div>
+          <div className={styles.flow}>
+            <div className={`${styles.node} ${styles.nodeBroken}`}>Fast answer</div>
+            <ArrowDown className={styles.arrow} size={18} />
+            <div className={`${styles.node} ${styles.nodeBroken}`}>Thin context transfer</div>
+            <ArrowDown className={styles.arrow} size={18} />
+            <div className={`${styles.node} ${styles.nodeDanger}`}>Customer repeats the issue</div>
+          </div>
+        </div>
+
+        <div className={styles.rightWay}>
+          <div className={styles.wayLabel}>
+            <ShieldCheck className={styles.labelIconGold} size={16} />
+            Escalation-ready route
+          </div>
+          <div className={styles.flow}>
+            <div className={`${styles.node} ${styles.nodeGold}`}>Issue type and threshold</div>
+            <ArrowDown className={styles.arrowGold} size={18} />
+            <div className={`${styles.node} ${styles.nodeGold}`}>Human owner receives context</div>
+            <ArrowDown className={styles.arrowGold} size={18} />
+            <div className={`${styles.node} ${styles.nodeSolid}`}>Resolution writes back to record</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function ServiceRecoveryLoopInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Service Recovery Loop</div>
+      <div className={styles.spineGrid}>
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>01</div>
+          <div className={styles.spineTitle}>Detect escalation</div>
+          <p className={styles.spineCopy}>
+            Watch for low confidence, policy limits, repeated attempts, or visible customer frustration.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>02</div>
+          <div className={styles.spineTitle}>Carry context</div>
+          <p className={styles.spineCopy}>
+            Transfer customer goal, attempted answer, source record, and risk reason to the owner.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>03</div>
+          <div className={styles.spineTitle}>Recover with judgment</div>
+          <p className={styles.spineCopy}>
+            A person handles nuance, trust repair, exceptions, and final communication.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.spineCard} ${styles.spineCardHighlight}`}>
+          <div className={styles.spineStepHighlight}>04</div>
+          <div className={styles.spineTitleHighlight}>Retain learning</div>
+          <p className={styles.spineCopyHighlight}>
+            Write the final resolution, exception, and improved route back into the system.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // 2. The Priority Pyramid (Layered Stack)
 export function TechStackInfographic() {
   return (

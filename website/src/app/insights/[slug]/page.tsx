@@ -40,7 +40,9 @@ import {
   OperatingSignalLedgerInfographic,
   PresenceBriefCanvasInfographic,
   ShadowAiRouteInfographic,
-  WorkflowAdoptionRhythmInfographic
+  WorkflowAdoptionRhythmInfographic,
+  EscalationClarityMapInfographic,
+  ServiceRecoveryLoopInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -217,6 +219,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         }
         if (paragraph === '[infographic:workflow-adoption-rhythm]') {
           return <WorkflowAdoptionRhythmInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:escalation-clarity-map]') {
+          return <EscalationClarityMapInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:service-recovery-loop]') {
+          return <ServiceRecoveryLoopInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
