@@ -176,30 +176,27 @@ export default function ClarityEnginePage() {
   const [isTypingPulse, setIsTypingPulse] = useState(false);
   const [isTasksOpen, setIsTasksOpen] = useState(false);
   const [isBlobLoaded, setIsBlobLoaded] = useState(false);
+  const [isIntroActive, setIsIntroActive] = useState(true);
   const transitionTimers = useRef<number[]>([]);
   const typingTimer = useRef<number | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const submitAnswerRef = useRef<(overrideAnswer?: string) => Promise<void>>(async () => {});
 
-  const { startAmbient, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
+  const { startAmbient, playIntro, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
   const { theme, toggleTheme } = useKramanitiTheme();
   const [hasLoadedStoredSession, setHasLoadedStoredSession] = useState(false);
 
-  // Attempt to start ambient audio immediately upon component mount.
-  // This will succeed if the user navigated from another page (due to browser autoplay policies),
-  // but if they hard-refreshed, it will queue up and start on their first interaction.
   useEffect(() => {
-    startAmbient();
-  }, [startAmbient]);
+    playIntro();
 
-  // Ambient audio will start automatically upon any click anywhere on the page surface or on buttons
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
+    const introTimer = window.setTimeout(() => {
+      setIsIntroActive(false);
       setIsBlobLoaded(true);
-    }, 1500);
-    return () => window.clearTimeout(timer);
-  }, []);
+      startAmbient();
+    }, 10000);
+
+    return () => window.clearTimeout(introTimer);
+  }, [playIntro, startAmbient]);
 
   const deferredDraft = useDeferredValue(draft);
   const completion = session.synthesis.completion;
@@ -552,7 +549,9 @@ export default function ClarityEnginePage() {
 
   // Determine Character State
   let charStateClass = styles.charIdle;
-  if (isStreaming) {
+  if (isIntroActive) {
+    charStateClass = styles.charIntro;
+  } else if (isStreaming) {
     charStateClass = styles.charThinking;
   } else if (isTypingPulse) {
     charStateClass = styles.charTypingPulse;
@@ -577,7 +576,7 @@ export default function ClarityEnginePage() {
   };
 
   return (
-    <div className={styles.canvas} onClick={startAmbient}>
+    <div className={`${styles.canvas} ${isIntroActive ? styles.introActive : ''}`} onClick={startAmbient}>
       {/* Background Ambience */}
       <div className={styles.canvasBgGlow} />
       <div className={styles.canvasNoise} />
@@ -661,14 +660,30 @@ export default function ClarityEnginePage() {
           {/* Central Character Entity */}
           <div className={styles.characterContainer}>
             <div className={`${styles.blobWrapper} ${charStateClass}`}>
+              <div className={styles.introHalo} aria-hidden="true" />
+              <div className={styles.introScanLine} aria-hidden="true" />
+              <div className={`${styles.introPrinciple} ${styles.introPrincipleStrategy}`} aria-hidden="true">
+                Strategy
+              </div>
+              <div className={`${styles.introPrinciple} ${styles.introPrincipleSystems}`} aria-hidden="true">
+                Systems
+              </div>
+              <div className={`${styles.introPrinciple} ${styles.introPrinciplePresence}`} aria-hidden="true">
+                Presence
+              </div>
               <div className={styles.orbit1} />
               <div className={styles.orbit2} />
               <div className={styles.assistantBlob} />
             </div>
+            <div className={styles.introCaption} aria-hidden={!isIntroActive}>
+              <span>Kramaniti Clarity Engine</span>
+              <strong>Strategy before tools.</strong>
+              <p>Systems before scale. Content after clarity.</p>
+            </div>
           </div>
 
           {/* Main Stage (Glass Panel with Questions & Input) */}
-          <section className={styles.mainStage} style={{ opacity: isBlobLoaded ? 1 : 0, transition: 'opacity 0.8s ease', pointerEvents: isBlobLoaded ? 'auto' : 'none' }}>
+          <section className={styles.mainStage} style={{ opacity: isBlobLoaded && !isIntroActive ? 1 : 0, transition: 'opacity 0.8s ease', pointerEvents: isBlobLoaded && !isIntroActive ? 'auto' : 'none' }}>
             <div className={panelClassName}>
 
               {/* Active Question with Blur-Typing Effect */}

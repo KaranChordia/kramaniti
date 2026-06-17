@@ -10,12 +10,16 @@ let globalAmbientSource: AudioBufferSourceNode | null = null;
 let globalClickBuffer: AudioBuffer | null = null;
 let globalAmbientBuffer: AudioBuffer | null = null;
 let globalSuccessBuffer: AudioBuffer | null = null;
+let globalIntroBuffer: AudioBuffer | null = null;
+let globalIntroSource: AudioBufferSourceNode | null = null;
 
 let isInitialized = false;
 let globalShouldPlayAmbient = false;
+let globalShouldPlayIntro = false;
 let globalBuffersLoaded = false;
 let globalIsAmbientMuted = false;
 let globalAmbientRetryTimers: number[] = [];
+let globalIntroRetryTimers: number[] = [];
 
 // Simple pub/sub to sync mute state across UI components
 const muteListeners = new Set<() => void>();
@@ -42,6 +46,25 @@ function scheduleAmbientStartupRetries(attemptStart: () => void) {
   });
 }
 
+function scheduleIntroStartupRetries(attemptStart: () => void) {
+  if (typeof window === 'undefined' || globalIntroRetryTimers.length > 0) return;
+
+  globalIntroRetryTimers = [250, 1000, 2500].map((delay) => {
+    const timer = window.setTimeout(() => {
+      globalIntroRetryTimers = globalIntroRetryTimers.filter((activeTimer) => activeTimer !== timer);
+      if (!globalShouldPlayIntro || globalIntroSource) return;
+
+      if (globalCtx?.state === 'suspended') {
+        globalCtx.resume().catch(() => {});
+      }
+
+      attemptStart();
+    }, delay);
+
+    return timer;
+  });
+}
+
 type BrowserAudioContext = typeof AudioContext;
 type WindowWithWebkitAudio = Window & {
   webkitAudioContext?: BrowserAudioContext;
@@ -53,6 +76,7 @@ const getAudioContextClass = (): BrowserAudioContext | undefined =>
 export function useAudioEngine() {
   const [isAmbientMuted, setIsAmbientMuted] = useState(globalIsAmbientMuted);
   const startAmbientRef = useRef<() => void>(() => {});
+  const playIntroRef = useRef<() => void>(() => {});
 
   // Sync mute state
   useEffect(() => {
@@ -117,21 +141,61 @@ export function useAudioEngine() {
     startAmbientRef.current = startAmbient;
   }, [startAmbient]);
 
+  const playIntro = useCallback(() => {
+    globalShouldPlayIntro = true;
+    initAudio();
+    scheduleIntroStartupRetries(() => playIntroRef.current());
+    if (!globalCtx || !globalIntroBuffer || globalIntroSource) return;
+
+    if (globalCtx.state === 'suspended') {
+      globalCtx.resume().catch(() => {});
+    }
+
+    const ctx = globalCtx;
+    const source = ctx.createBufferSource();
+    source.buffer = globalIntroBuffer;
+
+    const gain = ctx.createGain();
+    gain.gain.value = globalIsAmbientMuted ? 0 : 0.82;
+
+    source.connect(gain);
+    gain.connect(ctx.destination);
+    source.start(0);
+
+    const fadeStart = ctx.currentTime + 9.2;
+    gain.gain.setValueAtTime(gain.gain.value, fadeStart);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 10);
+    source.stop(ctx.currentTime + 10.05);
+
+    source.onended = () => {
+      globalIntroSource = null;
+      gain.disconnect();
+    };
+
+    globalIntroSource = source;
+  }, [initAudio]);
+
+  useEffect(() => {
+    playIntroRef.current = playIntro;
+  }, [playIntro]);
+
   // Load the audio files globally once
   useEffect(() => {
     if (globalBuffersLoaded) return;
 
     const loadSounds = async () => {
       try {
-        const [clickRes, ambientRes, successRes] = await Promise.all([
+        const [clickRes, ambientRes, successRes, introRes] = await Promise.all([
           fetch('/assets/audio/click.aac'),
           fetch('/assets/audio/ambient.aac'),
-          fetch('/assets/audio/success.aac')
+          fetch('/assets/audio/success.aac'),
+          fetch('/assets/audio/vibes-intro.aac')
         ]);
 
         const clickArrayBuffer = await clickRes.arrayBuffer();
         const ambientArrayBuffer = await ambientRes.arrayBuffer();
         const successArrayBuffer = await successRes.arrayBuffer();
+        const introArrayBuffer = await introRes.arrayBuffer();
 
         // Ensure context exists before decoding
         if (!globalCtx) {
@@ -142,15 +206,21 @@ export function useAudioEngine() {
         }
 
         if (globalCtx) {
-          const [clickBuf, ambientBuf, successBuf] = await Promise.all([
+          const [clickBuf, ambientBuf, successBuf, introBuf] = await Promise.all([
             globalCtx.decodeAudioData(clickArrayBuffer),
             globalCtx.decodeAudioData(ambientArrayBuffer),
-            globalCtx.decodeAudioData(successArrayBuffer)
+            globalCtx.decodeAudioData(successArrayBuffer),
+            globalCtx.decodeAudioData(introArrayBuffer)
           ]);
           globalClickBuffer = clickBuf;
           globalAmbientBuffer = ambientBuf;
           globalSuccessBuffer = successBuf;
+          globalIntroBuffer = introBuf;
           globalBuffersLoaded = true;
+
+          if (globalShouldPlayIntro && !globalIntroSource) {
+            playIntro();
+          }
 
           // Re-trigger ambient if it was requested before buffers loaded
           if (globalShouldPlayAmbient && !globalAmbientGain) {
@@ -163,7 +233,7 @@ export function useAudioEngine() {
     };
 
     void loadSounds();
-  }, [startAmbient]);
+  }, [playIntro, startAmbient]);
 
   const stopAmbient = useCallback(() => {
     if (!globalCtx || !globalAmbientGain || !globalAmbientSource) return;
@@ -254,6 +324,7 @@ export function useAudioEngine() {
     initAudio,
     startAmbient,
     stopAmbient,
+    playIntro,
     playClick,
     playSuccess,
     isAmbientMuted,
