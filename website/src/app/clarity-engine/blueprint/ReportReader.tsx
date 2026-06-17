@@ -6,6 +6,15 @@ import styles from './ReportReader.module.css';
 import { useAudioEngine } from '@/hooks/useAudioEngine';
 import Image from 'next/image';
 
+const normalizeReportMarkdown = (content: string) =>
+  content
+    .replace(/^[ \t]*#{1,6}[ \t]*$/gm, '')
+    .replace(/([^\n#])(#{2,6}\s+)/g, '$1\n\n$2')
+    .replace(/([^\n])(-\s+)/g, '$1\n$2')
+    .replace(/(#{2,6}\s+[^\n#-]+?)(#{2,6}\s+)/g, '$1\n\n$2')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
 interface ReportReaderProps {
   report: {
     agentId: string;
@@ -18,6 +27,7 @@ interface ReportReaderProps {
 
 export default function ReportReader({ report, onClose }: ReportReaderProps) {
   const { playClick } = useAudioEngine();
+  const normalizedContent = normalizeReportMarkdown(report.content);
 
   return (
     <div 
@@ -37,8 +47,8 @@ export default function ReportReader({ report, onClose }: ReportReaderProps) {
           <Image 
             src="/assets/brand/kramaniti-mark-gold.png" 
             alt="Kramaniti" 
-            width={48} 
-            height={48} 
+            width={144}
+            height={144}
             className={styles.kramanitiLogo} 
           />
           <div className={styles.agentIcon}>
@@ -50,7 +60,7 @@ export default function ReportReader({ report, onClose }: ReportReaderProps) {
         <div className={styles.cardBody}>
           <div className={styles.markdownWrapper}>
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {report.content}
+              {normalizedContent}
             </ReactMarkdown>
           </div>
         </div>

@@ -2,13 +2,14 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, Compass, Layers, Megaphone, Loader2, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, Compass, Layers, Megaphone, Loader2, Moon, Sun, Volume2, VolumeX } from 'lucide-react';
 import styles from './BlueprintPage.module.css';
 import engineStyles from '../ClarityEngine.module.css';
 import BlueprintStreamer from '../BlueprintStreamer';
 import { type BlueprintRequestBody } from '@/lib/clarity-engine/blueprintStreamer';
 import { useAudioEngine } from '@/hooks/useAudioEngine';
 import ReportReader from './ReportReader';
+import { useKramanitiTheme } from '@/hooks/useKramanitiTheme';
 
 interface ActiveReport {
   agentId: string;
@@ -19,32 +20,40 @@ interface ActiveReport {
 
 export default function BlueprintPage() {
   const router = useRouter();
-  const [payload] = useState<BlueprintRequestBody | null>(() => {
-    if (typeof window === 'undefined') return null;
-
-    const sessionData = sessionStorage.getItem('kramaniti-blueprint-session');
-    if (!sessionData) return null;
-
-    try {
-      return JSON.parse(sessionData) as BlueprintRequestBody;
-    } catch (err) {
-      console.error("Failed to parse blueprint session data", err);
-      return null;
-    }
-  });
+  const [payload, setPayload] = useState<BlueprintRequestBody | null>(null);
+  const [hasLoadedPayload, setHasLoadedPayload] = useState(false);
   const [completedAgents, setCompletedAgents] = useState(0);
   const [activeReport, setActiveReport] = useState<ActiveReport | null>(null);
   const { playSuccess, startAmbient, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
+  const { theme, toggleTheme } = useKramanitiTheme();
 
   useEffect(() => {
     startAmbient();
   }, [startAmbient]);
 
   useEffect(() => {
-    if (!payload) {
+    const timer = window.setTimeout(() => {
+      const sessionData = sessionStorage.getItem('kramaniti-blueprint-session');
+
+      if (sessionData) {
+        try {
+          setPayload(JSON.parse(sessionData) as BlueprintRequestBody);
+        } catch (err) {
+          console.error("Failed to parse blueprint session data", err);
+        }
+      }
+
+      setHasLoadedPayload(true);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (hasLoadedPayload && !payload) {
       router.push('/clarity-engine');
     }
-  }, [payload, router]);
+  }, [hasLoadedPayload, payload, router]);
 
   const handleAgentComplete = useCallback(() => {
     setCompletedAgents(prev => {
@@ -56,7 +65,7 @@ export default function BlueprintPage() {
     });
   }, [playSuccess]);
 
-  if (!payload) {
+  if (!hasLoadedPayload || !payload) {
     return (
       <div className={engineStyles.canvas}>
         <div className={engineStyles.canvasBgGlow} />
@@ -76,20 +85,38 @@ export default function BlueprintPage() {
       
       <header className={styles.header}>
         <div className={styles.headerLeft}>
-          <button className={styles.backBtn} onClick={(e) => { e.stopPropagation(); playClick(); router.push('/clarity-engine'); }}>
+          <button
+            className={styles.backBtn}
+            onClick={(e) => { e.stopPropagation(); playClick(); router.push('/clarity-engine'); }}
+            aria-label="Back to Clarity Engine"
+            title="Back to Clarity Engine"
+          >
             <ChevronLeft size={20} />
           </button>
           <h1 className={styles.headerTitle}>Your Growth Blueprint</h1>
         </div>
-        <div className={styles.headerActions} style={{ display: 'flex', gap: '8px', zIndex: 10 }}>
+        <div className={styles.headerActions}>
+          <button
+            className={styles.headerIconBtn}
+            onClick={(e) => {
+              e.stopPropagation();
+              playClick();
+              toggleTheme();
+            }}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+          >
+            {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+          </button>
           <button 
-            className={engineStyles.actionBtn} 
+            className={styles.headerIconBtn}
             onClick={(e) => { 
               e.stopPropagation();
               playClick(); 
               toggleAmbientMute(); 
             }}
             title={isAmbientMuted ? "Unmute Ambient Audio" : "Mute Ambient Audio"}
+            aria-label={isAmbientMuted ? "Unmute Ambient Audio" : "Mute Ambient Audio"}
           >
             {isAmbientMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
           </button>

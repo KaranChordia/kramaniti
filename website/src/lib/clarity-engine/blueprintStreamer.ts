@@ -22,67 +22,91 @@ function buildLocalBlueprintFallback(systemPrompt: string, body: BlueprintReques
     'The user is still clarifying the first useful business signal.';
 
   if (systemPrompt.includes('Strategy Director')) {
-    return `### Strategy & Clarity Pillar
+    return `### Strategy & Clarity Action Plan
 
 **Current signal:** ${strongestSignal}
 
-#### Positioning
-- Start with the clearest customer, problem, and outcome before naming tools or channels.
-- Frame the offer around one practical transformation the buyer can understand quickly.
+#### Strategic Diagnosis
+- The real issue is not choosing tools. The user needs a sharper buyer, problem, and operating promise before implementation.
+- Treat the current signal as the first hypothesis to test, not as a finished offer.
 
-#### Core Problem
-- Identify the repeated friction behind the idea: unclear buyer, scattered workflow, weak offer definition, or inconsistent follow-through.
-- Treat unknowns as assumptions to test, not as claims to publish.
+#### Recommended Positioning
+- Frame the work around one practical operating improvement the buyer can understand quickly.
+- Use a promise that connects the buyer's pain to a clearer workflow or decision route.
 
-#### Audience Clarity
-- Define who feels this problem often enough to pay for a better operating route.
-- Capture the moment when they actively search for help.
+#### First Decisions
+- Define the exact buyer who feels the problem often enough to act.
+- Name the before-state in one sentence.
+- Decide what proof would make the promise believable without inventing claims.
 
-#### Strategic Direction
-- Write a one-line promise, a first paid workflow, and the proof needed before scaling the offer.
+#### 7-Day Action Plan
+- Write one problem statement, one buyer sentence, and one operating promise.
+- Review 5 recent conversations, enquiries, or notes to find repeated language.
+- Draft one offer page outline before creating more content or adding tools.
+
+#### Risks To Avoid
+- Do not lead with AI if the buyer's problem is actually clarity, workflow, or trust.
+- Do not scale content before the strategic spine is clear.
 - Keep the sequence: strategy before tools, systems before scale, content after clarity.`;
   }
 
   if (systemPrompt.includes('Operations & Systems Architect')) {
-    return `### Systems & Workflow Pillar
+    return `### Systems & Workflow Action Plan
 
 **Current signal:** ${strongestSignal}
 
-#### Workflow Route
-- Map the work from first signal to delivered outcome.
-- Separate the steps that need human judgment from the steps that can be assisted by AI.
+#### Workflow Diagnosis
+- The first systems issue is usually not lack of software. It is unclear intake, weak handoff, scattered context, or repeated manual synthesis.
+- Map the work from first signal to delivered outcome before choosing automation.
 
-#### Friction Points
-- Look for repeated manual collection, unclear decisions, scattered notes, and missing handoffs.
-- Turn the first recurring bottleneck into a small operating system before adding more tools.
+#### First Operating System
+- Build one reusable intake and synthesis path for the recurring work.
+- The first artifact should capture context, decision status, next action, owner, and handoff notes.
 
-#### Human + AI Boundary
-- Let AI draft, summarize, classify, and prepare options.
-- Keep positioning, promises, approvals, and sensitive decisions human-led.
+#### Human + AI Rules
+- Human-led: diagnosis, promise, approvals, sensitive decisions, and final recommendations.
+- AI-assisted: summarizing, classifying, drafting, pattern extraction, and preparing options.
+- Automate later only when the handoff rule is already clear.
 
-#### First Build
-- Create one reusable intake, one synthesis view, and one handoff artifact that can be used repeatedly.`;
+#### 14-Day Build Plan
+- Days 1-3: map the current workflow and mark every handoff.
+- Days 4-7: design one intake/synthesis artifact.
+- Days 8-11: test it on 3 real cases.
+- Days 12-14: revise the artifact and document human/AI rules.
+
+#### Risks To Avoid
+- Do not automate a messy process before the decision logic is visible.
+- Do not add tools that create another place to check without improving the handoff.`;
   }
 
-  return `### Content & Presence Pillar
+  return `### Content & Presence Action Plan
 
 **Current signal:** ${strongestSignal}
 
-#### Starting Platform
-- Begin where the buyer already looks for context, trust, or proof.
-- Choose one primary channel before spreading the message across formats.
+#### Presence Diagnosis
+- The presence gap is usually a trust gap: the buyer cannot yet see how the thinking, workflow, or outcome works.
+- Content should make the operating clarity visible, not decorate an unclear offer.
 
-#### Cinematic Narrative
-- Show the before-state, the operating logic, and the sharper after-state.
-- Avoid tool-led claims. Make the business clarity visible.
+#### Core Narrative
+- Repeat this structure: the messy before-state, the operating logic, and the sharper next step.
+- Keep AI as infrastructure unless the buyer specifically cares about the AI method.
 
-#### Content Engine
-- Turn the clarified workflow into founder posts, short explainers, proof-safe walkthroughs, and a practical offer page.
-- Reuse the same strategic spine across channels so presence follows the work instead of inventing a separate story.
+#### First Content Moves
+- Publish one post explaining the repeated problem.
+- Publish one walkthrough of the diagnostic process.
+- Create one proof-safe workflow map or checklist.
+- Rewrite one website section around the buyer's felt problem.
+- Turn one real operating artifact into an anonymized insight.
 
-#### 30-Day Direction
-- Publish from the problem, the process, and the first operating artifact.
-- Keep every public claim grounded in what the system can actually deliver.`;
+#### 30-Day Presence Plan
+- Week 1: clarify the core narrative and one primary channel.
+- Week 2: publish problem/process content.
+- Week 3: publish proof-safe workflow content.
+- Week 4: refine the offer page or service explainer from the strongest signal.
+
+#### Claims To Avoid
+- Do not invent metrics, testimonials, case studies, or client proof.
+- Do not promise transformation that the workflow cannot yet support.`;
 }
 
 export function createStreamingBlueprintRoute(systemPrompt: string) {
@@ -131,6 +155,12 @@ System Prompt:
 ${systemPrompt}
 
 ---
+KRAMANITI CONTEXT:
+Kramaniti is a first-principles AI systems partner. Use this sequence: strategy before tools, systems before scale, content after clarity. Keep AI human-collaborative: AI assists, humans lead. Do not invent proof, metrics, testimonials, or client claims. The output is reflective diagnostic guidance, not a sales CTA.
+
+OUTPUT STANDARD:
+Do not simply summarize the user's answers. Use the answers as raw signal and produce a practical plan of action. Every section must include recommendations, specific next actions, useful suggestions, or risks to avoid. Prefer concrete verbs such as define, map, remove, draft, test, document, publish, and review. If information is missing, name the assumption and give the next action needed to resolve it.
+
 CONTEXT FOR GENERATION:
 User Answers:
 ${JSON.stringify(body.answers, null, 2)}

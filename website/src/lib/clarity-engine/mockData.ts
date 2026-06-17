@@ -1,16 +1,15 @@
+export interface MockScenarioQuestion {
+  question: string;
+  label: string;
+  placeholder: string;
+  assistantReply: string;
+}
+
 export interface MockScenario {
   id: string;
   name: string;
-  answers: {
-    context: string;
-    workflow: string;
-    presence: string;
-  };
-  questions: {
-    workflow: string;
-    presence: string;
-    complete: string;
-  };
+  answers: Record<string, string>;
+  questions: Record<string, MockScenarioQuestion>;
   blueprint: {
     strategy: string;
     systems: string;
@@ -20,168 +19,277 @@ export interface MockScenario {
 
 export const mockScenarios: MockScenario[] = [
   {
-    id: "saas-startup",
-    name: "B2B SaaS Startup",
+    id: 'founder-service-business',
+    name: 'Founder-Led Service Business',
     answers: {
-      context: "We are building an AI-powered CRM for boutique real estate agencies. The goal is to automate lead follow-ups and property matching. Our main problem is standing out against massive generic CRMs like Salesforce, and our sales cycles are too long.",
-      workflow: "Currently, our sales team manually prospects on LinkedIn, moves them to a spreadsheet, and emails them one by one. We want to automate outreach, automatically score leads based on their website activity, and auto-generate personalized email sequences.",
-      presence: "We want our brand to feel high-end, exclusive, but highly technical. We need a dark-mode website with subtle glassmorphism, clear interactive product demos, and a content engine that produces weekly case studies on how AI saves agents time."
+      phase1_clarity_goal:
+        'We are a founder-led consulting business with good expertise, but the offer feels scattered. We want clearer packaging before we create more content or add AI tools.',
+      phase2_audience_problem:
+        'The buyer is usually a founder or small leadership team. They know they need better systems and content, but they cannot tell what should be strategy, what should be workflow, and what should be marketing.',
+      phase3_current_workflow:
+        'Right now everything starts in calls and notes. We diagnose manually, write custom proposals from scratch, and then rebuild similar delivery documents every time.',
+      phase4_main_friction:
+        'The main friction is turning a messy first conversation into a clear scope. We lose time deciding what the client actually needs and what should come first.',
+      phase5_ai_boundary:
+        'Human judgment should stay in diagnosis, positioning, and final recommendations. AI could help summarize calls, identify repeated patterns, draft scopes, and prepare handoff documents.',
+      phase6_presence_proof:
+        'We want the public presence to show practical thinking: how we diagnose messy businesses, design workflows, and turn clarity into useful content without making exaggerated claims.',
     },
     questions: {
-      workflow: "Got it. Taking on legacy giants requires a completely different operational rhythm. Let's look at your current sales motions. What does a typical day look like for your sales team right now, and where is the biggest bottleneck in your pipeline?",
-      presence: "That's a very clear bottleneck. We can absolutely automate the lead enrichment and sequence generation. Finally, let's talk about perception. When a high-net-worth real estate broker lands on your platform, how do you want them to feel? What's the aesthetic or vibe you are aiming for?",
-      complete: "Excellent. I have everything I need. We have the context, the workflow constraints, and the cinematic presence goals. Generating the Blueprint..."
+      phase2_audience_problem: {
+        question: 'Who is this for, and what problem are they already feeling?',
+        label: 'Buyer Problem',
+        placeholder: 'Describe the buyer and the pain they already recognize...',
+        assistantReply:
+          'The first signal is not a tool problem. It is an offer and operating clarity problem, which means the buyer and the felt pain need to be sharper before anything scales.',
+      },
+      phase3_current_workflow: {
+        question: 'How does this work today, from first signal to delivered outcome?',
+        label: 'Current Workflow',
+        placeholder: 'Walk through the current path, even if it is messy...',
+        assistantReply:
+          'That points to a buyer who needs structure before execution. Now the operating route matters: we need to see how the work currently moves from interest to delivery.',
+      },
+      phase4_main_friction: {
+        question: 'Where is the main friction, delay, or decision confusion?',
+        label: 'Main Friction',
+        placeholder: 'Name the bottleneck, repeated delay, or unclear decision point...',
+        assistantReply:
+          'The current workflow is call-led and custom every time. That can stay premium, but the repeated decisions need a clearer system underneath.',
+      },
+      phase5_ai_boundary: {
+        question: 'Which parts need human judgment, and which parts could AI assist?',
+        label: 'AI Boundary',
+        placeholder: 'Separate judgment, approval, drafting, summarizing, routing, or automation...',
+        assistantReply:
+          'The friction is the translation layer: turning conversation into scope. This is exactly where human diagnosis should lead and AI can prepare the operating material around it.',
+      },
+      phase6_presence_proof: {
+        question: 'What trust, proof, or public presence should this create?',
+        label: 'Proof & Presence',
+        placeholder: 'Describe the confidence, proof, or narrative this should build...',
+        assistantReply:
+          'That boundary is strong. AI can support the memory, synthesis, and drafting, while the founder keeps control of diagnosis, promise, and approval.',
+      },
+      complete: {
+        question: 'I have enough context. We are ready to build the blueprint.',
+        label: 'Blueprint Ready',
+        placeholder: 'Generate the diagnostic blueprint...',
+        assistantReply:
+          'The diagnostic signal is complete: buyer, problem, workflow, friction, AI boundary, and presence direction are visible. The blueprint can now reflect how Kramaniti would think through the operating route.',
+      },
     },
     blueprint: {
-      strategy: `# Strategic Positioning Blueprint
-## 1. Core Identity & Market Position
-**The High-End Niche Authority.** You aren't competing with Salesforce; you are the bespoke, AI-native alternative for boutique real estate. Your positioning must shift from "CRM" to "Autonomous Revenue Engine for Luxury Real Estate."
+      strategy: `### Strategy & Clarity Action Plan
 
-## 2. The Core Offer
-- **Current State:** A generic AI CRM.
-- **The Shift:** "The invisible assistant that matches high-net-worth buyers to properties before they even ask."
-- **Pricing Strategy:** Premium tiered pricing based on successful matches, not just seat licenses.
+#### Strategic Diagnosis
+- The real strategic issue is not lack of expertise. It is that the offer, workflow, and content story are not yet connected into one clear operating route.
+- The buyer is a founder or leadership team that needs order before execution.
 
-## 3. Narrative Architecture
-- **The Enemy:** Bloated, generic software that requires a PhD to set up.
-- **The Promise:** Zero-friction intelligence. You open it, and your leads are already prioritized and drafted.
+#### Recommended Positioning
+- Position the offer as a **clarity-to-operating-system diagnostic** for founder-led businesses.
+- The promise should be practical: turn scattered conversations into one clear scope, workflow, and proof-safe presence direction.
 
-## 4. Growth Pipeline
-Focus entirely on high-signal outbound. Target top-100 boutique agencies in major metros with highly personalized, AI-generated teardowns of their current listing marketing.`,
-      systems: `# Operational Systems Blueprint
-## 1. Automated Outbound Engine
-Replace the manual spreadsheet process with a connected pipeline:
-- **Apollo.io / Clay:** Scrape boutique real estate firm directories and identify key brokers.
-- **Instantly.ai:** Manage cold email sequencing across multiple domains.
-- **Make.com:** Route positive replies directly into Slack with AI-generated context briefs on the prospect.
+#### First Decisions
+- Decide the one buyer profile this diagnostic is for first.
+- Decide the minimum output every first engagement should produce: scope, workflow map, or implementation brief.
+- Decide what proof can be shown safely: frameworks, anonymized maps, before/after structure, or founder thinking.
 
-## 2. Lead Scoring & Intent Tracking
-- Implement **Clearbit** or **RB2B** to deanonymize website traffic.
-- If a broker from a known boutique firm visits the pricing page, immediately alert the sales team and auto-enroll the prospect in a high-priority sequence.
+#### 7-Day Action Plan
+- Write a one-page diagnostic offer with buyer, problem, output, and next step.
+- Review the last 5 discovery calls or notes and mark repeated problems.
+- Draft one sample scope artifact that could be reused after every first conversation.
 
-## 3. Delivery Infrastructure
-- **Onboarding:** Use **Tally.so** for frictionless onboarding forms.
-- **Client Portal:** Build a white-labeled **Softr** portal where clients can track the AI's lead engagement metrics in real-time.`,
-      presence: `# Cinematic Presence Blueprint
-## 1. Visual Identity
-- **Aesthetic:** Dark mode, Obsidian backgrounds, Burnished Gold accents, and heavy use of Glassmorphism.
-- **Typography:** JetBrains Mono for data/numbers (showing technical precision) and Outfit for headings (clean, modern).
-- **Vibe:** It should feel like stepping into a high-end luxury vehicle.
+#### Risks To Avoid
+- Do not build more content before the diagnostic offer is clear.
+- Do not let AI write the promise; use AI only to prepare the raw material for founder judgment.`,
+      systems: `### Systems & Workflow Action Plan
 
-## 2. The Digital Storefront (Website)
-- **Hero Section:** No generic laptops. Show a live, interactive visualization of nodes connecting buyers to properties in real-time.
-- **Micro-interactions:** Buttons should have subtle "push" physics and gold shockwaves on click.
-- **Social Proof:** Replace standard logo walls with deeply technical, metric-driven case studies.
+#### Workflow Diagnosis
+- The workflow depends too much on founder memory after calls.
+- The repeated failure point is translating messy conversation into a consistent scope and handoff.
 
-## 3. Content Engine
-- **The "Boutique Intel" Newsletter:** A weekly deep-dive into how top 1% brokers use data to close. 
-- **Video Strategy:** Short, highly-polished screen recordings showing the AI working in real-time. No talking heads—just the product doing magic.`
-    }
+#### First Operating System
+- Build a **Discovery-to-Scope System**.
+- It should include intake questions, call summary fields, diagnosis tags, recommended route, open assumptions, and a final scope outline.
+
+#### Human + AI Rules
+- Human-led: diagnosis, positioning, recommendation, client promise, final scope.
+- AI-assisted: call summary, repeated pattern extraction, first-draft scope, checklist generation, handoff note.
+- Automate later: proposal assembly only after the scope structure is stable.
+
+#### 14-Day Build Plan
+- Days 1-3: map the current discovery-to-proposal workflow.
+- Days 4-6: create the reusable diagnostic intake and synthesis view.
+- Days 7-10: test it on 3 past opportunities.
+- Days 11-14: refine the output and write usage rules for founder review.
+
+#### Risks To Avoid
+- Do not automate proposal writing before the diagnostic logic is stable.
+- Do not create a system that only stores notes; it must produce a clear next action.`,
+      presence: `### Content & Presence Action Plan
+
+#### Presence Diagnosis
+- The presence should prove how the founder thinks, not just announce services.
+- The trust gap is whether buyers can see the method behind the diagnosis.
+
+#### Core Narrative
+- Repeat this story: scattered business signals become clear strategy, then reusable systems, then useful content.
+- Keep the language grounded in clarity, workflows, infrastructure, and practical AI.
+
+#### First Content Moves
+- Publish one post on why unclear scope slows founder-led businesses.
+- Publish one anonymized workflow map showing discovery-to-scope.
+- Rewrite one website section around the diagnostic offer.
+- Create one short walkthrough of the intake/synthesis artifact.
+- Turn one repeated client question into a practical explainer.
+
+#### 30-Day Presence Plan
+- Week 1: finalize the core narrative and offer-page outline.
+- Week 2: publish problem/process content.
+- Week 3: publish proof-safe workflow artifacts.
+- Week 4: refine the website copy from the strongest audience signal.
+
+#### Claims To Avoid
+- Do not claim client outcomes or metrics without evidence.
+- Do not make AI the headline when the real value is strategic clarity and operating design.`,
+    },
   },
   {
-    id: "specialty-coffee",
-    name: "Specialty Coffee Roaster",
+    id: 'messy-operations-ai-adoption',
+    name: 'Messy Operations AI Adoption',
     answers: {
-      context: "We are an independent specialty coffee roaster in Portland. We sell wholesale to local cafes and have a direct-to-consumer online subscription. We struggle with customer retention online and managing wholesale orders efficiently.",
-      workflow: "Wholesale clients text or email us their orders randomly throughout the week, which causes chaos in the roasting schedule. For online subs, we just use default Shopify emails, but churn is high after month 3.",
-      presence: "We want a warm, earthy, analog feel. Think textured paper, deep greens, espresso browns, and warm cream colors. We want to tell the stories of the specific farms we buy from in Colombia and Ethiopia through beautiful photography."
+      phase1_clarity_goal:
+        'We run a growing education business and want to use AI, but our internal operations are messy. Before buying tools, we need to understand where AI actually belongs.',
+      phase2_audience_problem:
+        'The people affected are the operations team, instructors, and students. Everyone feels delays in onboarding, repeated support questions, and inconsistent follow-up.',
+      phase3_current_workflow:
+        'Student enquiries arrive through forms, calls, and WhatsApp. The team copies details into spreadsheets, manually assigns follow-ups, and instructors often lack context.',
+      phase4_main_friction:
+        'The biggest friction is handoff. Information gets collected but not converted into clear next actions for the right person.',
+      phase5_ai_boundary:
+        'Humans should handle student conversations, sensitive decisions, and final approvals. AI could classify enquiries, summarize context, draft responses, and flag urgent cases.',
+      phase6_presence_proof:
+        'We want our public presence to show that we are organized, responsive, and serious about student outcomes, not just that we use AI.',
     },
     questions: {
-      workflow: "Fascinating. Balancing B2B wholesale logistics with DTC retention is tough. Let's dig into the operations. How do you currently collect and process those wholesale orders, and what's your current cadence for communicating with online subscribers?",
-      presence: "That chaos is completely solvable with a unified ordering portal and some automated triggers. Now, let's switch gears to the brand presence. When someone opens a bag of your coffee or visits your site, what's the core emotion and visual aesthetic you want them to experience?",
-      complete: "Beautiful. That analog warmth paired with transparent storytelling is a perfect angle. I have all the pieces. Synthesizing the Strategy, Systems, and Presence blueprints now..."
+      phase2_audience_problem: {
+        question: 'Who is this for, and what problem are they already feeling?',
+        label: 'Buyer Problem',
+        placeholder: 'Describe the buyer and the pain they already recognize...',
+        assistantReply:
+          'This is the right starting point: do not buy AI tools before the operating problem is named. The next signal is who feels the mess most clearly.',
+      },
+      phase3_current_workflow: {
+        question: 'How does this work today, from first signal to delivered outcome?',
+        label: 'Current Workflow',
+        placeholder: 'Walk through the current path, even if it is messy...',
+        assistantReply:
+          'The problem touches several people, which means this is a workflow issue, not a single automation task. We need to see the current path before deciding where AI should assist.',
+      },
+      phase4_main_friction: {
+        question: 'Where is the main friction, delay, or decision confusion?',
+        label: 'Main Friction',
+        placeholder: 'Name the bottleneck, repeated delay, or unclear decision point...',
+        assistantReply:
+          'The current workflow is scattered across channels and spreadsheets. That gives us enough to look for the first bottleneck instead of automating the whole system blindly.',
+      },
+      phase5_ai_boundary: {
+        question: 'Which parts need human judgment, and which parts could AI assist?',
+        label: 'AI Boundary',
+        placeholder: 'Separate judgment, approval, drafting, summarizing, routing, or automation...',
+        assistantReply:
+          'The handoff is the operating problem. AI should not replace the relationship; it should prepare context and routing so people can respond better.',
+      },
+      phase6_presence_proof: {
+        question: 'What trust, proof, or public presence should this create?',
+        label: 'Proof & Presence',
+        placeholder: 'Describe the confidence, proof, or narrative this should build...',
+        assistantReply:
+          'That is a healthy AI boundary. The system can assist classification and context, while people keep control of sensitive communication and decisions.',
+      },
+      complete: {
+        question: 'I have enough context. We are ready to build the blueprint.',
+        label: 'Blueprint Ready',
+        placeholder: 'Generate the diagnostic blueprint...',
+        assistantReply:
+          'The operating route is visible now: messy intake, weak handoff, clear human judgment, and a trust-led presence goal. The blueprint can stay practical and reflective.',
+      },
     },
     blueprint: {
-      strategy: `# Strategic Positioning Blueprint
-## 1. Core Identity & Market Position
-**The Transparent Roaster.** You aren't just selling caffeine; you are curating global agriculture. Your positioning shifts from "local coffee" to "Direct-trade, farm-to-cup experiences."
+      strategy: `### Strategy & Clarity Action Plan
 
-## 2. The Core Offer
-- **Wholesale:** "Predictable perfection." Guaranteeing zero out-of-stock emergencies for cafes.
-- **DTC Subscription:** The "Explorer's Club." Instead of just getting coffee, subscribers get a monthly zine about the origin, tasting notes, and a digital community.
+#### Strategic Diagnosis
+- The business does not need a broad AI rollout yet. It needs one operational lane where better intake and handoff will improve student experience.
+- The strongest strategic route is to frame AI as support infrastructure, not as the public promise.
 
-## 3. Narrative Architecture
-- **The Enemy:** Stale, mass-produced commodity coffee and opaque supply chains.
-- **The Promise:** Complete transparency. You know the exact elevation and farmer who grew your morning cup.`,
-      systems: `# Operational Systems Blueprint
-## 1. Wholesale Automation
-Eliminate the text/email chaos:
-- Build a dedicated wholesale portal using **Shopify B2B** or **Faire**.
-- Implement **Airtable** linked to **Make.com** to automatically aggregate all weekly wholesale orders by Tuesday at 5 PM, generating a master roast schedule spreadsheet.
-- Send automated SMS reminders to cafes on Monday mornings: "Reply with your order by 5 PM tomorrow to make the Wednesday roast."
+#### Recommended Positioning
+- Position the initiative as **responsive student operations**.
+- The promise: enquiries and support signals become clear next actions faster, with humans still owning sensitive communication.
 
-## 2. DTC Retention Engine
-- Replace default Shopify emails with **Klaviyo**.
-- Build a "Month 3" intervention flow: At day 75, send a highly personalized email offering a free sample of a premium reserve roast or a virtual tasting session to prevent churn.
+#### First Decisions
+- Choose the first workflow: enquiry-to-follow-up is the best starting lane.
+- Define what counts as urgent, routine, and needs-human-review.
+- Decide what student data can be summarized safely and who can see it.
 
-## 3. Inventory Sync
-- Connect the roasting output directly to Shopify inventory to prevent overselling limited micro-lots.`,
-      presence: `# Cinematic Presence Blueprint
-## 1. Visual Identity
-- **Aesthetic:** Analog, textured, warm. 
-- **Palette:** Deep Forest Green, Espresso Brown, Warm Cream.
-- **Typography:** A classic serif for storytelling (e.g., Playfair Display) mixed with a clean sans-serif for logistics.
+#### 7-Day Action Plan
+- Collect 20 recent enquiries and group them by intent.
+- Write the first triage rules for urgency, owner, and next action.
+- Draft a one-page student response standard for the team.
 
-## 2. The Digital Storefront (Website)
-- **Hero Section:** High-quality, slow-motion video of the roasting process or mist over Colombian coffee farms.
-- **Product Pages:** Don't just list beans. Show interactive flavor profile radars, farm altitude metrics, and harvest dates.
+#### Risks To Avoid
+- Do not buy an AI tool before the handoff rules are written.
+- Do not publicly claim better outcomes until the workflow is tested and measured.`,
+      systems: `### Systems & Workflow Action Plan
 
-## 3. Content Engine
-- **Origin Stories:** A dedicated blog/video series documenting visits to origin farms. 
-- **Brew Guides:** Highly aesthetic, step-by-step visual guides on how to brew the perfect pour-over or espresso with the specific beans they bought.`
-    }
+#### Workflow Diagnosis
+- The handoff is the weak point: information arrives, but it does not reliably become an owned next action.
+- Multiple channels are creating scattered context for both operations and instructors.
+
+#### First Operating System
+- Build a **Student Enquiry Triage Board**.
+- Fields should include source, student need, urgency, owner, next action, instructor context, and review status.
+
+#### Human + AI Rules
+- Human-led: student conversations, sensitive cases, exceptions, approvals.
+- AI-assisted: enquiry classification, context summary, draft response, urgency flag, routing suggestion.
+- Automate later: reminders and status updates after the triage rules prove reliable.
+
+#### 14-Day Build Plan
+- Days 1-3: map all enquiry sources and handoffs.
+- Days 4-7: build the triage board and response status fields.
+- Days 8-11: test with live enquiries and review routing accuracy.
+- Days 12-14: document what AI can draft and what must go to a human.
+
+#### Risks To Avoid
+- Do not let AI respond directly to sensitive student issues.
+- Do not create a dashboard that adds admin work without improving ownership.`,
+      presence: `### Content & Presence Action Plan
+
+#### Presence Diagnosis
+- The public trust gap is responsiveness and operational care.
+- The presence should show that the business is organized around student outcomes, not just using AI.
+
+#### Core Narrative
+- Repeat this idea: better internal systems create clearer student follow-through.
+- Keep AI as the support layer behind a human-led student experience.
+
+#### First Content Moves
+- Rewrite the enquiry/onboarding page around responsiveness and clarity.
+- Publish one post about why handoffs matter in student support.
+- Create one proof-safe process graphic showing enquiry-to-next-step.
+- Publish one internal standard publicly as a trust signal, without private data.
+- Turn common student questions into clear explainers.
+
+#### 30-Day Presence Plan
+- Week 1: clarify the student-support narrative.
+- Week 2: publish process and FAQ content.
+- Week 3: show the improved enquiry workflow in proof-safe form.
+- Week 4: refine website copy around responsiveness and care.
+
+#### Claims To Avoid
+- Do not claim improved response times until measured.
+- Do not publish student details, private cases, or unverifiable AI benefits.`,
+    },
   },
-  {
-    id: "creative-agency",
-    name: "Design & Innovation Agency",
-    answers: {
-      context: "We are a high-end branding and digital design agency. We work with funded startups to build their entire brand identity and web presence. Our problem is that proposals take too long to write, and clients often don't understand the strategic value we bring until it's too late.",
-      workflow: "Our creative director spends 10 hours a week writing custom proposals in InDesign. Onboarding is a messy thread of emails. We want to templatize the proposal generation while keeping it highly personalized, and automate the client onboarding.",
-      presence: "Ultra-minimal, brutalist but refined. Black and white mostly, with stark typography and massive, high-res project imagery. The site should feel like a high-end art gallery."
-    },
-    questions: {
-      workflow: "The classic agency dilemma—selling high-level strategy but getting bogged down in low-level documentation. Walk me through the exact steps you take from the moment a lead says 'yes' to the moment they are fully onboarded and work begins.",
-      presence: "Ten hours a week in InDesign is an incredibly expensive bottleneck. We can definitely systemize that into an automated generation flow. Finally, let's talk about how you present yourselves to the world. What is the defining visual style and tone of voice for the agency's own brand?",
-      complete: "Got it. The brutalist, gallery-like approach creates exactly the right exclusivity. I understand your context, workflows, and presence needs. Preparing the synthesis..."
-    },
-    blueprint: {
-      strategy: `# Strategic Positioning Blueprint
-## 1. Core Identity & Market Position
-**The Vision Architects.** You don't "make logos"; you engineer market perception for the next generation of category leaders. 
-
-## 2. The Core Offer
-- **The Shift:** Stop selling "branding packages." Sell "Venture-Ready Market Identity."
-- **Pricing:** Shift from hourly billing or fixed-deliverable pricing to value-based pricing anchored against the startup's recent funding round.
-
-## 3. Narrative Architecture
-- **The Enemy:** Template-driven, generic design that makes a unique product look like every other SaaS.
-- **The Promise:** We make your brand as innovative as your engineering.`,
-      systems: `# Operational Systems Blueprint
-## 1. Automated Proposal Generation
-- Move proposal data generation to **Notion**.
-- Use **Make.com** to trigger a document generation workflow in **DocuMint** or **PandaDoc**.
-- The creative director only inputs 5 key strategic bullet points; the system generates the 15-page branded PDF automatically.
-
-## 2. Frictionless Onboarding
-- Once a proposal is signed via Stripe/PandaDoc, trigger an automated onboarding sequence.
-- Auto-provision a dedicated client Slack channel and a shared Notion portal.
-- Send an automated "Welcome & Next Steps" video recorded by the founders.
-
-## 3. Client Portal
-- Use **Notion** as a dynamic client portal where clients can see project milestones, provide asynchronous feedback on designs, and access final assets without emailing you.`,
-      presence: `# Cinematic Presence Blueprint
-## 1. Visual Identity
-- **Aesthetic:** High-end gallery minimalism.
-- **Palette:** Stark Black, Pure White, occasional brutalist neon accents.
-- **Typography:** Massive sans-serif typography (e.g., Helvetica Now or Inter) mixed with micro-copy for technical details.
-
-## 2. The Digital Storefront (Website)
-- **Hero Section:** Pure typographic hero statement. As you scroll, enormous, immersive project imagery takes over the screen using WebGL or GSAP scroll triggers.
-- **Case Studies:** Don't just show the final logo. Show the mess, the process, the wireframes, and the strategy documents. Make the process the hero.
-
-## 3. Content Engine
-- **Founder Essays:** Long-form, opinionated essays on design philosophy, published on Substack or the main site. 
-- **Behind the Scenes:** Short, raw videos showing the design team debating typography or sketching layouts.`
-    }
-  }
 ];

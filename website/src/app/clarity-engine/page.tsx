@@ -8,7 +8,9 @@ import {
   Download,
   Home,
   Loader2,
+  Moon,
   RefreshCw,
+  Sun,
   ChevronDown,
   ChevronUp,
   Volume2,
@@ -28,6 +30,7 @@ import {
   type QuestionId,
 } from '@/lib/clarity-engine/assistant';
 import { type MockScenario } from '@/lib/clarity-engine/mockData';
+import { useKramanitiTheme } from '@/hooks/useKramanitiTheme';
 
 type SessionState = {
   answers: ClarityAnswers;
@@ -50,7 +53,16 @@ type SessionState = {
 const STORAGE_KEY = 'kramaniti-clarity-engine-v2';
 
 const SAMPLE_ANSWER =
-  'Founders and freelancers in co-working spaces keep collecting tools, prompts, and advice, but they do not have a clear operating framework that turns repeated demand into a first paid workflow.';
+  'We have a founder-led business with strong expertise, but the offer, workflow, and content system feel scattered. I want to clarify what should happen first before adding more AI tools.';
+
+const DIAGNOSTIC_SEQUENCE: QuestionId[] = [
+  'phase1_clarity_goal',
+  'phase2_audience_problem',
+  'phase3_current_workflow',
+  'phase4_main_friction',
+  'phase5_ai_boundary',
+  'phase6_presence_proof',
+];
 
 const createInitialSession = (): SessionState => {
   const initial = createInitialSessionEnvelope();
@@ -136,7 +148,7 @@ function BlurTypingText({ text, activeKey }: { text: string, activeKey: string }
   const words = text.split(' ');
 
   return (
-    <h1 className={styles.questionTitle} key={activeKey}>
+    <h1 className={styles.questionTitle} key={activeKey} aria-label={text}>
       {words.map((word, index) => (
         <span
           key={`${index}-${word}`}
@@ -154,7 +166,7 @@ import { useAudioEngine } from '@/hooks/useAudioEngine';
 
 export default function ClarityEnginePage() {
   const router = useRouter();
-  const [session, setSession] = useState<SessionState>(readStoredSession);
+  const [session, setSession] = useState<SessionState>(createInitialSession);
   const [draft, setDraft] = useState('');
   const [streamedAssistant, setStreamedAssistant] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
@@ -167,8 +179,11 @@ export default function ClarityEnginePage() {
   const transitionTimers = useRef<number[]>([]);
   const typingTimer = useRef<number | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const submitAnswerRef = useRef<(overrideAnswer?: string) => Promise<void>>(async () => {});
 
   const { startAmbient, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
+  const { theme, toggleTheme } = useKramanitiTheme();
+  const [hasLoadedStoredSession, setHasLoadedStoredSession] = useState(false);
 
   // Attempt to start ambient audio immediately upon component mount.
   // This will succeed if the user navigated from another page (due to browser autoplay policies),
@@ -190,14 +205,21 @@ export default function ClarityEnginePage() {
   const completion = session.synthesis.completion;
   const hasExport = completion >= 35 || session.transcript.length > 1;
 
-  const hasSynthesis =
-    session.synthesis.clarityContext ||
-    session.synthesis.workflowDirection ||
-    session.synthesis.presenceIdeas.length > 0;
+  const hasSynthesis = completion > 0 || session.transcript.length > 1;
 
   useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setSession(readStoredSession());
+      setHasLoadedStoredSession(true);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedStoredSession) return;
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-  }, [session]);
+  }, [hasLoadedStoredSession, session]);
 
   useEffect(() => {
     return () => {
@@ -275,6 +297,7 @@ export default function ClarityEnginePage() {
               focusTags: envelope.focusTags,
             },
             source: envelope.source,
+            mockScenarioId: prev.mockScenarioId,
           };
         });
       });
@@ -375,19 +398,13 @@ export default function ClarityEnginePage() {
         // MOCK STREAMING (Demo Mode)
         // -------------------------
         const scenario = demoScenarioRef.current;
-        let nextQKey: QuestionId = 'complete';
-        let nextQ = scenario.questions.complete;
-        let nextLabel = 'Synthesis Complete';
-
-        if (session.currentQuestionKey === 'phase1_clarity_goal') {
-          nextQKey = 'phase2_workflow';
-          nextQ = scenario.questions.workflow;
-          nextLabel = 'Workflow Diagnostics';
-        } else if (session.currentQuestionKey === 'phase2_workflow') {
-          nextQKey = 'phase3_presence';
-          nextQ = scenario.questions.presence;
-          nextLabel = 'Brand Presence';
-        }
+        const currentIndex = DIAGNOSTIC_SEQUENCE.indexOf(session.currentQuestionKey);
+        const nextQKey: QuestionId =
+          currentIndex >= 0 && currentIndex < DIAGNOSTIC_SEQUENCE.length - 1
+            ? DIAGNOSTIC_SEQUENCE[currentIndex + 1]
+            : 'complete';
+        const nextStep = scenario.questions[nextQKey];
+        const nextQ = nextStep.question;
 
         const tokens = nextQ.split(' ');
         for (let i = 0; i < tokens.length; i++) {
@@ -397,19 +414,26 @@ export default function ClarityEnginePage() {
         }
 
         finalEnvelope = {
-          assistantReply: nextQ,
+          assistantReply: nextStep.assistantReply,
           nextQuestionKey: nextQKey,
-          nextQuestion: nextQKey === 'complete' ? '' : nextQ,
-          nextQuestionLabel: nextLabel,
-          nextQuestionPlaceholder: '...',
-          latestSummary: 'Demo streaming...',
-          completion: nextQKey === 'complete' ? 100 : nextQKey === 'phase3_presence' ? 66 : 33,
-          statusLabel: nextQKey === 'complete' ? 'Synthesis Complete' : 'Gathering Data',
-          clarityContext: '',
-          workflowDirection: '',
-          presenceIdeas: [],
-          signalTrail: [],
-          focusTags: [],
+          nextQuestion: nextQ,
+          nextQuestionLabel: nextStep.label,
+          nextQuestionPlaceholder: nextStep.placeholder,
+          latestSummary: answer.slice(0, 180),
+          completion:
+            nextQKey === 'complete'
+              ? 100
+              : Math.min(95, Math.round(((currentIndex + 1) / DIAGNOSTIC_SEQUENCE.length) * 100)),
+          statusLabel: nextQKey === 'complete' ? 'Blueprint ready' : currentIndex >= 2 ? 'Opportunity mapping' : 'Pattern recognition',
+          clarityContext: 'Demo signal is moving through Kramaniti’s diagnostic sequence.',
+          workflowDirection: 'The route is being mapped from business clarity into workflow reality and AI boundaries.',
+          presenceIdeas: [
+            'Make the operating change visible.',
+            'Use proof-safe examples instead of broad claims.',
+            'Let content follow the clarified workflow.',
+          ],
+          signalTrail: ['Strategy before tools', 'Systems before scale', 'Content after clarity'],
+          focusTags: ['diagnostic', 'workflow', 'presence'],
           source: 'local'
         };
       } else {
@@ -479,6 +503,10 @@ export default function ClarityEnginePage() {
     }
   }
 
+  useEffect(() => {
+    submitAnswerRef.current = submitAnswer;
+  });
+
   // Demo Mode Automation Driver
   useEffect(() => {
     let timeoutId: number;
@@ -494,10 +522,8 @@ export default function ClarityEnginePage() {
     if (!scenario) return;
 
     const key = session.currentQuestionKey;
-    let targetAnswer = '';
-    if (key === 'phase1_clarity_goal') targetAnswer = scenario.answers.context;
-    else if (key === 'phase2_workflow') targetAnswer = scenario.answers.workflow;
-    else if (key === 'phase3_presence') targetAnswer = scenario.answers.presence;
+    const targetAnswer = scenario.answers[key] || '';
+    if (!targetAnswer) return;
 
     setIsInputActive(true);
     let i = 0;
@@ -509,7 +535,7 @@ export default function ClarityEnginePage() {
         timeoutId = window.setTimeout(typeChar, 10);
       } else {
         timeoutId = window.setTimeout(() => {
-          void submitAnswer(targetAnswer);
+          void submitAnswerRef.current(targetAnswer);
         }, 500);
       }
     };
@@ -565,25 +591,6 @@ export default function ClarityEnginePage() {
         </Link>
         <div className={styles.headerActions}>
           <button
-            className={styles.actionBtn}
-            onClick={(e) => {
-              e.stopPropagation();
-              playClick();
-              toggleAmbientMute();
-            }}
-            title={isAmbientMuted ? "Unmute Ambient Audio" : "Mute Ambient Audio"}
-          >
-            {isAmbientMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-          </button>
-          <button
-            className={`${styles.actionBtn} no-shockwave`}
-            onClick={(e) => { e.stopPropagation(); playClick(); resetSession(); }}
-            disabled={isDemoMode}
-          >
-            <RefreshCw size={14} />
-            Reset
-          </button>
-          <button
             className={`${styles.actionBtn} shockwave-btn`}
             onClick={(e) => { e.stopPropagation(); playClick(); loadSample(); }}
             disabled={isDemoMode}
@@ -592,8 +599,43 @@ export default function ClarityEnginePage() {
             <Wand2 size={14} />
             Load Sample
           </button>
-          {hasSynthesis && (
-            <div className={styles.progressContainer} onClick={playClick}>
+          <div className={styles.controlDock} onClick={playClick}>
+            <button
+              className={`${styles.controlIconBtn} ${styles.actionBtn}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                playClick();
+                toggleTheme();
+              }}
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+            >
+              {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+            </button>
+            <button
+              className={`${styles.controlIconBtn} ${styles.actionBtn}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                playClick();
+                toggleAmbientMute();
+              }}
+              title={isAmbientMuted ? "Unmute Ambient Audio" : "Mute Ambient Audio"}
+              aria-label={isAmbientMuted ? "Unmute Ambient Audio" : "Mute Ambient Audio"}
+            >
+              {isAmbientMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+            </button>
+            <button
+              className={`${styles.controlIconBtn} ${styles.actionBtn} no-shockwave`}
+              onClick={(e) => { e.stopPropagation(); playClick(); resetSession(); }}
+              disabled={isDemoMode}
+              title="Reset diagnostic"
+              aria-label="Reset diagnostic"
+            >
+              <RefreshCw size={14} />
+            </button>
+            {hasSynthesis && (
+              <>
+                <span className={styles.controlDivider} aria-hidden="true" />
               <div className={styles.progressBarWrapper}>
                 <div
                   className={styles.progressBarFill}
@@ -605,8 +647,9 @@ export default function ClarityEnginePage() {
               >
                 Synthesis ({completion}%)
               </button>
-            </div>
-          )}
+              </>
+            )}
+          </div>
         </div>
       </header>
 
@@ -647,7 +690,7 @@ export default function ClarityEnginePage() {
                   <div className={styles.actionRow}>
 
                     {/* Primary Signal Button / Input Field */}
-                    {!isInputActive ? (
+                    {!isInputActive && (
                       <button
                         type="button"
                         className={`${styles.morphElement} shockwave-btn ${styles.morphStateBtn}`}
@@ -659,38 +702,40 @@ export default function ClarityEnginePage() {
                       >
                         <span className={styles.btnContent}>Provide Signal</span>
                       </button>
-                    ) : (
+                    )}
+
+                    {isInputActive && (
                       <div className={`${styles.morphElement} ${styles.morphStateField}`}>
                         <div className={styles.fieldContent}>
-                        <textarea
-                          ref={textareaRef}
-                          className={styles.glassInput}
-                          value={draft}
-                          onChange={(event) => handleDraftChange(event.target.value)}
-                          onKeyDown={(event) => {
-                            if (event.key === 'Enter' && !event.shiftKey) {
-                              event.preventDefault();
-                              playClick();
-                              void submitAnswer();
-                            }
-                          }}
-                          placeholder={session.currentQuestionPlaceholder || 'Provide your thoughts...'}
-                        />
-                        <div className={styles.inputFooter}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(201, 168, 76, 0.8)' }} />
-                            {deferredDraft ? `${deferredDraft.length}/900` : statusText}
+                          <textarea
+                            ref={textareaRef}
+                            className={styles.glassInput}
+                            value={draft}
+                            onChange={(event) => handleDraftChange(event.target.value)}
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter' && !event.shiftKey) {
+                                event.preventDefault();
+                                playClick();
+                                void submitAnswer();
+                              }
+                            }}
+                            placeholder={session.currentQuestionPlaceholder || 'Provide your thoughts...'}
+                          />
+                          <div className={styles.inputFooter}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(201, 168, 76, 0.8)' }} />
+                              {deferredDraft ? `${deferredDraft.length}/900` : statusText}
+                            </div>
+                            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                              <button className={styles.actionBtn} onClick={(e) => { e.stopPropagation(); playClick(); seedExample(); }}>
+                                Load example
+                              </button>
+                              <button className={styles.submitBtn} onClick={(e) => { e.stopPropagation(); playClick(); void submitAnswer(); }} disabled={isStreaming || !draft.trim()}>
+                                {isStreaming ? 'Mapping...' : 'Submit'}
+                                {isStreaming ? <Loader2 size={12} className={styles.spin} /> : null}
+                              </button>
+                            </div>
                           </div>
-                          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                            <button className={styles.actionBtn} onClick={(e) => { e.stopPropagation(); playClick(); seedExample(); }}>
-                              Load example
-                            </button>
-                            <button className={styles.submitBtn} onClick={(e) => { e.stopPropagation(); playClick(); void submitAnswer(); }} disabled={isStreaming || !draft.trim()}>
-                              {isStreaming ? 'Mapping...' : 'Submit'}
-                              {isStreaming ? <Loader2 size={12} className={styles.spin} /> : null}
-                            </button>
-                          </div>
-                        </div>
                         </div>
                       </div>
                     )}

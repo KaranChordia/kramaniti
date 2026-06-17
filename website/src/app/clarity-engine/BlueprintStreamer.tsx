@@ -90,7 +90,7 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
             const mockMarkdown = scenario.blueprint[agentId as keyof typeof scenario.blueprint];
             if (mockMarkdown) {
               // Simulate streaming chunks
-              const chunks = mockMarkdown.match(/.{1,15}/g) || [];
+              const chunks = mockMarkdown.match(/[\s\S]{1,15}/g) || [];
               for (const chunk of chunks) {
                 if (!isMounted || abortController.signal.aborted) break;
                 setContent((prev) => prev + chunk);

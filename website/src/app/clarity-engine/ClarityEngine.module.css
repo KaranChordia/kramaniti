@@ -44,6 +44,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+  max-width: 100%;
   color: rgba(255, 255, 255, 0.5);
   font-size: 12px;
   text-transform: uppercase;
@@ -69,6 +71,7 @@
   display: flex;
   gap: 24px;
   align-items: center;
+  min-width: 0;
 }
 
 .actionBtn {
@@ -106,6 +109,50 @@
 
 .synthesisBtnPulse {
   animation: pulseGlow 2s infinite;
+}
+
+.controlDock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 4px;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.25s ease;
+}
+
+.controlDock:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(201, 168, 76, 0.3);
+}
+
+.controlIconBtn {
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  gap: 0;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.controlIconBtn:hover {
+  background: rgba(201, 168, 76, 0.12);
+}
+
+.controlIconBtn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.controlDivider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 0 2px;
 }
 
 @keyframes pulseGlow {
@@ -650,6 +697,11 @@
   letter-spacing: 0.15em;
 }
 
+.morphStateBtn .btnContent,
+.secondaryActionBtn span {
+  color: currentColor;
+}
+
 .morphStateBtn:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(201, 168, 76, 0.4);
@@ -1046,6 +1098,7 @@
 
   .brand {
     min-width: 0;
+    max-width: 100%;
     justify-content: center;
     gap: 8px;
     font-size: 10px;
@@ -1054,6 +1107,7 @@
   }
 
   .brand strong {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -1087,6 +1141,22 @@
   .headerActions > .actionBtn svg {
     width: 16px;
     height: 16px;
+  }
+
+  .controlDock {
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 4px;
+    border-radius: 14px;
+    gap: 6px;
+  }
+
+  .controlIconBtn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 12px;
   }
 
   .progressContainer {
@@ -1368,5 +1438,236 @@
 
   .inputFooter > div:last-child {
     flex-direction: column;
+  }
+}
+
+/* Theme System */
+.canvas {
+  --ce-bg: linear-gradient(135deg, #050402 0%, #110e08 50%, #030201 100%);
+  --ce-bg-glow: radial-gradient(circle at 50% -20%, rgba(201, 168, 76, 0.15) 0%, transparent 60%);
+  --ce-text: rgba(255, 255, 255, 0.92);
+  --ce-text-soft: rgba(255, 255, 255, 0.62);
+  --ce-text-muted: rgba(255, 255, 255, 0.44);
+  --ce-panel: rgba(12, 10, 6, 0.28);
+  --ce-panel-strong: rgba(12, 10, 6, 0.46);
+  --ce-panel-soft: rgba(255, 255, 255, 0.05);
+  --ce-border: rgba(255, 255, 255, 0.1);
+  --ce-border-strong: rgba(201, 168, 76, 0.24);
+  --ce-input: rgba(0, 0, 0, 0.26);
+  --ce-header: linear-gradient(180deg, rgba(5, 4, 2, 0.94), rgba(5, 4, 2, 0.72));
+  --ce-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+  background: var(--ce-bg);
+  color: var(--ce-text);
+  transition:
+    background 850ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 850ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:global(html[data-theme='light']) .canvas {
+  --ce-bg: linear-gradient(135deg, #f7f3e8 0%, #fffdf7 44%, #ece4d0 100%);
+  --ce-bg-glow: radial-gradient(circle at 50% -20%, rgba(201, 168, 76, 0.22) 0%, transparent 62%);
+  --ce-text: rgba(18, 16, 10, 0.92);
+  --ce-text-soft: rgba(47, 41, 28, 0.72);
+  --ce-text-muted: rgba(88, 76, 52, 0.54);
+  --ce-panel: rgba(255, 255, 255, 0.48);
+  --ce-panel-strong: rgba(255, 255, 255, 0.72);
+  --ce-panel-soft: rgba(255, 255, 255, 0.58);
+  --ce-border: rgba(124, 100, 42, 0.18);
+  --ce-border-strong: rgba(201, 168, 76, 0.45);
+  --ce-input: rgba(255, 255, 255, 0.7);
+  --ce-header: linear-gradient(180deg, rgba(255, 252, 244, 0.94), rgba(255, 252, 244, 0.76));
+  --ce-shadow: 0 24px 80px rgba(104, 81, 26, 0.18);
+}
+
+.canvasBgGlow {
+  background: var(--ce-bg-glow);
+}
+
+.canvasNoise {
+  opacity: var(--ce-noise-opacity, 0.04);
+}
+
+:global(html[data-theme='light']) .canvasNoise {
+  --ce-noise-opacity: 0.025;
+  mix-blend-mode: multiply;
+}
+
+.brand,
+.actionBtn,
+.footerText,
+.assistantCopy,
+.signalItem,
+.inputFooter,
+.modalClose {
+  color: var(--ce-text-soft);
+}
+
+.brand strong,
+.questionTitle,
+.modalTitle,
+.glassInput,
+.markdownPreview,
+.contextTitle {
+  color: var(--ce-text);
+}
+
+.brand span,
+.brand:hover,
+.actionBtn:hover,
+.questionLabel,
+.tagBadge,
+.synthesisBtn,
+.submitBtn,
+.focusTags {
+  color: rgba(201, 168, 76, 0.95);
+}
+
+.header {
+  transition:
+    background 850ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 850ms cubic-bezier(0.4, 0, 0.2, 1),
+    backdrop-filter 850ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glassPanel,
+.morphStateField,
+.contextSidebar,
+.modalContent {
+  background: var(--ce-panel);
+  border-color: var(--ce-border);
+  box-shadow: var(--ce-shadow);
+}
+
+.morphStateBtn,
+.secondaryActionBtn,
+.controlDock,
+.progressContainer,
+.synthesisBtn,
+.tasksAccordion,
+.footerRight .actionBtn,
+.inputFooter .actionBtn {
+  background: var(--ce-panel-soft);
+  border-color: var(--ce-border);
+}
+
+.morphStateBtn:hover,
+.secondaryActionBtn:hover,
+.controlDock:hover,
+.progressContainer:hover,
+.synthesisBtn:hover,
+.footerRight .actionBtn:hover {
+  background: var(--ce-panel-strong);
+  border-color: var(--ce-border-strong);
+}
+
+.progressBarWrapper,
+.signalItem::after {
+  background: rgba(201, 168, 76, 0.16);
+}
+
+.glassInput {
+  background: transparent;
+}
+
+.glassInput::placeholder {
+  color: var(--ce-text-muted);
+}
+
+.contextSidebar {
+  border-left-color: var(--ce-border-strong);
+}
+
+.signalItem::before {
+  background: rgba(201, 168, 76, 0.76);
+  box-shadow: 0 0 18px rgba(201, 168, 76, 0.28);
+}
+
+.modalOverlay {
+  background: rgba(0, 0, 0, 0.62);
+}
+
+:global(html[data-theme='light']) .modalOverlay {
+  background: rgba(244, 235, 211, 0.66);
+}
+
+:global(html[data-theme='light']) .assistantBlob {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.95) 0%, rgba(201, 168, 76, 0.44) 36%, rgba(120, 96, 42, 0.18) 70%, transparent 100%);
+  box-shadow: 0 0 42px rgba(201, 168, 76, 0.22), inset 0 0 34px rgba(255, 255, 255, 0.72);
+}
+
+:global(html[data-theme='light']) .orbit1,
+:global(html[data-theme='light']) .orbit2 {
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.86) 0%, rgba(201, 168, 76, 0.38) 55%, transparent 100%);
+}
+
+:global(html[data-theme='light']) .glassPanel,
+:global(html[data-theme='light']) .morphStateField,
+:global(html[data-theme='light']) .contextSidebar,
+:global(html[data-theme='light']) .modalContent {
+  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(124, 100, 42, 0.18);
+  box-shadow: 0 24px 80px rgba(104, 81, 26, 0.18);
+}
+
+:global(html[data-theme='light']) .morphStateBtn,
+:global(html[data-theme='light']) .secondaryActionBtn,
+:global(html[data-theme='light']) .controlDock,
+:global(html[data-theme='light']) .progressContainer,
+:global(html[data-theme='light']) .synthesisBtn,
+:global(html[data-theme='light']) .tasksAccordion,
+:global(html[data-theme='light']) .footerRight .actionBtn,
+:global(html[data-theme='light']) .inputFooter .actionBtn {
+  background: rgba(255, 255, 255, 0.64);
+  border-color: rgba(124, 100, 42, 0.18);
+}
+
+:global(html[data-theme='light']) .morphStateBtn {
+  color: rgba(18, 16, 10, 0.94);
+}
+
+:global(html[data-theme='light']) .secondaryActionBtn {
+  color: rgba(47, 41, 28, 0.78);
+}
+
+:global(html[data-theme='light']) .morphStateBtn:hover,
+:global(html[data-theme='light']) .secondaryActionBtn:hover {
+  color: rgba(132, 101, 20, 1);
+  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(201, 168, 76, 0.5);
+}
+
+:global(html[data-theme='light']) .controlDivider {
+  background: rgba(124, 100, 42, 0.2);
+}
+
+:global(html[data-theme='light']) .brand,
+:global(html[data-theme='light']) .actionBtn,
+:global(html[data-theme='light']) .footerText,
+:global(html[data-theme='light']) .assistantCopy,
+:global(html[data-theme='light']) .signalItem,
+:global(html[data-theme='light']) .inputFooter,
+:global(html[data-theme='light']) .modalClose {
+  color: rgba(47, 41, 28, 0.72);
+}
+
+:global(html[data-theme='light']) .brand strong,
+:global(html[data-theme='light']) .questionTitle,
+:global(html[data-theme='light']) .modalTitle,
+:global(html[data-theme='light']) .glassInput,
+:global(html[data-theme='light']) .contextTitle {
+  color: rgba(18, 16, 10, 0.92);
+}
+
+:global(html[data-theme='light']) .glassInput::placeholder {
+  color: rgba(88, 76, 52, 0.54);
+}
+
+@media (max-width: 900px) {
+  .header {
+    background: var(--ce-header);
+  }
+
+  .contextSidebar {
+    border-top-color: var(--ce-border-strong);
   }
 }
