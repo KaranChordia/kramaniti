@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 
 // Global singletons for audio to prevent multiple contexts across components
 let globalCtx: AudioContext | null = null;
@@ -15,11 +15,31 @@ let isInitialized = false;
 let globalShouldPlayAmbient = false;
 let globalBuffersLoaded = false;
 let globalIsAmbientMuted = false;
+let globalAmbientRetryTimers: number[] = [];
 
 // Simple pub/sub to sync mute state across UI components
 const muteListeners = new Set<() => void>();
 function notifyMute() {
   muteListeners.forEach(l => l());
+}
+
+function scheduleAmbientStartupRetries(attemptStart: () => void) {
+  if (typeof window === 'undefined' || globalAmbientRetryTimers.length > 0) return;
+
+  globalAmbientRetryTimers = [250, 1000, 2500, 5000].map((delay) => {
+    const timer = window.setTimeout(() => {
+      globalAmbientRetryTimers = globalAmbientRetryTimers.filter((activeTimer) => activeTimer !== timer);
+      if (!globalShouldPlayAmbient || globalAmbientGain) return;
+
+      if (globalCtx?.state === 'suspended') {
+        globalCtx.resume().catch(() => {});
+      }
+
+      attemptStart();
+    }, delay);
+
+    return timer;
+  });
 }
 
 type BrowserAudioContext = typeof AudioContext;
@@ -32,6 +52,7 @@ const getAudioContextClass = (): BrowserAudioContext | undefined =>
 
 export function useAudioEngine() {
   const [isAmbientMuted, setIsAmbientMuted] = useState(globalIsAmbientMuted);
+  const startAmbientRef = useRef<() => void>(() => {});
 
   // Sync mute state
   useEffect(() => {
@@ -60,6 +81,7 @@ export function useAudioEngine() {
   const startAmbient = useCallback(() => {
     globalShouldPlayAmbient = true;
     initAudio();
+    scheduleAmbientStartupRetries(() => startAmbientRef.current());
     if (!globalCtx || !globalAmbientBuffer) return;
 
     if (globalCtx.state === 'suspended') {
@@ -90,6 +112,10 @@ export function useAudioEngine() {
     globalAmbientGain = masterGain;
     globalAmbientSource = source;
   }, [initAudio]);
+
+  useEffect(() => {
+    startAmbientRef.current = startAmbient;
+  }, [startAmbient]);
 
   // Load the audio files globally once
   useEffect(() => {

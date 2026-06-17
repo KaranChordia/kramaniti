@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './BlueprintStreamer.module.css';
 import { type BlueprintRequestBody } from '@/lib/clarity-engine/blueprintStreamer';
 import { Check, ArrowRight } from 'lucide-react';
@@ -45,6 +45,7 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
   const [content, setContent] = useState<string>('');
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [currentLogIndex, setCurrentLogIndex] = useState(0);
+  const hasNotifiedComplete = useRef(false);
   const logs = useMemo(() => getSimulatedLogs(title), [title]);
   const { playClick } = useAudioEngine();
   
@@ -73,6 +74,13 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
 
   const isSimulating = currentLogIndex < logs.length - 1;
   const isActive = isFetching || isSimulating;
+
+  useEffect(() => {
+    if (isActive || hasNotifiedComplete.current) return;
+
+    hasNotifiedComplete.current = true;
+    onComplete?.();
+  }, [isActive, onComplete]);
 
   useEffect(() => {
     let isMounted = true;
@@ -135,7 +143,6 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
       } finally {
         if (isMounted) {
           setIsFetching(false);
-          onComplete?.();
         }
       }
     };
