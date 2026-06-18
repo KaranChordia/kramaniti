@@ -349,6 +349,103 @@ export function ServiceRecoveryLoopInfographic() {
   );
 }
 
+export function FounderMemoryInfrastructureInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Founder Memory vs. Operating Memory</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Where judgment sits</th>
+              <th className={styles.matrixColHeader}>What breaks</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>What to retain</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Founder memory</td>
+              <td className={styles.matrixCell}>Every repeated correction waits for the founder again.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Standard, reason, and example.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Chat thread</td>
+              <td className={styles.matrixCell}>Context is useful once, then disappears into scrollback.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Approved answer and source route.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>AI output</td>
+              <td className={styles.matrixCell}>Draft gets faster while judgment stays invisible.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Review condition and human owner.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Operating memory</td>
+              <td className={styles.matrixCell}>The workflow can now improve without restarting.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Write-back record inside the route.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export function MemoryWritebackLoopInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Memory Write-Back Loop</div>
+      <div className={styles.spineGrid}>
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>01</div>
+          <div className={styles.spineTitle}>Notice repeated judgment</div>
+          <p className={styles.spineCopy}>
+            Capture the correction, objection, exception, or taste decision that keeps returning.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>02</div>
+          <div className={styles.spineTitle}>Name the standard</div>
+          <p className={styles.spineCopy}>
+            Turn founder intuition into a short rule, boundary, reason, and approved example.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>03</div>
+          <div className={styles.spineTitle}>Attach it to the route</div>
+          <p className={styles.spineCopy}>
+            Place the record inside the CRM, proposal, checklist, brief, or internal tool.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.spineCard} ${styles.spineCardHighlight}`}>
+          <div className={styles.spineStepHighlight}>04</div>
+          <div className={styles.spineTitleHighlight}>Use it three times</div>
+          <p className={styles.spineCopyHighlight}>
+            Improve the record when the same question, edge case, or approval gap returns.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // 2. The Priority Pyramid (Layered Stack)
 export function TechStackInfographic() {
   return (

@@ -42,7 +42,9 @@ import {
   ShadowAiRouteInfographic,
   WorkflowAdoptionRhythmInfographic,
   EscalationClarityMapInfographic,
-  ServiceRecoveryLoopInfographic
+  ServiceRecoveryLoopInfographic,
+  FounderMemoryInfrastructureInfographic,
+  MemoryWritebackLoopInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -225,6 +227,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         }
         if (paragraph === '[infographic:service-recovery-loop]') {
           return <ServiceRecoveryLoopInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:founder-memory-infrastructure]') {
+          return <FounderMemoryInfrastructureInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:memory-writeback-loop]') {
+          return <MemoryWritebackLoopInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
