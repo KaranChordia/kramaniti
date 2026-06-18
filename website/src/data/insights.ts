@@ -1,6 +1,7 @@
 export interface Insight {
   slug: string;
   title: string;
+  category: 'Strategy' | 'Systems' | 'Adoption' | 'Governance' | 'Content' | 'AI Infrastructure' | 'Spatial';
   focus: string;
   date: string;
   author?: string;
@@ -14,6 +15,7 @@ export const insights: Insight[] = [
   {
     slug: 'stop-treating-founder-memory-as-infrastructure',
     title: 'Stop Treating Founder Memory as Infrastructure',
+    category: 'Systems',
     focus: 'Operating Memory',
     date: '18 Jun 2026',
     author: 'Karan Chordia',
@@ -59,6 +61,7 @@ export const insights: Insight[] = [
   {
     slug: 'design-the-escalation-before-the-assistant',
     title: 'Design the Escalation Before the Assistant',
+    category: 'Systems',
     focus: 'Service Handoffs',
     date: '17 Jun 2026',
     author: 'Karan Chordia',
@@ -95,6 +98,7 @@ export const insights: Insight[] = [
   {
     slug: 'name-the-workflow-before-you-normalize-ai-use',
     title: 'Name the Workflow Before You Normalize AI Use',
+    category: 'Adoption',
     focus: 'Adoption Design',
     date: '16 Jun 2026',
     author: 'Karan Chordia',
@@ -131,6 +135,7 @@ export const insights: Insight[] = [
   {
     slug: 'the-presence-brief-starts-inside-workflow',
     title: 'The Presence Brief Starts Inside Workflow',
+    category: 'Content',
     focus: 'Content Systems',
     date: '15 Jun 2026',
     author: 'Karan Chordia',
@@ -172,6 +177,7 @@ export const insights: Insight[] = [
   {
     slug: 'make-the-decision-route-visible-before-you-build',
     title: 'Make the Decision Route Visible Before You Build',
+    category: 'Strategy',
     focus: 'Decision Design',
     date: '14 Jun 2026',
     author: 'Karan Chordia',
@@ -211,6 +217,7 @@ export const insights: Insight[] = [
   {
     slug: 'audit-the-backstage-before-you-scale-the-frontstage',
     title: 'Audit the Backstage Before You Scale the Frontstage',
+    category: 'Systems',
     focus: 'Service Alignment',
     date: '12 Jun 2026',
     author: 'Karan Chordia',
@@ -250,6 +257,7 @@ export const insights: Insight[] = [
   {
     slug: 'the-adoption-packet-before-the-ai-build',
     title: 'The Adoption Packet Before the AI Build',
+    category: 'Adoption',
     focus: 'AI Enablement',
     date: '11 Jun 2026',
     author: 'Karan Chordia',
@@ -288,6 +296,7 @@ export const insights: Insight[] = [
   {
     slug: 'when-internal-intelligence-should-become-public',
     title: 'When Internal Intelligence Should Become Public',
+    category: 'Content',
     focus: 'Content Systems',
     date: '10 Jun 2026',
     author: 'Karan Chordia',
@@ -323,6 +332,7 @@ export const insights: Insight[] = [
   {
     slug: 'map-the-work-as-done-before-you-build',
     title: 'Map the Work-As-Done Before You Build',
+    category: 'Strategy',
     focus: 'Alignment Audit',
     date: '08 Jun 2026',
     author: 'Karan Chordia',
@@ -355,6 +365,7 @@ export const insights: Insight[] = [
   {
     slug: 'context-engineering-is-becoming-the-agent-operating-layer',
     title: 'Context Engineering Is Becoming the Agent Operating Layer',
+    category: 'AI Infrastructure',
     focus: 'Context Design',
     date: '08 Jun 2026',
     author: 'Karan Chordia',
@@ -385,6 +396,7 @@ export const insights: Insight[] = [
   {
     slug: 'ai-observability-is-becoming-the-trust-layer',
     title: 'AI Observability Is Becoming the Trust Layer',
+    category: 'Governance',
     focus: 'Observability Design',
     date: '07 Jun 2026',
     author: 'Karan Chordia',
@@ -415,6 +427,7 @@ export const insights: Insight[] = [
   {
     slug: 'token-spend-is-becoming-an-operating-design-problem',
     title: 'Token Spend Is Becoming an Operating Design Problem',
+    category: 'Systems',
     focus: 'Operating Economics',
     date: '06 Jun 2026',
     author: 'Karan Chordia',
@@ -442,6 +455,7 @@ export const insights: Insight[] = [
   {
     slug: 'the-forty-percent-defect-why-agentic-ai-stalls-in-execution',
     title: 'The 40% Defect: Why Agentic AI Stalls in the Last Mile',
+    category: 'Governance',
     focus: 'Systems & Risk',
     date: '06 Jun 2026',
     author: 'Karan Chordia',
@@ -469,6 +483,7 @@ export const insights: Insight[] = [
   {
     slug: 'prompt-sprawl-is-becoming-the-next-ai-bottleneck',
     title: 'Prompt Sprawl Is Becoming the Next AI Bottleneck',
+    category: 'AI Infrastructure',
     focus: 'Orchestration Design',
     date: '05 Jun 2026',
     author: 'Karan Chordia',
@@ -497,6 +512,7 @@ export const insights: Insight[] = [
   {
     slug: 'ai-review-is-becoming-the-operating-layer',
     title: 'AI Review Is Becoming the Operating Layer',
+    category: 'Governance',
     focus: 'Execution Design',
     date: '05 Jun 2026',
     author: 'Karan Chordia',
@@ -525,6 +541,7 @@ export const insights: Insight[] = [
   {
     slug: 'ai-governance-has-to-live-inside-the-workflow',
     title: 'AI Governance Has to Live Inside the Workflow',
+    category: 'Governance',
     focus: 'Governance Design',
     date: '04 Jun 2026',
     author: 'Karan Chordia',
@@ -553,6 +570,7 @@ export const insights: Insight[] = [
   {
     slug: 'ai-readiness-is-a-balance-problem',
     title: 'AI Readiness Is a Balance Problem',
+    category: 'Strategy',
     focus: 'Readiness Design',
     date: '03 Jun 2026',
     author: 'Karan Chordia',
@@ -586,6 +604,7 @@ export const insights: Insight[] = [
   {
     slug: 'ai-training-wont-rewire-a-broken-workflow',
     title: 'AI Training Won’t Rewire a Broken Workflow',
+    category: 'Adoption',
     focus: 'Operating Readiness',
     date: '02 Jun 2026',
     author: 'Karan Chordia',
@@ -618,6 +637,7 @@ export const insights: Insight[] = [
   {
     slug: 'ai-access-is-not-an-operating-model',
     title: 'AI Access Is Not an Operating Model',
+    category: 'Adoption',
     focus: 'Workflow Design',
     date: '01 Jun 2026',
     author: 'Karan Chordia',
@@ -655,6 +675,7 @@ export const insights: Insight[] = [
   {
     slug: 'why-scaling-chaos-breaks-business',
     title: 'Why Scaling Your Chaos with AI Will Break Your Business First',
+    category: 'Systems',
     focus: 'Operational Architecture',
     date: 'May 31, 2026',
     readTime: '4 min read',
@@ -687,6 +708,7 @@ export const insights: Insight[] = [
   {
     slug: 'spatial-ai-and-the-death-of-physical-staging',
     title: 'Spatial AI and the Death of Physical Staging',
+    category: 'Spatial',
     focus: 'Spatial AI & CRE',
     date: 'May 28, 2026',
     readTime: '4 min read',
@@ -703,6 +725,7 @@ export const insights: Insight[] = [
   {
     slug: 'mapping-the-core',
     title: 'Mapping the Core (Why Tech Stacks Come Last)',
+    category: 'Strategy',
     focus: 'Deep Strategy',
     date: 'Mar 02, 2024',
     readTime: '3 min read',
@@ -718,6 +741,7 @@ export const insights: Insight[] = [
   {
     slug: 'cinematic-standard-ai-world',
     title: 'The Cinematic Standard in an AI World',
+    category: 'Content',
     focus: 'Premium Output & Design Thinking',
     date: 'Jan 18, 2024',
     readTime: '4 min read',
@@ -734,6 +758,7 @@ export const insights: Insight[] = [
   {
     slug: 'agentic-workflows-vs-basic-automation',
     title: 'Agentic Workflows vs. Basic Automation',
+    category: 'AI Infrastructure',
     focus: 'Agentic Infrastructure',
     date: 'Nov 04, 2023',
     readTime: '5 min read',
@@ -750,6 +775,7 @@ export const insights: Insight[] = [
   {
     slug: 'death-of-disconnected-ops',
     title: 'The Death of Disconnected Ops',
+    category: 'Systems',
     focus: 'The Unified Pipeline Advantage',
     date: 'Oct 12, 2023',
     readTime: '4 min read',

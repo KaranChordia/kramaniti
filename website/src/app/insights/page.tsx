@@ -1,33 +1,22 @@
-import Link from 'next/link';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
 import { insights } from '../../data/insights';
+import { InsightsArchive } from './InsightsArchive';
 import styles from './Insights.module.css';
 
-function getDisplayMeta(insight: (typeof insights)[number]) {
-  if (insight.publishedAt) {
-    const publishedAt = new Date(insight.publishedAt);
-    const date = new Intl.DateTimeFormat('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    }).format(publishedAt);
-    const time = new Intl.DateTimeFormat('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    }).format(publishedAt);
-
-    return `${date} · ${time} IST`;
-  }
-
-  return insight.date;
-}
-
 export default function InsightsPage() {
+  const archiveInsights = insights.map((insight) => ({
+    slug: insight.slug,
+    title: insight.title,
+    category: insight.category,
+    focus: insight.focus,
+    date: insight.date,
+    author: insight.author,
+    publishedAt: insight.publishedAt,
+    readTime: insight.readTime,
+    summary: insight.summary,
+  }));
+
   return (
     <>
       <Navbar />
@@ -43,34 +32,11 @@ export default function InsightsPage() {
               <span className={styles.eyebrow}>Insights</span>
               <h1>The Logic Behind the Pipeline.</h1>
               <p className={styles.lead}>
-                Deep dives into strategy, agentic infrastructure, and the cinematic standard. Exploring why unified operations create true scale.
+                Deep dives into strategy, systems, adoption, governance, and content after clarity. Search the archive by business problem, operating layer, or topic.
               </p>
             </div>
 
-            <div className={styles.insightsGrid}>
-              {insights.map((insight) => (
-                <Link href={`/insights/${insight.slug}`} key={insight.slug} className={styles.insightCard}>
-                  <div className={styles.cardHeader}>
-                    <span className={styles.focus}>{insight.focus}</span>
-                    <span className={styles.date}>{getDisplayMeta(insight)}</span>
-                  </div>
-                  <h2>{insight.title}</h2>
-                  <p className={styles.summary}>{insight.summary}</p>
-                  <div className={styles.cardFooter}>
-                    <span className={styles.readTime}>
-                      {insight.author ? `${insight.author} · ${insight.readTime}` : insight.readTime}
-                    </span>
-                    <span className={styles.readMore}>
-                      Read Essay
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                      </svg>
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            <InsightsArchive insights={archiveInsights} />
           </div>
         </section>
       </main>
