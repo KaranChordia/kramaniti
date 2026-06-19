@@ -84,8 +84,8 @@ export function Contact() {
               <Input label="Company / Brand" name="company" placeholder="Company or brand name" required className={styles.contactInput} />
               <Select label="Budget Range" name="budget" options={budgetOptions} className={styles.contactInput} />
               <Textarea label="Workflow / Goal" name="goal" placeholder="Tell us what feels messy, manual, unclear, or ready to improve" required className={styles.contactInput} />
-              <Input
-                label="Website"
+              <input
+                type="text"
                 name="website"
                 tabIndex={-1}
                 autoComplete="off"
@@ -95,11 +95,13 @@ export function Contact() {
               <Button type="submit" variant="primary" className={styles.submitBtn} disabled={submitState === 'submitting'}>
                 {submitState === 'submitting' ? 'Sending...' : 'Request Alignment Audit'}
               </Button>
-              {message ? (
-                <p className={`${styles.formMessage} ${submitState === 'error' ? styles.errorMessage : styles.successMessage}`} role="status">
-                  {message}
-                </p>
-              ) : null}
+              <p
+                className={`${styles.formMessage} ${submitState === 'error' ? styles.errorMessage : ''} ${submitState === 'success' ? styles.successMessage : ''}`}
+                role="status"
+                aria-live="polite"
+              >
+                {message}
+              </p>
             </form>
           </div>
 

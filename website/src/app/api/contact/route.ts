@@ -11,6 +11,7 @@ type ContactPayload = {
 };
 
 const MAX_FIELD_LENGTH = 2000;
+const WEBHOOK_TIMEOUT_MS = 10000;
 
 function cleanString(value: unknown, maxLength = MAX_FIELD_LENGTH) {
   if (typeof value !== 'string') {
@@ -76,6 +77,8 @@ export async function POST(request: Request) {
 
   try {
     const targetUrl = new URL(webhookUrl);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), WEBHOOK_TIMEOUT_MS);
 
     if (process.env.CONTACT_WEBHOOK_SECRET && !targetUrl.searchParams.has('secret')) {
       targetUrl.searchParams.set('secret', process.env.CONTACT_WEBHOOK_SECRET);
@@ -87,11 +90,26 @@ export async function POST(request: Request) {
         'content-type': 'application/json',
       },
       body: JSON.stringify(submission),
+      signal: controller.signal,
     });
+    clearTimeout(timeout);
 
-    if (!response.ok) {
+    const responseText = await response.text();
+    let responseBody: { ok?: unknown; error?: unknown } | null = null;
+
+    try {
+      responseBody = responseText ? JSON.parse(responseText) : null;
+    } catch {
+      responseBody = null;
+    }
+
+    if (!response.ok || responseBody?.ok === false) {
+      const webhookError = typeof responseBody?.error === 'string'
+        ? responseBody.error
+        : 'Unable to save the enquiry right now.';
+
       return NextResponse.json(
-        { error: 'Unable to save the enquiry right now.' },
+        { error: webhookError },
         { status: 502 },
       );
     }
