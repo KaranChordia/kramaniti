@@ -55,7 +55,9 @@ import {
   EscalationClarityMapInfographic,
   ServiceRecoveryLoopInfographic,
   FounderMemoryInfrastructureInfographic,
-  MemoryWritebackLoopInfographic
+  MemoryWritebackLoopInfographic,
+  SystemAcceptanceTestInfographic,
+  BuildReadinessGateInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -367,6 +369,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:memory-writeback-loop]') {
           return <MemoryWritebackLoopInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:system-acceptance-test]') {
+          return <SystemAcceptanceTestInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:build-readiness-gate]') {
+          return <BuildReadinessGateInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);

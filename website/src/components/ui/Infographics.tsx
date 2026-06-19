@@ -446,6 +446,97 @@ export function MemoryWritebackLoopInfographic() {
   );
 }
 
+export function SystemAcceptanceTestInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>System Acceptance Test</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Brief field</th>
+              <th className={styles.matrixColHeader}>Weak version</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Testable version</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Workflow</td>
+              <td className={styles.matrixCell}>Improve sales follow-up.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Route every qualified lead to owner, next step, and source context.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Evidence</td>
+              <td className={styles.matrixCell}>Use previous calls and notes.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Retain call signal, fit reason, objection, and approved status.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Human review</td>
+              <td className={styles.matrixCell}>Founder checks when needed.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Founder reviews only high-value, unclear, or proof-sensitive cases.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Pass signal</td>
+              <td className={styles.matrixCell}>The tool feels useful.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Team can run the route twice without reconstructing missing context.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export function BuildReadinessGateInfographic() {
+  const gates = [
+    {
+      icon: Workflow,
+      label: 'Workflow named',
+      copy: 'The route, trigger, owner, and handoff are visible before tooling.',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Acceptance criteria',
+      copy: 'The team knows what done looks like in real operating conditions.',
+    },
+    {
+      icon: DatabaseZap,
+      label: 'Evidence retained',
+      copy: 'Source records, review decisions, and exceptions write back into the route.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Review rhythm',
+      copy: 'Human override, edge cases, and improvement cadence are assigned.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Build Readiness Gate</div>
+      <div className={styles.packetChecklist}>
+        {gates.map((gate, index) => {
+          const Icon = gate.icon;
+          const isFinal = index === gates.length - 1;
+
+          return (
+            <div className={`${styles.packetItem} ${isFinal ? styles.packetItemHighlight : ''}`} key={gate.label}>
+              <div className={isFinal ? styles.packetIconHighlight : styles.packetIcon}>
+                <Icon size={18} />
+              </div>
+              <div className={styles.packetContent}>
+                <span className={styles.packetNumber}>{String(index + 1).padStart(2, '0')}</span>
+                <h4>{gate.label}</h4>
+                <p>{gate.copy}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // 2. The Priority Pyramid (Layered Stack)
 export function TechStackInfographic() {
   return (
