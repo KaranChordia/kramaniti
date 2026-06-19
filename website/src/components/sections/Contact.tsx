@@ -25,10 +25,11 @@ export function Contact() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setSubmitState('submitting');
     setMessage('');
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const payload = {
       name: String(formData.get('name') || ''),
       email: String(formData.get('email') || ''),
@@ -54,7 +55,7 @@ export function Contact() {
         throw new Error(result.error || 'Unable to submit the enquiry.');
       }
 
-      event.currentTarget.reset();
+      form.reset();
       setSubmitState('success');
       setMessage('Your enquiry has been received. We will review the workflow context and respond shortly.');
     } catch (error) {
