@@ -245,8 +245,10 @@ Template #4     Template #1       Template #2       Template #5       Template #
 ## How to Add a New Post with an Infographic
 
 1. Write the new essay object inside [insights.ts](file:///Users/karanchordia/Documents/GitHub/kramaniti/website/src/data/insights.ts).
-2. Insert the trigger string (e.g. `[infographic:custom-slug]`) as a standalone item in the `content` array.
-3. Open [page.tsx](file:///Users/karanchordia/Documents/GitHub/kramaniti/website/src/app/insights/%5Bslug%5D/page.tsx):
+2. Add the broad `category` field used by the Insights archive and SEO metadata.
+3. Add `sourceLinks` only when the exact source URLs are verified and safe to publish. Do not invent or use generic search URLs.
+4. Insert the trigger string (e.g. `[infographic:custom-slug]`) as a standalone item in the `content` array.
+5. Open [page.tsx](file:///Users/karanchordia/Documents/GitHub/kramaniti/website/src/app/insights/%5Bslug%5D/page.tsx):
    - Import your infographic component.
    - Add a matching `if` condition in the paragraph mapping loop:
      ```tsx

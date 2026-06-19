@@ -1,7 +1,41 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar } from '../../../components/layout/Navbar';
 import { Footer } from '../../../components/layout/Footer';
+import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl } from '../../../lib/seo';
 import styles from './Nexocean.module.css';
+
+export const metadata: Metadata = {
+  title: 'Nexocean Selected Work | Kramaniti',
+  description:
+    'A Kramaniti selected-work page on a five-month Nexocean contract engagement involving internal recruiter workflow tools and brand content.',
+  alternates: {
+    canonical: absoluteUrl('/work/nexocean/'),
+  },
+  openGraph: {
+    type: 'article',
+    url: absoluteUrl('/work/nexocean/'),
+    siteName: SITE_NAME,
+    title: 'Nexocean Selected Work | Kramaniti',
+    description:
+      'Selected work covering internal recruiter workflow tools, practical AI support, and brand content for a five-month Nexocean contract engagement.',
+    images: [
+      {
+        url: absoluteUrl(DEFAULT_OG_IMAGE),
+        width: 512,
+        height: 512,
+        alt: `${SITE_NAME} mark`,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Nexocean Selected Work | Kramaniti',
+    description:
+      'Internal workflow tooling and brand-content support from a five-month Nexocean contract engagement.',
+    images: [absoluteUrl(DEFAULT_OG_IMAGE)],
+  },
+};
 
 const systemModules = [
   {
@@ -89,9 +123,35 @@ const videos = [
 ];
 
 export default function NexoceanWorkPage() {
+  const selectedWorkJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: 'Nexocean selected work',
+    url: absoluteUrl('/work/nexocean/'),
+    description:
+      'A selected-work page about internal recruiter workflow tools and brand content support during a five-month Nexocean contract engagement.',
+    creator: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: absoluteUrl('/'),
+    },
+    about: [
+      'recruiter workflow tools',
+      'internal AI support',
+      'brand content',
+      'workflow systems',
+    ],
+  };
+
   return (
     <>
       <Navbar />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(selectedWorkJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
       <main className={styles.main}>
         <section className={styles.hero}>
           <div className={styles.atmosphere} aria-hidden="true">

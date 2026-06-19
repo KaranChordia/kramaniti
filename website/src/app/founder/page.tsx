@@ -1,7 +1,41 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
+import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl } from '../../lib/seo';
 import styles from './Founder.module.css';
+
+export const metadata: Metadata = {
+  title: 'Founder | Kramaniti',
+  description:
+    'Meet Karan Chordia, founder of Kramaniti, and the operating principles behind strategy-first AI systems, workflow clarity, and coherent brand presence.',
+  alternates: {
+    canonical: absoluteUrl('/founder/'),
+  },
+  openGraph: {
+    type: 'profile',
+    url: absoluteUrl('/founder/'),
+    siteName: SITE_NAME,
+    title: 'Founder | Kramaniti',
+    description:
+      'Karan Chordia founded Kramaniti to connect operational clarity, practical intelligence systems, and brand presence.',
+    images: [
+      {
+        url: absoluteUrl(DEFAULT_OG_IMAGE),
+        width: 512,
+        height: 512,
+        alt: `${SITE_NAME} mark`,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Founder | Kramaniti',
+    description:
+      'The founder profile and operating principles behind Kramaniti.',
+    images: [absoluteUrl(DEFAULT_OG_IMAGE)],
+  },
+};
 
 const timeline = [
   {
@@ -65,9 +99,38 @@ const principles = [
 ];
 
 export default function FounderPage() {
+  const personJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Karan Chordia',
+    jobTitle: 'Founder',
+    worksFor: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: absoluteUrl('/'),
+    },
+    url: absoluteUrl('/founder/'),
+    image: absoluteUrl('/assets/founder_real.jpg'),
+    description:
+      'Karan Chordia leads Kramaniti across strategy, operating diagnosis, intelligence-system design, and brand-presence direction.',
+    knowsAbout: [
+      'workflow strategy',
+      'AI systems',
+      'brand presence',
+      'cinematic content',
+      'business operations',
+    ],
+  };
+
   return (
     <>
       <Navbar />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personJsonLd).replace(/</g, '\\u003c'),
+        }}
+      />
       <main className={styles.main}>
         <section className={styles.heroSection}>
           <div className={styles.atmosphere} aria-hidden="true">

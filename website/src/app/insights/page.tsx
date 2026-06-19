@@ -1,8 +1,39 @@
+import type { Metadata } from 'next';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
 import { insights } from '../../data/insights';
+import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl } from '../../lib/seo';
 import { InsightsArchive } from './InsightsArchive';
 import styles from './Insights.module.css';
+
+export const metadata: Metadata = {
+  title: 'Insights | Kramaniti',
+  description: 'Kramaniti insights on strategy, systems, adoption, governance, AI infrastructure, and content after clarity.',
+  alternates: {
+    canonical: absoluteUrl('/insights/'),
+  },
+  openGraph: {
+    type: 'website',
+    url: absoluteUrl('/insights/'),
+    siteName: SITE_NAME,
+    title: 'Insights | Kramaniti',
+    description: 'Strategy-first essays on practical AI systems, operating infrastructure, governance, and content after clarity.',
+    images: [
+      {
+        url: absoluteUrl(DEFAULT_OG_IMAGE),
+        width: 512,
+        height: 512,
+        alt: `${SITE_NAME} mark`,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Insights | Kramaniti',
+    description: 'Strategy-first essays on practical AI systems, operating infrastructure, governance, and content after clarity.',
+    images: [absoluteUrl(DEFAULT_OG_IMAGE)],
+  },
+};
 
 export default function InsightsPage() {
   const archiveInsights = insights.map((insight) => ({

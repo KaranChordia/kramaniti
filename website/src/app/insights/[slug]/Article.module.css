@@ -190,3 +190,91 @@
   font-weight: 600;
   text-shadow: 0 0 12px rgba(201, 168, 76, 0.2);
 }
+
+.sourceBox,
+.relatedBox {
+  margin-top: 36px;
+  padding: 28px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+:global(html[data-theme='light']) .sourceBox,
+:global(html[data-theme='light']) .relatedBox {
+  background: rgba(255, 255, 255, 0.62);
+  border-color: rgba(0, 0, 0, 0.07);
+}
+
+.sourceBox h3,
+.relatedBox h3 {
+  margin: 0 0 18px;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 22px;
+  color: var(--text-primary);
+}
+
+.sourceBox ul {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sourceBox a {
+  color: var(--color-burnished-gold);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.sourceBox a:hover {
+  text-decoration: underline;
+}
+
+.relatedGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.relatedCard {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.relatedCard:hover {
+  border-color: rgba(201, 168, 76, 0.34);
+  transform: translateY(-2px);
+}
+
+.relatedCard span {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-burnished-gold);
+}
+
+.relatedCard strong {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+  .sourceBox,
+  .relatedBox {
+    padding: 24px;
+  }
+}

@@ -1,8 +1,19 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Navbar } from '../../../components/layout/Navbar';
 import { Footer } from '../../../components/layout/Footer';
 import { insights } from '../../../data/insights';
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+  absoluteUrl,
+  getInsightKeywords,
+  getInsightPublishedDate,
+  getInsightUrl,
+  getRelatedInsights,
+  stripInlineMarkup,
+} from '../../../lib/seo';
 import { 
   TechStackInfographic, 
   DisconnectedOpsInfographic, 
@@ -71,13 +82,70 @@ function formatPublishedMeta(date: string, publishedAt?: string) {
   return `${displayDate} · ${displayTime} IST`;
 }
 
+type ArticlePageProps = { params: Promise<{ slug: string }> };
+
 export function generateStaticParams() {
   return insights.map((post) => ({
     slug: post.slug,
   }));
 }
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = insights.find((p) => p.slug === slug);
+
+  if (!post) {
+    return {
+      title: 'Insight Not Found | Kramaniti',
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  const url = getInsightUrl(post);
+  const title = `${post.title} | Kramaniti Insights`;
+  const description = stripInlineMarkup(post.summary);
+  const publishedTime = getInsightPublishedDate(post);
+  const authors = post.author ? [post.author] : ['Kramaniti'];
+
+  return {
+    title,
+    description,
+    keywords: getInsightKeywords(post),
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      type: 'article',
+      url,
+      siteName: SITE_NAME,
+      title,
+      description,
+      publishedTime,
+      authors,
+      section: post.category,
+      tags: [post.category, post.focus],
+      images: [
+        {
+          url: absoluteUrl(DEFAULT_OG_IMAGE),
+          width: 512,
+          height: 512,
+          alt: `${SITE_NAME} mark`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+      images: [absoluteUrl(DEFAULT_OG_IMAGE)],
+    },
+  };
+}
+
+export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
   const post = insights.find((p) => p.slug === slug);
 
@@ -85,11 +153,77 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     notFound();
   }
 
+  const relatedInsights = getRelatedInsights(post, insights);
+  const articleUrl = getInsightUrl(post);
+  const publishedDate = getInsightPublishedDate(post);
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: stripInlineMarkup(post.summary),
+    author: {
+      '@type': 'Person',
+      name: post.author ?? 'Kramaniti',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: absoluteUrl('/'),
+      logo: {
+        '@type': 'ImageObject',
+        url: absoluteUrl(DEFAULT_OG_IMAGE),
+      },
+    },
+    datePublished: publishedDate,
+    dateModified: publishedDate,
+    mainEntityOfPage: articleUrl,
+    url: articleUrl,
+    articleSection: post.category,
+    keywords: getInsightKeywords(post).join(', '),
+    citation: post.sourceLinks?.map((source) => source.url),
+  };
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: absoluteUrl('/'),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Insights',
+        item: absoluteUrl('/insights/'),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title,
+        item: articleUrl,
+      },
+    ],
+  };
+
   return (
     <>
       <Navbar />
       <main className={styles.main}>
         <article className={styles.articleSection}>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(articleJsonLd).replace(/</g, '\\u003c'),
+            }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c'),
+            }}
+          />
           <div className={styles.container}>
             <Link href="/insights" className={styles.backLink}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -266,6 +400,33 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 Reach Out
               </Link>
             </div>
+
+            {post.sourceLinks?.length ? (
+              <aside className={styles.sourceBox} aria-labelledby="source-links-heading">
+                <h3 id="source-links-heading">Source links</h3>
+                <ul>
+                  {post.sourceLinks.map((source) => (
+                    <li key={source.url}>
+                      <a href={source.url} target="_blank" rel="noreferrer">
+                        {source.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            ) : null}
+
+            <aside className={styles.relatedBox} aria-labelledby="related-insights-heading">
+              <h3 id="related-insights-heading">Related insights</h3>
+              <div className={styles.relatedGrid}>
+                {relatedInsights.map((insight) => (
+                  <Link href={`/insights/${insight.slug}`} key={insight.slug} className={styles.relatedCard}>
+                    <span>{insight.category}</span>
+                    <strong>{insight.title}</strong>
+                  </Link>
+                ))}
+              </div>
+            </aside>
           </div>
         </article>
       </main>

@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PwaRuntime } from "@/components/pwa/PwaRuntime";
 import { GlobalShockwave } from "@/components/GlobalShockwave";
+import { absoluteUrl, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -20,9 +21,34 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  applicationName: "Kramaniti",
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: "Kramaniti | Practical AI Systems for Brand Growth",
   description: "Kramaniti helps brands identify high-impact workflows, build practical AI infrastructure, and turn those systems into clear brand communication.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: "Kramaniti | Practical AI Systems for Brand Growth",
+    description: "Strategy-first AI systems, operating infrastructure, and cinematic content for brand growth.",
+    images: [
+      {
+        url: absoluteUrl(DEFAULT_OG_IMAGE),
+        width: 512,
+        height: 512,
+        alt: "Kramaniti mark",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Kramaniti | Practical AI Systems for Brand Growth",
+    description: "Strategy-first AI systems, operating infrastructure, and cinematic content for brand growth.",
+    images: [absoluteUrl(DEFAULT_OG_IMAGE)],
+  },
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [

@@ -8,6 +8,10 @@ export interface Insight {
   publishedAt?: string;
   readTime: string;
   summary: string;
+  sourceLinks?: {
+    label: string;
+    url: string;
+  }[];
   content: string[];
 }
 
