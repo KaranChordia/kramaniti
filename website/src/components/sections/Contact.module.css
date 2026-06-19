@@ -198,6 +198,30 @@
   border-radius: 8px;
 }
 
+.honeypot {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.formMessage {
+  margin: 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.successMessage {
+  color: var(--color-burnished-gold);
+}
+
+.errorMessage {
+  color: #ff9f9f;
+}
+
 .calendlyColumn {
   opacity: 0;
   transform: translateY(20px);

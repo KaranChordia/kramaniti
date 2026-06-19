@@ -6,8 +6,12 @@ import { Button } from '../ui/Button';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
 
+type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
+
 export function Contact() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
+  const [submitState, setSubmitState] = React.useState<SubmitState>('idle');
+  const [message, setMessage] = React.useState('');
 
   const budgetOptions = [
     { value: '', label: 'Select budget range' },
@@ -18,6 +22,46 @@ export function Contact() {
     { value: '6L_plus', label: '₹6L+' },
     { value: 'not_sure', label: 'Not sure yet' }
   ];
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitState('submitting');
+    setMessage('');
+
+    const formData = new FormData(event.currentTarget);
+    const payload = {
+      name: String(formData.get('name') || ''),
+      email: String(formData.get('email') || ''),
+      company: String(formData.get('company') || ''),
+      budget: String(formData.get('budget') || ''),
+      goal: String(formData.get('goal') || ''),
+      website: String(formData.get('website') || ''),
+      page: window.location.href,
+    };
+
+    try {
+      const response = await fetch('/api/contact/', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Unable to submit the enquiry.');
+      }
+
+      event.currentTarget.reset();
+      setSubmitState('success');
+      setMessage('Your enquiry has been received. We will review the workflow context and respond shortly.');
+    } catch (error) {
+      setSubmitState('error');
+      setMessage(error instanceof Error ? error.message : 'Unable to submit the enquiry right now.');
+    }
+  }
 
   return (
     <section className={styles.contact} id="contact" ref={ref as React.RefObject<HTMLDivElement>}>
@@ -34,15 +78,28 @@ export function Contact() {
 
         <div className={styles.grid}>
           <div className={`${styles.formColumn} ${isVisible ? styles.visible : ''}`}>
-            <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-              <Input label="Name" placeholder="Your full name" required className={styles.contactInput} />
-              <Input label="Work Email" type="email" placeholder="name@company.com" required className={styles.contactInput} />
-              <Input label="Company / Brand" placeholder="Company or brand name" required className={styles.contactInput} />
-              <Select label="Budget Range" options={budgetOptions} className={styles.contactInput} />
-              <Textarea label="Workflow / Goal" placeholder="Tell us what feels messy, manual, unclear, or ready to improve" className={styles.contactInput} />
-              <Button type="submit" variant="primary" className={styles.submitBtn}>
-                Request Alignment Audit
+            <form className={styles.form} onSubmit={handleSubmit}>
+              <Input label="Name" name="name" placeholder="Your full name" required className={styles.contactInput} />
+              <Input label="Work Email" name="email" type="email" placeholder="name@company.com" required className={styles.contactInput} />
+              <Input label="Company / Brand" name="company" placeholder="Company or brand name" required className={styles.contactInput} />
+              <Select label="Budget Range" name="budget" options={budgetOptions} className={styles.contactInput} />
+              <Textarea label="Workflow / Goal" name="goal" placeholder="Tell us what feels messy, manual, unclear, or ready to improve" required className={styles.contactInput} />
+              <Input
+                label="Website"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                className={styles.honeypot}
+                aria-hidden="true"
+              />
+              <Button type="submit" variant="primary" className={styles.submitBtn} disabled={submitState === 'submitting'}>
+                {submitState === 'submitting' ? 'Sending...' : 'Request Alignment Audit'}
               </Button>
+              {message ? (
+                <p className={`${styles.formMessage} ${submitState === 'error' ? styles.errorMessage : styles.successMessage}`} role="status">
+                  {message}
+                </p>
+              ) : null}
             </form>
           </div>
 
