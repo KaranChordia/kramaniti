@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { Check } from 'lucide-react';
 import styles from './Contact.module.css';
 import { Input, Textarea, Select } from '../ui/Input';
 import { Button } from '../ui/Button';
@@ -7,6 +8,7 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
+const MIN_PROGRESS_MS = 750;
 
 export function Contact() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
@@ -41,13 +43,17 @@ export function Contact() {
     };
 
     try {
-      const response = await fetch('/api/contact/', {
+      const submissionRequest = fetch('/api/contact/', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
         },
         body: JSON.stringify(payload),
       });
+      const minimumProgress = new Promise((resolve) => {
+        window.setTimeout(resolve, MIN_PROGRESS_MS);
+      });
+      const [response] = await Promise.all([submissionRequest, minimumProgress]);
 
       const result = await response.json();
 
@@ -93,8 +99,24 @@ export function Contact() {
                 className={styles.honeypot}
                 aria-hidden="true"
               />
-              <Button type="submit" variant="primary" className={styles.submitBtn} disabled={submitState === 'submitting'}>
-                {submitState === 'submitting' ? 'Sending...' : 'Request Alignment Audit'}
+              <Button
+                type="submit"
+                variant="primary"
+                className={`${styles.submitBtn} ${submitState === 'submitting' ? styles.submitBtnLoading : ''} ${submitState === 'success' ? styles.submitBtnSuccess : ''}`}
+                disabled={submitState === 'submitting'}
+                aria-label={submitState === 'success' ? 'Enquiry submitted' : 'Request Alignment Audit'}
+              >
+                <span className={styles.submitProgress} aria-hidden="true" />
+                <span className={styles.submitContent}>
+                  {submitState === 'success' ? (
+                    <>
+                      <Check size={18} strokeWidth={2.5} aria-hidden="true" />
+                      <span>Enquiry Received</span>
+                    </>
+                  ) : (
+                    <span>{submitState === 'submitting' ? 'Sending...' : 'Request Alignment Audit'}</span>
+                  )}
+                </span>
               </Button>
               <p
                 className={`${styles.formMessage} ${submitState === 'error' ? styles.errorMessage : ''} ${submitState === 'success' ? styles.successMessage : ''}`}
