@@ -76,6 +76,14 @@ export function KramanitiAssistant() {
   const isBusy = isSending || isStreamingResponse;
 
   useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }, [draft, isOpen]);
+
+  useEffect(() => {
     if (!isOpen) return;
 
     messagesEndRef.current?.scrollIntoView({
@@ -347,7 +355,7 @@ export function KramanitiAssistant() {
                     void submitMessage();
                   }
                 }}
-                placeholder="Ask about Kramaniti, the offer, a workflow, or the right first system..."
+                placeholder="Ask about Kramaniti or a workflow..."
                 rows={1}
                 maxLength={900}
                 disabled={isBusy}

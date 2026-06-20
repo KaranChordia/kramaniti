@@ -22,6 +22,62 @@ const HERO_SIGNAL_NODES = [
   { x: 918, y: 474, c1x: 756, c1y: 466, c2x: 644, c2y: 366, delay: '3.05s', duration: '7.9s', radius: 3 },
 ];
 const HERO_TRAVEL_NODES = HERO_SIGNAL_NODES.filter((_, index) => index % 2 === 0);
+const HERO_AMBIENT_DOTS = [
+  { x: 42, y: 54, r: 1.8, delay: '-1.2s', duration: '7.4s' },
+  { x: 118, y: 96, r: 1.2, delay: '-4.3s', duration: '8.8s' },
+  { x: 214, y: 42, r: 1.5, delay: '-2.7s', duration: '6.9s' },
+  { x: 332, y: 86, r: 1.1, delay: '-5.5s', duration: '9.3s' },
+  { x: 438, y: 34, r: 1.7, delay: '-0.6s', duration: '7.8s' },
+  { x: 592, y: 76, r: 1.3, delay: '-3.9s', duration: '8.4s' },
+  { x: 728, y: 48, r: 1.8, delay: '-6.1s', duration: '9.7s' },
+  { x: 884, y: 92, r: 1.2, delay: '-2.1s', duration: '7.1s' },
+  { x: 956, y: 42, r: 1.5, delay: '-4.8s', duration: '8.9s' },
+  { x: 64, y: 178, r: 1.4, delay: '-5.9s', duration: '9.1s' },
+  { x: 174, y: 228, r: 1.9, delay: '-1.7s', duration: '7.6s' },
+  { x: 284, y: 170, r: 1.3, delay: '-3.2s', duration: '8.2s' },
+  { x: 392, y: 232, r: 1.6, delay: '-0.4s', duration: '6.8s' },
+  { x: 514, y: 156, r: 1.1, delay: '-4.6s', duration: '9.6s' },
+  { x: 632, y: 214, r: 1.7, delay: '-2.8s', duration: '7.9s' },
+  { x: 756, y: 168, r: 1.3, delay: '-6.4s', duration: '8.7s' },
+  { x: 848, y: 236, r: 1.8, delay: '-1.1s', duration: '7.3s' },
+  { x: 948, y: 188, r: 1.2, delay: '-3.7s', duration: '9s' },
+  { x: 96, y: 338, r: 1.6, delay: '-2.4s', duration: '7.7s' },
+  { x: 226, y: 404, r: 1.2, delay: '-5.2s', duration: '8.5s' },
+  { x: 346, y: 324, r: 1.8, delay: '-0.9s', duration: '9.2s' },
+  { x: 456, y: 392, r: 1.4, delay: '-4.1s', duration: '7.2s' },
+  { x: 578, y: 330, r: 1.9, delay: '-6.7s', duration: '9.8s' },
+  { x: 704, y: 414, r: 1.3, delay: '-1.5s', duration: '8.1s' },
+  { x: 812, y: 336, r: 1.6, delay: '-3.4s', duration: '7.5s' },
+  { x: 928, y: 396, r: 1.4, delay: '-5.7s', duration: '9.4s' },
+  { x: 52, y: 508, r: 1.2, delay: '-3.1s', duration: '8.6s' },
+  { x: 156, y: 542, r: 1.7, delay: '-0.8s', duration: '7s' },
+  { x: 298, y: 494, r: 1.5, delay: '-4.9s', duration: '9.5s' },
+  { x: 424, y: 548, r: 1.1, delay: '-2.2s', duration: '7.8s' },
+  { x: 558, y: 502, r: 1.6, delay: '-6.2s', duration: '8.9s' },
+  { x: 688, y: 538, r: 1.2, delay: '-1.9s', duration: '7.6s' },
+  { x: 824, y: 492, r: 1.8, delay: '-4.4s', duration: '9.1s' },
+  { x: 960, y: 532, r: 1.3, delay: '-2.9s', duration: '8.3s' },
+];
+const HERO_AMBIENT_LINES = [
+  { x1: 42, y1: 54, x2: 214, y2: 42, delay: '-2.1s', duration: '10.2s' },
+  { x1: 118, y1: 96, x2: 284, y2: 170, delay: '-6.4s', duration: '12.4s' },
+  { x1: 332, y1: 86, x2: 514, y2: 156, delay: '-4.8s', duration: '9.8s' },
+  { x1: 592, y1: 76, x2: 756, y2: 168, delay: '-1.3s', duration: '11.6s' },
+  { x1: 728, y1: 48, x2: 948, y2: 188, delay: '-7.2s', duration: '13.1s' },
+  { x1: 64, y1: 178, x2: 174, y2: 228, delay: '-3.6s', duration: '10.8s' },
+  { x1: 284, y1: 170, x2: 392, y2: 232, delay: '-8.1s', duration: '12s' },
+  { x1: 632, y1: 214, x2: 848, y2: 236, delay: '-5.3s', duration: '9.4s' },
+  { x1: 96, y1: 338, x2: 226, y2: 404, delay: '-0.9s', duration: '11.2s' },
+  { x1: 346, y1: 324, x2: 456, y2: 392, delay: '-6.8s', duration: '10.5s' },
+  { x1: 578, y1: 330, x2: 704, y2: 414, delay: '-3.9s', duration: '12.8s' },
+  { x1: 812, y1: 336, x2: 928, y2: 396, delay: '-9.2s', duration: '11.7s' },
+  { x1: 52, y1: 508, x2: 156, y2: 542, delay: '-4.5s', duration: '9.9s' },
+  { x1: 298, y1: 494, x2: 424, y2: 548, delay: '-1.8s', duration: '12.2s' },
+  { x1: 558, y1: 502, x2: 688, y2: 538, delay: '-7.7s', duration: '10.7s' },
+  { x1: 824, y1: 492, x2: 960, y2: 532, delay: '-2.7s', duration: '13.4s' },
+  { x1: 214, y1: 42, x2: 174, y2: 228, delay: '-5.9s', duration: '12.7s' },
+  { x1: 756, y1: 168, x2: 704, y2: 414, delay: '-0.4s', duration: '11.3s' },
+];
 
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -106,6 +162,37 @@ export function Hero() {
         <div className={styles.background} aria-hidden="true">
           <div className={`${styles.glow} ${styles.glowLeft}`}></div>
           <div className={`${styles.glow} ${styles.glowRight}`}></div>
+          <svg className={styles.ambientNetwork} viewBox="0 0 1000 600" preserveAspectRatio="none">
+            <g className={styles.ambientLines}>
+              {HERO_AMBIENT_LINES.map((line, index) => (
+                <line
+                  key={`ambient-line-${index}`}
+                  x1={line.x1}
+                  y1={line.y1}
+                  x2={line.x2}
+                  y2={line.y2}
+                  style={{
+                    '--ambient-delay': line.delay,
+                    '--ambient-duration': line.duration,
+                  } as React.CSSProperties}
+                />
+              ))}
+            </g>
+            <g className={styles.ambientDots}>
+              {HERO_AMBIENT_DOTS.map((dot, index) => (
+                <circle
+                  key={`ambient-dot-${index}`}
+                  cx={dot.x}
+                  cy={dot.y}
+                  r={dot.r}
+                  style={{
+                    '--ambient-delay': dot.delay,
+                    '--ambient-duration': dot.duration,
+                  } as React.CSSProperties}
+                />
+              ))}
+            </g>
+          </svg>
           
           {ENABLE_HERO_SCROLL_SEQUENCE && (
             <>

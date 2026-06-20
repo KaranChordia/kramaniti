@@ -512,11 +512,12 @@
 .inputDock textarea {
   width: 100%;
   min-height: 48px;
-  max-height: 126px;
+  height: 48px;
   padding: 14px 15px;
   border: 1px solid rgba(246, 223, 157, 0.14);
   border-radius: 8px;
   resize: none;
+  overflow: hidden;
   color: rgba(255, 255, 255, 0.9);
   background: rgba(255, 255, 255, 0.055);
   outline: none;
@@ -612,15 +613,31 @@
     height: 64px;
   }
 
+  .stage {
+    place-items: start center;
+  }
+
+  .backdrop {
+    top: calc(98px + env(safe-area-inset-top));
+  }
+
   .panel {
-    width: calc(100vw - 18px);
-    height: calc(100dvh - 96px);
-    margin-top: 44px;
+    width: calc(100vw - 16px);
+    height: calc(100dvh - 118px - env(safe-area-inset-top));
+    margin-top: calc(104px + env(safe-area-inset-top));
+    border-radius: 8px;
+    transform:
+      translate3d(0, var(--assistant-origin-y), 0)
+      scale(0.12);
+  }
+
+  .rootOpen .panel {
+    border-radius: 8px;
   }
 
   .header {
     align-items: center;
-    padding: 24px 18px 18px;
+    padding: calc(16px + env(safe-area-inset-top)) 18px 16px;
   }
 
   .panelBlob {
@@ -646,7 +663,18 @@
 
   .inputDock {
     grid-template-columns: 1fr auto;
-    padding-bottom: 18px;
+    padding-top: 14px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+
+  .inputDock textarea {
+    font-size: 16px;
+    line-height: 1.38;
+  }
+
+  .sendButton {
+    width: 46px;
+    height: 46px;
   }
 }
 
