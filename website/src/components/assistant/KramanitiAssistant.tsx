@@ -251,8 +251,6 @@ export function KramanitiAssistant() {
         aria-expanded={isOpen}
         title={isOpen ? 'Close assistant' : 'Open Kramaniti assistant'}
       >
-        <span className={styles.orbitOne} aria-hidden="true" />
-        <span className={styles.orbitTwo} aria-hidden="true" />
         <span className={styles.assistantBlob} aria-hidden="true" />
       </button>
 

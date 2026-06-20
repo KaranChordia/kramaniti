@@ -86,7 +86,7 @@
     inset 18px 0 34px rgba(201, 168, 76, 0.14);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  transform: translateZ(0);
+  animation: blobFloat 4.8s ease-in-out infinite alternate;
 }
 
 .blobButton:hover .assistantBlob {
@@ -133,36 +133,6 @@
 
 .rootOpen.rootResponding .assistantBlob {
   filter: brightness(1.3) saturate(1.12);
-}
-
-.orbitOne,
-.orbitTwo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.86) 0%, rgba(201, 168, 76, 0.62) 52%, transparent 100%);
-  box-shadow: 0 0 24px rgba(201, 168, 76, 0.46);
-  opacity: 0.82;
-  z-index: 2;
-}
-
-.orbitOne {
-  width: 14px;
-  height: 14px;
-  transform: rotate(28deg) translateX(42px) rotate(-28deg);
-}
-
-.orbitTwo {
-  width: 9px;
-  height: 9px;
-  transform: rotate(208deg) translateX(36px) rotate(-208deg);
-}
-
-.rootTyping .orbitOne,
-.rootTyping .orbitTwo {
-  opacity: 1;
-  box-shadow: 0 0 34px rgba(201, 168, 76, 0.7);
 }
 
 .stage {
