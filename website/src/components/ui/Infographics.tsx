@@ -537,6 +537,95 @@ export function BuildReadinessGateInfographic() {
   );
 }
 
+export function WorkflowPolicyNoteInfographic() {
+  const fields = [
+    {
+      icon: Workflow,
+      label: 'Workflow name',
+      copy: 'The route where AI support is allowed, reviewed, and retained.',
+    },
+    {
+      icon: Settings2,
+      label: 'Allowed support',
+      copy: 'What AI may draft, summarize, classify, check, or suggest.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Review condition',
+      copy: 'The moment a person must approve, override, or escalate.',
+    },
+    {
+      icon: DatabaseZap,
+      label: 'Write-back record',
+      copy: 'Where the approved output, exception, or learning returns.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Workflow Policy Note</div>
+      <div className={styles.signalGrid}>
+        {fields.map((field, index) => {
+          const Icon = field.icon;
+          const isFinal = index === fields.length - 1;
+
+          return (
+            <div className={`${styles.signalCard} ${isFinal ? styles.signalCardHighlight : ''}`} key={field.label}>
+              <div className={isFinal ? styles.signalIconHighlight : styles.signalIcon}>
+                <Icon size={20} />
+              </div>
+              <div className={isFinal ? styles.signalMetricGold : styles.signalMetric}>{String(index + 1).padStart(2, '0')}</div>
+              <div className={isFinal ? styles.signalLabelGold : styles.signalLabel}>{field.label}</div>
+              <p className={isFinal ? styles.signalCopyGold : styles.signalCopy}>{field.copy}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function PolicyBoundaryRouteInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Policy Boundary Route</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Workflow moment</th>
+              <th className={styles.matrixColHeader}>Detached policy says</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Workflow note says</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Input</td>
+              <td className={styles.matrixCell}>Protect sensitive data.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Use only approved notes; remove private customer details.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Output</td>
+              <td className={styles.matrixCell}>Review AI-generated work.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Founder reviews proof-sensitive claims before publishing.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Action</td>
+              <td className={styles.matrixCell}>Avoid excessive autonomy.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>AI may suggest next step; owner sends or rejects it.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Record</td>
+              <td className={styles.matrixCell}>Keep auditability in mind.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Approved answer, exception, and owner decision write back.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 // 2. The Priority Pyramid (Layered Stack)
 export function TechStackInfographic() {
   return (

@@ -57,7 +57,9 @@ import {
   FounderMemoryInfrastructureInfographic,
   MemoryWritebackLoopInfographic,
   SystemAcceptanceTestInfographic,
-  BuildReadinessGateInfographic
+  BuildReadinessGateInfographic,
+  WorkflowPolicyNoteInfographic,
+  PolicyBoundaryRouteInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -375,6 +377,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:build-readiness-gate]') {
           return <BuildReadinessGateInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:workflow-policy-note]') {
+          return <WorkflowPolicyNoteInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:policy-boundary-route]') {
+          return <PolicyBoundaryRouteInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
