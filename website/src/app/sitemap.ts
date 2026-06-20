@@ -29,7 +29,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
+      url: absoluteUrl('/work/'),
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: absoluteUrl('/work/nexocean/'),
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: absoluteUrl('/work/maitri/'),
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.6,

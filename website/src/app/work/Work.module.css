@@ -1,0 +1,251 @@
+.main {
+  min-height: 100vh;
+  background: var(--gradient-dark-depth);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+:global(html[data-theme='light']) .main {
+  background: linear-gradient(180deg, #f8f8f8 0%, #ffffff 52%, #f0f0f5 100%);
+}
+
+.container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero,
+.section {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero {
+  padding: 146px 0 78px;
+}
+
+.hero::before,
+.section::before {
+  content: '';
+  position: absolute;
+  inset: -12% -6%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(201, 168, 76, 0.1), transparent 28%),
+    radial-gradient(circle at 84% 68%, rgba(255, 255, 255, 0.035), transparent 25%),
+    linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.035), transparent);
+}
+
+.heroCopy {
+  max-width: 850px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 18px;
+  padding: 8px 12px;
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  border-radius: 10px;
+  background: rgba(201, 168, 76, 0.08);
+  color: var(--color-burnished-gold);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.section h2 {
+  margin: 0;
+  font-family: var(--font-outfit), sans-serif;
+  letter-spacing: 0;
+  color: var(--text-primary);
+}
+
+.hero h1 {
+  max-width: 840px;
+  font-size: clamp(44px, 6vw, 76px);
+  line-height: 1.03;
+}
+
+.lead {
+  max-width: 760px;
+  margin: 22px 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.68;
+}
+
+.section {
+  padding: 56px 0 108px;
+}
+
+.folderGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.folderCard {
+  position: relative;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.025);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.14);
+  color: inherit;
+  text-decoration: none;
+  backdrop-filter: blur(16px);
+  transition: transform 240ms ease, border-color 240ms ease, background 240ms ease;
+}
+
+.folderCard:hover {
+  transform: translateY(-5px);
+  border-color: rgba(201, 168, 76, 0.34);
+  color: inherit;
+}
+
+.folderCard::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  left: 30px;
+  width: 112px;
+  height: 34px;
+  border: 1px solid rgba(201, 168, 76, 0.22);
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  background: rgba(201, 168, 76, 0.1);
+}
+
+.folderCard::after {
+  content: '';
+  position: absolute;
+  inset: 58px 24px auto;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201, 168, 76, 0.44), transparent);
+}
+
+.folderTop {
+  position: relative;
+  z-index: 1;
+  padding-top: 78px;
+}
+
+.folderMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.folderMeta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.folderCard h2 {
+  font-size: clamp(32px, 3.8vw, 48px);
+  line-height: 1.08;
+}
+
+.folderCard p {
+  margin: 18px 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 15px;
+  line-height: 1.72;
+}
+
+.folderFooter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 42px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.folderFooter span:first-child {
+  color: var(--color-burnished-gold);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.folderFooter span:last-child {
+  color: var(--text-muted);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+}
+
+:global(html[data-theme='light']) .folderCard {
+  border-color: rgba(17, 17, 17, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.74)),
+    rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 42px rgba(16, 16, 24, 0.08);
+}
+
+:global(html[data-theme='light']) .folderMeta span {
+  border-color: rgba(17, 17, 17, 0.08);
+}
+
+@media (max-width: 860px) {
+  .folderGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero {
+    padding: 116px 0 52px;
+  }
+
+  .section {
+    padding: 42px 0 78px;
+  }
+
+  .container {
+    padding: 0 18px;
+  }
+
+  .folderCard {
+    min-height: 0;
+    padding: 24px;
+  }
+
+  .folderCard::before {
+    left: 24px;
+  }
+}

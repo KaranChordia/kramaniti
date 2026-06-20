@@ -50,7 +50,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
               <Link href="/#services" className={styles.navLink}>Services</Link>
               <Link href="/clarity-engine" className={styles.navLink}>Clarity Engine</Link>
               <Link href="/#workflows" className={styles.navLink}>Process</Link>
-              <Link href="/work/nexocean" className={styles.navLink}>Work</Link>
+              <Link href="/work" className={styles.navLink}>Work</Link>
               <Link href="/founder" className={styles.navLink}>Founder</Link>
               <Link href="/insights" className={styles.navLink}>Insights</Link>
             </nav>
@@ -88,7 +88,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
             <Link href="/clarity-engine" className={styles.mobileLink} onClick={closeMobileMenu}>Clarity Engine</Link>
             <Link href="/#workflows" className={styles.mobileLink} onClick={closeMobileMenu}>Process</Link>
-            <Link href="/work/nexocean" className={styles.mobileLink} onClick={closeMobileMenu}>Work</Link>
+            <Link href="/work" className={styles.mobileLink} onClick={closeMobileMenu}>Work</Link>
             <Link href="/founder" className={styles.mobileLink} onClick={closeMobileMenu}>Founder</Link>
             <Link href="/insights" className={styles.mobileLink} onClick={closeMobileMenu}>Insights</Link>
             <div style={{ marginTop: '24px' }}>

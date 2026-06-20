@@ -298,9 +298,14 @@ export default function NexoceanWorkPage() {
               <p>
                 The internal repository remains reference-only. This page focuses on the business-facing shape of the work: practical AI systems for recruiters, supported by premium brand communication.
               </p>
-              <Link href="/#contact" className={styles.closingLink}>
-                Discuss a workflow audit
-              </Link>
+              <div className={styles.closingActions}>
+                <Link href="/#contact" className={styles.closingLink}>
+                  Discuss a workflow audit
+                </Link>
+                <Link href="/work" className={styles.closingLink}>
+                  Back to work folders
+                </Link>
+              </div>
             </div>
           </div>
         </section>
