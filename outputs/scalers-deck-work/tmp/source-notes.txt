@@ -1,0 +1,25 @@
+Source notes for 5-slide deck: Kramaniti x The Scalers
+
+User-provided context:
+- Karan spoke with the founder of The Scalers and briefly explained Kramaniti's work.
+- Karan showed the Kramaniti work page and discussed how he helped Nexocean with internal tools, AI workflows, and content.
+- The founder showed interest and asked Karan to speak with Akshita, lead hiring manager.
+- The Scalers and Kramaniti operate from the same co-working space context: WeWork Galaxy, Bengaluru.
+
+Kramaniti repository sources:
+- AGENTS.md: Kramaniti is a first-principles AI systems partner connecting strategy, operational infrastructure, and cinematic content into one brand growth pipeline. Narrative sequence: strategy before tools, systems before scale, content after clarity.
+- 06_ai_agent_context/system_prompts/master_context.md: Kramaniti works across strategy, systems, and content. Systems deliverables include custom workflows, practical AI tools, internal systems, process integrations, content repurposing systems, usage documentation, override rules, and human review checkpoints.
+- website/src/components/sections/Services.tsx: service architecture is Foundation Alignment Audit, Intelligence System Build, and Alignment Retainer, with AI Enablement & Adoption as human-collaborative support.
+- website/src/components/sections/Workflows.tsx: process is diagnose reality, define operating logic, design the system, build practical support, enable adoption, translate into presence, refine continuously.
+- website/src/app/work/nexocean/page.tsx: Nexocean selected work is a 5-month contract engagement involving internal recruiter workflow tools and brand content. Claim guardrail: no quantified outcomes or endorsement claims.
+
+The Scalers public sources:
+- The Scalers homepage, accessed 2026-06-19: https://thescalers.com/
+  Supports: offshore software development teams in India; dedicated tech and data teams in Bangalore; senior AI-capable engineers; 130+ offshore tech and data teams built; 7-step recruitment process; private branded office; HR, payroll, compliance, and security support; people-first approach; Great Place to Work; 45-60 day average from kickoff to onboarding first engineers; integration with same tools/processes/workflows; Partner Success Manager and Chief Happiness Officer references.
+- The Scalers About page, accessed 2026-06-19: https://thescalers.com/about-us/
+  Supports: partners treat teams as integral colleagues, not outsourced help; core values of transparency, empowerment, inclusivity; culture emphasis; since 2014, over 130 high-performing teams; Bangalore office at 43 Residency Road.
+
+Deck claim discipline:
+- Use The Scalers facts only from public sources.
+- Use Nexocean as selected experience only, framed as internal recruiter workflow tools + brand content during a 5-month contract. No metrics, testimonials, or client endorsement.
+- Do not use logos unless verified official assets are intentionally added. This deck uses text-only references.

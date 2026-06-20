@@ -1,0 +1,120 @@
+{"kind":"deck","id":"pr/vd4zk6","name":"Deck"}
+{"kind":"layout","layoutId":"b567bdc9-f3a2-40d9-ac50-8b7e4c90c0f1","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"2eec7a52-bc9f-4c6d-9ed3-439552f2a5e1","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/6z2gsf","slide":1,"title":"FOUNDER REFERRAL CONVERSATION","textShapes":15}
+{"kind":"textbox","id":"sh/0fepkzup","slide":1,"text":"FOUNDER REFERRAL CONVERSATION","textPreview":"FOUNDER REFERRAL CONVERSATION","textChars":29,"textLines":1,"bbox":[56,34,420,22]}
+{"kind":"textbox","id":"sh/bulwval8","slide":1,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[1168,32,48,24]}
+{"kind":"shape","id":"sh/i9s36hcr","slide":1,"bbox":[56,64,1168,0]}
+{"kind":"textbox","id":"sh/tovahoza","slide":1,"text":"A practical systems partner for The Scalers","textPreview":"A practical systems partner for The Scalers","textChars":43,"textLines":1,"bbox":[56,118,760,140]}
+{"kind":"textbox","id":"sh/032lszqt","slide":1,"text":"Prepared for Akshita and the hiring team after the founder conversation at WeWork Galaxy, Bengaluru.","textPreview":"Prepared for Akshita and the hiring team after the founder conversation at WeWork Galaxy, Bengaluru.","textChars":100,"textLines":1,"bbox":[60,280,660,62]}
+{"kind":"shape","id":"sh/bi9s36hc","slide":1,"bbox":[60,376,210,34]}
+{"kind":"textbox","id":"sh/ixczed8v","slide":1,"text":"STRATEGY BEFORE TOOLS","textPreview":"STRATEGY BEFORE TOOLS","textChars":21,"textLines":1,"bbox":[76,384,178,16]}
+{"kind":"shape","id":"sh/tcj6tova","slide":1,"bbox":[288,376,210,34]}
+{"kind":"textbox","id":"sh/0rqd4vmt","slide":1,"text":"SYSTEMS BEFORE SCALE","textPreview":"SYSTEMS BEFORE SCALE","textChars":20,"textLines":1,"bbox":[304,384,178,16]}
+{"kind":"shape","id":"sh/i9s36hcr","slide":1,"bbox":[516,376,210,34]}
+{"kind":"textbox","id":"sh/bulwval8","slide":1,"text":"CONTENT AFTER CLARITY","textPreview":"CONTENT AFTER CLARITY","textChars":21,"textLines":1,"bbox":[532,384,178,16]}
+{"kind":"shape","id":"sh/0fepkzup","slide":1,"bbox":[824,118,344,392]}
+{"kind":"textbox","id":"sh/p0bi9s36","slide":1,"text":"Why this is relevant","textPreview":"Why this is relevant","textChars":20,"textLines":1,"bbox":[858,154,270,32]}
+{"kind":"textbox","id":"sh/ixczed8v","slide":1,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[858,212,38,24]}
+{"kind":"textbox","id":"sh/bi9s36hc","slide":1,"text":"The Scalers already sells a people-first, integrated team-building model.","textPreview":"The Scalers already sells a people-first, integrated team-building model.","textChars":73,"textLines":1,"bbox":[902,204,220,62]}
+{"kind":"textbox","id":"sh/032lszqt","slide":1,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[858,294,38,24]}
+{"kind":"textbox","id":"sh/tovahoza","slide":1,"text":"Hiring, onboarding, culture, and partner trust are workflow-heavy by nature.","textPreview":"Hiring, onboarding, culture, and partner trust are workflow-heavy by nature.","textChars":76,"textLines":1,"bbox":[902,286,220,62]}
+{"kind":"textbox","id":"sh/il0rqd4v","slide":1,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[858,376,38,24]}
+{"kind":"textbox","id":"sh/b6xkf6dc","slide":1,"text":"Kramaniti can turn that operating knowledge into sharper internal tools, practical AI support, and content systems.","textPreview":"Kramaniti can turn that operating knowledge into sharper internal tools, practical AI support, and content systems.","textChars":115,"textLines":1,"bbox":[902,368,220,62]}
+{"kind":"textbox","id":"sh/32lszqtc","slide":1,"text":"Text-only references. No client outcome claims added.","textPreview":"Text-only references. No client outcome claims added.","textChars":53,"textLines":1,"bbox":[58,652,620,18]}
+{"kind":"notes","id":"nt/6z2gsf","slide":1,"text":""}
+{"kind":"slide","id":"sl/b5ed74","slide":2,"title":"KRAMANITI METHOD","textShapes":14}
+{"kind":"textbox","id":"sh/rqd4vmtw","slide":2,"text":"KRAMANITI METHOD","textPreview":"KRAMANITI METHOD","textChars":16,"textLines":1,"bbox":[56,34,420,22]}
+{"kind":"textbox","id":"sh/kb6xkf6d","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1168,32,48,24]}
+{"kind":"shape","id":"sh/9w3m94fu","slide":2,"bbox":[56,64,1168,0]}
+{"kind":"textbox","id":"sh/2t83itgf","slide":2,"text":"What Kramaniti does","textPreview":"What Kramaniti does","textChars":19,"textLines":1,"bbox":[56,96,780,96]}
+{"kind":"textbox","id":"sh/re1w7mp0","slide":2,"text":"We connect business clarity, internal infrastructure, and brand communication so growth does not depend on disconnected AI experiments.","textPreview":"We connect business clarity, internal infrastructure, and brand communication so growth does not depend on disconnected AI experiments.","textChars":135,"textLines":1,"bbox":[58,190,760,62]}
+{"kind":"shape","id":"sh/kzupwb2h","slide":2,"bbox":[74,320,330,210]}
+{"kind":"textbox","id":"sh/9knih4by","slide":2,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[102,346,48,28]}
+{"kind":"textbox","id":"sh/2p8nqxs7","slide":2,"text":"Strategy","textPreview":"Strategy","textChars":8,"textLines":1,"bbox":[102,384,250,36]}
+{"kind":"textbox","id":"sh/ra5gbq1o","slide":2,"text":"Diagnose workflow reality, bottlenecks, decision loops, and the first system worth building.","textPreview":"Diagnose workflow reality, bottlenecks, decision loops, and the first system worth building.","textChars":92,"textLines":1,"bbox":[102,438,266,70]}
+{"kind":"shape","id":"sh/3m94fu18","slide":2,"bbox":[404,425,54,0]}
+{"kind":"shape","id":"sh/a5gbq1or","slide":2,"bbox":[458,320,330,210]}
+{"kind":"textbox","id":"sh/lszqtcj6","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[486,346,48,28]}
+{"kind":"textbox","id":"sh/s72x4nap","slide":2,"text":"Systems","textPreview":"Systems","textChars":7,"textLines":1,"bbox":[486,384,250,36]}
+{"kind":"textbox","id":"sh/3ylc7u54","slide":2,"text":"Design practical AI-assisted tools, operating workflows, documentation, and human review checkpoints.","textPreview":"Design practical AI-assisted tools, operating workflows, documentation, and human review checkpoints.","textChars":101,"textLines":1,"bbox":[486,438,266,70]}
+{"kind":"shape","id":"sh/adsji5sn","slide":2,"bbox":[788,425,54,0]}
+{"kind":"shape","id":"sh/h4byhgn2","slide":2,"bbox":[842,320,330,210]}
+{"kind":"textbox","id":"sh/sji5snel","slide":2,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[870,346,48,28]}
+{"kind":"textbox","id":"sh/za1gvy90","slide":2,"text":"Content","textPreview":"Content","textChars":7,"textLines":1,"bbox":[870,384,250,36]}
+{"kind":"textbox","id":"sh/ap4r65wj","slide":2,"text":"Translate internal clarity into sharper founder narrative, hiring communication, and reusable content.","textPreview":"Translate internal clarity into sharper founder narrative, hiring communication, and reusable content.","textChars":102,"textLines":1,"bbox":[870,438,266,70]}
+{"kind":"textbox","id":"sh/yd0z6103","slide":2,"text":"Operating principle: automate where useful, assist where judgment needs support, keep human-led where trust, taste, or context matters.","textPreview":"Operating principle: automate where useful, assist where judgment needs support, keep human-led where trust, taste, or context matters.","textChars":135,"textLines":1,"bbox":[92,582,1060,34]}
+{"kind":"notes","id":"nt/b5ed74","slide":2,"text":""}
+{"kind":"slide","id":"sl/geuokm","slide":3,"title":"THE SCALERS FIT","textShapes":13}
+{"kind":"textbox","id":"sh/at47y1kr","slide":3,"text":"THE SCALERS FIT","textPreview":"THE SCALERS FIT","textChars":15,"textLines":1,"bbox":[56,34,420,22]}
+{"kind":"textbox","id":"sh/lkjm1cfa","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1168,32,48,24]}
+{"kind":"shape","id":"sh/szqtcj6t","slide":3,"bbox":[56,64,1168,0]}
+{"kind":"textbox","id":"sh/32lszqtc","slide":3,"text":"Where this maps to The Scalers","textPreview":"Where this maps to The Scalers","textChars":30,"textLines":1,"bbox":[56,96,780,96]}
+{"kind":"textbox","id":"sh/ahoza1gv","slide":3,"text":"The Scalers' public model is already system-shaped: recruitment, managed operations, cultural alignment, and long-term people care.","textPreview":"The Scalers' public model is already system-shaped: recruitment, managed operations, cultural alignment, and long-term people care.","textChars":131,"textLines":1,"bbox":[58,190,760,62]}
+{"kind":"shape","id":"sh/l87ed8ba","slide":3,"bbox":[70,292,472,80]}
+{"kind":"textbox","id":"sh/sneloj2t","slide":3,"text":"Recruitment engine","textPreview":"Recruitment engine","textChars":18,"textLines":1,"bbox":[96,310,250,24]}
+{"kind":"textbox","id":"sh/3q5o7qpg","slide":3,"text":"7-step process, role materials, screening, interviews, and candidate fit.","textPreview":"7-step process, role materials, screening, interviews, and candidate fit.","textChars":73,"textLines":1,"bbox":[96,340,390,28]}
+{"kind":"shape","id":"sh/e9cvixcz","slide":3,"bbox":[70,404,472,80]}
+{"kind":"textbox","id":"sh/87ed8bat","slide":3,"text":"Operating support","textPreview":"Operating support","textChars":17,"textLines":1,"bbox":[96,422,250,24]}
+{"kind":"textbox","id":"sh/xs72x4na","slide":3,"text":"HR, payroll, compliance, security, office setup, partner success, and local execution.","textPreview":"HR, payroll, compliance, security, office setup, partner success, and local execution.","textChars":86,"textLines":1,"bbox":[96,452,390,28]}
+{"kind":"shape","id":"sh/q1orytsv","slide":3,"bbox":[70,516,472,104]}
+{"kind":"textbox","id":"sh/fmlkjm1c","slide":3,"text":"Culture and retention","textPreview":"Culture and retention","textChars":21,"textLines":1,"bbox":[96,534,250,48]}
+{"kind":"textbox","id":"sh/8z25kb6x","slide":3,"text":"People-first integration, transparency, empowerment, inclusivity, and team belonging.","textPreview":"People-first integration, transparency, empowerment, inclusivity, and team belonging.","textChars":85,"textLines":1,"bbox":[96,574,390,42]}
+{"kind":"shape","id":"sh/1gvy90je","slide":3,"bbox":[682,292,448,278]}
+{"kind":"textbox","id":"sh/qtcj6tov","slide":3,"text":"Kramaniti can strengthen the internal layer behind that promise.","textPreview":"Kramaniti can strengthen the internal layer behind that promise.","textChars":64,"textLines":1,"bbox":[722,328,356,118]}
+{"kind":"textbox","id":"sh/je9cvixc","slide":3,"text":"Not by replacing people. By giving hiring and people teams clearer workflows, better knowledge systems, practical AI support, and content that makes the model easier to understand.","textPreview":"Not by replacing people. By giving hiring and people teams clearer workflows, better knowledge systems, practical AI support, and content...","textChars":180,"textLines":1,"bbox":[724,464,350,86]}
+{"kind":"shape","id":"sh/8v6psfil","slide":3,"bbox":[562,412,100,0]}
+{"kind":"textbox","id":"sh/xczed8v6","slide":3,"text":"Sources: The Scalers homepage and About page, accessed 19 Jun 2026.","textPreview":"Sources: The Scalers homepage and About page, accessed 19 Jun 2026.","textChars":67,"textLines":1,"bbox":[58,652,620,18]}
+{"kind":"notes","id":"nt/geuokm","slide":3,"text":""}
+{"kind":"slide","id":"sl/73iz7h","slide":4,"title":"VALUE PROPOSITION","textShapes":17}
+{"kind":"textbox","id":"sh/0nuxc3yl","slide":4,"text":"VALUE PROPOSITION","textPreview":"VALUE PROPOSITION","textChars":17,"textLines":1,"bbox":[56,34,420,22]}
+{"kind":"textbox","id":"sh/72x4nap4","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1168,32,48,24]}
+{"kind":"shape","id":"sh/ih4byhgn","slide":4,"bbox":[56,64,1168,0]}
+{"kind":"textbox","id":"sh/pkzupwb2","slide":4,"text":"What Kramaniti can offer Scalers","textPreview":"What Kramaniti can offer Scalers","textChars":32,"textLines":1,"bbox":[56,96,780,96]}
+{"kind":"textbox","id":"sh/0z61032l","slide":4,"text":"A focused support layer for hiring operations, recruiter enablement, and content that explains The Scalers' people-first model with more clarity.","textPreview":"A focused support layer for hiring operations, recruiter enablement, and content that explains The Scalers' people-first model with more ...","textChars":145,"textLines":1,"bbox":[58,190,760,62]}
+{"kind":"shape","id":"sh/7ed8bat4","slide":4,"bbox":[72,304,520,132]}
+{"kind":"textbox","id":"sh/itgfmlkj","slide":4,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[98,326,40,22]}
+{"kind":"textbox","id":"sh/pwb2hwfy","slide":4,"text":"Hiring workflow clarity","textPreview":"Hiring workflow clarity","textChars":23,"textLines":1,"bbox":[160,326,360,34]}
+{"kind":"textbox","id":"sh/0bi9s36h","slide":4,"text":"Map the journey from role intake to onboarding, identify repeated friction, and define the best first system to improve.","textPreview":"Map the journey from role intake to onboarding, identify repeated friction, and define the best first system to improve.","textChars":120,"textLines":1,"bbox":[160,370,390,52]}
+{"kind":"shape","id":"sh/u18jqh0f","slide":4,"bbox":[668,304,520,132]}
+{"kind":"textbox","id":"sh/jm1cfa9w","slide":4,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[694,326,40,22]}
+{"kind":"textbox","id":"sh/c7u54zid","slide":4,"text":"Recruiter AI workbench","textPreview":"Recruiter AI workbench","textChars":22,"textLines":1,"bbox":[756,326,360,34]}
+{"kind":"textbox","id":"sh/1orytsvu","slide":4,"text":"Prototype focused assistants for JD intake, candidate notes, outreach drafts, interview prep, and knowledge retrieval.","textPreview":"Prototype focused assistants for JD intake, candidate notes, outreach drafts, interview prep, and knowledge retrieval.","textChars":118,"textLines":1,"bbox":[756,370,390,52]}
+{"kind":"shape","id":"sh/u9knih4b","slide":4,"bbox":[72,486,520,132]}
+{"kind":"textbox","id":"sh/judg7ads","slide":4,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[98,508,40,22]}
+{"kind":"textbox","id":"sh/cfa9w3m9","slide":4,"text":"Candidate + partner communication","textPreview":"Candidate + partner communication","textChars":33,"textLines":1,"bbox":[160,508,360,34]}
+{"kind":"textbox","id":"sh/1032lszq","slide":4,"text":"Turn process knowledge into sharper hiring pages, recruiter scripts, explainers, and founder/leadership content.","textPreview":"Turn process knowledge into sharper hiring pages, recruiter scripts, explainers, and founder/leadership content.","textChars":112,"textLines":1,"bbox":[160,552,390,52]}
+{"kind":"shape","id":"sh/udg7adsj","slide":4,"bbox":[668,486,520,132]}
+{"kind":"textbox","id":"sh/nyd0z610","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[694,508,40,22]}
+{"kind":"textbox","id":"sh/fu18jqh0","slide":4,"text":"Enablement and adoption","textPreview":"Enablement and adoption","textChars":23,"textLines":1,"bbox":[756,508,360,34]}
+{"kind":"textbox","id":"sh/m94fu18j","slide":4,"text":"Create usage rules, override points, review checkpoints, and team guidance so tools support recruiters without taking judgment away.","textPreview":"Create usage rules, override points, review checkpoints, and team guidance so tools support recruiters without taking judgment away.","textChars":132,"textLines":1,"bbox":[756,552,390,52]}
+{"kind":"textbox","id":"sh/x0nuxc3y","slide":4,"text":"Selected experience reference: Nexocean internal recruiter workflow tools + brand content during a five-month contract engagement.","textPreview":"Selected experience reference: Nexocean internal recruiter workflow tools + brand content during a five-month contract engagement.","textChars":130,"textLines":1,"bbox":[58,652,860,18]}
+{"kind":"notes","id":"nt/73iz7h","slide":4,"text":""}
+{"kind":"slide","id":"sl/stwdx4","slide":5,"title":"SUGGESTED NEXT STEP","textShapes":20}
+{"kind":"textbox","id":"sh/6psfil0r","slide":5,"text":"SUGGESTED NEXT STEP","textPreview":"SUGGESTED NEXT STEP","textChars":19,"textLines":1,"bbox":[56,34,420,22]}
+{"kind":"textbox","id":"sh/dcbulwva","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1168,32,48,24]}
+{"kind":"shape","id":"sh/kre1w7mp","slide":5,"bbox":[56,64,1168,0]}
+{"kind":"textbox","id":"sh/vixczed8","slide":5,"text":"A low-risk first engagement","textPreview":"A low-risk first engagement","textChars":27,"textLines":1,"bbox":[56,104,640,58]}
+{"kind":"textbox","id":"sh/2x4nap4r","slide":5,"text":"10-day hiring workflow audit + prototype direction","textPreview":"10-day hiring workflow audit + prototype direction","textChars":50,"textLines":1,"bbox":[58,170,700,34]}
+{"kind":"textbox","id":"sh/donyd0z6","slide":5,"text":"The goal is not to sell a large AI transformation. It is to find one hiring or people workflow where a practical system can save attention, improve consistency, and support the team's existing way of working.","textPreview":"The goal is not to sell a large AI transformation. It is to find one hiring or people workflow where a practical system can save attentio...","textChars":208,"textLines":1,"bbox":[58,224,620,92]}
+{"kind":"textbox","id":"sh/k3q5o7qp","slide":5,"text":"Day 1-2","textPreview":"Day 1-2","textChars":7,"textLines":1,"bbox":[84,344,86,24]}
+{"kind":"shape","id":"sh/vu9knih4","slide":5,"bbox":[182,356,38,0]}
+{"kind":"textbox","id":"sh/29gr2p8n","slide":5,"text":"Interview Akshita/team, review current hiring flow, collect sample role and candidate artifacts.","textPreview":"Interview Akshita/team, review current hiring flow, collect sample role and candidate artifacts.","textChars":96,"textLines":1,"bbox":[244,340,460,38]}
+{"kind":"textbox","id":"sh/kre1w7mp","slide":5,"text":"Day 3-5","textPreview":"Day 3-5","textChars":7,"textLines":1,"bbox":[84,412,86,24]}
+{"kind":"shape","id":"sh/dcbulwva","slide":5,"bbox":[182,424,38,0]}
+{"kind":"textbox","id":"sh/6psfil0r","slide":5,"text":"Map bottlenecks, handoffs, repeated writing, decision points, and tool gaps.","textPreview":"Map bottlenecks, handoffs, repeated writing, decision points, and tool gaps.","textChars":76,"textLines":1,"bbox":[244,408,460,38]}
+{"kind":"textbox","id":"sh/val87ed8","slide":5,"text":"Day 6-8","textPreview":"Day 6-8","textChars":7,"textLines":1,"bbox":[84,480,86,24]}
+{"kind":"shape","id":"sh/k3q5o7qp","slide":5,"bbox":[182,492,38,0]}
+{"kind":"textbox","id":"sh/donyd0z6","slide":5,"text":"Design a practical AI-assisted workflow or internal tool concept around one priority use case.","textPreview":"Design a practical AI-assisted workflow or internal tool concept around one priority use case.","textChars":94,"textLines":1,"bbox":[244,476,460,38]}
+{"kind":"textbox","id":"sh/2x4nap4r","slide":5,"text":"Day 9-10","textPreview":"Day 9-10","textChars":8,"textLines":1,"bbox":[84,548,86,24]}
+{"kind":"shape","id":"sh/vixczed8","slide":5,"bbox":[182,560,38,0]}
+{"kind":"textbox","id":"sh/kf6dcbul","slide":5,"text":"Deliver the blueprint: workflow map, prototype spec, adoption rules, and content opportunities.","textPreview":"Deliver the blueprint: workflow map, prototype spec, adoption rules, and content opportunities.","textChars":95,"textLines":1,"bbox":[244,544,460,38]}
+{"kind":"shape","id":"sh/d0z61032","slide":5,"bbox":[820,166,326,382]}
+{"kind":"textbox","id":"sh/dsji5sne","slide":5,"text":"Output Akshita can evaluate","textPreview":"Output Akshita can evaluate","textChars":27,"textLines":1,"bbox":[856,206,254,34]}
+{"kind":"textbox","id":"sh/o7qpg3ex","slide":5,"text":"+ One priority workflow","textPreview":"+ One priority workflow","textChars":23,"textLines":1,"bbox":[858,270,244,24]}
+{"kind":"textbox","id":"sh/vmtwra5g","slide":5,"text":"+ One prototype direction","textPreview":"+ One prototype direction","textChars":25,"textLines":1,"bbox":[858,314,244,24]}
+{"kind":"textbox","id":"sh/61032lsz","slide":5,"text":"+ Clear human/AI handoffs","textPreview":"+ Clear human/AI handoffs","textChars":25,"textLines":1,"bbox":[858,358,244,24]}
+{"kind":"textbox","id":"sh/d4vmtwra","slide":5,"text":"+ Recruiter-facing usage notes","textPreview":"+ Recruiter-facing usage notes","textChars":30,"textLines":1,"bbox":[858,402,244,24]}
+{"kind":"textbox","id":"sh/oj2t83it","slide":5,"text":"+ Content angles for hiring and partner trust","textPreview":"+ Content angles for hiring and partner trust","textChars":45,"textLines":1,"bbox":[858,446,244,24]}
+{"kind":"textbox","id":"sh/vy90je9c","slide":5,"text":"Kramaniti | Strategy before tools. Systems before scale. Content after clarity.","textPreview":"Kramaniti | Strategy before tools. Systems before scale. Content after clarity.","textChars":79,"textLines":1,"bbox":[58,652,860,18]}
+{"kind":"notes","id":"nt/stwdx4","slide":5,"text":""}

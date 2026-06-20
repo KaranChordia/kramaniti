@@ -1,0 +1,1389 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/stwdx4",
+    "id": "stwdx4",
+    "slide": 5,
+    "layoutId": "2eec7a52-bc9f-4c6d-9ed3-439552f2a5e1",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "b567bdc9-f3a2-40d9-ac50-8b7e4c90c0f1",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#0B0F12",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "+mn-lt"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "2eec7a52-bc9f-4c6d-9ed3-439552f2a5e1",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "b567bdc9-f3a2-40d9-ac50-8b7e4c90c0f1",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "b567bdc9-f3a2-40d9-ac50-8b7e4c90c0f1",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6psfil0r",
+      "id": "1",
+      "bbox": [
+        56,
+        34,
+        420,
+        22
+      ],
+      "geometry": "rect",
+      "text": "SUGGESTED NEXT STEP",
+      "textPreview": "SUGGESTED NEXT STEP",
+      "resolvedFontSize": 11,
+      "resolvedTextStyle": {
+        "fontSize": 11,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "SUGGESTED NEXT STEP"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "SUGGESTED NEXT STEP",
+          "resolvedTextStyle": {
+            "fontSize": 11,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "SUGGESTED NEXT STEP",
+              "fontSize": 11,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dcbulwva",
+      "id": "2",
+      "bbox": [
+        1168,
+        32,
+        48,
+        24
+      ],
+      "geometry": "rect",
+      "text": "05",
+      "textPreview": "05",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "fontSize": 13,
+        "typeface": "+mn-lt",
+        "color": "#A8B0AC",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "05"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "05",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "color": "#A8B0AC",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "05",
+              "fontSize": 13,
+              "color": "#A8B0AC",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kre1w7mp",
+      "id": "3",
+      "bbox": [
+        56,
+        64,
+        1168,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#26342F",
+      "lineWidth": 1
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vixczed8",
+      "id": "4",
+      "bbox": [
+        56,
+        104,
+        640,
+        58
+      ],
+      "geometry": "rect",
+      "text": "A low-risk first engagement",
+      "textPreview": "A low-risk first engagement",
+      "resolvedFontSize": 44,
+      "resolvedTextStyle": {
+        "fontSize": 44,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "A low-risk first engagement"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "A low-risk first engagement",
+          "resolvedTextStyle": {
+            "fontSize": 44,
+            "color": "#F4EFE6",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "A low-risk first engagement",
+              "fontSize": 44,
+              "color": "#F4EFE6",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2x4nap4r",
+      "id": "5",
+      "bbox": [
+        58,
+        170,
+        700,
+        34
+      ],
+      "geometry": "rect",
+      "text": "10-day hiring workflow audit + prototype direction",
+      "textPreview": "10-day hiring workflow audit + prototype direction",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "fontSize": 23,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "10-day hiring workflow audit + prototype direction"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "10-day hiring workflow audit + prototype direction",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "10-day hiring workflow audit + prototype direction",
+              "fontSize": 23,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/donyd0z6",
+      "id": "6",
+      "bbox": [
+        58,
+        224,
+        620,
+        92
+      ],
+      "geometry": "rect",
+      "text": "The goal is not to sell a large AI transformation. It is to find one hiring or people workflow where a practical system can save attention, improve consistency, and support the team's existing way of working.",
+      "textPreview": "The goal is not to sell a large AI transformation. It is to find one hiring or people workflow where a practical system can save attentio...",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "+mn-lt",
+        "color": "#A8B0AC",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "The goal is not to sell a large AI transformation. It is to find one"
+          },
+          {
+            "index": 2,
+            "text": "hiring or people workflow where a practical system can save"
+          },
+          {
+            "index": 3,
+            "text": "attention, improve consistency, and support the team's existing"
+          },
+          {
+            "index": 4,
+            "text": "way of working."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "The goal is not to sell a large AI transformation. It is to find one hiring or people workflow where a practical system can save attention, improve consistency, and support the team's existing way of working.",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "color": "#A8B0AC"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "The goal is not to sell a large AI transformation. It is to find one hiring or people workflow where a practical system can save attention, improve consistency, and support the team's existing way of working.",
+              "fontSize": 20,
+              "color": "#A8B0AC"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k3q5o7qp",
+      "id": "7",
+      "bbox": [
+        84,
+        344,
+        86,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Day 1-2",
+      "textPreview": "Day 1-2",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Day 1-2"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Day 1-2",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Day 1-2",
+              "fontSize": 14,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vu9knih4",
+      "id": "8",
+      "bbox": [
+        182,
+        356,
+        38,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#C9A24D",
+      "lineWidth": 2
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/29gr2p8n",
+      "id": "9",
+      "bbox": [
+        244,
+        340,
+        460,
+        38
+      ],
+      "geometry": "rect",
+      "text": "Interview Akshita/team, review current hiring flow, collect sample role and candidate artifacts.",
+      "textPreview": "Interview Akshita/team, review current hiring flow, collect sample role and candidate artifacts.",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "fontSize": 16,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Interview Akshita/team, review current hiring flow, collect"
+          },
+          {
+            "index": 2,
+            "text": "sample role and candidate artifacts."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Interview Akshita/team, review current hiring flow, collect sample role and candidate artifacts.",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "color": "#F4EFE6"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Interview Akshita/team, review current hiring flow, collect sample role and candidate artifacts.",
+              "fontSize": 16,
+              "color": "#F4EFE6"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kre1w7mp",
+      "id": "10",
+      "bbox": [
+        84,
+        412,
+        86,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Day 3-5",
+      "textPreview": "Day 3-5",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Day 3-5"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Day 3-5",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Day 3-5",
+              "fontSize": 14,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dcbulwva",
+      "id": "11",
+      "bbox": [
+        182,
+        424,
+        38,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#C9A24D",
+      "lineWidth": 2
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6psfil0r",
+      "id": "12",
+      "bbox": [
+        244,
+        408,
+        460,
+        38
+      ],
+      "geometry": "rect",
+      "text": "Map bottlenecks, handoffs, repeated writing, decision points, and tool gaps.",
+      "textPreview": "Map bottlenecks, handoffs, repeated writing, decision points, and tool gaps.",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "fontSize": 16,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Map bottlenecks, handoffs, repeated writing, decision points,"
+          },
+          {
+            "index": 2,
+            "text": "and tool gaps."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Map bottlenecks, handoffs, repeated writing, decision points, and tool gaps.",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "color": "#F4EFE6"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Map bottlenecks, handoffs, repeated writing, decision points, and tool gaps.",
+              "fontSize": 16,
+              "color": "#F4EFE6"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/val87ed8",
+      "id": "13",
+      "bbox": [
+        84,
+        480,
+        86,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Day 6-8",
+      "textPreview": "Day 6-8",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Day 6-8"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Day 6-8",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Day 6-8",
+              "fontSize": 14,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k3q5o7qp",
+      "id": "14",
+      "bbox": [
+        182,
+        492,
+        38,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#C9A24D",
+      "lineWidth": 2
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/donyd0z6",
+      "id": "15",
+      "bbox": [
+        244,
+        476,
+        460,
+        38
+      ],
+      "geometry": "rect",
+      "text": "Design a practical AI-assisted workflow or internal tool concept around one priority use case.",
+      "textPreview": "Design a practical AI-assisted workflow or internal tool concept around one priority use case.",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "fontSize": 16,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Design a practical AI-assisted workflow or internal tool"
+          },
+          {
+            "index": 2,
+            "text": "concept around one priority use case."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Design a practical AI-assisted workflow or internal tool concept around one priority use case.",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "color": "#F4EFE6"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Design a practical AI-assisted workflow or internal tool concept around one priority use case.",
+              "fontSize": 16,
+              "color": "#F4EFE6"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2x4nap4r",
+      "id": "16",
+      "bbox": [
+        84,
+        548,
+        86,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Day 9-10",
+      "textPreview": "Day 9-10",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Day 9-10"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Day 9-10",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Day 9-10",
+              "fontSize": 14,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vixczed8",
+      "id": "17",
+      "bbox": [
+        182,
+        560,
+        38,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#5F6B66",
+      "lineWidth": 2
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kf6dcbul",
+      "id": "18",
+      "bbox": [
+        244,
+        544,
+        460,
+        38
+      ],
+      "geometry": "rect",
+      "text": "Deliver the blueprint: workflow map, prototype spec, adoption rules, and content opportunities.",
+      "textPreview": "Deliver the blueprint: workflow map, prototype spec, adoption rules, and content opportunities.",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "fontSize": 16,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Deliver the blueprint: workflow map, prototype spec,"
+          },
+          {
+            "index": 2,
+            "text": "adoption rules, and content opportunities."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Deliver the blueprint: workflow map, prototype spec, adoption rules, and content opportunities.",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "color": "#F4EFE6"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Deliver the blueprint: workflow map, prototype spec, adoption rules, and content opportunities.",
+              "fontSize": 16,
+              "color": "#F4EFE6"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/d0z61032",
+      "id": "19",
+      "bbox": [
+        820,
+        166,
+        326,
+        382
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#16231F",
+      "lineColor": "#C9A24D",
+      "lineWidth": 1
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dsji5sne",
+      "id": "20",
+      "bbox": [
+        856,
+        206,
+        254,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Output Akshita can evaluate",
+      "textPreview": "Output Akshita can evaluate",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Output Akshita can"
+          },
+          {
+            "index": 2,
+            "text": "evaluate"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Output Akshita can evaluate",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "color": "#F4EFE6",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Output Akshita can evaluate",
+              "fontSize": 24,
+              "color": "#F4EFE6",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/o7qpg3ex",
+      "id": "21",
+      "bbox": [
+        858,
+        270,
+        244,
+        24
+      ],
+      "geometry": "rect",
+      "text": "+ One priority workflow",
+      "textPreview": "+ One priority workflow",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+ One priority workflow"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+ One priority workflow",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "color": "#F4EFE6"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+ One priority workflow",
+              "fontSize": 17,
+              "color": "#F4EFE6"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 22,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vmtwra5g",
+      "id": "22",
+      "bbox": [
+        858,
+        314,
+        244,
+        24
+      ],
+      "geometry": "rect",
+      "text": "+ One prototype direction",
+      "textPreview": "+ One prototype direction",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+ One prototype direction"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+ One prototype direction",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "color": "#F4EFE6"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+ One prototype direction",
+              "fontSize": 17,
+              "color": "#F4EFE6"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 23,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/61032lsz",
+      "id": "23",
+      "bbox": [
+        858,
+        358,
+        244,
+        24
+      ],
+      "geometry": "rect",
+      "text": "+ Clear human/AI handoffs",
+      "textPreview": "+ Clear human/AI handoffs",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+ Clear human/AI handoffs"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+ Clear human/AI handoffs",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "color": "#F4EFE6"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+ Clear human/AI handoffs",
+              "fontSize": 17,
+              "color": "#F4EFE6"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 24,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/d4vmtwra",
+      "id": "24",
+      "bbox": [
+        858,
+        402,
+        244,
+        24
+      ],
+      "geometry": "rect",
+      "text": "+ Recruiter-facing usage notes",
+      "textPreview": "+ Recruiter-facing usage notes",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+ Recruiter-facing usage"
+          },
+          {
+            "index": 2,
+            "text": "notes"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+ Recruiter-facing usage notes",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "color": "#F4EFE6"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+ Recruiter-facing usage notes",
+              "fontSize": 17,
+              "color": "#F4EFE6"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 25,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/oj2t83it",
+      "id": "25",
+      "bbox": [
+        858,
+        446,
+        244,
+        24
+      ],
+      "geometry": "rect",
+      "text": "+ Content angles for hiring and partner trust",
+      "textPreview": "+ Content angles for hiring and partner trust",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+ Content angles for hiring"
+          },
+          {
+            "index": 2,
+            "text": "and partner trust"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+ Content angles for hiring and partner trust",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "color": "#F4EFE6"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+ Content angles for hiring and partner trust",
+              "fontSize": 17,
+              "color": "#F4EFE6"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 26,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vy90je9c",
+      "id": "26",
+      "bbox": [
+        58,
+        652,
+        860,
+        18
+      ],
+      "geometry": "rect",
+      "text": "Kramaniti | Strategy before tools. Systems before scale. Content after clarity.",
+      "textPreview": "Kramaniti | Strategy before tools. Systems before scale. Content after clarity.",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "fontSize": 10,
+        "typeface": "+mn-lt",
+        "color": "#5F6B66",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Kramaniti | Strategy before tools. Systems before scale. Content after clarity."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Kramaniti | Strategy before tools. Systems before scale. Content after clarity.",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "color": "#5F6B66"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Kramaniti | Strategy before tools. Systems before scale. Content after clarity.",
+              "fontSize": 10,
+              "color": "#5F6B66"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

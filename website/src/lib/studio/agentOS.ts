@@ -1,274 +1,328 @@
 export type AgentLayer = 'leadership' | 'strategy' | 'growth' | 'delivery' | 'governance';
 
-export type AgentStatus = 'active' | 'standby' | 'planned';
+export type AgentTaskStatus = 'Input' | 'Routed' | 'Drafted' | 'In review' | 'Approved';
 
-export type AgentTaskStatus = 'Draft' | 'Routed' | 'In review' | 'Approved';
+export type AgentConsoleNavItem = {
+  id: 'input' | 'route' | 'review' | 'memory';
+  label: string;
+  status: AgentTaskStatus;
+};
 
-export type AgentOSAgent = {
+export type AgentConsoleAgent = {
   id: string;
   name: string;
   analogue: string;
   layer: AgentLayer;
-  status: AgentStatus;
   description: string;
-  memory: string[];
-  outputs: string[];
-  constraints: string[];
 };
 
-export type AgentTaskType = {
+export type AgentRoute = {
   id: string;
   label: string;
-  leadAgentId: string;
-  supportingAgentIds: string[];
+  keywords: string[];
+  leadAgent: AgentConsoleAgent;
+  supportingAgents: AgentConsoleAgent[];
+  reason: string;
   approvalGate: string;
+  draftOutputs: string[];
+  governanceChecks: string[];
+  nextAction: string;
 };
 
-export type AgentTask = {
-  id: string;
-  title: string;
-  goal: string;
+export type AgentConsoleState = {
+  request: string;
   context: string;
-  taskTypeId: string;
-  leadAgentId: string;
-  supportingAgentIds: string[];
+  routeId: string;
   status: AgentTaskStatus;
-  createdAt: string;
-  lastUpdatedAt: string;
+  draftResponse: string;
+  responseSource: 'groq' | 'local' | '';
+  agentTasks: StudioAgentTask[];
+  memoryNote: string;
+  updatedAt: string;
 };
 
-export const AGENT_OS_STORAGE_KEY = 'kramaniti-agent-os-tasks-v1';
-export const LM_STUDIO_CONFIG_STORAGE_KEY = 'kramaniti-lm-studio-config-v1';
-export const DEFAULT_LM_STUDIO_BASE_URL = 'http://127.0.0.1:1234/v1';
-export const DEFAULT_LM_STUDIO_MODEL = 'nvidia/nemotron-3-nano-4b';
+export type StudioAgentTask = {
+  agentName: string;
+  role: string;
+  task: string;
+  output: string;
+};
 
-export const AGENT_OS_ROSTER: AgentOSAgent[] = [
-  {
+export const AGENT_CONSOLE_STORAGE_KEY = 'kramaniti-agent-console-v1';
+export const DEFAULT_LM_STUDIO_BASE_URL = 'http://127.0.0.1:1234/v1';
+
+export const AGENT_CONSOLE_NAV: AgentConsoleNavItem[] = [
+  { id: 'input', label: 'Input', status: 'Input' },
+  { id: 'route', label: 'Route', status: 'Routed' },
+  { id: 'review', label: 'Review', status: 'In review' },
+  { id: 'memory', label: 'Memory', status: 'Approved' },
+];
+
+export const AGENTS: Record<string, AgentConsoleAgent> = {
+  master_coordinator: {
     id: 'master_coordinator',
     name: 'Master Coordinator',
     analogue: 'Chief of Staff',
     layer: 'leadership',
-    status: 'active',
     description: 'Routes requests, protects continuity, and keeps ownership clear across the agent team.',
-    memory: ['Priorities', 'project status', 'handoff log', 'decision history'],
-    outputs: ['Task briefs', 'handoff notes', 'priority lists'],
-    constraints: ['Does not publish', 'does not change pricing', 'does not override founder decisions'],
   },
-  {
-    id: 'digital_presence_orchestrator',
-    name: 'Digital Presence Orchestrator',
-    analogue: 'Digital presence director',
-    layer: 'growth',
-    status: 'active',
-    description: 'Owns Kramaniti public presence across brand system, content, website direction, assets, distribution, and proof review.',
-    memory: ['Brand operating kit', 'campaign briefs', 'content calendar', 'proof register'],
-    outputs: ['Digital presence plans', 'campaign briefs', 'agent assignments', 'publishing review paths'],
-    constraints: ['Does not publish', 'does not invent proof', 'routes public claims through governance'],
-  },
-  {
-    id: 'brand_identity_agent',
-    name: 'Brand Identity Agent',
-    analogue: 'Brand design system lead',
-    layer: 'strategy',
-    status: 'active',
-    description: 'Maintains visual rules, brand kit, logo usage, color, typography, and design consistency.',
-    memory: ['Brand identity guidelines', 'visual system palette', 'asset registry'],
-    outputs: ['Brand kit updates', 'visual direction notes', 'asset requirements'],
-    constraints: ['Does not approve third-party assets without permission clarity'],
-  },
-  {
+  brand_strategist: {
     id: 'brand_strategist',
     name: 'Brand Strategist',
     analogue: 'Head of Strategy',
     layer: 'strategy',
-    status: 'active',
     description: 'Maintains positioning, audience clarity, offer framing, and campaign angles.',
-    memory: ['Positioning analysis', 'brand narrative', 'service packages'],
-    outputs: ['Messaging maps', 'positioning memos', 'copy direction'],
-    constraints: ['Does not approve public proof, pricing, or client claims alone'],
   },
-  {
+  workflow_architect: {
+    id: 'workflow_architect',
+    name: 'Workflow Architect',
+    analogue: 'Principal systems consultant',
+    layer: 'delivery',
+    description: 'Diagnoses business workflows and defines practical systems that improve real operations.',
+  },
+  systems_designer: {
+    id: 'systems_designer',
+    name: 'Systems Designer',
+    analogue: 'Technical systems designer',
+    layer: 'delivery',
+    description: 'Turns workflow clarity into buildable internal tools, integrations, and adoption paths.',
+  },
+  content_director: {
     id: 'content_director',
     name: 'Content Director',
     analogue: 'Head of Content',
     layer: 'growth',
-    status: 'standby',
-    description: 'Turns clarity and systems thinking into useful content pillars, calendars, posts, scripts, and newsletters.',
-    memory: ['Content pillars', 'content calendar', 'content ideas backlog'],
-    outputs: ['Editorial calendars', 'post drafts', 'scripts', 'article outlines'],
-    constraints: ['No invented results', 'no publishing without review'],
+    description: 'Turns clarity and systems thinking into content pillars, calendars, posts, scripts, and newsletters.',
   },
-  {
+  narrative_editor: {
     id: 'narrative_editor',
     name: 'Narrative Editor',
     analogue: 'Editorial Director',
     layer: 'strategy',
-    status: 'standby',
     description: 'Turns strategy into polished public copy, founder voice, captions, bios, and proposal language.',
-    memory: ['Brand narrative', 'founder background', 'website copy sections'],
-    outputs: ['Polished copy blocks', 'voice notes', 'headline options'],
-    constraints: ['Does not invent proof or inflate outcomes'],
   },
-  {
+  website_steward: {
     id: 'website_steward',
     name: 'Website Steward',
     analogue: 'Website and conversion owner',
     layer: 'growth',
-    status: 'active',
     description: 'Keeps website messaging, CTA flow, page structure, conversion clarity, and public proof rules aligned.',
-    memory: ['Website implementation plan', 'public page structure', 'CTA flow'],
-    outputs: ['Website updates', 'section copy', 'QA notes'],
-    constraints: ['Does not add logos, testimonials, metrics, or live form assumptions without verification'],
   },
-  {
-    id: 'distribution_analytics_agent',
-    name: 'Distribution & Analytics Agent',
-    analogue: 'Distribution and performance lead',
+  digital_presence_orchestrator: {
+    id: 'digital_presence_orchestrator',
+    name: 'Digital Presence Orchestrator',
+    analogue: 'Digital presence director',
     layer: 'growth',
-    status: 'active',
-    description: 'Tracks publishing, channel fit, performance signals, and repeat/revise/stop decisions.',
-    memory: ['Publishing checklist', 'analytics log', 'content calendar'],
-    outputs: ['Channel notes', 'analytics log entries', 'repeat-revise-stop recommendations'],
-    constraints: ['Does not publish without approval', 'does not invent performance metrics'],
+    description: 'Owns Kramaniti public presence across brand system, content, website direction, assets, distribution, and proof review.',
   },
-  {
-    id: 'asset_librarian',
-    name: 'Asset Librarian',
-    analogue: 'Brand asset manager',
-    layer: 'governance',
-    status: 'planned',
-    description: 'Keeps assets findable, labeled, provenance-aware, and safe for approved use.',
-    memory: ['Asset registry', 'brand assets', 'screenshots', 'exports'],
-    outputs: ['Source notes', 'public-use flags', 'organized asset folders'],
-    constraints: ['Does not publish third-party assets without permission clarity'],
-  },
-  {
+  proof_governance_auditor: {
     id: 'proof_governance_auditor',
     name: 'Proof and Governance Auditor',
     analogue: 'Trust and risk reviewer',
     layer: 'governance',
-    status: 'standby',
     description: 'Reviews public claims, proof, client names, metrics, testimonials, and hype language before publication.',
-    memory: ['Decision log', 'proof register', 'claim audits'],
-    outputs: ['Risk notes', 'approval checklists', 'decision-log entries'],
-    constraints: ['Does not approve claims just because they are useful for sales'],
   },
-  {
+  agent_ops_architect: {
     id: 'agent_ops_architect',
     name: 'Agent Operations Architect',
     analogue: 'Internal agent systems designer',
     layer: 'governance',
-    status: 'planned',
     description: 'Maintains agent definitions, prompts, routing logic, protocols, and operating-system continuity.',
-    memory: ['Agent roster', 'routing', 'protocols', 'master context'],
-    outputs: ['Agent specs', 'prompt updates', 'operating rules'],
-    constraints: ['Does not create agents for novelty or grant autonomous public authority'],
   },
-];
+};
 
-export const AGENT_TASK_TYPES: AgentTaskType[] = [
+export const AGENT_ROUTES: AgentRoute[] = [
   {
-    id: 'digital_presence_plan',
-    label: 'Digital presence plan',
-    leadAgentId: 'digital_presence_orchestrator',
-    supportingAgentIds: ['brand_strategist', 'brand_identity_agent', 'content_director', 'website_steward', 'proof_governance_auditor'],
-    approvalGate: 'Founder approval before publishing or major public-facing changes.',
+    id: 'strategy_positioning',
+    label: 'Strategy and positioning',
+    keywords: ['strategy', 'positioning', 'offer', 'icp', 'brand', 'narrative', 'market', 'pricing', 'service'],
+    leadAgent: AGENTS.brand_strategist,
+    supportingAgents: [AGENTS.narrative_editor, AGENTS.proof_governance_auditor],
+    reason: 'The request appears to affect positioning, offers, audience clarity, or strategic language.',
+    approvalGate: 'Founder approval before major public positioning, offer, or pricing changes.',
+    draftOutputs: ['Positioning recommendation', 'Messaging direction', 'Offer or audience implications'],
+    governanceChecks: ['Avoid generic AI agency language', 'Flag pricing or offer changes', 'Keep claims evidence-aware'],
+    nextAction: 'Prepare a strategy draft and mark strategic decisions for review.',
   },
   {
-    id: 'campaign_brief',
-    label: 'Campaign brief',
-    leadAgentId: 'digital_presence_orchestrator',
-    supportingAgentIds: ['brand_strategist', 'content_director', 'narrative_editor', 'distribution_analytics_agent', 'proof_governance_auditor'],
-    approvalGate: 'Proof review and founder approval before distribution.',
+    id: 'systems_workflow',
+    label: 'Systems and workflow',
+    keywords: ['workflow', 'system', 'automation', 'process', 'tool', 'crm', 'integration', 'handoff', 'operations'],
+    leadAgent: AGENTS.workflow_architect,
+    supportingAgents: [AGENTS.systems_designer, AGENTS.proof_governance_auditor],
+    reason: 'The request appears to involve operating workflows, system design, implementation paths, or adoption risk.',
+    approvalGate: 'Founder approval before client-facing promises, credentials, external integrations, or irreversible workflow changes.',
+    draftOutputs: ['Workflow diagnosis', 'System blueprint', 'Human review and adoption checkpoints'],
+    governanceChecks: ['Start from workflow before tools', 'Separate automated, assisted, and human-led steps', 'Do not handle private client data without approval'],
+    nextAction: 'Map the current workflow and define the smallest useful system step.',
   },
   {
-    id: 'brand_design_kit',
-    label: 'Brand design kit',
-    leadAgentId: 'brand_identity_agent',
-    supportingAgentIds: ['brand_strategist', 'asset_librarian', 'website_steward'],
-    approvalGate: 'Founder approval before changing reusable brand direction.',
+    id: 'content_campaigns',
+    label: 'Content and campaigns',
+    keywords: ['content', 'campaign', 'post', 'linkedin', 'newsletter', 'script', 'article', 'insight', 'reel', 'video'],
+    leadAgent: AGENTS.content_director,
+    supportingAgents: [AGENTS.narrative_editor, AGENTS.digital_presence_orchestrator, AGENTS.proof_governance_auditor],
+    reason: 'The request appears to involve content planning, editorial output, campaign structure, or distribution.',
+    approvalGate: 'Proof review and founder approval before publishing or scheduled distribution.',
+    draftOutputs: ['Content brief', 'Narrative angle', 'Publishing review path'],
+    governanceChecks: ['No invented metrics or testimonials', 'Keep content after clarity', 'Check proof-sensitive claims before publication'],
+    nextAction: 'Draft a content brief and route claims through governance.',
   },
   {
-    id: 'content_calendar',
-    label: 'Content calendar',
-    leadAgentId: 'content_director',
-    supportingAgentIds: ['digital_presence_orchestrator', 'brand_strategist', 'narrative_editor', 'proof_governance_auditor'],
-    approvalGate: 'Founder approval before scheduled publication.',
+    id: 'website_public_copy',
+    label: 'Website and public copy',
+    keywords: ['website', 'homepage', 'page', 'copy', 'cta', 'section', 'seo', 'public', 'conversion', 'studio'],
+    leadAgent: AGENTS.website_steward,
+    supportingAgents: [AGENTS.brand_strategist, AGENTS.narrative_editor, AGENTS.proof_governance_auditor],
+    reason: 'The request appears to affect the public website, conversion flow, public copy, or page structure.',
+    approvalGate: 'Governance review before public copy, proof, CTA, or structural changes go live.',
+    draftOutputs: ['Website change brief', 'Copy or section direction', 'QA and proof review notes'],
+    governanceChecks: ['No unsupported client logos or proof', 'Do not add live booking/form assumptions', 'Keep first impression business-first'],
+    nextAction: 'Prepare the website change and verify the public-risk surface.',
   },
   {
-    id: 'website_messaging',
-    label: 'Website messaging',
-    leadAgentId: 'website_steward',
-    supportingAgentIds: ['brand_strategist', 'narrative_editor', 'proof_governance_auditor'],
-    approvalGate: 'Governance review before public copy goes live.',
+    id: 'digital_presence',
+    label: 'Digital presence',
+    keywords: ['digital presence', 'distribution', 'calendar', 'assets', 'brand system', 'social', 'presence', 'analytics'],
+    leadAgent: AGENTS.digital_presence_orchestrator,
+    supportingAgents: [AGENTS.brand_strategist, AGENTS.content_director, AGENTS.website_steward, AGENTS.proof_governance_auditor],
+    reason: 'The request appears to cross brand, content, website, assets, and distribution ownership.',
+    approvalGate: 'Founder approval before publishing, campaign launches, or major public-facing changes.',
+    draftOutputs: ['Digital presence plan', 'Agent assignment', 'Approval cadence'],
+    governanceChecks: ['Keep one clear owner', 'Route proof-sensitive claims', 'Avoid turning the system into an agent maze'],
+    nextAction: 'Scope the operating cycle and assign owners.',
   },
   {
-    id: 'proof_review',
-    label: 'Proof review',
-    leadAgentId: 'proof_governance_auditor',
-    supportingAgentIds: ['founder_archivist', 'asset_librarian', 'website_steward'],
-    approvalGate: 'No claim leaves draft state until approved or softened.',
-  },
-  {
-    id: 'publishing_review',
-    label: 'Publishing and analytics review',
-    leadAgentId: 'distribution_analytics_agent',
-    supportingAgentIds: ['content_director', 'website_steward', 'proof_governance_auditor'],
-    approvalGate: 'No direct publishing from the agent OS.',
+    id: 'proof_risk',
+    label: 'Proof and risk',
+    keywords: ['proof', 'claim', 'client', 'testimonial', 'metric', 'logo', 'case study', 'permission', 'risk', 'legal'],
+    leadAgent: AGENTS.proof_governance_auditor,
+    supportingAgents: [AGENTS.website_steward, AGENTS.brand_strategist],
+    reason: 'The request appears to involve public claims, client proof, permission, metrics, testimonials, or trust risk.',
+    approvalGate: 'No claim leaves draft state until it is approved, softened, or moved to internal-only use.',
+    draftOutputs: ['Claim classification', 'Risk note', 'Approved or softened wording'],
+    governanceChecks: ['Use Fact, Inference, Unverified, and Recommendation labels', 'No invented proof', 'Flag permission gaps'],
+    nextAction: 'Classify the claim and decide whether it is public-safe.',
   },
   {
     id: 'agent_framework',
-    label: 'Agent framework update',
-    leadAgentId: 'agent_ops_architect',
-    supportingAgentIds: ['master_coordinator', 'proof_governance_auditor'],
-    approvalGate: 'Record structural changes in the decision log.',
+    label: 'Agent framework',
+    keywords: ['agent', 'agents', 'framework', 'operating console', 'routing', 'memory', 'protocol', 'roster', 'studio'],
+    leadAgent: AGENTS.agent_ops_architect,
+    supportingAgents: [AGENTS.master_coordinator, AGENTS.proof_governance_auditor],
+    reason: 'The request appears to affect the agent operating model, routing, memory, protocols, or Studio agent surface.',
+    approvalGate: 'Record structural changes in the decision log and keep agents scoped to recurring business functions.',
+    draftOutputs: ['Operating protocol update', 'Routing or memory recommendation', 'Decision-log note'],
+    governanceChecks: ['Do not create novelty agents', 'Keep Master Coordinator as router', 'Preserve founder approval gates'],
+    nextAction: 'Update the agent operating model and document the structural decision.',
   },
 ];
 
-export const AGENT_STATUS_COLUMNS: AgentTaskStatus[] = ['Draft', 'Routed', 'In review', 'Approved'];
+export const DEFAULT_CONSOLE_STATE: AgentConsoleState = {
+  request: '',
+  context: '',
+  routeId: 'strategy_positioning',
+  status: 'Input',
+  draftResponse: '',
+  responseSource: '',
+  agentTasks: [],
+  memoryNote: '',
+  updatedAt: '',
+};
 
-export const AGENT_OS_SEED_TASKS: AgentTask[] = [
-  {
-    id: 'agent-task-digital-presence',
-    title: 'Prepare first digital presence operating cycle',
-    goal: 'Turn the new Digital Presence Orchestrator system into a first 30-day operating cadence.',
-    context: 'Confirm active channels, approval cadence, and reusable assets before any public content leaves draft status.',
-    taskTypeId: 'digital_presence_plan',
-    leadAgentId: 'digital_presence_orchestrator',
-    supportingAgentIds: ['brand_strategist', 'content_director', 'distribution_analytics_agent', 'proof_governance_auditor'],
-    status: 'Routed',
-    createdAt: '2026-06-11T00:00:00.000Z',
-    lastUpdatedAt: '2026-06-11T00:00:00.000Z',
-  },
-];
+export function createDefaultAgentTasks(route: AgentRoute, request: string): StudioAgentTask[] {
+  const supportingAgents = route.supportingAgents.slice(0, 2);
+  const team = [route.leadAgent, ...supportingAgents];
 
-export const LM_STUDIO_SETUP_STEPS = [
-  'Open LM Studio and load Nemotron 3 Nano 4B or another local chat model that fits your Mac memory.',
-  'Go to the Developer tab and start the local server. Keep the server running while Studio is open.',
-  `Use the OpenAI-compatible base URL shown by LM Studio. Current local default: ${DEFAULT_LM_STUDIO_BASE_URL}.`,
-  `Use the loaded model identifier. Current local default: ${DEFAULT_LM_STUDIO_MODEL}.`,
-  'Run Test Server from this screen. If models load, run a prompt against the selected agent.',
-  'Keep publishing, proof claims, pricing, credentials, and external commitments behind human approval.',
-];
+  return team.map((agent, index) => ({
+    agentName: agent.name,
+    role: agent.analogue,
+    task:
+      index === 0
+        ? `Create the main working draft for this request.`
+        : `Complete the ${agent.layer === 'governance' ? 'review and risk' : 'specialist support'} task delegated by ${route.leadAgent.name}.`,
+    output:
+      index === 0
+        ? `Awaiting ${agent.name} output for: ${request.trim() || 'the founder request'}.`
+        : `Awaiting ${agent.name} support output.`,
+  }));
+}
 
-export const LM_STUDIO_PROMPT_TEMPLATE = `You are operating inside the Kramaniti Agent OS.
+export function getRouteById(routeId: string) {
+  return AGENT_ROUTES.find((route) => route.id === routeId) ?? AGENT_ROUTES[0];
+}
 
-Follow Kramaniti sequence:
+export function routeFounderRequest(request: string, context = '') {
+  const haystack = `${request} ${context}`.toLowerCase();
+  const scoredRoutes = AGENT_ROUTES.map((route) => ({
+    route,
+    score: route.keywords.reduce((score, keyword) => (haystack.includes(keyword) ? score + 1 : score), 0),
+  })).sort((a, b) => b.score - a.score);
+
+  return scoredRoutes[0]?.score ? scoredRoutes[0].route : AGENT_ROUTES[0];
+}
+
+export function buildStudioFallbackResponse(request: string, route: AgentRoute) {
+  const cleanRequest = request.trim() || 'No request supplied.';
+
+  return [
+    `Lead agent: ${route.leadAgent.name}`,
+    `Why this route: ${route.reason}`,
+    '',
+    'Recommended draft:',
+    `1. Clarify the founder request: ${cleanRequest}`,
+    `2. Prepare ${route.draftOutputs.join(', ').toLowerCase()} before execution.`,
+    `3. Apply governance checks: ${route.governanceChecks.join('; ')}.`,
+    '',
+    `Approval gate: ${route.approvalGate}`,
+    `Next action: ${route.nextAction}`,
+  ].join('\n');
+}
+
+export function buildStudioFallbackTasks(request: string, route: AgentRoute) {
+  const cleanRequest = request.trim() || 'the founder request';
+
+  return createDefaultAgentTasks(route, request).map((task, index) => ({
+    ...task,
+    output:
+      index === 0
+        ? `Drafted a short next step for ${cleanRequest}: ${route.nextAction}`
+        : `Completed support check: ${route.governanceChecks[index - 1] ?? route.approvalGate}`,
+  }));
+}
+
+export function buildStudioSystemPrompt(route: AgentRoute) {
+  return `You are operating inside Kramaniti Studio.
+
+Kramaniti is a first-principles AI systems partner, not a generic AI automation agency.
+
+Follow this sequence:
 1. Strategy before tools.
 2. Systems before scale.
 3. Content after clarity.
 
-Do not invent client proof, metrics, testimonials, or public claims.
-Return a concise response with:
-- lead agent reasoning
-- supporting agents
-- first three tasks
-- approval gate`;
+Active route: ${route.label}
+Lead agent: ${route.leadAgent.name}
+Lead role: ${route.leadAgent.description}
+Supporting agents: ${route.supportingAgents.map((agent) => agent.name).join(', ')}
+Approval gate: ${route.approvalGate}
 
-export function getAgentById(agentId: string) {
-  return AGENT_OS_ROSTER.find((agent) => agent.id === agentId);
-}
+Rules:
+- Do not invent client proof, testimonials, metrics, case studies, permissions, or outcomes.
+- Do not publish, change pricing, handle credentials, or create external commitments.
+- Use business-first language.
+- Choose exactly three agents from the lead and supporting agents listed above.
+- Assign one concrete task to each agent.
+- Keep task wording short and outcome-focused.
+- Do not write the completed outputs here. Outputs are produced by each agent after delegation.
 
-export function getTaskTypeById(taskTypeId: string) {
-  return AGENT_TASK_TYPES.find((taskType) => taskType.id === taskTypeId);
+Return strict JSON only with this shape:
+{
+  "summary": "one short sentence explaining the delegation",
+  "agentTasks": [
+    { "agentName": "Name", "role": "Role", "task": "Short delegated task", "output": "" }
+  ],
+  "approvalGate": "short approval gate",
+  "memoryNote": "short memory note"
+}`;
 }

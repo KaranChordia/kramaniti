@@ -399,3 +399,24 @@ This log registers the major strategic and structural decisions made during the 
 *   **Open Questions:**
     *   Should the production deployment keep all route handlers inside the website app, or should heavier inference move to a separate backend later?
     *   Should the Clarity Engine store sessions, or remain ephemeral by default?
+
+### Decision 18: Simplify Studio Into an Agent Operating Console
+*   **Date:** 2026-06-19
+*   **Area:** Studio frontend, agent operations, governance
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Replace the planner-plus-Agent-OS Studio workbench with a focused agent operating console that preserves the Studio visual design while simplifying the workflow to Founder Input -> Routing Decision -> Draft Output -> Governance Review -> Founder Approval -> Memory Note.
+*   **Rationale:** The earlier Studio direction combined planning dossier generation, project tools, task boards, roster inspection, LM Studio setup, and model prompting in one surface. The founder said the experience felt too complex and asked to keep the design intact while replacing the execution plan with a simpler operating protocol.
+*   **Source or Evidence:** Founder request on 2026-06-19 to implement the simplified Studio plan and use the Clarity Engine UX as inspiration.
+*   **Affected Files:**
+    *   `website/src/app/studio/page.tsx`
+    *   `website/src/app/studio/studio.module.css`
+    *   `website/src/lib/studio/agentOS.ts`
+    *   `docs/kramaniti_site_implementation_plan.md`
+    *   `09_reviews/decisions.md`
+*   **Alternatives Rejected:**
+    1.  *Keeping the full dashboard-style Studio workbench:* Rejected because it created unnecessary complexity for founder-facing agent routing.
+    2.  *Keeping LM Studio as a visible first-class tab:* Rejected for this iteration because local model experimentation should not dominate the operating surface.
+    3.  *Creating a separate agent dashboard route:* Rejected because Studio can keep the visual language while becoming a focused operating console.
+*   **Claim Guardrails:**
+    *   Studio may route, draft, summarize, and prepare memory notes.
+    *   Studio must not publish, invent proof, change pricing, handle credentials, make client-facing promises, or create external commitments.

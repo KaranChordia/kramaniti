@@ -1,0 +1,24 @@
+Deck: Kramaniti x The Scalers | 5-slide personalized conversation deck
+
+Mode: create
+Audience: Akshita, lead hiring manager at The Scalers, following founder referral.
+Objective: make Kramaniti feel useful to The Scalers' hiring, people, and growth operations by connecting strategy, internal systems, practical AI workflows, and content.
+
+Style:
+- Slide size: 16:9, 1280 x 720.
+- Palette: near-black #0B0F12 as dominant, deep green #10231F support, warm gold #C9A24D accent, off-white #F4EFE6 text, muted gray #A8B0AC, pale surface #17211E.
+- Fonts: Aptos Display for headings, Aptos for body.
+- Scale: cover title 54-60, slide titles 34-42, body 18-22, labels 11-13, small notes 10.
+- Visual language: premium dark, thin connector lines, gold step markers, dense but uncluttered business proposal feel.
+
+Slide list:
+1. "A practical systems partner for The Scalers" - personalized opener; shared Bangalore/workspace context; why now.
+2. "What Kramaniti does" - strategy, systems, content as three connected layers.
+3. "Where this maps to The Scalers" - their model: recruitment, operations, cultural alignment, people-first integration; Kramaniti fit.
+4. "Value proposition for hiring and people operations" - four offer modules: hiring workflow clarity, recruiter AI workbench, candidate/partner communication, enablement/adoption.
+5. "Low-risk next step" - 10-day hiring workflow audit / pilot path and expected outputs.
+
+Object types:
+- Editable textboxes, rounded rectangles, connector lines, simple shape diagrams.
+- No full-slide bitmaps.
+- Speaker/source notes via visible small source footer on research slides.

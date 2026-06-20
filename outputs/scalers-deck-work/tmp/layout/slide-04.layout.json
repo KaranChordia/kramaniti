@@ -1,0 +1,1208 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/73iz7h",
+    "id": "73iz7h",
+    "slide": 4,
+    "layoutId": "2eec7a52-bc9f-4c6d-9ed3-439552f2a5e1",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "b567bdc9-f3a2-40d9-ac50-8b7e4c90c0f1",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#0B0F12",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "+mn-lt"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "2eec7a52-bc9f-4c6d-9ed3-439552f2a5e1",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "b567bdc9-f3a2-40d9-ac50-8b7e4c90c0f1",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "b567bdc9-f3a2-40d9-ac50-8b7e4c90c0f1",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0nuxc3yl",
+      "id": "1",
+      "bbox": [
+        56,
+        34,
+        420,
+        22
+      ],
+      "geometry": "rect",
+      "text": "VALUE PROPOSITION",
+      "textPreview": "VALUE PROPOSITION",
+      "resolvedFontSize": 11,
+      "resolvedTextStyle": {
+        "fontSize": 11,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "VALUE PROPOSITION"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "VALUE PROPOSITION",
+          "resolvedTextStyle": {
+            "fontSize": 11,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "VALUE PROPOSITION",
+              "fontSize": 11,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/72x4nap4",
+      "id": "2",
+      "bbox": [
+        1168,
+        32,
+        48,
+        24
+      ],
+      "geometry": "rect",
+      "text": "04",
+      "textPreview": "04",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "fontSize": 13,
+        "typeface": "+mn-lt",
+        "color": "#A8B0AC",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "04"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "04",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "color": "#A8B0AC",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "04",
+              "fontSize": 13,
+              "color": "#A8B0AC",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ih4byhgn",
+      "id": "3",
+      "bbox": [
+        56,
+        64,
+        1168,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#26342F",
+      "lineWidth": 1
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pkzupwb2",
+      "id": "4",
+      "bbox": [
+        56,
+        96,
+        780,
+        96
+      ],
+      "geometry": "rect",
+      "text": "What Kramaniti can offer Scalers",
+      "textPreview": "What Kramaniti can offer Scalers",
+      "resolvedFontSize": 40,
+      "resolvedTextStyle": {
+        "fontSize": 40,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "What Kramaniti can offer Scalers"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "What Kramaniti can offer Scalers",
+          "resolvedTextStyle": {
+            "fontSize": 40,
+            "color": "#F4EFE6",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "What Kramaniti can offer Scalers",
+              "fontSize": 40,
+              "color": "#F4EFE6",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0z61032l",
+      "id": "5",
+      "bbox": [
+        58,
+        190,
+        760,
+        62
+      ],
+      "geometry": "rect",
+      "text": "A focused support layer for hiring operations, recruiter enablement, and content that explains The Scalers' people-first model with more clarity.",
+      "textPreview": "A focused support layer for hiring operations, recruiter enablement, and content that explains The Scalers' people-first model with more ...",
+      "resolvedFontSize": 19,
+      "resolvedTextStyle": {
+        "fontSize": 19,
+        "typeface": "+mn-lt",
+        "color": "#A8B0AC",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "A focused support layer for hiring operations, recruiter enablement, and content that"
+          },
+          {
+            "index": 2,
+            "text": "explains The Scalers' people-first model with more clarity."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "A focused support layer for hiring operations, recruiter enablement, and content that explains The Scalers' people-first model with more clarity.",
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "color": "#A8B0AC"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "A focused support layer for hiring operations, recruiter enablement, and content that explains The Scalers' people-first model with more clarity.",
+              "fontSize": 19,
+              "color": "#A8B0AC"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7ed8bat4",
+      "id": "6",
+      "bbox": [
+        72,
+        304,
+        520,
+        132
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#111A17",
+      "lineColor": "#33443D",
+      "lineWidth": 1
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/itgfmlkj",
+      "id": "7",
+      "bbox": [
+        98,
+        326,
+        40,
+        22
+      ],
+      "geometry": "rect",
+      "text": "01",
+      "textPreview": "01",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "fontSize": 13,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "01"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "01",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "01",
+              "fontSize": 13,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pwb2hwfy",
+      "id": "8",
+      "bbox": [
+        160,
+        326,
+        360,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Hiring workflow clarity",
+      "textPreview": "Hiring workflow clarity",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "fontSize": 23,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Hiring workflow clarity"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Hiring workflow clarity",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "color": "#F4EFE6",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Hiring workflow clarity",
+              "fontSize": 23,
+              "color": "#F4EFE6",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0bi9s36h",
+      "id": "9",
+      "bbox": [
+        160,
+        370,
+        390,
+        52
+      ],
+      "geometry": "rect",
+      "text": "Map the journey from role intake to onboarding, identify repeated friction, and define the best first system to improve.",
+      "textPreview": "Map the journey from role intake to onboarding, identify repeated friction, and define the best first system to improve.",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#A8B0AC",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Map the journey from role intake to onboarding,"
+          },
+          {
+            "index": 2,
+            "text": "identify repeated friction, and define the best first"
+          },
+          {
+            "index": 3,
+            "text": "system to improve."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Map the journey from role intake to onboarding, identify repeated friction, and define the best first system to improve.",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#A8B0AC"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Map the journey from role intake to onboarding, identify repeated friction, and define the best first system to improve.",
+              "fontSize": 15,
+              "color": "#A8B0AC"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u18jqh0f",
+      "id": "10",
+      "bbox": [
+        668,
+        304,
+        520,
+        132
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#16231F",
+      "lineColor": "#C9A24D",
+      "lineWidth": 1
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jm1cfa9w",
+      "id": "11",
+      "bbox": [
+        694,
+        326,
+        40,
+        22
+      ],
+      "geometry": "rect",
+      "text": "02",
+      "textPreview": "02",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "fontSize": 13,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "02"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "02",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "02",
+              "fontSize": 13,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/c7u54zid",
+      "id": "12",
+      "bbox": [
+        756,
+        326,
+        360,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Recruiter AI workbench",
+      "textPreview": "Recruiter AI workbench",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "fontSize": 23,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Recruiter AI workbench"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Recruiter AI workbench",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "color": "#F4EFE6",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Recruiter AI workbench",
+              "fontSize": 23,
+              "color": "#F4EFE6",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1orytsvu",
+      "id": "13",
+      "bbox": [
+        756,
+        370,
+        390,
+        52
+      ],
+      "geometry": "rect",
+      "text": "Prototype focused assistants for JD intake, candidate notes, outreach drafts, interview prep, and knowledge retrieval.",
+      "textPreview": "Prototype focused assistants for JD intake, candidate notes, outreach drafts, interview prep, and knowledge retrieval.",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#A8B0AC",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Prototype focused assistants for JD intake, candidate"
+          },
+          {
+            "index": 2,
+            "text": "notes, outreach drafts, interview prep, and knowledge"
+          },
+          {
+            "index": 3,
+            "text": "retrieval."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Prototype focused assistants for JD intake, candidate notes, outreach drafts, interview prep, and knowledge retrieval.",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#A8B0AC"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Prototype focused assistants for JD intake, candidate notes, outreach drafts, interview prep, and knowledge retrieval.",
+              "fontSize": 15,
+              "color": "#A8B0AC"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/u9knih4b",
+      "id": "14",
+      "bbox": [
+        72,
+        486,
+        520,
+        132
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#111A17",
+      "lineColor": "#33443D",
+      "lineWidth": 1
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/judg7ads",
+      "id": "15",
+      "bbox": [
+        98,
+        508,
+        40,
+        22
+      ],
+      "geometry": "rect",
+      "text": "03",
+      "textPreview": "03",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "fontSize": 13,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "03",
+              "fontSize": 13,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cfa9w3m9",
+      "id": "16",
+      "bbox": [
+        160,
+        508,
+        360,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Candidate + partner communication",
+      "textPreview": "Candidate + partner communication",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Candidate + partner"
+          },
+          {
+            "index": 2,
+            "text": "communication"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Candidate + partner communication",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "color": "#F4EFE6",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Candidate + partner communication",
+              "fontSize": 21,
+              "color": "#F4EFE6",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1032lszq",
+      "id": "17",
+      "bbox": [
+        160,
+        552,
+        390,
+        52
+      ],
+      "geometry": "rect",
+      "text": "Turn process knowledge into sharper hiring pages, recruiter scripts, explainers, and founder/leadership content.",
+      "textPreview": "Turn process knowledge into sharper hiring pages, recruiter scripts, explainers, and founder/leadership content.",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#A8B0AC",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Turn process knowledge into sharper hiring pages,"
+          },
+          {
+            "index": 2,
+            "text": "recruiter scripts, explainers, and founder/leadership"
+          },
+          {
+            "index": 3,
+            "text": "content."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Turn process knowledge into sharper hiring pages, recruiter scripts, explainers, and founder/leadership content.",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#A8B0AC"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Turn process knowledge into sharper hiring pages, recruiter scripts, explainers, and founder/leadership content.",
+              "fontSize": 15,
+              "color": "#A8B0AC"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/udg7adsj",
+      "id": "18",
+      "bbox": [
+        668,
+        486,
+        520,
+        132
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#111A17",
+      "lineColor": "#33443D",
+      "lineWidth": 1
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/nyd0z610",
+      "id": "19",
+      "bbox": [
+        694,
+        508,
+        40,
+        22
+      ],
+      "geometry": "rect",
+      "text": "04",
+      "textPreview": "04",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "fontSize": 13,
+        "typeface": "+mn-lt",
+        "color": "#C9A24D",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "04"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "04",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "color": "#C9A24D",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "04",
+              "fontSize": 13,
+              "color": "#C9A24D",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fu18jqh0",
+      "id": "20",
+      "bbox": [
+        756,
+        508,
+        360,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Enablement and adoption",
+      "textPreview": "Enablement and adoption",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "fontSize": 23,
+        "typeface": "+mn-lt",
+        "color": "#F4EFE6",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Enablement and adoption"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Enablement and adoption",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "color": "#F4EFE6",
+            "bold": true
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Enablement and adoption",
+              "fontSize": 23,
+              "color": "#F4EFE6",
+              "bold": true
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m94fu18j",
+      "id": "21",
+      "bbox": [
+        756,
+        552,
+        390,
+        52
+      ],
+      "geometry": "rect",
+      "text": "Create usage rules, override points, review checkpoints, and team guidance so tools support recruiters without taking judgment away.",
+      "textPreview": "Create usage rules, override points, review checkpoints, and team guidance so tools support recruiters without taking judgment away.",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#A8B0AC",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Create usage rules, override points, review"
+          },
+          {
+            "index": 2,
+            "text": "checkpoints, and team guidance so tools support"
+          },
+          {
+            "index": 3,
+            "text": "recruiters without taking judgment away."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Create usage rules, override points, review checkpoints, and team guidance so tools support recruiters without taking judgment away.",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#A8B0AC"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Create usage rules, override points, review checkpoints, and team guidance so tools support recruiters without taking judgment away.",
+              "fontSize": 15,
+              "color": "#A8B0AC"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 22,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x0nuxc3y",
+      "id": "22",
+      "bbox": [
+        58,
+        652,
+        860,
+        18
+      ],
+      "geometry": "rect",
+      "text": "Selected experience reference: Nexocean internal recruiter workflow tools + brand content during a five-month contract engagement.",
+      "textPreview": "Selected experience reference: Nexocean internal recruiter workflow tools + brand content during a five-month contract engagement.",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "fontSize": 10,
+        "typeface": "+mn-lt",
+        "color": "#5F6B66",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Selected experience reference: Nexocean internal recruiter workflow tools + brand content during a five-month contract engagement."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Selected experience reference: Nexocean internal recruiter workflow tools + brand content during a five-month contract engagement.",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "color": "#5F6B66"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Selected experience reference: Nexocean internal recruiter workflow tools + brand content during a five-month contract engagement.",
+              "fontSize": 10,
+              "color": "#5F6B66"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}
