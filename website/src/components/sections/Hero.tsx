@@ -21,6 +21,7 @@ const HERO_SIGNAL_NODES = [
   { x: 832, y: 446, c1x: 724, c1y: 438, c2x: 624, c2y: 352, delay: '1.66s', duration: '7.3s', radius: 3.5 },
   { x: 918, y: 474, c1x: 756, c1y: 466, c2x: 644, c2y: 366, delay: '3.05s', duration: '7.9s', radius: 3 },
 ];
+const HERO_TRAVEL_NODES = HERO_SIGNAL_NODES.filter((_, index) => index % 2 === 0);
 
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -282,10 +283,10 @@ export function Hero() {
               </g>
 
               <g className={styles.signalTravelDots} filter="url(#heroSignalSoftGlow)">
-                {HERO_SIGNAL_NODES.map((node, index) => (
+                {HERO_TRAVEL_NODES.map((node, index) => (
                   <circle key={`signal-travel-${index}`} r={node.radius + 0.8} className={styles.signalTravelDot}>
                     <animateMotion dur={node.duration} repeatCount="indefinite" begin={node.delay}>
-                      <mpath href={`#heroSignalPath${index}`} />
+                      <mpath href={`#heroSignalPath${index * 2}`} />
                     </animateMotion>
                   </circle>
                 ))}

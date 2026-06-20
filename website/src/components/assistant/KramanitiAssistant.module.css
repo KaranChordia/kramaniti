@@ -86,9 +86,7 @@
     inset 18px 0 34px rgba(201, 168, 76, 0.14);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  animation:
-    liquidShape 6s ease-in-out infinite alternate,
-    blobFloat 4s ease-in-out infinite alternate;
+  transform: translateZ(0);
 }
 
 .blobButton:hover .assistantBlob {
@@ -152,13 +150,13 @@
 .orbitOne {
   width: 14px;
   height: 14px;
-  animation: orbitOne 3.8s linear infinite;
+  transform: rotate(28deg) translateX(42px) rotate(-28deg);
 }
 
 .orbitTwo {
   width: 9px;
   height: 9px;
-  animation: orbitTwo 3s linear infinite reverse;
+  transform: rotate(208deg) translateX(36px) rotate(-208deg);
 }
 
 .rootTyping .orbitOne,
@@ -190,8 +188,8 @@
   background:
     radial-gradient(circle at 50% 18%, rgba(201, 168, 76, 0.18), transparent 34%),
     linear-gradient(180deg, rgba(10, 10, 15, 0.84), rgba(10, 10, 15, 0.96));
-  backdrop-filter: blur(30px) saturate(1.12);
-  -webkit-backdrop-filter: blur(30px) saturate(1.12);
+  backdrop-filter: blur(12px) saturate(1.08);
+  -webkit-backdrop-filter: blur(12px) saturate(1.08);
   cursor: default;
   opacity: 0;
   transition:

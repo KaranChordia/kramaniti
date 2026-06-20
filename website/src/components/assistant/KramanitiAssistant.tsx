@@ -50,6 +50,7 @@ const starterPrompts = [
 const RESPONSE_WORD_INTERVAL_MS = 58;
 const RESPONSE_PUNCTUATION_PAUSE_MS = 120;
 const RESPONSE_PARAGRAPH_PAUSE_MS = 180;
+const STREAM_RENDER_INTERVAL_MS = 110;
 
 const tokenizeAssistantResponse = (value: string) => value.match(/\S+\s*/g) || [];
 
@@ -62,6 +63,7 @@ const getTokenDelay = (token: string) => {
 
 export function KramanitiAssistant() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasOpened, setHasOpened] = useState(false);
   const [draft, setDraft] = useState('');
   const [messages, setMessages] = useState<AssistantMessage[]>(INITIAL_MESSAGES);
   const [isSending, setIsSending] = useState(false);
@@ -74,8 +76,13 @@ export function KramanitiAssistant() {
   const isBusy = isSending || isStreamingResponse;
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }, [messages, isBusy]);
+    if (!isOpen) return;
+
+    messagesEndRef.current?.scrollIntoView({
+      behavior: isStreamingResponse ? 'auto' : 'smooth',
+      block: 'end',
+    });
+  }, [isOpen, isStreamingResponse, messages]);
 
   useEffect(() => {
     return () => {
@@ -134,6 +141,7 @@ export function KramanitiAssistant() {
     const tokens = tokenizeAssistantResponse(fullResponse);
     const runId = streamRunRef.current + 1;
     const messageId = `assistant-stream-${runId}`;
+    let lastRenderTime = 0;
     streamRunRef.current = runId;
     setIsStreamingResponse(true);
 
@@ -150,12 +158,17 @@ export function KramanitiAssistant() {
     for (const [index, token] of tokens.entries()) {
       if (streamRunRef.current !== runId) return;
 
-      const visibleText = tokens.slice(0, index + 1).join('');
-      setMessages((current) =>
-        current.map((message) =>
-          message.id === messageId ? { ...message, content: visibleText } : message,
-        ),
-      );
+      const now = window.performance.now();
+      const isLastToken = index === tokens.length - 1;
+      if (isLastToken || now - lastRenderTime >= STREAM_RENDER_INTERVAL_MS) {
+        lastRenderTime = now;
+        const visibleText = tokens.slice(0, index + 1).join('');
+        setMessages((current) =>
+          current.map((message) =>
+            message.id === messageId ? { ...message, content: visibleText } : message,
+          ),
+        );
+      }
 
       await waitForStreamDelay(getTokenDelay(token));
     }
@@ -223,12 +236,17 @@ export function KramanitiAssistant() {
     void submitMessage();
   };
 
+  const toggleAssistant = () => {
+    if (!isOpen) setHasOpened(true);
+    setIsOpen((current) => !current);
+  };
+
   return (
     <div className={`${styles.root} ${isOpen ? styles.rootOpen : ''} ${isTyping ? styles.rootTyping : ''} ${isBusy ? styles.rootResponding : ''}`}>
       <button
         type="button"
         className={styles.blobButton}
-        onClick={() => setIsOpen((current) => !current)}
+        onClick={toggleAssistant}
         aria-label={isOpen ? 'Close Kramaniti assistant' : 'Open Kramaniti assistant'}
         aria-expanded={isOpen}
         title={isOpen ? 'Close assistant' : 'Open Kramaniti assistant'}
@@ -238,109 +256,111 @@ export function KramanitiAssistant() {
         <span className={styles.assistantBlob} aria-hidden="true" />
       </button>
 
-      <div className={styles.stage} aria-hidden={!isOpen}>
-        <button
-          type="button"
-          className={styles.backdrop}
-          onClick={() => setIsOpen(false)}
-          aria-label="Close assistant backdrop"
-          tabIndex={isOpen ? 0 : -1}
-        />
+      {hasOpened ? (
+        <div className={styles.stage} aria-hidden={!isOpen}>
+          <button
+            type="button"
+            className={styles.backdrop}
+            onClick={() => setIsOpen(false)}
+            aria-label="Close assistant backdrop"
+            tabIndex={isOpen ? 0 : -1}
+          />
 
-        <section
-          className={styles.panel}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Kramaniti assistant chat"
-        >
-          <div className={styles.panelGlow} aria-hidden="true" />
+          <section
+            className={styles.panel}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Kramaniti assistant chat"
+          >
+            <div className={styles.panelGlow} aria-hidden="true" />
 
-          <header className={styles.header}>
-            <div className={styles.panelBlob} aria-hidden="true">
-              <span className={styles.panelBlobOrbitOne} />
-              <span className={styles.panelBlobOrbitTwo} />
-              <span className={styles.panelBlobCore} />
-            </div>
-            <div className={styles.identity}>
-              <span className={styles.kicker}>
-                Kramaniti Assistant
-              </span>
-            </div>
-            <div className={styles.headerActions}>
-              <button type="button" className={styles.iconButton} onClick={resetThread} title="Reset chat" aria-label="Reset chat">
-                <RotateCcw size={16} />
-              </button>
-              <button type="button" className={styles.iconButton} onClick={() => setIsOpen(false)} title="Close" aria-label="Close">
-                <X size={18} />
-              </button>
-            </div>
-          </header>
-
-          <div className={styles.messages} aria-live="polite">
-            {messages.map((message) => (
-              <article
-                key={message.id}
-                className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage} ${message.isStreaming ? styles.streamingMessage : ''}`}
-              >
-                <span className={styles.messageLabel}>{message.role === 'user' ? 'You' : 'Kramaniti'}</span>
-                <p>
-                  {message.content}
-                  {message.isStreaming ? <span className={styles.streamCaret} aria-hidden="true" /> : null}
-                </p>
-              </article>
-            ))}
-
-            {isSending && (
-              <article className={`${styles.message} ${styles.assistantMessage}`}>
-                <span className={styles.messageLabel}>Kramaniti</span>
-                <div className={styles.thinking}>
-                  <span />
-                  <span />
-                  <span />
-                </div>
-              </article>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {messages.length === 1 && (
-            <div className={styles.promptRail} aria-label="Starter prompts">
-              {starterPrompts.map((prompt) => (
-                <button
-                  type="button"
-                  key={prompt}
-                  className={styles.promptChip}
-                  disabled={isBusy}
-                  onClick={() => void submitMessage(prompt)}
-                >
-                  {prompt}
+            <header className={styles.header}>
+              <div className={styles.panelBlob} aria-hidden="true">
+                <span className={styles.panelBlobOrbitOne} />
+                <span className={styles.panelBlobOrbitTwo} />
+                <span className={styles.panelBlobCore} />
+              </div>
+              <div className={styles.identity}>
+                <span className={styles.kicker}>
+                  Kramaniti Assistant
+                </span>
+              </div>
+              <div className={styles.headerActions}>
+                <button type="button" className={styles.iconButton} onClick={resetThread} title="Reset chat" aria-label="Reset chat">
+                  <RotateCcw size={16} />
                 </button>
-              ))}
-            </div>
-          )}
+                <button type="button" className={styles.iconButton} onClick={() => setIsOpen(false)} title="Close" aria-label="Close">
+                  <X size={18} />
+                </button>
+              </div>
+            </header>
 
-          <form className={styles.inputDock} onSubmit={handleSubmit}>
-            <textarea
-              ref={textareaRef}
-              value={draft}
-              onChange={(event) => setDraft(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' && !event.shiftKey) {
-                  event.preventDefault();
-                  void submitMessage();
-                }
-              }}
-              placeholder="Ask about Kramaniti, the offer, a workflow, or the right first system..."
-              rows={1}
-              maxLength={900}
-              disabled={isBusy}
-            />
-            <button type="submit" className={styles.sendButton} disabled={!draft.trim() || isBusy} aria-label="Send message">
-              <Send size={17} />
-            </button>
-          </form>
-        </section>
-      </div>
+            <div className={styles.messages} aria-live="polite">
+              {messages.map((message) => (
+                <article
+                  key={message.id}
+                  className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage} ${message.isStreaming ? styles.streamingMessage : ''}`}
+                >
+                  <span className={styles.messageLabel}>{message.role === 'user' ? 'You' : 'Kramaniti'}</span>
+                  <p>
+                    {message.content}
+                    {message.isStreaming ? <span className={styles.streamCaret} aria-hidden="true" /> : null}
+                  </p>
+                </article>
+              ))}
+
+              {isSending && (
+                <article className={`${styles.message} ${styles.assistantMessage}`}>
+                  <span className={styles.messageLabel}>Kramaniti</span>
+                  <div className={styles.thinking}>
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                </article>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {messages.length === 1 && (
+              <div className={styles.promptRail} aria-label="Starter prompts">
+                {starterPrompts.map((prompt) => (
+                  <button
+                    type="button"
+                    key={prompt}
+                    className={styles.promptChip}
+                    disabled={isBusy}
+                    onClick={() => void submitMessage(prompt)}
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <form className={styles.inputDock} onSubmit={handleSubmit}>
+              <textarea
+                ref={textareaRef}
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    void submitMessage();
+                  }
+                }}
+                placeholder="Ask about Kramaniti, the offer, a workflow, or the right first system..."
+                rows={1}
+                maxLength={900}
+                disabled={isBusy}
+              />
+              <button type="submit" className={styles.sendButton} disabled={!draft.trim() || isBusy} aria-label="Send message">
+                <Send size={17} />
+              </button>
+            </form>
+          </section>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -598,7 +598,7 @@
     drop-shadow(0 0 5px rgba(255, 236, 173, 0.42))
     drop-shadow(0 0 15px rgba(201, 168, 76, 0.26));
   opacity: 0;
-  animation: signalBeamRun 6.8s cubic-bezier(0.45, 0, 0.2, 1) var(--signal-delay, 0s) infinite;
+  animation: signalBeamRun 9.6s cubic-bezier(0.45, 0, 0.2, 1) var(--signal-delay, 0s) infinite;
 }
 
 .signalAnchors circle {
@@ -606,7 +606,7 @@
   opacity: 0;
   transform-origin: center;
   transform-box: fill-box;
-  animation: signalAnchorPulse 5.8s ease-in-out var(--signal-delay, 0s) infinite;
+  animation: signalAnchorPulse 8.4s ease-in-out var(--signal-delay, 0s) infinite;
 }
 
 .signalTravelDot {
@@ -620,7 +620,7 @@
   fill: url(#heroSignalCoreGlow);
   opacity: 0.5;
   transform-origin: 500px 280px;
-  animation: signalCoreBreathe 5.2s ease-in-out infinite;
+  animation: signalCoreBreathe 7.8s ease-in-out infinite;
 }
 
 .signalCoreOuter {
@@ -630,12 +630,12 @@
   stroke-dasharray: 2 11;
   vector-effect: non-scaling-stroke;
   transform-origin: 500px 280px;
-  animation: signalCoreRotate 12s linear infinite;
+  animation: signalCoreRotate 18s linear infinite;
 }
 
 .signalCoreOrbit {
   transform-origin: 500px 280px;
-  animation: signalCoreRotate 9s linear infinite reverse;
+  animation: signalCoreRotate 14s linear infinite reverse;
 }
 
 .signalCoreOrbit path {
@@ -652,7 +652,7 @@
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
   transform-origin: 500px 280px;
-  animation: signalCoreRotate 6.8s linear infinite;
+  animation: signalCoreRotate 12s linear infinite;
 }
 
 .signalCoreDot {
@@ -722,7 +722,7 @@
 .content.visible .heroBrandText {
   animation: 
     heroBrandEnter 360ms cubic-bezier(0.16, 1, 0.3, 1) 20ms forwards,
-    textShimmer 5s linear infinite 380ms;
+    textShimmer 1600ms ease-out 380ms both;
 }
 
 .layerTextItem {
