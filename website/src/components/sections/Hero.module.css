@@ -5,6 +5,12 @@
   --hero-scroll: 0;
 }
 
+.sequenceDisabled {
+  height: auto;
+  min-height: 100svh;
+  background: transparent;
+}
+
 .heroFooter {
   position: absolute;
   bottom: 0;
@@ -30,8 +36,21 @@
   background: var(--gradient-dark-depth);
 }
 
+.sequenceDisabled .stickyContainer {
+  position: relative;
+  height: auto;
+  min-height: 100svh;
+  align-items: stretch;
+  padding: clamp(124px, 15vh, 164px) 24px clamp(70px, 10vh, 108px);
+  background: transparent;
+}
+
 :global(html[data-theme='light']) .stickyContainer {
   background: linear-gradient(180deg, #f8f8f8 0%, #ffffff 45%, #f0f0f5 100%);
+}
+
+:global(html[data-theme='light']) .sequenceDisabled .stickyContainer {
+  background: transparent;
 }
 
 .background {
@@ -443,6 +462,11 @@
   }
 }
 
+.sequenceDisabled .layerStack,
+.sequenceDisabled .scrollTextStage {
+  display: none !important;
+}
+
 /* -------------------------------------
    FOREGROUND TEXT (Chronological)
    ------------------------------------- */
@@ -480,6 +504,185 @@
   opacity: 0;
   transition: opacity 0.8s ease;
   pointer-events: none;
+}
+
+.sequenceDisabled .container {
+  position: relative;
+  inset: auto;
+  flex: 1 1 auto;
+  justify-content: center;
+  padding: 0;
+}
+
+.sequenceDisabled .split {
+  max-width: min(1120px, 90vw);
+}
+
+.sequenceDisabled .content {
+  gap: clamp(20px, 2.8vh, 30px);
+  max-width: 1040px;
+  position: relative;
+  z-index: 4;
+}
+
+.sequenceDisabled .heroBrandText {
+  font-size: clamp(32px, 4.6vw, 64px);
+}
+
+.sequenceDisabled .headline {
+  max-width: 19ch;
+  font-size: clamp(38px, 5.2vw, 70px);
+  line-height: 1.04;
+  text-shadow: 0 18px 52px rgba(0, 0, 0, 0.42);
+}
+
+.sequenceDisabled .subheading {
+  max-width: 58ch;
+  font-size: clamp(15px, 1.25vw, 18px);
+  line-height: 1.58;
+  text-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+}
+
+.heroSignal {
+  display: none;
+}
+
+.sequenceDisabled .heroSignal {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  z-index: 2;
+  display: block;
+  width: min(1160px, 94vw);
+  height: min(520px, 58vh);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, calc(-50% + 12px)) scale(0.985);
+  transition:
+    opacity 900ms ease 140ms,
+    transform 1200ms cubic-bezier(0.16, 1, 0.3, 1) 140ms;
+  filter: saturate(1.08);
+}
+
+.sequenceDisabled .heroSignalVisible {
+  opacity: 0.78;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.signalSvg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.signalPaths path {
+  fill: none;
+  stroke: rgba(201, 168, 76, 0.13);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  vector-effect: non-scaling-stroke;
+  animation: signalPathReveal 1500ms cubic-bezier(0.16, 1, 0.3, 1) calc(180ms + var(--signal-delay, 0s)) forwards;
+}
+
+.signalBeams path {
+  fill: none;
+  stroke: url(#heroSignalFlow);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 0.08 0.92;
+  stroke-dashoffset: 1;
+  vector-effect: non-scaling-stroke;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 236, 173, 0.42))
+    drop-shadow(0 0 15px rgba(201, 168, 76, 0.26));
+  opacity: 0;
+  animation: signalBeamRun 6.8s cubic-bezier(0.45, 0, 0.2, 1) var(--signal-delay, 0s) infinite;
+}
+
+.signalAnchors circle {
+  fill: rgba(255, 236, 173, 0.72);
+  opacity: 0;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: signalAnchorPulse 5.8s ease-in-out var(--signal-delay, 0s) infinite;
+}
+
+.signalTravelDot {
+  fill: rgba(255, 236, 173, 0.9);
+  filter:
+    drop-shadow(0 0 7px rgba(255, 236, 173, 0.48))
+    drop-shadow(0 0 16px rgba(201, 168, 76, 0.42));
+}
+
+.signalCoreHalo {
+  fill: url(#heroSignalCoreGlow);
+  opacity: 0.5;
+  transform-origin: 500px 280px;
+  animation: signalCoreBreathe 5.2s ease-in-out infinite;
+}
+
+.signalCoreOuter {
+  fill: none;
+  stroke: rgba(255, 236, 173, 0.28);
+  stroke-width: 1;
+  stroke-dasharray: 2 11;
+  vector-effect: non-scaling-stroke;
+  transform-origin: 500px 280px;
+  animation: signalCoreRotate 12s linear infinite;
+}
+
+.signalCoreOrbit {
+  transform-origin: 500px 280px;
+  animation: signalCoreRotate 9s linear infinite reverse;
+}
+
+.signalCoreOrbit path {
+  fill: none;
+  stroke: rgba(255, 236, 173, 0.62);
+  stroke-width: 2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.signalCoreInner {
+  fill: rgba(201, 168, 76, 0.12);
+  stroke: rgba(255, 236, 173, 0.38);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transform-origin: 500px 280px;
+  animation: signalCoreRotate 6.8s linear infinite;
+}
+
+.signalCoreDot {
+  fill: rgba(255, 236, 173, 0.95);
+  opacity: 0.96;
+  transform-origin: 500px 280px;
+  animation: signalCoreDotPulse 3.8s ease-in-out infinite;
+}
+
+:global(html[data-theme='light']) .signalPaths path {
+  stroke: rgba(180, 148, 56, 0.18);
+}
+
+:global(html[data-theme='light']) .signalAnchors circle,
+:global(html[data-theme='light']) .signalTravelDot,
+:global(html[data-theme='light']) .signalCoreDot {
+  fill: rgba(180, 148, 56, 0.9);
+}
+
+:global(html[data-theme='light']) .signalCoreHalo {
+  opacity: 0.34;
+}
+
+:global(html[data-theme='light']) .signalCoreOuter,
+:global(html[data-theme='light']) .signalCoreInner {
+  stroke: rgba(180, 148, 56, 0.34);
+}
+
+:global(html[data-theme='light']) .signalCoreOrbit path {
+  stroke: rgba(180, 148, 56, 0.52);
 }
 
 .content.visible {
@@ -1160,6 +1363,37 @@
   }
 }
 
+@keyframes signalPathReveal {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes signalBeamRun {
+  0% { stroke-dashoffset: 1; opacity: 0; }
+  10% { opacity: 0.86; }
+  68% { opacity: 0.86; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes signalAnchorPulse {
+  0%, 100% { opacity: 0.28; transform: scale(0.86); }
+  38% { opacity: 0.9; transform: scale(1.22); }
+  72% { opacity: 0.46; transform: scale(0.96); }
+}
+
+@keyframes signalCoreBreathe {
+  0%, 100% { opacity: 0.34; transform: scale(0.92); }
+  50% { opacity: 0.68; transform: scale(1.12); }
+}
+
+@keyframes signalCoreRotate {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes signalCoreDotPulse {
+  0%, 100% { opacity: 0.74; transform: scale(0.92); }
+  50% { opacity: 1; transform: scale(1.18); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .flowLine,
   .glow,
@@ -1179,7 +1413,16 @@
   .scanline,
   .scrollIndicator,
   .motifRing,
-  .motifLine {
+  .motifLine,
+  .signalPaths path,
+  .signalBeams path,
+  .signalAnchors circle,
+  .signalTravelDot,
+  .signalCoreHalo,
+  .signalCoreOuter,
+  .signalCoreOrbit,
+  .signalCoreInner,
+  .signalCoreDot {
     animation: none !important;
     transition: none !important;
   }
@@ -1201,9 +1444,27 @@
 
   .connectorPathBase,
   .connectorPathFlow,
-  .connectorPathPulse {
+  .connectorPathPulse,
+  .signalPaths path {
     opacity: 1;
     stroke-dashoffset: 0;
+  }
+
+  .signalBeams path {
+    opacity: 0.4;
+  }
+
+  .signalAnchors circle,
+  .signalCoreHalo,
+  .signalCoreOuter,
+  .signalCoreOrbit,
+  .signalCoreInner,
+  .signalCoreDot {
+    opacity: 0.8;
+  }
+
+  .signalTravelDots {
+    display: none;
   }
 
   .headlineWord {
@@ -1225,15 +1486,63 @@
     min-height: 100vh;
     padding: 106px 20px 64px;
   }
+  .sequenceDisabled .stickyContainer {
+    min-height: 100svh;
+    padding: 106px 20px 64px;
+  }
   .container {
     justify-content: center;
     padding-top: 80px;
     padding-bottom: 40px;
   }
+  .sequenceDisabled .container {
+    justify-content: center;
+    padding: 0;
+  }
   .content {
     gap: 26px;
   }
+  .sequenceDisabled .content {
+    gap: 26px;
+    max-width: 100%;
+  }
+  .sequenceDisabled .heroSignal {
+    top: 50%;
+    width: 136vw;
+    height: 52svh;
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 8px)) scale(0.96);
+  }
+  .sequenceDisabled .heroSignalVisible {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .signalPaths path:nth-child(4),
+  .signalPaths path:nth-child(5),
+  .signalPaths path:nth-child(6),
+  .signalPaths path:nth-child(7),
+  .signalPaths path:nth-child(12),
+  .signalBeams path:nth-child(4),
+  .signalBeams path:nth-child(5),
+  .signalBeams path:nth-child(6),
+  .signalBeams path:nth-child(7),
+  .signalBeams path:nth-child(12),
+  .signalAnchors circle:nth-child(4),
+  .signalAnchors circle:nth-child(5),
+  .signalAnchors circle:nth-child(6),
+  .signalAnchors circle:nth-child(7),
+  .signalAnchors circle:nth-child(12),
+  .signalTravelDots circle:nth-child(4),
+  .signalTravelDots circle:nth-child(5),
+  .signalTravelDots circle:nth-child(6),
+  .signalTravelDots circle:nth-child(7),
+  .signalTravelDots circle:nth-child(12) {
+    opacity: 0;
+  }
   .heroBrandText {
+    font-size: clamp(28px, 10vw, 44px);
+  }
+  .sequenceDisabled .heroBrandText {
     font-size: clamp(28px, 10vw, 44px);
   }
   .networkStage {
@@ -1262,6 +1571,11 @@
     line-height: 1.18;
     max-width: 100%;
   }
+  .sequenceDisabled .headline {
+    font-size: clamp(18px, 6.2vw, 26px);
+    line-height: 1.18;
+    max-width: 100%;
+  }
   .headlineWord {
     white-space: normal;
   }
@@ -1273,6 +1587,11 @@
     padding: 0;
     white-space: normal;
     text-wrap: balance;
+  }
+  .sequenceDisabled .subheading {
+    font-size: clamp(12px, 3.8vw, 14px);
+    line-height: 1.55;
+    max-width: 34ch;
   }
   .heroCta {
     min-height: 40px;

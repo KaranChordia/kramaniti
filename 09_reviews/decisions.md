@@ -420,3 +420,33 @@ This log registers the major strategic and structural decisions made during the 
 *   **Claim Guardrails:**
     *   Studio may route, draft, summarize, and prepare memory notes.
     *   Studio must not publish, invent proof, change pricing, handle credentials, make client-facing promises, or create external commitments.
+
+### Decision 19: Add Global Kramaniti Website Assistant
+*   **Date:** 2026-06-20
+*   **Area:** Website, public assistant, AI runtime, knowledge access
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Add a global Kramaniti assistant to the public website as a bottom-right Clarity Engine-inspired blob that expands into a centered premium chat interface.
+*   **Rationale:** The public site now needs a lightweight conversational layer that can answer questions about Kramaniti's method, services, founder context, Clarity Engine, Studio direction, proof rules, and current public content without forcing visitors into a separate dashboard or cluttering the homepage.
+*   **Source or Evidence:** Founder request on 2026-06-20 to build a Kramaniti chatbot assistant with company and repository knowledge, a premium UI/UX, the Clarity Engine AI blob as character, a fixed bottom-right launcher, and Groq SDK calls using GPT-OSS 120B.
+*   **Affected Files:**
+    *   `website/src/app/layout.tsx`
+    *   `website/src/app/api/chat/route.ts`
+    *   `website/src/components/assistant/KramanitiAssistant.tsx`
+    *   `website/src/components/assistant/KramanitiAssistant.module.css`
+    *   `website/src/lib/kramaniti-assistant/knowledge.ts`
+    *   `docs/kramaniti_site_implementation_plan.md`
+*   **Alternatives Rejected:**
+    1.  *Keeping the old Studio chatbot widget:* Rejected because it was not mounted globally, carried outdated Gemini wording, and did not match the requested Clarity Engine character direction.
+    2.  *Calling Groq directly from the browser:* Rejected because it would expose credentials and conflict with the repository's no-secrets rule.
+    3.  *Dumping every repository file directly into the browser:* Rejected because a public assistant should use curated server-side context and proof guardrails instead of exposing raw internal workspace material.
+*   **Guardrails:**
+    *   Keep `GROQ_API_KEY` server-side only.
+    *   Default to `openai/gpt-oss-120b`, with `GROQ_CHAT_MODEL` available as an override.
+    *   Keep public-facing answers business-first and aligned to strategy before tools, systems before scale, and content after clarity.
+    *   Treat vague, greeting-like, or low-signal visitor prompts as a reason to ask one concise clarifying question instead of giving a full method explanation.
+    *   Do not invent claims, metrics, testimonials, client permissions, pricing, or project outcomes.
+    *   Do not reveal secrets, environment variables, raw internal file dumps, or private implementation details.
+*   **Open Questions:**
+    *   Should future versions add retrieval indexing instead of curated runtime context?
+    *   Should assistant conversations be ephemeral, saved to a CRM, or stored only after explicit visitor consent?
+    *   Should the assistant later support lead capture or remain an educational guide until the contact backend is finalized?

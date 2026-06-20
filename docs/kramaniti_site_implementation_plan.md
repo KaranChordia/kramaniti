@@ -262,6 +262,28 @@ Related files:
 - `website/src/lib/clarity-engine/assistant.ts`
 - `website/src/components/layout/Navbar.tsx`
 
+## 10.4 Global Kramaniti Assistant
+
+2026-06-20 update: the public website now includes a global Kramaniti assistant fixed to the bottom-right corner as a Clarity Engine-inspired liquid blob.
+
+[Fact] The current implementation includes:
+
+- A site-wide assistant mounted from `website/src/app/layout.tsx`.
+- A blob-only fixed launcher that expands into a centered cinematic chat layer.
+- A server route at `/api/chat/` powered by the Groq SDK and default model `openai/gpt-oss-120b`.
+- A server-side curated repository knowledge context assembled from canonical Kramaniti docs, website rules, proof governance, decision history, and recent public Insights.
+- A local fallback response when `GROQ_API_KEY` is not configured.
+- Response modes that keep vague prompts short, ask one clarifying question for broad interest, and reserve longer answers for concrete requests.
+
+[Constraint] The assistant must stay proof-safe and public-facing. It can answer from Kramaniti context, explain the method, guide users toward the AI Workflow Audit, and clarify services. It must not reveal secrets, raw internal file dumps, private implementation details, unverified client claims, metrics, testimonials, pricing, or permission-sensitive proof.
+
+Related files:
+
+- `website/src/components/assistant/KramanitiAssistant.tsx`
+- `website/src/components/assistant/KramanitiAssistant.module.css`
+- `website/src/app/api/chat/route.ts`
+- `website/src/lib/kramaniti-assistant/knowledge.ts`
+
 ## 11. Nexocean Portfolio Page
 
 - Added a dedicated selected-work page at `/work/nexocean`.

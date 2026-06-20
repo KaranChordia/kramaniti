@@ -19,6 +19,7 @@ type IntroPhase = 'dark' | 'logo-in' | 'logo-out' | 'done';
 const DARK_PHASE_MS = 220;
 const LOGO_IN_MS = 760;
 const LOGO_OUT_MS = 420;
+const ENABLE_NAV_HERO_SEQUENCE_SYNC = false;
 
 export function HomepageSequence() {
   const [phase, setPhase] = useState<IntroPhase>('dark');
@@ -53,7 +54,9 @@ export function HomepageSequence() {
       bodyOverflowY: body.style.overflowY,
     };
 
-    root.dataset.homeSequence = 'true';
+    if (ENABLE_NAV_HERO_SEQUENCE_SYNC) {
+      root.dataset.homeSequence = 'true';
+    }
 
     return () => {
       if (previous.rootOverflowY) root.style.overflowY = previous.rootOverflowY;
