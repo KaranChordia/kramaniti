@@ -5,6 +5,7 @@ import styles from "./PwaRuntime.module.css";
 
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
 const INSTALL_PROMPT_DISMISSED_KEY = "kramaniti-pwa-install-dismissed";
+const BRAND_THEME_COLOR = "#C9A84C";
 
 type BeforeInstallPromptChoice = {
   outcome: "accepted" | "dismissed";
@@ -24,6 +25,30 @@ const isStandaloneApp = () =>
 export function PwaRuntime() {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallVisible, setIsInstallVisible] = useState(false);
+
+  useEffect(() => {
+    const pinThemeColor = () => {
+      const themeColorTags = Array.from(document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]'));
+      const primaryThemeColor = themeColorTags[0] ?? document.createElement("meta");
+
+      primaryThemeColor.setAttribute("name", "theme-color");
+      primaryThemeColor.setAttribute("content", BRAND_THEME_COLOR);
+      primaryThemeColor.removeAttribute("media");
+
+      if (!primaryThemeColor.parentElement) {
+        document.head.appendChild(primaryThemeColor);
+      }
+
+      themeColorTags.slice(1).forEach((tag) => tag.remove());
+    };
+
+    pinThemeColor();
+    document.addEventListener("visibilitychange", pinThemeColor);
+
+    return () => {
+      document.removeEventListener("visibilitychange", pinThemeColor);
+    };
+  }, []);
 
   useEffect(() => {
     if (!("serviceWorker" in navigator)) {

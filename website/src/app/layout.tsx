@@ -79,7 +79,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  colorScheme: "dark light",
+  colorScheme: "light",
   themeColor: "#C9A84C",
   width: "device-width",
   initialScale: 1,
@@ -95,7 +95,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning data-theme="dark" data-scroll-behavior="smooth">
       <head>
-        <meta name="color-scheme" content="dark light" />
+        <meta name="msapplication-navbutton-color" content="#C9A84C" />
       </head>
       <body
         className={`${outfit.variable} ${jetbrainsMono.variable} antialiased`}
@@ -106,8 +106,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                const colorScheme = localStorage.getItem("kramaniti-theme");
-                document.documentElement.setAttribute("data-theme", colorScheme || "dark");
+                localStorage.removeItem("kramaniti-theme");
+                const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                document.documentElement.setAttribute("data-theme", prefersDark ? "dark" : "light");
               } catch (e) {}
             `
           }}

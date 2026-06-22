@@ -2,15 +2,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './ThemeToggle.module.css';
 
+type ThemeMode = 'light' | 'dark';
+
+const getSystemTheme = (): ThemeMode =>
+  window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+  const [theme, setTheme] = useState<ThemeMode>(() => {
     if (typeof window === 'undefined') {
       return 'dark';
     }
 
-    const storedTheme = localStorage.getItem('kramaniti-theme') as 'light' | 'dark' | null;
-    const currentTheme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark' | null;
-    return storedTheme ?? currentTheme ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const currentTheme = document.documentElement.getAttribute('data-theme') as ThemeMode | null;
+    return currentTheme ?? getSystemTheme();
   });
 
   // Track whether the toggle handler already applied the theme to the DOM
@@ -24,8 +28,23 @@ export function ThemeToggle() {
       return;
     }
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('kramaniti-theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const syncWithSystemTheme = () => {
+      const systemTheme = mediaQuery.matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', systemTheme);
+      setTheme(systemTheme);
+    };
+
+    mediaQuery.addEventListener('change', syncWithSystemTheme);
+
+    return () => {
+      mediaQuery.removeEventListener('change', syncWithSystemTheme);
+    };
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -45,7 +64,6 @@ export function ThemeToggle() {
       // later, which re-triggers colour transitions on text elements.
       appliedByToggle.current = true;
       root.setAttribute('data-theme', newTheme);
-      localStorage.setItem('kramaniti-theme', newTheme);
 
       // Update React state so the icon re-renders.
       setTheme(newTheme);
