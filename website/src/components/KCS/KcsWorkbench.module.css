@@ -1,11 +1,11 @@
 .shell {
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 18% 18%, rgba(201, 168, 76, 0.08), transparent 26%),
-    radial-gradient(circle at 82% 76%, rgba(255, 255, 255, 0.04), transparent 24%),
-    linear-gradient(180deg, rgba(10, 10, 15, 0.98), rgba(20, 20, 24, 1));
+    radial-gradient(circle at 16% 20%, rgba(201, 168, 76, 0.08), transparent 26%),
+    radial-gradient(circle at 78% 70%, rgba(240, 240, 245, 0.035), transparent 24%),
+    linear-gradient(180deg, #0a0a0f 0%, #141418 52%, #0a0a0f 100%);
   color: var(--text-primary);
 }
 
@@ -15,20 +15,20 @@
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: linear-gradient(180deg, transparent, #000 10%, #000 90%, transparent);
-  opacity: 0.55;
+    linear-gradient(rgba(255, 255, 255, 0.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.026) 1px, transparent 1px);
+  background-size: 68px 68px;
+  mask-image: linear-gradient(180deg, transparent, #000 14%, #000 84%, transparent);
+  opacity: 0.7;
 }
 
-.globalAtmosphere,
+.ambientField,
 .stage {
   position: relative;
   z-index: 1;
 }
 
-.globalAtmosphere {
+.ambientField {
   position: absolute;
   inset: 0;
   overflow: hidden;
@@ -39,110 +39,103 @@
 .flowLineVertical {
   position: absolute;
   pointer-events: none;
+  opacity: 0.34;
 }
 
 .flowLine {
   height: 1px;
   background:
-    linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.12), transparent),
-    linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.8), rgba(240, 240, 245, 0.76), rgba(201, 168, 76, 0.8), transparent);
+    linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.14), transparent),
+    linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.72), rgba(246, 223, 157, 0.8), rgba(201, 168, 76, 0.72), transparent);
   background-repeat: no-repeat;
-  background-size: 100% 100%, 320px 100%;
-  animation: flowHorizontal 8.4s linear infinite;
+  background-size: 100% 100%, 260px 100%;
+  animation: flowHorizontal 9.2s linear infinite;
 }
 
 .flowLineVertical {
   width: 1px;
   background:
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.06), transparent),
-    linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.7), rgba(240, 240, 245, 0.72), rgba(201, 168, 76, 0.7), transparent);
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.05), transparent),
+    linear-gradient(180deg, transparent, rgba(201, 168, 76, 0.58), rgba(246, 223, 157, 0.7), rgba(201, 168, 76, 0.58), transparent);
   background-repeat: no-repeat;
-  background-size: 100% 100%, 100% 320px;
-  animation: flowVertical 8.8s linear infinite;
+  background-size: 100% 100%, 100% 260px;
+  animation: flowVertical 10.4s linear infinite;
 }
 
 .flowLineOne {
-  left: 4%;
-  right: 18%;
-  top: 16%;
-  animation-duration: 6.3s;
-  animation-delay: -2.2s;
-  opacity: 0.46;
+  left: 7%;
+  right: 16%;
+  top: 18%;
+  animation-delay: -3.1s;
 }
 
 .flowLineTwo {
   left: 12%;
-  right: 8%;
-  top: 46%;
-  animation-duration: 9.1s;
-  animation-delay: -4.7s;
-  opacity: 0.34;
+  right: 7%;
+  top: 52%;
+  animation-duration: 11.8s;
+  animation-delay: -6.4s;
+  opacity: 0.25;
 }
 
 .flowLineThree {
-  left: 8%;
-  right: 22%;
-  top: 74%;
-  animation-duration: 7.4s;
-  animation-delay: -1.4s;
-  opacity: 0.38;
-}
-
-.flowLineFour {
   left: 18%;
-  right: 4%;
-  top: 88%;
-  animation-duration: 10.2s;
-  animation-delay: -5.1s;
-  opacity: 0.22;
-}
-
-.flowLineFive {
-  top: 8%;
-  bottom: 12%;
-  left: 16%;
-  animation-duration: 7.8s;
-  animation-delay: -3.4s;
-  opacity: 0.34;
-}
-
-.flowLineSix {
-  top: 14%;
-  bottom: 6%;
-  right: 18%;
-  animation-duration: 9.6s;
-  animation-delay: -1.8s;
+  right: 10%;
+  bottom: 13%;
+  animation-duration: 8.7s;
+  animation-delay: -2.2s;
   opacity: 0.28;
 }
 
+.flowLineFour {
+  top: 9%;
+  bottom: 12%;
+  left: 18%;
+  animation-delay: -4.2s;
+}
+
+.flowLineFive {
+  top: 12%;
+  bottom: 8%;
+  right: 18%;
+  animation-duration: 12.1s;
+  animation-delay: -1.6s;
+  opacity: 0.24;
+}
+
 .stage {
-  min-height: 100vh;
-  padding: 26px;
+  min-height: 100dvh;
+  padding: 22px;
 }
 
 .scene {
   position: relative;
-  min-height: calc(100vh - 52px);
+  min-height: calc(100dvh - 44px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   background:
-    linear-gradient(135deg, rgba(201, 168, 76, 0.05), transparent 32%),
-    linear-gradient(320deg, rgba(255, 255, 255, 0.035), transparent 34%),
-    rgba(10, 10, 15, 0.72);
-  box-shadow: 0 26px 90px rgba(0, 0, 0, 0.42);
-  animation: sceneIn 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    linear-gradient(135deg, rgba(201, 168, 76, 0.055), transparent 30%),
+    linear-gradient(315deg, rgba(255, 255, 255, 0.034), transparent 34%),
+    rgba(10, 10, 15, 0.76);
+  box-shadow:
+    0 32px 100px rgba(0, 0, 0, 0.46),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  animation: sceneIn 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .brandBar {
   position: relative;
   z-index: 4;
+  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 74px;
+  gap: 18px;
   padding: 0 28px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.065);
 }
 
 .wordmark {
@@ -162,6 +155,7 @@
   display: flex;
   align-items: baseline;
   gap: 12px;
+  min-width: 0;
 }
 
 .sceneMeta span,
@@ -172,164 +166,382 @@
   text-transform: uppercase;
 }
 
-.sceneViewport {
+.sceneMeta span {
+  color: rgba(240, 240, 245, 0.52);
+}
+
+.sceneCanvas {
   position: relative;
-  min-height: calc(100vh - 126px);
-  padding: 0 0 88px;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 28px clamp(22px, 4vw, 56px) 34px;
 }
 
 .sceneAtmosphere {
   position: absolute;
   inset: 0;
-  overflow: hidden;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .atmosWord {
   position: absolute;
-  font-family: var(--font-outfit), system-ui, sans-serif;
-  font-size: clamp(84px, 15vw, 240px);
-  font-weight: 700;
-  line-height: 0.9;
+  z-index: 0;
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(201, 168, 76, 0.18);
-  text-shadow: 0 0 24px rgba(201, 168, 76, 0.05);
-  opacity: 0.52;
+  -webkit-text-stroke: 1.3px rgba(201, 168, 76, 0.16);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-size: clamp(78px, 14vw, 220px);
+  font-weight: 700;
+  line-height: 0.85;
+  opacity: 0.54;
   white-space: nowrap;
   user-select: none;
-  animation: wordFloat 11s ease-in-out infinite;
+  animation: wordDrift 12s ease-in-out infinite;
 }
 
 .atmosWordOne {
-  top: 9%;
   left: -1%;
+  top: 7%;
 }
 
 .atmosWordTwo {
   right: -1%;
-  bottom: 8%;
-  animation-delay: -4.6s;
+  bottom: 7%;
+  animation-delay: -5.4s;
 }
 
-.copyBlock {
-  position: absolute;
-  left: clamp(28px, 5vw, 72px);
-  top: clamp(44px, 10vh, 110px);
-  z-index: 5;
-  width: min(34vw, 470px);
+.motionSystem {
+  position: relative;
+  z-index: 2;
+  width: min(86vw, 1080px);
+  min-height: clamp(500px, 67dvh, 720px);
   display: grid;
-  gap: 18px;
-  animation: copyIn 760ms 120ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(201, 168, 76, 0.075), transparent 34%),
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    rgba(10, 10, 15, 0.46);
+  background-size: 100% 100%, 48px 48px, 48px 48px, 100% 100%;
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.34);
 }
 
-.copyBlock p,
-.copyBlock h1,
-.copyBlock span {
+.motionSystem::before {
+  content: '';
+  position: absolute;
+  inset: 10%;
+  border: 1px solid rgba(201, 168, 76, 0.09);
+  border-radius: 8px;
+  opacity: 0.7;
+}
+
+.noiseField,
+.systemSvg,
+.microStack {
+  position: absolute;
+  inset: 0;
+}
+
+.noiseField {
+  pointer-events: none;
+}
+
+.noiseNode {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(155, 155, 168, 0.42);
+  box-shadow: 0 0 18px rgba(155, 155, 168, 0.12);
+  opacity: 0.36;
+  transform: scale(1);
+  animation: nodeDrift 5.8s ease-in-out infinite;
+}
+
+.noiseNode1 { left: 12%; top: 23%; animation-delay: -1.1s; }
+.noiseNode2 { left: 19%; top: 58%; animation-delay: -3.6s; }
+.noiseNode3 { left: 25%; top: 38%; animation-delay: -2.2s; }
+.noiseNode4 { left: 31%; top: 74%; animation-delay: -5.1s; }
+.noiseNode5 { left: 36%; top: 19%; animation-delay: -1.8s; }
+.noiseNode6 { left: 42%; top: 54%; animation-delay: -4.2s; }
+.noiseNode7 { left: 49%; top: 29%; animation-delay: -2.8s; }
+.noiseNode8 { left: 54%; top: 68%; animation-delay: -5.7s; }
+.noiseNode9 { left: 59%; top: 43%; animation-delay: -3.3s; }
+.noiseNode10 { left: 64%; top: 18%; animation-delay: -1.6s; }
+.noiseNode11 { left: 69%; top: 62%; animation-delay: -4.7s; }
+.noiseNode12 { left: 73%; top: 35%; animation-delay: -2.5s; }
+.noiseNode13 { left: 79%; top: 74%; animation-delay: -5.4s; }
+.noiseNode14 { left: 84%; top: 26%; animation-delay: -3.9s; }
+.noiseNode15 { left: 15%; top: 79%; animation-delay: -2.9s; }
+.noiseNode16 { left: 47%; top: 82%; animation-delay: -4.9s; }
+.noiseNode17 { left: 87%; top: 53%; animation-delay: -1.9s; }
+.noiseNode18 { left: 8%; top: 43%; animation-delay: -4.4s; }
+
+.systemSvg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.gridPath,
+.scatterPath,
+.mainRoute,
+.routeBeam,
+.gateBox,
+.layerBox,
+.loopRingOuter,
+.loopRingInner,
+.loopBeam,
+.coreOuter {
+  fill: none;
+}
+
+.gridPath {
+  stroke: rgba(255, 255, 255, 0.04);
+  stroke-width: 1;
+}
+
+.scatterPath {
+  stroke: rgba(155, 155, 168, 0.2);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 4 16;
+  transition: opacity 420ms ease;
+}
+
+.mainRoute {
+  stroke: rgba(201, 168, 76, 0.34);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0.38;
+  animation: routeDraw var(--scene-duration, 5600ms) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.routeBeam {
+  stroke: url('#kcs-route-gradient');
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 0.13 0.87;
+  stroke-dashoffset: 0.13;
+  opacity: 0;
+  animation: routeBeam 3.4s linear infinite;
+}
+
+.gateSet,
+.layerSet,
+.loopRingOuter,
+.loopRingInner,
+.loopBeam {
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+
+.gateBox {
+  stroke: rgba(201, 168, 76, 0.42);
+  stroke-width: 1.3;
+  fill: rgba(20, 20, 24, 0.72);
+}
+
+.layerBox {
+  stroke: rgba(201, 168, 76, 0.28);
+  stroke-width: 1.2;
+  fill: rgba(20, 20, 24, 0.56);
+}
+
+.loopRingOuter,
+.loopRingInner {
+  stroke: rgba(201, 168, 76, 0.18);
+  stroke-width: 1.2;
+}
+
+.loopBeam {
+  stroke: rgba(246, 223, 157, 0.9);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-dasharray: 0.1 0.9;
+  stroke-dashoffset: 0.1;
+  animation: loopRun 5.2s linear infinite;
+}
+
+.coreOuter {
+  stroke: rgba(201, 168, 76, 0.32);
+  stroke-width: 1.2;
+  fill: rgba(201, 168, 76, 0.04);
+  animation: coreBreathe 4.8s ease-in-out infinite;
+}
+
+.coreInner {
+  fill: rgba(201, 168, 76, 0.92);
+}
+
+.visualScatter .scatterPath,
+.visualScatter .noiseNode {
+  opacity: 0.78;
+}
+
+.visualScatter .mainRoute {
+  opacity: 0.16;
+}
+
+.visualSignal .noiseNode {
+  opacity: 0.18;
+}
+
+.visualSignal .scatterPath {
+  opacity: 0.12;
+}
+
+.visualSignal .mainRoute,
+.visualSignal .routeBeam {
+  opacity: 1;
+}
+
+.visualGates .noiseNode {
+  opacity: 0.12;
+}
+
+.visualGates .routeBeam,
+.visualGates .gateSet {
+  opacity: 1;
+}
+
+.visualLayers .noiseNode {
+  opacity: 0.1;
+}
+
+.visualLayers .scatterPath {
+  opacity: 0.06;
+}
+
+.visualLayers .mainRoute {
+  opacity: 0.28;
+}
+
+.visualLayers .layerSet {
+  opacity: 1;
+}
+
+.visualRhythm .noiseNode,
+.visualRhythm .scatterPath {
+  opacity: 0.08;
+}
+
+.visualRhythm .mainRoute {
+  opacity: 0;
+}
+
+.visualRhythm .loopRingOuter,
+.visualRhythm .loopRingInner,
+.visualRhythm .loopBeam {
+  opacity: 1;
+}
+
+.microStack {
+  z-index: 3;
+  pointer-events: none;
+}
+
+.microStack span {
+  position: absolute;
+  min-width: 112px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: rgba(240, 240, 245, 0.72);
+  background: rgba(10, 10, 15, 0.72);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: microIn 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.microItem1 {
+  left: 18%;
+  top: 18%;
+}
+
+.microItem2 {
+  right: 17%;
+  top: 32%;
+  animation-delay: 180ms;
+}
+
+.microItem3 {
+  left: 46%;
+  bottom: 16%;
+  animation-delay: 340ms;
+}
+
+.copyRail {
+  position: absolute;
+  z-index: 4;
+  left: clamp(24px, 4vw, 58px);
+  bottom: clamp(26px, 5vh, 56px);
+  width: min(480px, 44vw);
+  display: grid;
+  gap: 12px;
+  padding: 18px 18px 20px;
+  border-left: 1px solid rgba(201, 168, 76, 0.38);
+  background: linear-gradient(90deg, rgba(10, 10, 15, 0.78), rgba(10, 10, 15, 0));
+  animation: copyIn 740ms 160ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.copyRail p,
+.copyRail h1,
+.copyRail span {
   margin: 0;
 }
 
-.copyBlock p {
+.copyRail p {
   color: var(--color-burnished-gold);
   font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.copyBlock h1 {
+.copyRail h1 {
   color: var(--text-primary);
   font-family: var(--font-outfit), system-ui, sans-serif;
-  font-size: clamp(50px, 6vw, 88px);
+  font-size: clamp(34px, 4.8vw, 68px);
   font-weight: 700;
-  line-height: 0.96;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
+  line-height: 0.98;
 }
 
-.copyBlock > span {
-  max-width: 28ch;
-  color: var(--text-secondary);
-  font-size: clamp(17px, 1.6vw, 23px);
+.copyRail span {
+  max-width: 38ch;
+  color: rgba(240, 240, 245, 0.68);
+  font-size: clamp(15px, 1.3vw, 19px);
   line-height: 1.5;
 }
 
-.beatList {
+.footerRail {
+  position: relative;
+  z-index: 5;
   display: grid;
-  gap: 10px;
-  margin-top: 6px;
-}
-
-.beatItem {
-  display: flex;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
   align-items: center;
-  gap: 10px;
-  color: var(--text-secondary);
-}
-
-.beatItem i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(201, 168, 76, 0.9);
-  box-shadow: 0 0 16px rgba(201, 168, 76, 0.34);
-}
-
-.beatItem small {
-  font-family: var(--font-inter), system-ui, sans-serif;
-  font-size: 14px;
-  line-height: 1.3;
-}
-
-.visual {
-  position: absolute;
-  right: clamp(22px, 5vw, 72px);
-  top: clamp(44px, 7vh, 86px);
-  bottom: 88px;
-  left: min(34vw, 430px);
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.visual::before {
-  content: '';
-  position: absolute;
-  inset: 6% 4%;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 44px 44px;
-  opacity: 0.58;
-}
-
-.visualSvg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.visualCaption {
-  position: absolute;
-  left: 8%;
-  bottom: 8%;
-  color: rgba(240, 240, 245, 0.55);
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  padding: 18px 24px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.065);
 }
 
 .timeline {
-  position: absolute;
-  left: clamp(28px, 5vw, 72px);
-  right: 132px;
-  bottom: 30px;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 10px;
-  z-index: 6;
+  gap: 9px;
 }
 
 .timelineSegment {
@@ -339,674 +551,238 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
-.timelineSegmentFill,
-.timelineSegmentActive {
+.timelineFill,
+.timelineActive {
   position: absolute;
   inset: 0;
   transform-origin: left center;
 }
 
-.timelineSegmentFill {
-  background: rgba(201, 168, 76, 0.3);
+.timelineFill {
+  background: rgba(201, 168, 76, 0.32);
   transform: scaleX(0);
 }
 
-.timelineSegmentDone {
+.timelineDone {
   transform: scaleX(1);
 }
 
-.timelineSegmentActive {
-  background: linear-gradient(90deg, rgba(201, 168, 76, 0.3), rgba(255, 239, 191, 0.9));
+.timelineActive {
+  background: linear-gradient(90deg, rgba(201, 168, 76, 0.26), rgba(246, 223, 157, 0.92));
   animation-name: segmentGrow;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
 }
 
 .controls {
-  position: absolute;
-  right: 28px;
-  bottom: 18px;
-  z-index: 7;
   display: flex;
   gap: 8px;
 }
 
 .controls button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-grid;
+  place-items: center;
   width: 38px;
   height: 38px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 8px;
-  background: rgba(10, 10, 15, 0.74);
-  color: var(--text-secondary);
+  color: rgba(240, 240, 245, 0.72);
+  background: rgba(10, 10, 15, 0.72);
   cursor: pointer;
   transition:
+    background 180ms ease,
     border-color 180ms ease,
     color 180ms ease,
-    background 180ms ease,
     transform 180ms ease;
 }
 
 .controls button:hover,
 .controls button:focus-visible {
   border-color: rgba(201, 168, 76, 0.5);
-  background: rgba(201, 168, 76, 0.1);
   color: var(--color-burnished-gold);
+  background: rgba(201, 168, 76, 0.1);
   outline: none;
   transform: translateY(-1px);
 }
 
-.originRing,
-.traceStem,
-.tracePath,
-.routeTrack,
-.loopTrack,
-.orbitRingOuter,
-.orbitRingMid,
-.orbitRingInner {
-  fill: none;
-}
-
-.originRing {
-  stroke: rgba(201, 168, 76, 0.16);
-  stroke-width: 1;
-  animation: pulseRing 4.1s ease-in-out infinite;
-}
-
-.originDot {
-  fill: rgba(201, 168, 76, 0.92);
-}
-
-.traceStem {
-  stroke: rgba(201, 168, 76, 0.55);
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-.tracePath {
-  stroke: rgba(201, 168, 76, 0.26);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-}
-
-.traceBeam {
-  fill: none;
-  stroke: rgba(255, 242, 198, 0.9);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-dasharray: 80 900;
-  stroke-dashoffset: 80;
-  filter: drop-shadow(0 0 8px rgba(255, 239, 191, 0.42));
-  animation: beamLong 3.6s linear infinite;
-}
-
-.traceBeam:nth-of-type(5) {
-  animation-delay: 0.3s;
-}
-
-.traceBeam:nth-of-type(6) {
-  animation-delay: 0.65s;
-}
-
-.callout,
-.routeChip,
-.signalLabel,
-.orbitLabel,
-.loopNode,
-.loopCore {
-  position: absolute;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  background: rgba(10, 10, 15, 0.74);
-  color: var(--text-secondary);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.26);
-}
-
-.callout,
-.routeChip,
-.signalLabel,
-.orbitLabel,
-.loopNode {
-  padding: 12px 14px;
-  font-size: 13px;
-  line-height: 1.25;
-  animation: labelIn 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.calloutOne {
-  left: 54%;
-  top: 13%;
-}
-
-.calloutTwo {
-  left: 60%;
-  top: 46%;
-  animation-delay: 120ms;
-}
-
-.calloutThree {
-  left: 54%;
-  bottom: 17%;
-  animation-delay: 240ms;
-}
-
-.routeTrack {
-  stroke: rgba(201, 168, 76, 0.2);
-  stroke-width: 1.6;
-  stroke-linecap: round;
-}
-
-.routeBeam {
-  fill: none;
-  stroke: rgba(255, 236, 173, 0.85);
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 8px rgba(255, 239, 191, 0.38));
-}
-
-.routeBeamOne {
-  stroke-dasharray: 60 960;
-  stroke-dashoffset: 60;
-  animation: beamRouteOne 3.8s linear infinite;
-}
-
-.routeBeamTwo {
-  stroke-dasharray: 60 920;
-  stroke-dashoffset: 60;
-  animation: beamRouteTwo 4.4s linear infinite;
-}
-
-.routeBeamThree {
-  stroke-dasharray: 50 540;
-  stroke-dashoffset: 50;
-  animation: beamRouteThree 3s linear infinite;
-}
-
-.routeChipOne {
-  left: 17%;
-  top: 14%;
-}
-
-.routeChipTwo {
-  left: 46%;
-  top: 28%;
-  animation-delay: 120ms;
-}
-
-.routeChipThree {
-  right: 18%;
-  top: 24%;
-  animation-delay: 240ms;
-}
-
-.routeChipFour {
-  right: 22%;
-  bottom: 16%;
-  animation-delay: 360ms;
-}
-
-.signalBand {
-  position: absolute;
-  left: 15%;
-  right: 17%;
-  height: 86px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  background: rgba(20, 20, 24, 0.46);
-}
-
-.signalBandOne {
-  top: 18%;
-  transform: translateX(-4%);
-}
-
-.signalBandTwo {
-  top: 40%;
-}
-
-.signalBandThree {
-  top: 62%;
-  transform: translateX(4%);
-}
-
-.signalBeam {
-  position: absolute;
-  left: 26%;
-  right: 26%;
-  top: 48%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255, 236, 173, 0.92), transparent);
-  filter: drop-shadow(0 0 10px rgba(255, 239, 191, 0.42));
-  animation: pulseSweep 3.2s ease-in-out infinite;
-}
-
-.signalCore {
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  display: grid;
-  place-items: center;
-  width: 140px;
-  height: 140px;
-  transform: translate(-50%, -50%);
-  border: 1px solid rgba(201, 168, 76, 0.34);
-  border-radius: 8px;
-  background: rgba(10, 10, 15, 0.82);
-  box-shadow: 0 0 34px rgba(201, 168, 76, 0.08);
-}
-
-.signalCore span {
-  color: var(--color-burnished-gold);
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.signalLabelOne {
-  left: 14%;
-  top: 16%;
-}
-
-.signalLabelTwo {
-  right: 16%;
-  top: 41%;
-  animation-delay: 140ms;
-}
-
-.signalLabelThree {
-  left: 22%;
-  bottom: 16%;
-  animation-delay: 280ms;
-}
-
-.orbitRingOuter {
-  stroke: rgba(201, 168, 76, 0.18);
-  stroke-width: 1;
-}
-
-.orbitRingMid {
-  stroke: rgba(201, 168, 76, 0.26);
-  stroke-width: 1;
-}
-
-.orbitRingInner {
-  stroke: rgba(201, 168, 76, 0.34);
-  stroke-width: 1;
-}
-
-.orbitCoreOuter {
-  fill: rgba(201, 168, 76, 0.12);
-  animation: corePulse 4.4s ease-in-out infinite;
-}
-
-.orbitCoreInner {
-  fill: rgba(201, 168, 76, 0.84);
-}
-
-.orbitBeamOuter,
-.orbitBeamMid,
-.orbitBeamInner {
-  fill: none;
-  stroke: rgba(255, 236, 173, 0.78);
-  stroke-width: 2;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 6px rgba(255, 239, 191, 0.34));
-}
-
-.orbitBeamOuter {
-  stroke-dasharray: 96 1180;
-  stroke-dashoffset: 96;
-  animation: orbitSpinOuter 11s linear infinite;
-}
-
-.orbitBeamMid {
-  stroke-dasharray: 76 868;
-  stroke-dashoffset: 76;
-  animation: orbitSpinMid 8.6s linear infinite;
-}
-
-.orbitBeamInner {
-  stroke-dasharray: 64 552;
-  stroke-dashoffset: 64;
-  animation: orbitSpinInner 6.2s linear infinite;
-}
-
-.orbitLabelOne {
-  left: 58%;
-  top: 12%;
-}
-
-.orbitLabelTwo {
-  right: 13%;
-  top: 44%;
-  animation-delay: 120ms;
-}
-
-.orbitLabelThree {
-  left: 34%;
-  bottom: 17%;
-  animation-delay: 240ms;
-}
-
-.loopTrack {
-  stroke: rgba(201, 168, 76, 0.24);
-  stroke-width: 1.6;
-}
-
-.loopBeam {
-  fill: none;
-  stroke: rgba(255, 236, 173, 0.9);
-  stroke-width: 2.8;
-  stroke-linecap: round;
-  stroke-dasharray: 96 1680;
-  stroke-dashoffset: 96;
-  filter: drop-shadow(0 0 10px rgba(255, 239, 191, 0.42));
-  animation: loopRun 5s linear infinite;
-}
-
-.loopNode {
-  min-width: 118px;
-  text-align: center;
-}
-
-.loopNodeOne {
-  left: 26%;
-  top: 18%;
-}
-
-.loopNodeTwo {
-  right: 18%;
-  top: 26%;
-  animation-delay: 120ms;
-}
-
-.loopNodeThree {
-  right: 24%;
-  bottom: 16%;
-  animation-delay: 240ms;
-}
-
-.loopNodeFour {
-  left: 18%;
-  bottom: 24%;
-  animation-delay: 360ms;
-}
-
-.loopCore {
-  left: 50%;
-  top: 50%;
-  display: grid;
-  place-items: center;
-  width: 124px;
-  height: 124px;
-  transform: translate(-50%, -50%);
-  border-color: rgba(201, 168, 76, 0.28);
-  border-radius: 50%;
-  color: var(--color-burnished-gold);
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
 @keyframes flowHorizontal {
-  0% {
-    background-position: 0 0, -320px 0;
-  }
-
-  100% {
-    background-position: 0 0, calc(100% + 320px) 0;
-  }
+  0% { background-position: 0 0, -260px 0; }
+  100% { background-position: 0 0, calc(100% + 260px) 0; }
 }
 
 @keyframes flowVertical {
-  0% {
-    background-position: 0 0, 0 -320px;
-  }
-
-  100% {
-    background-position: 0 0, 0 calc(100% + 320px);
-  }
+  0% { background-position: 0 0, 0 -260px; }
+  100% { background-position: 0 0, 0 calc(100% + 260px); }
 }
 
 @keyframes sceneIn {
   from {
     opacity: 0;
-    transform: translateY(18px) scale(0.985);
+    transform: scale(0.988);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes wordDrift {
+  0%,
+  100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -10px, 0); }
+}
+
+@keyframes nodeDrift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.92);
+  }
+
+  50% {
+    transform: translate3d(8px, -10px, 0) scale(1.08);
+  }
+}
+
+@keyframes routeDraw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes routeBeam {
+  from { stroke-dashoffset: 0.13; }
+  to { stroke-dashoffset: -0.87; }
+}
+
+@keyframes loopRun {
+  from { stroke-dashoffset: 0.1; }
+  to { stroke-dashoffset: -0.9; }
+}
+
+@keyframes coreBreathe {
+  0%,
+  100% {
+    opacity: 0.56;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes microIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @keyframes copyIn {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(18px);
   }
 
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes labelIn {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes wordFloat {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  50% {
-    transform: translate3d(0, -12px, 0);
-  }
-}
-
-@keyframes pulseRing {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.15;
-  }
-
-  50% {
-    transform: scale(1.1);
-    opacity: 0.28;
-  }
-}
-
-@keyframes beamLong {
-  0% {
-    stroke-dashoffset: 80;
-  }
-
-  100% {
-    stroke-dashoffset: -900;
-  }
-}
-
-@keyframes beamRouteOne {
-  0% {
-    stroke-dashoffset: 60;
-  }
-
-  100% {
-    stroke-dashoffset: -960;
-  }
-}
-
-@keyframes beamRouteTwo {
-  0% {
-    stroke-dashoffset: 60;
-  }
-
-  100% {
-    stroke-dashoffset: -920;
-  }
-}
-
-@keyframes beamRouteThree {
-  0% {
-    stroke-dashoffset: 50;
-  }
-
-  100% {
-    stroke-dashoffset: -540;
-  }
-}
-
-@keyframes pulseSweep {
-  0%,
-  100% {
-    opacity: 0.45;
-    transform: translateX(-4%);
-  }
-
-  50% {
-    opacity: 1;
-    transform: translateX(4%);
-  }
-}
-
-@keyframes corePulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.12;
-  }
-
-  50% {
-    transform: scale(1.15);
-    opacity: 0.22;
-  }
-}
-
-@keyframes orbitSpinOuter {
-  0% {
-    stroke-dashoffset: 96;
-  }
-
-  100% {
-    stroke-dashoffset: -1180;
-  }
-}
-
-@keyframes orbitSpinMid {
-  0% {
-    stroke-dashoffset: 76;
-  }
-
-  100% {
-    stroke-dashoffset: -868;
-  }
-}
-
-@keyframes orbitSpinInner {
-  0% {
-    stroke-dashoffset: 64;
-  }
-
-  100% {
-    stroke-dashoffset: -552;
-  }
-}
-
-@keyframes loopRun {
-  0% {
-    stroke-dashoffset: 96;
-  }
-
-  100% {
-    stroke-dashoffset: -1680;
   }
 }
 
 @keyframes segmentGrow {
-  from {
-    transform: scaleX(0);
-  }
-
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@media (max-width: 1100px) {
-  .copyBlock {
-    width: min(40vw, 420px);
-  }
-
-  .visual {
-    left: min(38vw, 360px);
-  }
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 @media (max-width: 860px) {
   .stage {
-    padding: 14px;
+    padding: 10px;
   }
 
   .scene {
-    min-height: calc(100vh - 28px);
+    min-height: calc(100dvh - 20px);
   }
 
-  .sceneViewport {
-    min-height: auto;
-    padding: 28px 22px 96px;
+  .brandBar {
+    min-height: 60px;
+    padding: 0 16px;
   }
 
-  .copyBlock {
-    position: relative;
-    left: auto;
-    top: auto;
+  .sceneMeta span {
+    display: none;
+  }
+
+  .sceneCanvas {
+    align-content: start;
+    padding: 16px 12px 20px;
+  }
+
+  .motionSystem {
     width: 100%;
-    max-width: 100%;
-    margin-bottom: 28px;
+    min-height: min(58dvh, 520px);
   }
 
-  .copyBlock h1 {
-    font-size: clamp(40px, 12vw, 64px);
-  }
-
-  .copyBlock > span {
-    max-width: 34ch;
-    font-size: 17px;
-  }
-
-  .visual {
+  .copyRail {
     position: relative;
     left: auto;
-    right: auto;
-    top: auto;
     bottom: auto;
-    min-height: 420px;
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px 14px 16px;
+    background: rgba(10, 10, 15, 0.58);
   }
 
-  .timeline {
-    left: 22px;
-    right: 116px;
-    bottom: 28px;
+  .copyRail h1 {
+    font-size: clamp(28px, 9vw, 42px);
+    line-height: 1.04;
+  }
+
+  .copyRail span {
+    max-width: 36ch;
+    font-size: 15px;
+  }
+
+  .microStack span {
+    min-width: 86px;
+    padding: 8px 9px;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  .microItem1 {
+    left: 8%;
+    top: 17%;
+  }
+
+  .microItem2 {
+    right: 7%;
+    top: 34%;
+  }
+
+  .microItem3 {
+    left: 36%;
+    bottom: 14%;
+  }
+
+  .footerRail {
+    grid-template-columns: 1fr;
+    padding: 14px 14px 16px;
   }
 
   .controls {
-    right: 18px;
-    bottom: 14px;
+    justify-content: flex-end;
+  }
+
+  .atmosWord {
+    animation: none;
+    opacity: 0.36;
+  }
+
+  .flowLine,
+  .flowLineVertical {
+    opacity: 0.18;
   }
 }
 
@@ -1016,5 +792,15 @@
   .shell *::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  .mainRoute {
+    stroke-dashoffset: 0;
+  }
+
+  .microStack span,
+  .copyRail {
+    opacity: 1;
+    transform: none;
   }
 }

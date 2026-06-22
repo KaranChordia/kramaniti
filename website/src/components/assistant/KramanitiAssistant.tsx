@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { RotateCcw, Send, X } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import styles from './KramanitiAssistant.module.css';
 
 type AssistantRole = 'assistant' | 'user';
@@ -62,6 +63,7 @@ const getTokenDelay = (token: string) => {
 };
 
 export function KramanitiAssistant() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [hasOpened, setHasOpened] = useState(false);
   const [draft, setDraft] = useState('');
@@ -74,6 +76,7 @@ export function KramanitiAssistant() {
   const streamRunRef = useRef(0);
   const isTyping = draft.length > 0;
   const isBusy = isSending || isStreamingResponse;
+  const isMotionHeavyRoute = pathname?.toLowerCase().startsWith('/kcs') ?? false;
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -250,7 +253,10 @@ export function KramanitiAssistant() {
   };
 
   return (
-    <div className={`${styles.root} ${isOpen ? styles.rootOpen : ''} ${isTyping ? styles.rootTyping : ''} ${isBusy ? styles.rootResponding : ''}`}>
+    <div
+      className={`${styles.root} ${isOpen ? styles.rootOpen : ''} ${isTyping ? styles.rootTyping : ''} ${isBusy ? styles.rootResponding : ''} ${isMotionHeavyRoute ? styles.rootPassive : ''}`}
+      data-assistant-mode={isMotionHeavyRoute ? 'passive' : 'active'}
+    >
       <button
         type="button"
         className={styles.blobButton}

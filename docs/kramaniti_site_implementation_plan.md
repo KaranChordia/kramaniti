@@ -215,6 +215,7 @@ Related files:
 [Fact] The current KCS implementation includes:
 
 - A clean local `/KCS` scene player.
+- A narrow Next.js rewrite so `/KCS/` resolves to the uppercase KCS route while preserving the existing global trailing-slash behavior.
 - A rendered starter sequence built from `website/src/lib/KCS/sceneSequence.ts`.
 - Premium dark Kramaniti visual language with thin technical lines, burnished-gold motion accents, and minimal icon controls.
 - A reusable Codex skill at `/Users/karanchordia/.codex/skills/kramaniti-content-studio`.
@@ -235,6 +236,7 @@ Related files:
 - `website/src/components/KCS/KcsWorkbench.tsx`
 - `website/src/components/KCS/KcsWorkbench.module.css`
 - `website/src/lib/KCS/sceneSequence.ts`
+- `website/next.config.ts`
 - `docs/kcs_content_studio.md`
 
 ## 10.3 Clarity Engine
@@ -258,6 +260,7 @@ Related files:
 
 - `website/src/app/clarity-engine/page.tsx`
 - `website/src/app/clarity-engine/ClarityEngine.module.css`
+
 - `website/src/app/api/clarity-engine/chat/route.ts`
 - `website/src/lib/clarity-engine/assistant.ts`
 - `website/src/components/layout/Navbar.tsx`
@@ -270,6 +273,7 @@ Related files:
 
 - A site-wide assistant mounted from `website/src/app/layout.tsx`.
 - A blob-only fixed launcher that expands into a centered cinematic chat layer.
+- A passive launcher mode on the motion-heavy KCS route, with mobile animation paused so the assistant stays available without adding continuous visual load.
 - A server route at `/api/chat/` powered by the Groq SDK and default model `openai/gpt-oss-120b`.
 - A server-side curated repository knowledge context assembled from canonical Kramaniti docs, website rules, proof governance, decision history, and recent public Insights.
 - A local fallback response when `GROQ_API_KEY` is not configured.
@@ -277,12 +281,23 @@ Related files:
 
 [Constraint] The assistant must stay proof-safe and public-facing. It can answer from Kramaniti context, explain the method, guide users toward the AI Workflow Audit, and clarify services. It must not reveal secrets, raw internal file dumps, private implementation details, unverified client claims, metrics, testimonials, pricing, or permission-sensitive proof.
 
+2026-06-21 update: the assistant now has explicit identity, scope, and service-response guardrails in the server-side runtime context.
+
+[Fact] The assistant should answer from the Kramaniti repository context only. Its safe public domain covers Kramaniti, Karan Chordia, the website, founder profile, services, public work pages, Clarity Engine, Studio, KCS, Insights, claim rules, and the Kramaniti method.
+
+[Fact] Karan Chordia is the founder behind Kramaniti. If a visitor asks who founded Kramaniti, this company, this website, or uses likely speech-to-text wording such as "common people" while asking about the company, the assistant should answer with that founder fact and clarify that the official brand is Kramaniti.
+
+[Recommendation] When a visitor describes employee duties, operational tasks, manual work, content production, CRM, support, sales follow-up, reporting, hiring, or similar responsibilities, the assistant should explain how Kramaniti would approach the work: clarify the role and current tools, map recurring tasks and bottlenecks, separate human-led, AI-assisted, and safely automated steps, design the support system, add review rules, and guide serious prospects toward an AI Workflow Audit.
+
+[Constraint] The assistant should not answer broad general-knowledge questions as if it has unrestricted world knowledge. It should state that it is the Kramaniti website assistant and connect the conversation back to Kramaniti context when relevant.
+
 Related files:
 
 - `website/src/components/assistant/KramanitiAssistant.tsx`
 - `website/src/components/assistant/KramanitiAssistant.module.css`
 - `website/src/app/api/chat/route.ts`
 - `website/src/lib/kramaniti-assistant/knowledge.ts`
+- `docs/kcs_zero_copy_motion_proposal.md`
 
 ## 11. Nexocean Portfolio Page
 

@@ -66,6 +66,16 @@ const concreteSignals = [
   'what do you do',
   'who is karan',
   'who is the founder',
+  'founder of kramaniti',
+  'founder of this company',
+  'founder of the company',
+  'founder of common people',
+  'common people',
+  'company founder',
+  'about karan',
+  'about the founder',
+  'about this company',
+  'about your company',
   'clarity engine',
   'ai workflow audit',
   'workflow audit',
@@ -92,6 +102,13 @@ const concreteSignals = [
   'roadmap',
   'workflow',
   'workflows',
+  'employee',
+  'team member',
+  'operator',
+  'daily tasks',
+  'manual tasks',
+  'repetitive tasks',
+  'things to be done',
   'content system',
   'crm',
   'proposal',
@@ -209,6 +226,22 @@ const normalizeMessages = (body: ChatRequestBody): ChatRequestMessage[] => {
 
 const buildLocalFallback = (latestMessage: string, responseMode: ResponseMode) => {
   const topic = latestMessage ? ` On your question: "${latestMessage.slice(0, 140)}"` : '';
+  const normalized = normalizeIntentText(latestMessage);
+  const asksIdentity =
+    /\b(founder|founded|who is karan|who started|who runs)\b/.test(normalized) ||
+    normalized.includes('common people');
+  const asksServices =
+    /\b(service|services|offer|offers|help|audit|workflow|workflows|employee|operator|manual tasks|repetitive tasks|daily tasks|things to be done|crm|content|sales|support)\b/.test(
+      normalized,
+    );
+
+  if (asksIdentity) {
+    return 'Karan Chordia is the founder behind Kramaniti. If you meant "Common People" as a separate company, this assistant only has verified context for Kramaniti from this website and repository.';
+  }
+
+  if (asksServices && responseMode.id === 'direct') {
+    return 'Kramaniti would start by mapping the real workflow: the role, repeated tasks, handoffs, tools, bottlenecks, and decisions that need review. From there, the work is to separate what should stay human-led, what can be AI-assisted, and what can be safely automated before designing a practical system or content pipeline.';
+  }
 
   if (responseMode.id === 'low_signal') {
     return 'I can help, but I need one signal first. Are you trying to understand Kramaniti, choose a service, or clarify a workflow?';
@@ -219,6 +252,24 @@ const buildLocalFallback = (latestMessage: string, responseMode: ResponseMode) =
   }
 
   return `The hosted Groq layer is not configured yet.${topic} Kramaniti's default answer starts with the same sequence: clarify the strategy, map the workflow, then decide what content or AI support should follow.`;
+};
+
+const buildDeterministicGuardrailResponse = (latestMessage: string) => {
+  const normalized = normalizeIntentText(latestMessage);
+  const asksFounder =
+    /\b(who|what|tell me|name)\b.*\b(founder|founded|started|runs)\b/.test(normalized) ||
+    /\b(founder|founded|started|runs)\b.*\b(kramaniti|company|website|common people|karan)\b/.test(
+      normalized,
+    ) ||
+    normalized.includes('who is karan');
+
+  if (!asksFounder) return null;
+
+  if (!normalized.includes('common people')) {
+    return 'Karan Chordia is the founder behind Kramaniti.';
+  }
+
+  return 'If by "Common People" you mean this company or website, the official brand is Kramaniti, and Karan Chordia is the founder behind Kramaniti. I only have verified context for Kramaniti from this website and repository, so I would not name a founder for a separate organization without confirmed context.';
 };
 
 const buildMessages = (
@@ -238,10 +289,15 @@ const buildMessages = (
       content: `You are the Kramaniti website assistant.
 
 Follow these rules:
+- Answer only from Kramaniti website and repository context.
+- The official brand is Kramaniti. Karan Chordia is the founder behind Kramaniti.
+- If the visitor asks who founded Kramaniti, this company, this website, or uses likely speech-to-text wording such as "common people" while asking about the company, answer clearly: Karan Chordia is the founder behind Kramaniti. If they seem to mean an external company, clarify that you only have verified context for Kramaniti.
 - Answer as a premium, practical Kramaniti guide.
 - Keep public-facing language business-first: strategy, systems, workflows, infrastructure, clarity, brand growth, practical AI, operating pipeline, cinematic content.
 - Do not sound like a generic AI automation agency.
 - Default sequence: strategy before tools, systems before scale, content after clarity.
+- If a visitor describes employee duties, operational responsibilities, daily tasks, sales follow-up, support, CRM, reporting, hiring, content, or repeated manual work, explain how Kramaniti would address it: understand the role and workflow, map bottlenecks and handoffs, decide what stays human-led versus AI-assisted or automated, design the support system, add review and override rules, and train the team to use it.
+- For unrelated general-knowledge questions, say you are the Kramaniti website assistant and can answer from Kramaniti context. Do not pretend to know facts that are not in the repository context.
 - Do not invent client names, testimonials, metrics, logos, case studies, project outcomes, pricing, or permissions.
 - Do not promise measurable improvement, guaranteed growth, unlocked revenue, or quantified outcomes unless the user has supplied verified evidence.
 - If proof is not verified in the context, say it is not verified and use category-level language.
@@ -284,6 +340,15 @@ export async function POST(request: Request) {
   }
 
   const responseMode = inferResponseMode(latestUserMessage);
+  const deterministicResponse = buildDeterministicGuardrailResponse(latestUserMessage);
+
+  if (deterministicResponse) {
+    return NextResponse.json({
+      response: deterministicResponse,
+      source: 'local',
+      model: MODEL_NAME,
+    });
+  }
 
   if (!process.env.GROQ_API_KEY) {
     return NextResponse.json({

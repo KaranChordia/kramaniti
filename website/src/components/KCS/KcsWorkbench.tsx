@@ -1,184 +1,137 @@
 'use client';
 
-import { useCallback, useEffect, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import {
   kcsSceneSequence,
   type KcsRenderedScene,
+  type KcsVisualMode,
 } from '../../lib/KCS/sceneSequence';
 import styles from './KcsWorkbench.module.css';
 
-const DEFAULT_SCENE_DURATION_MS = 5600;
+const visualClassMap: Record<KcsVisualMode, string> = {
+  scatter: styles.visualScatter,
+  signal: styles.visualSignal,
+  gates: styles.visualGates,
+  layers: styles.visualLayers,
+  rhythm: styles.visualRhythm,
+};
 
-function MotionField() {
+const signalNodes = Array.from({ length: 18 }, (_, index) => index);
+
+function AmbientField() {
   return (
-    <div className={styles.globalAtmosphere} aria-hidden="true">
+    <div className={styles.ambientField} aria-hidden="true">
       <span className={`${styles.flowLine} ${styles.flowLineOne}`} />
       <span className={`${styles.flowLine} ${styles.flowLineTwo}`} />
       <span className={`${styles.flowLine} ${styles.flowLineThree}`} />
-      <span className={`${styles.flowLine} ${styles.flowLineFour}`} />
+      <span className={`${styles.flowLineVertical} ${styles.flowLineFour}`} />
       <span className={`${styles.flowLineVertical} ${styles.flowLineFive}`} />
-      <span className={`${styles.flowLineVertical} ${styles.flowLineSix}`} />
     </div>
   );
 }
 
-function DivergingPathsVisual({ scene }: { scene: KcsRenderedScene }) {
+function MotionSystem({ scene }: { scene: KcsRenderedScene }) {
   return (
-    <div className={`${styles.visual} ${styles.divergingPaths}`} aria-hidden="true">
-      <svg className={styles.visualSvg} viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet">
+    <div className={`${styles.motionSystem} ${visualClassMap[scene.visualMode]}`} aria-hidden="true">
+      <div className={styles.noiseField}>
+        {signalNodes.map((node) => (
+          <span key={node} className={`${styles.noiseNode} ${styles[`noiseNode${node + 1}`]}`} />
+        ))}
+      </div>
+
+      <svg className={styles.systemSvg} viewBox="0 0 980 620" preserveAspectRatio="xMidYMid meet">
         <defs>
-          <filter id="kcs-soft-glow">
-            <feGaussianBlur stdDeviation="4" result="blur" />
+          <filter id="kcs-gold-glow">
+            <feGaussianBlur stdDeviation="5" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+          <linearGradient id="kcs-route-gradient" x1="0%" x2="100%" y1="0%" y2="0%">
+            <stop offset="0%" stopColor="rgba(160, 125, 58, 0)" />
+            <stop offset="45%" stopColor="rgba(201, 168, 76, 0.92)" />
+            <stop offset="100%" stopColor="rgba(246, 223, 157, 0)" />
+          </linearGradient>
         </defs>
 
-        <circle cx="88" cy="260" r="26" className={styles.originRing} />
-        <circle cx="88" cy="260" r="5" className={styles.originDot} filter="url(#kcs-soft-glow)" />
-        <line x1="88" y1="260" x2="210" y2="260" className={styles.traceStem} />
-        <path d="M 210 260 C 300 260, 338 96, 434 96 L 634 96" className={styles.tracePath} />
-        <path d="M 210 260 L 652 260" className={styles.tracePath} />
-        <path d="M 210 260 C 300 260, 338 424, 434 424 L 634 424" className={styles.tracePath} />
-        <path d="M 210 260 C 300 260, 338 96, 434 96 L 634 96" className={styles.traceBeam} />
-        <path d="M 210 260 L 652 260" className={styles.traceBeam} />
-        <path d="M 210 260 C 300 260, 338 424, 434 424 L 634 424" className={styles.traceBeam} />
-      </svg>
-
-      <div className={`${styles.callout} ${styles.calloutOne}`}>{scene.labels[0]}</div>
-      <div className={`${styles.callout} ${styles.calloutTwo}`}>{scene.labels[1]}</div>
-      <div className={`${styles.callout} ${styles.calloutThree}`}>{scene.labels[2]}</div>
-      <div className={styles.visualCaption}>one input can split into three disconnected outcomes</div>
-    </div>
-  );
-}
-
-function RouteConstellationVisual({ scene }: { scene: KcsRenderedScene }) {
-  return (
-    <div className={`${styles.visual} ${styles.routeConstellation}`} aria-hidden="true">
-      <svg className={styles.visualSvg} viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet">
         <path
-          d="M 132 122 L 132 272 Q 132 300 160 300 L 354 300 Q 386 300 386 268 L 386 142 Q 386 110 418 110 L 636 110"
-          className={styles.routeTrack}
-        />
-        <path
-          d="M 196 380 L 196 330 Q 196 298 228 298 L 520 298 Q 550 298 550 266 L 550 196 Q 550 164 582 164 L 720 164"
-          className={styles.routeTrack}
-        />
-        <path
-          d="M 354 300 L 354 420 Q 354 448 382 448 L 666 448"
-          className={styles.routeTrack}
+          className={styles.gridPath}
+          d="M 132 128 H 848 M 132 310 H 848 M 132 492 H 848 M 220 82 V 538 M 490 82 V 538 M 760 82 V 538"
         />
 
         <path
-          d="M 132 122 L 132 272 Q 132 300 160 300 L 354 300 Q 386 300 386 268 L 386 142 Q 386 110 418 110 L 636 110"
-          className={`${styles.routeBeam} ${styles.routeBeamOne}`}
+          className={styles.scatterPath}
+          d="M 140 154 C 284 88 342 240 490 184 C 628 132 706 110 846 162"
         />
         <path
-          d="M 196 380 L 196 330 Q 196 298 228 298 L 520 298 Q 550 298 550 266 L 550 196 Q 550 164 582 164 L 720 164"
-          className={`${styles.routeBeam} ${styles.routeBeamTwo}`}
+          className={styles.scatterPath}
+          d="M 144 466 C 248 360 370 518 490 430 C 608 342 744 380 842 484"
         />
         <path
-          d="M 354 300 L 354 420 Q 354 448 382 448 L 666 448"
-          className={`${styles.routeBeam} ${styles.routeBeamThree}`}
+          className={styles.scatterPath}
+          d="M 166 312 C 284 304 362 248 490 310 C 600 362 708 300 820 312"
         />
-      </svg>
 
-      <div className={`${styles.routeChip} ${styles.routeChipOne}`}>{scene.labels[0]}</div>
-      <div className={`${styles.routeChip} ${styles.routeChipTwo}`}>{scene.labels[1]}</div>
-      <div className={`${styles.routeChip} ${styles.routeChipThree}`}>{scene.labels[2]}</div>
-      <div className={`${styles.routeChip} ${styles.routeChipFour}`}>{scene.labels[3]}</div>
-    </div>
-  );
-}
-
-function SignalExtractionVisual({ scene }: { scene: KcsRenderedScene }) {
-  return (
-    <div className={`${styles.visual} ${styles.signalExtraction}`} aria-hidden="true">
-      <div className={`${styles.signalBand} ${styles.signalBandOne}`} />
-      <div className={`${styles.signalBand} ${styles.signalBandTwo}`} />
-      <div className={`${styles.signalBand} ${styles.signalBandThree}`} />
-      <div className={styles.signalBeam} />
-      <div className={styles.signalCore}>
-        <span>{scene.number}</span>
-      </div>
-      <div className={`${styles.signalLabel} ${styles.signalLabelOne}`}>{scene.labels[0]}</div>
-      <div className={`${styles.signalLabel} ${styles.signalLabelTwo}`}>{scene.labels[1]}</div>
-      <div className={`${styles.signalLabel} ${styles.signalLabelThree}`}>{scene.labels[2]}</div>
-      <div className={styles.visualCaption}>compress many inputs into one clear decision path</div>
-    </div>
-  );
-}
-
-function LayeredOrbitVisual({ scene }: { scene: KcsRenderedScene }) {
-  return (
-    <div className={`${styles.visual} ${styles.layeredOrbit}`} aria-hidden="true">
-      <svg className={styles.visualSvg} viewBox="0 0 720 520" preserveAspectRatio="xMidYMid meet">
-        <circle cx="360" cy="260" r="188" className={styles.orbitRingOuter} />
-        <circle cx="360" cy="260" r="138" className={styles.orbitRingMid} />
-        <circle cx="360" cy="260" r="88" className={styles.orbitRingInner} />
-        <circle cx="360" cy="260" r="34" className={styles.orbitCoreOuter} />
-        <circle cx="360" cy="260" r="18" className={styles.orbitCoreInner} />
-        <path d="M 360 72 a 188 188 0 1 1 0 376 a 188 188 0 1 1 0 -376" className={styles.orbitBeamOuter} />
-        <path d="M 360 122 a 138 138 0 1 1 0 276 a 138 138 0 1 1 0 -276" className={styles.orbitBeamMid} />
-        <path d="M 360 172 a 88 88 0 1 1 0 176 a 88 88 0 1 1 0 -176" className={styles.orbitBeamInner} />
-      </svg>
-
-      <div className={`${styles.orbitLabel} ${styles.orbitLabelOne}`}>{scene.labels[0]}</div>
-      <div className={`${styles.orbitLabel} ${styles.orbitLabelTwo}`}>{scene.labels[1]}</div>
-      <div className={`${styles.orbitLabel} ${styles.orbitLabelThree}`}>{scene.labels[2]}</div>
-    </div>
-  );
-}
-
-function FeedbackLoopVisual({ scene }: { scene: KcsRenderedScene }) {
-  return (
-    <div className={`${styles.visual} ${styles.feedbackLoop}`} aria-hidden="true">
-      <svg className={styles.visualSvg} viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet">
         <path
-          d="M 238 124 H 626 Q 708 124 708 206 V 316 Q 708 398 626 398 H 274 Q 192 398 192 316 V 184 Q 192 124 238 124 Z"
-          className={styles.loopTrack}
+          className={styles.mainRoute}
+          d="M 126 474 C 232 430 262 322 366 310 C 468 298 510 188 612 184 C 724 180 768 292 856 252"
+          pathLength="1"
         />
         <path
-          d="M 238 124 H 626 Q 708 124 708 206 V 316 Q 708 398 626 398 H 274 Q 192 398 192 316 V 184 Q 192 124 238 124 Z"
+          className={styles.routeBeam}
+          d="M 126 474 C 232 430 262 322 366 310 C 468 298 510 188 612 184 C 724 180 768 292 856 252"
+          pathLength="1"
+          filter="url(#kcs-gold-glow)"
+        />
+
+        <g className={styles.gateSet}>
+          <rect className={styles.gateBox} x="308" y="250" width="126" height="74" rx="8" />
+          <rect className={styles.gateBox} x="518" y="124" width="126" height="74" rx="8" />
+          <rect className={styles.gateBox} x="712" y="220" width="126" height="74" rx="8" />
+        </g>
+
+        <g className={styles.layerSet}>
+          <rect className={styles.layerBox} x="268" y="158" width="438" height="72" rx="8" />
+          <rect className={styles.layerBox} x="316" y="274" width="342" height="72" rx="8" />
+          <rect className={styles.layerBox} x="366" y="390" width="242" height="72" rx="8" />
+        </g>
+
+        <circle className={styles.loopRingOuter} cx="490" cy="310" r="176" />
+        <circle className={styles.loopRingInner} cx="490" cy="310" r="104" />
+        <path
           className={styles.loopBeam}
+          d="M 490 134 a 176 176 0 1 1 0 352 a 176 176 0 1 1 0 -352"
+          pathLength="1"
+          filter="url(#kcs-gold-glow)"
         />
+
+        <circle className={styles.coreOuter} cx="490" cy="310" r="62" />
+        <circle className={styles.coreInner} cx="490" cy="310" r="19" filter="url(#kcs-gold-glow)" />
       </svg>
 
-      <div className={`${styles.loopNode} ${styles.loopNodeOne}`}>{scene.labels[0]}</div>
-      <div className={`${styles.loopNode} ${styles.loopNodeTwo}`}>{scene.labels[1]}</div>
-      <div className={`${styles.loopNode} ${styles.loopNodeThree}`}>{scene.labels[2]}</div>
-      <div className={`${styles.loopNode} ${styles.loopNodeFour}`}>{scene.labels[3]}</div>
-      <div className={styles.loopCore}>improve</div>
+      <div className={styles.microStack}>
+        {scene.microCopy.map((item, index) => (
+          <span key={item} className={styles[`microItem${index + 1}`]}>
+            {item}
+          </span>
+        ))}
+      </div>
     </div>
   );
-}
-
-function SceneVisual({ scene }: { scene: KcsRenderedScene }) {
-  switch (scene.visualMode) {
-    case 'divergingPaths':
-      return <DivergingPathsVisual scene={scene} />;
-    case 'routeConstellation':
-      return <RouteConstellationVisual scene={scene} />;
-    case 'signalExtraction':
-      return <SignalExtractionVisual scene={scene} />;
-    case 'layeredOrbit':
-      return <LayeredOrbitVisual scene={scene} />;
-    case 'feedbackLoop':
-      return <FeedbackLoopVisual scene={scene} />;
-    default:
-      return null;
-  }
 }
 
 export function KcsWorkbench() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const activeScene = kcsSceneSequence[activeIndex];
-  const sceneDuration = activeScene.durationMs ?? DEFAULT_SCENE_DURATION_MS;
+  const sceneDuration = activeScene.durationMs;
+
+  const activeProgressStyle = useMemo(
+    () => ({ animationDuration: `${sceneDuration}ms` }),
+    [sceneDuration],
+  );
 
   const goToScene = useCallback((index: number) => {
     setActiveIndex((index + kcsSceneSequence.length) % kcsSceneSequence.length);
@@ -202,16 +155,16 @@ export function KcsWorkbench() {
     }, sceneDuration);
 
     return () => window.clearTimeout(timeout);
-  }, [isPlaying, sceneDuration, activeIndex]);
+  }, [activeIndex, isPlaying, sceneDuration]);
 
   return (
     <main className={styles.shell}>
-      <MotionField />
+      <AmbientField />
 
       <section className={styles.stage} aria-label="Kramaniti Content Studio scene output">
         <article
           key={activeScene.id}
-          className={`${styles.scene} ${styles[activeScene.visualMode]}`}
+          className={styles.scene}
           style={{ '--scene-duration': `${sceneDuration}ms` } as CSSProperties}
         >
           <header className={styles.brandBar}>
@@ -219,12 +172,12 @@ export function KcsWorkbench() {
               <span>K</span>RAMANITI
             </div>
             <div className={styles.sceneMeta}>
-              <span>{activeScene.eyebrow}</span>
+              <span>{activeScene.kicker}</span>
               <strong>{activeScene.number}</strong>
             </div>
           </header>
 
-          <div className={styles.sceneViewport}>
+          <div className={styles.sceneCanvas}>
             <div className={styles.sceneAtmosphere} aria-hidden="true">
               <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>
                 {activeScene.atmosphere[0]}
@@ -234,30 +187,23 @@ export function KcsWorkbench() {
               </span>
             </div>
 
-            <div className={styles.copyBlock}>
-              <p>{activeScene.eyebrow}</p>
+            <MotionSystem scene={activeScene} />
+
+            <div className={styles.copyRail}>
+              <p>{activeScene.kicker}</p>
               <h1>{activeScene.headline}</h1>
-              <span>{activeScene.supporting}</span>
-
-              <div className={styles.beatList}>
-                {activeScene.beats.map((beat) => (
-                  <div key={beat} className={styles.beatItem}>
-                    <i />
-                    <small>{beat}</small>
-                  </div>
-                ))}
-              </div>
+              <span>{activeScene.support}</span>
             </div>
+          </div>
 
-            <SceneVisual scene={activeScene} />
-
+          <footer className={styles.footerRail}>
             <div className={styles.timeline} aria-hidden="true">
               {kcsSceneSequence.map((scene, index) => (
                 <span key={scene.id} className={styles.timelineSegment}>
                   <span
                     className={[
-                      styles.timelineSegmentFill,
-                      index < activeIndex ? styles.timelineSegmentDone : '',
+                      styles.timelineFill,
+                      index < activeIndex ? styles.timelineDone : '',
                     ]
                       .filter(Boolean)
                       .join(' ')}
@@ -265,33 +211,31 @@ export function KcsWorkbench() {
                   {index === activeIndex && isPlaying ? (
                     <span
                       key={`${scene.id}-progress`}
-                      className={styles.timelineSegmentActive}
-                      style={{
-                        animationDuration: `${scene.durationMs ?? DEFAULT_SCENE_DURATION_MS}ms`,
-                      }}
+                      className={styles.timelineActive}
+                      style={activeProgressStyle}
                     />
                   ) : null}
                 </span>
               ))}
             </div>
-          </div>
-        </article>
 
-        <nav className={styles.controls} aria-label="Scene controls">
-          <button type="button" onClick={goToPrevious} aria-label="Previous scene">
-            <ChevronLeft size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsPlaying((current) => !current)}
-            aria-label={isPlaying ? 'Pause sequence' : 'Play sequence'}
-          >
-            {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-          </button>
-          <button type="button" onClick={goToNext} aria-label="Next scene">
-            <ChevronRight size={18} />
-          </button>
-        </nav>
+            <nav className={styles.controls} aria-label="Scene controls">
+              <button type="button" onClick={goToPrevious} aria-label="Previous scene">
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsPlaying((current) => !current)}
+                aria-label={isPlaying ? 'Pause sequence' : 'Play sequence'}
+              >
+                {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+              </button>
+              <button type="button" onClick={goToNext} aria-label="Next scene">
+                <ChevronRight size={18} />
+              </button>
+            </nav>
+          </footer>
+        </article>
       </section>
     </main>
   );

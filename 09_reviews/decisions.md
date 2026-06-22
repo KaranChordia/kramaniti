@@ -450,3 +450,9 @@ This log registers the major strategic and structural decisions made during the 
     *   Should future versions add retrieval indexing instead of curated runtime context?
     *   Should assistant conversations be ephemeral, saved to a CRM, or stored only after explicit visitor consent?
     *   Should the assistant later support lead capture or remain an educational guide until the contact backend is finalized?
+
+*   **2026-06-21 Behavior Update:**
+    *   The assistant now carries explicit identity and domain-boundary instructions in its curated runtime context.
+    *   It must answer that Karan Chordia is the founder behind Kramaniti when visitors ask who founded Kramaniti, this company, this website, or use likely speech-to-text wording such as "common people" in that context.
+    *   It should answer employee/operator workflow questions by explaining Kramaniti's service approach: understand the role, map recurring tasks and handoffs, separate human-led, AI-assisted, and automated steps, define review and override rules, and guide serious prospects toward an AI Workflow Audit.
+    *   Local fallback behavior now includes founder and workflow-service answers so the widget remains coherent when Groq is not configured.

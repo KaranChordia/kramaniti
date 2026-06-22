@@ -17,6 +17,52 @@ export interface Insight {
 
 export const insights: Insight[] = [
   {
+    slug: 'why-90-percent-ai-adoption-yields-only-6-percent-enterprise-value',
+    title: 'Why 90% AI Adoption Yields Only 6% Enterprise Value',
+    category: 'Strategy',
+    focus: 'Operational Value',
+    date: '22 Jun 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-06-22T12:00:00+05:30',
+    readTime: '5 min read',
+    summary: 'A strategic analysis of the 2026 AI value gap: why widespread tool adoption fails to translate into bottom-line P&L returns, and how first-principles workflow engineering bridges the difference.',
+    sourceLinks: [
+      {
+        label: 'Genpact & HFS Research on Enterprise AI Debt',
+        url: 'https://www.genpact.com/insight/the-18-trillion-opportunity-how-four-enterprise-debts-will-make-or-break-your-ai-future',
+      },
+      {
+        label: 'RAND Corporation Study on AI Project Failures',
+        url: 'https://www.rand.org/pubs/research_reports/RRA2680-1.html',
+      },
+    ],
+    content: [
+      'Almost every leadership team in 2026 has a line item for artificial intelligence. We have reached a point of near-universal tool adoption, where subscribing to a new model or integrating an API takes minutes. Yet, when we audit the actual P&L returns, the disparity is stark.',
+      'A brand does not capture value because it has access to a model. It captures value when the model is embedded in a stable, well-architected operational pipeline.',
+      'When you layer intelligent tools over unmapped workflows, you do not build leverage. You simply automate chaos, executing process inefficiencies at a much faster rate.',
+      '[Fact] A June 2026 study by Genpact and HFS Research shows that while over 90% of business leaders believe intelligent systems will transform their work, only 6% of enterprises have successfully resolved the foundational debts—specifically data, process, technology, and talent debt—required to capture real value.',
+      '[Inference] The value gap is not a technology bottleneck. It is a workflow design bottleneck. The market is saturated with advanced models, but businesses remain immature in mapping the operational routes that those models are supposed to assist.',
+      '[infographic:value-gap-funnel]',
+      '<h3>Strategy Before Tools: Diagnose the Baseline</h3>',
+      'The most common operational failure is starting with the tech stack. A founder sees a demo of a new system, subscribes to the tool, and then instructs the team to find a problem it can solve. This approach guarantees fragmentation.',
+      'Without a clear understanding of your current workflows, new tools create disconnected silos. Your CRM remains out of sync with your content engine, and team members spend hours manually moving data that a simple API integration could have routed.',
+      '[Recommendation] Stop buying software before you have mapped your workflows. Start with an AI Workflow Audit to diagnose where operational friction actually sits. Name the trigger, the handoff, the decision owner, and the write-back record for your core commercial routes.',
+      '<h3>Systems Before Scale: Address the Process Debt</h3>',
+      '[Fact] Research by the RAND Corporation shows that over 80% of enterprise AI projects fail to deliver their promised business value—a failure rate roughly double that of traditional IT implementations.',
+      '[Inference] This high failure rate highlights that scaling a system requires stable infrastructure first. If a workflow relies on human memory to handle exceptions, or lacks a clear human-in-the-loop review threshold, any automation built around it will eventually fracture the customer experience.',
+      'This is why we engineer custom systems with clear boundaries. We do not design for full automation by default. We design collaborative systems: defining exactly where the system should assist, where the human must lead, and what conditions trigger a manual override or escalation.',
+      '[infographic:collaboration-boundary-map]',
+      '<h3>Content After Clarity: Earn the Megaphone</h3>',
+      'Only when your strategy is diagnosed and your systems are running smoothly should you translate that internal clarity into public brand presence.',
+      'Many brands try to use AI to solve their content volume problems first. They generate thousands of generic posts, hoping that sheer volume will compensate for a lack of narrative. But hollow volume—often referred to as AI slop—only dilutes credibility and destroys trust in premium B2B markets.',
+      '[Recommendation] Let your public presence be the cinematic output of your operational reality. When your internal systems capture clean evidence, customer outcomes, and founder insights, content creation becomes a natural extension of your daily work. You do not need to invent hype; you just document the truth of what you build.',
+      '<h3>The Path to Becoming a Debt Resolver</h3>',
+      'Bridging the value gap requires moving away from experimental tools and moving toward structured systems. It means accepting that AI adoption is a human-collaborative design problem, not a blind automation mandate.',
+      'Begin by choosing just one recurring workflow—whether it is lead qualification, client onboarding, or content approval. Audit the baseline, design the system boundary, build the practical support, and train the team to run the route.',
+      'When your strategy, your internal systems, and your public brand presence are driven by the same operating logic, you stop spending capital on technological novelty and start building compound leverage.'
+    ]
+  },
+  {
     slug: 'the-smallest-useful-ai-policy-is-a-workflow-note',
     title: 'The Smallest Useful AI Policy Is a Workflow Note',
     category: 'Governance',

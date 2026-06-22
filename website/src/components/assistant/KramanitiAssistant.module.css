@@ -4,6 +4,7 @@
   z-index: 95;
   pointer-events: none;
   font-family: var(--font-outfit), system-ui, sans-serif;
+  contain: layout style paint;
   --assistant-ios-spring: cubic-bezier(0.16, 1, 0.3, 1);
   --assistant-ios-close: cubic-bezier(0.45, 0, 0.55, 1);
   --assistant-origin-x: calc(50vw - clamp(54px, 5vw, 82px));
@@ -31,6 +32,7 @@
     filter 320ms ease;
   z-index: 98;
   overflow: visible;
+  animation: launcherDrift 7.2s ease-in-out infinite alternate;
 }
 
 .blobButton:hover {
@@ -45,6 +47,7 @@
   pointer-events: none;
   transform: scale(0.92);
   filter: brightness(1.2) drop-shadow(0 0 34px rgba(201, 168, 76, 0.62));
+  animation: none;
   transition:
     width 620ms var(--assistant-ios-spring),
     height 620ms var(--assistant-ios-spring),
@@ -86,7 +89,38 @@
     inset 18px 0 34px rgba(201, 168, 76, 0.14);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  animation: blobFloat 4.8s ease-in-out infinite alternate;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, border-radius;
+  animation:
+    liquidShape 6.4s ease-in-out infinite alternate,
+    blobFloat 4.8s ease-in-out infinite alternate;
+}
+
+.assistantBlob::before,
+.assistantBlob::after {
+  content: '';
+  position: absolute;
+  inset: -34%;
+  border-radius: 45%;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+}
+
+.assistantBlob::before {
+  background:
+    radial-gradient(circle at 30% 34%, rgba(255, 255, 255, 0.86), transparent 20%),
+    radial-gradient(circle at 64% 58%, rgba(246, 223, 157, 0.44), transparent 26%);
+  mix-blend-mode: screen;
+  opacity: 0.62;
+  animation: blobInnerSwirl 8.8s ease-in-out infinite alternate;
+}
+
+.assistantBlob::after {
+  inset: -18%;
+  border: 1px solid rgba(246, 223, 157, 0.18);
+  background: radial-gradient(circle at 52% 46%, transparent 38%, rgba(201, 168, 76, 0.16) 70%, transparent 100%);
+  opacity: 0.5;
+  animation: blobSurfacePulse 5.6s ease-in-out infinite alternate;
 }
 
 .blobButton:hover .assistantBlob {
@@ -95,6 +129,19 @@
     0 0 96px rgba(201, 168, 76, 0.2),
     inset 0 0 28px rgba(255, 255, 255, 0.72),
     inset 18px 0 34px rgba(201, 168, 76, 0.18);
+  animation:
+    liquidShapeHover 3.2s ease-in-out infinite alternate,
+    blobHoverFloat 3.4s ease-in-out infinite alternate;
+}
+
+.blobButton:hover .assistantBlob::before {
+  opacity: 0.78;
+  animation-duration: 4.6s;
+}
+
+.blobButton:hover .assistantBlob::after {
+  opacity: 0.72;
+  animation-duration: 3.4s;
 }
 
 .rootTyping .assistantBlob {
@@ -133,6 +180,29 @@
 
 .rootOpen.rootResponding .assistantBlob {
   filter: brightness(1.3) saturate(1.12);
+}
+
+.rootPassive:not(.rootOpen) .blobButton {
+  opacity: 0.76;
+  animation: none;
+  transition:
+    opacity 180ms ease,
+    filter 180ms ease;
+}
+
+.rootPassive:not(.rootOpen) .blobButton:hover {
+  filter: brightness(1.06) drop-shadow(0 0 14px rgba(201, 168, 76, 0.28));
+  transform: none;
+}
+
+.rootPassive:not(.rootOpen) .assistantBlob {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  animation: none;
+  box-shadow:
+    0 0 24px rgba(201, 168, 76, 0.24),
+    inset 0 0 20px rgba(255, 255, 255, 0.48),
+    inset 14px 0 26px rgba(201, 168, 76, 0.12);
 }
 
 .stage {
@@ -557,10 +627,43 @@
   100% { border-radius: 45% 55% 42% 58% / 55% 45% 58% 42%; }
 }
 
+@keyframes liquidShapeHover {
+  0% { border-radius: 40% 60% 45% 55% / 58% 42% 56% 44%; }
+  22% { border-radius: 58% 42% 62% 38% / 40% 60% 42% 58%; }
+  48% { border-radius: 44% 56% 38% 62% / 62% 38% 58% 42%; }
+  74% { border-radius: 62% 38% 55% 45% / 46% 54% 38% 62%; }
+  100% { border-radius: 42% 58% 48% 52% / 55% 45% 62% 38%; }
+}
+
+@keyframes launcherDrift {
+  0% { translate: 0 0; }
+  42% { translate: -2px -8px; }
+  76% { translate: 2px -4px; }
+  100% { translate: -1px 3px; }
+}
+
 @keyframes blobFloat {
-  0% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-5px) rotate(3deg); }
-  100% { transform: translateY(4px) rotate(-3deg); }
+  0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(-1px, -7px, 0) rotate(3deg) scale(1.025); }
+  100% { transform: translate3d(1px, 4px, 0) rotate(-3deg) scale(0.985); }
+}
+
+@keyframes blobHoverFloat {
+  0% { transform: translate3d(0, 1px, 0) rotate(-2deg) scale(1.04); }
+  42% { transform: translate3d(-2px, -8px, 0) rotate(4deg) scale(1.1); }
+  100% { transform: translate3d(2px, 3px, 0) rotate(-5deg) scale(1.05); }
+}
+
+@keyframes blobInnerSwirl {
+  0% { transform: translate3d(-8%, -6%, 0) rotate(0deg) scale(0.94); }
+  50% { transform: translate3d(5%, 7%, 0) rotate(62deg) scale(1.05); }
+  100% { transform: translate3d(10%, -4%, 0) rotate(128deg) scale(0.98); }
+}
+
+@keyframes blobSurfacePulse {
+  0% { transform: translate3d(-2%, 2%, 0) rotate(0deg) scale(0.9); opacity: 0.38; }
+  50% { transform: translate3d(2%, -3%, 0) rotate(18deg) scale(1.1); opacity: 0.7; }
+  100% { transform: translate3d(3%, 2%, 0) rotate(-14deg) scale(0.98); opacity: 0.5; }
 }
 
 @keyframes orbitOne {
@@ -608,6 +711,34 @@
     height: 64px;
   }
 
+  .rootPassive:not(.rootOpen) .blobButton {
+    right: calc(14px + env(safe-area-inset-right));
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    width: 52px;
+    height: 52px;
+  }
+
+  .rootPassive:not(.rootOpen) .assistantBlob {
+    inset: 10px;
+  }
+
+  .assistantBlob {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    animation:
+      liquidShape 8.6s ease-in-out infinite alternate,
+      blobFloat 7.2s ease-in-out infinite alternate;
+    box-shadow:
+      0 0 26px rgba(201, 168, 76, 0.28),
+      inset 0 0 20px rgba(255, 255, 255, 0.44),
+      inset 12px 0 22px rgba(201, 168, 76, 0.1);
+  }
+
+  .assistantBlob::before,
+  .assistantBlob::after {
+    display: none;
+  }
+
   .rootOpen .blobButton {
     width: 64px;
     height: 64px;
@@ -619,6 +750,11 @@
 
   .backdrop {
     top: calc(98px + env(safe-area-inset-top));
+    background:
+      radial-gradient(circle at 50% 12%, rgba(201, 168, 76, 0.14), transparent 32%),
+      linear-gradient(180deg, rgba(10, 10, 15, 0.82), rgba(10, 10, 15, 0.94));
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .panel {
@@ -633,6 +769,17 @@
 
   .rootOpen .panel {
     border-radius: 8px;
+    transition:
+      transform 520ms var(--assistant-ios-spring) 40ms,
+      opacity 260ms ease 40ms,
+      border-radius 420ms var(--assistant-ios-spring) 40ms;
+  }
+
+  .panelGlow {
+    background:
+      linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.05), transparent);
+    background-size: 100% 100%;
+    mask-image: linear-gradient(180deg, black, transparent 76%);
   }
 
   .header {
@@ -648,6 +795,14 @@
 
   .panelBlobCore {
     inset: 10px;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    animation: none;
+  }
+
+  .panelBlobOrbitOne,
+  .panelBlobOrbitTwo {
+    display: none;
   }
 
   .messages,
@@ -681,6 +836,8 @@
 @media (prefers-reduced-motion: reduce) {
   .blobButton,
   .assistantBlob,
+  .assistantBlob::before,
+  .assistantBlob::after,
   .orbitOne,
   .orbitTwo,
   .panelBlobCore,
