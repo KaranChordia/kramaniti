@@ -22,6 +22,10 @@ const isStandaloneApp = () =>
   window.matchMedia("(display-mode: standalone)").matches ||
   (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
 
+const isMobileInstallSurface = () =>
+  window.matchMedia("(max-width: 768px)").matches &&
+  window.matchMedia("(pointer: coarse)").matches;
+
 export function PwaRuntime() {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallVisible, setIsInstallVisible] = useState(false);
@@ -107,7 +111,7 @@ export function PwaRuntime() {
   }, []);
 
   useEffect(() => {
-    if (isStandaloneApp()) {
+    if (isStandaloneApp() || !isMobileInstallSurface()) {
       return;
     }
 
@@ -117,6 +121,10 @@ export function PwaRuntime() {
     }
 
     const handleBeforeInstallPrompt = (event: Event) => {
+      if (!isMobileInstallSurface()) {
+        return;
+      }
+
       event.preventDefault();
       setInstallPrompt(event as BeforeInstallPromptEvent);
       window.setTimeout(() => setIsInstallVisible(true), 900);

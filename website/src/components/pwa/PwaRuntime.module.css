@@ -134,12 +134,9 @@
   }
 }
 
-@media (min-width: 721px) {
+@media (min-width: 769px), (pointer: fine) {
   .installPrompt {
-    width: min(360px, calc(100vw - 48px));
-    right: auto;
-    bottom: 24px;
-    left: 24px;
+    display: none;
   }
 }
 
