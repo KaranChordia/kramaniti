@@ -1,0 +1,167 @@
+.installPrompt {
+  position: fixed;
+  left: calc(14px + env(safe-area-inset-left));
+  right: calc(86px + env(safe-area-inset-right));
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  z-index: 94;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 9px 9px 9px 10px;
+  border: 1px solid rgba(246, 223, 157, 0.26);
+  border-radius: 12px;
+  color: var(--text-primary);
+  background:
+    linear-gradient(135deg, rgba(201, 168, 76, 0.18), rgba(255, 255, 255, 0.055)),
+    rgba(10, 10, 15, 0.96);
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  transform: translateY(12px);
+  opacity: 0;
+  animation: installPromptIn 360ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  color: #0a0a0f;
+  background: linear-gradient(135deg, #f6df9d, #c9a84c);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 0 18px rgba(201, 168, 76, 0.22);
+}
+
+.copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.copy span,
+.copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy span {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.copy small {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.installButton,
+.dismissButton {
+  display: inline-grid;
+  place-items: center;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.installButton {
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 8px;
+  color: #0a0a0f;
+  background: linear-gradient(135deg, #f6df9d, #c9a84c);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dismissButton {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.72);
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.installButton:focus-visible,
+.dismissButton:focus-visible {
+  outline: 2px solid rgba(246, 223, 157, 0.9);
+  outline-offset: 3px;
+}
+
+:global(html[data-theme='light']) .installPrompt {
+  color: rgba(10, 10, 15, 0.92);
+  background:
+    linear-gradient(135deg, rgba(201, 168, 76, 0.16), rgba(255, 255, 255, 0.88)),
+    rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 18px 42px rgba(20, 20, 24, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+:global(html[data-theme='light']) .copy span {
+  color: rgba(10, 10, 15, 0.9);
+}
+
+:global(html[data-theme='light']) .copy small,
+:global(html[data-theme='light']) .dismissButton {
+  color: rgba(10, 10, 15, 0.58);
+}
+
+@keyframes installPromptIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 721px) {
+  .installPrompt {
+    width: min(360px, calc(100vw - 48px));
+    right: auto;
+    bottom: 24px;
+    left: 24px;
+  }
+}
+
+@media (max-width: 380px) {
+  .installPrompt {
+    right: calc(76px + env(safe-area-inset-right));
+    gap: 8px;
+  }
+
+  .copy small {
+    display: none;
+  }
+
+  .installButton {
+    padding: 0 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .installPrompt {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

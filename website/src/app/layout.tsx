@@ -72,11 +72,14 @@ export const metadata: Metadata = {
   },
   other: {
     "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-title": "Kramaniti",
+    "mobile-web-app-capable": "yes",
     "msapplication-TileColor": "#C9A84C",
   }
 };
 
 export const viewport = {
+  colorScheme: "dark light",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#C9A84C" },
     { media: "(prefers-color-scheme: dark)", color: "#C9A84C" },
