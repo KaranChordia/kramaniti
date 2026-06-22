@@ -4,7 +4,6 @@
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  --problem-scroll: 0;
 }
 
 .problem::before {
@@ -375,6 +374,13 @@
    ============================================= */
 
 @media (max-width: 900px) {
+  .atmosWord,
+  .atmosphere::before,
+  .originRing,
+  .beamPath {
+    animation: none !important;
+  }
+
   .divergeStage {
     aspect-ratio: auto;
     max-height: none;

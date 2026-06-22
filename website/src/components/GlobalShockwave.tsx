@@ -4,6 +4,10 @@ import { useEffect } from 'react';
 
 export function GlobalShockwave() {
   useEffect(() => {
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      return;
+    }
+
     const handleClick = (e: MouseEvent) => {
       // Find closest button or a link acting as a button
       const target = e.target as HTMLElement;

@@ -352,6 +352,45 @@
 }
 
 @media (max-width: 768px) {
+  .navWrapper {
+    top: 16px;
+    padding: 0 16px;
+    transition-duration: 260ms;
+    will-change: auto;
+  }
+
+  .header {
+    background:
+      linear-gradient(180deg, rgba(14, 14, 18, 0.98), rgba(10, 10, 15, 0.98)),
+      rgba(10, 10, 15, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .header::before {
+    display: none;
+  }
+
+  .header::after {
+    filter: none;
+    opacity: 0.52;
+    animation: none;
+  }
+
+  :global(html[data-theme='light']) .header {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 245, 248, 0.98)),
+      rgba(250, 250, 252, 0.96);
+  }
+
+  .mobileMenuOverlay {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
   :global(html[data-home-sequence="true"]) .visible {
     opacity: 1;
     transform: none;

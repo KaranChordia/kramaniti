@@ -422,8 +422,13 @@
     opacity: 0.18;
   }
 
+  .flowLine::after,
   .signalDot {
-    animation-duration: 7s;
+    animation: none;
+  }
+
+  .signalDot {
+    opacity: 0.34;
   }
 }
 
@@ -454,7 +459,7 @@
     width: min(100%, 250px);
   }
 
-  .flowLine:nth-child(n + 7),
+  .flowLine,
   .mobileOptional {
     display: none;
   }

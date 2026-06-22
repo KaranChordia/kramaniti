@@ -709,6 +709,7 @@
   .blobButton {
     width: 64px;
     height: 64px;
+    animation: none;
   }
 
   .rootPassive:not(.rootOpen) .blobButton {
@@ -725,9 +726,7 @@
   .assistantBlob {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    animation:
-      liquidShape 8.6s ease-in-out infinite alternate,
-      blobFloat 7.2s ease-in-out infinite alternate;
+    animation: none;
     box-shadow:
       0 0 26px rgba(201, 168, 76, 0.28),
       inset 0 0 20px rgba(255, 255, 255, 0.44),

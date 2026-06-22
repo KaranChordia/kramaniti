@@ -26,8 +26,9 @@ export function HomepageSequence() {
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersFastMobile = window.matchMedia('(max-width: 768px)').matches;
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || prefersFastMobile) {
       const reducedMotionTimer = window.setTimeout(() => setPhase('done'), 0);
       return () => window.clearTimeout(reducedMotionTimer);
     }

@@ -228,6 +228,15 @@
 }
 
 @media (max-width: 720px) {
+  .main {
+    overflow: clip;
+  }
+
+  .hero::before,
+  .section::before {
+    opacity: 0.42;
+  }
+
   .hero {
     padding: 116px 0 52px;
   }
@@ -243,6 +252,14 @@
   .folderCard {
     min-height: 0;
     padding: 24px;
+    backdrop-filter: none;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease;
+  }
+
+  .folderCard:hover {
+    transform: none;
   }
 
   .folderCard::before {

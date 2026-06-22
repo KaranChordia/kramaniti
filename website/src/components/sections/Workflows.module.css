@@ -426,6 +426,13 @@
   .workflows {
     padding: 80px 0;
   }
+
+  .flowLine,
+  .flowLineVertical,
+  .atmosWord {
+    animation: none !important;
+  }
+
   .header {
     margin-bottom: 48px;
   }

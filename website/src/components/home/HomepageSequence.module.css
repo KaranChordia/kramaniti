@@ -248,6 +248,13 @@
 }
 
 @media (max-width: 768px) {
+  .shell::before,
+  .shell::after {
+    position: absolute;
+    opacity: 0.1;
+    transform: none;
+  }
+
   .logoStage {
     transform: translateY(-6px);
   }

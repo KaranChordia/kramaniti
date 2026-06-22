@@ -374,6 +374,11 @@
   .services {
     padding: 80px 0;
   }
+
+  .atmosWord {
+    animation: none !important;
+  }
+
   .header {
     margin-bottom: 48px;
   }

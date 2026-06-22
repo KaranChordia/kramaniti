@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './Problem.module.css';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
@@ -22,35 +22,12 @@ const signals = [
 export function Problem() {
   const [intersectionRef, isVisible] = useIntersectionObserver({ threshold: 0.05 });
   const sectionRef = intersectionRef as React.RefObject<HTMLElement | null>;
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const update = () => {
-      const rect = section.getBoundingClientRect();
-      const viewH = window.innerHeight;
-      const total = rect.height + viewH;
-      const raw = (viewH - rect.top) / total;
-      setScrollProgress(Math.min(Math.max(raw, 0), 1));
-    };
-
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    return () => {
-      window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
-    };
-  }, [sectionRef]);
 
   return (
     <section
       className={styles.problem}
       id="problem"
       ref={sectionRef}
-      style={{ '--problem-scroll': scrollProgress } as React.CSSProperties}
     >
       <div className={styles.atmosphere} aria-hidden="true">
         <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Clarity</span>
