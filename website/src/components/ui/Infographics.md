@@ -205,14 +205,42 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: four-step horizontal pipeline from workflow naming to allowed support, boundary review, and write-back.
 * **Selection Criteria**: Choose when post needs a lightweight operating rhythm for team adoption, enablement, or AI-assisted work.
 
-## 26. Escalation Clarity Map (Customer Handoff Comparison)
+## 26. AI Value Gap Funnel (Adoption-To-Value Path)
+* **Component Name**: `ValueGapFunnelInfographic`
+* **Trigger String**: `[infographic:value-gap-funnel]`
+* **Best Used For**: Showing how high AI adoption still narrows through unresolved operating debt before reaching enterprise value.
+* **Visuals**: three-stage pipeline from adoption to process debt to value capture.
+* **Selection Criteria**: Choose when post explains adoption versus realized value, enterprise AI debt, or workflow bottlenecks behind AI ROI.
+
+## 27. Collaboration Boundary Map (Human-AI Responsibility Split)
+* **Component Name**: `CollaborationBoundaryMapInfographic`
+* **Trigger String**: `[infographic:collaboration-boundary-map]`
+* **Best Used For**: Separating automated repetition, AI-assisted judgment, and human-led accountability in practical systems.
+* **Visuals**: three-column boundary map with the human-led standard emphasized.
+* **Selection Criteria**: Choose when post explains human-collaborative systems, override boundaries, or the difference between automation and accountable judgment.
+
+## 28. Source Route Calendar (Content Provenance Flow)
+* **Component Name**: `SourceRouteCalendarInfographic`
+* **Trigger String**: `[infographic:source-route-calendar]`
+* **Best Used For**: Showing how operational signals become calendar slots only after source, boundary, and owner context are visible.
+* **Visuals**: four-card horizontal brief board from signal to source, boundary, and calendar slot.
+* **Selection Criteria**: Choose when post explains source-led content planning, evidence-backed calendars, or internal-to-external communication.
+
+## 29. Message Map Source Route (Claim-Safe Content Matrix)
+* **Component Name**: `MessageMapSourceRouteInfographic`
+* **Trigger String**: `[infographic:message-map-source-route]`
+* **Best Used For**: Comparing weak content-calendar habits with a source-led message standard.
+* **Visuals**: matrix with message field, weak calendar habit, and source-led standard columns.
+* **Selection Criteria**: Choose when post explains claim boundaries, message maps, founder interpretation, and content write-back.
+
+## 30. Escalation Clarity Map (Customer Handoff Comparison)
 * **Component Name**: `EscalationClarityMapInfographic`
 * **Trigger String**: `[infographic:escalation-clarity-map]`
 * **Best Used For**: Contrasting assistant-first customer support with an escalation-ready service route.
 * **Visuals**: two vertical flows comparing thin AI handoff against issue threshold, human owner, context transfer, and resolution write-back.
 * **Selection Criteria**: Choose when a post explains customer-facing AI, service handoffs, human escalation, or trust recovery.
 
-## 27. Service Recovery Loop (Escalation Control Spine)
+## 31. Service Recovery Loop (Escalation Control Spine)
 * **Component Name**: `ServiceRecoveryLoopInfographic`
 * **Trigger String**: `[infographic:service-recovery-loop]`
 * **Best Used For**: Showing how customer-service escalation turns into retained operating learning.

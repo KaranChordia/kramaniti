@@ -163,6 +163,181 @@ export function PresenceBriefCanvasInfographic() {
   );
 }
 
+export function ValueGapFunnelInfographic() {
+  const steps = [
+    {
+      label: 'Adoption',
+      value: '90%+',
+      copy: 'Tools are available, trials are active, and usage is visible.',
+    },
+    {
+      label: 'Debt',
+      value: 'Process',
+      copy: 'Data, workflow, technology, and talent gaps still shape the route.',
+    },
+    {
+      label: 'Value',
+      value: '6%',
+      copy: 'Only the resolved operating system turns AI activity into measurable value.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>AI Value Gap Funnel</div>
+      <div className={styles.pipelineContainer}>
+        {steps.map((step, index) => (
+          <React.Fragment key={step.label}>
+            <div className={`${styles.pipelineNode} ${index === steps.length - 1 ? styles.pipelineNodeHighlight : ''}`}>
+              <div className={index === steps.length - 1 ? styles.pipelineStepHighlight : styles.pipelineStep}>{step.value}</div>
+              <div className={styles.pipelineContent}>
+                <div className={index === steps.length - 1 ? styles.pipelineNodeTitleHighlight : styles.pipelineNodeTitle}>{step.label}</div>
+                <p className={index === steps.length - 1 ? styles.pipelineNodeDescHighlight : styles.pipelineNodeDesc}>{step.copy}</p>
+              </div>
+            </div>
+            {index < steps.length - 1 ? (
+              <div className={styles.pipelineArrow}>
+                <ArrowRight className={styles.arrowIconDesktop} size={20} />
+                <ArrowDown className={styles.arrowIconMobile} size={20} />
+              </div>
+            ) : null}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function CollaborationBoundaryMapInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Collaboration Boundary Map</div>
+      <div className={styles.boundaryMap}>
+        <div className={styles.boundaryColumn}>
+          <span className={styles.boundaryStep}>01</span>
+          <h4>Automate repetition</h4>
+          <p>Routing, formatting, extraction, reminders, and low-risk updates move without adding judgment debt.</p>
+          <div className={styles.boundaryTag}>System handles repetition</div>
+        </div>
+
+        <div className={styles.boundaryDivider}></div>
+
+        <div className={`${styles.boundaryColumn} ${styles.boundaryColumnAssist}`}>
+          <span className={styles.boundaryStepAssist}>02</span>
+          <h4>Assist judgment</h4>
+          <p>Summaries, classification, drafts, research, and recommendations support a visible decision owner.</p>
+          <div className={styles.boundaryTagAssist}>AI supports the route</div>
+        </div>
+
+        <div className={styles.boundaryDivider}></div>
+
+        <div className={`${styles.boundaryColumn} ${styles.boundaryColumnHighlight}`}>
+          <span className={styles.boundaryStepHighlight}>03</span>
+          <h4>Keep people accountable</h4>
+          <p>Trust, taste, pricing, promises, sensitive data, and final approvals stay human-led.</p>
+          <div className={styles.boundaryTagHighlight}>People own the standard</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function SourceRouteCalendarInfographic() {
+  const stages = [
+    {
+      icon: Radar,
+      label: 'Signal',
+      copy: 'A repeated question, delivery lesson, bottleneck, or market pattern appears in real work.',
+    },
+    {
+      icon: FolderSync,
+      label: 'Source',
+      copy: 'The team retains the call note, workflow record, approval comment, or system evidence.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Boundary',
+      copy: 'The owner decides what is safe to say, what needs softer language, and what stays internal.',
+    },
+    {
+      icon: Megaphone,
+      label: 'Calendar slot',
+      copy: 'The public format is chosen only after the message has a source route.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Source Route Calendar</div>
+      <div className={styles.briefBoard}>
+        {stages.map((stage, index) => {
+          const Icon = stage.icon;
+          const isFinal = index === stages.length - 1;
+
+          return (
+            <React.Fragment key={stage.label}>
+              <div className={`${styles.briefCard} ${isFinal ? styles.briefCardHighlight : ''}`}>
+                <div className={isFinal ? styles.briefIconHighlight : styles.briefIcon}>
+                  <Icon size={18} />
+                </div>
+                <div className={isFinal ? styles.briefLabelGold : styles.briefLabel}>{stage.label}</div>
+                <p className={isFinal ? styles.briefCopyGold : styles.briefCopy}>{stage.copy}</p>
+              </div>
+              {index < stages.length - 1 ? (
+                <div className={styles.briefConnector}>
+                  <ArrowRight className={styles.arrowIconDesktop} size={18} />
+                  <ArrowDown className={styles.arrowIconMobile} size={18} />
+                </div>
+              ) : null}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function MessageMapSourceRouteInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Message Map Source Route</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Message field</th>
+              <th className={styles.matrixColHeader}>Weak calendar habit</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Source-led standard</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Audience question</td>
+              <td className={styles.matrixCell}>Pick a trending topic.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Use a question customers or operators already repeat.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Evidence</td>
+              <td className={styles.matrixCell}>Rely on memory or generic research.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Point to a retained workflow, note, source, or standard.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Claim boundary</td>
+              <td className={styles.matrixCell}>Say the strongest version.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Say the strongest version the source can support.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Write-back</td>
+              <td className={styles.matrixCell}>Publish and move on.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Return new objections, phrases, and lessons to the system.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 export function ShadowAiRouteInfographic() {
   return (
     <div className={styles.infographicWrapper}>

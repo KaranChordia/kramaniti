@@ -50,6 +50,10 @@ import {
   DecisionRecordCardInfographic,
   OperatingSignalLedgerInfographic,
   PresenceBriefCanvasInfographic,
+  ValueGapFunnelInfographic,
+  CollaborationBoundaryMapInfographic,
+  SourceRouteCalendarInfographic,
+  MessageMapSourceRouteInfographic,
   ShadowAiRouteInfographic,
   WorkflowAdoptionRhythmInfographic,
   EscalationClarityMapInfographic,
@@ -353,6 +357,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:presence-brief-canvas]') {
           return <PresenceBriefCanvasInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:value-gap-funnel]') {
+          return <ValueGapFunnelInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:collaboration-boundary-map]') {
+          return <CollaborationBoundaryMapInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:source-route-calendar]') {
+          return <SourceRouteCalendarInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:message-map-source-route]') {
+          return <MessageMapSourceRouteInfographic key={index} />;
         }
         if (paragraph === '[infographic:shadow-ai-route]') {
           return <ShadowAiRouteInfographic key={index} />;
