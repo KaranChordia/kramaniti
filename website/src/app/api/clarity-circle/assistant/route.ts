@@ -76,6 +76,10 @@ type ProjectDraft = {
   outcome: string;
 };
 
+type FolderDraft = {
+  name: string;
+};
+
 type MemoryDraft = {
   title: string;
   content: string;
@@ -85,6 +89,7 @@ type MemoryDraft = {
 type AssistantPayload = {
   response: string;
   projectDraft?: ProjectDraft | null;
+  folderDraft?: FolderDraft | null;
   memoryDraft?: MemoryDraft | null;
 };
 
@@ -181,6 +186,9 @@ const buildCircleContext = (body: AssistantRequestBody) => {
 const wantsProject = (message: string) =>
   /\b(create|start|make|add|open|set up|new)\b/i.test(message) && /\b(project|idea|workspace|plan)\b/i.test(message);
 
+const wantsFolder = (message: string) =>
+  /\b(create|start|make|add|set up|new)\b/i.test(message) && /\b(folder|directory|collection)\b/i.test(message);
+
 const wantsMemory = (message: string) =>
   /\b(remember|save this|keep this|note this|store this)\b/i.test(message) ||
   /\b(my preference|important context|don't forget|do not forget)\b/i.test(message);
@@ -192,6 +200,15 @@ const buildLocalPayload = (latestMessage: string, body: AssistantRequestBody): A
   const fallbackTrack = body.track || body.savedContext?.track || 'founder';
   const track = inferTrack(latestMessage, fallbackTrack);
   const topic = truncate(latestMessage || body.savedContext?.headline || 'New clarity project', 90);
+  const folderName = truncate(
+    clean(
+      latestMessage
+        .replace(/\b(create|start|make|add|set up|new)\b/gi, '')
+        .replace(/\b(folder|directory|collection)\b/gi, '')
+        .replace(/\b(for|called|named|as)\b/gi, ' ')
+    ) || 'New folder',
+    80,
+  );
 
   const payload: AssistantPayload = {
     response:
@@ -219,6 +236,14 @@ const buildLocalPayload = (latestMessage: string, body: AssistantRequestBody): A
     };
   }
 
+  if (wantsFolder(latestMessage)) {
+    payload.response = 'I prepared a private project folder for this Circle workspace. Use it to group related projects and keep the assistant context easier to read.';
+    payload.folderDraft = {
+      name: folderName,
+    };
+    payload.memoryDraft = null;
+  }
+
   if (wantsMemory(latestMessage)) {
     payload.memoryDraft = {
       title: 'User preference',
@@ -242,6 +267,7 @@ const parseAssistantPayload = (raw: string): AssistantPayload | null => {
     return {
       response: clean(parsed.response),
       projectDraft: parsed.projectDraft || null,
+      folderDraft: parsed.folderDraft || null,
       memoryDraft: parsed.memoryDraft || null,
     };
   } catch {
@@ -255,6 +281,7 @@ const buildMessages = (
 ): ChatCompletionMessageParam[] => {
   const latestMessage = [...history].reverse().find((message) => message.role === 'user')?.content || '';
   const shouldDraftProject = wantsProject(latestMessage);
+  const shouldDraftFolder = wantsFolder(latestMessage);
   const shouldDraftMemory = wantsMemory(latestMessage);
 
   return [
@@ -273,6 +300,7 @@ Your job:
 - Do not invent tool availability, market updates, client claims, metrics, testimonials, pricing, or outcomes.
 - If external or current-market facts are needed, say that dated source checks are required before the recommendation is final.
 - If the user asks you to create a project, return a projectDraft object.
+- If the user asks you to create a folder, return a folderDraft object.
 - If the user asks you to remember something, or if a durable preference or useful signal emerges, return a memoryDraft object.
 - Keep the public answer under 120 words unless the user asks for a deeper breakdown.
 - Return valid JSON only with this shape:
@@ -286,6 +314,9 @@ Your job:
     "blocker": "what is unclear",
     "outcome": "what should become clearer"
   },
+  "folderDraft": null or {
+    "name": "short folder name"
+  },
   "memoryDraft": null or {
     "title": "short memory title",
     "content": "what should be remembered",
@@ -294,6 +325,7 @@ Your job:
 }
 
 Project draft expected from latest message: ${shouldDraftProject ? 'yes' : 'only if genuinely useful'}.
+Folder draft expected from latest message: ${shouldDraftFolder ? 'yes' : 'only if genuinely useful'}.
 Memory draft expected from latest message: ${shouldDraftMemory ? 'yes' : 'only if genuinely useful'}.
 
 Private Circle context:
@@ -305,7 +337,7 @@ ${buildKramanitiKnowledgeContext()}`,
     {
       role: 'assistant',
       content:
-        '{"response":"Understood. I will use the private Circle context and Kramaniti operating rules, then return only structured JSON.","projectDraft":null,"memoryDraft":null}',
+        '{"response":"Understood. I will use the private Circle context and Kramaniti operating rules, then return only structured JSON.","projectDraft":null,"folderDraft":null,"memoryDraft":null}',
     },
     ...history.map((message) => ({
       role: message.role,

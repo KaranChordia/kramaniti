@@ -74,6 +74,10 @@ type AssistantProjectDraft = {
   outcome: string;
 };
 
+type AssistantFolderDraft = {
+  name: string;
+};
+
 type AssistantMemoryDraft = {
   title: string;
   content: string;
@@ -83,6 +87,7 @@ type AssistantMemoryDraft = {
 type AssistantResponse = {
   response?: string;
   projectDraft?: AssistantProjectDraft | null;
+  folderDraft?: AssistantFolderDraft | null;
   memoryDraft?: AssistantMemoryDraft | null;
   error?: string;
 };
@@ -99,6 +104,14 @@ type WorkspaceSnapshot = {
 
 const STORAGE_KEY = 'kramaniti-clarity-circle-sequence-v1';
 const ENGINE_HANDOFF_KEY = 'kramaniti-clarity-circle-engine-handoff-v1';
+
+const clearCircleLocalStorage = () => {
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Browser storage can be blocked; signed-in data still stays database-backed.
+  }
+};
 
 type EngineHandoff = {
   version: 1;
@@ -406,6 +419,7 @@ export function ClarityCircle() {
         .schema('clarity_circle')
         .from('projects')
         .select('*')
+        .eq('user_id', user.id)
         .eq('status', 'active')
         .order('updated_at', { ascending: false })
         .limit(120),
@@ -413,6 +427,7 @@ export function ClarityCircle() {
         .schema('clarity_circle')
         .from('project_folders')
         .select('*')
+        .eq('user_id', user.id)
         .eq('status', 'active')
         .order('sort_order', { ascending: true })
         .order('updated_at', { ascending: false })
@@ -421,18 +436,21 @@ export function ClarityCircle() {
         .schema('clarity_circle')
         .from('context_entries')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(120),
       supabase
         .schema('clarity_circle')
         .from('assistant_messages')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: true })
         .limit(30),
       supabase
         .schema('clarity_circle')
         .from('assistant_memories')
         .select('*')
+        .eq('user_id', user.id)
         .eq('status', 'active')
         .order('updated_at', { ascending: false })
         .limit(20),
@@ -441,6 +459,10 @@ export function ClarityCircle() {
     if (projectResult.error) {
       if (!options?.quiet) setStatus('Saved projects could not be loaded.');
       return null;
+    }
+
+    if (folderResult.error && !options?.quiet) {
+      setStatus('Saved folders could not be loaded.');
     }
 
     const nextProjects = projectResult.data ?? [];
@@ -458,7 +480,9 @@ export function ClarityCircle() {
     const nextMemories = memoryResult.error ? [] : memoryResult.data ?? [];
 
     setProjects(nextProjects);
-    setProjectFolders(nextFolders);
+    if (!folderResult.error) {
+      setProjectFolders(nextFolders);
+    }
     setContextEntries(nextEntries);
     setAssistantMessages(nextMessages);
     setAssistantMemories(nextMemories);
@@ -535,6 +559,11 @@ export function ClarityCircle() {
 
   useEffect(() => {
     if (!hasLoaded) return;
+    if (authUser) {
+      clearCircleLocalStorage();
+      return;
+    }
+
     window.localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
@@ -557,6 +586,7 @@ export function ClarityCircle() {
     activeProjectFolder,
     assistantMemories,
     assistantMessages,
+    authUser,
     hasLoaded,
     intent,
     projectFolders,
@@ -579,6 +609,7 @@ export function ClarityCircle() {
       const user = data.session?.user ?? null;
       setAuthUser(user);
       if (user && step === 'entry') {
+        clearCircleLocalStorage();
         void loadProfile(user);
         setStep('track');
         setActiveMenu('path');
@@ -590,6 +621,7 @@ export function ClarityCircle() {
       const user = session?.user ?? null;
       setAuthUser(user);
       if (user) {
+        clearCircleLocalStorage();
         void loadProfile(user);
         setStep((current) => {
           if (current === 'entry') {
@@ -745,6 +777,7 @@ export function ClarityCircle() {
     if (user && result.data.session) {
       const profile = await upsertProfile(user, username);
       if (!profile) return;
+      clearCircleLocalStorage();
       setAuthUser(user);
       setAuthLogin(username);
       setStep('track');
@@ -770,6 +803,7 @@ export function ClarityCircle() {
     const profile = await upsertProfile(retryUser, username);
     if (!profile) return;
 
+    clearCircleLocalStorage();
     setAuthUser(retryUser);
     setAuthLogin(username);
     setStep('track');
@@ -820,6 +854,7 @@ export function ClarityCircle() {
     }
 
     const user = result.data.user;
+    clearCircleLocalStorage();
     setAuthUser(user);
     const profile = await loadProfile(user);
     setStep('track');
@@ -882,11 +917,11 @@ export function ClarityCircle() {
       return project.folder_id === folderId;
     }).length;
 
-  const createProjectFolder = async () => {
-    const name = cleanSentence(newFolderName, '').slice(0, 80);
+  const createProjectFolder = async (folderName = newFolderName, options?: { source?: 'assistant' | 'user' }) => {
+    const name = cleanSentence(folderName, '').slice(0, 80);
     if (!name) {
       setStatus('Name the folder first.');
-      return;
+      return null;
     }
 
     const localFolder: ClarityCircleProjectFolder = {
@@ -900,13 +935,17 @@ export function ClarityCircle() {
     };
 
     const supabase = getClarityCircleSupabase();
-    if (!supabase || !authUser) {
+    if (!authUser) {
       setProjectFolders((current) => [...current, localFolder]);
       setActiveProjectFolder(localFolder.id);
       setNewFolderName('');
       setIsCreatingFolder(false);
       setStatus('Folder created locally.');
-      return;
+      return localFolder;
+    }
+    if (!supabase) {
+      setStatus('Folder could not be saved to your account.');
+      return null;
     }
 
     const { data, error } = await supabase
@@ -921,16 +960,17 @@ export function ClarityCircle() {
       .single();
 
     if (error || !data) {
-      setStatus(error?.code === '23505' ? 'A folder with this name already exists.' : 'Folder could not be created.');
-      return;
+      setStatus(error?.code === '23505' ? 'A folder with this name already exists.' : 'Folder could not be saved to your account.');
+      return null;
     }
 
     setProjectFolders((current) => [...current, data]);
     setActiveProjectFolder(data.id);
     setNewFolderName('');
     setIsCreatingFolder(false);
-    setStatus('Folder created.');
+    setStatus(options?.source === 'assistant' ? 'Assistant folder created.' : 'Folder created.');
     void refreshWorkspace(authUser, { quiet: true });
+    return data;
   };
 
   const moveProjectToFolder = async (project: ClarityCircleProject, folderId: string | null) => {
@@ -985,9 +1025,13 @@ export function ClarityCircle() {
     };
 
     const supabase = getClarityCircleSupabase();
-    if (!supabase || !authUser) {
+    if (!authUser) {
       setAssistantMemories((current) => [localMemory, ...current].slice(0, 12));
       return localMemory;
+    }
+    if (!supabase) {
+      setStatus('Assistant memory could not be saved to your account.');
+      return null;
     }
 
     const { data, error } = await supabase
@@ -1005,8 +1049,8 @@ export function ClarityCircle() {
       .single();
 
     if (error || !data) {
-      setAssistantMemories((current) => [localMemory, ...current].slice(0, 12));
-      return localMemory;
+      setStatus('Assistant memory could not be saved to your account.');
+      return null;
     }
 
     setAssistantMemories((current) => [data, ...current.filter((item) => item.id !== data.id)].slice(0, 12));
@@ -1030,11 +1074,15 @@ export function ClarityCircle() {
     setStep('context');
 
     const supabase = getClarityCircleSupabase();
-    if (!supabase || !authUser) {
-      const localProject = localProjectFromContext(context, authUser?.id ?? 'local');
+    if (!authUser) {
+      const localProject = localProjectFromContext(context, 'local');
       setProjects((current) => [localProject, ...current.filter((item) => item.id !== localProject.id)].slice(0, 80));
       setSelectedProjectId(localProject.id);
       setStatus('Project drafted locally.');
+      return null;
+    }
+    if (!supabase) {
+      setStatus('Project could not be saved to your account.');
       return null;
     }
 
@@ -1057,7 +1105,7 @@ export function ClarityCircle() {
       .single();
 
     if (error || !project) {
-      setStatus('Project drafted locally. Account save failed.');
+      setStatus('Project could not be saved to your account.');
       return null;
     }
 
@@ -1179,6 +1227,10 @@ export function ClarityCircle() {
         projectId = project?.id ?? null;
       }
 
+      if (data.folderDraft) {
+        await createProjectFolder(data.folderDraft.name, { source: 'assistant' });
+      }
+
       if (data.memoryDraft) {
         await saveAssistantMemory(data.memoryDraft, projectId);
       }
@@ -1220,11 +1272,15 @@ export function ClarityCircle() {
     setActiveMenu('context');
 
     const supabase = getClarityCircleSupabase();
-    if (!supabase || !authUser) {
-      const localProject = localProjectFromContext(context, authUser?.id ?? 'local');
+    if (!authUser) {
+      const localProject = localProjectFromContext(context, 'local');
       setProjects((current) => [localProject, ...current].slice(0, 80));
       setSelectedProjectId(localProject.id);
       setStatus('Context saved locally.');
+      return;
+    }
+    if (!supabase) {
+      setStatus('Context could not be saved to your account.');
       return;
     }
 
@@ -1249,7 +1305,7 @@ export function ClarityCircle() {
 
     if (projectError || !project) {
       setIsSavingContext(false);
-      setStatus('Context saved locally. Cloud save failed.');
+      setStatus('Context could not be saved to your account.');
       return;
     }
 
