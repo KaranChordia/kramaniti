@@ -13,6 +13,7 @@ import {
   Lock,
   LogOut,
   Mail,
+  KeyRound,
   RefreshCw,
   Sparkles,
   UserRound,
@@ -193,6 +194,7 @@ export function ClarityCircle() {
   const [status, setStatus] = useState('Your private idea context stays on this browser in v1.');
   const [hasLoaded, setHasLoaded] = useState(false);
   const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [isAuthBusy, setIsAuthBusy] = useState(false);
   const [isSavingContext, setIsSavingContext] = useState(false);
@@ -314,26 +316,53 @@ export function ClarityCircle() {
       return;
     }
 
-    if (!authEmail.trim()) {
-      setStatus('Enter your email to receive a secure sign-in link.');
+    const email = authEmail.trim();
+    const password = authPassword.trim();
+
+    if (!email || !password) {
+      setStatus('Enter your email and password before continuing.');
+      return;
+    }
+
+    if (password.length < 8) {
+      setStatus('Use a password with at least 8 characters.');
       return;
     }
 
     setIsAuthBusy(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      email: authEmail.trim(),
-      options: {
-        emailRedirectTo: `${window.location.origin}/clarity-circle`,
-      },
-    });
+    const result =
+      mode === 'signup'
+        ? await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              emailRedirectTo: `${window.location.origin}/clarity-circle`,
+            },
+          })
+        : await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
     setIsAuthBusy(false);
 
-    if (error) {
-      setStatus(error.message);
+    if (result.error) {
+      setStatus(result.error.message);
       return;
     }
 
-    setStatus('Check your email for the secure Supabase sign-in link.');
+    const user = result.data.user ?? result.data.session?.user ?? null;
+    if (user && result.data.session) {
+      setAuthUser(user);
+      setStep('track');
+      setStatus('Signed in. Your Clarity Circle projects can be saved to Supabase.');
+      return;
+    }
+
+    setStatus(
+      mode === 'signup'
+        ? 'Account created. If email confirmation is enabled, confirm your email before signing in.'
+        : 'Sign in accepted. If your email is not confirmed yet, check your inbox first.'
+    );
   };
 
   const continueLocally = () => {
@@ -544,6 +573,17 @@ export function ClarityCircle() {
                     disabled={Boolean(authUser) || isAuthBusy}
                   />
                 </label>
+                <label className={styles.authField}>
+                  <span>Password</span>
+                  <input
+                    type="password"
+                    value={authPassword}
+                    onChange={(event) => setAuthPassword(event.target.value)}
+                    placeholder="Minimum 8 characters"
+                    autoComplete={sessionMode === 'signup' ? 'new-password' : 'current-password'}
+                    disabled={Boolean(authUser) || isAuthBusy}
+                  />
+                </label>
                 <button
                   type="button"
                   className={styles.primaryButton}
@@ -565,6 +605,7 @@ export function ClarityCircle() {
                   Continue locally
                 </button>
               </div>
+              <p className={styles.authNotice}>{status}</p>
 
               <div className={styles.entryFooter}>
                 <span>
@@ -572,8 +613,12 @@ export function ClarityCircle() {
                   {isSupabaseReady
                     ? authUser
                       ? `Signed in as ${authUser.email ?? 'Supabase user'}`
-                      : 'Supabase magic-link sign-in is ready.'
+                      : 'Supabase email and password auth is ready.'
                     : 'Supabase env vars are not configured locally yet.'}
+                </span>
+                <span>
+                  <KeyRound size={14} aria-hidden="true" />
+                  Password accounts use Supabase Auth; confirmation depends on your Supabase email settings.
                 </span>
                 <span>
                   <Lock size={14} aria-hidden="true" />

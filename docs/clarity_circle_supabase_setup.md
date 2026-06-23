@@ -56,7 +56,8 @@ All Clarity Circle tables have RLS enabled. Policies limit each authenticated us
 
 ## Current App Behavior
 
-- Email magic-link auth is used when Supabase env vars are present.
+- Email and password auth is used when Supabase env vars are present.
+- If Supabase email confirmation is enabled, users may need to confirm their email before signing in.
 - Unsigned sessions continue to work locally in the browser.
 - Completed intent capture is saved as a private `clarity_circle.projects` row for signed-in users.
 - The Clarity Circle to Clarity Engine handoff remains browser-local and one-time.
