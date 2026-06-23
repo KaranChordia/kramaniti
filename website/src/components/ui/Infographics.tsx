@@ -2377,3 +2377,99 @@ export function DecisionRecordCardInfographic() {
     </div>
   );
 }
+
+export function WorkflowDecisionLedgerInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Workflow Decision Ledger</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Workflow moment</th>
+              <th className={styles.matrixColHeader}>What usually drifts</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Decision to retain</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Lead qualification</td>
+              <td className={styles.matrixCell}>Fit rules stay inside founder judgment.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Who is accepted, why, and which tradeoff is allowed.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Content approval</td>
+              <td className={styles.matrixCell}>Claims move faster than source confidence.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>The claim boundary and final approval owner.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>System build</td>
+              <td className={styles.matrixCell}>Tool choices hide workflow assumptions.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>The option chosen, alternatives rejected, and review trigger.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Service handoff</td>
+              <td className={styles.matrixCell}>Exceptions restart in chat or meetings.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>The next owner, context packet, and escalation reason.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export function OnePageDecisionPacketInfographic() {
+  const packetItems = [
+    {
+      icon: Radar,
+      label: 'Question',
+      copy: 'The operating choice the team keeps debating, delaying, or reconstructing.',
+    },
+    {
+      icon: GitBranch,
+      label: 'Options',
+      copy: 'The realistic paths considered, including the path intentionally rejected.',
+    },
+    {
+      icon: Scale,
+      label: 'Tradeoff',
+      copy: 'The constraint, risk, cost, or slower route the business accepts on purpose.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Owner',
+      copy: 'The one person accountable for the decision and the people who must be informed.',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Review trigger',
+      copy: 'The condition that tells the team when the decision should be revisited.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>One-Page Decision Packet</div>
+      <div className={styles.packetChecklist}>
+        {packetItems.map((item, index) => {
+          const Icon = item.icon;
+          const isFinal = index === packetItems.length - 1;
+
+          return (
+            <div className={`${styles.packetItem} ${isFinal ? styles.packetItemHighlight : ''}`} key={item.label}>
+              <div className={isFinal ? styles.packetIconHighlight : styles.packetIcon}>
+                <Icon size={18} />
+              </div>
+              <div className={styles.packetContent}>
+                <span className={styles.packetNumber}>{String(index + 1).padStart(2, '0')}</span>
+                <h4>{item.label}</h4>
+                <p>{item.copy}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

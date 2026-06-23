@@ -63,7 +63,9 @@ import {
   SystemAcceptanceTestInfographic,
   BuildReadinessGateInfographic,
   WorkflowPolicyNoteInfographic,
-  PolicyBoundaryRouteInfographic
+  PolicyBoundaryRouteInfographic,
+  WorkflowDecisionLedgerInfographic,
+  OnePageDecisionPacketInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -399,6 +401,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:policy-boundary-route]') {
           return <PolicyBoundaryRouteInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:workflow-decision-ledger]') {
+          return <WorkflowDecisionLedgerInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:one-page-decision-packet]') {
+          return <OnePageDecisionPacketInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
