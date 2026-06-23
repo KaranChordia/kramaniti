@@ -429,7 +429,27 @@ export function ClarityCircle() {
       return;
     }
 
-    setStatus('Account created, but Supabase email confirmation is still enabled. Disable email confirmation for instant access.');
+    const retry = await supabase.auth.signInWithPassword({ email, password });
+
+    if (retry.error) {
+      const message = retry.error.message.toLowerCase();
+      if (message.includes('confirm')) {
+        setStatus('Account exists, but Supabase still requires email confirmation before first sign-in.');
+        return;
+      }
+
+      setStatus('Account could not be opened yet. If this email already exists, use the Sign in tab.');
+      return;
+    }
+
+    const retryUser = retry.data.user;
+    const profile = await upsertProfile(retryUser, username);
+    if (!profile) return;
+
+    setAuthUser(retryUser);
+    setAuthLogin(username);
+    setStep('track');
+    setStatus(`Signed in as ${username}.`);
   };
 
   const signIn = async () => {
