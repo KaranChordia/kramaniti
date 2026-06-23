@@ -511,6 +511,7 @@ This log registers the major strategic and structural decisions made during the 
 
 *   **2026-06-23 Supabase Storage Update:**
     *   The founder asked to connect Clarity Circle to the existing Supabase project without creating a new project and without overlapping with recruiting-company database structures.
-    *   Clarity Circle now uses Supabase email/password auth when env vars are configured, and saves completed intent captures as private projects for signed-in users.
+    *   Clarity Circle now uses Supabase auth when env vars are configured, with email-first signup followed by username/password creation. Sign-in uses username/password through a schema-local username lookup function.
     *   The database design uses a dedicated `clarity_circle` schema with `profiles`, `projects`, and `context_entries` tables, RLS policies scoped to `auth.uid()`, and explicit grants only for authenticated users.
+    *   The signed-in UI now includes a profile/settings panel placeholder for future account, settings, and project-management surfaces.
     *   Future Clarity Circle storage work must remain inside the `clarity_circle` schema unless a newer database decision explicitly changes that boundary.

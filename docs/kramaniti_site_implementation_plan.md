@@ -313,8 +313,9 @@ Related files:
 - A two-track selector: Building a business / Founder Track, and Exploring an idea / Builder Track.
 - A focused intent-capture screen that asks for the one-line intent, current context, audience, blocker, and desired outcome.
 - A private context workspace that saves the user's starting point locally, then shows the system's understanding, next questions, and suggested sequence.
-- Supabase-ready email/password authentication and private project storage when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are configured.
+- Supabase-ready authentication with two-step signup: email first, then username/password, plus private project storage when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are configured.
 - A dedicated Supabase migration for the isolated `clarity_circle` schema so Clarity Circle data does not overlap with existing recruiting-company tables in the same Supabase project.
+- A profile/settings panel placeholder for signed-in users, showing username, email, account, settings, and projects menu surfaces for future expansion.
 - A browser-local handoff into `/clarity-engine` so the Engine can use the Circle's saved starting context and continue with the current workflow question instead of asking the user to repeat the same initial details.
 - A progressive product model where future digest, public-learning, and Clarity Brief surfaces should appear after context is captured instead of being visible all at once.
 - Navigation and sitemap entries for the new route.

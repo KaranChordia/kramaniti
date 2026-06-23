@@ -275,6 +275,35 @@
   flex-wrap: wrap;
 }
 
+.authTabs {
+  display: flex;
+  width: fit-content;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.authTabs button {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--circle-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.authTabs .authTabActive {
+  border-color: rgba(201, 168, 76, 0.38);
+  background: rgba(201, 168, 76, 0.1);
+  color: var(--circle-text);
+}
+
 .primaryButton,
 .secondaryButton,
 .primaryLink,
@@ -368,6 +397,11 @@
 .authField input:focus {
   border-color: rgba(201, 168, 76, 0.58);
   box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+}
+
+.authField input[readonly] {
+  color: var(--circle-muted);
+  background: rgba(255, 255, 255, 0.035);
 }
 
 .authNotice {
@@ -636,6 +670,84 @@
 .projectList small {
   color: var(--circle-faint);
   font-size: 12px;
+}
+
+.profilePanel {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.profileAvatar {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(201, 168, 76, 0.44);
+  border-radius: 8px;
+  background: rgba(201, 168, 76, 0.1);
+  color: var(--circle-gold-light);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.profilePanel span,
+.profilePanel strong,
+.profilePanel small {
+  display: block;
+  line-height: 1.25;
+}
+
+.profilePanel span {
+  color: var(--circle-gold-light);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.profilePanel strong {
+  margin-top: 4px;
+  color: var(--circle-text);
+  font-size: 14px;
+}
+
+.profilePanel small {
+  margin-top: 3px;
+  color: var(--circle-faint);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.profilePanel nav {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 7px;
+  margin-top: 4px;
+}
+
+.profilePanel nav button {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  background: rgba(3, 3, 5, 0.28);
+  color: var(--circle-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  padding: 0 10px;
+  text-align: left;
+}
+
+.profilePanel nav svg {
+  color: var(--circle-gold);
 }
 
 .primaryButton:focus-visible,

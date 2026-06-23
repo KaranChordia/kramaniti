@@ -28,9 +28,30 @@ export type ClarityCircleContextEntry = {
   created_at: string;
 };
 
+export type ClarityCircleProfile = {
+  user_id: string;
+  email: string | null;
+  username: string | null;
+  full_name: string | null;
+  preferred_track: ClarityCircleTrack | null;
+  created_at: string;
+  updated_at: string;
+};
+
 type ClarityCircleDatabase = {
   clarity_circle: {
     Tables: {
+      profiles: {
+        Row: ClarityCircleProfile;
+        Insert: {
+          user_id: string;
+          email?: string | null;
+          username?: string | null;
+          full_name?: string | null;
+          preferred_track?: ClarityCircleTrack | null;
+        };
+        Update: Partial<Omit<ClarityCircleProfile, 'user_id' | 'created_at' | 'updated_at'>>;
+      };
       projects: {
         Row: ClarityCircleProject;
         Insert: {
@@ -57,6 +78,12 @@ type ClarityCircleDatabase = {
           payload?: Record<string, unknown>;
         };
         Update: Partial<Omit<ClarityCircleContextEntry, 'id' | 'project_id' | 'user_id' | 'created_at'>>;
+      };
+    };
+    Functions: {
+      resolve_login_email: {
+        Args: { login: string };
+        Returns: string | null;
       };
     };
   };

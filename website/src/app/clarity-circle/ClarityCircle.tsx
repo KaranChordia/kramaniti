@@ -15,6 +15,7 @@ import {
   Mail,
   KeyRound,
   RefreshCw,
+  Settings,
   Sparkles,
   UserRound,
 } from 'lucide-react';
@@ -22,6 +23,7 @@ import type { User } from '@supabase/supabase-js';
 import {
   getClarityCircleSupabase,
   isClarityCircleSupabaseConfigured,
+  type ClarityCircleProfile,
   type ClarityCircleProject,
 } from '@/lib/clarity-circle/supabase';
 import styles from './ClarityCircle.module.css';
@@ -29,6 +31,7 @@ import styles from './ClarityCircle.module.css';
 type Track = 'founder' | 'builder';
 type StepId = 'entry' | 'track' | 'intent' | 'context';
 type SessionMode = 'signin' | 'signup';
+type AuthView = 'signup-email' | 'signup-credentials' | 'signin';
 
 type IntentDraft = {
   headline: string;
@@ -125,6 +128,9 @@ const cleanSentence = (value: string, fallback: string) => {
   return clean.length > 210 ? `${clean.slice(0, 207).trim()}...` : clean;
 };
 
+const normalizeUsername = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+const isEmail = (value: string) => /\S+@\S+\.\S+/.test(value.trim());
+
 const buildSavedContext = (track: Track, intent: IntentDraft): SavedContext => {
   const trackCopy = TRACKS[track];
   const summary =
@@ -191,16 +197,63 @@ export function ClarityCircle() {
   const [intent, setIntent] = useState<IntentDraft>(TRACKS.founder.defaults);
   const [savedContext, setSavedContext] = useState<SavedContext | null>(null);
   const [sessionMode, setSessionMode] = useState<SessionMode>('signup');
+  const [authView, setAuthView] = useState<AuthView>('signup-email');
   const [status, setStatus] = useState('Your private idea context stays on this browser in v1.');
   const [hasLoaded, setHasLoaded] = useState(false);
   const [authEmail, setAuthEmail] = useState('');
+  const [authUsername, setAuthUsername] = useState('');
+  const [authLogin, setAuthLogin] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authProfile, setAuthProfile] = useState<ClarityCircleProfile | null>(null);
   const [isAuthBusy, setIsAuthBusy] = useState(false);
   const [isSavingContext, setIsSavingContext] = useState(false);
   const [projects, setProjects] = useState<ClarityCircleProject[]>([]);
 
   const isSupabaseReady = isClarityCircleSupabaseConfigured();
+
+  const loadProfile = async (user: User) => {
+    const supabase = getClarityCircleSupabase();
+    if (!supabase) return null;
+
+    const { data } = await supabase
+      .schema('clarity_circle')
+      .from('profiles')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    setAuthProfile(data ?? null);
+    return data ?? null;
+  };
+
+  const upsertProfile = async (user: User, username: string) => {
+    const supabase = getClarityCircleSupabase();
+    if (!supabase) return null;
+
+    const normalizedUsername = normalizeUsername(username);
+    const { data, error } = await supabase
+      .schema('clarity_circle')
+      .from('profiles')
+      .upsert(
+        {
+          user_id: user.id,
+          email: user.email ?? authEmail.trim(),
+          username: normalizedUsername,
+        },
+        { onConflict: 'user_id' }
+      )
+      .select('*')
+      .single();
+
+    if (error) {
+      setStatus(error.code === '23505' ? 'That username is already taken.' : error.message);
+      return null;
+    }
+
+    setAuthProfile(data);
+    return data;
+  };
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -247,6 +300,7 @@ export function ClarityCircle() {
       const user = data.session?.user ?? null;
       setAuthUser(user);
       if (user && step === 'entry') {
+        void loadProfile(user);
         setStep('track');
         setStatus('Signed in. Your Clarity Circle projects can now be saved to Supabase.');
       }
@@ -256,9 +310,11 @@ export function ClarityCircle() {
       const user = session?.user ?? null;
       setAuthUser(user);
       if (user) {
+        void loadProfile(user);
         setStep((current) => (current === 'entry' ? 'track' : current));
         setStatus('Signed in. Your Clarity Circle projects can now be saved to Supabase.');
       } else {
+        setAuthProfile(null);
         setProjects([]);
       }
     });
@@ -300,9 +356,7 @@ export function ClarityCircle() {
   const selectedTrack = TRACKS[track];
   const TrackIcon = selectedTrack.icon;
 
-  const startSession = async (mode: SessionMode) => {
-    setSessionMode(mode);
-
+  const continueSignupWithEmail = () => {
     const supabase = getClarityCircleSupabase();
     if (!supabase) {
       setStep('track');
@@ -310,17 +364,36 @@ export function ClarityCircle() {
       return;
     }
 
-    if (authUser) {
+    if (!isEmail(authEmail)) {
+      setStatus('Enter a valid email address to create your account.');
+      return;
+    }
+
+    setSessionMode('signup');
+    setAuthView('signup-credentials');
+    setStatus('Now create a username and password for this email.');
+  };
+
+  const createAccount = async () => {
+    const supabase = getClarityCircleSupabase();
+    if (!supabase) {
       setStep('track');
-      setStatus('Signed in. Your Clarity Circle projects can be saved to Supabase.');
+      setStatus('Supabase is not configured locally yet, so this session is using browser-local storage.');
       return;
     }
 
     const email = authEmail.trim();
+    const username = normalizeUsername(authUsername);
     const password = authPassword.trim();
 
-    if (!email || !password) {
-      setStatus('Enter your email and password before continuing.');
+    if (!isEmail(email)) {
+      setAuthView('signup-email');
+      setStatus('Enter a valid email address first.');
+      return;
+    }
+
+    if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+      setStatus('Choose a username using 3-24 lowercase letters, numbers, or underscores.');
       return;
     }
 
@@ -330,19 +403,14 @@ export function ClarityCircle() {
     }
 
     setIsAuthBusy(true);
-    const result =
-      mode === 'signup'
-        ? await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-              emailRedirectTo: `${window.location.origin}/clarity-circle`,
-            },
-          })
-        : await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
+    const result = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { username },
+        emailRedirectTo: `${window.location.origin}/clarity-circle`,
+      },
+    });
     setIsAuthBusy(false);
 
     if (result.error) {
@@ -352,17 +420,64 @@ export function ClarityCircle() {
 
     const user = result.data.user ?? result.data.session?.user ?? null;
     if (user && result.data.session) {
+      const profile = await upsertProfile(user, username);
+      if (!profile) return;
       setAuthUser(user);
+      setAuthLogin(username);
       setStep('track');
-      setStatus('Signed in. Your Clarity Circle projects can be saved to Supabase.');
+      setStatus(`Account created. Signed in as ${username}.`);
       return;
     }
 
-    setStatus(
-      mode === 'signup'
-        ? 'Account created. If email confirmation is enabled, confirm your email before signing in.'
-        : 'Sign in accepted. If your email is not confirmed yet, check your inbox first.'
-    );
+    setStatus('Account created, but Supabase email confirmation is still enabled. Disable email confirmation for instant access.');
+  };
+
+  const signIn = async () => {
+    const supabase = getClarityCircleSupabase();
+    if (!supabase) {
+      setStep('track');
+      setStatus('Supabase is not configured locally yet, so this session is using browser-local storage.');
+      return;
+    }
+
+    const login = authLogin.trim();
+    const password = authPassword.trim();
+
+    if (!login || !password) {
+      setStatus('Enter your username and password.');
+      return;
+    }
+
+    setIsAuthBusy(true);
+    let email = login;
+
+    if (!isEmail(login)) {
+      const { data, error } = await supabase.schema('clarity_circle').rpc('resolve_login_email', {
+        login,
+      });
+
+      if (error || !data) {
+        setIsAuthBusy(false);
+        setStatus('No account found for that username.');
+        return;
+      }
+
+      email = data;
+    }
+
+    const result = await supabase.auth.signInWithPassword({ email, password });
+    setIsAuthBusy(false);
+
+    if (result.error) {
+      setStatus(result.error.message);
+      return;
+    }
+
+    const user = result.data.user;
+    setAuthUser(user);
+    const profile = await loadProfile(user);
+    setStep('track');
+    setStatus(`Signed in${profile?.username ? ` as ${profile.username}` : ''}.`);
   };
 
   const continueLocally = () => {
@@ -376,7 +491,9 @@ export function ClarityCircle() {
 
     await supabase.auth.signOut();
     setAuthUser(null);
+    setAuthProfile(null);
     setProjects([]);
+    setAuthView('signin');
     setStatus('Signed out. You can still continue locally on this browser.');
   };
 
@@ -537,10 +654,37 @@ export function ClarityCircle() {
               <p>
                 {authUser
                   ? 'Signed-in projects are stored in the isolated clarity_circle schema.'
-                  : 'Unsigned sessions stay local in your browser. Public sharing remains a separate choice.'}
+                : 'Unsigned sessions stay local in your browser. Public sharing remains a separate choice.'}
               </p>
             </div>
           </div>
+
+          {authUser && (
+            <div className={styles.profilePanel} aria-label="Profile and settings">
+              <div className={styles.profileAvatar}>
+                {(authProfile?.username || authUser.email || 'U').slice(0, 1).toUpperCase()}
+              </div>
+              <div>
+                <span>Profile</span>
+                <strong>{authProfile?.username ?? 'Username pending'}</strong>
+                <small>{authUser.email}</small>
+              </div>
+              <nav aria-label="Future profile menus">
+                <button type="button">
+                  <UserRound size={15} aria-hidden="true" />
+                  Account
+                </button>
+                <button type="button">
+                  <Settings size={15} aria-hidden="true" />
+                  Settings
+                </button>
+                <button type="button">
+                  <FileText size={15} aria-hidden="true" />
+                  Projects
+                </button>
+              </nav>
+            </div>
+          )}
         </aside>
 
         <section className={styles.stage} aria-live="polite">
@@ -561,50 +705,138 @@ export function ClarityCircle() {
                 and turn scattered ideas into sharper next steps.
               </p>
 
-              <div className={styles.entryActions}>
-                <label className={styles.authField}>
-                  <span>Email</span>
-                  <input
-                    type="email"
-                    value={authEmail}
-                    onChange={(event) => setAuthEmail(event.target.value)}
-                    placeholder="you@company.com"
-                    autoComplete="email"
-                    disabled={Boolean(authUser) || isAuthBusy}
-                  />
-                </label>
-                <label className={styles.authField}>
-                  <span>Password</span>
-                  <input
-                    type="password"
-                    value={authPassword}
-                    onChange={(event) => setAuthPassword(event.target.value)}
-                    placeholder="Minimum 8 characters"
-                    autoComplete={sessionMode === 'signup' ? 'new-password' : 'current-password'}
-                    disabled={Boolean(authUser) || isAuthBusy}
-                  />
-                </label>
+              <div className={styles.authTabs} aria-label="Authentication mode">
                 <button
                   type="button"
-                  className={styles.primaryButton}
-                  onClick={() => void startSession('signup')}
-                  disabled={isAuthBusy}
+                  className={authView !== 'signin' ? styles.authTabActive : ''}
+                  onClick={() => {
+                    setSessionMode('signup');
+                    setAuthView('signup-email');
+                    setStatus('Enter your email to begin account creation.');
+                  }}
                 >
                   Create account
-                  <ArrowRight size={17} aria-hidden="true" />
                 </button>
                 <button
                   type="button"
-                  className={styles.secondaryButton}
-                  onClick={() => void startSession('signin')}
-                  disabled={isAuthBusy}
+                  className={authView === 'signin' ? styles.authTabActive : ''}
+                  onClick={() => {
+                    setSessionMode('signin');
+                    setAuthView('signin');
+                    setStatus('Sign in with your username and password.');
+                  }}
                 >
                   Sign in
                 </button>
-                <button type="button" className={styles.textButton} onClick={continueLocally}>
-                  Continue locally
-                </button>
               </div>
+
+              {authView === 'signup-email' && (
+                <div className={styles.entryActions}>
+                  <label className={styles.authField}>
+                    <span>Email</span>
+                    <input
+                      type="email"
+                      value={authEmail}
+                      onChange={(event) => setAuthEmail(event.target.value)}
+                      placeholder="you@company.com"
+                      autoComplete="email"
+                      disabled={Boolean(authUser) || isAuthBusy}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className={styles.primaryButton}
+                    onClick={continueSignupWithEmail}
+                    disabled={isAuthBusy}
+                  >
+                    Continue
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </button>
+                  <button type="button" className={styles.textButton} onClick={continueLocally}>
+                    Continue locally
+                  </button>
+                </div>
+              )}
+
+              {authView === 'signup-credentials' && (
+                <div className={styles.entryActions}>
+                  <label className={styles.authField}>
+                    <span>Email</span>
+                    <input type="email" value={authEmail} readOnly />
+                  </label>
+                  <label className={styles.authField}>
+                    <span>Username</span>
+                    <input
+                      value={authUsername}
+                      onChange={(event) => setAuthUsername(normalizeUsername(event.target.value))}
+                      placeholder="karan_builder"
+                      autoComplete="username"
+                      disabled={Boolean(authUser) || isAuthBusy}
+                    />
+                  </label>
+                  <label className={styles.authField}>
+                    <span>Password</span>
+                    <input
+                      type="password"
+                      value={authPassword}
+                      onChange={(event) => setAuthPassword(event.target.value)}
+                      placeholder="Minimum 8 characters"
+                      autoComplete="new-password"
+                      disabled={Boolean(authUser) || isAuthBusy}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className={styles.primaryButton}
+                    onClick={() => void createAccount()}
+                    disabled={isAuthBusy}
+                  >
+                    Create account
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </button>
+                  <button type="button" className={styles.textButton} onClick={() => setAuthView('signup-email')}>
+                    Change email
+                  </button>
+                </div>
+              )}
+
+              {authView === 'signin' && (
+                <div className={styles.entryActions}>
+                  <label className={styles.authField}>
+                    <span>Username</span>
+                    <input
+                      value={authLogin}
+                      onChange={(event) => setAuthLogin(event.target.value)}
+                      placeholder="your_username"
+                      autoComplete="username"
+                      disabled={Boolean(authUser) || isAuthBusy}
+                    />
+                  </label>
+                  <label className={styles.authField}>
+                    <span>Password</span>
+                    <input
+                      type="password"
+                      value={authPassword}
+                      onChange={(event) => setAuthPassword(event.target.value)}
+                      placeholder="Your password"
+                      autoComplete="current-password"
+                      disabled={Boolean(authUser) || isAuthBusy}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className={styles.primaryButton}
+                    onClick={() => void signIn()}
+                    disabled={isAuthBusy}
+                  >
+                    Sign in
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </button>
+                  <button type="button" className={styles.textButton} onClick={continueLocally}>
+                    Continue locally
+                  </button>
+                </div>
+              )}
               <p className={styles.authNotice}>{status}</p>
 
               <div className={styles.entryFooter}>
@@ -612,13 +844,13 @@ export function ClarityCircle() {
                   <Mail size={14} aria-hidden="true" />
                   {isSupabaseReady
                     ? authUser
-                      ? `Signed in as ${authUser.email ?? 'Supabase user'}`
-                      : 'Supabase email and password auth is ready.'
+                      ? `Signed in as ${authProfile?.username ?? authUser.email ?? 'Supabase user'}`
+                      : 'Create an account with email, username, and password.'
                     : 'Supabase env vars are not configured locally yet.'}
                 </span>
                 <span>
                   <KeyRound size={14} aria-hidden="true" />
-                  Password accounts use Supabase Auth; confirmation depends on your Supabase email settings.
+                  Sign in with your username and password after registration.
                 </span>
                 <span>
                   <Lock size={14} aria-hidden="true" />
