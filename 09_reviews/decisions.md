@@ -515,3 +515,26 @@ This log registers the major strategic and structural decisions made during the 
     *   The database design uses a dedicated `clarity_circle` schema with `profiles`, `projects`, and `context_entries` tables, RLS policies scoped to `auth.uid()`, and explicit grants only for authenticated users.
     *   The signed-in UI now includes a profile/settings panel placeholder for future account, settings, and project-management surfaces.
     *   Future Clarity Circle storage work must remain inside the `clarity_circle` schema unless a newer database decision explicitly changes that boundary.
+
+*   **2026-06-23 Dedicated Circle Assistant Update:**
+    *   The founder asked to disable the current global Kramaniti assistant on Clarity Circle and replace it with a dedicated Clarity Circle assistant.
+    *   The global public assistant remains available on the rest of the website, but is route-hidden on `/clarity-circle`.
+    *   Clarity Circle now has its own assistant menu surface, conversation UI, and user-visible Memory panel.
+    *   The Circle Assistant uses the member's saved context, project list, memory notes, and Kramaniti's curated repository context.
+    *   Signed-in assistant conversations are stored in `clarity_circle.assistant_messages`; assistant memory notes are stored in `clarity_circle.assistant_memories`; both are RLS-protected and user-owned.
+    *   The Circle Assistant can create new private projects from a user query, while keeping all project rows under `clarity_circle.projects`.
+    *   Guardrail: this assistant may summarize, challenge, remember, and draft projects, but it must not make founder decisions, invent proof, promise outcomes, or present unsupported current-market/tool claims without dated sources.
+
+*   **2026-06-23 Projects Finder Update:**
+    *   The founder asked to polish the Projects section first and make it behave like a folder-based workspace inspired by Mac Finder navigation.
+    *   Projects now use a three-pane workspace: folder rail, project rows, and preview/action pane.
+    *   Users can create folders, browse All Projects or Unfiled, search project rows, select a project, preview its context, open it, and move it into a folder.
+    *   Signed-in folders are stored in `clarity_circle.project_folders`; projects reference them through `clarity_circle.projects.folder_id`.
+    *   Guardrail: folder storage and project moves must remain inside the isolated `clarity_circle` schema with RLS ownership checks. Do not reuse recruiting-company tables.
+
+*   **2026-06-23 Realtime Workspace Context Update:**
+    *   The founder clarified that the Circle Assistant must know manually created and assistant-created project context, and that counts/state should update across the platform in realtime.
+    *   Clarity Circle now refreshes the signed-in workspace before assistant requests and sends folder names, project data, project questions/actions, selected project, context entries, and memory notes to the Circle Assistant.
+    *   The frontend subscribes to realtime changes for `clarity_circle.projects`, `project_folders`, `context_entries`, `assistant_messages`, and `assistant_memories`.
+    *   The Supabase realtime publication now includes those Clarity Circle workspace tables.
+    *   Guardrail: realtime must remain scoped to user-owned rows through existing RLS policies and must not expose recruiting-company tables or unrelated schemas.

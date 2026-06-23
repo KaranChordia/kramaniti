@@ -1,20 +1,26 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
+  Archive,
   ArrowRight,
+  Bot,
+  Brain,
   Building2,
-  CheckCircle2,
+  ChevronRight,
   CircleDot,
   Compass,
   FileText,
+  Folder,
+  FolderOpen,
+  FolderPlus,
   Lightbulb,
-  Lock,
   LogOut,
-  Mail,
-  KeyRound,
+  Search,
+  Plus,
   RefreshCw,
+  Send,
   Settings,
   Sparkles,
   UserRound,
@@ -22,9 +28,12 @@ import {
 import type { User } from '@supabase/supabase-js';
 import {
   getClarityCircleSupabase,
-  isClarityCircleSupabaseConfigured,
+  type ClarityCircleAssistantMemory,
+  type ClarityCircleAssistantMessage,
+  type ClarityCircleContextEntry,
   type ClarityCircleProfile,
   type ClarityCircleProject,
+  type ClarityCircleProjectFolder,
 } from '@/lib/clarity-circle/supabase';
 import styles from './ClarityCircle.module.css';
 
@@ -32,6 +41,7 @@ type Track = 'founder' | 'builder';
 type StepId = 'entry' | 'track' | 'intent' | 'context';
 type SessionMode = 'signin' | 'signup';
 type AuthView = 'signup-email' | 'signup-credentials' | 'signin';
+type MenuId = 'start' | 'path' | 'context' | 'assistant' | 'memory' | 'projects' | 'profile' | 'settings';
 
 type IntentDraft = {
   headline: string;
@@ -48,6 +58,43 @@ type SavedContext = {
   summary: string;
   questions: string[];
   actions: string[];
+};
+
+type UiAssistantMessage = Pick<ClarityCircleAssistantMessage, 'role' | 'content'> & {
+  id: string;
+  createdAt: string;
+};
+
+type AssistantProjectDraft = {
+  title: string;
+  track: Track;
+  context: string;
+  audience: string;
+  blocker: string;
+  outcome: string;
+};
+
+type AssistantMemoryDraft = {
+  title: string;
+  content: string;
+  memory_type: ClarityCircleAssistantMemory['memory_type'];
+};
+
+type AssistantResponse = {
+  response?: string;
+  projectDraft?: AssistantProjectDraft | null;
+  memoryDraft?: AssistantMemoryDraft | null;
+  error?: string;
+};
+
+type ProjectFolderFilter = 'all' | 'unfiled' | string;
+
+type WorkspaceSnapshot = {
+  projects: ClarityCircleProject[];
+  folders: ClarityCircleProjectFolder[];
+  contextEntries: ClarityCircleContextEntry[];
+  messages: UiAssistantMessage[];
+  memories: ClarityCircleAssistantMemory[];
 };
 
 const STORAGE_KEY = 'kramaniti-clarity-circle-sequence-v1';
@@ -115,6 +162,38 @@ const STEPS: Array<{ id: StepId; label: string; detail: string }> = [
   { id: 'context', label: 'Context', detail: 'Save and develop' },
 ];
 
+const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> = [
+  { id: 'start', label: 'Start', icon: CircleDot },
+  { id: 'path', label: 'Path', icon: Compass },
+  { id: 'context', label: 'Context', icon: FileText },
+  { id: 'assistant', label: 'Assistant', icon: Bot },
+  { id: 'memory', label: 'Memory', icon: Brain },
+  { id: 'projects', label: 'Projects', icon: Sparkles },
+  { id: 'profile', label: 'Profile', icon: UserRound },
+  { id: 'settings', label: 'Settings', icon: Settings },
+];
+
+const createUiMessage = (role: UiAssistantMessage['role'], content: string): UiAssistantMessage => ({
+  id: `${role}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+  role,
+  content,
+  createdAt: new Date().toISOString(),
+});
+
+const INITIAL_ASSISTANT_MESSAGES: UiAssistantMessage[] = [
+  createUiMessage(
+    'assistant',
+    'I can use your Circle context, projects, and memory to sharpen your next move or create a new project from a rough request.',
+  ),
+];
+
+const formatProjectDate = (value: string) =>
+  new Intl.DateTimeFormat('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    timeZone: 'Asia/Kolkata',
+  }).format(new Date(value));
+
 const nowLabel = () =>
   new Intl.DateTimeFormat('en-IN', {
     dateStyle: 'medium',
@@ -130,6 +209,10 @@ const cleanSentence = (value: string, fallback: string) => {
 
 const normalizeUsername = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
 const isEmail = (value: string) => /\S+@\S+\.\S+/.test(value.trim());
+const getUserMetadataUsername = (user: User | null) => {
+  const value = user?.user_metadata?.username;
+  return typeof value === 'string' ? normalizeUsername(value) : '';
+};
 
 const buildSavedContext = (track: Track, intent: IntentDraft): SavedContext => {
   const trackCopy = TRACKS[track];
@@ -191,14 +274,33 @@ const savedContextFromProject = (project: ClarityCircleProject): SavedContext =>
   actions: project.actions,
 });
 
+const localProjectFromContext = (context: SavedContext, userId = 'local'): ClarityCircleProject => ({
+  id: `local-project-${Date.now()}`,
+  user_id: userId,
+  folder_id: null,
+  track: context.track,
+  title: context.intent.headline,
+  context: context.intent.context,
+  audience: context.intent.audience || null,
+  blocker: context.intent.blocker || null,
+  outcome: context.intent.outcome || null,
+  summary: context.summary,
+  questions: context.questions,
+  actions: context.actions,
+  status: 'active',
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+});
+
 export function ClarityCircle() {
   const [step, setStep] = useState<StepId>('entry');
   const [track, setTrack] = useState<Track>('founder');
   const [intent, setIntent] = useState<IntentDraft>(TRACKS.founder.defaults);
   const [savedContext, setSavedContext] = useState<SavedContext | null>(null);
+  const [activeMenu, setActiveMenu] = useState<MenuId>('start');
   const [sessionMode, setSessionMode] = useState<SessionMode>('signup');
   const [authView, setAuthView] = useState<AuthView>('signup-email');
-  const [status, setStatus] = useState('Your private idea context stays on this browser in v1.');
+  const [status, setStatus] = useState('Start with one clear signal.');
   const [hasLoaded, setHasLoaded] = useState(false);
   const [authEmail, setAuthEmail] = useState('');
   const [authUsername, setAuthUsername] = useState('');
@@ -209,25 +311,19 @@ export function ClarityCircle() {
   const [isAuthBusy, setIsAuthBusy] = useState(false);
   const [isSavingContext, setIsSavingContext] = useState(false);
   const [projects, setProjects] = useState<ClarityCircleProject[]>([]);
+  const [projectFolders, setProjectFolders] = useState<ClarityCircleProjectFolder[]>([]);
+  const [contextEntries, setContextEntries] = useState<ClarityCircleContextEntry[]>([]);
+  const [activeProjectFolder, setActiveProjectFolder] = useState<ProjectFolderFilter>('all');
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [projectSearch, setProjectSearch] = useState('');
+  const [newFolderName, setNewFolderName] = useState('');
+  const [isCreatingFolder, setIsCreatingFolder] = useState(false);
+  const [assistantInput, setAssistantInput] = useState('');
+  const [assistantMessages, setAssistantMessages] = useState<UiAssistantMessage[]>(INITIAL_ASSISTANT_MESSAGES);
+  const [assistantMemories, setAssistantMemories] = useState<ClarityCircleAssistantMemory[]>([]);
+  const [isAssistantBusy, setIsAssistantBusy] = useState(false);
 
-  const isSupabaseReady = isClarityCircleSupabaseConfigured();
-
-  const loadProfile = async (user: User) => {
-    const supabase = getClarityCircleSupabase();
-    if (!supabase) return null;
-
-    const { data } = await supabase
-      .schema('clarity_circle')
-      .from('profiles')
-      .select('*')
-      .eq('user_id', user.id)
-      .maybeSingle();
-
-    setAuthProfile(data ?? null);
-    return data ?? null;
-  };
-
-  const upsertProfile = async (user: User, username: string) => {
+  const upsertProfile = useCallback(async (user: User, username: string, options?: { quiet?: boolean }) => {
     const supabase = getClarityCircleSupabase();
     if (!supabase) return null;
 
@@ -238,7 +334,7 @@ export function ClarityCircle() {
       .upsert(
         {
           user_id: user.id,
-          email: user.email ?? authEmail.trim(),
+          email: user.email ?? null,
           username: normalizedUsername,
         },
         { onConflict: 'user_id' }
@@ -247,13 +343,138 @@ export function ClarityCircle() {
       .single();
 
     if (error) {
-      setStatus(error.code === '23505' ? 'That username is already taken.' : error.message);
+      if (!options?.quiet) {
+        setStatus(error.code === '23505' ? 'That username is already taken.' : error.message);
+      }
       return null;
     }
 
     setAuthProfile(data);
     return data;
-  };
+  }, []);
+
+  const loadProfile = useCallback(async (user: User) => {
+    const supabase = getClarityCircleSupabase();
+    if (!supabase) return null;
+
+    const fallbackUsername = getUserMetadataUsername(user);
+    const fallbackProfile: ClarityCircleProfile | null =
+      fallbackUsername || user.email
+        ? {
+            user_id: user.id,
+            email: user.email ?? null,
+            username: fallbackUsername || null,
+            full_name: null,
+            preferred_track: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }
+        : null;
+
+    const { data, error } = await supabase
+      .schema('clarity_circle')
+      .from('profiles')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      setAuthProfile(fallbackProfile);
+      return fallbackProfile;
+    }
+
+    if (data) {
+      setAuthProfile(data);
+      return data;
+    }
+
+    if (fallbackUsername) {
+      const repairedProfile = await upsertProfile(user, fallbackUsername, { quiet: true });
+      if (repairedProfile) return repairedProfile;
+    }
+
+    setAuthProfile(fallbackProfile);
+    return fallbackProfile;
+  }, [upsertProfile]);
+
+  const refreshWorkspace = useCallback(async (user: User, options?: { quiet?: boolean }) => {
+    const supabase = getClarityCircleSupabase();
+    if (!supabase) return null;
+
+    const [projectResult, folderResult, entryResult, messageResult, memoryResult] = await Promise.all([
+      supabase
+        .schema('clarity_circle')
+        .from('projects')
+        .select('*')
+        .eq('status', 'active')
+        .order('updated_at', { ascending: false })
+        .limit(120),
+      supabase
+        .schema('clarity_circle')
+        .from('project_folders')
+        .select('*')
+        .eq('status', 'active')
+        .order('sort_order', { ascending: true })
+        .order('updated_at', { ascending: false })
+        .limit(60),
+      supabase
+        .schema('clarity_circle')
+        .from('context_entries')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(120),
+      supabase
+        .schema('clarity_circle')
+        .from('assistant_messages')
+        .select('*')
+        .order('created_at', { ascending: true })
+        .limit(30),
+      supabase
+        .schema('clarity_circle')
+        .from('assistant_memories')
+        .select('*')
+        .eq('status', 'active')
+        .order('updated_at', { ascending: false })
+        .limit(20),
+    ]);
+
+    if (projectResult.error) {
+      if (!options?.quiet) setStatus('Saved projects could not be loaded.');
+      return null;
+    }
+
+    const nextProjects = projectResult.data ?? [];
+    const nextFolders = folderResult.error ? [] : folderResult.data ?? [];
+    const nextEntries = entryResult.error ? [] : entryResult.data ?? [];
+    const nextMessages =
+      !messageResult.error && messageResult.data?.length
+        ? messageResult.data.map((message) => ({
+            id: message.id,
+            role: message.role,
+            content: message.content,
+            createdAt: message.created_at,
+          }))
+        : INITIAL_ASSISTANT_MESSAGES;
+    const nextMemories = memoryResult.error ? [] : memoryResult.data ?? [];
+
+    setProjects(nextProjects);
+    setProjectFolders(nextFolders);
+    setContextEntries(nextEntries);
+    setAssistantMessages(nextMessages);
+    setAssistantMemories(nextMemories);
+    setSelectedProjectId((current) => {
+      if (current && nextProjects.some((project) => project.id === current)) return current;
+      return nextProjects[0]?.id ?? null;
+    });
+
+    return {
+      projects: nextProjects,
+      folders: nextFolders,
+      contextEntries: nextEntries,
+      messages: nextMessages,
+      memories: nextMemories,
+    } satisfies WorkspaceSnapshot;
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -266,16 +487,44 @@ export function ClarityCircle() {
             intent: IntentDraft;
             savedContext: SavedContext | null;
             sessionMode: SessionMode;
+            activeMenu: MenuId;
+            assistantMessages: UiAssistantMessage[];
+            assistantMemories: ClarityCircleAssistantMemory[];
+            projectFolders: ClarityCircleProjectFolder[];
+            activeProjectFolder: ProjectFolderFilter;
+            selectedProjectId: string | null;
+            projectSearch: string;
           }>;
 
           if (parsed.track && TRACKS[parsed.track]) setTrack(parsed.track);
           if (parsed.intent) setIntent(parsed.intent);
           if (parsed.savedContext) setSavedContext(parsed.savedContext);
           if (parsed.sessionMode) setSessionMode(parsed.sessionMode);
+          if (parsed.activeMenu && MENU_ITEMS.some((item) => item.id === parsed.activeMenu)) {
+            setActiveMenu(parsed.activeMenu);
+          }
+          if (Array.isArray(parsed.assistantMessages) && parsed.assistantMessages.length > 0) {
+            setAssistantMessages(parsed.assistantMessages.slice(-12));
+          }
+          if (Array.isArray(parsed.assistantMemories)) {
+            setAssistantMemories(parsed.assistantMemories.slice(0, 10));
+          }
+          if (Array.isArray(parsed.projectFolders)) {
+            setProjectFolders(parsed.projectFolders.slice(0, 24));
+          }
+          if (typeof parsed.activeProjectFolder === 'string') {
+            setActiveProjectFolder(parsed.activeProjectFolder);
+          }
+          if (typeof parsed.selectedProjectId === 'string' || parsed.selectedProjectId === null) {
+            setSelectedProjectId(parsed.selectedProjectId);
+          }
+          if (typeof parsed.projectSearch === 'string') {
+            setProjectSearch(parsed.projectSearch);
+          }
           if (parsed.step && STEPS.some((item) => item.id === parsed.step)) setStep(parsed.step);
         }
       } catch {
-        setStatus('Local context could not be restored, so this session starts fresh.');
+        setStatus('This session starts fresh.');
       } finally {
         setHasLoaded(true);
       }
@@ -286,8 +535,38 @@ export function ClarityCircle() {
 
   useEffect(() => {
     if (!hasLoaded) return;
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ step, track, intent, savedContext, sessionMode }));
-  }, [hasLoaded, intent, savedContext, sessionMode, step, track]);
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        step,
+        track,
+        intent,
+        savedContext,
+        sessionMode,
+        activeMenu,
+        assistantMessages: assistantMessages.slice(-12),
+        assistantMemories: assistantMemories.slice(0, 10),
+        projectFolders: projectFolders.slice(0, 24),
+        activeProjectFolder,
+        selectedProjectId,
+        projectSearch,
+      }),
+    );
+  }, [
+    activeMenu,
+    activeProjectFolder,
+    assistantMemories,
+    assistantMessages,
+    hasLoaded,
+    intent,
+    projectFolders,
+    projectSearch,
+    savedContext,
+    selectedProjectId,
+    sessionMode,
+    step,
+    track,
+  ]);
 
   useEffect(() => {
     const supabase = getClarityCircleSupabase();
@@ -302,7 +581,8 @@ export function ClarityCircle() {
       if (user && step === 'entry') {
         void loadProfile(user);
         setStep('track');
-        setStatus('Signed in. Your Clarity Circle projects can now be saved to Supabase.');
+        setActiveMenu('path');
+        setStatus('Welcome back.');
       }
     });
 
@@ -311,11 +591,18 @@ export function ClarityCircle() {
       setAuthUser(user);
       if (user) {
         void loadProfile(user);
-        setStep((current) => (current === 'entry' ? 'track' : current));
-        setStatus('Signed in. Your Clarity Circle projects can now be saved to Supabase.');
+        setStep((current) => {
+          if (current === 'entry') {
+            setActiveMenu('path');
+            return 'track';
+          }
+          return current;
+        });
+        setStatus('Welcome back.');
       } else {
         setAuthProfile(null);
         setProjects([]);
+        setProjectFolders([]);
       }
     });
 
@@ -323,7 +610,7 @@ export function ClarityCircle() {
       isMounted = false;
       data.subscription.unsubscribe();
     };
-  }, [step]);
+  }, [loadProfile, step]);
 
   useEffect(() => {
     const supabase = getClarityCircleSupabase();
@@ -331,36 +618,71 @@ export function ClarityCircle() {
 
     let isMounted = true;
 
-    supabase
-      .schema('clarity_circle')
-      .from('projects')
-      .select('*')
-      .eq('status', 'active')
-      .order('updated_at', { ascending: false })
-      .limit(5)
-      .then(({ data, error }) => {
-        if (!isMounted) return;
-        if (error) {
-          setStatus('Signed in, but saved projects could not be loaded from Supabase.');
-          return;
-        }
-        setProjects(data ?? []);
-      });
+    const initialRefresh = window.setTimeout(() => {
+      if (!isMounted) return;
+      void refreshWorkspace(authUser);
+    }, 0);
 
     return () => {
       isMounted = false;
+      window.clearTimeout(initialRefresh);
     };
-  }, [authUser]);
+  }, [authUser, refreshWorkspace]);
 
-  const activeIndex = useMemo(() => STEPS.findIndex((item) => item.id === step), [step]);
+  useEffect(() => {
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser) return;
+
+    let refreshTimer: number | null = null;
+    const queueRefresh = () => {
+      if (refreshTimer) window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(() => {
+        void refreshWorkspace(authUser, { quiet: true });
+      }, 180);
+    };
+
+    const channel = supabase
+      .channel(`clarity-circle-workspace-${authUser.id}`)
+      .on('postgres_changes', { event: '*', schema: 'clarity_circle', table: 'projects', filter: `user_id=eq.${authUser.id}` }, queueRefresh)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_circle', table: 'project_folders', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_circle', table: 'context_entries', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_circle', table: 'assistant_messages', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_circle', table: 'assistant_memories', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .subscribe();
+
+    return () => {
+      if (refreshTimer) window.clearTimeout(refreshTimer);
+      void supabase.removeChannel(channel);
+    };
+  }, [authUser, refreshWorkspace]);
+
   const selectedTrack = TRACKS[track];
-  const TrackIcon = selectedTrack.icon;
+  const metadataUsername = getUserMetadataUsername(authUser);
+  const displayUsername = authProfile?.username || metadataUsername;
+  const displayEmail = authUser?.email ?? authProfile?.email ?? '';
 
   const continueSignupWithEmail = () => {
     const supabase = getClarityCircleSupabase();
     if (!supabase) {
       setStep('track');
-      setStatus('Supabase is not configured locally yet, so this session is using browser-local storage.');
+      setActiveMenu('path');
+      setStatus('Continue locally for now.');
       return;
     }
 
@@ -371,14 +693,15 @@ export function ClarityCircle() {
 
     setSessionMode('signup');
     setAuthView('signup-credentials');
-    setStatus('Now create a username and password for this email.');
+    setStatus('Create your username and password.');
   };
 
   const createAccount = async () => {
     const supabase = getClarityCircleSupabase();
     if (!supabase) {
       setStep('track');
-      setStatus('Supabase is not configured locally yet, so this session is using browser-local storage.');
+      setActiveMenu('path');
+      setStatus('Continue locally for now.');
       return;
     }
 
@@ -425,6 +748,7 @@ export function ClarityCircle() {
       setAuthUser(user);
       setAuthLogin(username);
       setStep('track');
+      setActiveMenu('path');
       setStatus(`Account created. Signed in as ${username}.`);
       return;
     }
@@ -434,7 +758,7 @@ export function ClarityCircle() {
     if (retry.error) {
       const message = retry.error.message.toLowerCase();
       if (message.includes('confirm')) {
-        setStatus('Account exists, but Supabase still requires email confirmation before first sign-in.');
+        setStatus('Account created. Email confirmation is still required before first sign-in.');
         return;
       }
 
@@ -449,6 +773,7 @@ export function ClarityCircle() {
     setAuthUser(retryUser);
     setAuthLogin(username);
     setStep('track');
+    setActiveMenu('path');
     setStatus(`Signed in as ${username}.`);
   };
 
@@ -456,7 +781,8 @@ export function ClarityCircle() {
     const supabase = getClarityCircleSupabase();
     if (!supabase) {
       setStep('track');
-      setStatus('Supabase is not configured locally yet, so this session is using browser-local storage.');
+      setActiveMenu('path');
+      setStatus('Continue locally for now.');
       return;
     }
 
@@ -497,12 +823,14 @@ export function ClarityCircle() {
     setAuthUser(user);
     const profile = await loadProfile(user);
     setStep('track');
+    setActiveMenu('path');
     setStatus(`Signed in${profile?.username ? ` as ${profile.username}` : ''}.`);
   };
 
   const continueLocally = () => {
     setStep('track');
-    setStatus('Continuing locally. Supabase will not store this context until you sign in.');
+    setActiveMenu('path');
+    setStatus('Continue locally.');
   };
 
   const signOut = async () => {
@@ -513,15 +841,364 @@ export function ClarityCircle() {
     setAuthUser(null);
     setAuthProfile(null);
     setProjects([]);
+    setProjectFolders([]);
+    setActiveProjectFolder('all');
+    setSelectedProjectId(null);
+    setProjectSearch('');
+    setAssistantMessages(INITIAL_ASSISTANT_MESSAGES);
+    setAssistantMemories([]);
     setAuthView('signin');
-    setStatus('Signed out. You can still continue locally on this browser.');
+    setActiveMenu('start');
+    setStep('entry');
+    setStatus('Signed out.');
+  };
+
+  const getFolderName = (folderId: string | null | undefined) => {
+    if (!folderId) return 'Unfiled';
+    return projectFolders.find((folder) => folder.id === folderId)?.name ?? 'Folder';
+  };
+
+  const filteredProjects = projects.filter((project) => {
+    const search = projectSearch.trim().toLowerCase();
+    const matchesFolder =
+      activeProjectFolder === 'all' ||
+      (activeProjectFolder === 'unfiled' ? !project.folder_id : project.folder_id === activeProjectFolder);
+    const matchesSearch =
+      !search ||
+      [project.title, project.context, project.audience, project.blocker, project.outcome]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(search));
+
+    return matchesFolder && matchesSearch;
+  });
+
+  const selectedProject =
+    filteredProjects.find((project) => project.id === selectedProjectId) || filteredProjects[0] || null;
+
+  const folderProjectCount = (folderId: ProjectFolderFilter) =>
+    projects.filter((project) => {
+      if (folderId === 'all') return true;
+      if (folderId === 'unfiled') return !project.folder_id;
+      return project.folder_id === folderId;
+    }).length;
+
+  const createProjectFolder = async () => {
+    const name = cleanSentence(newFolderName, '').slice(0, 80);
+    if (!name) {
+      setStatus('Name the folder first.');
+      return;
+    }
+
+    const localFolder: ClarityCircleProjectFolder = {
+      id: `local-folder-${Date.now()}`,
+      user_id: authUser?.id ?? 'local',
+      name,
+      sort_order: projectFolders.length,
+      status: 'active',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser) {
+      setProjectFolders((current) => [...current, localFolder]);
+      setActiveProjectFolder(localFolder.id);
+      setNewFolderName('');
+      setIsCreatingFolder(false);
+      setStatus('Folder created locally.');
+      return;
+    }
+
+    const { data, error } = await supabase
+      .schema('clarity_circle')
+      .from('project_folders')
+      .insert({
+        user_id: authUser.id,
+        name,
+        sort_order: projectFolders.length,
+      })
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      setStatus(error?.code === '23505' ? 'A folder with this name already exists.' : 'Folder could not be created.');
+      return;
+    }
+
+    setProjectFolders((current) => [...current, data]);
+    setActiveProjectFolder(data.id);
+    setNewFolderName('');
+    setIsCreatingFolder(false);
+    setStatus('Folder created.');
+    void refreshWorkspace(authUser, { quiet: true });
+  };
+
+  const moveProjectToFolder = async (project: ClarityCircleProject, folderId: string | null) => {
+    setProjects((current) =>
+      current.map((item) => (item.id === project.id ? { ...item, folder_id: folderId, updated_at: new Date().toISOString() } : item)),
+    );
+    setStatus(folderId ? `Moved to ${getFolderName(folderId)}.` : 'Moved to Unfiled.');
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || project.id.startsWith('local-project-')) return;
+
+    const { error } = await supabase
+      .schema('clarity_circle')
+      .from('projects')
+      .update({ folder_id: folderId })
+      .eq('id', project.id);
+
+    if (error) {
+      setStatus('Project move could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true });
+      return;
+    }
+
+    void refreshWorkspace(authUser, { quiet: true });
+  };
+
+  const saveAssistantMessage = async (message: UiAssistantMessage, projectId?: string | null) => {
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser) return;
+
+    await supabase.schema('clarity_circle').from('assistant_messages').insert({
+      user_id: authUser.id,
+      project_id: projectId ?? null,
+      role: message.role,
+      content: message.content,
+      metadata: { created_at: message.createdAt },
+    });
+  };
+
+  const saveAssistantMemory = async (draft: AssistantMemoryDraft, projectId?: string | null) => {
+    const localMemory: ClarityCircleAssistantMemory = {
+      id: `local-memory-${Date.now()}`,
+      user_id: authUser?.id ?? 'local',
+      project_id: projectId ?? null,
+      memory_type: draft.memory_type,
+      title: cleanSentence(draft.title, 'Circle memory'),
+      content: cleanSentence(draft.content, 'Saved assistant context'),
+      source: 'assistant',
+      status: 'active',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser) {
+      setAssistantMemories((current) => [localMemory, ...current].slice(0, 12));
+      return localMemory;
+    }
+
+    const { data, error } = await supabase
+      .schema('clarity_circle')
+      .from('assistant_memories')
+      .insert({
+        user_id: authUser.id,
+        project_id: projectId ?? null,
+        memory_type: draft.memory_type,
+        title: localMemory.title,
+        content: localMemory.content,
+        source: 'assistant',
+      })
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      setAssistantMemories((current) => [localMemory, ...current].slice(0, 12));
+      return localMemory;
+    }
+
+    setAssistantMemories((current) => [data, ...current.filter((item) => item.id !== data.id)].slice(0, 12));
+    void refreshWorkspace(authUser, { quiet: true });
+    return data;
+  };
+
+  const createProjectFromAssistantDraft = async (draft: AssistantProjectDraft) => {
+    const projectIntent: IntentDraft = {
+      headline: cleanSentence(draft.title, 'New clarity project'),
+      context: cleanSentence(draft.context, 'A new project created from the Circle assistant.'),
+      audience: draft.audience?.trim() || '',
+      blocker: draft.blocker?.trim() || 'The first decision is still unclear.',
+      outcome: draft.outcome?.trim() || 'A clearer next action.',
+    };
+    const context = buildSavedContext(draft.track, projectIntent);
+
+    setTrack(draft.track);
+    setIntent(projectIntent);
+    setSavedContext(context);
+    setStep('context');
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser) {
+      const localProject = localProjectFromContext(context, authUser?.id ?? 'local');
+      setProjects((current) => [localProject, ...current.filter((item) => item.id !== localProject.id)].slice(0, 80));
+      setSelectedProjectId(localProject.id);
+      setStatus('Project drafted locally.');
+      return null;
+    }
+
+    const { data: project, error } = await supabase
+      .schema('clarity_circle')
+      .from('projects')
+      .insert({
+        user_id: authUser.id,
+        track: draft.track,
+        title: projectIntent.headline,
+        context: projectIntent.context,
+        audience: projectIntent.audience || null,
+        blocker: projectIntent.blocker || null,
+        outcome: projectIntent.outcome || null,
+        summary: context.summary,
+        questions: context.questions,
+        actions: context.actions,
+      })
+      .select('*')
+      .single();
+
+    if (error || !project) {
+      setStatus('Project drafted locally. Account save failed.');
+      return null;
+    }
+
+    await supabase.schema('clarity_circle').from('context_entries').insert({
+      project_id: project.id,
+      user_id: authUser.id,
+      entry_type: 'note',
+      payload: {
+        source: 'circle_assistant',
+        title: project.title,
+        context: project.context,
+        audience: project.audience,
+        blocker: project.blocker,
+        outcome: project.outcome,
+      },
+    });
+
+    setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
+    setSelectedProjectId(project.id);
+    setStatus('Project created.');
+    void refreshWorkspace(authUser, { quiet: true });
+    return project;
+  };
+
+  const archiveAssistantMemory = async (memory: ClarityCircleAssistantMemory) => {
+    setAssistantMemories((current) => current.filter((item) => item.id !== memory.id));
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || memory.id.startsWith('local-memory-')) return;
+
+    await supabase
+      .schema('clarity_circle')
+      .from('assistant_memories')
+      .update({ status: 'archived' })
+      .eq('id', memory.id);
+  };
+
+  const sendAssistantMessage = async () => {
+    const prompt = assistantInput.trim();
+    if (!prompt || isAssistantBusy) return;
+
+    const userMessage = createUiMessage('user', prompt);
+    const nextMessages = [...assistantMessages, userMessage].slice(-12);
+
+    setAssistantMessages(nextMessages);
+    setAssistantInput('');
+    setIsAssistantBusy(true);
+    void saveAssistantMessage(userMessage);
+
+    try {
+      const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true }) : null;
+      const assistantProjects = liveWorkspace?.projects ?? projects;
+      const assistantFolders = liveWorkspace?.folders ?? projectFolders;
+      const assistantEntries = liveWorkspace?.contextEntries ?? contextEntries;
+      const assistantMemoriesForRequest = liveWorkspace?.memories ?? assistantMemories;
+
+      const response = await fetch('/api/clarity-circle/assistant/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: nextMessages.map((message) => ({ role: message.role, content: message.content })),
+          track,
+          savedContext: savedContext
+            ? {
+                track: savedContext.track,
+                headline: savedContext.intent.headline,
+                context: savedContext.intent.context,
+                audience: savedContext.intent.audience,
+                blocker: savedContext.intent.blocker,
+                outcome: savedContext.intent.outcome,
+                summary: savedContext.summary,
+              }
+            : null,
+          projects: assistantProjects.map((project) => ({
+            id: project.id,
+            folder_id: project.folder_id,
+            folderName: project.folder_id
+              ? assistantFolders.find((folder) => folder.id === project.folder_id)?.name ?? 'Folder'
+              : 'Unfiled',
+            title: project.title,
+            track: project.track,
+            context: project.context,
+            audience: project.audience,
+            blocker: project.blocker,
+            outcome: project.outcome,
+            summary: project.summary,
+            questions: project.questions,
+            actions: project.actions,
+          })),
+          folders: assistantFolders.map((folder) => ({
+            id: folder.id,
+            name: folder.name,
+          })),
+          contextEntries: assistantEntries.map((entry) => ({
+            project_id: entry.project_id,
+            entry_type: entry.entry_type,
+            payload: entry.payload,
+            created_at: entry.created_at,
+          })),
+          selectedProjectId,
+          memories: assistantMemoriesForRequest.map((memory) => ({
+            title: memory.title,
+            content: memory.content,
+            memory_type: memory.memory_type,
+          })),
+        }),
+      });
+
+      const data = (await response.json()) as AssistantResponse;
+      const reply = data.response || data.error || 'The Circle assistant could not respond yet.';
+      const assistantMessage = createUiMessage('assistant', reply);
+
+      setAssistantMessages((current) => [...current, assistantMessage].slice(-12));
+      void saveAssistantMessage(assistantMessage);
+
+      let projectId: string | null = null;
+      if (data.projectDraft) {
+        const project = await createProjectFromAssistantDraft(data.projectDraft);
+        projectId = project?.id ?? null;
+      }
+
+      if (data.memoryDraft) {
+        await saveAssistantMemory(data.memoryDraft, projectId);
+      }
+    } catch {
+      const fallbackMessage = createUiMessage(
+        'assistant',
+        'I could not reach the Circle assistant just now. Your context is still available here, and you can try again.',
+      );
+      setAssistantMessages((current) => [...current, fallbackMessage].slice(-12));
+    } finally {
+      setIsAssistantBusy(false);
+    }
   };
 
   const chooseTrack = (nextTrack: Track) => {
     setTrack(nextTrack);
     setIntent(TRACKS[nextTrack].defaults);
     setStep('intent');
-    setStatus(`${TRACKS[nextTrack].shortLabel} selected. The next screen captures only your intent.`);
+    setActiveMenu('context');
+    setStatus(`${TRACKS[nextTrack].shortLabel} selected.`);
   };
 
   const saveIntent = async () => {
@@ -540,10 +1217,14 @@ export function ClarityCircle() {
 
     setSavedContext(context);
     setStep('context');
+    setActiveMenu('context');
 
     const supabase = getClarityCircleSupabase();
     if (!supabase || !authUser) {
-      setStatus('Context saved locally. Sign in with Supabase to store it as a private project.');
+      const localProject = localProjectFromContext(context, authUser?.id ?? 'local');
+      setProjects((current) => [localProject, ...current].slice(0, 80));
+      setSelectedProjectId(localProject.id);
+      setStatus('Context saved locally.');
       return;
     }
 
@@ -568,7 +1249,7 @@ export function ClarityCircle() {
 
     if (projectError || !project) {
       setIsSavingContext(false);
-      setStatus('Context saved locally, but Supabase project storage failed. Check the migration and env setup.');
+      setStatus('Context saved locally. Cloud save failed.');
       return;
     }
 
@@ -586,9 +1267,11 @@ export function ClarityCircle() {
       },
     });
 
-    setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 5));
+    setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
+    setSelectedProjectId(project.id);
     setIsSavingContext(false);
-    setStatus('Context saved privately to the clarity_circle Supabase schema.');
+    setStatus('Context saved.');
+    void refreshWorkspace(authUser, { quiet: true });
   };
 
   const openProject = (project: ClarityCircleProject) => {
@@ -602,16 +1285,19 @@ export function ClarityCircle() {
     });
     setSavedContext(savedContextFromProject(project));
     setStep('context');
-    setStatus('Loaded a private Supabase project into this Clarity Circle session.');
+    setActiveMenu('context');
+    setStatus('Project loaded.');
   };
 
   const refineAgain = () => {
     setStep('intent');
-    setStatus('Refine the saved signal without exposing it publicly.');
+    setActiveMenu('context');
+    setStatus('Refine the signal.');
   };
 
   const restart = () => {
     setStep('entry');
+    setActiveMenu('start');
     setStatus('Started a fresh Clarity Circle sequence.');
   };
 
@@ -637,6 +1323,13 @@ export function ClarityCircle() {
     setStatus('Clarity Engine connection prepared with this private Circle context.');
   };
 
+  const openMenu = (menuId: MenuId) => {
+    setActiveMenu(menuId);
+    if (menuId === 'start') setStep('entry');
+    if (menuId === 'path') setStep('track');
+    if (menuId === 'context' && step === 'entry') setStep(savedContext ? 'context' : 'intent');
+  };
+
   return (
     <main className={styles.page}>
       <section className={styles.shell} aria-label="Kramaniti Clarity Circle">
@@ -651,54 +1344,43 @@ export function ClarityCircle() {
             <span>Clarity Circle</span>
           </div>
 
-          <ol className={styles.steps}>
-            {STEPS.map((item, index) => {
-              const isActive = item.id === step;
-              const isComplete = index < activeIndex;
+          <nav className={styles.menu} aria-label="Clarity Circle sections">
+            {MENU_ITEMS.map((item) => {
+              const Icon = item.icon;
               return (
-                <li key={item.id} className={isActive ? styles.stepActive : isComplete ? styles.stepComplete : ''}>
-                  <span>{isComplete ? <CheckCircle2 size={16} aria-hidden="true" /> : index + 1}</span>
-                  <div>
-                    <strong>{item.label}</strong>
-                    <small>{item.detail}</small>
-                  </div>
-                </li>
+                <button
+                  key={item.id}
+                  type="button"
+                  className={activeMenu === item.id ? styles.menuActive : ''}
+                  onClick={() => openMenu(item.id)}
+                >
+                  <Icon size={16} aria-hidden="true" />
+                  <span>{item.label}</span>
+                </button>
               );
             })}
-          </ol>
-
-          <div className={styles.privacyNote}>
-            <Lock size={17} aria-hidden="true" />
-            <div>
-              <strong>{authUser ? 'Supabase private storage' : 'Private memory first'}</strong>
-              <p>
-                {authUser
-                  ? 'Signed-in projects are stored in the isolated clarity_circle schema.'
-                : 'Unsigned sessions stay local in your browser. Public sharing remains a separate choice.'}
-              </p>
-            </div>
-          </div>
+          </nav>
 
           {authUser && (
             <div className={styles.profilePanel} aria-label="Profile and settings">
               <div className={styles.profileAvatar}>
-                {(authProfile?.username || authUser.email || 'U').slice(0, 1).toUpperCase()}
+                {(displayUsername || displayEmail || 'U').slice(0, 1).toUpperCase()}
               </div>
               <div>
                 <span>Profile</span>
-                <strong>{authProfile?.username ?? 'Username pending'}</strong>
-                <small>{authUser.email}</small>
+                <strong>{displayUsername || 'Username syncing'}</strong>
+                <small>{displayEmail}</small>
               </div>
-              <nav aria-label="Future profile menus">
-                <button type="button">
+              <nav aria-label="Account sections">
+                <button type="button" onClick={() => openMenu('profile')}>
                   <UserRound size={15} aria-hidden="true" />
-                  Account
+                  Profile
                 </button>
-                <button type="button">
+                <button type="button" onClick={() => openMenu('settings')}>
                   <Settings size={15} aria-hidden="true" />
                   Settings
                 </button>
-                <button type="button">
+                <button type="button" onClick={() => openMenu('projects')}>
                   <FileText size={15} aria-hidden="true" />
                   Projects
                 </button>
@@ -708,21 +1390,23 @@ export function ClarityCircle() {
         </aside>
 
         <section className={styles.stage} aria-live="polite">
-          <div className={styles.statusBar}>
-            <span>{status}</span>
-            <i aria-hidden="true" />
+          <div className={styles.topBar}>
+            <div>
+              <span>{MENU_ITEMS.find((item) => item.id === activeMenu)?.label ?? 'Start'}</span>
+              <strong>{status}</strong>
+            </div>
+            {authUser && (
+              <button type="button" className={styles.iconButton} onClick={() => void signOut()} aria-label="Sign out">
+                <LogOut size={17} aria-hidden="true" />
+              </button>
+            )}
           </div>
 
-          {step === 'entry' && (
+          {activeMenu === 'start' && (
             <section className={styles.screen} aria-labelledby="entry-title">
-              <div className={styles.eyebrow}>
-                <Sparkles size={15} aria-hidden="true" />
-                <span>AI-assisted clarity ecosystem</span>
-              </div>
               <h1 id="entry-title">Kramaniti&apos;s Clarity Circle</h1>
               <p className={styles.lead}>
-                A simple guided space for founders and early builders to save rough thinking, clarify direction,
-                and turn scattered ideas into sharper next steps.
+                A focused workspace for founders and builders to turn rough thinking into clearer next steps.
               </p>
 
               <div className={styles.authTabs} aria-label="Authentication mode">
@@ -857,43 +1541,14 @@ export function ClarityCircle() {
                   </button>
                 </div>
               )}
-              <p className={styles.authNotice}>{status}</p>
-
-              <div className={styles.entryFooter}>
-                <span>
-                  <Mail size={14} aria-hidden="true" />
-                  {isSupabaseReady
-                    ? authUser
-                      ? `Signed in as ${authProfile?.username ?? authUser.email ?? 'Supabase user'}`
-                      : 'Create an account with email, username, and password.'
-                    : 'Supabase env vars are not configured locally yet.'}
-                </span>
-                <span>
-                  <KeyRound size={14} aria-hidden="true" />
-                  Sign in with your username and password after registration.
-                </span>
-                <span>
-                  <Lock size={14} aria-hidden="true" />
-                  Clarity Circle app data uses the separate clarity_circle schema.
-                </span>
-                <span>
-                  <Compass size={14} aria-hidden="true" />
-                  Strategy before tools. Systems before scale. Content after clarity.
-                </span>
-              </div>
             </section>
           )}
 
-          {step === 'track' && (
+          {activeMenu === 'path' && (
             <section className={styles.screen} aria-labelledby="track-title">
-              <div className={styles.eyebrow}>
-                <UserRound size={15} aria-hidden="true" />
-                <span>{sessionMode === 'signin' ? 'Welcome back' : 'Start your circle'}</span>
-              </div>
-              <h1 id="track-title">Choose the path that fits you today.</h1>
+              <h1 id="track-title">Choose your path.</h1>
               <p className={styles.lead}>
-                The Circle separates founder clarity from early idea exploration so the AI can ask better questions
-                and keep the right context.
+                Founder clarity and early idea exploration need different questions.
               </p>
 
               <div className={styles.trackChoices}>
@@ -913,20 +1568,13 @@ export function ClarityCircle() {
             </section>
           )}
 
-          {step === 'intent' && (
+          {activeMenu === 'context' && step !== 'context' && (
             <section className={styles.screen} aria-labelledby="intent-title">
-              <div className={styles.eyebrow}>
-                <TrackIcon size={15} aria-hidden="true" />
-                <span>{selectedTrack.shortLabel}</span>
-              </div>
               <h1 id="intent-title">
-                {track === 'founder'
-                  ? 'Tell the Circle what you are trying to build.'
-                  : 'Tell the Circle what idea you are exploring.'}
+                {track === 'founder' ? 'Capture the business signal.' : 'Capture the idea signal.'}
               </h1>
               <p className={styles.lead}>
-                This is the private context layer. Keep it rough, but make the intent specific enough that the system
-                can develop it over time.
+                Keep it rough. The first version only needs enough shape to develop.
               </p>
 
               <div className={styles.intentForm}>
@@ -986,16 +1634,11 @@ export function ClarityCircle() {
             </section>
           )}
 
-          {step === 'context' && savedContext && (
+          {activeMenu === 'context' && step === 'context' && savedContext && (
             <section className={styles.screen} aria-labelledby="context-title">
-              <div className={styles.eyebrow}>
-                <CheckCircle2 size={15} aria-hidden="true" />
-                <span>Private context saved</span>
-              </div>
-              <h1 id="context-title">Your Circle now has a starting point.</h1>
+              <h1 id="context-title">Starting point saved.</h1>
               <p className={styles.lead}>
-                From here the product should progressively offer a digest, a community prompt, and a Clarity Brief
-                instead of showing every module at once.
+                Use this as the working context for projects, briefs, and the Clarity Engine.
               </p>
 
               <div className={styles.contextPanel}>
@@ -1028,20 +1671,6 @@ export function ClarityCircle() {
                 </article>
               </div>
 
-              {projects.length > 0 && (
-                <div className={styles.projectList} aria-label="Saved Supabase projects">
-                  <span>Private Supabase projects</span>
-                  <div>
-                    {projects.map((project) => (
-                      <button key={project.id} type="button" onClick={() => openProject(project)}>
-                        <strong>{project.title}</strong>
-                        <small>{project.track === 'founder' ? 'Founder Track' : 'Builder Track'}</small>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               <div className={styles.screenActions}>
                 <button type="button" className={styles.secondaryButton} onClick={refineAgain}>
                   <RefreshCw size={16} aria-hidden="true" />
@@ -1060,6 +1689,416 @@ export function ClarityCircle() {
                     Sign out
                   </button>
                 )}
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'context' && step === 'context' && !savedContext && (
+            <section className={styles.screen} aria-labelledby="context-empty-title">
+              <h1 id="context-empty-title">No context yet.</h1>
+              <p className={styles.lead}>Choose a path and save the first signal.</p>
+              <div className={styles.screenActions}>
+                <button type="button" className={styles.primaryButton} onClick={() => openMenu('path')}>
+                  Choose path
+                  <ArrowRight size={17} aria-hidden="true" />
+                </button>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'assistant' && (
+            <section className={`${styles.screen} ${styles.assistantScreen}`} aria-labelledby="assistant-title">
+              <div>
+                <h1 id="assistant-title">Circle Assistant</h1>
+                <p className={styles.lead}>
+                  Ask from your saved context, create a project, or save a useful memory.
+                </p>
+              </div>
+
+              <div className={styles.assistantLayout}>
+                <section className={styles.chatPanel} aria-label="Circle assistant conversation">
+                  <div className={styles.chatMessages}>
+                    {assistantMessages.map((message) => (
+                      <article
+                        key={message.id}
+                        className={message.role === 'assistant' ? styles.assistantBubble : styles.userBubble}
+                      >
+                        <span>{message.role === 'assistant' ? 'Circle Assistant' : displayUsername || 'You'}</span>
+                        <p>{message.content}</p>
+                      </article>
+                    ))}
+                    {isAssistantBusy && (
+                      <article className={styles.assistantBubble}>
+                        <span>Circle Assistant</span>
+                        <p>Thinking through your Circle context...</p>
+                      </article>
+                    )}
+                  </div>
+
+                  <form
+                    className={styles.assistantComposer}
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      void sendAssistantMessage();
+                    }}
+                  >
+                    <textarea
+                      value={assistantInput}
+                      onChange={(event) => setAssistantInput(event.target.value)}
+                      placeholder="Ask to sharpen this, remember a preference, or create a project..."
+                      rows={1}
+                      disabled={isAssistantBusy}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' && !event.shiftKey) {
+                          event.preventDefault();
+                          void sendAssistantMessage();
+                        }
+                      }}
+                    />
+                    <button type="submit" className={styles.iconPrimaryButton} disabled={isAssistantBusy || !assistantInput.trim()}>
+                      <Send size={17} aria-hidden="true" />
+                      <span>Send</span>
+                    </button>
+                  </form>
+                </section>
+
+                <aside className={styles.assistantSidePanel} aria-label="Assistant context">
+                  <div>
+                    <span>Active context</span>
+                    <strong>{savedContext?.intent.headline || 'No saved context yet'}</strong>
+                    <p>{savedContext?.summary || 'Save the first signal so the assistant has a better starting point.'}</p>
+                  </div>
+                  <div>
+                    <span>Projects</span>
+                    <strong>{projects.length || (savedContext ? 1 : 0)}</strong>
+                    <p>Ask “create a project for...” and the assistant will draft it into your project list.</p>
+                  </div>
+                  <div>
+                    <span>Memory</span>
+                    <strong>{assistantMemories.length}</strong>
+                    <p>Saved assistant memories are visible and manageable from the Memory section.</p>
+                  </div>
+                </aside>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'memory' && (
+            <section className={styles.screen} aria-labelledby="memory-title">
+              <h1 id="memory-title">Memory</h1>
+              <p className={styles.lead}>Review what the Circle Assistant keeps as context for future answers.</p>
+
+              <div className={styles.memoryList} aria-label="Assistant memories">
+                {assistantMemories.length > 0 ? (
+                  assistantMemories.map((memory) => (
+                    <article key={memory.id} className={styles.memoryItem}>
+                      <div>
+                        <span>{memory.memory_type.replace('_', ' ')}</span>
+                        <h2>{memory.title}</h2>
+                        <p>{memory.content}</p>
+                      </div>
+                      <button
+                        type="button"
+                        className={styles.iconButton}
+                        onClick={() => void archiveAssistantMemory(memory)}
+                        aria-label={`Archive ${memory.title}`}
+                        title="Archive memory"
+                      >
+                        <Archive size={16} aria-hidden="true" />
+                      </button>
+                    </article>
+                  ))
+                ) : (
+                  <div className={styles.emptyState}>
+                    <Brain size={18} aria-hidden="true" />
+                    <strong>No assistant memories yet.</strong>
+                    <p>Ask the assistant to remember a preference, decision boundary, or useful project signal.</p>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.screenActions}>
+                <button type="button" className={styles.primaryButton} onClick={() => openMenu('assistant')}>
+                  <Plus size={16} aria-hidden="true" />
+                  Add through assistant
+                </button>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'projects' && (
+            <section className={`${styles.screen} ${styles.projectsScreen}`} aria-labelledby="projects-title">
+              <div className={styles.projectsIntro}>
+                <div>
+                  <h1 id="projects-title">Projects</h1>
+                  <p className={styles.lead}>Organize saved contexts into a focused project workspace.</p>
+                </div>
+                <div className={styles.projectsToolbar}>
+                  <button type="button" className={styles.secondaryButton} onClick={() => setIsCreatingFolder(true)}>
+                    <FolderPlus size={16} aria-hidden="true" />
+                    New folder
+                  </button>
+                  <button type="button" className={styles.primaryButton} onClick={() => openMenu('path')}>
+                    <Plus size={16} aria-hidden="true" />
+                    New project
+                  </button>
+                </div>
+              </div>
+
+              <div className={styles.finderShell} aria-label="Project finder">
+                <aside className={styles.folderPane} aria-label="Project folders">
+                  <div className={styles.finderWindowDots} aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <div className={styles.folderGroup}>
+                    <span>Locations</span>
+                    <button
+                      type="button"
+                      className={activeProjectFolder === 'all' ? styles.folderActive : ''}
+                      onClick={() => setActiveProjectFolder('all')}
+                    >
+                      <FolderOpen size={16} aria-hidden="true" />
+                      <strong>All Projects</strong>
+                      <small>{folderProjectCount('all')}</small>
+                    </button>
+                    <button
+                      type="button"
+                      className={activeProjectFolder === 'unfiled' ? styles.folderActive : ''}
+                      onClick={() => setActiveProjectFolder('unfiled')}
+                    >
+                      <Folder size={16} aria-hidden="true" />
+                      <strong>Unfiled</strong>
+                      <small>{folderProjectCount('unfiled')}</small>
+                    </button>
+                  </div>
+
+                  <div className={styles.folderGroup}>
+                    <span>Folders</span>
+                    {projectFolders.map((folder) => (
+                      <button
+                        key={folder.id}
+                        type="button"
+                        className={activeProjectFolder === folder.id ? styles.folderActive : ''}
+                        onClick={() => setActiveProjectFolder(folder.id)}
+                      >
+                        <Folder size={16} aria-hidden="true" />
+                        <strong>{folder.name}</strong>
+                        <small>{folderProjectCount(folder.id)}</small>
+                      </button>
+                    ))}
+
+                    {isCreatingFolder ? (
+                      <form
+                        className={styles.newFolderForm}
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          void createProjectFolder();
+                        }}
+                      >
+                        <input
+                          value={newFolderName}
+                          onChange={(event) => setNewFolderName(event.target.value)}
+                          placeholder="Folder name"
+                          autoFocus
+                        />
+                        <button type="submit">Create</button>
+                      </form>
+                    ) : (
+                      <button type="button" className={styles.folderGhostButton} onClick={() => setIsCreatingFolder(true)}>
+                        <FolderPlus size={16} aria-hidden="true" />
+                        <strong>Add folder</strong>
+                      </button>
+                    )}
+                  </div>
+                </aside>
+
+                <section className={styles.filePane} aria-label="Projects in selected folder">
+                  <div className={styles.fileToolbar}>
+                    <div>
+                      <span>{activeProjectFolder === 'all' ? 'All Projects' : activeProjectFolder === 'unfiled' ? 'Unfiled' : getFolderName(activeProjectFolder)}</span>
+                      <strong>{filteredProjects.length} item{filteredProjects.length === 1 ? '' : 's'}</strong>
+                    </div>
+                    <label className={styles.projectSearch}>
+                      <Search size={15} aria-hidden="true" />
+                      <input
+                        value={projectSearch}
+                        onChange={(event) => setProjectSearch(event.target.value)}
+                        placeholder="Search"
+                      />
+                    </label>
+                  </div>
+
+                  <div className={styles.projectRows} role="list" aria-label="Project list">
+                    {filteredProjects.length > 0 ? (
+                      filteredProjects.map((project) => (
+                        <button
+                          key={project.id}
+                          type="button"
+                          className={selectedProject?.id === project.id ? styles.projectRowActive : ''}
+                          onClick={() => setSelectedProjectId(project.id)}
+                        >
+                          <span className={styles.projectFileIcon}>
+                            <FileText size={16} aria-hidden="true" />
+                          </span>
+                          <span>
+                            <strong>{project.title}</strong>
+                            <small>{project.context}</small>
+                          </span>
+                          <span>{project.track === 'founder' ? 'Founder' : 'Builder'}</span>
+                          <span>{getFolderName(project.folder_id)}</span>
+                          <span>{formatProjectDate(project.updated_at)}</span>
+                          <ChevronRight size={15} aria-hidden="true" />
+                        </button>
+                      ))
+                    ) : (
+                      <div className={styles.finderEmpty}>
+                        <FolderOpen size={20} aria-hidden="true" />
+                        <strong>No projects here.</strong>
+                        <p>Create a project or move an existing one into this folder.</p>
+                      </div>
+                    )}
+                  </div>
+                </section>
+
+                <aside className={styles.previewPane} aria-label="Project preview">
+                  {selectedProject ? (
+                    <>
+                      <div className={styles.previewHeader}>
+                        <span className={styles.previewIcon}>
+                          <FileText size={22} aria-hidden="true" />
+                        </span>
+                        <div>
+                          <h2>{selectedProject.title}</h2>
+                          <p>{selectedProject.track === 'founder' ? 'Founder Track' : 'Builder Track'}</p>
+                        </div>
+                      </div>
+
+                      <dl className={styles.previewMeta}>
+                        <div>
+                          <dt>Folder</dt>
+                          <dd>{getFolderName(selectedProject.folder_id)}</dd>
+                        </div>
+                        <div>
+                          <dt>Updated</dt>
+                          <dd>{formatProjectDate(selectedProject.updated_at)}</dd>
+                        </div>
+                      </dl>
+
+                      <div className={styles.previewBody}>
+                        <span>Context</span>
+                        <p>{selectedProject.summary || selectedProject.context}</p>
+                      </div>
+
+                      <label className={styles.moveControl}>
+                        <span>Move to</span>
+                        <select
+                          value={selectedProject.folder_id ?? 'unfiled'}
+                          onChange={(event) =>
+                            void moveProjectToFolder(
+                              selectedProject,
+                              event.target.value === 'unfiled' ? null : event.target.value,
+                            )
+                          }
+                        >
+                          <option value="unfiled">Unfiled</option>
+                          {projectFolders.map((folder) => (
+                            <option key={folder.id} value={folder.id}>
+                              {folder.name}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <div className={styles.previewActions}>
+                        <button type="button" className={styles.primaryButton} onClick={() => openProject(selectedProject)}>
+                          Open project
+                          <ArrowRight size={16} aria-hidden="true" />
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className={styles.finderEmpty}>
+                      <FileText size={20} aria-hidden="true" />
+                      <strong>Select a project.</strong>
+                      <p>Your project details will appear here.</p>
+                    </div>
+                  )}
+                </aside>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'profile' && (
+            <section className={styles.screen} aria-labelledby="profile-title">
+              <h1 id="profile-title">Profile</h1>
+              <p className={styles.lead}>Your account identity and preferred working path.</p>
+
+              <div className={styles.profileDetail}>
+                <div className={styles.profileAvatarLarge}>
+                  {(displayUsername || displayEmail || 'U').slice(0, 1).toUpperCase()}
+                </div>
+                <div>
+                  <span>Username</span>
+                  <strong>{displayUsername || 'Username syncing'}</strong>
+                </div>
+                <div>
+                  <span>Email</span>
+                  <strong>{displayEmail || 'Not signed in'}</strong>
+                </div>
+                <div>
+                  <span>Path</span>
+                  <strong>{selectedTrack.shortLabel}</strong>
+                </div>
+              </div>
+
+              <div className={styles.screenActions}>
+                <button type="button" className={styles.secondaryButton} onClick={() => openMenu('settings')}>
+                  Settings
+                </button>
+                {authUser && (
+                  <button type="button" className={styles.textButton} onClick={() => void signOut()}>
+                    <LogOut size={16} aria-hidden="true" />
+                    Sign out
+                  </button>
+                )}
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'settings' && (
+            <section className={styles.screen} aria-labelledby="settings-title">
+              <h1 id="settings-title">Settings</h1>
+              <p className={styles.lead}>Simple defaults for how the Circle develops your context.</p>
+
+              <div className={styles.settingsList}>
+                <label>
+                  <span>Preferred path</span>
+                  <select
+                    value={track}
+                    onChange={(event) => {
+                      const nextTrack = event.target.value as Track;
+                      setTrack(nextTrack);
+                      setIntent(TRACKS[nextTrack].defaults);
+                      setStatus(`${TRACKS[nextTrack].shortLabel} selected.`);
+                    }}
+                  >
+                    <option value="founder">Founder Track</option>
+                    <option value="builder">Individual Track</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Digest rhythm</span>
+                  <select defaultValue="weekly">
+                    <option value="weekly">Weekly</option>
+                    <option value="paused">Paused</option>
+                  </select>
+                </label>
+                <label className={styles.toggleRow}>
+                  <input type="checkbox" defaultChecked />
+                  <span>Keep vault entries private by default</span>
+                </label>
               </div>
             </section>
           )}

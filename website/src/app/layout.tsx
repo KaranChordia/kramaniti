@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { PwaRuntime } from "@/components/pwa/PwaRuntime";
 import { GlobalShockwave } from "@/components/GlobalShockwave";
-import { KramanitiAssistant } from "@/components/assistant/KramanitiAssistant";
+import { RouteAwareAssistant } from "@/components/assistant/RouteAwareAssistant";
 import { absoluteUrl, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
@@ -116,7 +116,7 @@ export default function RootLayout({
         <GlobalShockwave />
         <PwaRuntime />
         {children}
-        <KramanitiAssistant />
+        <RouteAwareAssistant />
         <Analytics />
         <SpeedInsights />
       </body>

@@ -317,16 +317,24 @@ Related files:
 - A dedicated Supabase migration for the isolated `clarity_circle` schema so Clarity Circle data does not overlap with existing recruiting-company tables in the same Supabase project.
 - A profile/settings panel placeholder for signed-in users, showing username, email, account, settings, and projects menu surfaces for future expansion.
 - A browser-local handoff into `/clarity-engine` so the Engine can use the Circle's saved starting context and continue with the current workflow question instead of asking the user to repeat the same initial details.
+- A dedicated Clarity Circle Assistant available only inside `/clarity-circle`, separate from the global public Kramaniti assistant.
+- Circle Assistant conversations and user-visible memory notes are stored in `clarity_circle.assistant_messages` and `clarity_circle.assistant_memories` for signed-in users, with browser-local fallback for local sessions.
+- The Circle Assistant uses the member's supplied context, saved projects, and memory notes, plus Kramaniti's curated repository context, to answer in a Clarity Circle-specific way.
+- The Circle Assistant can create new private projects from a user query while keeping project storage under `clarity_circle.projects`.
+- The Projects section now uses a Finder-style workspace with folder navigation, project rows, preview details, search, folder creation, and move-to-folder controls.
+- Signed-in project folders are stored in `clarity_circle.project_folders`; projects reference folders through `clarity_circle.projects.folder_id`.
+- Clarity Circle now subscribes to realtime workspace changes for projects, folders, context entries, assistant messages, and assistant memories.
+- The Circle Assistant refreshes the signed-in workspace before answering so manually created projects, folders, project entries, and assistant-created projects use the same context path.
 - A progressive product model where future digest, public-learning, and Clarity Brief surfaces should appear after context is captured instead of being visible all at once.
 - Navigation and sitemap entries for the new route.
 
 [Constraint] Clarity Circle must stay distinct from Clarity Engine. Clarity Engine is the focused single diagnostic session. Clarity Circle is the ongoing ecosystem layer with member memory, community engagement, and recurring progress rhythm.
 
-[Constraint] V1 remains free and browser-local. Do not add accounts, payment, public claims, external tool recommendations, backend persistence, emails, or market updates without a newer implementation decision and privacy/storage model.
+[Constraint] V1 remains free. Auth-backed storage is allowed only inside the isolated `clarity_circle` schema, with RLS scoped to `auth.uid()`. Do not add payments, public claims, external tool recommendations, emails, or market updates without a newer implementation decision and privacy/storage model.
 
 [Constraint] The Clarity Circle UX should stay sequential by default: entry, path selection, focused intent capture, then saved-context development. Do not return to an all-panels-at-once dashboard unless the founder explicitly asks for that mode again.
 
-[Constraint] The Clarity Circle to Clarity Engine connection is a temporary browser-local handoff in v1. Do not treat it as authenticated user memory, backend persistence, CRM storage, or public sharing.
+[Constraint] The Clarity Circle to Clarity Engine connection remains a temporary browser-local handoff. Do not treat the handoff itself as CRM storage or public sharing.
 
 [Constraint] Supabase-backed Clarity Circle storage must remain under the `clarity_circle` schema with RLS policies scoped to `auth.uid()`. Do not reuse recruiting tables or add Clarity Circle data to existing recruiting-company schemas.
 
@@ -335,8 +343,12 @@ Related files:
 - `website/src/app/clarity-circle/page.tsx`
 - `website/src/app/clarity-circle/ClarityCircle.tsx`
 - `website/src/app/clarity-circle/ClarityCircle.module.css`
+- `website/src/app/api/clarity-circle/assistant/route.ts`
 - `website/src/lib/clarity-circle/supabase.ts`
 - `supabase/migrations/20260623060000_clarity_circle_schema.sql`
+- `supabase/migrations/20260623121000_clarity_circle_assistant_memory.sql`
+- `supabase/migrations/20260623143000_clarity_circle_project_folders.sql`
+- `supabase/migrations/20260623154500_clarity_circle_realtime_workspace.sql`
 - `docs/clarity_circle_supabase_setup.md`
 - `website/src/components/layout/Navbar.tsx`
 - `website/src/app/sitemap.ts`

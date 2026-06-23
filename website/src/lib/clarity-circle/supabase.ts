@@ -5,6 +5,7 @@ export type ClarityCircleTrack = 'founder' | 'builder';
 export type ClarityCircleProject = {
   id: string;
   user_id: string;
+  folder_id: string | null;
   track: ClarityCircleTrack;
   title: string;
   context: string;
@@ -19,6 +20,16 @@ export type ClarityCircleProject = {
   updated_at: string;
 };
 
+export type ClarityCircleProjectFolder = {
+  id: string;
+  user_id: string;
+  name: string;
+  sort_order: number;
+  status: 'active' | 'archived';
+  created_at: string;
+  updated_at: string;
+};
+
 export type ClarityCircleContextEntry = {
   id: string;
   project_id: string;
@@ -26,6 +37,29 @@ export type ClarityCircleContextEntry = {
   entry_type: 'intent' | 'note' | 'digest' | 'brief' | 'engine_handoff';
   payload: Record<string, unknown>;
   created_at: string;
+};
+
+export type ClarityCircleAssistantMessage = {
+  id: string;
+  user_id: string;
+  project_id: string | null;
+  role: 'user' | 'assistant';
+  content: string;
+  metadata: Record<string, unknown>;
+  created_at: string;
+};
+
+export type ClarityCircleAssistantMemory = {
+  id: string;
+  user_id: string;
+  project_id: string | null;
+  memory_type: 'insight' | 'preference' | 'project_signal' | 'boundary';
+  title: string;
+  content: string;
+  source: 'assistant' | 'user';
+  status: 'active' | 'archived';
+  created_at: string;
+  updated_at: string;
 };
 
 export type ClarityCircleProfile = {
@@ -56,6 +90,7 @@ type ClarityCircleDatabase = {
         Row: ClarityCircleProject;
         Insert: {
           user_id: string;
+          folder_id?: string | null;
           track: ClarityCircleTrack;
           title: string;
           context: string;
@@ -69,6 +104,16 @@ type ClarityCircleDatabase = {
         };
         Update: Partial<Omit<ClarityCircleProject, 'id' | 'user_id' | 'created_at' | 'updated_at'>>;
       };
+      project_folders: {
+        Row: ClarityCircleProjectFolder;
+        Insert: {
+          user_id: string;
+          name: string;
+          sort_order?: number;
+          status?: ClarityCircleProjectFolder['status'];
+        };
+        Update: Partial<Omit<ClarityCircleProjectFolder, 'id' | 'user_id' | 'created_at' | 'updated_at'>>;
+      };
       context_entries: {
         Row: ClarityCircleContextEntry;
         Insert: {
@@ -78,6 +123,32 @@ type ClarityCircleDatabase = {
           payload?: Record<string, unknown>;
         };
         Update: Partial<Omit<ClarityCircleContextEntry, 'id' | 'project_id' | 'user_id' | 'created_at'>>;
+      };
+      assistant_messages: {
+        Row: ClarityCircleAssistantMessage;
+        Insert: {
+          user_id: string;
+          project_id?: string | null;
+          role: ClarityCircleAssistantMessage['role'];
+          content: string;
+          metadata?: Record<string, unknown>;
+        };
+        Update: never;
+      };
+      assistant_memories: {
+        Row: ClarityCircleAssistantMemory;
+        Insert: {
+          user_id: string;
+          project_id?: string | null;
+          memory_type?: ClarityCircleAssistantMemory['memory_type'];
+          title: string;
+          content: string;
+          source?: ClarityCircleAssistantMemory['source'];
+          status?: ClarityCircleAssistantMemory['status'];
+        };
+        Update: Partial<
+          Omit<ClarityCircleAssistantMemory, 'id' | 'user_id' | 'created_at' | 'updated_at'>
+        >;
       };
     };
     Functions: {
