@@ -51,6 +51,22 @@ type SessionState = {
 };
 
 const STORAGE_KEY = 'kramaniti-clarity-engine-v2';
+const CIRCLE_HANDOFF_KEY = 'kramaniti-clarity-circle-engine-handoff-v1';
+
+type ClarityCircleHandoff = {
+  version: 1;
+  createdAt: string;
+  track: 'founder' | 'builder';
+  trackLabel: string;
+  headline: string;
+  context: string;
+  audience: string;
+  blocker: string;
+  outcome: string;
+  summary: string;
+  questions: string[];
+  actions: string[];
+};
 
 const SAMPLE_ANSWER =
   'We have a founder-led business with strong expertise, but the offer, workflow, and content system feel scattered. I want to clarify what should happen first before adding more AI tools.';
@@ -84,6 +100,119 @@ const createInitialSession = (): SessionState => {
     contextLog: [],
     aiTasks: [],
     synthesis: { ...INITIAL_SYNTHESIS },
+    source: 'local',
+  };
+};
+
+const cleanHandoffValue = (value: unknown) =>
+  typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
+
+const isClarityCircleHandoff = (value: unknown): value is ClarityCircleHandoff => {
+  if (!value || typeof value !== 'object') return false;
+
+  const candidate = value as Partial<ClarityCircleHandoff>;
+
+  return (
+    candidate.version === 1 &&
+    (candidate.track === 'founder' || candidate.track === 'builder') &&
+    typeof candidate.headline === 'string' &&
+    typeof candidate.context === 'string'
+  );
+};
+
+const readClarityCircleHandoff = (): ClarityCircleHandoff | null => {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const stored = window.localStorage.getItem(CIRCLE_HANDOFF_KEY);
+    if (!stored) return null;
+
+    const parsed = JSON.parse(stored) as unknown;
+    window.localStorage.removeItem(CIRCLE_HANDOFF_KEY);
+
+    return isClarityCircleHandoff(parsed) ? parsed : null;
+  } catch {
+    window.localStorage.removeItem(CIRCLE_HANDOFF_KEY);
+    return null;
+  }
+};
+
+const buildCircleHandoffAnswer = (handoff: ClarityCircleHandoff) => {
+  const lines = [
+    `Clarity Circle path: ${cleanHandoffValue(handoff.trackLabel) || handoff.track}`,
+    `Intent: ${cleanHandoffValue(handoff.headline)}`,
+    `Context: ${cleanHandoffValue(handoff.context)}`,
+    `Audience: ${cleanHandoffValue(handoff.audience) || 'Not clearly named yet.'}`,
+    `Current blocker: ${cleanHandoffValue(handoff.blocker) || 'Not clearly named yet.'}`,
+    `Desired outcome: ${cleanHandoffValue(handoff.outcome) || 'Not clearly named yet.'}`,
+  ];
+
+  return lines.join('\n');
+};
+
+const createSessionFromCircleHandoff = (handoff: ClarityCircleHandoff): SessionState => {
+  const base = createInitialSession();
+  const handoffAnswer = buildCircleHandoffAnswer(handoff);
+  const audienceAnswer = cleanHandoffValue(handoff.audience);
+  const phase1Answer = [
+    cleanHandoffValue(handoff.headline),
+    cleanHandoffValue(handoff.context),
+    cleanHandoffValue(handoff.outcome) ? `Desired outcome: ${cleanHandoffValue(handoff.outcome)}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+  const answers: ClarityAnswers = {
+    phase1_clarity_goal: phase1Answer || handoffAnswer,
+  };
+
+  if (audienceAnswer) {
+    answers.phase2_audience_problem = audienceAnswer;
+  }
+
+  return {
+    ...base,
+    answers,
+    assistantReply:
+      'I have the Clarity Circle context, so we do not need to repeat the starting point. Next, I need the current workflow so the diagnosis can separate strategy, systems, and proof-safe presence.',
+    currentQuestion: 'How does this work today, from first signal to delivered outcome?',
+    currentQuestionKey: 'phase3_current_workflow',
+    currentQuestionLabel: 'Current Workflow',
+    currentQuestionPlaceholder: 'Walk through the current path, even if it is messy...',
+    transcript: [
+      ...base.transcript,
+      {
+        role: 'user',
+        content: handoffAnswer,
+        createdAt: handoff.createdAt,
+      },
+      {
+        role: 'assistant',
+        content:
+          'I have the Clarity Circle context, so we do not need to repeat the starting point. Next, I need the current workflow so the diagnosis can separate strategy, systems, and proof-safe presence.',
+        createdAt: new Date().toISOString(),
+      },
+    ],
+    contextLog: [
+      cleanHandoffValue(handoff.summary) || 'Clarity Circle handoff loaded into the diagnostic session.',
+      cleanHandoffValue(handoff.blocker) ? `Current blocker: ${cleanHandoffValue(handoff.blocker)}` : '',
+      cleanHandoffValue(handoff.outcome) ? `Desired outcome: ${cleanHandoffValue(handoff.outcome)}` : '',
+    ].filter(Boolean),
+    synthesis: {
+      completion: audienceAnswer ? 34 : 17,
+      statusLabel: 'Circle context loaded',
+      clarityContext:
+        cleanHandoffValue(handoff.summary) ||
+        'The starting intent from Clarity Circle is loaded. The next step is to map workflow reality.',
+      workflowDirection:
+        'The Engine should now map the current path, then identify friction, human judgment boundaries, and the proof direction.',
+      presenceIdeas: [
+        cleanHandoffValue(handoff.outcome) || 'Turn the clarified direction into one proof-safe public artifact.',
+        'Show the before-state, decision route, and next move without unsupported claims.',
+        'Let content follow the clarified workflow instead of leading the strategy.',
+      ],
+      signalTrail: ['Clarity Circle intake', 'Strategy before tools', 'Systems before scale'],
+      focusTags: ['circle', handoff.track, 'private'],
+    },
     source: 'local',
   };
 };
@@ -206,7 +335,14 @@ export default function ClarityEnginePage() {
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      setSession(readStoredSession());
+      const circleHandoff = readClarityCircleHandoff();
+      if (circleHandoff) {
+        setSession(createSessionFromCircleHandoff(circleHandoff));
+        setStatusText('Clarity Circle context loaded.');
+        setIsInputActive(true);
+      } else {
+        setSession(readStoredSession());
+      }
       setHasLoadedStoredSession(true);
     }, 0);
 

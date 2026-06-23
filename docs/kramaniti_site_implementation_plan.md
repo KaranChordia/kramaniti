@@ -299,6 +299,47 @@ Related files:
 - `website/src/lib/kramaniti-assistant/knowledge.ts`
 - `docs/kcs_zero_copy_motion_proposal.md`
 
+## 10.5 Kramaniti Clarity Circle
+
+2026-06-22 update: the website now includes a public `/clarity-circle` route for Kramaniti Clarity Circle, a free AI-assisted clarity ecosystem for founders and early builders.
+
+[Recommendation] Clarity Circle should not be positioned as an AI social network. It should behave as an ongoing clarity network: private memory, public learning, weekly AI-assisted reflection, and clarity briefs that can lead serious users toward the AI Workflow Audit or deeper Kramaniti services.
+
+[Fact] The current implementation includes:
+
+- A standalone route at `/clarity-circle`.
+- A premium but simple sequential app flow rather than a dense all-in-one dashboard.
+- A modern entry screen with simulated sign in / account creation for the v1 prototype.
+- A two-track selector: Building a business / Founder Track, and Exploring an idea / Builder Track.
+- A focused intent-capture screen that asks for the one-line intent, current context, audience, blocker, and desired outcome.
+- A private context workspace that saves the user's starting point locally, then shows the system's understanding, next questions, and suggested sequence.
+- Supabase-ready email magic-link authentication and private project storage when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are configured.
+- A dedicated Supabase migration for the isolated `clarity_circle` schema so Clarity Circle data does not overlap with existing recruiting-company tables in the same Supabase project.
+- A browser-local handoff into `/clarity-engine` so the Engine can use the Circle's saved starting context and continue with the current workflow question instead of asking the user to repeat the same initial details.
+- A progressive product model where future digest, public-learning, and Clarity Brief surfaces should appear after context is captured instead of being visible all at once.
+- Navigation and sitemap entries for the new route.
+
+[Constraint] Clarity Circle must stay distinct from Clarity Engine. Clarity Engine is the focused single diagnostic session. Clarity Circle is the ongoing ecosystem layer with member memory, community engagement, and recurring progress rhythm.
+
+[Constraint] V1 remains free and browser-local. Do not add accounts, payment, public claims, external tool recommendations, backend persistence, emails, or market updates without a newer implementation decision and privacy/storage model.
+
+[Constraint] The Clarity Circle UX should stay sequential by default: entry, path selection, focused intent capture, then saved-context development. Do not return to an all-panels-at-once dashboard unless the founder explicitly asks for that mode again.
+
+[Constraint] The Clarity Circle to Clarity Engine connection is a temporary browser-local handoff in v1. Do not treat it as authenticated user memory, backend persistence, CRM storage, or public sharing.
+
+[Constraint] Supabase-backed Clarity Circle storage must remain under the `clarity_circle` schema with RLS policies scoped to `auth.uid()`. Do not reuse recruiting tables or add Clarity Circle data to existing recruiting-company schemas.
+
+Related files:
+
+- `website/src/app/clarity-circle/page.tsx`
+- `website/src/app/clarity-circle/ClarityCircle.tsx`
+- `website/src/app/clarity-circle/ClarityCircle.module.css`
+- `website/src/lib/clarity-circle/supabase.ts`
+- `supabase/migrations/20260623060000_clarity_circle_schema.sql`
+- `docs/clarity_circle_supabase_setup.md`
+- `website/src/components/layout/Navbar.tsx`
+- `website/src/app/sitemap.ts`
+
 ## 11. Nexocean Portfolio Page
 
 - Added a dedicated selected-work page at `/work/nexocean`.

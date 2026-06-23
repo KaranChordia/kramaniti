@@ -456,3 +456,61 @@ This log registers the major strategic and structural decisions made during the 
     *   It must answer that Karan Chordia is the founder behind Kramaniti when visitors ask who founded Kramaniti, this company, this website, or use likely speech-to-text wording such as "common people" in that context.
     *   It should answer employee/operator workflow questions by explaining Kramaniti's service approach: understand the role, map recurring tasks and handoffs, separate human-led, AI-assisted, and automated steps, define review and override rules, and guide serious prospects toward an AI Workflow Audit.
     *   Local fallback behavior now includes founder and workflow-service answers so the widget remains coherent when Groq is not configured.
+
+### Decision 20: Add Kramaniti Clarity Circle as an Ongoing Public Clarity Ecosystem
+*   **Date:** 2026-06-22
+*   **Area:** Website, public platform, community strategy, offer entry point
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Add a standalone `/clarity-circle` route for Kramaniti Clarity Circle, a free AI-assisted clarity network for founders and early builders that combines a curated forum, private idea vault, weekly digest, and clarity brief generator.
+*   **Rationale:** The founder described a possible company platform for founders who want clarity on harnessing AI and individuals who want to start an idea but lack a clear path. The accepted foundation positions the product as an AI-assisted clarity ecosystem, not a generic AI social network. This route gives the concept a usable v1 while keeping it distinct from Clarity Engine and avoiding premature backend complexity.
+*   **Source or Evidence:** Founder request on 2026-06-22 to implement the Clarity Circle foundation plan with two separated tracks, private memory, public learning, weekly AI digest, and clarity brief output.
+*   **Affected Files:**
+    *   `website/src/app/clarity-circle/page.tsx`
+    *   `website/src/app/clarity-circle/ClarityCircle.tsx`
+    *   `website/src/app/clarity-circle/ClarityCircle.module.css`
+    *   `website/src/components/layout/Navbar.tsx`
+    *   `website/src/components/layout/Navbar.module.css`
+    *   `website/src/app/sitemap.ts`
+    *   `docs/kramaniti_site_implementation_plan.md`
+    *   `09_reviews/decisions.md`
+*   **Alternatives Rejected:**
+    1.  *Building a generic community feed:* Rejected because Kramaniti's value is clarity, workflow thinking, and proof-safe operating direction, not engagement volume.
+    2.  *Making v1 a paid membership product:* Rejected because the current role is a free ecosystem and lead path toward AI Workflow Audit and deeper services.
+    3.  *Merging the product into Clarity Engine:* Rejected because Clarity Engine is a single diagnostic session, while Clarity Circle is ongoing memory, community engagement, and weekly progress.
+    4.  *Adding accounts, emails, or backend persistence immediately:* Rejected because browser-local state is enough to validate the interaction model without handling private user data in production infrastructure.
+*   **Guardrails:**
+    *   Do not call Clarity Circle an AI social network.
+    *   Keep private idea vault entries private by default.
+    *   Keep AI as an assistive layer for summaries, sharper questions, digest memos, and briefs; humans own strategy, claims, pricing, and decisions.
+    *   Any future external market or tool updates must be source-linked and date-stamped.
+    *   Do not add payments, public proof claims, user accounts, CRM storage, or email delivery without a newer decision and privacy/storage model.
+*   **Open Questions:**
+    *   Should the next iteration add authentication and server-side private vault storage?
+    *   Should weekly digests become email-based, in-app only, or opt-in CRM notes?
+    *   Should public forum posts be moderated by Kramaniti agents before publishing?
+
+*   **2026-06-22 UX Update:**
+    *   The Clarity Circle route was redesigned from a traditional webpage-like surface into a premium dashboard experience.
+    *   The canonical UX direction is now an app shell with left navigation, a compact top command bar, track switcher, privacy status, command intake, private vault, public learning, weekly digest, clarity brief, and workflow route panels.
+    *   Future Clarity Circle UI work should preserve the dashboard/operating-console model unless the founder explicitly asks to return to a landing-page style.
+
+*   **2026-06-23 Sketch Alignment Update:**
+    *   The founder supplied a rough Clarity Circle sketch that clarified the platform model: target audience and problem first, then community/platform, AI-enabled assistance, and founder/individual circle.
+    *   The dashboard was updated to show Who/Why, founders harnessing AI, individuals starting out, storage for ideas/projects, intelligent engagement, journey tracking, personalised insights, contribution connection, and engagement/validation loops.
+    *   Future Clarity Circle work should treat this sketch model as product structure, not as a literal visual wireframe.
+
+*   **2026-06-23 Sequential UX Update:**
+    *   The founder asked for the Clarity Circle experience to stay very simple and unfold sequentially rather than showing every product block on one dashboard screen.
+    *   The canonical UX is now: modern entry/sign-in screen, founder vs individual path selection, focused private intent capture, then a saved-context workspace that can progressively introduce digest, public-learning, and Clarity Brief actions.
+    *   Future Clarity Circle UI work should preserve this staged flow unless the founder explicitly asks for a dashboard mode again.
+
+*   **2026-06-23 Clarity Engine Handoff Update:**
+    *   The Clarity Circle context workspace now prepares a browser-local handoff when the user chooses to continue into Clarity Engine.
+    *   Clarity Engine consumes the handoff once, seeds its diagnostic session with the Circle's intent, context, audience, blocker, and desired outcome, then continues from the current workflow question.
+    *   This is not authenticated account memory or backend persistence; it is a v1 local bridge between two public diagnostic surfaces.
+
+*   **2026-06-23 Supabase Storage Update:**
+    *   The founder asked to connect Clarity Circle to the existing Supabase project without creating a new project and without overlapping with recruiting-company database structures.
+    *   Clarity Circle now uses Supabase email magic-link auth when env vars are configured, and saves completed intent captures as private projects for signed-in users.
+    *   The database design uses a dedicated `clarity_circle` schema with `profiles`, `projects`, and `context_entries` tables, RLS policies scoped to `auth.uid()`, and explicit grants only for authenticated users.
+    *   Future Clarity Circle storage work must remain inside the `clarity_circle` schema unless a newer database decision explicitly changes that boundary.

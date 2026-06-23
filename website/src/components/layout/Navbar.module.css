@@ -225,7 +225,7 @@
   .desktopNav {
     display: flex;
     align-items: center;
-    gap: 22px;
+    gap: 16px;
   }
   .ctaButton {
     display: inline-flex !important;

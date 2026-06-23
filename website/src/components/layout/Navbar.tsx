@@ -49,6 +49,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
               <Link href="/#method" className={styles.navLink}>Method</Link>
               <Link href="/#services" className={styles.navLink}>Services</Link>
               <Link href="/clarity-engine" className={styles.navLink}>Clarity Engine</Link>
+              <Link href="/clarity-circle" className={styles.navLink}>Clarity Circle</Link>
               <Link href="/#workflows" className={styles.navLink}>Process</Link>
               <Link href="/work" className={styles.navLink}>Work</Link>
               <Link href="/founder" className={styles.navLink}>Founder</Link>
@@ -87,6 +88,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <Link href="/#method" className={styles.mobileLink} onClick={closeMobileMenu}>Method</Link>
             <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
             <Link href="/clarity-engine" className={styles.mobileLink} onClick={closeMobileMenu}>Clarity Engine</Link>
+            <Link href="/clarity-circle" className={styles.mobileLink} onClick={closeMobileMenu}>Clarity Circle</Link>
             <Link href="/#workflows" className={styles.mobileLink} onClick={closeMobileMenu}>Process</Link>
             <Link href="/work" className={styles.mobileLink} onClick={closeMobileMenu}>Work</Link>
             <Link href="/founder" className={styles.mobileLink} onClick={closeMobileMenu}>Founder</Link>
