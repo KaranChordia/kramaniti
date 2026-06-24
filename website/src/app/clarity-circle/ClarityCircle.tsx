@@ -817,7 +817,7 @@ export function ClarityCircle() {
     return fallbackProfile;
   }, [syncProfileTrack, track, upsertProfile]);
 
-  const refreshWorkspace = useCallback(async (user: User, options?: { quiet?: boolean }) => {
+  const refreshWorkspace = useCallback(async (user: User, options?: { quiet?: boolean; preserveAssistantState?: boolean }) => {
     const supabase = getClarityCircleSupabase();
     if (!supabase) return null;
 
@@ -913,11 +913,13 @@ export function ClarityCircle() {
       setProjectTasks(nextTasks);
     }
     setContextEntries(nextEntries);
-    setAssistantMessages(nextMessages);
-    setAssistantThreads(nextAssistantThreads);
-    setActiveAssistantThreadId((current) =>
-      nextAssistantThreads.some((thread) => thread.id === current) ? current : nextAssistantThreads[0]?.id ?? DEFAULT_ASSISTANT_THREAD_ID,
-    );
+    if (!options?.preserveAssistantState) {
+      setAssistantMessages(nextMessages);
+      setAssistantThreads(nextAssistantThreads);
+      setActiveAssistantThreadId((current) =>
+        nextAssistantThreads.some((thread) => thread.id === current) ? current : nextAssistantThreads[0]?.id ?? DEFAULT_ASSISTANT_THREAD_ID,
+      );
+    }
     setAssistantMemories(nextMemories);
     setSelectedProjectId((current) => {
       if (current && nextProjects.some((project) => project.id === current)) return current;
@@ -1139,14 +1141,14 @@ export function ClarityCircle() {
 
     const initialRefresh = window.setTimeout(() => {
       if (!isMounted) return;
-      void refreshWorkspace(authUser);
+      void refreshWorkspace(authUser, { preserveAssistantState: activeMenu === 'assistant' });
     }, 0);
 
     return () => {
       isMounted = false;
       window.clearTimeout(initialRefresh);
     };
-  }, [authUser, refreshWorkspace]);
+  }, [activeMenu, authUser, refreshWorkspace]);
 
   useEffect(() => {
     const supabase = getClarityCircleSupabase();
@@ -1156,7 +1158,7 @@ export function ClarityCircle() {
     const queueRefresh = () => {
       if (refreshTimer) window.clearTimeout(refreshTimer);
       refreshTimer = window.setTimeout(() => {
-        void refreshWorkspace(authUser, { quiet: true });
+        void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: activeMenu === 'assistant' });
       }, 180);
     };
 
@@ -1194,7 +1196,7 @@ export function ClarityCircle() {
       if (refreshTimer) window.clearTimeout(refreshTimer);
       void supabase.removeChannel(channel);
     };
-  }, [authUser, refreshWorkspace]);
+  }, [activeMenu, authUser, refreshWorkspace]);
 
   const accountTrack = authProfile?.preferred_track ?? track;
   const accountTrackCopy = TRACKS[accountTrack];
@@ -2019,7 +2021,7 @@ export function ClarityCircle() {
     }
 
     setAssistantMemories((current) => [data, ...current.filter((item) => item.id !== data.id)].slice(0, 12));
-    void refreshWorkspace(authUser, { quiet: true });
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
     return data;
   };
 
@@ -2102,7 +2104,7 @@ export function ClarityCircle() {
     setProjectInstructionDraft(project.project_instruction || project.context);
     await insertProjectTasks(project, buildAutoTasks(project), 'auto');
     setStatus('Project created with assistant context and starting tasks.');
-    void refreshWorkspace(authUser, { quiet: true });
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
     return project;
   };
 
@@ -2162,6 +2164,39 @@ export function ClarityCircle() {
     }
 
     return result;
+  };
+
+  const buildActionAwareAssistantReply = (data: AssistantResponse, result: AssistantActionResult, fallbackReply: string) => {
+    const requestedActions = [
+      data.projectDraft ? 'project' : null,
+      data.folderDraft ? 'folder' : null,
+      data.taskDrafts?.length ? 'tasks' : null,
+      data.memoryDraft ? 'memory' : null,
+    ].filter(Boolean) as string[];
+
+    if (requestedActions.length === 0) return fallbackReply;
+
+    const savedActions = [
+      result.project ? 'project' : null,
+      result.folder ? 'folder' : null,
+      result.taskCount > 0 ? (result.taskCount === 1 ? 'task' : 'tasks') : null,
+      result.memory ? 'memory' : null,
+    ].filter(Boolean) as string[];
+    const failedActions = requestedActions.filter((action) => !savedActions.includes(action));
+
+    if (failedActions.length === 0) {
+      return `${fallbackReply} Saved to your Circle: ${savedActions.join(', ')}.`;
+    }
+
+    const failureReason = authUser
+      ? 'the account save did not complete. Please check that the latest Supabase migrations are applied and try again.'
+      : 'you need to sign in before I can save it to your Circle workspace.';
+
+    if (savedActions.length > 0) {
+      return `${fallbackReply} Saved to your Circle: ${savedActions.join(', ')}. Could not save: ${failedActions.join(', ')} because ${failureReason}`;
+    }
+
+    return `I drafted the ${failedActions.join(', ')}, but ${failureReason}`;
   };
 
   const archiveAssistantMemory = async (memory: ClarityCircleAssistantMemory) => {
@@ -2315,7 +2350,7 @@ export function ClarityCircle() {
     const userMessageSave = saveAssistantMessage(userMessage, null, threadId);
 
     try {
-      const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true }) : null;
+      const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true, preserveAssistantState: true }) : null;
       const assistantProjects = liveWorkspace?.projects ?? projects;
       const assistantFolders = liveWorkspace?.folders ?? projectFolders;
       const assistantTasks = liveWorkspace?.tasks ?? projectTasks;
@@ -2384,8 +2419,10 @@ export function ClarityCircle() {
       });
 
       const data = (await response.json()) as AssistantResponse;
-      const reply = data.response || data.error || 'The Circle assistant could not respond yet.';
+      const baseReply = data.response || data.error || 'The Circle assistant could not respond yet.';
       const savedUserMessage = (await userMessageSave) ?? userMessage;
+      const actionResult = await runAssistantActions(data);
+      const reply = buildActionAwareAssistantReply(data, actionResult, baseReply);
       const assistantMessage = createUiMessage('assistant', reply, null, threadId);
       const completedMessages = [
         ...nextMessages.map((message) => (message.id === userMessage.id ? savedUserMessage : message)),
@@ -2407,7 +2444,6 @@ export function ClarityCircle() {
       }
       const assistantMessageSave = saveAssistantMessage(assistantMessage, null, threadId, summaryTitle);
 
-      await runAssistantActions(data);
       await assistantMessageSave;
     } catch {
       const fallbackMessage = createUiMessage(
@@ -2440,7 +2476,7 @@ export function ClarityCircle() {
     const userMessageSave = saveAssistantMessage(userMessage, selectedProject.id);
 
     try {
-      const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true }) : null;
+      const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true, preserveAssistantState: true }) : null;
       const assistantProjects = liveWorkspace?.projects ?? projects;
       const assistantFolders = liveWorkspace?.folders ?? projectFolders;
       const assistantTasks = liveWorkspace?.tasks ?? projectTasks;
@@ -2509,8 +2545,10 @@ export function ClarityCircle() {
       });
 
       const data = (await response.json()) as AssistantResponse;
-      const reply = data.response || data.error || 'The project assistant could not respond yet.';
+      const baseReply = data.response || data.error || 'The project assistant could not respond yet.';
       const savedUserMessage = (await userMessageSave) ?? userMessage;
+      const actionResult = await runAssistantActions(data, { project: selectedProject });
+      const reply = buildActionAwareAssistantReply(data, actionResult, baseReply);
       const assistantMessage = createUiMessage('assistant', reply, selectedProject.id);
       const completedMessages = [
         ...nextMessages.map((message) => (message.id === userMessage.id ? savedUserMessage : message)),
@@ -2523,7 +2561,6 @@ export function ClarityCircle() {
       ]);
       const assistantMessageSave = saveAssistantMessage(assistantMessage, selectedProject.id);
 
-      await runAssistantActions(data, { project: selectedProject });
       await assistantMessageSave;
     } catch {
       const fallbackMessage = createUiMessage(

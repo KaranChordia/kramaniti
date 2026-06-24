@@ -234,6 +234,17 @@ const wantsProject = (message: string, history: AssistantMessage[] = []) =>
 const wantsFolder = (message: string) =>
   /\b(create|start|make|add|set up|new)\b/i.test(message) && /\b(folder|directory|collection)\b/i.test(message);
 
+const confirmsFolderCreation = (message: string) =>
+  /\b(go ahead|create it|create this|create that|create one|please create|proceed|do it|set it up|make it)\b/i.test(message);
+
+const conversationInvitedFolderCreation = (history: AssistantMessage[]) =>
+  history
+    .slice(0, -1)
+    .some((message) => /\b(folder|directory|collection|group related projects)\b/i.test(message.content));
+
+const shouldCreateFolder = (message: string, history: AssistantMessage[] = []) =>
+  wantsFolder(message) || (confirmsFolderCreation(message) && conversationInvitedFolderCreation(history));
+
 const wantsMemory = (message: string) =>
   /\b(remember|save this|keep this|note this|store this)\b/i.test(message) ||
   /\b(my preference|important context|don't forget|do not forget)\b/i.test(message);
@@ -294,35 +305,66 @@ const buildProjectDraft = (latestMessage: string, history: AssistantMessage[], b
   };
 };
 
+const buildFolderName = (message: string, history: AssistantMessage[], body: AssistantRequestBody) => {
+  const directName = clean(
+    message
+      .replace(/\b(create|start|make|add|set up|new|please|folder|directory|collection)\b/gi, ' ')
+      .replace(/\b(for|called|named|as)\b/gi, ' '),
+  );
+
+  if (directName && directName.length > 2 && !confirmsFolderCreation(message)) {
+    return truncate(directName, 80);
+  }
+
+  const previousProjectSignal = [...history]
+    .slice(0, -1)
+    .reverse()
+    .find((entry) => entry.role === 'user' && entry.content.length > 12)?.content;
+
+  return truncate(
+    buildProjectTitle(previousProjectSignal || body.savedContext?.headline || body.savedContext?.context || 'New folder'),
+    80,
+  );
+};
+
+const buildFolderDraft = (latestMessage: string, history: AssistantMessage[], body: AssistantRequestBody): FolderDraft => ({
+  name: buildFolderName(latestMessage, history, body),
+});
+
 const ensureRequestedActions = (
   payload: AssistantPayload,
   latestMessage: string,
   history: AssistantMessage[],
   body: AssistantRequestBody,
 ): AssistantPayload => {
-  if (!wantsProject(latestMessage, history) || payload.projectDraft) return payload;
+  let nextPayload = payload;
 
-  return {
-    ...payload,
-    response:
-      payload.response && !/\bproject created\b/i.test(payload.response)
-        ? payload.response
-        : 'Project created. I kept it tied to the original idea and added a practical starting structure for the next pass.',
-    projectDraft: buildProjectDraft(latestMessage, history, body),
-  };
+  if (wantsProject(latestMessage, history) && !nextPayload.projectDraft) {
+    nextPayload = {
+      ...nextPayload,
+      response:
+        nextPayload.response && !/\bproject created\b/i.test(nextPayload.response)
+          ? nextPayload.response
+          : 'Project created. I kept it tied to the original idea and added a practical starting structure for the next pass.',
+      projectDraft: buildProjectDraft(latestMessage, history, body),
+    };
+  }
+
+  if (shouldCreateFolder(latestMessage, history) && !nextPayload.folderDraft) {
+    nextPayload = {
+      ...nextPayload,
+      response:
+        nextPayload.response && !/\bfolder created\b/i.test(nextPayload.response)
+          ? nextPayload.response
+          : 'Folder created. I prepared a private workspace folder for related projects.',
+      folderDraft: buildFolderDraft(latestMessage, history, body),
+    };
+  }
+
+  return nextPayload;
 };
 
 const buildLocalPayload = (latestMessage: string, body: AssistantRequestBody, history: AssistantMessage[] = []): AssistantPayload => {
-  const folderName = truncate(
-    clean(
-      latestMessage
-        .replace(/\b(create|start|make|add|set up|new)\b/gi, '')
-        .replace(/\b(folder|directory|collection)\b/gi, '')
-        .replace(/\b(for|called|named|as)\b/gi, ' ')
-    ) || 'New folder',
-    80,
-  );
-
   const payload: AssistantPayload = {
     response:
       'I have the Circle context. The useful next move is to keep the request tied to one project, one audience, one blocker, and one decision boundary before choosing tools or publishing content.',
@@ -348,11 +390,9 @@ const buildLocalPayload = (latestMessage: string, body: AssistantRequestBody, hi
     payload.memoryDraft = null;
   }
 
-  if (wantsFolder(latestMessage)) {
+  if (shouldCreateFolder(latestMessage, history)) {
     payload.response = 'I prepared a private project folder for this Circle workspace. Use it to group related projects and keep the assistant context easier to read.';
-    payload.folderDraft = {
-      name: folderName,
-    };
+    payload.folderDraft = buildFolderDraft(latestMessage, history, body);
     payload.memoryDraft = null;
   }
 
@@ -394,7 +434,7 @@ const buildMessages = (
 ): ChatCompletionMessageParam[] => {
   const latestMessage = [...history].reverse().find((message) => message.role === 'user')?.content || '';
   const shouldDraftProject = wantsProject(latestMessage, history);
-  const shouldDraftFolder = wantsFolder(latestMessage);
+  const shouldDraftFolder = shouldCreateFolder(latestMessage, history);
   const shouldDraftMemory = wantsMemory(latestMessage);
   const shouldDraftTask = wantsTask(latestMessage);
 
@@ -417,6 +457,8 @@ Your job:
 - If the user confirms a previous project suggestion with phrases like "go ahead", "create it", "proceed", or "set it up", return a projectDraft object using the earlier project idea as the source context.
 - Never say "Project created" unless the JSON response also includes a non-null projectDraft.
 - If the user asks you to create a folder, return a folderDraft object.
+- If the user confirms a previous folder suggestion with phrases like "go ahead", "create it", "proceed", or "set it up", return a folderDraft object.
+- Never say "Folder created" unless the JSON response also includes a non-null folderDraft.
 - If the user asks for a task, todo, or concrete action item for the selected project, return taskDrafts.
 - If the user asks you to remember something, or if a durable preference or useful signal emerges, return a memoryDraft object.
 - When a selected project exists, answer as that project's assistant: use the selected project's instruction, context, tasks, messages, and memories first, while keeping the broader Clarity Circle behavior.
