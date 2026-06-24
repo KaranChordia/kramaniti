@@ -228,6 +228,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 3px;
+  margin: -3px;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
@@ -291,6 +293,18 @@
 .menu button:focus-visible svg,
 .menu .menuActive svg {
   color: var(--circle-gold-light);
+}
+
+.lightTheme .menu button:hover,
+.lightTheme .menu button:focus-visible,
+.lightTheme .menu .menuActive {
+  background:
+    linear-gradient(180deg, rgba(201, 168, 76, 0.18), rgba(255, 255, 255, 0.58)),
+    var(--circle-control);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    inset 0 0 0 1px rgba(201, 168, 76, 0.12),
+    0 8px 16px rgba(80, 65, 31, 0.08);
 }
 
 .profilePanel {
@@ -525,6 +539,41 @@
   color: var(--circle-text);
 }
 
+.signupPathPicker {
+  grid-column: 1 / -1;
+  width: min(100%, 660px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 auto;
+  padding: 4px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-panel-soft);
+}
+
+.signupPathPicker button {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--circle-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.signupPathPicker .signupPathActive {
+  border-color: var(--circle-gold-border);
+  background: var(--circle-control-hover);
+  color: var(--circle-text);
+}
+
 .authStatus {
   width: min(100%, 420px);
   min-height: 38px;
@@ -569,6 +618,8 @@
 .authField input,
 .intentForm input,
 .intentForm textarea,
+.communityComposer input,
+.communityComposer textarea,
 .settingsList select {
   width: 100%;
   border: 1px solid var(--circle-border);
@@ -587,6 +638,7 @@
 
 .authField input,
 .intentForm input,
+.communityComposer input,
 .settingsList select {
   min-height: 46px;
   padding: 0 13px;
@@ -609,9 +661,17 @@
   resize: vertical;
 }
 
+.communityComposer textarea {
+  min-height: 132px;
+  padding: 13px;
+  resize: vertical;
+}
+
 .authField input:focus,
 .intentForm input:focus,
 .intentForm textarea:focus,
+.communityComposer input:focus,
+.communityComposer textarea:focus,
 .settingsList select:focus {
   border-color: var(--circle-border-strong);
   background: var(--circle-input-focus);
@@ -753,6 +813,9 @@
 .contextGrid article,
 .homePanel,
 .homeStatCard,
+.communityComposer,
+.communityThread,
+.communityHeader,
 .projectList,
 .finderShell,
 .chatPanel,
@@ -832,32 +895,36 @@
 
 .homeScreen {
   width: 100%;
-  gap: 14px;
+  gap: 12px;
   padding-top: 0;
 }
 
 .homeHero {
-  min-height: 176px;
+  min-height: 236px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.72fr);
+  align-items: stretch;
   gap: 18px;
-  padding: 20px;
+  padding: 18px;
   border: 1px solid var(--circle-gold-border);
   border-radius: 8px;
   background:
-    radial-gradient(circle at 88% 18%, rgba(201, 168, 76, 0.22), transparent 34%),
+    radial-gradient(circle at 88% 18%, rgba(201, 168, 76, 0.22), transparent 30%),
+    radial-gradient(circle at 0% 100%, rgba(255, 255, 255, 0.055), transparent 36%),
     var(--circle-hero-sheen),
     var(--circle-hero-fill);
   box-shadow: var(--circle-card-shadow);
 }
 
-.homeHero div {
+.homeHeroMain {
   display: grid;
-  gap: 10px;
+  align-content: end;
+  gap: 12px;
+  min-width: 0;
 }
 
 .homeHero span,
+.homeRoleCard span,
 .homePanelHeader span,
 .homeStatCard span {
   color: var(--circle-gold-light);
@@ -868,8 +935,9 @@
 }
 
 .homeHero h1 {
-  max-width: 780px;
-  font-size: clamp(38px, 5.2vw, 72px);
+  max-width: 880px;
+  font-size: clamp(42px, 5.4vw, 78px);
+  letter-spacing: 0;
 }
 
 .homeHero p {
@@ -880,6 +948,42 @@
   line-height: 1.5;
 }
 
+.homeHeroActions,
+.homeRoleCard {
+  display: flex;
+}
+
+.homeHeroActions {
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 4px;
+}
+
+.homeRoleCard {
+  min-height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.018)),
+    var(--circle-row-strong);
+  box-shadow: var(--circle-control-shadow);
+}
+
+.homeRoleCard strong {
+  color: var(--circle-text);
+  font-size: 24px;
+  line-height: 1.08;
+}
+
+.homeRoleCard p {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .homeStatsGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -887,11 +991,16 @@
 }
 
 .homeStatCard {
-  min-height: 104px;
+  min-height: 132px;
   display: grid;
   align-content: space-between;
-  gap: 10px;
+  justify-items: start;
+  gap: 8px;
   padding: 14px;
+  color: var(--circle-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
 .homeStatCard svg {
@@ -902,6 +1011,21 @@
   color: var(--circle-text);
   font-size: clamp(26px, 3vw, 38px);
   line-height: 0.95;
+}
+
+.homeStatCard small {
+  color: var(--circle-faint);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.homeStatCard:hover,
+.homeStatCard:focus-visible {
+  border-color: var(--circle-gold-border);
+  background:
+    var(--circle-card-hover-sheen),
+    var(--circle-panel);
+  outline: none;
 }
 
 .homeBentoGrid {
@@ -962,6 +1086,50 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: auto;
+}
+
+.homeActivityList {
+  display: grid;
+  gap: 8px;
+}
+
+.homeActivityList button {
+  min-height: 64px;
+  display: grid;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-row);
+  color: var(--circle-muted);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--circle-control-shadow);
+}
+
+.homeActivityList button:hover,
+.homeActivityList button:focus-visible {
+  border-color: var(--circle-gold-border);
+  background: var(--circle-control-hover);
+  color: var(--circle-text);
+  outline: none;
+}
+
+.homeActivityList span {
+  color: var(--circle-gold-light);
+  font-size: 10px;
+  font-weight: 780;
+  text-transform: uppercase;
+}
+
+.homeActivityList strong {
+  color: inherit;
+  font-size: 14px;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .homeJourneyTrack {
@@ -1077,6 +1245,203 @@
   color: var(--circle-faint);
   font-size: 12px;
   line-height: 1.25;
+}
+
+.communityScreen {
+  align-content: start;
+}
+
+.communityHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: end;
+  padding: 18px;
+}
+
+.communityHeader > div:first-child {
+  display: grid;
+  gap: 9px;
+}
+
+.communityHeader span,
+.communityComposer > span,
+.communityThreadHeader span {
+  color: var(--circle-gold-light);
+  font-size: 11px;
+  font-weight: 780;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.communityHeader h1,
+.communityComposer h2,
+.communityThread h2 {
+  margin: 0;
+  color: var(--circle-text);
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.communityHeader h1 {
+  max-width: 820px;
+  font-size: clamp(30px, 4.5vw, 58px);
+}
+
+.communityHeader p,
+.communityComposer p,
+.communityThread p {
+  margin: 0;
+  color: var(--circle-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.communityHeader p {
+  max-width: 720px;
+}
+
+.communityCounters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(112px, 1fr));
+  gap: 8px;
+}
+
+.communityCounters div {
+  min-height: 82px;
+  display: grid;
+  align-content: space-between;
+  padding: 12px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-row);
+  box-shadow: var(--circle-control-shadow);
+}
+
+.communityCounters strong {
+  color: var(--circle-text);
+  font-size: 34px;
+  line-height: 0.95;
+}
+
+.communityCounters span {
+  color: var(--circle-faint);
+}
+
+.communityGrid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(300px, 0.38fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.communityComposer {
+  align-content: start;
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.communityComposer label {
+  display: grid;
+  gap: 8px;
+  color: var(--circle-faint);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.communityFeed {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
+}
+
+.communityFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.communityFilters button {
+  min-height: 38px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-control);
+  color: var(--circle-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 720;
+  padding: 0 12px;
+  cursor: pointer;
+  box-shadow: var(--circle-control-shadow);
+}
+
+.communityFilters button:hover,
+.communityFilters button:focus-visible,
+.communityFilters .communityFilterActive {
+  border-color: var(--circle-gold-border);
+  background: var(--circle-control-hover);
+  color: var(--circle-text);
+  outline: none;
+}
+
+.communityThreads {
+  min-height: 0;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  overflow-y: auto;
+}
+
+.communityThread {
+  display: grid;
+  gap: 12px;
+  padding: 15px;
+}
+
+.communityThreadHeader,
+.communityThreadMeta,
+.communityThreadActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.communityThreadHeader small,
+.communityThreadMeta span {
+  color: var(--circle-faint);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.communityThread h2 {
+  font-size: 21px;
+}
+
+.communityTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.communityTags span {
+  min-height: 26px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--circle-border);
+  border-radius: 999px;
+  background: var(--circle-control);
+  color: var(--circle-muted);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 9px;
+}
+
+.communityThreadActions {
+  justify-content: flex-start;
 }
 
 .projectList {
@@ -2117,6 +2482,15 @@
     grid-column: span 2;
   }
 
+  .communityHeader,
+  .communityGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .communityCounters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .finderShell {
     grid-template-columns: 190px minmax(0, 1fr);
     overflow: auto;
@@ -2270,10 +2644,13 @@
     font-size: 34px;
   }
 
-  .homeStatsGrid,
   .homeBentoGrid,
   .homeJourneyTrack {
     grid-template-columns: 1fr;
+  }
+
+  .homeStatsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .homePanel,
@@ -2282,9 +2659,35 @@
     min-height: 0;
   }
 
+  .homeStatCard {
+    min-height: 118px;
+  }
+
   .homePanelWide,
   .homeJourneyPanel {
     grid-column: span 1;
+  }
+
+  .communityHeader {
+    padding: 15px;
+  }
+
+  .communityHeader h1 {
+    font-size: 32px;
+  }
+
+  .communityCounters,
+  .communityThreadActions {
+    grid-template-columns: 1fr;
+  }
+
+  .communityThreadActions {
+    display: grid;
+  }
+
+  .communityThreadActions .secondaryButton,
+  .communityThreadActions .textButton {
+    width: 100%;
   }
 
   .homeJourneyTrack div {
@@ -2319,6 +2722,10 @@
     display: grid;
     grid-template-columns: 1fr;
     width: 100%;
+  }
+
+  .signupPathPicker {
+    grid-template-columns: 1fr;
   }
 
   .primaryButton,

@@ -345,6 +345,212 @@ input, textarea, select {
   font-size: 16px !important;
 }
 
+/* Clarity Circle critical shell fallback.
+   The route uses CSS Modules for its full interface. These scoped hooks keep
+   the screen usable if a cached page or delayed route stylesheet misses them. */
+.clarity-circle-route {
+  --circle-fallback-bg: #08090a;
+  --circle-fallback-surface: #0a0b0c;
+  --circle-fallback-panel: rgba(16, 17, 19, 0.92);
+  --circle-fallback-border: rgba(255, 255, 255, 0.1);
+  --circle-fallback-gold: #c9a84c;
+  --circle-fallback-gold-light: #e4c36e;
+  --circle-fallback-text: #f7f3ea;
+  --circle-fallback-muted: rgba(247, 243, 234, 0.68);
+  position: relative;
+  min-height: 100dvh;
+  padding: 8px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(201, 168, 76, 0.24), transparent 34%),
+    radial-gradient(circle at 100% 100%, rgba(201, 168, 76, 0.2), transparent 38%),
+    linear-gradient(135deg, #11100d 0%, #090a0b 48%, #151617 78%, #2d2f31 100%);
+  color: var(--circle-fallback-text);
+  font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+
+.clarity-circle-shell {
+  min-height: calc(100dvh - 16px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.018)),
+    var(--circle-fallback-surface);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.clarity-circle-rail {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto minmax(180px, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--circle-fallback-border);
+  background: rgba(7, 8, 9, 0.5);
+}
+
+.clarity-circle-menu,
+.clarity-circle-utilities {
+  display: flex;
+  align-items: center;
+}
+
+.clarity-circle-menu {
+  justify-self: center;
+  justify-content: center;
+  gap: 6px;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.clarity-circle-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.clarity-circle-utilities {
+  justify-self: end;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--circle-fallback-border);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.clarity-circle-stage {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: 22px;
+  padding: 22px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.clarity-circle-route :where(button, a[role='button']) {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--circle-fallback-border);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.055);
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.clarity-circle-route :where(button:hover, button:focus-visible, a[role='button']:focus-visible) {
+  border-color: rgba(201, 168, 76, 0.34);
+  background: rgba(201, 168, 76, 0.1);
+  outline: none;
+}
+
+.clarity-circle-route :where(input, textarea, select) {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--circle-fallback-border);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--circle-fallback-text);
+  font: inherit;
+  line-height: 1.5;
+  outline: none;
+}
+
+.clarity-circle-route :where(input) {
+  padding: 0 13px;
+}
+
+.clarity-circle-route :where(textarea) {
+  padding: 13px;
+  resize: vertical;
+}
+
+.clarity-circle-route :where(input:focus, textarea:focus, select:focus) {
+  border-color: rgba(201, 168, 76, 0.42);
+  background: rgba(3, 3, 5, 0.68);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+}
+
+.clarity-circle-route :where(h1, h2, h3, p) {
+  margin: 0;
+}
+
+.clarity-circle-route :where(h1) {
+  max-width: 760px;
+  color: var(--circle-fallback-text);
+  font-size: clamp(36px, 4.8vw, 58px);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.clarity-circle-route :where(p, label, small) {
+  color: var(--circle-fallback-muted);
+}
+
+.clarity-circle-route :where(svg) {
+  color: var(--circle-fallback-gold-light);
+  flex: 0 0 auto;
+}
+
+@media (max-width: 720px) {
+  .clarity-circle-route {
+    min-height: 100svh;
+    padding: 0;
+  }
+
+  .clarity-circle-shell {
+    min-height: 100svh;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .clarity-circle-rail {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand utilities"
+      "menu menu";
+    padding: 9px 10px 8px;
+    gap: 8px 10px;
+  }
+
+  .clarity-circle-rail > button {
+    grid-area: brand;
+    min-width: 0;
+  }
+
+  .clarity-circle-menu {
+    grid-area: menu;
+    justify-self: stretch;
+    justify-content: flex-start;
+  }
+
+  .clarity-circle-utilities {
+    grid-area: utilities;
+  }
+
+  .clarity-circle-stage {
+    padding: 16px 14px 20px;
+  }
+}
+
 /* Ensure smooth touch scrolling globally */
 * {
   -webkit-overflow-scrolling: touch;

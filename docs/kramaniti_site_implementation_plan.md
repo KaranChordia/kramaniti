@@ -311,6 +311,9 @@ Related files:
 - A premium but simple sequential app flow rather than a dense all-in-one dashboard.
 - A modern entry screen with simulated sign in / account creation for the v1 prototype.
 - A two-track selector: Building a business / Founder Track, and Exploring an idea / Builder Track.
+- A Circle community surface with two contribution paths: founders can post problem statements as threads, and solopreneurs can share work, ideas, prototypes, or useful signals.
+- The first Circle feed implementation is local-first, with seeded founder problem threads and solopreneur shares for product validation before community persistence is added.
+- Account creation now treats the selected path as the user's Circle role. Founder accounts get the founder problem-statement composer and founder-owned project/context path; solopreneur accounts get the work/idea sharing composer and solopreneur-owned project/context path.
 - A focused intent-capture screen that asks for the one-line intent, current context, audience, blocker, and desired outcome.
 - A private context workspace that saves the user's starting point locally, then shows the system's understanding, next questions, and suggested sequence.
 - Supabase-ready authentication with two-step signup: email first, then username/password, plus private project storage when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are configured.
@@ -334,6 +337,10 @@ Related files:
 - Navigation and sitemap entries for the new route.
 
 [Constraint] Clarity Circle must stay distinct from Clarity Engine. Clarity Engine is the focused single diagnostic session. Clarity Circle is the ongoing ecosystem layer with member memory, community engagement, and recurring progress rhythm.
+
+[Constraint] The social layer should be founder/solopreneur-focused. Founders contribute real problem statements; solopreneurs contribute work, ideas, and experiments. It should not become a generic engagement feed.
+
+[Constraint] Founder and solopreneur capabilities should remain role-gated by the account's saved `preferred_track`. Do not show founder problem-posting controls to solopreneur accounts, and do not show solopreneur share-posting controls to founder accounts unless a newer product decision explicitly merges those roles.
 
 [Constraint] V1 remains free. Auth-backed storage is allowed only inside the isolated `clarity_circle` schema, with RLS scoped to `auth.uid()`. Do not add payments, public claims, external tool recommendations, emails, or market updates without a newer implementation decision and privacy/storage model.
 

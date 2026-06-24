@@ -30,6 +30,7 @@ import {
   Settings,
   ShieldCheck,
   Sun,
+  Users,
   UserRound,
 } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
@@ -49,7 +50,7 @@ type Track = 'founder' | 'builder';
 type StepId = 'entry' | 'track' | 'intent' | 'context';
 type SessionMode = 'signin' | 'signup';
 type AuthView = 'signup-email' | 'signup-credentials' | 'signin';
-type MenuId = 'home' | 'start' | 'path' | 'context' | 'assistant' | 'memory' | 'projects' | 'profile' | 'settings';
+type MenuId = 'home' | 'start' | 'path' | 'context' | 'circle' | 'assistant' | 'memory' | 'projects' | 'profile' | 'settings';
 
 type IntentDraft = {
   headline: string;
@@ -116,6 +117,22 @@ type AssistantActionResult = {
 };
 
 type ProjectFolderFilter = 'all' | 'unfiled' | string;
+type CommunityPostKind = 'founder_problem' | 'builder_share';
+type CommunityPostFilter = 'all' | CommunityPostKind;
+
+type CommunityPost = {
+  id: string;
+  kind: CommunityPostKind;
+  track: Track;
+  title: string;
+  body: string;
+  tags: string[];
+  authorLabel: string;
+  createdAt: string;
+  interestCount: number;
+  replyCount: number;
+  source: 'seed' | 'user';
+};
 
 type WorkspaceSnapshot = {
   projects: ClarityCircleProject[];
@@ -179,15 +196,15 @@ const TRACKS: Record<
     },
   },
   builder: {
-    label: 'I am exploring an idea',
-    shortLabel: 'Builder Track',
-    description: 'Turn a rough idea into a clearer audience, problem, validation path, and first useful version.',
+    label: 'I am a solopreneur or solo builder',
+    shortLabel: 'Solopreneur Track',
+    description: 'Turn a rough idea, useful work, or early build into a clearer audience, validation path, and first version.',
     icon: Lightbulb,
     defaults: {
       headline: 'How do I turn this rough idea into a first useful version?',
       context:
         'I have an idea and a few possible directions, but I am not sure who it is for, what problem matters most, or what to do first.',
-      audience: 'Individuals or early builders who have an idea but need a sharper first audience and use case.',
+      audience: 'Solopreneurs, solo builders, or early individuals who have an idea but need a sharper first audience and use case.',
       blocker: 'The audience, first version, and validation move are still unclear.',
       outcome: 'A simple validation plan and one clear explanation of the idea.',
     },
@@ -205,6 +222,7 @@ const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> =
   { id: 'start', label: 'Start', icon: CircleDot },
   { id: 'path', label: 'Path', icon: Compass },
   { id: 'context', label: 'Context', icon: FileText },
+  { id: 'circle', label: 'Circle', icon: Users },
   { id: 'assistant', label: 'Assistant', icon: MessageCircle },
   { id: 'memory', label: 'Memory', icon: Database },
   { id: 'projects', label: 'Projects', icon: FolderOpen },
@@ -223,6 +241,65 @@ const INITIAL_ASSISTANT_MESSAGES: UiAssistantMessage[] = [
     'assistant',
     'I can use your Circle context, projects, and memory to sharpen your next move or create a new project from a rough request.',
   ),
+];
+
+const COMMUNITY_SEED_POSTS: CommunityPost[] = [
+  {
+    id: 'seed-founder-onboarding',
+    kind: 'founder_problem',
+    track: 'founder',
+    title: 'Founder onboarding gets messy before the first AI tool is chosen',
+    body:
+      'The business has repeat leads, but every first conversation becomes a different handoff. The useful thread is how to map the intake, owner, review point, and next action before adding tools.',
+    tags: ['workflow', 'onboarding', 'handoff'],
+    authorLabel: 'Founder Track',
+    createdAt: '2026-06-24T08:00:00.000Z',
+    interestCount: 4,
+    replyCount: 3,
+    source: 'seed',
+  },
+  {
+    id: 'seed-founder-content',
+    kind: 'founder_problem',
+    track: 'founder',
+    title: 'Good internal work is not becoming clear founder content',
+    body:
+      'There are useful delivery notes, but they do not become public proof-safe posts. The problem is deciding what can be shared, what needs permission, and what should stay internal.',
+    tags: ['content', 'proof', 'founder-led'],
+    authorLabel: 'Founder Track',
+    createdAt: '2026-06-23T11:15:00.000Z',
+    interestCount: 6,
+    replyCount: 5,
+    source: 'seed',
+  },
+  {
+    id: 'seed-builder-intake-board',
+    kind: 'builder_share',
+    track: 'builder',
+    title: 'Testing a lightweight intake board for service founders',
+    body:
+      'I am sketching a board that turns scattered enquiry notes into owner, urgency, next action, and review status. The first useful version is intentionally small.',
+    tags: ['prototype', 'service', 'intake'],
+    authorLabel: 'Solopreneur Track',
+    createdAt: '2026-06-24T05:45:00.000Z',
+    interestCount: 8,
+    replyCount: 4,
+    source: 'seed',
+  },
+  {
+    id: 'seed-builder-content-repurposer',
+    kind: 'builder_share',
+    track: 'builder',
+    title: 'Idea: turn founder voice notes into weekly clarity prompts',
+    body:
+      'The idea is not a full content engine yet. It is a small routine that catches one decision, one blocker, and one next post angle from rough founder notes.',
+    tags: ['idea', 'content', 'solo-build'],
+    authorLabel: 'Solopreneur Track',
+    createdAt: '2026-06-22T16:30:00.000Z',
+    interestCount: 5,
+    replyCount: 2,
+    source: 'seed',
+  },
 ];
 
 const formatProjectDate = (value: string) =>
@@ -260,7 +337,7 @@ const buildSavedContext = (track: Track, intent: IntentDraft): SavedContext => {
           intent.headline,
           trackCopy.defaults.headline
         )} The Circle should keep focusing on the current workflow, decision owner, human review boundary, and proof-safe next move before tools are selected.`
-      : `The current builder signal is: ${cleanSentence(
+      : `The current solopreneur signal is: ${cleanSentence(
           intent.headline,
           trackCopy.defaults.headline
         )} The Circle should keep focusing on audience pain, first useful version, validation, and simple proof before building too much.`;
@@ -345,6 +422,11 @@ export function ClarityCircle() {
   const [projectAssistantInput, setProjectAssistantInput] = useState('');
   const [newFolderName, setNewFolderName] = useState('');
   const [isCreatingFolder, setIsCreatingFolder] = useState(false);
+  const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>(COMMUNITY_SEED_POSTS);
+  const [communityFilter, setCommunityFilter] = useState<CommunityPostFilter>('all');
+  const [communityTitle, setCommunityTitle] = useState('');
+  const [communityBody, setCommunityBody] = useState('');
+  const [communityTags, setCommunityTags] = useState('');
   const [assistantInput, setAssistantInput] = useState('');
   const [assistantMessages, setAssistantMessages] = useState<UiAssistantMessage[]>(INITIAL_ASSISTANT_MESSAGES);
   const [assistantMemories, setAssistantMemories] = useState<ClarityCircleAssistantMemory[]>([]);
@@ -378,7 +460,15 @@ export function ClarityCircle() {
     }
   }, [projectAssistantInput, resizeAssistantInput]);
 
-  const upsertProfile = useCallback(async (user: User, username: string, options?: { quiet?: boolean }) => {
+  const syncProfileTrack = useCallback((profile: ClarityCircleProfile | null) => {
+    const profileTrack = profile?.preferred_track;
+    if (!profileTrack || !TRACKS[profileTrack]) return;
+
+    setTrack(profileTrack);
+    setIntent((current) => (current === TRACKS.founder.defaults || current === TRACKS.builder.defaults ? TRACKS[profileTrack].defaults : current));
+  }, []);
+
+  const upsertProfile = useCallback(async (user: User, username: string, preferredTrack: Track, options?: { quiet?: boolean }) => {
     const supabase = getClarityCircleSupabase();
     if (!supabase) return null;
 
@@ -391,6 +481,7 @@ export function ClarityCircle() {
           user_id: user.id,
           email: user.email ?? null,
           username: normalizedUsername,
+          preferred_track: preferredTrack,
         },
         { onConflict: 'user_id' }
       )
@@ -405,8 +496,9 @@ export function ClarityCircle() {
     }
 
     setAuthProfile(data);
+    syncProfileTrack(data);
     return data;
-  }, []);
+  }, [syncProfileTrack]);
 
   const loadProfile = useCallback(async (user: User) => {
     const supabase = getClarityCircleSupabase();
@@ -420,7 +512,7 @@ export function ClarityCircle() {
             email: user.email ?? null,
             username: fallbackUsername || null,
             full_name: null,
-            preferred_track: null,
+            preferred_track: fallbackUsername ? track : null,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           }
@@ -440,17 +532,19 @@ export function ClarityCircle() {
 
     if (data) {
       setAuthProfile(data);
+      syncProfileTrack(data);
       return data;
     }
 
     if (fallbackUsername) {
-      const repairedProfile = await upsertProfile(user, fallbackUsername, { quiet: true });
+      const repairedProfile = await upsertProfile(user, fallbackUsername, track, { quiet: true });
       if (repairedProfile) return repairedProfile;
     }
 
     setAuthProfile(fallbackProfile);
+    syncProfileTrack(fallbackProfile);
     return fallbackProfile;
-  }, [upsertProfile]);
+  }, [syncProfileTrack, track, upsertProfile]);
 
   const refreshWorkspace = useCallback(async (user: User, options?: { quiet?: boolean }) => {
     const supabase = getClarityCircleSupabase();
@@ -579,13 +673,15 @@ export function ClarityCircle() {
             activeProjectFolder: ProjectFolderFilter;
             selectedProjectId: string | null;
             projectSearch: string;
+            communityPosts: CommunityPost[];
+            communityFilter: CommunityPostFilter;
           }>;
 
           if (parsed.track && TRACKS[parsed.track]) setTrack(parsed.track);
           if (parsed.intent) setIntent(parsed.intent);
           if (parsed.savedContext) setSavedContext(parsed.savedContext);
           if (parsed.sessionMode) setSessionMode(parsed.sessionMode);
-          if (parsed.activeMenu && MENU_ITEMS.some((item) => item.id === parsed.activeMenu)) {
+          if (parsed.activeMenu === 'home' || (parsed.activeMenu && MENU_ITEMS.some((item) => item.id === parsed.activeMenu))) {
             setActiveMenu(parsed.activeMenu);
           }
           if (Array.isArray(parsed.assistantMessages) && parsed.assistantMessages.length > 0) {
@@ -606,7 +702,22 @@ export function ClarityCircle() {
           if (typeof parsed.projectSearch === 'string') {
             setProjectSearch(parsed.projectSearch);
           }
+          if (Array.isArray(parsed.communityPosts) && parsed.communityPosts.length > 0) {
+            setCommunityPosts(parsed.communityPosts.slice(0, 40));
+          }
+          if (
+            parsed.communityFilter === 'all' ||
+            parsed.communityFilter === 'founder_problem' ||
+            parsed.communityFilter === 'builder_share'
+          ) {
+            setCommunityFilter(parsed.communityFilter);
+          }
           if (parsed.step && STEPS.some((item) => item.id === parsed.step)) setStep(parsed.step);
+        }
+
+        const requestedView = new URLSearchParams(window.location.search).get('view');
+        if (requestedView === 'home') {
+          setActiveMenu('home');
         }
       } catch {
         setStatus('This session starts fresh.');
@@ -640,6 +751,8 @@ export function ClarityCircle() {
         activeProjectFolder,
         selectedProjectId,
         projectSearch,
+        communityPosts: communityPosts.slice(0, 40),
+        communityFilter,
       }),
     );
   }, [
@@ -648,6 +761,8 @@ export function ClarityCircle() {
     assistantMemories,
     assistantMessages,
     authUser,
+    communityFilter,
+    communityPosts,
     hasLoaded,
     intent,
     projectFolders,
@@ -770,7 +885,10 @@ export function ClarityCircle() {
     };
   }, [authUser, refreshWorkspace]);
 
-  const selectedTrack = TRACKS[track];
+  const accountTrack = authProfile?.preferred_track ?? track;
+  const accountTrackCopy = TRACKS[accountTrack];
+  const isFounderAccount = accountTrack === 'founder';
+  const isSolopreneurAccount = accountTrack === 'builder';
   const metadataUsername = getUserMetadataUsername(authUser);
   const displayUsername = authProfile?.username || metadataUsername;
   const displayEmail = authUser?.email ?? authProfile?.email ?? '';
@@ -789,7 +907,7 @@ export function ClarityCircle() {
 
     setSessionMode('signup');
     setAuthView('signup-credentials');
-    setStatus('Create your username and password.');
+    setStatus('Choose your path, then create your username and password.');
   };
 
   const createAccount = async () => {
@@ -837,14 +955,14 @@ export function ClarityCircle() {
 
     const user = result.data.user ?? result.data.session?.user ?? null;
     if (user && result.data.session) {
-      const profile = await upsertProfile(user, username);
+      const profile = await upsertProfile(user, username, track);
       if (!profile) return;
       clearCircleLocalStorage();
       setAuthUser(user);
       setAuthLogin(username);
       setStep('track');
       setActiveMenu('path');
-      setStatus(`Account created. Signed in as ${username}.`);
+      setStatus(`Account created as ${TRACKS[track].shortLabel}. Signed in as ${username}.`);
       return;
     }
 
@@ -862,7 +980,7 @@ export function ClarityCircle() {
     }
 
     const retryUser = retry.data.user;
-    const profile = await upsertProfile(retryUser, username);
+    const profile = await upsertProfile(retryUser, username, track);
     if (!profile) return;
 
     clearCircleLocalStorage();
@@ -870,7 +988,7 @@ export function ClarityCircle() {
     setAuthLogin(username);
     setStep('track');
     setActiveMenu('path');
-    setStatus(`Signed in as ${username}.`);
+    setStatus(`Signed in as ${username} on the ${TRACKS[track].shortLabel}.`);
   };
 
   const signIn = async () => {
@@ -954,6 +1072,49 @@ export function ClarityCircle() {
     setStatus('Signed out.');
   };
 
+  const applyTrackChoice = async (nextTrack: Track, options?: { persist?: boolean; statusPrefix?: string }) => {
+    setTrack(nextTrack);
+    setIntent(TRACKS[nextTrack].defaults);
+
+    if (!options?.persist || !authUser) {
+      setStatus(options?.statusPrefix ?? `${TRACKS[nextTrack].shortLabel} selected.`);
+      return;
+    }
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase) {
+      setStatus('Account path could not be saved. Please refresh and try again.');
+      return;
+    }
+
+    const previousProfile = authProfile;
+    const nextProfile: ClarityCircleProfile = {
+      user_id: authUser.id,
+      email: authUser.email ?? authProfile?.email ?? null,
+      username: authProfile?.username ?? getUserMetadataUsername(authUser) ?? null,
+      full_name: authProfile?.full_name ?? null,
+      preferred_track: nextTrack,
+      created_at: authProfile?.created_at ?? new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    setAuthProfile(nextProfile);
+
+    const { error } = await supabase
+      .schema('clarity_circle')
+      .from('profiles')
+      .update({ preferred_track: nextTrack })
+      .eq('user_id', authUser.id);
+
+    if (error) {
+      setAuthProfile(previousProfile);
+      setStatus('Account path could not be saved.');
+      return;
+    }
+
+    setStatus(options.statusPrefix ?? `${TRACKS[nextTrack].shortLabel} saved for this account.`);
+  };
+
   const getFolderName = (folderId: string | null | undefined) => {
     if (!folderId) return 'Unfiled';
     return projectFolders.find((folder) => folder.id === folderId)?.name ?? 'Folder';
@@ -994,17 +1155,93 @@ export function ClarityCircle() {
   const activeSignal = savedContext?.intent.headline || latestProject?.title || intent.headline;
   const activeSignalSummary =
     savedContext?.summary || latestProject?.summary || latestProject?.context || intent.context || 'Save a first signal to build the Circle context.';
-  const homeStats = [
-    { label: 'Projects', value: projects.length, icon: FolderOpen },
-    { label: 'Folders', value: projectFolders.length, icon: Folder },
-    { label: 'Memories', value: assistantMemories.length, icon: Database },
-    { label: 'Context notes', value: contextEntries.length, icon: FileText },
+  const openTaskCount = projectTasks.filter((task) => task.status === 'open').length;
+  const founderProblemCount = communityPosts.filter((post) => post.kind === 'founder_problem').length;
+  const builderShareCount = communityPosts.filter((post) => post.kind === 'builder_share').length;
+  const latestCommunityPosts = [...communityPosts]
+    .sort((left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime())
+    .slice(0, 3);
+  const availableCommunityFilters: Array<{ id: CommunityPostFilter; label: string }> = isFounderAccount
+    ? [
+        { id: 'all', label: 'All visible threads' },
+        { id: 'founder_problem', label: 'My problem statements' },
+        { id: 'builder_share', label: 'Solopreneur responses' },
+      ]
+    : [
+        { id: 'all', label: 'All visible threads' },
+        { id: 'founder_problem', label: 'Founder problems' },
+        { id: 'builder_share', label: 'My shares' },
+      ];
+  const filteredCommunityPosts = communityPosts.filter((post) => communityFilter === 'all' || post.kind === communityFilter);
+  const currentCommunityKind: CommunityPostKind = isFounderAccount ? 'founder_problem' : 'builder_share';
+  const communityComposerCopy =
+    currentCommunityKind === 'founder_problem'
+      ? {
+          label: 'Founder problem statement',
+          title: 'Post a problem statement',
+          body: 'Frame the operational or growth problem clearly enough that solopreneurs can respond with useful work, ideas, or prototypes. Solopreneur sharing controls are hidden for founder accounts.',
+          titlePlaceholder: 'What problem needs sharper thinking?',
+          bodyPlaceholder: 'Describe the workflow, blocker, audience, and what a useful contribution would clarify.',
+          button: 'Post problem',
+        }
+      : {
+          label: 'Solopreneur share',
+          title: 'Share work or an idea',
+          body: 'Share a build, idea, observation, or useful experiment that can connect to founder problems inside the Circle. Founder problem-posting controls are hidden for solopreneur accounts.',
+          titlePlaceholder: 'What are you working on or noticing?',
+          bodyPlaceholder: 'Describe the work, idea, signal, or experiment. Keep it specific enough for founders to understand.',
+          button: 'Share with Circle',
+        };
+  const homeRoleCopy = isFounderAccount
+    ? {
+        title: 'Founder problem command center',
+        description:
+          'Post real operating problems, turn the strongest thread into a private project, and keep the assistant anchored to your current workflow.',
+        roleDetail: 'You can publish founder problem statements. Solopreneurs can respond with work, ideas, and experiments.',
+        primaryAction: savedContext || latestProject ? 'Continue founder context' : 'Capture founder signal',
+      }
+    : {
+        title: 'Solopreneur clarity command center',
+        description:
+          'Find founder problems, share useful work or ideas, and turn promising signals into private projects with assistant memory.',
+        roleDetail: 'You can share work, ideas, and experiments. Founder problem-posting stays reserved for founder accounts.',
+        primaryAction: savedContext || latestProject ? 'Continue solopreneur context' : 'Capture solopreneur signal',
+      };
+  const homeStats: Array<{ label: string; value: number; detail: string; icon: typeof CircleDot; menu: MenuId }> = [
+    {
+      label: 'Projects',
+      value: projects.length,
+      detail: latestProject ? `Latest: ${latestProject.title}` : 'Create the first private project.',
+      icon: FolderOpen,
+      menu: 'projects',
+    },
+    {
+      label: 'Open tasks',
+      value: openTaskCount,
+      detail: openTaskCount > 0 ? 'Tasks waiting in Projects.' : 'No open project tasks yet.',
+      icon: CheckCircle2,
+      menu: 'projects',
+    },
+    {
+      label: 'Circle threads',
+      value: communityPosts.length,
+      detail: `${founderProblemCount} founder problems, ${builderShareCount} solopreneur shares.`,
+      icon: Users,
+      menu: 'circle',
+    },
+    {
+      label: 'Memories',
+      value: assistantMemories.length,
+      detail: latestMemory ? latestMemory.title : 'No saved assistant memories.',
+      icon: Database,
+      menu: 'memory',
+    },
   ];
   const journeySteps = [
+    { label: 'Path', detail: accountTrackCopy.shortLabel, active: true },
     { label: 'Signal', detail: savedContext || latestProject ? 'Captured' : 'Awaiting input', active: Boolean(savedContext || latestProject) },
     { label: 'Project', detail: projects.length > 0 ? `${projects.length} saved` : 'Not started', active: projects.length > 0 },
     { label: 'Memory', detail: assistantMemories.length > 0 ? 'Assistant aware' : 'Ready to learn', active: assistantMemories.length > 0 },
-    { label: 'Digest', detail: 'Mock preview', active: false },
   ];
 
   const folderProjectCount = (folderId: ProjectFolderFilter) =>
@@ -1186,7 +1423,7 @@ export function ClarityCircle() {
       blocker: 'The project needs a clearer first operating path.',
       outcome: 'A focused project plan with useful tasks and project-specific assistant context.',
     };
-    const context = buildSavedContext(track, projectIntent);
+    const context = buildSavedContext(accountTrack, projectIntent);
     const projectInstruction = buildProjectInstruction(projectIntent);
 
     setIsSavingProject(true);
@@ -1195,7 +1432,7 @@ export function ClarityCircle() {
       .from('projects')
       .insert({
         user_id: authUser.id,
-        track,
+        track: accountTrack,
         title: projectTitle,
         context: brief,
         project_instruction: projectInstruction,
@@ -1236,6 +1473,69 @@ export function ClarityCircle() {
     setStatus('Project created with starting tasks.');
     void refreshWorkspace(authUser, { quiet: true });
     return project;
+  };
+
+  const createCommunityPost = () => {
+    const title = cleanSentence(communityTitle, '');
+    const body = cleanSentence(communityBody, '');
+
+    if (!title || !body) {
+      setStatus('Add a title and enough context before posting to the Circle.');
+      return null;
+    }
+
+    const tags = communityTags
+      .split(',')
+      .map((tag) => tag.trim().toLowerCase())
+      .filter(Boolean)
+      .slice(0, 4);
+    const post: CommunityPost = {
+      id: `local-thread-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      kind: currentCommunityKind,
+      track: accountTrack,
+      title,
+      body,
+      tags,
+      authorLabel:
+        displayUsername ||
+        (isFounderAccount ? 'Founder Track' : 'Solopreneur Track'),
+      createdAt: new Date().toISOString(),
+      interestCount: 0,
+      replyCount: 0,
+      source: 'user',
+    };
+
+    setCommunityPosts((current) => [post, ...current].slice(0, 40));
+    setCommunityFilter(post.kind);
+    setCommunityTitle('');
+    setCommunityBody('');
+    setCommunityTags('');
+    setStatus(post.kind === 'founder_problem' ? 'Founder problem posted locally.' : 'Solopreneur share posted locally.');
+    return post;
+  };
+
+  const markCommunityInterest = (post: CommunityPost) => {
+    setCommunityPosts((current) =>
+      current.map((item) =>
+        item.id === post.id
+          ? { ...item, interestCount: item.interestCount + 1, replyCount: item.replyCount + (post.kind === 'founder_problem' ? 1 : 0) }
+          : item,
+      ),
+    );
+    setStatus(post.kind === 'founder_problem' ? 'Contribution signal added to this founder problem.' : 'Interest signal added to this share.');
+  };
+
+  const turnCommunityPostIntoProject = (post: CommunityPost) => {
+    const prefix = post.kind === 'founder_problem' ? 'Founder problem thread' : 'Solopreneur share';
+    openNewProjectFlow(`${prefix}: ${post.title}\n\n${post.body}\n\nTags: ${post.tags.join(', ') || 'none'}`);
+  };
+
+  const askAssistantAboutCommunityPost = (post: CommunityPost) => {
+    const prompt =
+      post.kind === 'founder_problem'
+        ? `Use this founder problem thread as Circle context and suggest the sharpest next questions and useful solopreneur contribution paths: ${post.title}. ${post.body}`
+        : `Use this solopreneur share as Circle context and suggest which founder problem it could connect to: ${post.title}. ${post.body}`;
+    seedAssistantPrompt(prompt);
   };
 
   const saveAssistantMessage = async (message: UiAssistantMessage, projectId?: string | null) => {
@@ -1725,11 +2025,9 @@ export function ClarityCircle() {
   };
 
   const chooseTrack = (nextTrack: Track) => {
-    setTrack(nextTrack);
-    setIntent(TRACKS[nextTrack].defaults);
     setStep('intent');
     setActiveMenu('context');
-    setStatus(`${TRACKS[nextTrack].shortLabel} selected.`);
+    void applyTrackChoice(nextTrack, { persist: Boolean(authUser), statusPrefix: `${TRACKS[nextTrack].shortLabel} selected.` });
   };
 
   const saveIntent = async () => {
@@ -1749,7 +2047,7 @@ export function ClarityCircle() {
       return;
     }
 
-    const context = buildSavedContext(track, {
+    const context = buildSavedContext(accountTrack, {
       headline: intent.headline.trim(),
       context: intent.context.trim(),
       audience: intent.audience.trim(),
@@ -1768,7 +2066,7 @@ export function ClarityCircle() {
       .from('projects')
       .insert({
         user_id: authUser.id,
-        track,
+        track: accountTrack,
         title: context.intent.headline,
         context: context.intent.context,
         project_instruction: projectInstruction,
@@ -1883,10 +2181,10 @@ export function ClarityCircle() {
   };
 
   return (
-    <main className={`${styles.page} ${themeMode === 'light' ? styles.lightTheme : ''}`}>
-      <section className={styles.shell} aria-label="Kramaniti Clarity Circle">
+    <main className={`clarity-circle-route ${styles.page} ${themeMode === 'light' ? styles.lightTheme : ''}`}>
+      <section className={`clarity-circle-shell ${styles.shell}`} aria-label="Kramaniti Clarity Circle">
         <header
-          className={styles.rail}
+          className={`clarity-circle-rail ${styles.rail}`}
           style={{ backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}
           aria-label="Clarity Circle navigation"
         >
@@ -1908,7 +2206,7 @@ export function ClarityCircle() {
             <span>Clarity Circle</span>
           </button>
 
-          <nav className={styles.menu} aria-label="Clarity Circle sections">
+          <nav className={`clarity-circle-menu ${styles.menu}`} aria-label="Clarity Circle sections">
             {MENU_ITEMS.map((item) => {
               const Icon = item.icon;
               return (
@@ -1928,7 +2226,7 @@ export function ClarityCircle() {
             })}
           </nav>
 
-          <div className={styles.navUtilities} aria-label="Account and display controls">
+          <div className={`clarity-circle-utilities ${styles.navUtilities}`} aria-label="Account and display controls">
             <button
               type="button"
               className={`${styles.navIconButton} ${activeMenu === 'profile' ? styles.navIconActive : ''}`}
@@ -1964,33 +2262,57 @@ export function ClarityCircle() {
         <section
           className={`${styles.stage} ${activeMenu === 'start' ? styles.entryStage : ''} ${
             activeMenu === 'assistant' ? styles.assistantStage : ''
-          }`}
+          } clarity-circle-stage`}
           aria-live="polite"
         >
 
           {activeMenu === 'home' && (
             <section className={`${styles.screen} ${styles.homeScreen}`} aria-labelledby="home-title">
               <div className={styles.homeHero}>
-                <div>
-                  <span>{selectedTrack.shortLabel}</span>
-                  <h1 id="home-title">Clarity Circle Home</h1>
-                  <p>{activeSignalSummary}</p>
+                <div className={styles.homeHeroMain}>
+                  <span>{accountTrackCopy.shortLabel}</span>
+                  <h1 id="home-title">{homeRoleCopy.title}</h1>
+                  <p>{homeRoleCopy.description}</p>
+                  <div className={styles.homeHeroActions}>
+                    <button
+                      type="button"
+                      className={styles.primaryButton}
+                      onClick={() => {
+                        if (latestProject && !savedContext) {
+                          openProject(latestProject);
+                          return;
+                        }
+                        openMenu(savedContext ? 'context' : 'path');
+                      }}
+                    >
+                      {homeRoleCopy.primaryAction}
+                      <ArrowRight size={17} aria-hidden="true" />
+                    </button>
+                    <button type="button" className={styles.secondaryButton} onClick={() => openMenu('circle')}>
+                      Open Circle
+                    </button>
+                  </div>
                 </div>
-                <button type="button" className={styles.primaryButton} onClick={() => openMenu('assistant')}>
-                  Open assistant
-                  <ArrowRight size={17} aria-hidden="true" />
-                </button>
+                <aside className={styles.homeRoleCard} aria-label="Account path">
+                  <span>Account path</span>
+                  <strong>{accountTrackCopy.shortLabel}</strong>
+                  <p>{homeRoleCopy.roleDetail}</p>
+                  <button type="button" className={styles.textButton} onClick={() => openMenu('settings')}>
+                    Adjust path
+                  </button>
+                </aside>
               </div>
 
               <div className={styles.homeStatsGrid} aria-label="Workspace summary">
                 {homeStats.map((item) => {
                   const Icon = item.icon;
                   return (
-                    <article key={item.label} className={styles.homeStatCard}>
+                    <button key={item.label} type="button" className={styles.homeStatCard} onClick={() => openMenu(item.menu)}>
                       <Icon size={17} aria-hidden="true" />
                       <span>{item.label}</span>
                       <strong>{item.value}</strong>
-                    </article>
+                      <small>{item.detail}</small>
+                    </button>
                   );
                 })}
               </div>
@@ -2019,22 +2341,28 @@ export function ClarityCircle() {
 
                 <article className={styles.homePanel}>
                   <div className={styles.homePanelHeader}>
-                    <span>Projects</span>
-                    <FolderOpen size={17} aria-hidden="true" />
+                    <span>Circle activity</span>
+                    <Users size={17} aria-hidden="true" />
                   </div>
-                  <strong className={styles.homeLargeMetric}>{projects.length}</strong>
-                  <p>{latestProject ? `Latest: ${latestProject.title}` : 'No project has been created yet.'}</p>
-                  <button type="button" className={styles.textButton} onClick={() => openMenu('projects')}>
-                    View projects
+                  <div className={styles.homeActivityList}>
+                    {latestCommunityPosts.map((post) => (
+                      <button key={post.id} type="button" onClick={() => openMenu('circle')}>
+                        <span>{post.kind === 'founder_problem' ? 'Founder problem' : 'Solopreneur share'}</span>
+                        <strong>{post.title}</strong>
+                      </button>
+                    ))}
+                  </div>
+                  <button type="button" className={styles.textButton} onClick={() => openMenu('circle')}>
+                    {isFounderAccount ? 'Post a problem' : 'Share work'}
                   </button>
                 </article>
 
                 <article className={`${styles.homePanel} ${styles.homeJourneyPanel}`}>
                   <div className={styles.homePanelHeader}>
-                    <span>Mock journey</span>
+                    <span>Workspace route</span>
                     <Route size={17} aria-hidden="true" />
                   </div>
-                  <div className={styles.homeJourneyTrack} aria-label="Mock journey progress">
+                  <div className={styles.homeJourneyTrack} aria-label="Workspace route progress">
                     {journeySteps.map((item) => (
                       <div key={item.label} className={item.active ? styles.homeJourneyActive : ''}>
                         <span />
@@ -2083,6 +2411,22 @@ export function ClarityCircle() {
                   </button>
                 </article>
 
+                <article className={styles.homePanel}>
+                  <div className={styles.homePanelHeader}>
+                    <span>Assistant route</span>
+                    <MessageCircle size={17} aria-hidden="true" />
+                  </div>
+                  <h2>{circleAssistantMessages.length > 1 ? 'Continue the assistant thread' : 'Ask from the current Circle context'}</h2>
+                  <p>
+                    {circleAssistantMessages.length > 1
+                      ? `${circleAssistantMessages.length} Circle assistant messages are available.`
+                      : 'Use the assistant to turn this role, signal, and workspace into sharper next steps.'}
+                  </p>
+                  <button type="button" className={styles.secondaryButton} onClick={() => openMenu('assistant')}>
+                    Open assistant
+                  </button>
+                </article>
+
                 <article className={`${styles.homePanel} ${styles.homePanelWide}`}>
                   <div className={styles.homePanelHeader}>
                     <span>Recent workspace</span>
@@ -2095,7 +2439,7 @@ export function ClarityCircle() {
                           <FileText size={16} aria-hidden="true" />
                           <span>
                             <strong>{project.title}</strong>
-                            <small>{project.track === 'founder' ? 'Founder Track' : 'Builder Track'} - {formatProjectDate(project.updated_at)}</small>
+                            <small>{project.track === 'founder' ? 'Founder Track' : 'Solopreneur Track'} - {formatProjectDate(project.updated_at)}</small>
                           </span>
                           <ChevronRight size={15} aria-hidden="true" />
                         </button>
@@ -2113,7 +2457,7 @@ export function ClarityCircle() {
             <section className={`${styles.screen} ${styles.entryScreen}`} aria-labelledby="entry-title">
               <h1 id="entry-title">Kramaniti&apos;s Clarity Circle</h1>
               <p className={styles.lead}>
-                A focused workspace for founders and builders to turn rough thinking into clearer next steps.
+                A focused workspace for founders and solopreneurs to turn rough thinking into clearer next steps.
               </p>
 
               <div className={styles.authTabs} aria-label="Authentication mode">
@@ -2175,6 +2519,28 @@ export function ClarityCircle() {
 
               {authView === 'signup-credentials' && (
                 <div className={styles.entryActions}>
+                  <div className={styles.signupPathPicker} aria-label="Choose account path">
+                    {(Object.keys(TRACKS) as Track[]).map((key) => {
+                      const item = TRACKS[key];
+                      const Icon = item.icon;
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          className={track === key ? styles.signupPathActive : ''}
+                          onClick={() => {
+                            setTrack(key);
+                            setIntent(TRACKS[key].defaults);
+                            setStatus(`${TRACKS[key].shortLabel} will be used for this account.`);
+                          }}
+                          aria-pressed={track === key}
+                        >
+                          <Icon size={16} aria-hidden="true" />
+                          <span>{item.shortLabel}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                   <label className={styles.authField}>
                     <span>Email</span>
                     <input type="email" value={authEmail} readOnly />
@@ -2184,7 +2550,7 @@ export function ClarityCircle() {
                     <input
                       value={authUsername}
                       onChange={(event) => setAuthUsername(normalizeUsername(event.target.value))}
-                      placeholder="karan_builder"
+                      placeholder="your_username"
                       autoComplete="username"
                       disabled={Boolean(authUser) || isAuthBusy}
                     />
@@ -2272,7 +2638,7 @@ export function ClarityCircle() {
           )}
 
           {activeMenu === 'context' && step !== 'context' && (
-            <section className={styles.screen} aria-label={track === 'founder' ? 'Capture the business signal' : 'Capture the idea signal'}>
+            <section className={styles.screen} aria-label={accountTrack === 'founder' ? 'Capture the business signal' : 'Capture the solopreneur signal'}>
               <div className={styles.intentForm}>
                 <label>
                   One-line intent
@@ -2334,7 +2700,7 @@ export function ClarityCircle() {
             <section className={styles.screen} aria-label="Saved context">
               <div className={styles.contextPanel}>
                 <div className={styles.contextHeader}>
-                  <span>{selectedTrack.shortLabel}</span>
+                  <span>{TRACKS[savedContext.track].shortLabel}</span>
                   <small>Saved {savedContext.savedAt}</small>
                 </div>
                 <h2>{savedContext.intent.headline}</h2>
@@ -2392,6 +2758,134 @@ export function ClarityCircle() {
                   Choose path
                   <ArrowRight size={17} aria-hidden="true" />
                 </button>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'circle' && (
+            <section className={`${styles.screen} ${styles.communityScreen}`} aria-label="Circle threads">
+              <div className={styles.communityHeader}>
+                <div>
+                  <span>{accountTrackCopy.shortLabel}</span>
+                  <h1>Founder problems meet solopreneur work</h1>
+                  <p>
+                    {isFounderAccount
+                      ? 'Your account can post founder problem statements and review solopreneur responses. Solopreneur sharing tools stay hidden.'
+                      : 'Share work, ideas, prototypes, or signals that can connect to real founder problems.'}
+                  </p>
+                </div>
+                <div className={styles.communityCounters} aria-label="Circle counts">
+                  <div>
+                    <strong>{founderProblemCount}</strong>
+                    <span>Founder problems</span>
+                  </div>
+                  <div>
+                    <strong>{builderShareCount}</strong>
+                    <span>Solopreneur shares</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.communityGrid}>
+                <form
+                  className={styles.communityComposer}
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    createCommunityPost();
+                  }}
+                >
+                  <span>{communityComposerCopy.label}</span>
+                  <h2>{communityComposerCopy.title}</h2>
+                  <p>{communityComposerCopy.body}</p>
+                  <label>
+                    Title
+                    <input
+                      value={communityTitle}
+                      onChange={(event) => setCommunityTitle(event.target.value)}
+                      placeholder={communityComposerCopy.titlePlaceholder}
+                    />
+                  </label>
+                  <label>
+                    Context
+                    <textarea
+                      value={communityBody}
+                      onChange={(event) => setCommunityBody(event.target.value)}
+                      placeholder={communityComposerCopy.bodyPlaceholder}
+                    />
+                  </label>
+                  <label>
+                    Tags
+                    <input
+                      value={communityTags}
+                      onChange={(event) => setCommunityTags(event.target.value)}
+                      placeholder="workflow, content, prototype"
+                    />
+                  </label>
+                  <button type="submit" className={styles.primaryButton}>
+                    {communityComposerCopy.button}
+                    <ArrowRight size={16} aria-hidden="true" />
+                  </button>
+                </form>
+
+                <section className={styles.communityFeed} aria-label="Circle feed">
+                  <div className={styles.communityFilters} aria-label="Thread filters">
+                    {availableCommunityFilters.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        className={communityFilter === item.id ? styles.communityFilterActive : ''}
+                        onClick={() => setCommunityFilter(item.id)}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className={styles.communityThreads} role="list" aria-label="Circle threads">
+                    {filteredCommunityPosts.map((post) => (
+                      <article key={post.id} className={styles.communityThread} role="listitem">
+                        <div className={styles.communityThreadHeader}>
+                          <span>{post.kind === 'founder_problem' ? 'Founder problem' : 'Solopreneur share'}</span>
+                          <small>{post.authorLabel} - {formatProjectDate(post.createdAt)}</small>
+                        </div>
+                        <h2>{post.title}</h2>
+                        <p>{post.body}</p>
+                        {post.tags.length > 0 && (
+                          <div className={styles.communityTags} aria-label="Thread tags">
+                            {post.tags.map((tag) => (
+                              <span key={tag}>{tag}</span>
+                            ))}
+                          </div>
+                        )}
+                        <div className={styles.communityThreadMeta}>
+                          <span>{post.interestCount} interested</span>
+                          <span>{post.replyCount} replies</span>
+                        </div>
+                        <div className={styles.communityThreadActions}>
+                          {isSolopreneurAccount && post.kind === 'founder_problem' && (
+                            <button type="button" className={styles.secondaryButton} onClick={() => markCommunityInterest(post)}>
+                              I can contribute
+                            </button>
+                          )}
+                          {isFounderAccount && post.kind === 'builder_share' && (
+                            <button type="button" className={styles.secondaryButton} onClick={() => markCommunityInterest(post)}>
+                              Interested
+                            </button>
+                          )}
+                          <button type="button" className={styles.textButton} onClick={() => askAssistantAboutCommunityPost(post)}>
+                            Ask assistant
+                          </button>
+                          {((isFounderAccount && post.kind === 'founder_problem') ||
+                            (isSolopreneurAccount && post.kind === 'builder_share')) && (
+                            <button type="button" className={styles.textButton} onClick={() => turnCommunityPostIntoProject(post)}>
+                              Make project
+                            </button>
+                          )}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
               </div>
             </section>
           )}
@@ -2733,7 +3227,7 @@ export function ClarityCircle() {
                             <small>{project.context}</small>
                           </span>
                           <span className={styles.projectRowMeta}>
-                            <span>{project.track === 'founder' ? 'Founder' : 'Builder'}</span>
+                            <span>{project.track === 'founder' ? 'Founder' : 'Solopreneur'}</span>
                             <span>{getFolderName(project.folder_id)}</span>
                             <span>{formatProjectDate(project.updated_at)}</span>
                           </span>
@@ -2759,7 +3253,7 @@ export function ClarityCircle() {
                         </span>
                         <div>
                           <h2>{selectedProject.title}</h2>
-                          <p>{selectedProject.track === 'founder' ? 'Founder Track' : 'Builder Track'}</p>
+                          <p>{selectedProject.track === 'founder' ? 'Founder Track' : 'Solopreneur Track'}</p>
                         </div>
                       </div>
 
@@ -2968,7 +3462,7 @@ export function ClarityCircle() {
                 </div>
                 <div>
                   <span>Path</span>
-                  <strong>{selectedTrack.shortLabel}</strong>
+                  <strong>{accountTrackCopy.shortLabel}</strong>
                 </div>
               </div>
 
@@ -2992,16 +3486,17 @@ export function ClarityCircle() {
                 <label>
                   <span>Preferred path</span>
                   <select
-                    value={track}
+                    value={accountTrack}
                     onChange={(event) => {
                       const nextTrack = event.target.value as Track;
-                      setTrack(nextTrack);
-                      setIntent(TRACKS[nextTrack].defaults);
-                      setStatus(`${TRACKS[nextTrack].shortLabel} selected.`);
+                      void applyTrackChoice(nextTrack, {
+                        persist: Boolean(authUser),
+                        statusPrefix: `${TRACKS[nextTrack].shortLabel} saved for this account.`,
+                      });
                     }}
                   >
                     <option value="founder">Founder Track</option>
-                    <option value="builder">Individual Track</option>
+                    <option value="builder">Solopreneur Track</option>
                   </select>
                 </label>
                 <label>

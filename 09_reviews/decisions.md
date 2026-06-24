@@ -546,3 +546,16 @@ This log registers the major strategic and structural decisions made during the 
     *   The Circle Assistant now uses one shared intelligent-action executor across the main assistant and project assistant, so project, folder, task, and memory drafts can save into the same workspace model instead of stopping as chat-only advice.
     *   Project tasks are stored in `clarity_circle.project_tasks`; project assistant conversations continue to use `clarity_circle.assistant_messages.project_id`.
     *   Guardrail: project instructions, tasks, and assistant threads must remain private, user-owned, and scoped inside the isolated `clarity_circle` schema with RLS ownership checks.
+
+*   **2026-06-24 Founder/Solopreneur Circle Update:**
+    *   The founder clarified that Clarity Circle should behave like a focused social platform for founders and solopreneurs, with two distinct paths.
+    *   Founder Track users should be able to post real problem statements as threads that solopreneurs can see and respond to with useful work, ideas, or experiments.
+    *   Solopreneur Track users should be able to share work, ideas, prototypes, or interesting signals that can connect back to founder problems.
+    *   The first implementation adds a local-first Circle feed, seeded founder problem threads, seeded solopreneur shares, a path-aware composer, filters, contribution signals, assistant handoff, and project creation from a thread.
+    *   Guardrail: keep this as a founder/solopreneur clarity network, not a generic social media feed optimized for engagement volume. Future persistence should stay inside the `clarity_circle` schema with RLS and an explicit moderation/privacy model.
+
+*   **2026-06-24 Account Path Boundary Update:**
+    *   The founder clarified that the selected signup path should determine the user's Circle capabilities.
+    *   Clarity Circle now stores the selected signup path in `clarity_circle.profiles.preferred_track` and restores that path after sign-in.
+    *   Founder accounts are routed toward founder problem statements, founder-owned context capture, and founder-typed projects. Solopreneur accounts are routed toward work/idea sharing, solopreneur context capture, and solopreneur-typed projects.
+    *   Guardrail: do not expose founder-only creation controls to solopreneur accounts, or solopreneur-only creation controls to founder accounts, unless a newer product decision explicitly changes the account-role model.
