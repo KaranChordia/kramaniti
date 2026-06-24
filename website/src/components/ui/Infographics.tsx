@@ -801,6 +801,112 @@ export function PolicyBoundaryRouteInfographic() {
   );
 }
 
+export function HandoffPacketMapInfographic() {
+  const fields = [
+    {
+      icon: Workflow,
+      label: 'Trigger',
+      copy: 'The event that starts the handoff: call completed, lead qualified, issue escalated, or claim drafted.',
+    },
+    {
+      icon: FolderSync,
+      label: 'Context source',
+      copy: 'The record the next owner can inspect without asking someone to reconstruct the history.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Boundary',
+      copy: 'The review, approval, exception, or human-led judgment condition that protects the route.',
+    },
+    {
+      icon: DatabaseZap,
+      label: 'Write-back',
+      copy: 'The accepted output, correction, or learning returns to the system instead of disappearing into a thread.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Handoff Packet Map</div>
+      <div className={styles.packetChecklist}>
+        {fields.map((field, index) => {
+          const Icon = field.icon;
+          const isFinal = index === fields.length - 1;
+
+          return (
+            <div className={`${styles.packetItem} ${isFinal ? styles.packetItemHighlight : ''}`} key={field.label}>
+              <div className={isFinal ? styles.packetIconHighlight : styles.packetIcon}>
+                <Icon size={18} />
+              </div>
+              <div className={styles.packetContent}>
+                <span className={styles.packetNumber}>{String(index + 1).padStart(2, '0')}</span>
+                <h4>{field.label}</h4>
+                <p>{field.copy}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function HandoffTraceRouteInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Handoff Trace Route</div>
+      <div className={styles.spineGrid}>
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>01</div>
+          <div className={styles.spineTitle}>Capture signal</div>
+          <p className={styles.spineCopy}>
+            Retain the call note, issue, decision, or source that made the workflow move.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>02</div>
+          <div className={styles.spineTitle}>Carry context</div>
+          <p className={styles.spineCopy}>
+            Move owner, source, status, and review condition with the task.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={styles.spineCard}>
+          <div className={styles.spineStep}>03</div>
+          <div className={styles.spineTitle}>Act with judgment</div>
+          <p className={styles.spineCopy}>
+            A person approves, corrects, escalates, or rejects where trust and taste matter.
+          </p>
+        </div>
+
+        <div className={styles.spineConnector}>
+          <ArrowRight className={styles.arrowIconDesktop} size={20} />
+          <ArrowDown className={styles.arrowIconMobile} size={20} />
+        </div>
+
+        <div className={`${styles.spineCard} ${styles.spineCardHighlight}`}>
+          <div className={styles.spineStepHighlight}>04</div>
+          <div className={styles.spineTitleHighlight}>Write back truth</div>
+          <p className={styles.spineCopyHighlight}>
+            The approved output and exception return to the operating record.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // 2. The Priority Pyramid (Layered Stack)
 export function TechStackInfographic() {
   return (

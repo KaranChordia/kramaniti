@@ -65,7 +65,9 @@ import {
   WorkflowPolicyNoteInfographic,
   PolicyBoundaryRouteInfographic,
   WorkflowDecisionLedgerInfographic,
-  OnePageDecisionPacketInfographic
+  OnePageDecisionPacketInfographic,
+  HandoffPacketMapInfographic,
+  HandoffTraceRouteInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -407,6 +409,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:one-page-decision-packet]') {
           return <OnePageDecisionPacketInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:handoff-packet-map]') {
+          return <HandoffPacketMapInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:handoff-trace-route]') {
+          return <HandoffTraceRouteInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
