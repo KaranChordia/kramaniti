@@ -889,7 +889,13 @@ export function ClarityCircle() {
         login,
       });
 
-      if (error || !data) {
+      if (error) {
+        setIsAuthBusy(false);
+        setStatus('Username sign-in is not available yet. The latest database migration may need to be applied.');
+        return;
+      }
+
+      if (!data) {
         setIsAuthBusy(false);
         setStatus('No account found for that username.');
         return;
