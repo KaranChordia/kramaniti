@@ -81,6 +81,7 @@ type ProjectDraft = {
   title: string;
   track: Track;
   context: string;
+  projectInstruction?: string;
   audience: string;
   blocker: string;
   outcome: string;
@@ -206,7 +207,8 @@ const buildCircleContext = (body: AssistantRequestBody) => {
 };
 
 const wantsProject = (message: string) =>
-  /\b(create|start|make|add|open|set up|new)\b/i.test(message) && /\b(project|idea|workspace|plan)\b/i.test(message);
+  /\b(create|start|make|add|open|set up|new|turn this into|convert this into)\b/i.test(message) &&
+  /\b(project|idea|workspace|plan)\b/i.test(message);
 
 const wantsFolder = (message: string) =>
   /\b(create|start|make|add|set up|new)\b/i.test(message) && /\b(folder|directory|collection)\b/i.test(message);
@@ -256,6 +258,15 @@ const buildLocalPayload = (latestMessage: string, body: AssistantRequestBody): A
         latestMessage ||
         body.savedContext?.context ||
         'A new project created from the Circle assistant conversation.',
+      projectInstruction: [
+        `Project: ${topic || 'New clarity project'}`,
+        `Context: ${
+          latestMessage ||
+          body.savedContext?.context ||
+          'A new project created from the Circle assistant conversation.'
+        }`,
+        'Operating rule: keep future outputs tied to this project, separate human-led from AI-assisted work, and turn suggestions into reviewable next actions.',
+      ].join('\n'),
       audience: body.savedContext?.audience || '',
       blocker: body.savedContext?.blocker || 'The clearest first decision is still open.',
       outcome: body.savedContext?.outcome || 'A sharper next step and a practical clarity brief.',

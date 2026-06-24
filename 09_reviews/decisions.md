@@ -543,5 +543,6 @@ This log registers the major strategic and structural decisions made during the 
     *   The founder asked for project creation to begin with a direct "what is this project about?" input, and for assistant-created projects to prefill that operating context from the assistant conversation.
     *   Projects now include `project_instruction`, which acts as the project-level operating context for future output.
     *   Projects now support auto-built starter tasks, manually added user tasks, and project-specific assistant threads.
+    *   The Circle Assistant now uses one shared intelligent-action executor across the main assistant and project assistant, so project, folder, task, and memory drafts can save into the same workspace model instead of stopping as chat-only advice.
     *   Project tasks are stored in `clarity_circle.project_tasks`; project assistant conversations continue to use `clarity_circle.assistant_messages.project_id`.
     *   Guardrail: project instructions, tasks, and assistant threads must remain private, user-owned, and scoped inside the isolated `clarity_circle` schema with RLS ownership checks.

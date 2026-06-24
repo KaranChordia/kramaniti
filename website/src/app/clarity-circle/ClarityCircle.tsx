@@ -108,6 +108,13 @@ type AssistantResponse = {
   error?: string;
 };
 
+type AssistantActionResult = {
+  project: ClarityCircleProject | null;
+  folder: ClarityCircleProjectFolder | null;
+  taskCount: number;
+  memory: ClarityCircleAssistantMemory | null;
+};
+
 type ProjectFolderFilter = 'all' | 'unfiled' | string;
 
 type WorkspaceSnapshot = {
@@ -1426,12 +1433,70 @@ export function ClarityCircle() {
 
     setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
     setSelectedProjectId(project.id);
+    setActiveProjectFolder('all');
+    setActiveMenu('projects');
+    setIsCreatingProject(false);
     setProjectBrief(project.project_instruction || project.context);
     setProjectInstructionDraft(project.project_instruction || project.context);
     await insertProjectTasks(project, buildAutoTasks(project), 'auto');
     setStatus('Project created with assistant context and starting tasks.');
     void refreshWorkspace(authUser, { quiet: true });
     return project;
+  };
+
+  const runAssistantActions = async (
+    data: AssistantResponse,
+    options?: { project?: ClarityCircleProject | null },
+  ): Promise<AssistantActionResult> => {
+    const result: AssistantActionResult = {
+      project: null,
+      folder: null,
+      taskCount: 0,
+      memory: null,
+    };
+    const actionLabels: string[] = [];
+
+    if (data.folderDraft) {
+      const folder = await createProjectFolder(data.folderDraft.name, { source: 'assistant' });
+      if (folder) {
+        result.folder = folder;
+        actionLabels.push('folder');
+      }
+    }
+
+    if (data.projectDraft) {
+      const project = await createProjectFromAssistantDraft(data.projectDraft);
+      if (project) {
+        result.project = project;
+        actionLabels.push('project');
+      }
+    }
+
+    const taskTarget = result.project ?? options?.project ?? selectedProject;
+    if (data.taskDrafts?.length && taskTarget) {
+      const tasks = await insertProjectTasks(taskTarget, data.taskDrafts, 'assistant');
+      if (tasks.length > 0) {
+        result.taskCount = tasks.length;
+        actionLabels.push(tasks.length === 1 ? 'task' : 'tasks');
+      }
+    } else if (data.taskDrafts?.length && !taskTarget) {
+      setStatus('Assistant drafted tasks, but no project is selected yet.');
+    }
+
+    if (data.memoryDraft) {
+      const memoryProjectId = result.project?.id ?? options?.project?.id ?? null;
+      const memory = await saveAssistantMemory(data.memoryDraft, memoryProjectId);
+      if (memory) {
+        result.memory = memory;
+        actionLabels.push('memory');
+      }
+    }
+
+    if (actionLabels.length > 0) {
+      setStatus(`Assistant action complete: ${actionLabels.join(', ')} saved.`);
+    }
+
+    return result;
   };
 
   const archiveAssistantMemory = async (memory: ClarityCircleAssistantMemory) => {
@@ -1467,7 +1532,7 @@ export function ClarityCircle() {
       const assistantEntries = liveWorkspace?.contextEntries ?? contextEntries;
       const assistantMemoriesForRequest = liveWorkspace?.memories ?? assistantMemories;
 
-      const response = await fetch('/api/clarity-circle/assistant/', {
+      const response = await fetch('/api/clarity-circle/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1531,32 +1596,22 @@ export function ClarityCircle() {
       const reply = data.response || data.error || 'The Circle assistant could not respond yet.';
       const assistantMessage = createUiMessage('assistant', reply);
 
-      setAssistantMessages((current) => [...current, assistantMessage].slice(-12));
+      setAssistantMessages((current) => [
+        ...current.filter((message) => message.project_id),
+        ...[...nextMessages, assistantMessage].slice(-12),
+      ]);
       void saveAssistantMessage(assistantMessage);
 
-      let projectId: string | null = null;
-      if (data.projectDraft) {
-        const project = await createProjectFromAssistantDraft(data.projectDraft);
-        projectId = project?.id ?? null;
-      }
-
-      if (data.folderDraft) {
-        await createProjectFolder(data.folderDraft.name, { source: 'assistant' });
-      }
-
-      if (data.taskDrafts?.length && selectedProject) {
-        await insertProjectTasks(selectedProject, data.taskDrafts, 'assistant');
-      }
-
-      if (data.memoryDraft) {
-        await saveAssistantMemory(data.memoryDraft, projectId);
-      }
+      await runAssistantActions(data);
     } catch {
       const fallbackMessage = createUiMessage(
         'assistant',
         'I could not reach the Circle assistant just now. Your context is still available here, and you can try again.',
       );
-      setAssistantMessages((current) => [...current, fallbackMessage].slice(-12));
+      setAssistantMessages((current) => [
+        ...current.filter((message) => message.project_id),
+        ...[...nextMessages, fallbackMessage].slice(-12),
+      ]);
     } finally {
       setIsAssistantBusy(false);
     }
@@ -1583,7 +1638,7 @@ export function ClarityCircle() {
       const assistantEntries = liveWorkspace?.contextEntries ?? contextEntries;
       const assistantMemoriesForRequest = liveWorkspace?.memories ?? assistantMemories;
 
-      const response = await fetch('/api/clarity-circle/assistant/', {
+      const response = await fetch('/api/clarity-circle/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1647,23 +1702,23 @@ export function ClarityCircle() {
       const reply = data.response || data.error || 'The project assistant could not respond yet.';
       const assistantMessage = createUiMessage('assistant', reply, selectedProject.id);
 
-      setAssistantMessages((current) => [...current, assistantMessage].slice(-60));
+      setAssistantMessages((current) => [
+        ...current.filter((message) => message.project_id !== selectedProject.id),
+        ...[...nextMessages, assistantMessage].slice(-12),
+      ]);
       void saveAssistantMessage(assistantMessage, selectedProject.id);
 
-      if (data.taskDrafts?.length) {
-        await insertProjectTasks(selectedProject, data.taskDrafts, 'assistant');
-      }
-
-      if (data.memoryDraft) {
-        await saveAssistantMemory(data.memoryDraft, selectedProject.id);
-      }
+      await runAssistantActions(data, { project: selectedProject });
     } catch {
       const fallbackMessage = createUiMessage(
         'assistant',
         'I could not reach the project assistant just now. The project instruction and tasks are still saved here.',
         selectedProject.id,
       );
-      setAssistantMessages((current) => [...current, fallbackMessage].slice(-60));
+      setAssistantMessages((current) => [
+        ...current.filter((message) => message.project_id !== selectedProject.id),
+        ...[...nextMessages, fallbackMessage].slice(-12),
+      ]);
     } finally {
       setIsProjectAssistantBusy(false);
     }
@@ -1807,6 +1862,17 @@ export function ClarityCircle() {
 
     window.localStorage.setItem(ENGINE_HANDOFF_KEY, JSON.stringify(handoff));
     setStatus('Clarity Engine connection prepared with this private Circle context.');
+  };
+
+  const seedAssistantPrompt = (prompt: string) => {
+    setAssistantInput(prompt);
+    setActiveMenu('assistant');
+    window.requestAnimationFrame(() => {
+      assistantInputRef.current?.focus();
+      if (assistantInputRef.current) {
+        resizeAssistantInput(assistantInputRef.current);
+      }
+    });
   };
 
   const openMenu = (menuId: MenuId) => {
@@ -2406,6 +2472,61 @@ export function ClarityCircle() {
                   </form>
                 </section>
 
+                <aside className={styles.assistantSidePanel} aria-label="Circle assistant actions">
+                  <div>
+                    <span>Workspace actions</span>
+                    <strong>Turn conversation into structure</strong>
+                    <p>{latestProject ? `Latest project: ${latestProject.title}` : 'No saved project yet.'}</p>
+                    <div className={styles.assistantActionButtons}>
+                      <button
+                        type="button"
+                        className={styles.secondaryButton}
+                        onClick={() =>
+                          seedAssistantPrompt(
+                            `Turn this into a project: ${savedContext?.intent.context || intent.context || activeSignal}`,
+                          )
+                        }
+                      >
+                        <FolderOpen size={16} aria-hidden="true" />
+                        Create project
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.secondaryButton}
+                        onClick={() =>
+                          seedAssistantPrompt(
+                            `Create next-step tasks for ${selectedProject?.title || latestProject?.title || activeSignal}.`,
+                          )
+                        }
+                      >
+                        <CheckCircle2 size={16} aria-hidden="true" />
+                        Draft tasks
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.secondaryButton}
+                        onClick={() =>
+                          seedAssistantPrompt(
+                            `Remember this as a useful Circle signal: ${
+                              savedContext?.summary || latestProject?.summary || activeSignalSummary
+                            }`,
+                          )
+                        }
+                      >
+                        <Database size={16} aria-hidden="true" />
+                        Save memory
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <span>Current focus</span>
+                    <strong>{selectedProject?.title || latestProject?.title || activeSignal}</strong>
+                    <p>{selectedProject?.project_instruction || selectedProject?.context || activeSignalSummary}</p>
+                    <button type="button" className={styles.textButton} onClick={() => openMenu('projects')}>
+                      Open projects
+                    </button>
+                  </div>
+                </aside>
               </div>
             </section>
           )}

@@ -326,6 +326,7 @@ Related files:
 - Projects now include a project-level instruction field that acts as the operating context for future project output.
 - New projects can be created directly from Projects by answering what the project is about; assistant-created projects auto-fill that instruction from the assistant conversation.
 - Projects now support auto-built starter tasks, manually added tasks, and a selected-project assistant thread that reuses the Clarity Circle assistant behavior while staying scoped to the project instruction and task context.
+- The Circle Assistant now runs one shared intelligent-action path across the main assistant and selected-project assistant: project drafts, folder drafts, task drafts, and memory drafts are saved through the same workspace executor, then reflected in Projects/Memory state.
 - Signed-in project tasks are stored in `clarity_circle.project_tasks`; project assistant messages continue using `clarity_circle.assistant_messages.project_id`.
 - Clarity Circle now subscribes to realtime workspace changes for projects, folders, context entries, assistant messages, and assistant memories.
 - The Circle Assistant refreshes the signed-in workspace before answering so manually created projects, folders, project entries, and assistant-created projects use the same context path.
