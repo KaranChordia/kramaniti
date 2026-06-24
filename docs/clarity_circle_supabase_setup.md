@@ -58,6 +58,14 @@ The migrations create:
 
 All Clarity Circle tables have RLS enabled. Policies limit each authenticated user to their own rows via `auth.uid()`.
 
+The `clarity_circle` schema must also be included in Supabase API "Exposed schemas". The repository migration sets the equivalent PostgREST role configuration for this project:
+
+```sql
+alter role authenticator set pgrst.db_schemas = 'public, storage, graphql_public, clarity_circle';
+notify pgrst, 'reload config';
+notify pgrst, 'reload schema';
+```
+
 ## Current App Behavior
 
 - Signup is a two-step flow: email first, then username and password.
