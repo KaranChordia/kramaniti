@@ -314,7 +314,7 @@ export function ClarityCircle() {
   const [themeMode, setThemeMode] = useState<'dark' | 'light'>('dark');
   const [sessionMode, setSessionMode] = useState<SessionMode>('signup');
   const [authView, setAuthView] = useState<AuthView>('signup-email');
-  const [, setStatus] = useState('');
+  const [status, setStatus] = useState('');
   const [hasLoaded, setHasLoaded] = useState(false);
   const [authEmail, setAuthEmail] = useState('');
   const [authUsername, setAuthUsername] = useState('');
@@ -2069,6 +2069,13 @@ export function ClarityCircle() {
                 </button>
               </div>
 
+              <p className={styles.authStatus} aria-live="polite">
+                {status ||
+                  (authView === 'signin'
+                    ? 'Enter your username and password to continue.'
+                    : 'Create an account to save projects, tasks, and project assistant memory.')}
+              </p>
+
               {authView === 'signup-email' && (
                 <div className={styles.entryActions}>
                   <label className={styles.authField}>
@@ -2088,7 +2095,7 @@ export function ClarityCircle() {
                     onClick={continueSignupWithEmail}
                     disabled={isAuthBusy}
                   >
-                    Continue
+                    {isAuthBusy ? 'Checking...' : 'Continue'}
                     <ArrowRight size={17} aria-hidden="true" />
                   </button>
                 </div>
@@ -2127,7 +2134,7 @@ export function ClarityCircle() {
                     onClick={() => void createAccount()}
                     disabled={isAuthBusy}
                   >
-                    Create account
+                    {isAuthBusy ? 'Creating...' : 'Create account'}
                     <ArrowRight size={17} aria-hidden="true" />
                   </button>
                   <button type="button" className={styles.textButton} onClick={() => setAuthView('signup-email')}>
@@ -2165,7 +2172,7 @@ export function ClarityCircle() {
                     onClick={() => void signIn()}
                     disabled={isAuthBusy}
                   >
-                    Sign in
+                    {isAuthBusy ? 'Signing in...' : 'Sign in'}
                     <ArrowRight size={17} aria-hidden="true" />
                   </button>
                 </div>

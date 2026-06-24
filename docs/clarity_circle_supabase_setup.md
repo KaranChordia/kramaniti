@@ -62,7 +62,7 @@ All Clarity Circle tables have RLS enabled. Policies limit each authenticated us
 
 - Signup is a two-step flow: email first, then username and password.
 - Usernames are stored in `clarity_circle.profiles.username` and must be 3-24 lowercase letters, numbers, or underscores.
-- Sign-in accepts the username and password. The app resolves the username to the linked email through `clarity_circle.resolve_login_email`.
+- Sign-in accepts the username and password. The app resolves the username to the linked email through `clarity_circle.resolve_login_email`; the `anon` role needs schema usage plus execute permission on this function because the lookup happens before password authentication.
 - If Supabase email confirmation is enabled, users may still need to confirm their email before first access. Disable email confirmation in Supabase Auth settings if the product should allow immediate username/password access.
 - Unsigned sessions continue to work locally in the browser.
 - Completed intent capture is saved as a private `clarity_circle.projects` row for signed-in users.
