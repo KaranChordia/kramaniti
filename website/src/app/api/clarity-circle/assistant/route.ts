@@ -31,6 +31,7 @@ type CircleProjectContext = {
 };
 
 type CircleProjectTaskContext = {
+  id?: string;
   project_id: string;
   title: string;
   detail?: string | null;
@@ -51,6 +52,8 @@ type CircleContextEntry = {
 };
 
 type CircleMemoryContext = {
+  id?: string;
+  project_id?: string | null;
   title: string;
   content: string;
   memory_type?: 'insight' | 'preference' | 'project_signal' | 'boundary';
@@ -103,12 +106,51 @@ type TaskDraft = {
   detail?: string;
 };
 
+type ProjectUpdateDraft = {
+  id: string;
+  title?: string;
+  track?: Track;
+  context?: string;
+  projectInstruction?: string;
+  audience?: string;
+  blocker?: string;
+  outcome?: string;
+  summary?: string;
+  folderId?: string | null;
+};
+
+type FolderUpdateDraft = {
+  id: string;
+  name?: string;
+  sortOrder?: number;
+};
+
+type TaskUpdateDraft = {
+  id: string;
+  title?: string;
+  detail?: string | null;
+  status?: 'open' | 'done' | 'archived';
+  sortOrder?: number;
+};
+
+type MemoryUpdateDraft = {
+  id: string;
+  title?: string;
+  content?: string;
+  memory_type?: 'insight' | 'preference' | 'project_signal' | 'boundary';
+  status?: 'active' | 'archived';
+};
+
 type AssistantPayload = {
   response: string;
   projectDraft?: ProjectDraft | null;
   folderDraft?: FolderDraft | null;
   memoryDraft?: MemoryDraft | null;
   taskDrafts?: TaskDraft[] | null;
+  projectUpdate?: ProjectUpdateDraft | null;
+  folderUpdate?: FolderUpdateDraft | null;
+  taskUpdates?: TaskUpdateDraft[] | null;
+  memoryUpdate?: MemoryUpdateDraft | null;
 };
 
 const MODEL_NAME = process.env.GROQ_CHAT_MODEL || 'openai/gpt-oss-120b';
@@ -164,7 +206,7 @@ const buildCircleContext = (body: AssistantRequestBody) => {
 
         return `${index + 1}. ${project.title} (${project.track})${
           body.selectedProjectId === project.id ? ' [currently selected]' : ''
-        }\nFolder: ${project.folderName || 'Unfiled'}\nProject instruction: ${
+        }\nProject ID: ${project.id || 'missing'}\nFolder: ${project.folderName || 'Unfiled'}\nProject instruction: ${
           project.project_instruction || project.context
         }\nContext: ${project.context}\nAudience: ${
           project.audience || 'Not stated'
@@ -175,7 +217,7 @@ const buildCircleContext = (body: AssistantRequestBody) => {
         }\nTasks:\n${(body.projectTasks || [])
           .filter((task) => task.project_id === project.id)
           .slice(0, 12)
-          .map((task) => `- [${task.status || 'open'}] ${task.title}${task.detail ? `: ${task.detail}` : ''}`)
+          .map((task) => `- ${task.id ? `(${task.id}) ` : ''}[${task.status || 'open'}] ${task.title}${task.detail ? `: ${task.detail}` : ''}`)
           .join('\n') || 'No tasks supplied.'}\nSaved entries:\n${entries || 'No saved entries supplied.'}`;
       },
     )
@@ -188,7 +230,7 @@ const buildCircleContext = (body: AssistantRequestBody) => {
 
   const memories = (body.memories || [])
     .slice(0, 20)
-    .map((memory, index) => `${index + 1}. ${memory.title}: ${memory.content}`)
+    .map((memory, index) => `${index + 1}. ${memory.id ? `(${memory.id}) ` : ''}${memory.title}: ${memory.content}`)
     .join('\n');
 
   return truncate(
@@ -251,6 +293,23 @@ const wantsMemory = (message: string) =>
 
 const wantsTask = (message: string) =>
   /\b(create|start|make|add|set up|new|turn this into)\b/i.test(message) && /\b(task|todo|to-do|next step|action item)\b/i.test(message);
+
+const wantsUpdate = (message: string) =>
+  /\b(update|change|edit|revise|modify|rename|move|archive|complete|mark|set|replace)\b/i.test(message);
+
+const wantsProjectUpdate = (message: string, body: AssistantRequestBody) =>
+  wantsUpdate(message) &&
+  (/\b(project|current project|selected project|this project|it|this)\b/i.test(message) || Boolean(body.selectedProjectId)) &&
+  !/\b(folder|directory|collection|task|todo|to-do|memory|remembered note)\b/i.test(message);
+
+const wantsFolderUpdate = (message: string) =>
+  wantsUpdate(message) && /\b(folder|directory|collection)\b/i.test(message);
+
+const wantsTaskUpdate = (message: string) =>
+  wantsUpdate(message) && /\b(task|todo|to-do|next step|action item)\b/i.test(message);
+
+const wantsMemoryUpdate = (message: string) =>
+  wantsUpdate(message) && /\b(memory|remembered note|preference|saved note)\b/i.test(message);
 
 const inferTrack = (message: string, fallback: Track): Track =>
   /\b(individual|builder|idea|validate|exploring)\b/i.test(message) ? 'builder' : fallback;
@@ -331,6 +390,77 @@ const buildFolderDraft = (latestMessage: string, history: AssistantMessage[], bo
   name: buildFolderName(latestMessage, history, body),
 });
 
+const getSelectedProject = (body: AssistantRequestBody) =>
+  (body.projects || []).find((project) => project.id && project.id === body.selectedProjectId) || (body.projects || [])[0] || null;
+
+const buildProjectUpdateDraft = (latestMessage: string, body: AssistantRequestBody): ProjectUpdateDraft | null => {
+  const project = getSelectedProject(body);
+  if (!project?.id) return null;
+
+  const updateNote = clean(
+    latestMessage
+      .replace(/\b(update|change|edit|revise|modify|set|replace)\b/gi, ' ')
+      .replace(/\b(current project|selected project|this project|project|with|to)\b/gi, ' '),
+  );
+  const addition = updateNote || latestMessage;
+  const baseInstruction = project.project_instruction || project.context;
+
+  return {
+    id: project.id,
+    context: truncate(`${project.context}\n\nUpdate note: ${addition}`, 1800),
+    projectInstruction: truncate(`${baseInstruction}\n\nCurrent update: ${addition}`, 2200),
+    summary: truncate(addition, 420),
+  };
+};
+
+const buildFolderUpdateDraft = (latestMessage: string, body: AssistantRequestBody): FolderUpdateDraft | null => {
+  const folder = (body.folders || [])[0];
+  if (!folder?.id) return null;
+
+  const renameMatch = latestMessage.match(/\b(?:to|as|called|named)\s+(.+)$/i);
+  const name = renameMatch ? clean(renameMatch[1].replace(/\bfolder\b/gi, ' ')) : '';
+
+  return {
+    id: folder.id,
+    ...(name ? { name: truncate(name, 80) } : {}),
+  };
+};
+
+const getSelectedProjectTask = (body: AssistantRequestBody) =>
+  (body.projectTasks || []).find((task) => task.project_id === body.selectedProjectId) || (body.projectTasks || [])[0] || null;
+
+const buildTaskUpdateDraft = (latestMessage: string, body: AssistantRequestBody): TaskUpdateDraft | null => {
+  const task = getSelectedProjectTask(body);
+  if (!task?.id) return null;
+
+  const status: TaskUpdateDraft['status'] = /\b(done|complete|completed|finished)\b/i.test(latestMessage)
+    ? 'done'
+    : /\b(archive|archived|remove)\b/i.test(latestMessage)
+      ? 'archived'
+      : /\b(reopen|open|pending)\b/i.test(latestMessage)
+        ? 'open'
+        : undefined;
+
+  return {
+    id: task.id,
+    ...(status ? { status } : {}),
+  };
+};
+
+const buildMemoryUpdateDraft = (latestMessage: string, body: AssistantRequestBody): MemoryUpdateDraft | null => {
+  const memory = (body.memories || [])[0];
+  if (!memory?.id) return null;
+
+  const archive = /\b(archive|remove|forget)\b/i.test(latestMessage);
+  const updateNote = clean(latestMessage.replace(/\b(update|change|edit|revise|modify|memory|remembered note|preference|with|to)\b/gi, ' '));
+
+  return {
+    id: memory.id,
+    ...(archive ? { status: 'archived' as const } : {}),
+    ...(!archive && updateNote ? { content: truncate(updateNote, 1200) } : {}),
+  };
+};
+
 const ensureRequestedActions = (
   payload: AssistantPayload,
   latestMessage: string,
@@ -339,7 +469,57 @@ const ensureRequestedActions = (
 ): AssistantPayload => {
   let nextPayload = payload;
 
-  if (wantsProject(latestMessage, history) && !nextPayload.projectDraft) {
+  if (wantsProjectUpdate(latestMessage, body)) {
+    const projectUpdate = nextPayload.projectUpdate || buildProjectUpdateDraft(latestMessage, body);
+    if (projectUpdate) {
+      const response =
+        nextPayload.response && !/\bproject created\b/i.test(nextPayload.response)
+          ? nextPayload.response
+          : 'I drafted an update for the current project. Review it before I save the change to the project.';
+
+      nextPayload = {
+        ...nextPayload,
+        response,
+        projectDraft: null,
+        projectUpdate,
+      };
+    }
+  }
+
+  if (wantsFolderUpdate(latestMessage)) {
+    const folderUpdate = nextPayload.folderUpdate || buildFolderUpdateDraft(latestMessage, body);
+    if (folderUpdate) {
+      nextPayload = {
+        ...nextPayload,
+        folderDraft: null,
+        folderUpdate,
+      };
+    }
+  }
+
+  if (wantsTaskUpdate(latestMessage)) {
+    const taskUpdate = nextPayload.taskUpdates?.length ? nextPayload.taskUpdates : buildTaskUpdateDraft(latestMessage, body);
+    if (taskUpdate) {
+      nextPayload = {
+        ...nextPayload,
+        taskDrafts: null,
+        taskUpdates: Array.isArray(taskUpdate) ? taskUpdate : [taskUpdate],
+      };
+    }
+  }
+
+  if (wantsMemoryUpdate(latestMessage)) {
+    const memoryUpdate = nextPayload.memoryUpdate || buildMemoryUpdateDraft(latestMessage, body);
+    if (memoryUpdate) {
+      nextPayload = {
+        ...nextPayload,
+        memoryDraft: null,
+        memoryUpdate,
+      };
+    }
+  }
+
+  if (!wantsUpdate(latestMessage) && wantsProject(latestMessage, history) && !nextPayload.projectDraft) {
     nextPayload = {
       ...nextPayload,
       response:
@@ -350,7 +530,7 @@ const ensureRequestedActions = (
     };
   }
 
-  if (shouldCreateFolder(latestMessage, history) && !nextPayload.folderDraft) {
+  if (!wantsUpdate(latestMessage) && shouldCreateFolder(latestMessage, history) && !nextPayload.folderDraft) {
     nextPayload = {
       ...nextPayload,
       response:
@@ -422,6 +602,10 @@ const parseAssistantPayload = (raw: string): AssistantPayload | null => {
       folderDraft: parsed.folderDraft || null,
       memoryDraft: parsed.memoryDraft || null,
       taskDrafts: Array.isArray(parsed.taskDrafts) ? parsed.taskDrafts.slice(0, 6) : null,
+      projectUpdate: parsed.projectUpdate || null,
+      folderUpdate: parsed.folderUpdate || null,
+      taskUpdates: Array.isArray(parsed.taskUpdates) ? parsed.taskUpdates.slice(0, 8) : null,
+      memoryUpdate: parsed.memoryUpdate || null,
     };
   } catch {
     return null;
@@ -437,6 +621,7 @@ const buildMessages = (
   const shouldDraftFolder = shouldCreateFolder(latestMessage, history);
   const shouldDraftMemory = wantsMemory(latestMessage);
   const shouldDraftTask = wantsTask(latestMessage);
+  const shouldUpdateProject = wantsProjectUpdate(latestMessage, body);
 
   return [
     {
@@ -455,6 +640,9 @@ Your job:
 - If external or current-market facts are needed, say that dated source checks are required before the recommendation is final.
 - If the user asks you to create a project, return a projectDraft object.
 - If the user confirms a previous project suggestion with phrases like "go ahead", "create it", "proceed", or "set it up", return a projectDraft object using the earlier project idea as the source context.
+- If the user asks to update, change, revise, rename, move, archive, or modify an existing project, folder, task, or memory, return the relevant update object and do not return a create draft for that same request.
+- For "current project", "selected project", "this project", or "it" update requests, use selectedProjectId as the target project id.
+- Never return projectDraft for an update request unless the user explicitly asks for a new project.
 - Never say "Project created" unless the JSON response also includes a non-null projectDraft.
 - If the user asks you to create a folder, return a folderDraft object.
 - If the user confirms a previous folder suggestion with phrases like "go ahead", "create it", "proceed", or "set it up", return a folderDraft object.
@@ -488,10 +676,44 @@ Your job:
       "title": "short task title",
       "detail": "optional task detail"
     }
-  ]
+  ],
+  "projectUpdate": null or {
+    "id": "existing project id",
+    "title": "optional replacement title",
+    "track": "founder or builder when changing path",
+    "context": "optional replacement project context",
+    "projectInstruction": "optional replacement project instruction",
+    "audience": "optional replacement audience",
+    "blocker": "optional replacement blocker",
+    "outcome": "optional replacement outcome",
+    "summary": "optional replacement summary",
+    "folderId": "optional target folder id or null for unfiled"
+  },
+  "folderUpdate": null or {
+    "id": "existing folder id",
+    "name": "optional replacement folder name",
+    "sortOrder": 0
+  },
+  "taskUpdates": null or [
+    {
+      "id": "existing task id",
+      "title": "optional replacement task title",
+      "detail": "optional replacement detail or null",
+      "status": "open or done or archived",
+      "sortOrder": 0
+    }
+  ],
+  "memoryUpdate": null or {
+    "id": "existing memory id",
+    "title": "optional replacement title",
+    "content": "optional replacement content",
+    "memory_type": "insight or preference or project_signal or boundary",
+    "status": "active or archived"
+  }
 }
 
 Project draft expected from latest message: ${shouldDraftProject ? 'yes' : 'only if genuinely useful'}.
+Project update expected from latest message: ${shouldUpdateProject ? 'yes' : 'only if genuinely useful'}.
 Folder draft expected from latest message: ${shouldDraftFolder ? 'yes' : 'only if genuinely useful'}.
 Memory draft expected from latest message: ${shouldDraftMemory ? 'yes' : 'only if genuinely useful'}.
 Task drafts expected from latest message: ${shouldDraftTask ? 'yes' : 'only if genuinely useful'}.
@@ -508,7 +730,7 @@ ${buildKramanitiKnowledgeContext()}`,
     {
       role: 'assistant',
       content:
-        '{"response":"Understood. I will use the private Circle context and Kramaniti operating rules, then return only structured JSON.","projectDraft":null,"folderDraft":null,"memoryDraft":null,"taskDrafts":null}',
+        '{"response":"Understood. I will use the private Circle context and Kramaniti operating rules, then return only structured JSON.","projectDraft":null,"folderDraft":null,"memoryDraft":null,"taskDrafts":null,"projectUpdate":null,"folderUpdate":null,"taskUpdates":null,"memoryUpdate":null}',
     },
     ...history.map((message) => ({
       role: message.role,

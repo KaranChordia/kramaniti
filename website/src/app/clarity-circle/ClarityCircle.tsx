@@ -112,12 +112,51 @@ type AssistantTaskDraft = {
   detail?: string;
 };
 
+type AssistantProjectUpdateDraft = {
+  id: string;
+  title?: string;
+  track?: Track;
+  context?: string;
+  projectInstruction?: string;
+  audience?: string;
+  blocker?: string;
+  outcome?: string;
+  summary?: string;
+  folderId?: string | null;
+};
+
+type AssistantFolderUpdateDraft = {
+  id: string;
+  name?: string;
+  sortOrder?: number;
+};
+
+type AssistantTaskUpdateDraft = {
+  id: string;
+  title?: string;
+  detail?: string | null;
+  status?: ClarityCircleProjectTask['status'];
+  sortOrder?: number;
+};
+
+type AssistantMemoryUpdateDraft = {
+  id: string;
+  title?: string;
+  content?: string;
+  memory_type?: ClarityCircleAssistantMemory['memory_type'];
+  status?: ClarityCircleAssistantMemory['status'];
+};
+
 type AssistantResponse = {
   response?: string;
   projectDraft?: AssistantProjectDraft | null;
   folderDraft?: AssistantFolderDraft | null;
   memoryDraft?: AssistantMemoryDraft | null;
   taskDrafts?: AssistantTaskDraft[] | null;
+  projectUpdate?: AssistantProjectUpdateDraft | null;
+  folderUpdate?: AssistantFolderUpdateDraft | null;
+  taskUpdates?: AssistantTaskUpdateDraft[] | null;
+  memoryUpdate?: AssistantMemoryUpdateDraft | null;
   error?: string;
 };
 
@@ -137,6 +176,10 @@ type AssistantActionResult = {
   folder: ClarityCircleProjectFolder | null;
   taskCount: number;
   memory: ClarityCircleAssistantMemory | null;
+  projectUpdated: boolean;
+  folderUpdated: boolean;
+  taskUpdateCount: number;
+  memoryUpdated: boolean;
 };
 
 type ProjectFolderFilter = 'all' | 'unfiled' | string;
@@ -2142,6 +2185,250 @@ export function ClarityCircle() {
     return project;
   };
 
+  const updateProjectFromAssistantDraft = async (
+    draft: AssistantProjectUpdateDraft,
+    options?: { keepCurrentMenu?: boolean },
+  ) => {
+    const supabase = getClarityCircleSupabase();
+    const currentProject = projects.find((project) => project.id === draft.id);
+
+    if (!authUser) {
+      setStatus('Sign in before updating projects.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return null;
+    }
+    if (!supabase || !currentProject) {
+      setStatus('Project update could not be saved.');
+      return null;
+    }
+
+    const patch: Partial<ClarityCircleProject> = {};
+
+    if (draft.title !== undefined) patch.title = cleanSentence(draft.title, currentProject.title).slice(0, 110);
+    if (draft.track === 'founder' || draft.track === 'builder') patch.track = draft.track;
+    if (draft.context !== undefined) patch.context = cleanSentence(draft.context, currentProject.context);
+    if (draft.projectInstruction !== undefined) {
+      patch.project_instruction = cleanSentence(draft.projectInstruction, currentProject.project_instruction || currentProject.context);
+    }
+    if (draft.audience !== undefined) patch.audience = cleanSentence(draft.audience, '') || null;
+    if (draft.blocker !== undefined) patch.blocker = cleanSentence(draft.blocker, '') || null;
+    if (draft.outcome !== undefined) patch.outcome = cleanSentence(draft.outcome, '') || null;
+    if (draft.summary !== undefined) patch.summary = cleanSentence(draft.summary, '') || null;
+    if ('folderId' in draft) {
+      patch.folder_id = draft.folderId ?? null;
+    }
+
+    if (Object.keys(patch).length === 0) {
+      setStatus('Assistant did not include a project change to save.');
+      return null;
+    }
+
+    const optimisticProject = { ...currentProject, ...patch, updated_at: new Date().toISOString() };
+    setProjects((current) => current.map((project) => (project.id === draft.id ? optimisticProject : project)));
+
+    const { data, error } = await supabase
+      .schema('clarity_circle')
+      .from('projects')
+      .update(patch)
+      .eq('id', draft.id)
+      .eq('user_id', authUser.id)
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      setStatus('Project update could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+      return null;
+    }
+
+    await supabase.schema('clarity_circle').from('context_entries').insert({
+      project_id: data.id,
+      user_id: authUser.id,
+      entry_type: 'note',
+      payload: {
+        source: 'circle_assistant_update',
+        changed_fields: Object.keys(patch),
+        title: data.title,
+        project_instruction: data.project_instruction,
+        context: data.context,
+      },
+    });
+
+    setProjects((current) => [data, ...current.filter((project) => project.id !== data.id)].slice(0, 80));
+    setSelectedProjectId(data.id);
+    setProjectInstructionDraft(data.project_instruction || data.context);
+    setStatus('Project updated.');
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+    return data;
+  };
+
+  const updateFolderFromAssistantDraft = async (
+    draft: AssistantFolderUpdateDraft,
+    options?: { keepCurrentMenu?: boolean },
+  ) => {
+    const supabase = getClarityCircleSupabase();
+    const currentFolder = projectFolders.find((folder) => folder.id === draft.id);
+
+    if (!authUser) {
+      setStatus('Sign in before updating folders.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return null;
+    }
+    if (!supabase || !currentFolder) {
+      setStatus('Folder update could not be saved.');
+      return null;
+    }
+
+    const patch: Partial<ClarityCircleProjectFolder> = {};
+    if (draft.name !== undefined) patch.name = cleanSentence(draft.name, currentFolder.name).slice(0, 80);
+    if (typeof draft.sortOrder === 'number' && Number.isFinite(draft.sortOrder)) patch.sort_order = Math.max(0, Math.round(draft.sortOrder));
+
+    if (Object.keys(patch).length === 0) {
+      setStatus('Assistant did not include a folder change to save.');
+      return null;
+    }
+
+    setProjectFolders((current) =>
+      current.map((folder) => (folder.id === draft.id ? { ...folder, ...patch, updated_at: new Date().toISOString() } : folder)),
+    );
+
+    const { data, error } = await supabase
+      .schema('clarity_circle')
+      .from('project_folders')
+      .update(patch)
+      .eq('id', draft.id)
+      .eq('user_id', authUser.id)
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      setStatus(error?.code === '23505' ? 'A folder with this name already exists.' : 'Folder update could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+      return null;
+    }
+
+    setProjectFolders((current) => current.map((folder) => (folder.id === data.id ? data : folder)));
+    setActiveProjectFolder(data.id);
+    setStatus('Folder updated.');
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+    return data;
+  };
+
+  const updateProjectTasksFromAssistantDraft = async (
+    drafts: AssistantTaskUpdateDraft[],
+    options?: { keepCurrentMenu?: boolean },
+  ) => {
+    const supabase = getClarityCircleSupabase();
+    if (!authUser) {
+      setStatus('Sign in before updating tasks.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return 0;
+    }
+    if (!supabase) {
+      setStatus('Task updates could not be saved.');
+      return 0;
+    }
+
+    let updatedCount = 0;
+
+    for (const draft of drafts.slice(0, 8)) {
+      const currentTask = projectTasks.find((task) => task.id === draft.id);
+      if (!currentTask) continue;
+
+      const patch: Partial<ClarityCircleProjectTask> = {};
+      if (draft.title !== undefined) patch.title = cleanSentence(draft.title, currentTask.title).slice(0, 160);
+      if ('detail' in draft) patch.detail = draft.detail ? cleanSentence(draft.detail, '') : null;
+      if (draft.status === 'open' || draft.status === 'done' || draft.status === 'archived') patch.status = draft.status;
+      if (typeof draft.sortOrder === 'number' && Number.isFinite(draft.sortOrder)) patch.sort_order = Math.max(0, Math.round(draft.sortOrder));
+      if (Object.keys(patch).length === 0) continue;
+
+      const { data, error } = await supabase
+        .schema('clarity_circle')
+        .from('project_tasks')
+        .update(patch)
+        .eq('id', draft.id)
+        .eq('user_id', authUser.id)
+        .select('*')
+        .single();
+
+      if (!error && data) {
+        updatedCount += 1;
+        setProjectTasks((current) => current.map((task) => (task.id === data.id ? data : task)));
+      }
+    }
+
+    if (updatedCount === 0) {
+      setStatus('Task updates could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+      return 0;
+    }
+
+    setStatus(updatedCount === 1 ? 'Task updated.' : 'Tasks updated.');
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+    return updatedCount;
+  };
+
+  const updateMemoryFromAssistantDraft = async (
+    draft: AssistantMemoryUpdateDraft,
+    options?: { keepCurrentMenu?: boolean },
+  ) => {
+    const supabase = getClarityCircleSupabase();
+    const currentMemory = assistantMemories.find((memory) => memory.id === draft.id);
+
+    if (!authUser) {
+      setStatus('Sign in before updating assistant memory.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return null;
+    }
+    if (!supabase || !currentMemory) {
+      setStatus('Assistant memory update could not be saved.');
+      return null;
+    }
+
+    const patch: Partial<ClarityCircleAssistantMemory> = {};
+    if (draft.title !== undefined) patch.title = cleanSentence(draft.title, currentMemory.title);
+    if (draft.content !== undefined) patch.content = cleanSentence(draft.content, currentMemory.content);
+    if (draft.memory_type) patch.memory_type = draft.memory_type;
+    if (draft.status === 'active' || draft.status === 'archived') patch.status = draft.status;
+
+    if (Object.keys(patch).length === 0) {
+      setStatus('Assistant did not include a memory change to save.');
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .schema('clarity_circle')
+      .from('assistant_memories')
+      .update(patch)
+      .eq('id', draft.id)
+      .eq('user_id', authUser.id)
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      setStatus('Assistant memory update could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+      return null;
+    }
+
+    setAssistantMemories((current) =>
+      data.status === 'active'
+        ? [data, ...current.filter((memory) => memory.id !== data.id && memory.status === 'active')].slice(0, 12)
+        : current.filter((memory) => memory.id !== data.id && memory.status === 'active'),
+    );
+    setStatus('Assistant memory updated.');
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+    return data;
+  };
+
   const runAssistantActions = async (
     data: AssistantResponse,
     options?: { project?: ClarityCircleProject | null },
@@ -2151,8 +2438,20 @@ export function ClarityCircle() {
       folder: null,
       taskCount: 0,
       memory: null,
+      projectUpdated: false,
+      folderUpdated: false,
+      taskUpdateCount: 0,
+      memoryUpdated: false,
     };
     const actionLabels: string[] = [];
+
+    if (data.folderUpdate) {
+      const folder = await updateFolderFromAssistantDraft(data.folderUpdate, { keepCurrentMenu: activeMenu === 'assistant' });
+      if (folder) {
+        result.folderUpdated = true;
+        actionLabels.push('folder update');
+      }
+    }
 
     if (data.folderDraft) {
       const folder = await createProjectFolder(data.folderDraft.name, {
@@ -2165,11 +2464,28 @@ export function ClarityCircle() {
       }
     }
 
+    if (data.projectUpdate) {
+      const project = await updateProjectFromAssistantDraft(data.projectUpdate, { keepCurrentMenu: activeMenu === 'assistant' });
+      if (project) {
+        result.project = project;
+        result.projectUpdated = true;
+        actionLabels.push('project update');
+      }
+    }
+
     if (data.projectDraft) {
       const project = await createProjectFromAssistantDraft(data.projectDraft, { keepCurrentMenu: activeMenu === 'assistant' });
       if (project) {
         result.project = project;
         actionLabels.push('project');
+      }
+    }
+
+    if (data.taskUpdates?.length) {
+      const updatedCount = await updateProjectTasksFromAssistantDraft(data.taskUpdates, { keepCurrentMenu: activeMenu === 'assistant' });
+      if (updatedCount > 0) {
+        result.taskUpdateCount = updatedCount;
+        actionLabels.push(updatedCount === 1 ? 'task update' : 'task updates');
       }
     }
 
@@ -2182,6 +2498,15 @@ export function ClarityCircle() {
       }
     } else if (data.taskDrafts?.length && !taskTarget) {
       setStatus('Assistant drafted tasks, but no project is selected yet.');
+    }
+
+    if (data.memoryUpdate) {
+      const memory = await updateMemoryFromAssistantDraft(data.memoryUpdate, { keepCurrentMenu: activeMenu === 'assistant' });
+      if (memory) {
+        result.memory = memory;
+        result.memoryUpdated = true;
+        actionLabels.push('memory update');
+      }
     }
 
     if (data.memoryDraft) {
@@ -2202,6 +2527,10 @@ export function ClarityCircle() {
 
   const getAssistantActionLabels = (data: AssistantResponse) =>
     [
+      data.projectUpdate ? 'project update' : null,
+      data.folderUpdate ? 'folder update' : null,
+      data.taskUpdates?.length ? (data.taskUpdates.length === 1 ? 'task update' : 'task updates') : null,
+      data.memoryUpdate ? 'memory update' : null,
       data.projectDraft ? 'project' : null,
       data.folderDraft ? 'folder' : null,
       data.taskDrafts?.length ? (data.taskDrafts.length === 1 ? 'task' : 'tasks') : null,
@@ -2216,12 +2545,18 @@ export function ClarityCircle() {
 
     const cleanedReply = fallbackReply
       .replace(/\bProject created\b/gi, 'Project drafted')
+      .replace(/\bProject updated\b/gi, 'Project update drafted')
       .replace(/\bFolder created\b/gi, 'Folder drafted')
+      .replace(/\bFolder updated\b/gi, 'Folder update drafted')
       .replace(/\bTask created\b/gi, 'Task drafted')
       .replace(/\bTasks created\b/gi, 'Tasks drafted')
+      .replace(/\bTask updated\b/gi, 'Task update drafted')
+      .replace(/\bTasks updated\b/gi, 'Task updates drafted')
       .replace(/\bMemory saved\b/gi, 'Memory drafted')
+      .replace(/\bMemory updated\b/gi, 'Memory update drafted')
       .replace(/\bcreated\b/gi, 'drafted')
-      .replace(/\bsaved\b/gi, 'drafted');
+      .replace(/\bsaved\b/gi, 'drafted')
+      .replace(/\bupdated\b/gi, 'drafted an update');
 
     return `${cleanedReply} Approve below before I save ${labels.join(', ')} to your Circle.`;
   };
@@ -2232,10 +2567,14 @@ export function ClarityCircle() {
     if (requestedActions.length === 0) return fallbackReply;
 
     const savedActions = [
-      result.project ? 'project' : null,
-      result.folder ? 'folder' : null,
+      result.projectUpdated ? 'project update' : null,
+      result.folderUpdated ? 'folder update' : null,
+      result.taskUpdateCount > 0 ? (result.taskUpdateCount === 1 ? 'task update' : 'task updates') : null,
+      result.memoryUpdated ? 'memory update' : null,
+      result.project && !result.projectUpdated ? 'project' : null,
+      result.folder && !result.folderUpdated ? 'folder' : null,
       result.taskCount > 0 ? (result.taskCount === 1 ? 'task' : 'tasks') : null,
-      result.memory ? 'memory' : null,
+      result.memory && !result.memoryUpdated ? 'memory' : null,
     ].filter(Boolean) as string[];
     const failedActions = requestedActions.filter((action) => !savedActions.includes(action));
 
@@ -2293,6 +2632,10 @@ export function ClarityCircle() {
       const result = await runAssistantActions(pendingAction.data, { project: actionProject });
       resultText = buildActionAwareAssistantReply(pendingAction.data, result, 'Approved.');
       failed = getAssistantActionLabels(pendingAction.data).some((label) => {
+        if (label === 'project update') return !result.projectUpdated;
+        if (label === 'folder update') return !result.folderUpdated;
+        if (label === 'memory update') return !result.memoryUpdated;
+        if (label === 'task update' || label === 'task updates') return result.taskUpdateCount <= 0;
         if (label === 'project') return !result.project;
         if (label === 'folder') return !result.folder;
         if (label === 'memory') return !result.memory;
@@ -2534,6 +2877,7 @@ export function ClarityCircle() {
             actions: project.actions,
           })),
           projectTasks: assistantTasks.map((task) => ({
+            id: task.id,
             project_id: task.project_id,
             title: task.title,
             detail: task.detail,
@@ -2553,6 +2897,8 @@ export function ClarityCircle() {
           selectedProjectId,
           assistantPreference: assistantSettings.behaviorPreference.trim() || null,
           memories: assistantMemoriesForRequest.map((memory) => ({
+            id: memory.id,
+            project_id: memory.project_id,
             title: memory.title,
             content: memory.content,
             memory_type: memory.memory_type,
@@ -2666,6 +3012,7 @@ export function ClarityCircle() {
             actions: project.actions,
           })),
           projectTasks: assistantTasks.map((task) => ({
+            id: task.id,
             project_id: task.project_id,
             title: task.title,
             detail: task.detail,
@@ -2687,6 +3034,8 @@ export function ClarityCircle() {
           memories: assistantMemoriesForRequest
             .filter((memory) => !memory.project_id || memory.project_id === selectedProject.id)
             .map((memory) => ({
+              id: memory.id,
+              project_id: memory.project_id,
               title: memory.title,
               content: memory.content,
               memory_type: memory.memory_type,
