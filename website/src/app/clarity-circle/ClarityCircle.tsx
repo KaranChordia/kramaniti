@@ -9,6 +9,7 @@ import {
   ArrowRight,
   BarChart3,
   Building2,
+  CheckCircle2,
   ChevronRight,
   CircleDot,
   Compass,
@@ -40,6 +41,7 @@ import {
   type ClarityCircleProfile,
   type ClarityCircleProject,
   type ClarityCircleProjectFolder,
+  type ClarityCircleProjectTask,
 } from '@/lib/clarity-circle/supabase';
 import styles from './ClarityCircle.module.css';
 
@@ -69,12 +71,14 @@ type SavedContext = {
 type UiAssistantMessage = Pick<ClarityCircleAssistantMessage, 'role' | 'content'> & {
   id: string;
   createdAt: string;
+  project_id?: string | null;
 };
 
 type AssistantProjectDraft = {
   title: string;
   track: Track;
   context: string;
+  projectInstruction?: string;
   audience: string;
   blocker: string;
   outcome: string;
@@ -90,11 +94,17 @@ type AssistantMemoryDraft = {
   memory_type: ClarityCircleAssistantMemory['memory_type'];
 };
 
+type AssistantTaskDraft = {
+  title: string;
+  detail?: string;
+};
+
 type AssistantResponse = {
   response?: string;
   projectDraft?: AssistantProjectDraft | null;
   folderDraft?: AssistantFolderDraft | null;
   memoryDraft?: AssistantMemoryDraft | null;
+  taskDrafts?: AssistantTaskDraft[] | null;
   error?: string;
 };
 
@@ -103,6 +113,7 @@ type ProjectFolderFilter = 'all' | 'unfiled' | string;
 type WorkspaceSnapshot = {
   projects: ClarityCircleProject[];
   folders: ClarityCircleProjectFolder[];
+  tasks: ClarityCircleProjectTask[];
   contextEntries: ClarityCircleContextEntry[];
   messages: UiAssistantMessage[];
   memories: ClarityCircleAssistantMemory[];
@@ -192,11 +203,12 @@ const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> =
   { id: 'projects', label: 'Projects', icon: FolderOpen },
 ];
 
-const createUiMessage = (role: UiAssistantMessage['role'], content: string): UiAssistantMessage => ({
+const createUiMessage = (role: UiAssistantMessage['role'], content: string, projectId?: string | null): UiAssistantMessage => ({
   id: `${role}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
   role,
   content,
   createdAt: new Date().toISOString(),
+  project_id: projectId ?? null,
 });
 
 const INITIAL_ASSISTANT_MESSAGES: UiAssistantMessage[] = [
@@ -283,7 +295,7 @@ const savedContextFromProject = (project: ClarityCircleProject): SavedContext =>
   savedAt: nowLabel(),
   intent: {
     headline: project.title,
-    context: project.context,
+    context: project.project_instruction || project.context,
     audience: project.audience ?? '',
     blocker: project.blocker ?? '',
     outcome: project.outcome ?? '',
@@ -314,17 +326,27 @@ export function ClarityCircle() {
   const [isSavingContext, setIsSavingContext] = useState(false);
   const [projects, setProjects] = useState<ClarityCircleProject[]>([]);
   const [projectFolders, setProjectFolders] = useState<ClarityCircleProjectFolder[]>([]);
+  const [projectTasks, setProjectTasks] = useState<ClarityCircleProjectTask[]>([]);
   const [contextEntries, setContextEntries] = useState<ClarityCircleContextEntry[]>([]);
   const [activeProjectFolder, setActiveProjectFolder] = useState<ProjectFolderFilter>('all');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [projectSearch, setProjectSearch] = useState('');
+  const [isCreatingProject, setIsCreatingProject] = useState(false);
+  const [projectBrief, setProjectBrief] = useState('');
+  const [projectInstructionDraft, setProjectInstructionDraft] = useState<string | null>(null);
+  const [manualTaskTitle, setManualTaskTitle] = useState('');
+  const [projectAssistantInput, setProjectAssistantInput] = useState('');
   const [newFolderName, setNewFolderName] = useState('');
   const [isCreatingFolder, setIsCreatingFolder] = useState(false);
   const [assistantInput, setAssistantInput] = useState('');
   const [assistantMessages, setAssistantMessages] = useState<UiAssistantMessage[]>(INITIAL_ASSISTANT_MESSAGES);
   const [assistantMemories, setAssistantMemories] = useState<ClarityCircleAssistantMemory[]>([]);
   const [isAssistantBusy, setIsAssistantBusy] = useState(false);
+  const [isProjectAssistantBusy, setIsProjectAssistantBusy] = useState(false);
+  const [isSavingProject, setIsSavingProject] = useState(false);
+  const [isSavingProjectInstruction, setIsSavingProjectInstruction] = useState(false);
   const assistantInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const projectAssistantInputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const resizeAssistantInput = useCallback((input: HTMLTextAreaElement) => {
     input.style.height = `${ASSISTANT_INPUT_MIN_HEIGHT}px`;
@@ -342,6 +364,12 @@ export function ClarityCircle() {
       resizeAssistantInput(assistantInputRef.current);
     }
   }, [assistantInput, resizeAssistantInput]);
+
+  useEffect(() => {
+    if (projectAssistantInputRef.current) {
+      resizeAssistantInput(projectAssistantInputRef.current);
+    }
+  }, [projectAssistantInput, resizeAssistantInput]);
 
   const upsertProfile = useCallback(async (user: User, username: string, options?: { quiet?: boolean }) => {
     const supabase = getClarityCircleSupabase();
@@ -421,7 +449,7 @@ export function ClarityCircle() {
     const supabase = getClarityCircleSupabase();
     if (!supabase) return null;
 
-    const [projectResult, folderResult, entryResult, messageResult, memoryResult] = await Promise.all([
+    const [projectResult, folderResult, taskResult, entryResult, messageResult, memoryResult] = await Promise.all([
       supabase
         .schema('clarity_circle')
         .from('projects')
@@ -439,6 +467,15 @@ export function ClarityCircle() {
         .order('sort_order', { ascending: true })
         .order('updated_at', { ascending: false })
         .limit(60),
+      supabase
+        .schema('clarity_circle')
+        .from('project_tasks')
+        .select('*')
+        .eq('user_id', user.id)
+        .neq('status', 'archived')
+        .order('sort_order', { ascending: true })
+        .order('updated_at', { ascending: false })
+        .limit(240),
       supabase
         .schema('clarity_circle')
         .from('context_entries')
@@ -472,8 +509,13 @@ export function ClarityCircle() {
       setStatus('Saved folders could not be loaded.');
     }
 
+    if (taskResult.error && !options?.quiet) {
+      setStatus('Project tasks could not be loaded. The latest migration may need to be applied.');
+    }
+
     const nextProjects = projectResult.data ?? [];
     const nextFolders = folderResult.error ? [] : folderResult.data ?? [];
+    const nextTasks = taskResult.error ? [] : taskResult.data ?? [];
     const nextEntries = entryResult.error ? [] : entryResult.data ?? [];
     const nextMessages =
       !messageResult.error && messageResult.data?.length
@@ -482,6 +524,7 @@ export function ClarityCircle() {
             role: message.role,
             content: message.content,
             createdAt: message.created_at,
+            project_id: message.project_id,
           }))
         : INITIAL_ASSISTANT_MESSAGES;
     const nextMemories = memoryResult.error ? [] : memoryResult.data ?? [];
@@ -489,6 +532,9 @@ export function ClarityCircle() {
     setProjects(nextProjects);
     if (!folderResult.error) {
       setProjectFolders(nextFolders);
+    }
+    if (!taskResult.error) {
+      setProjectTasks(nextTasks);
     }
     setContextEntries(nextEntries);
     setAssistantMessages(nextMessages);
@@ -501,6 +547,7 @@ export function ClarityCircle() {
     return {
       projects: nextProjects,
       folders: nextFolders,
+      tasks: nextTasks,
       contextEntries: nextEntries,
       messages: nextMessages,
       memories: nextMemories,
@@ -690,6 +737,11 @@ export function ClarityCircle() {
       )
       .on(
         'postgres_changes',
+        { event: '*', schema: 'clarity_circle', table: 'project_tasks', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .on(
+        'postgres_changes',
         { event: '*', schema: 'clarity_circle', table: 'context_entries', filter: `user_id=eq.${authUser.id}` },
         queueRefresh,
       )
@@ -872,9 +924,15 @@ export function ClarityCircle() {
     setAuthProfile(null);
     setProjects([]);
     setProjectFolders([]);
+    setProjectTasks([]);
     setActiveProjectFolder('all');
     setSelectedProjectId(null);
     setProjectSearch('');
+    setIsCreatingProject(false);
+    setProjectBrief('');
+    setProjectInstructionDraft(null);
+    setManualTaskTitle('');
+    setProjectAssistantInput('');
     setAssistantMessages(INITIAL_ASSISTANT_MESSAGES);
     setAssistantMemories([]);
     setAuthView('signin');
@@ -904,6 +962,16 @@ export function ClarityCircle() {
 
   const selectedProject =
     filteredProjects.find((project) => project.id === selectedProjectId) || filteredProjects[0] || null;
+  const selectedProjectTasks = selectedProject
+    ? projectTasks
+        .filter((task) => task.project_id === selectedProject.id && task.status !== 'archived')
+        .sort((left, right) => left.sort_order - right.sort_order || new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime())
+    : [];
+  const circleAssistantMessages = assistantMessages.filter((message) => !message.project_id);
+  const selectedProjectMessages = selectedProject
+    ? assistantMessages.filter((message) => message.project_id === selectedProject.id).slice(-12)
+    : [];
+  const selectedProjectInstruction = selectedProject?.project_instruction || selectedProject?.context || '';
 
   const recentProjects = [...projects]
     .sort((left, right) => new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime())
@@ -932,6 +1000,85 @@ export function ClarityCircle() {
       if (folderId === 'unfiled') return !project.folder_id;
       return project.folder_id === folderId;
     }).length;
+
+  const buildProjectInstruction = (draft: IntentDraft | AssistantProjectDraft | string) => {
+    if (typeof draft === 'string') {
+      return cleanSentence(draft, 'Use this project context to keep outputs focused, practical, and reviewable.');
+    }
+
+    const title = 'headline' in draft ? draft.headline : draft.title;
+    return [
+      `Project: ${cleanSentence(title, 'New clarity project')}`,
+      `Context: ${cleanSentence(draft.context, 'The project context is still being clarified.')}`,
+      draft.audience ? `Audience: ${cleanSentence(draft.audience, 'Not stated')}` : '',
+      draft.blocker ? `Current blocker: ${cleanSentence(draft.blocker, 'Not stated')}` : '',
+      draft.outcome ? `Desired outcome: ${cleanSentence(draft.outcome, 'Not stated')}` : '',
+      'Operating rule: answer from this project context first, keep recommendations practical, separate human-led from AI-assisted work, and avoid unsupported claims.',
+    ]
+      .filter(Boolean)
+      .join('\n');
+  };
+
+  const buildAutoTasks = (project: Pick<ClarityCircleProject, 'id' | 'track' | 'title' | 'context' | 'project_instruction'>) => {
+    const instruction = project.project_instruction || project.context;
+    return [
+      {
+        title: 'Clarify the project brief',
+        detail: cleanSentence(instruction, 'Review the project context and tighten the first decision.'),
+      },
+      project.track === 'founder'
+        ? {
+            title: 'Map the workflow boundary',
+            detail: 'Separate what should stay human-led, what can be AI-assisted, and what needs review before automation.',
+          }
+        : {
+            title: 'Choose the first validation move',
+            detail: 'Define the smallest test that proves whether the idea deserves more build time.',
+          },
+      {
+        title: 'Ask the project assistant for the next pass',
+        detail: 'Use the scoped assistant thread so future outputs stay tied to this project instruction.',
+      },
+    ];
+  };
+
+  const insertProjectTasks = async (
+    project: ClarityCircleProject,
+    taskDrafts: Array<{ title: string; detail?: string | null }>,
+    source: ClarityCircleProjectTask['source'],
+  ) => {
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || taskDrafts.length === 0) return [];
+
+    const existingCount = projectTasks.filter((task) => task.project_id === project.id).length;
+    const rows = taskDrafts.slice(0, 8).map((task, index) => ({
+      project_id: project.id,
+      user_id: authUser.id,
+      title: cleanSentence(task.title, 'New task').slice(0, 160),
+      detail: task.detail ? cleanSentence(task.detail, '') : null,
+      source,
+      sort_order: existingCount + index,
+    }));
+
+    const { data, error } = await supabase.schema('clarity_circle').from('project_tasks').insert(rows).select('*');
+
+    if (error || !data) {
+      setStatus('Tasks could not be saved. The project task migration may need to be applied.');
+      return [];
+    }
+
+    setProjectTasks((current) => [...current, ...data]);
+    return data;
+  };
+
+  const openNewProjectFlow = (prefill = '') => {
+    setIsCreatingProject(true);
+    setProjectBrief(prefill || savedContext?.intent.context || '');
+    setProjectInstructionDraft(null);
+    setSelectedProjectId(null);
+    setActiveMenu('projects');
+    setStatus('Describe what the project is about.');
+  };
 
   const createProjectFolder = async (folderName = newFolderName, options?: { source?: 'assistant' | 'user' }) => {
     const name = cleanSentence(folderName, '').slice(0, 80);
@@ -1000,6 +1147,84 @@ export function ClarityCircle() {
     void refreshWorkspace(authUser, { quiet: true });
   };
 
+  const createProjectFromBrief = async () => {
+    const brief = projectBrief.trim();
+    if (!brief) {
+      setStatus('Add what this project is about first.');
+      return null;
+    }
+
+    const supabase = getClarityCircleSupabase();
+    if (!authUser) {
+      setStatus('Sign in before creating projects.');
+      openMenu('start');
+      return null;
+    }
+    if (!supabase) {
+      setStatus('Project could not be saved to your account.');
+      return null;
+    }
+
+    const projectTitle = cleanSentence(brief.split(/[.!?\n]/)[0] || brief, 'New clarity project').slice(0, 110);
+    const projectIntent: IntentDraft = {
+      headline: projectTitle,
+      context: brief,
+      audience: '',
+      blocker: 'The project needs a clearer first operating path.',
+      outcome: 'A focused project plan with useful tasks and project-specific assistant context.',
+    };
+    const context = buildSavedContext(track, projectIntent);
+    const projectInstruction = buildProjectInstruction(projectIntent);
+
+    setIsSavingProject(true);
+    const { data: project, error } = await supabase
+      .schema('clarity_circle')
+      .from('projects')
+      .insert({
+        user_id: authUser.id,
+        track,
+        title: projectTitle,
+        context: brief,
+        project_instruction: projectInstruction,
+        blocker: projectIntent.blocker,
+        outcome: projectIntent.outcome,
+        summary: context.summary,
+        questions: context.questions,
+        actions: context.actions,
+      })
+      .select('*')
+      .single();
+
+    if (error || !project) {
+      setIsSavingProject(false);
+      setStatus('Project could not be saved to your account.');
+      return null;
+    }
+
+    await supabase.schema('clarity_circle').from('context_entries').insert({
+      project_id: project.id,
+      user_id: authUser.id,
+      entry_type: 'note',
+      payload: {
+        source: 'manual_project_brief',
+        title: project.title,
+        project_instruction: project.project_instruction,
+        context: project.context,
+      },
+    });
+
+    setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
+    setSelectedProjectId(project.id);
+    setProjectBrief('');
+    setProjectInstructionDraft(project.project_instruction || project.context);
+    setIsCreatingProject(false);
+    setIsSavingProject(false);
+    await insertProjectTasks(project, buildAutoTasks(project), 'auto');
+    setStatus('Project created with starting tasks.');
+    void refreshWorkspace(authUser, { quiet: true });
+    return project;
+  };
+
   const saveAssistantMessage = async (message: UiAssistantMessage, projectId?: string | null) => {
     const supabase = getClarityCircleSupabase();
     if (!supabase || !authUser) return;
@@ -1011,6 +1236,81 @@ export function ClarityCircle() {
       content: message.content,
       metadata: { created_at: message.createdAt },
     });
+  };
+
+  const createManualTask = async () => {
+    if (!selectedProject) return null;
+    const title = manualTaskTitle.trim();
+    if (!title) {
+      setStatus('Name the task first.');
+      return null;
+    }
+
+    const tasks = await insertProjectTasks(selectedProject, [{ title }], 'user');
+    if (tasks.length > 0) {
+      setManualTaskTitle('');
+      setStatus('Task added.');
+    }
+    return tasks[0] ?? null;
+  };
+
+  const toggleProjectTask = async (task: ClarityCircleProjectTask) => {
+    const nextStatus: ClarityCircleProjectTask['status'] = task.status === 'done' ? 'open' : 'done';
+    setProjectTasks((current) =>
+      current.map((item) => (item.id === task.id ? { ...item, status: nextStatus, updated_at: new Date().toISOString() } : item)),
+    );
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser) return;
+
+    const { error } = await supabase
+      .schema('clarity_circle')
+      .from('project_tasks')
+      .update({ status: nextStatus })
+      .eq('id', task.id);
+
+    if (error) {
+      setStatus('Task status could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const saveProjectInstruction = async (project: ClarityCircleProject) => {
+    const instruction = (projectInstructionDraft ?? selectedProjectInstruction).trim();
+    if (!instruction) {
+      setStatus('Add a project instruction first.');
+      return;
+    }
+
+    setIsSavingProjectInstruction(true);
+    setProjects((current) =>
+      current.map((item) =>
+        item.id === project.id ? { ...item, project_instruction: instruction, updated_at: new Date().toISOString() } : item,
+      ),
+    );
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser) {
+      setIsSavingProjectInstruction(false);
+      return;
+    }
+
+    const { error } = await supabase
+      .schema('clarity_circle')
+      .from('projects')
+      .update({ project_instruction: instruction })
+      .eq('id', project.id);
+
+    setIsSavingProjectInstruction(false);
+
+    if (error) {
+      setStatus('Project instruction could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true });
+      return;
+    }
+
+    setStatus('Project instruction saved.');
+    void refreshWorkspace(authUser, { quiet: true });
   };
 
   const saveAssistantMemory = async (draft: AssistantMemoryDraft, projectId?: string | null) => {
@@ -1072,6 +1372,7 @@ export function ClarityCircle() {
       outcome: draft.outcome?.trim() || 'A clearer next action.',
     };
     const context = buildSavedContext(draft.track, projectIntent);
+    const projectInstruction = draft.projectInstruction?.trim() || buildProjectInstruction(projectIntent);
 
     setTrack(draft.track);
     setIntent(projectIntent);
@@ -1086,6 +1387,7 @@ export function ClarityCircle() {
         track: draft.track,
         title: projectIntent.headline,
         context: projectIntent.context,
+        project_instruction: projectInstruction,
         audience: projectIntent.audience || null,
         blocker: projectIntent.blocker || null,
         outcome: projectIntent.outcome || null,
@@ -1108,6 +1410,7 @@ export function ClarityCircle() {
       payload: {
         source: 'circle_assistant',
         title: project.title,
+        project_instruction: project.project_instruction,
         context: project.context,
         audience: project.audience,
         blocker: project.blocker,
@@ -1117,7 +1420,10 @@ export function ClarityCircle() {
 
     setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
     setSelectedProjectId(project.id);
-    setStatus('Project created.');
+    setProjectBrief(project.project_instruction || project.context);
+    setProjectInstructionDraft(project.project_instruction || project.context);
+    await insertProjectTasks(project, buildAutoTasks(project), 'auto');
+    setStatus('Project created with assistant context and starting tasks.');
     void refreshWorkspace(authUser, { quiet: true });
     return project;
   };
@@ -1140,9 +1446,9 @@ export function ClarityCircle() {
     if (!prompt || isAssistantBusy) return;
 
     const userMessage = createUiMessage('user', prompt);
-    const nextMessages = [...assistantMessages, userMessage].slice(-12);
+    const nextMessages = [...circleAssistantMessages, userMessage].slice(-12);
 
-    setAssistantMessages(nextMessages);
+    setAssistantMessages((current) => [...current.filter((message) => message.project_id), ...nextMessages]);
     setAssistantInput('');
     setIsAssistantBusy(true);
     void saveAssistantMessage(userMessage);
@@ -1151,6 +1457,7 @@ export function ClarityCircle() {
       const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true }) : null;
       const assistantProjects = liveWorkspace?.projects ?? projects;
       const assistantFolders = liveWorkspace?.folders ?? projectFolders;
+      const assistantTasks = liveWorkspace?.tasks ?? projectTasks;
       const assistantEntries = liveWorkspace?.contextEntries ?? contextEntries;
       const assistantMemoriesForRequest = liveWorkspace?.memories ?? assistantMemories;
 
@@ -1180,12 +1487,20 @@ export function ClarityCircle() {
             title: project.title,
             track: project.track,
             context: project.context,
+            project_instruction: project.project_instruction,
             audience: project.audience,
             blocker: project.blocker,
             outcome: project.outcome,
             summary: project.summary,
             questions: project.questions,
             actions: project.actions,
+          })),
+          projectTasks: assistantTasks.map((task) => ({
+            project_id: task.project_id,
+            title: task.title,
+            detail: task.detail,
+            source: task.source,
+            status: task.status,
           })),
           folders: assistantFolders.map((folder) => ({
             id: folder.id,
@@ -1223,6 +1538,10 @@ export function ClarityCircle() {
         await createProjectFolder(data.folderDraft.name, { source: 'assistant' });
       }
 
+      if (data.taskDrafts?.length && selectedProject) {
+        await insertProjectTasks(selectedProject, data.taskDrafts, 'assistant');
+      }
+
       if (data.memoryDraft) {
         await saveAssistantMemory(data.memoryDraft, projectId);
       }
@@ -1234,6 +1553,113 @@ export function ClarityCircle() {
       setAssistantMessages((current) => [...current, fallbackMessage].slice(-12));
     } finally {
       setIsAssistantBusy(false);
+    }
+  };
+
+  const sendProjectAssistantMessage = async () => {
+    if (!selectedProject) return;
+    const prompt = projectAssistantInput.trim();
+    if (!prompt || isProjectAssistantBusy) return;
+
+    const userMessage = createUiMessage('user', prompt, selectedProject.id);
+    const nextMessages = [...selectedProjectMessages, userMessage].slice(-12);
+
+    setAssistantMessages((current) => [...current.filter((message) => message.project_id !== selectedProject.id), ...nextMessages]);
+    setProjectAssistantInput('');
+    setIsProjectAssistantBusy(true);
+    void saveAssistantMessage(userMessage, selectedProject.id);
+
+    try {
+      const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true }) : null;
+      const assistantProjects = liveWorkspace?.projects ?? projects;
+      const assistantFolders = liveWorkspace?.folders ?? projectFolders;
+      const assistantTasks = liveWorkspace?.tasks ?? projectTasks;
+      const assistantEntries = liveWorkspace?.contextEntries ?? contextEntries;
+      const assistantMemoriesForRequest = liveWorkspace?.memories ?? assistantMemories;
+
+      const response = await fetch('/api/clarity-circle/assistant/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: nextMessages.map((message) => ({ role: message.role, content: message.content })),
+          track: selectedProject.track,
+          savedContext: {
+            track: selectedProject.track,
+            headline: selectedProject.title,
+            context: selectedProject.project_instruction || selectedProject.context,
+            audience: selectedProject.audience || '',
+            blocker: selectedProject.blocker || '',
+            outcome: selectedProject.outcome || '',
+            summary: selectedProject.summary || selectedProject.context,
+          },
+          projects: assistantProjects.map((project) => ({
+            id: project.id,
+            folder_id: project.folder_id,
+            folderName: project.folder_id
+              ? assistantFolders.find((folder) => folder.id === project.folder_id)?.name ?? 'Folder'
+              : 'Unfiled',
+            title: project.title,
+            track: project.track,
+            context: project.context,
+            project_instruction: project.project_instruction,
+            audience: project.audience,
+            blocker: project.blocker,
+            outcome: project.outcome,
+            summary: project.summary,
+            questions: project.questions,
+            actions: project.actions,
+          })),
+          projectTasks: assistantTasks.map((task) => ({
+            project_id: task.project_id,
+            title: task.title,
+            detail: task.detail,
+            source: task.source,
+            status: task.status,
+          })),
+          folders: assistantFolders.map((folder) => ({
+            id: folder.id,
+            name: folder.name,
+          })),
+          contextEntries: assistantEntries.map((entry) => ({
+            project_id: entry.project_id,
+            entry_type: entry.entry_type,
+            payload: entry.payload,
+            created_at: entry.created_at,
+          })),
+          selectedProjectId: selectedProject.id,
+          memories: assistantMemoriesForRequest
+            .filter((memory) => !memory.project_id || memory.project_id === selectedProject.id)
+            .map((memory) => ({
+              title: memory.title,
+              content: memory.content,
+              memory_type: memory.memory_type,
+            })),
+        }),
+      });
+
+      const data = (await response.json()) as AssistantResponse;
+      const reply = data.response || data.error || 'The project assistant could not respond yet.';
+      const assistantMessage = createUiMessage('assistant', reply, selectedProject.id);
+
+      setAssistantMessages((current) => [...current, assistantMessage].slice(-60));
+      void saveAssistantMessage(assistantMessage, selectedProject.id);
+
+      if (data.taskDrafts?.length) {
+        await insertProjectTasks(selectedProject, data.taskDrafts, 'assistant');
+      }
+
+      if (data.memoryDraft) {
+        await saveAssistantMemory(data.memoryDraft, selectedProject.id);
+      }
+    } catch {
+      const fallbackMessage = createUiMessage(
+        'assistant',
+        'I could not reach the project assistant just now. The project instruction and tasks are still saved here.',
+        selectedProject.id,
+      );
+      setAssistantMessages((current) => [...current, fallbackMessage].slice(-60));
+    } finally {
+      setIsProjectAssistantBusy(false);
     }
   };
 
@@ -1269,6 +1695,7 @@ export function ClarityCircle() {
       blocker: intent.blocker.trim(),
       outcome: intent.outcome.trim(),
     });
+    const projectInstruction = buildProjectInstruction(context.intent);
 
     setSavedContext(context);
     setStep('context');
@@ -1283,6 +1710,7 @@ export function ClarityCircle() {
         track,
         title: context.intent.headline,
         context: context.intent.context,
+        project_instruction: projectInstruction,
         audience: context.intent.audience || null,
         blocker: context.intent.blocker || null,
         outcome: context.intent.outcome || null,
@@ -1305,6 +1733,7 @@ export function ClarityCircle() {
       entry_type: 'intent',
       payload: {
         headline: context.intent.headline,
+        project_instruction: projectInstruction,
         context: context.intent.context,
         audience: context.intent.audience,
         blocker: context.intent.blocker,
@@ -1315,8 +1744,11 @@ export function ClarityCircle() {
 
     setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
     setSelectedProjectId(project.id);
+    setProjectBrief(project.project_instruction || project.context);
+    setProjectInstructionDraft(project.project_instruction || project.context);
+    await insertProjectTasks(project, buildAutoTasks(project), 'auto');
     setIsSavingContext(false);
-    setStatus('Context saved.');
+    setStatus('Context saved with starting tasks.');
     void refreshWorkspace(authUser, { quiet: true });
   };
 
@@ -1332,6 +1764,8 @@ export function ClarityCircle() {
     setSavedContext(savedContextFromProject(project));
     setStep('context');
     setActiveMenu('context');
+    setProjectBrief(project.project_instruction || project.context);
+    setProjectInstructionDraft(project.project_instruction || project.context);
     setStatus('Project loaded.');
   };
 
@@ -1888,7 +2322,7 @@ export function ClarityCircle() {
               <div className={styles.assistantLayout}>
                 <section className={styles.chatPanel} aria-label="Circle assistant conversation">
                   <div className={styles.chatMessages}>
-                    {assistantMessages.map((message) => (
+                    {circleAssistantMessages.map((message) => (
                       <article
                         key={message.id}
                         className={message.role === 'assistant' ? styles.assistantBubble : styles.userBubble}
@@ -2100,13 +2534,49 @@ export function ClarityCircle() {
                       <button
                         type="button"
                         className={`${styles.secondaryButton} ${styles.projectToolbarButton}`}
-                        onClick={() => openMenu('path')}
+                        onClick={() => openNewProjectFlow()}
                       >
                         <span className={styles.projectToolbarPlus}>+</span>
                         New project
                       </button>
                     </div>
                   </div>
+
+                  {isCreatingProject && (
+                    <form
+                      className={styles.projectCreatePanel}
+                      onSubmit={(event) => {
+                        event.preventDefault();
+                        void createProjectFromBrief();
+                      }}
+                    >
+                      <label>
+                        <span>What is this project about?</span>
+                        <textarea
+                          value={projectBrief}
+                          onChange={(event) => setProjectBrief(event.target.value)}
+                          placeholder="Describe the project, idea, workflow, or outcome. This becomes the project instruction for future outputs."
+                          autoFocus
+                        />
+                      </label>
+                      <div className={styles.projectCreateActions}>
+                        <button type="submit" className={styles.primaryButton} disabled={isSavingProject}>
+                          {isSavingProject ? 'Creating...' : 'Create project'}
+                          <ArrowRight size={16} aria-hidden="true" />
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.textButton}
+                          onClick={() => {
+                            setIsCreatingProject(false);
+                            setProjectBrief(selectedProjectInstruction);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  )}
 
                   <div className={styles.projectRows} role="list" aria-label="Project list">
                     {filteredProjects.length > 0 ? (
@@ -2115,7 +2585,11 @@ export function ClarityCircle() {
                           key={project.id}
                           type="button"
                           className={selectedProject?.id === project.id ? styles.projectRowActive : ''}
-                          onClick={() => setSelectedProjectId(project.id)}
+                          onClick={() => {
+                            setSelectedProjectId(project.id);
+                            setProjectInstructionDraft(project.project_instruction || project.context);
+                            setIsCreatingProject(false);
+                          }}
                         >
                           <span className={styles.projectFileIcon}>
                             <FileText size={16} aria-hidden="true" />
@@ -2170,6 +2644,140 @@ export function ClarityCircle() {
                         <span>Context</span>
                         <p>{selectedProject.summary || selectedProject.context}</p>
                       </div>
+
+                      <div className={styles.projectInstructionPanel}>
+                        <label>
+                          <span>Project instruction</span>
+                          <textarea
+                            value={projectInstructionDraft ?? selectedProjectInstruction}
+                            onChange={(event) => setProjectInstructionDraft(event.target.value)}
+                            placeholder="Set how this project should behave and what future outputs should stay anchored to."
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          className={styles.secondaryButton}
+                          onClick={() => void saveProjectInstruction(selectedProject)}
+                          disabled={isSavingProjectInstruction}
+                        >
+                          {isSavingProjectInstruction ? 'Saving...' : 'Save instruction'}
+                        </button>
+                      </div>
+
+                      <section className={styles.projectTaskPanel} aria-label="Project tasks">
+                        <div className={styles.projectSubheader}>
+                          <span>Tasks</span>
+                          <small>{selectedProjectTasks.filter((task) => task.status !== 'done').length} open</small>
+                        </div>
+                        <div className={styles.projectTaskList}>
+                          {selectedProjectTasks.length > 0 ? (
+                            selectedProjectTasks.map((task) => (
+                              <button
+                                key={task.id}
+                                type="button"
+                                className={task.status === 'done' ? styles.projectTaskDone : ''}
+                                onClick={() => void toggleProjectTask(task)}
+                              >
+                                <CheckCircle2 size={16} aria-hidden="true" />
+                                <span>
+                                  <strong>{task.title}</strong>
+                                  {task.detail && <small>{task.detail}</small>}
+                                </span>
+                              </button>
+                            ))
+                          ) : (
+                            <p>No tasks yet. Add one manually or ask the project assistant.</p>
+                          )}
+                        </div>
+                        <form
+                          className={styles.manualTaskForm}
+                          onSubmit={(event) => {
+                            event.preventDefault();
+                            void createManualTask();
+                          }}
+                        >
+                          <input
+                            value={manualTaskTitle}
+                            onChange={(event) => setManualTaskTitle(event.target.value)}
+                            placeholder="Add a manual task"
+                          />
+                          <button type="submit">Add</button>
+                        </form>
+                      </section>
+
+                      <section className={styles.projectAssistantPanel} aria-label="Project assistant">
+                        <div className={styles.projectSubheader}>
+                          <span>Project assistant</span>
+                          <small>Uses this instruction</small>
+                        </div>
+                        <div className={styles.projectAssistantMessages}>
+                          {selectedProjectMessages.length > 0 ? (
+                            selectedProjectMessages.map((message) => (
+                              <article
+                                key={message.id}
+                                className={message.role === 'assistant' ? styles.assistantBubble : styles.userBubble}
+                              >
+                                <span className={styles.chatAvatar} aria-label={message.role === 'assistant' ? 'Project assistant' : 'You'}>
+                                  {message.role === 'assistant' ? (
+                                    <Image
+                                      src="/assets/brand/clarity-circle-mark-gold.png"
+                                      alt=""
+                                      width={24}
+                                      height={24}
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    (displayUsername || displayEmail || 'U').slice(0, 1).toUpperCase()
+                                  )}
+                                </span>
+                                <span className={styles.chatDivider} aria-hidden="true" />
+                                <p>{message.content}</p>
+                              </article>
+                            ))
+                          ) : (
+                            <p>Ask from this project&apos;s context. Replies, tasks, and memories stay scoped to this project.</p>
+                          )}
+                          {isProjectAssistantBusy && (
+                            <article className={styles.assistantBubble}>
+                              <span className={styles.chatAvatar} aria-label="Project assistant">
+                                <Image
+                                  src="/assets/brand/clarity-circle-mark-gold.png"
+                                  alt=""
+                                  width={24}
+                                  height={24}
+                                  aria-hidden="true"
+                                />
+                              </span>
+                              <span className={styles.chatDivider} aria-hidden="true" />
+                              <p>Thinking from this project instruction...</p>
+                            </article>
+                          )}
+                        </div>
+                        <form
+                          className={styles.assistantComposer}
+                          onSubmit={(event) => {
+                            event.preventDefault();
+                            void sendProjectAssistantMessage();
+                          }}
+                        >
+                          <textarea
+                            ref={projectAssistantInputRef}
+                            value={projectAssistantInput}
+                            onChange={(event) => {
+                              setProjectAssistantInput(event.target.value);
+                              resizeAssistantInput(event.currentTarget);
+                            }}
+                            onInput={(event) => resizeAssistantInput(event.currentTarget)}
+                            placeholder="Ask this project assistant..."
+                            rows={1}
+                            disabled={isProjectAssistantBusy}
+                          />
+                          <button type="submit" className={styles.iconPrimaryButton} disabled={isProjectAssistantBusy || !projectAssistantInput.trim()}>
+                            <Send size={17} aria-hidden="true" />
+                            <span>Send</span>
+                          </button>
+                        </form>
+                      </section>
 
                       <label className={styles.moveControl}>
                         <span>Move to</span>

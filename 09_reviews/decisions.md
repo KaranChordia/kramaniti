@@ -538,3 +538,10 @@ This log registers the major strategic and structural decisions made during the 
     *   The frontend subscribes to realtime changes for `clarity_circle.projects`, `project_folders`, `context_entries`, `assistant_messages`, and `assistant_memories`.
     *   The Supabase realtime publication now includes those Clarity Circle workspace tables.
     *   Guardrail: realtime must remain scoped to user-owned rows through existing RLS policies and must not expose recruiting-company tables or unrelated schemas.
+
+*   **2026-06-24 Project Workspace Update:**
+    *   The founder asked for project creation to begin with a direct "what is this project about?" input, and for assistant-created projects to prefill that operating context from the assistant conversation.
+    *   Projects now include `project_instruction`, which acts as the project-level operating context for future output.
+    *   Projects now support auto-built starter tasks, manually added user tasks, and project-specific assistant threads.
+    *   Project tasks are stored in `clarity_circle.project_tasks`; project assistant conversations continue to use `clarity_circle.assistant_messages.project_id`.
+    *   Guardrail: project instructions, tasks, and assistant threads must remain private, user-owned, and scoped inside the isolated `clarity_circle` schema with RLS ownership checks.

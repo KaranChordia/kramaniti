@@ -323,6 +323,10 @@ Related files:
 - The Circle Assistant can create new private projects from a user query while keeping project storage under `clarity_circle.projects`.
 - The Projects section now uses a Finder-style workspace with folder navigation, project rows, preview details, search, folder creation, and move-to-folder controls.
 - Signed-in project folders are stored in `clarity_circle.project_folders`; projects reference folders through `clarity_circle.projects.folder_id`.
+- Projects now include a project-level instruction field that acts as the operating context for future project output.
+- New projects can be created directly from Projects by answering what the project is about; assistant-created projects auto-fill that instruction from the assistant conversation.
+- Projects now support auto-built starter tasks, manually added tasks, and a selected-project assistant thread that reuses the Clarity Circle assistant behavior while staying scoped to the project instruction and task context.
+- Signed-in project tasks are stored in `clarity_circle.project_tasks`; project assistant messages continue using `clarity_circle.assistant_messages.project_id`.
 - Clarity Circle now subscribes to realtime workspace changes for projects, folders, context entries, assistant messages, and assistant memories.
 - The Circle Assistant refreshes the signed-in workspace before answering so manually created projects, folders, project entries, and assistant-created projects use the same context path.
 - A progressive product model where future digest, public-learning, and Clarity Brief surfaces should appear after context is captured instead of being visible all at once.
@@ -349,6 +353,7 @@ Related files:
 - `supabase/migrations/20260623121000_clarity_circle_assistant_memory.sql`
 - `supabase/migrations/20260623143000_clarity_circle_project_folders.sql`
 - `supabase/migrations/20260623154500_clarity_circle_realtime_workspace.sql`
+- `supabase/migrations/20260624111719_clarity_circle_project_tasks.sql`
 - `docs/clarity_circle_supabase_setup.md`
 - `website/src/components/layout/Navbar.tsx`
 - `website/src/app/sitemap.ts`

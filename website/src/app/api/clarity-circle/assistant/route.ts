@@ -21,12 +21,21 @@ type CircleProjectContext = {
   title: string;
   track: Track;
   context: string;
+  project_instruction?: string | null;
   audience?: string | null;
   blocker?: string | null;
   outcome?: string | null;
   summary?: string | null;
   questions?: string[];
   actions?: string[];
+};
+
+type CircleProjectTaskContext = {
+  project_id: string;
+  title: string;
+  detail?: string | null;
+  source?: 'auto' | 'assistant' | 'user';
+  status?: 'open' | 'done' | 'archived';
 };
 
 type CircleFolderContext = {
@@ -64,6 +73,7 @@ type AssistantRequestBody = {
   folders?: CircleFolderContext[];
   contextEntries?: CircleContextEntry[];
   selectedProjectId?: string | null;
+  projectTasks?: CircleProjectTaskContext[];
   memories?: CircleMemoryContext[];
 };
 
@@ -86,11 +96,17 @@ type MemoryDraft = {
   memory_type: 'insight' | 'preference' | 'project_signal' | 'boundary';
 };
 
+type TaskDraft = {
+  title: string;
+  detail?: string;
+};
+
 type AssistantPayload = {
   response: string;
   projectDraft?: ProjectDraft | null;
   folderDraft?: FolderDraft | null;
   memoryDraft?: MemoryDraft | null;
+  taskDrafts?: TaskDraft[] | null;
 };
 
 const MODEL_NAME = process.env.GROQ_CHAT_MODEL || 'openai/gpt-oss-120b';
@@ -146,13 +162,19 @@ const buildCircleContext = (body: AssistantRequestBody) => {
 
         return `${index + 1}. ${project.title} (${project.track})${
           body.selectedProjectId === project.id ? ' [currently selected]' : ''
-        }\nFolder: ${project.folderName || 'Unfiled'}\nContext: ${project.context}\nAudience: ${
+        }\nFolder: ${project.folderName || 'Unfiled'}\nProject instruction: ${
+          project.project_instruction || project.context
+        }\nContext: ${project.context}\nAudience: ${
           project.audience || 'Not stated'
         }\nBlocker: ${project.blocker || 'Not stated'}\nOutcome: ${project.outcome || 'Not stated'}\nSummary: ${
           project.summary || 'Not stated'
         }\nQuestions: ${(project.questions || []).join(' | ') || 'Not stated'}\nActions: ${
           (project.actions || []).join(' | ') || 'Not stated'
-        }\nSaved entries:\n${entries || 'No saved entries supplied.'}`;
+        }\nTasks:\n${(body.projectTasks || [])
+          .filter((task) => task.project_id === project.id)
+          .slice(0, 12)
+          .map((task) => `- [${task.status || 'open'}] ${task.title}${task.detail ? `: ${task.detail}` : ''}`)
+          .join('\n') || 'No tasks supplied.'}\nSaved entries:\n${entries || 'No saved entries supplied.'}`;
       },
     )
     .join('\n\n');
@@ -193,6 +215,9 @@ const wantsMemory = (message: string) =>
   /\b(remember|save this|keep this|note this|store this)\b/i.test(message) ||
   /\b(my preference|important context|don't forget|do not forget)\b/i.test(message);
 
+const wantsTask = (message: string) =>
+  /\b(create|start|make|add|set up|new|turn this into)\b/i.test(message) && /\b(task|todo|to-do|next step|action item)\b/i.test(message);
+
 const inferTrack = (message: string, fallback: Track): Track =>
   /\b(individual|builder|idea|validate|exploring)\b/i.test(message) ? 'builder' : fallback;
 
@@ -218,6 +243,7 @@ const buildLocalPayload = (latestMessage: string, body: AssistantRequestBody): A
       content: body.savedContext?.summary || topic,
       memory_type: 'insight',
     },
+    taskDrafts: null,
   };
 
   if (wantsProject(latestMessage)) {
@@ -234,6 +260,18 @@ const buildLocalPayload = (latestMessage: string, body: AssistantRequestBody): A
       blocker: body.savedContext?.blocker || 'The clearest first decision is still open.',
       outcome: body.savedContext?.outcome || 'A sharper next step and a practical clarity brief.',
     };
+  }
+
+  if (wantsTask(latestMessage)) {
+    payload.response =
+      'I turned this into a project task. Keep the next step small enough that you can review it before the project moves forward.';
+    payload.taskDrafts = [
+      {
+        title: truncate(latestMessage.replace(/\b(create|start|make|add|set up|new|turn this into|task|todo|to-do)\b/gi, '').trim() || 'Clarify next action', 120),
+        detail: 'Assistant-created from the current project conversation.',
+      },
+    ];
+    payload.memoryDraft = null;
   }
 
   if (wantsFolder(latestMessage)) {
@@ -269,6 +307,7 @@ const parseAssistantPayload = (raw: string): AssistantPayload | null => {
       projectDraft: parsed.projectDraft || null,
       folderDraft: parsed.folderDraft || null,
       memoryDraft: parsed.memoryDraft || null,
+      taskDrafts: Array.isArray(parsed.taskDrafts) ? parsed.taskDrafts.slice(0, 6) : null,
     };
   } catch {
     return null;
@@ -283,6 +322,7 @@ const buildMessages = (
   const shouldDraftProject = wantsProject(latestMessage);
   const shouldDraftFolder = wantsFolder(latestMessage);
   const shouldDraftMemory = wantsMemory(latestMessage);
+  const shouldDraftTask = wantsTask(latestMessage);
 
   return [
     {
@@ -301,7 +341,9 @@ Your job:
 - If external or current-market facts are needed, say that dated source checks are required before the recommendation is final.
 - If the user asks you to create a project, return a projectDraft object.
 - If the user asks you to create a folder, return a folderDraft object.
+- If the user asks for a task, todo, or concrete action item for the selected project, return taskDrafts.
 - If the user asks you to remember something, or if a durable preference or useful signal emerges, return a memoryDraft object.
+- When a selected project exists, answer as that project's assistant: use the selected project's instruction, context, tasks, messages, and memories first, while keeping the broader Clarity Circle behavior.
 - Keep the public answer under 120 words unless the user asks for a deeper breakdown.
 - Return valid JSON only with this shape:
 {
@@ -310,6 +352,7 @@ Your job:
     "title": "short project title",
     "track": "founder" or "builder",
     "context": "what the project is about",
+    "projectInstruction": "how future outputs in this project should behave",
     "audience": "who this is for",
     "blocker": "what is unclear",
     "outcome": "what should become clearer"
@@ -321,12 +364,19 @@ Your job:
     "title": "short memory title",
     "content": "what should be remembered",
     "memory_type": "insight" or "preference" or "project_signal" or "boundary"
-  }
+  },
+  "taskDrafts": null or [
+    {
+      "title": "short task title",
+      "detail": "optional task detail"
+    }
+  ]
 }
 
 Project draft expected from latest message: ${shouldDraftProject ? 'yes' : 'only if genuinely useful'}.
 Folder draft expected from latest message: ${shouldDraftFolder ? 'yes' : 'only if genuinely useful'}.
 Memory draft expected from latest message: ${shouldDraftMemory ? 'yes' : 'only if genuinely useful'}.
+Task drafts expected from latest message: ${shouldDraftTask ? 'yes' : 'only if genuinely useful'}.
 
 Private Circle context:
 ${buildCircleContext(body)}
@@ -337,7 +387,7 @@ ${buildKramanitiKnowledgeContext()}`,
     {
       role: 'assistant',
       content:
-        '{"response":"Understood. I will use the private Circle context and Kramaniti operating rules, then return only structured JSON.","projectDraft":null,"folderDraft":null,"memoryDraft":null}',
+        '{"response":"Understood. I will use the private Circle context and Kramaniti operating rules, then return only structured JSON.","projectDraft":null,"folderDraft":null,"memoryDraft":null,"taskDrafts":null}',
     },
     ...history.map((message) => ({
       role: message.role,

@@ -1249,7 +1249,10 @@
 
 .newFolderForm input,
 .projectSearch input,
-.moveControl select {
+.moveControl select,
+.manualTaskForm input,
+.projectCreatePanel textarea,
+.projectInstructionPanel textarea {
   width: 100%;
   border: 1px solid var(--circle-border);
   border-radius: 8px;
@@ -1257,6 +1260,59 @@
   color: var(--circle-text);
   font: inherit;
   outline: none;
+}
+
+.projectCreatePanel,
+.projectInstructionPanel,
+.projectTaskPanel,
+.projectAssistantPanel {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--circle-border);
+  background: var(--circle-row);
+}
+
+.projectCreatePanel {
+  border-bottom: 1px solid var(--circle-divider);
+  background:
+    var(--circle-card-sheen),
+    var(--circle-panel);
+}
+
+.projectCreatePanel label,
+.projectInstructionPanel label {
+  display: grid;
+  gap: 8px;
+}
+
+.projectCreatePanel span,
+.projectInstructionPanel span,
+.projectSubheader span {
+  color: var(--circle-gold-light);
+  font-size: 11px;
+  font-weight: 780;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.projectCreatePanel textarea,
+.projectInstructionPanel textarea {
+  min-height: 116px;
+  padding: 11px;
+  resize: vertical;
+  color: var(--circle-text);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.projectInstructionPanel textarea {
+  min-height: 132px;
+}
+
+.projectCreateActions {
+  display: grid;
+  gap: 8px;
 }
 
 .newFolderForm input {
@@ -1517,11 +1573,127 @@
   gap: 8px;
 }
 
+.projectSubheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.projectSubheader small {
+  color: var(--circle-faint);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
 .previewBody p {
   margin: 0;
   color: var(--circle-muted);
   font-size: 14px;
   line-height: 1.5;
+}
+
+.projectTaskList {
+  display: grid;
+  gap: 7px;
+}
+
+.projectTaskList button {
+  width: 100%;
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: start;
+  gap: 9px;
+  padding: 9px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-control);
+  color: var(--circle-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.projectTaskList button svg {
+  margin-top: 1px;
+  color: var(--circle-faint);
+}
+
+.projectTaskList strong,
+.projectTaskList small {
+  display: block;
+  min-width: 0;
+}
+
+.projectTaskList strong {
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.projectTaskList small {
+  margin-top: 4px;
+  color: var(--circle-faint);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.projectTaskList .projectTaskDone {
+  color: var(--circle-faint);
+}
+
+.projectTaskList .projectTaskDone strong {
+  text-decoration: line-through;
+}
+
+.projectTaskList .projectTaskDone svg {
+  color: var(--circle-gold-light);
+}
+
+.manualTaskForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.manualTaskForm input {
+  min-height: 38px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+.manualTaskForm button {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--circle-gold-border);
+  border-radius: 8px;
+  background: var(--circle-control-hover);
+  color: var(--circle-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.projectAssistantMessages {
+  max-height: 260px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.projectAssistantMessages > p,
+.projectTaskList > p {
+  margin: 0;
+  color: var(--circle-faint);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.projectAssistantPanel .assistantComposer {
+  margin: 0 -12px -12px;
+  border-radius: 0 0 8px 8px;
 }
 
 .moveControl select {

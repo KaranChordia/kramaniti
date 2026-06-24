@@ -9,6 +9,7 @@ export type ClarityCircleProject = {
   track: ClarityCircleTrack;
   title: string;
   context: string;
+  project_instruction: string | null;
   audience: string | null;
   blocker: string | null;
   outcome: string | null;
@@ -16,6 +17,19 @@ export type ClarityCircleProject = {
   questions: string[];
   actions: string[];
   status: 'active' | 'archived';
+  created_at: string;
+  updated_at: string;
+};
+
+export type ClarityCircleProjectTask = {
+  id: string;
+  project_id: string;
+  user_id: string;
+  title: string;
+  detail: string | null;
+  source: 'auto' | 'assistant' | 'user';
+  status: 'open' | 'done' | 'archived';
+  sort_order: number;
   created_at: string;
   updated_at: string;
 };
@@ -94,6 +108,7 @@ type ClarityCircleDatabase = {
           track: ClarityCircleTrack;
           title: string;
           context: string;
+          project_instruction?: string | null;
           audience?: string | null;
           blocker?: string | null;
           outcome?: string | null;
@@ -103,6 +118,21 @@ type ClarityCircleDatabase = {
           status?: 'active' | 'archived';
         };
         Update: Partial<Omit<ClarityCircleProject, 'id' | 'user_id' | 'created_at' | 'updated_at'>>;
+      };
+      project_tasks: {
+        Row: ClarityCircleProjectTask;
+        Insert: {
+          project_id: string;
+          user_id: string;
+          title: string;
+          detail?: string | null;
+          source?: ClarityCircleProjectTask['source'];
+          status?: ClarityCircleProjectTask['status'];
+          sort_order?: number;
+        };
+        Update: Partial<
+          Omit<ClarityCircleProjectTask, 'id' | 'project_id' | 'user_id' | 'created_at' | 'updated_at'>
+        >;
       };
       project_folders: {
         Row: ClarityCircleProjectFolder;
