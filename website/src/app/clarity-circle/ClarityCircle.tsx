@@ -3869,7 +3869,12 @@ export function ClarityCircle() {
                         }
                       }}
                     />
-                    <button type="submit" className={styles.iconPrimaryButton} disabled={isAssistantBusy || !assistantInput.trim()}>
+                    <button
+                      type="submit"
+                      className={styles.iconPrimaryButton}
+                      disabled={isAssistantBusy || !assistantInput.trim()}
+                      aria-label="Send message"
+                    >
                       <Send size={17} aria-hidden="true" />
                       <span>Send</span>
                     </button>
@@ -4274,7 +4279,12 @@ export function ClarityCircle() {
                             rows={1}
                             disabled={isProjectAssistantBusy}
                           />
-                          <button type="submit" className={styles.iconPrimaryButton} disabled={isProjectAssistantBusy || !projectAssistantInput.trim()}>
+                          <button
+                            type="submit"
+                            className={styles.iconPrimaryButton}
+                            disabled={isProjectAssistantBusy || !projectAssistantInput.trim()}
+                            aria-label="Send project message"
+                          >
                             <Send size={17} aria-hidden="true" />
                             <span>Send</span>
                           </button>

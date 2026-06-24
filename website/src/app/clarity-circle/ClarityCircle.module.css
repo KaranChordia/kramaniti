@@ -2,6 +2,7 @@
   --circle-bg: #08090a;
   --circle-surface: #0a0b0c;
   --circle-panel: rgba(16, 17, 19, 0.92);
+  --circle-panel-solid: #111214;
   --circle-panel-soft: rgba(255, 255, 255, 0.04);
   --circle-border: rgba(255, 255, 255, 0.1);
   --circle-border-strong: rgba(201, 168, 76, 0.42);
@@ -52,6 +53,7 @@
 .lightTheme {
   --circle-surface: #f5f1e7;
   --circle-panel: rgba(255, 252, 244, 0.92);
+  --circle-panel-solid: #fffaf0;
   --circle-panel-soft: rgba(10, 11, 12, 0.045);
   --circle-border: rgba(10, 11, 12, 0.12);
   --circle-text: #15130f;
@@ -3375,6 +3377,101 @@
 
   .chatPanel {
     min-height: 0;
+  }
+
+  .assistantMenuBar {
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .assistantThreadGroup {
+    max-width: none;
+    width: 100%;
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .assistantThreadTabs {
+    flex: 1 1 calc(100% - 100px);
+    max-width: calc(100% - 100px);
+  }
+
+  .assistantThreadTabs button {
+    max-width: 142px;
+  }
+
+  .assistantThreadDropdownHost {
+    flex: 0 0 auto;
+  }
+
+  .assistantThreadGroup > span {
+    display: none;
+  }
+
+  .assistantThreadActions {
+    flex: 1 1 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+    border-top: 1px solid var(--circle-subtle-divider);
+  }
+
+  .assistantThreadActions button {
+    min-width: 0;
+    padding: 0 8px;
+  }
+
+  .assistantMenuButton,
+  .assistantSettingsHost {
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  .assistantProjectActions {
+    flex: 1 1 100%;
+  }
+
+  .assistantMenuButton,
+  .assistantSettingsButton {
+    width: 100%;
+  }
+
+  .assistantProjectActions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  }
+
+  .assistantProjectActions button {
+    min-width: 0;
+    padding: 0 8px;
+  }
+
+  .assistantThreadDropdown,
+  .assistantSettingsDropdown {
+    background: var(--circle-panel-solid, var(--circle-panel));
+    backdrop-filter: none;
+  }
+
+  .assistantSettingsDropdown {
+    right: 0;
+    width: min(365px, calc(100vw - 28px));
+    box-shadow: 0 22px 48px rgba(0, 0, 0, 0.38);
+  }
+
+  .assistantSettingsDropdown textarea {
+    min-height: 96px;
+    background: var(--circle-surface);
+  }
+
+  .assistantSettingsQuickActions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .assistantSettingsQuickActions button,
+  .assistantSettingsFooter button {
+    width: 100%;
+    background: var(--circle-surface);
   }
 
   .assistantBubble,
