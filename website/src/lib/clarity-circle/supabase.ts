@@ -82,6 +82,7 @@ export type ClarityCircleProfile = {
   username: string | null;
   full_name: string | null;
   preferred_track: ClarityCircleTrack | null;
+  assistant_settings: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 };
@@ -97,6 +98,7 @@ type ClarityCircleDatabase = {
           username?: string | null;
           full_name?: string | null;
           preferred_track?: ClarityCircleTrack | null;
+          assistant_settings?: Record<string, unknown>;
         };
         Update: Partial<Omit<ClarityCircleProfile, 'user_id' | 'created_at' | 'updated_at'>>;
       };

@@ -333,6 +333,10 @@ Related files:
 - Signed-in project tasks are stored in `clarity_circle.project_tasks`; project assistant messages continue using `clarity_circle.assistant_messages.project_id`.
 - Clarity Circle now subscribes to realtime workspace changes for projects, folders, context entries, assistant messages, and assistant memories.
 - The Circle Assistant refreshes the signed-in workspace before answering so manually created projects, folders, project entries, and assistant-created projects use the same context path.
+- The Circle Assistant supports multiple main chat threads through assistant message metadata, with each main thread treated as a separate conversation session. Project-specific assistant threads remain scoped separately by `project_id`.
+- After five completed main assistant exchanges, the thread title should shift from the early prompt label to a compact summary title stored in assistant message metadata.
+- The Assistant surface uses an action-first assistant menu bar below the route navigation. Keep it as icon + button text only; do not add visible instruction labels to that bar.
+- Assistant settings may collect user response-style preferences such as directness, question style, or reply structure. Treat these as behavior/personality tweaks only, never as replacement system instructions or permission to override Clarity Circle boundaries.
 - A progressive product model where future digest, public-learning, and Clarity Brief surfaces should appear after context is captured instead of being visible all at once.
 - Navigation and sitemap entries for the new route.
 
@@ -341,6 +345,8 @@ Related files:
 [Constraint] The social layer should be founder/solopreneur-focused. Founders contribute real problem statements; solopreneurs contribute work, ideas, and experiments. It should not become a generic engagement feed.
 
 [Constraint] Founder and solopreneur capabilities should remain role-gated by the account's saved `preferred_track`. Do not show founder problem-posting controls to solopreneur accounts, and do not show solopreneur share-posting controls to founder accounts unless a newer product decision explicitly merges those roles.
+
+[Constraint] Clarity Circle screens should not spend meaningful viewport space on sections that only explain the product. Prefer effective UI density: composers, threads, project/task surfaces, filters, actions, and stateful workspace objects. Explanatory copy should be compact and embedded inside functional controls or empty states.
 
 [Constraint] V1 remains free. Auth-backed storage is allowed only inside the isolated `clarity_circle` schema, with RLS scoped to `auth.uid()`. Do not add payments, public claims, external tool recommendations, emails, or market updates without a newer implementation decision and privacy/storage model.
 
@@ -362,6 +368,7 @@ Related files:
 - `supabase/migrations/20260623143000_clarity_circle_project_folders.sql`
 - `supabase/migrations/20260623154500_clarity_circle_realtime_workspace.sql`
 - `supabase/migrations/20260624111719_clarity_circle_project_tasks.sql`
+- `supabase/migrations/20260624130000_clarity_circle_assistant_settings.sql`
 - `docs/clarity_circle_supabase_setup.md`
 - `website/src/components/layout/Navbar.tsx`
 - `website/src/app/sitemap.ts`

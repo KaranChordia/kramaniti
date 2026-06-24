@@ -559,3 +559,13 @@ This log registers the major strategic and structural decisions made during the 
     *   Clarity Circle now stores the selected signup path in `clarity_circle.profiles.preferred_track` and restores that path after sign-in.
     *   Founder accounts are routed toward founder problem statements, founder-owned context capture, and founder-typed projects. Solopreneur accounts are routed toward work/idea sharing, solopreneur context capture, and solopreneur-typed projects.
     *   Guardrail: do not expose founder-only creation controls to solopreneur accounts, or solopreneur-only creation controls to founder accounts, unless a newer product decision explicitly changes the account-role model.
+
+*   **2026-06-24 Circle Thread UX Density Update:**
+    *   The founder clarified that the Circle page should behave more like a social-media thread surface, with room for future post-level functionality.
+    *   The large informational Circle header was removed. The Circle tab now prioritizes the composer, feed filters, thread cards, metadata, tags, and action rows.
+    *   Guardrail: avoid Clarity Circle sections that use space only to convey information. Use screen area for effective UI: composers, filters, threads, actions, project/task surfaces, and interaction-ready workspace objects.
+
+*   **2026-06-24 Assistant Menu Bar Update:**
+    *   The Assistant page now supports multiple main assistant chat threads, with thread identity carried in assistant message metadata.
+    *   The old right-side assistant information panel was removed in favor of a horizontal assistant menu bar under the route navigation.
+    *   Guardrail: assistant menu bars should use compact action controls only: icons, button text, thread buttons, and grouped project actions. Do not add visible instructional labels or explanation blocks to that bar.

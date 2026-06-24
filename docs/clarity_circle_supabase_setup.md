@@ -82,6 +82,8 @@ notify pgrst, 'reload schema';
 - Workspace realtime is enabled for `projects`, `project_folders`, `context_entries`, `assistant_messages`, and `assistant_memories`.
 - The dashboard listens for workspace changes and refreshes project counts, folders, assistant memories, and context entries without requiring a page refresh.
 - The dedicated Circle Assistant stores signed-in conversation turns in `clarity_circle.assistant_messages`.
+- Main Circle Assistant thread identity and summary titles are stored in `clarity_circle.assistant_messages.metadata`, with project-specific threads still scoped by `project_id`.
+- Assistant response-style preferences are stored on `clarity_circle.profiles.assistant_settings`; these are behavior tweaks only, not replacement system instructions.
 - Project-specific assistant turns use `clarity_circle.assistant_messages.project_id`, so each project can keep a separate assistant thread while preserving common Circle assistant behavior.
 - User-visible assistant memory notes are stored in `clarity_circle.assistant_memories` and can be archived from the Memory panel.
 - The Circle Assistant can create new private projects from user requests; those projects still use `clarity_circle.projects`.

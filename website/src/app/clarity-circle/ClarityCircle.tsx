@@ -19,6 +19,7 @@ import {
   FolderOpen,
   FolderPlus,
   Lightbulb,
+  List,
   LogOut,
   MessageCircle,
   Moon,
@@ -30,6 +31,7 @@ import {
   Settings,
   ShieldCheck,
   Sun,
+  Trash2,
   Users,
   UserRound,
 } from 'lucide-react';
@@ -73,6 +75,15 @@ type UiAssistantMessage = Pick<ClarityCircleAssistantMessage, 'role' | 'content'
   id: string;
   createdAt: string;
   project_id?: string | null;
+  thread_id?: string | null;
+  thread_title?: string | null;
+};
+
+type AssistantThread = {
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type AssistantProjectDraft = {
@@ -107,6 +118,10 @@ type AssistantResponse = {
   memoryDraft?: AssistantMemoryDraft | null;
   taskDrafts?: AssistantTaskDraft[] | null;
   error?: string;
+};
+
+type AssistantSettingsDraft = {
+  behaviorPreference: string;
 };
 
 type AssistantActionResult = {
@@ -147,6 +162,8 @@ const STORAGE_KEY = 'kramaniti-clarity-circle-sequence-v1';
 const ENGINE_HANDOFF_KEY = 'kramaniti-clarity-circle-engine-handoff-v1';
 const ASSISTANT_INPUT_MIN_HEIGHT = 42;
 const ASSISTANT_INPUT_MAX_HEIGHT = 132;
+const DEFAULT_ASSISTANT_THREAD_ID = 'circle-thread-default';
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const clearCircleLocalStorage = () => {
   try {
@@ -228,20 +245,157 @@ const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> =
   { id: 'projects', label: 'Projects', icon: FolderOpen },
 ];
 
-const createUiMessage = (role: UiAssistantMessage['role'], content: string, projectId?: string | null): UiAssistantMessage => ({
+const createUiMessage = (
+  role: UiAssistantMessage['role'],
+  content: string,
+  projectId?: string | null,
+  threadId?: string | null,
+  threadTitle?: string | null,
+): UiAssistantMessage => ({
   id: `${role}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
   role,
   content,
   createdAt: new Date().toISOString(),
   project_id: projectId ?? null,
+  thread_id: threadId ?? null,
+  thread_title: threadTitle ?? null,
 });
 
 const INITIAL_ASSISTANT_MESSAGES: UiAssistantMessage[] = [
   createUiMessage(
     'assistant',
     'I can use your Circle context, projects, and memory to sharpen your next move or create a new project from a rough request.',
+    null,
+    DEFAULT_ASSISTANT_THREAD_ID,
   ),
 ];
+
+const INITIAL_ASSISTANT_THREADS: AssistantThread[] = [
+  {
+    id: DEFAULT_ASSISTANT_THREAD_ID,
+    title: 'Circle thread',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
+
+const getAssistantThreadId = (message: UiAssistantMessage) => message.thread_id || DEFAULT_ASSISTANT_THREAD_ID;
+
+const buildAssistantThreadTitle = (content: string, fallback: string) => {
+  const clean = content.replace(/\s+/g, ' ').trim();
+  if (!clean) return fallback;
+  return clean.length > 34 ? `${clean.slice(0, 31).trim()}...` : clean;
+};
+
+const getMessageThreadIdFromMetadata = (metadata: Record<string, unknown> | null | undefined) => {
+  const threadId = metadata?.thread_id;
+  return typeof threadId === 'string' && threadId.trim() ? threadId : DEFAULT_ASSISTANT_THREAD_ID;
+};
+
+const getMessageThreadTitleFromMetadata = (metadata: Record<string, unknown> | null | undefined) => {
+  const threadTitle = metadata?.thread_title;
+  return typeof threadTitle === 'string' && threadTitle.trim() ? threadTitle : null;
+};
+
+const THREAD_TITLE_STOPWORDS = new Set([
+  'about',
+  'after',
+  'again',
+  'assistant',
+  'before',
+  'build',
+  'building',
+  'chat',
+  'circle',
+  'clarity',
+  'conversation',
+  'create',
+  'draft',
+  'from',
+  'have',
+  'help',
+  'into',
+  'just',
+  'make',
+  'need',
+  'next',
+  'please',
+  'project',
+  'should',
+  'that',
+  'this',
+  'thread',
+  'through',
+  'turn',
+  'what',
+  'when',
+  'with',
+  'would',
+]);
+
+const buildAssistantThreadSummaryTitle = (messages: UiAssistantMessage[]) => {
+  const userTurns = messages.filter((message) => message.role === 'user');
+  const assistantTurns = messages.filter((message) => message.role === 'assistant');
+  if (Math.min(userTurns.length, assistantTurns.length) < 5) return null;
+
+  const source = userTurns
+    .slice(-5)
+    .map((message) => message.content)
+    .join(' ')
+    .toLowerCase();
+  const words = source.match(/[a-z0-9]+/g) ?? [];
+  const wordCounts = new Map<string, number>();
+
+  for (const word of words) {
+    if (word.length < 4 || THREAD_TITLE_STOPWORDS.has(word)) continue;
+    wordCounts.set(word, (wordCounts.get(word) ?? 0) + 1);
+  }
+
+  const keywords = [...wordCounts.entries()]
+    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+    .slice(0, 5)
+    .map(([word]) => word);
+
+  if (keywords.length === 0) {
+    return buildAssistantThreadTitle(userTurns[userTurns.length - 1]?.content ?? '', 'Circle summary');
+  }
+
+  const title = keywords.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return buildAssistantThreadTitle(title, 'Circle summary');
+};
+
+const buildAssistantThreads = (messages: UiAssistantMessage[], previousThreads: AssistantThread[] = []) => {
+  const threadMap = new Map<string, AssistantThread>();
+
+  for (const thread of previousThreads) {
+    threadMap.set(thread.id, thread);
+  }
+
+  for (const message of messages) {
+    if (message.project_id) continue;
+    const threadId = getAssistantThreadId(message);
+    const existing = threadMap.get(threadId);
+    const messageTime = message.createdAt || new Date().toISOString();
+    const title =
+      message.thread_title ||
+      (message.role === 'user'
+        ? buildAssistantThreadTitle(message.content, existing?.title || 'Circle thread')
+        : existing?.title || 'Circle thread');
+
+    threadMap.set(threadId, {
+      id: threadId,
+      title,
+      createdAt: existing?.createdAt || messageTime,
+      updatedAt: existing && new Date(existing.updatedAt).getTime() > new Date(messageTime).getTime() ? existing.updatedAt : messageTime,
+    });
+  }
+
+  if (!threadMap.size) {
+    return INITIAL_ASSISTANT_THREADS;
+  }
+
+  return [...threadMap.values()].sort((left, right) => new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime());
+};
 
 const COMMUNITY_SEED_POSTS: CommunityPost[] = [
   {
@@ -327,6 +481,14 @@ const isEmail = (value: string) => /\S+@\S+\.\S+/.test(value.trim());
 const getUserMetadataUsername = (user: User | null) => {
   const value = user?.user_metadata?.username;
   return typeof value === 'string' ? normalizeUsername(value) : '';
+};
+
+const normalizeAssistantSettings = (value: unknown): AssistantSettingsDraft => {
+  if (!value || typeof value !== 'object') return { behaviorPreference: '' };
+  const settings = value as Partial<AssistantSettingsDraft>;
+  return {
+    behaviorPreference: typeof settings.behaviorPreference === 'string' ? settings.behaviorPreference.slice(0, 600) : '',
+  };
 };
 
 const buildSavedContext = (track: Track, intent: IntentDraft): SavedContext => {
@@ -429,6 +591,13 @@ export function ClarityCircle() {
   const [communityTags, setCommunityTags] = useState('');
   const [assistantInput, setAssistantInput] = useState('');
   const [assistantMessages, setAssistantMessages] = useState<UiAssistantMessage[]>(INITIAL_ASSISTANT_MESSAGES);
+  const [assistantThreads, setAssistantThreads] = useState<AssistantThread[]>(INITIAL_ASSISTANT_THREADS);
+  const [activeAssistantThreadId, setActiveAssistantThreadId] = useState(DEFAULT_ASSISTANT_THREAD_ID);
+  const [isAssistantThreadDropdownOpen, setIsAssistantThreadDropdownOpen] = useState(false);
+  const [isAssistantThreadDropdownClosing, setIsAssistantThreadDropdownClosing] = useState(false);
+  const [isAssistantSettingsOpen, setIsAssistantSettingsOpen] = useState(false);
+  const [isAssistantSettingsClosing, setIsAssistantSettingsClosing] = useState(false);
+  const [assistantSettings, setAssistantSettings] = useState<AssistantSettingsDraft>({ behaviorPreference: '' });
   const [assistantMemories, setAssistantMemories] = useState<ClarityCircleAssistantMemory[]>([]);
   const [isAssistantBusy, setIsAssistantBusy] = useState(false);
   const [isProjectAssistantBusy, setIsProjectAssistantBusy] = useState(false);
@@ -436,6 +605,10 @@ export function ClarityCircle() {
   const [isSavingProjectInstruction, setIsSavingProjectInstruction] = useState(false);
   const assistantInputRef = useRef<HTMLTextAreaElement | null>(null);
   const projectAssistantInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const assistantThreadDropdownHostRef = useRef<HTMLDivElement | null>(null);
+  const assistantSettingsHostRef = useRef<HTMLDivElement | null>(null);
+  const assistantThreadDropdownCloseTimerRef = useRef<number | null>(null);
+  const assistantSettingsCloseTimerRef = useRef<number | null>(null);
 
   const resizeAssistantInput = useCallback((input: HTMLTextAreaElement) => {
     input.style.height = `${ASSISTANT_INPUT_MIN_HEIGHT}px`;
@@ -459,6 +632,100 @@ export function ClarityCircle() {
       resizeAssistantInput(projectAssistantInputRef.current);
     }
   }, [projectAssistantInput, resizeAssistantInput]);
+
+  const closeAssistantThreadDropdown = useCallback(() => {
+    if (!isAssistantThreadDropdownOpen || isAssistantThreadDropdownClosing) return;
+    if (assistantThreadDropdownCloseTimerRef.current) {
+      window.clearTimeout(assistantThreadDropdownCloseTimerRef.current);
+    }
+    setIsAssistantThreadDropdownOpen(false);
+    setIsAssistantThreadDropdownClosing(true);
+    assistantThreadDropdownCloseTimerRef.current = window.setTimeout(() => {
+      setIsAssistantThreadDropdownClosing(false);
+      assistantThreadDropdownCloseTimerRef.current = null;
+    }, 160);
+  }, [isAssistantThreadDropdownClosing, isAssistantThreadDropdownOpen]);
+
+  const openAssistantThreadDropdown = useCallback(() => {
+    if (assistantThreadDropdownCloseTimerRef.current) {
+      window.clearTimeout(assistantThreadDropdownCloseTimerRef.current);
+      assistantThreadDropdownCloseTimerRef.current = null;
+    }
+    setIsAssistantThreadDropdownClosing(false);
+    setIsAssistantThreadDropdownOpen(true);
+  }, []);
+
+  const closeAssistantSettings = useCallback(() => {
+    if (!isAssistantSettingsOpen || isAssistantSettingsClosing) return;
+    if (assistantSettingsCloseTimerRef.current) {
+      window.clearTimeout(assistantSettingsCloseTimerRef.current);
+    }
+    setIsAssistantSettingsOpen(false);
+    setIsAssistantSettingsClosing(true);
+    assistantSettingsCloseTimerRef.current = window.setTimeout(() => {
+      setIsAssistantSettingsClosing(false);
+      assistantSettingsCloseTimerRef.current = null;
+    }, 160);
+  }, [isAssistantSettingsClosing, isAssistantSettingsOpen]);
+
+  const openAssistantSettings = useCallback(() => {
+    if (assistantSettingsCloseTimerRef.current) {
+      window.clearTimeout(assistantSettingsCloseTimerRef.current);
+      assistantSettingsCloseTimerRef.current = null;
+    }
+    setIsAssistantSettingsClosing(false);
+    setIsAssistantSettingsOpen(true);
+  }, []);
+
+  useEffect(() => {
+    const handleOutsidePointer = (event: MouseEvent | TouchEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+
+      if (
+        isAssistantThreadDropdownOpen &&
+        assistantThreadDropdownHostRef.current &&
+        !assistantThreadDropdownHostRef.current.contains(target)
+      ) {
+        closeAssistantThreadDropdown();
+      }
+
+      if (
+        isAssistantSettingsOpen &&
+        assistantSettingsHostRef.current &&
+        !assistantSettingsHostRef.current.contains(target)
+      ) {
+        closeAssistantSettings();
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      closeAssistantThreadDropdown();
+      closeAssistantSettings();
+    };
+
+    document.addEventListener('mousedown', handleOutsidePointer);
+    document.addEventListener('touchstart', handleOutsidePointer);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsidePointer);
+      document.removeEventListener('touchstart', handleOutsidePointer);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [closeAssistantSettings, closeAssistantThreadDropdown, isAssistantSettingsOpen, isAssistantThreadDropdownOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (assistantThreadDropdownCloseTimerRef.current) {
+        window.clearTimeout(assistantThreadDropdownCloseTimerRef.current);
+      }
+      if (assistantSettingsCloseTimerRef.current) {
+        window.clearTimeout(assistantSettingsCloseTimerRef.current);
+      }
+    };
+  }, []);
 
   const syncProfileTrack = useCallback((profile: ClarityCircleProfile | null) => {
     const profileTrack = profile?.preferred_track;
@@ -513,6 +780,7 @@ export function ClarityCircle() {
             username: fallbackUsername || null,
             full_name: null,
             preferred_track: fallbackUsername ? track : null,
+            assistant_settings: {},
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           }
@@ -527,12 +795,14 @@ export function ClarityCircle() {
 
     if (error) {
       setAuthProfile(fallbackProfile);
+      setAssistantSettings(normalizeAssistantSettings(fallbackProfile?.assistant_settings));
       return fallbackProfile;
     }
 
     if (data) {
       setAuthProfile(data);
       syncProfileTrack(data);
+      setAssistantSettings(normalizeAssistantSettings(data.assistant_settings));
       return data;
     }
 
@@ -543,6 +813,7 @@ export function ClarityCircle() {
 
     setAuthProfile(fallbackProfile);
     syncProfileTrack(fallbackProfile);
+    setAssistantSettings(normalizeAssistantSettings(fallbackProfile?.assistant_settings));
     return fallbackProfile;
   }, [syncProfileTrack, track, upsertProfile]);
 
@@ -589,8 +860,8 @@ export function ClarityCircle() {
         .from('assistant_messages')
         .select('*')
         .eq('user_id', user.id)
-        .order('created_at', { ascending: true })
-        .limit(30),
+        .order('created_at', { ascending: false })
+        .limit(240),
       supabase
         .schema('clarity_circle')
         .from('assistant_memories')
@@ -618,17 +889,21 @@ export function ClarityCircle() {
     const nextFolders = folderResult.error ? [] : folderResult.data ?? [];
     const nextTasks = taskResult.error ? [] : taskResult.data ?? [];
     const nextEntries = entryResult.error ? [] : entryResult.data ?? [];
+    const nextMessageRows = !messageResult.error && messageResult.data?.length ? [...messageResult.data].reverse() : [];
     const nextMessages =
-      !messageResult.error && messageResult.data?.length
-        ? messageResult.data.map((message) => ({
+      nextMessageRows.length > 0
+        ? nextMessageRows.map((message) => ({
             id: message.id,
             role: message.role,
             content: message.content,
             createdAt: message.created_at,
             project_id: message.project_id,
+            thread_id: message.project_id ? null : getMessageThreadIdFromMetadata(message.metadata),
+            thread_title: message.project_id ? null : getMessageThreadTitleFromMetadata(message.metadata),
           }))
         : INITIAL_ASSISTANT_MESSAGES;
     const nextMemories = memoryResult.error ? [] : memoryResult.data ?? [];
+    const nextAssistantThreads = buildAssistantThreads(nextMessages);
 
     setProjects(nextProjects);
     if (!folderResult.error) {
@@ -639,6 +914,10 @@ export function ClarityCircle() {
     }
     setContextEntries(nextEntries);
     setAssistantMessages(nextMessages);
+    setAssistantThreads(nextAssistantThreads);
+    setActiveAssistantThreadId((current) =>
+      nextAssistantThreads.some((thread) => thread.id === current) ? current : nextAssistantThreads[0]?.id ?? DEFAULT_ASSISTANT_THREAD_ID,
+    );
     setAssistantMemories(nextMemories);
     setSelectedProjectId((current) => {
       if (current && nextProjects.some((project) => project.id === current)) return current;
@@ -668,6 +947,9 @@ export function ClarityCircle() {
             sessionMode: SessionMode;
             activeMenu: MenuId;
             assistantMessages: UiAssistantMessage[];
+            assistantThreads: AssistantThread[];
+            activeAssistantThreadId: string;
+            assistantSettings: AssistantSettingsDraft;
             assistantMemories: ClarityCircleAssistantMemory[];
             projectFolders: ClarityCircleProjectFolder[];
             activeProjectFolder: ProjectFolderFilter;
@@ -685,7 +967,24 @@ export function ClarityCircle() {
             setActiveMenu(parsed.activeMenu);
           }
           if (Array.isArray(parsed.assistantMessages) && parsed.assistantMessages.length > 0) {
-            setAssistantMessages(parsed.assistantMessages.slice(-12));
+            const parsedAssistantMessages = parsed.assistantMessages.slice(-60).map((message) => ({
+              ...message,
+              thread_id: message.project_id ? null : message.thread_id || DEFAULT_ASSISTANT_THREAD_ID,
+              thread_title: message.project_id ? null : message.thread_title ?? null,
+            }));
+            setAssistantMessages(parsedAssistantMessages);
+            setAssistantThreads(buildAssistantThreads(parsedAssistantMessages));
+          }
+          if (Array.isArray(parsed.assistantThreads) && parsed.assistantThreads.length > 0) {
+            setAssistantThreads(parsed.assistantThreads.slice(0, 12));
+          }
+          if (typeof parsed.activeAssistantThreadId === 'string' && parsed.activeAssistantThreadId) {
+            setActiveAssistantThreadId(parsed.activeAssistantThreadId);
+          }
+          if (parsed.assistantSettings && typeof parsed.assistantSettings.behaviorPreference === 'string') {
+            setAssistantSettings({
+              behaviorPreference: parsed.assistantSettings.behaviorPreference.slice(0, 600),
+            });
           }
           if (Array.isArray(parsed.assistantMemories)) {
             setAssistantMemories(parsed.assistantMemories.slice(0, 10));
@@ -719,6 +1018,12 @@ export function ClarityCircle() {
         if (requestedView === 'home') {
           setActiveMenu('home');
         }
+        if (requestedView === 'circle') {
+          setActiveMenu('circle');
+        }
+        if (requestedView === 'assistant') {
+          setActiveMenu('assistant');
+        }
       } catch {
         setStatus('This session starts fresh.');
       } finally {
@@ -745,7 +1050,10 @@ export function ClarityCircle() {
         savedContext,
         sessionMode,
         activeMenu,
-        assistantMessages: assistantMessages.slice(-12),
+        assistantMessages: assistantMessages.slice(-60),
+        assistantThreads: assistantThreads.slice(0, 12),
+        activeAssistantThreadId,
+        assistantSettings,
         assistantMemories: assistantMemories.slice(0, 10),
         projectFolders: projectFolders.slice(0, 24),
         activeProjectFolder,
@@ -758,8 +1066,11 @@ export function ClarityCircle() {
   }, [
     activeMenu,
     activeProjectFolder,
+    activeAssistantThreadId,
     assistantMemories,
     assistantMessages,
+    assistantSettings,
+    assistantThreads,
     authUser,
     communityFilter,
     communityPosts,
@@ -788,7 +1099,7 @@ export function ClarityCircle() {
         clearCircleLocalStorage();
         void loadProfile(user);
         setStep('track');
-        setActiveMenu('path');
+        setActiveMenu((current) => (current === 'start' ? 'path' : current));
         setStatus('Welcome back.');
       }
     });
@@ -801,7 +1112,7 @@ export function ClarityCircle() {
         void loadProfile(user);
         setStep((current) => {
           if (current === 'entry') {
-            setActiveMenu('path');
+            setActiveMenu((currentMenu) => (currentMenu === 'start' ? 'path' : currentMenu));
             return 'track';
           }
           return current;
@@ -1065,6 +1376,9 @@ export function ClarityCircle() {
     setManualTaskTitle('');
     setProjectAssistantInput('');
     setAssistantMessages(INITIAL_ASSISTANT_MESSAGES);
+    setAssistantThreads(INITIAL_ASSISTANT_THREADS);
+    setActiveAssistantThreadId(DEFAULT_ASSISTANT_THREAD_ID);
+    setAssistantSettings({ behaviorPreference: '' });
     setAssistantMemories([]);
     setAuthView('signin');
     setActiveMenu('start');
@@ -1094,6 +1408,7 @@ export function ClarityCircle() {
       username: authProfile?.username ?? getUserMetadataUsername(authUser) ?? null,
       full_name: authProfile?.full_name ?? null,
       preferred_track: nextTrack,
+      assistant_settings: authProfile?.assistant_settings ?? assistantSettings,
       created_at: authProfile?.created_at ?? new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
@@ -1141,7 +1456,14 @@ export function ClarityCircle() {
         .filter((task) => task.project_id === selectedProject.id && task.status !== 'archived')
         .sort((left, right) => left.sort_order - right.sort_order || new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime())
     : [];
-  const circleAssistantMessages = assistantMessages.filter((message) => !message.project_id);
+  const resolvedAssistantThreadId = assistantThreads.some((thread) => thread.id === activeAssistantThreadId)
+    ? activeAssistantThreadId
+    : assistantThreads[0]?.id ?? DEFAULT_ASSISTANT_THREAD_ID;
+  const visibleAssistantThreads = assistantThreads.slice(0, 5);
+  const circleAssistantMessages = assistantMessages.filter(
+    (message) => !message.project_id && getAssistantThreadId(message) === resolvedAssistantThreadId,
+  );
+  const circleAssistantMessageCount = assistantMessages.filter((message) => !message.project_id).length;
   const selectedProjectMessages = selectedProject
     ? assistantMessages.filter((message) => message.project_id === selectedProject.id).slice(-12)
     : [];
@@ -1178,16 +1500,12 @@ export function ClarityCircle() {
     currentCommunityKind === 'founder_problem'
       ? {
           label: 'Founder problem statement',
-          title: 'Post a problem statement',
-          body: 'Frame the operational or growth problem clearly enough that solopreneurs can respond with useful work, ideas, or prototypes. Solopreneur sharing controls are hidden for founder accounts.',
           titlePlaceholder: 'What problem needs sharper thinking?',
           bodyPlaceholder: 'Describe the workflow, blocker, audience, and what a useful contribution would clarify.',
           button: 'Post problem',
         }
       : {
           label: 'Solopreneur share',
-          title: 'Share work or an idea',
-          body: 'Share a build, idea, observation, or useful experiment that can connect to founder problems inside the Circle. Founder problem-posting controls are hidden for solopreneur accounts.',
           titlePlaceholder: 'What are you working on or noticing?',
           bodyPlaceholder: 'Describe the work, idea, signal, or experiment. Keep it specific enough for founders to understand.',
           button: 'Share with Circle',
@@ -1330,7 +1648,10 @@ export function ClarityCircle() {
     setStatus('Describe what the project is about.');
   };
 
-  const createProjectFolder = async (folderName = newFolderName, options?: { source?: 'assistant' | 'user' }) => {
+  const createProjectFolder = async (
+    folderName = newFolderName,
+    options?: { source?: 'assistant' | 'user'; keepCurrentMenu?: boolean },
+  ) => {
     const name = cleanSentence(folderName, '').slice(0, 80);
     if (!name) {
       setStatus('Name the folder first.');
@@ -1340,7 +1661,9 @@ export function ClarityCircle() {
     const supabase = getClarityCircleSupabase();
     if (!authUser) {
       setStatus('Sign in before creating folders.');
-      openMenu('start');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
       return null;
     }
     if (!supabase) {
@@ -1538,17 +1861,46 @@ export function ClarityCircle() {
     seedAssistantPrompt(prompt);
   };
 
-  const saveAssistantMessage = async (message: UiAssistantMessage, projectId?: string | null) => {
+  const saveAssistantMessage = async (
+    message: UiAssistantMessage,
+    projectId?: string | null,
+    threadId?: string | null,
+    threadTitle?: string | null,
+  ) => {
     const supabase = getClarityCircleSupabase();
     if (!supabase || !authUser) return;
 
-    await supabase.schema('clarity_circle').from('assistant_messages').insert({
-      user_id: authUser.id,
-      project_id: projectId ?? null,
-      role: message.role,
-      content: message.content,
-      metadata: { created_at: message.createdAt },
-    });
+    const { data, error } = await supabase
+      .schema('clarity_circle')
+      .from('assistant_messages')
+      .insert({
+        user_id: authUser.id,
+        project_id: projectId ?? null,
+        role: message.role,
+        content: message.content,
+        metadata: {
+          created_at: message.createdAt,
+          thread_id: projectId ? null : message.thread_id || threadId || DEFAULT_ASSISTANT_THREAD_ID,
+          thread_title: projectId ? null : message.thread_title || threadTitle || null,
+        },
+      })
+      .select('*')
+      .single();
+
+    if (error || !data) return null;
+
+    const savedMessage: UiAssistantMessage = {
+      id: data.id,
+      role: data.role,
+      content: data.content,
+      createdAt: data.created_at,
+      project_id: data.project_id,
+      thread_id: data.project_id ? null : getMessageThreadIdFromMetadata(data.metadata),
+      thread_title: data.project_id ? null : getMessageThreadTitleFromMetadata(data.metadata),
+    };
+
+    setAssistantMessages((current) => current.map((item) => (item.id === message.id ? savedMessage : item)));
+    return savedMessage;
   };
 
   const createManualTask = async () => {
@@ -1626,11 +1978,17 @@ export function ClarityCircle() {
     void refreshWorkspace(authUser, { quiet: true });
   };
 
-  const saveAssistantMemory = async (draft: AssistantMemoryDraft, projectId?: string | null) => {
+  const saveAssistantMemory = async (
+    draft: AssistantMemoryDraft,
+    projectId?: string | null,
+    options?: { keepCurrentMenu?: boolean },
+  ) => {
     const supabase = getClarityCircleSupabase();
     if (!authUser) {
       setStatus('Sign in before saving assistant memory.');
-      openMenu('start');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
       return null;
     }
     if (!supabase) {
@@ -1665,11 +2023,13 @@ export function ClarityCircle() {
     return data;
   };
 
-  const createProjectFromAssistantDraft = async (draft: AssistantProjectDraft) => {
+  const createProjectFromAssistantDraft = async (draft: AssistantProjectDraft, options?: { keepCurrentMenu?: boolean }) => {
     const supabase = getClarityCircleSupabase();
     if (!authUser) {
       setStatus('Sign in before creating projects.');
-      openMenu('start');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
       return null;
     }
     if (!supabase) {
@@ -1734,7 +2094,9 @@ export function ClarityCircle() {
     setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
     setSelectedProjectId(project.id);
     setActiveProjectFolder('all');
-    setActiveMenu('projects');
+    if (!options?.keepCurrentMenu) {
+      setActiveMenu('projects');
+    }
     setIsCreatingProject(false);
     setProjectBrief(project.project_instruction || project.context);
     setProjectInstructionDraft(project.project_instruction || project.context);
@@ -1757,7 +2119,10 @@ export function ClarityCircle() {
     const actionLabels: string[] = [];
 
     if (data.folderDraft) {
-      const folder = await createProjectFolder(data.folderDraft.name, { source: 'assistant' });
+      const folder = await createProjectFolder(data.folderDraft.name, {
+        source: 'assistant',
+        keepCurrentMenu: activeMenu === 'assistant',
+      });
       if (folder) {
         result.folder = folder;
         actionLabels.push('folder');
@@ -1765,7 +2130,7 @@ export function ClarityCircle() {
     }
 
     if (data.projectDraft) {
-      const project = await createProjectFromAssistantDraft(data.projectDraft);
+      const project = await createProjectFromAssistantDraft(data.projectDraft, { keepCurrentMenu: activeMenu === 'assistant' });
       if (project) {
         result.project = project;
         actionLabels.push('project');
@@ -1785,7 +2150,7 @@ export function ClarityCircle() {
 
     if (data.memoryDraft) {
       const memoryProjectId = result.project?.id ?? options?.project?.id ?? null;
-      const memory = await saveAssistantMemory(data.memoryDraft, memoryProjectId);
+      const memory = await saveAssistantMemory(data.memoryDraft, memoryProjectId, { keepCurrentMenu: activeMenu === 'assistant' });
       if (memory) {
         result.memory = memory;
         actionLabels.push('memory');
@@ -1812,17 +2177,142 @@ export function ClarityCircle() {
       .eq('id', memory.id);
   };
 
+  const saveAssistantSettings = async (nextSettings = assistantSettings, options?: { close?: boolean }) => {
+    const normalizedSettings = normalizeAssistantSettings(nextSettings);
+    setAssistantSettings(normalizedSettings);
+
+    if (options?.close) {
+      closeAssistantSettings();
+    }
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser) return;
+
+    const { error } = await supabase
+      .schema('clarity_circle')
+      .from('profiles')
+      .update({ assistant_settings: normalizedSettings })
+      .eq('user_id', authUser.id);
+
+    if (error) {
+      setStatus('Assistant settings could not be saved.');
+      return;
+    }
+
+    setAuthProfile((current) => (current ? { ...current, assistant_settings: normalizedSettings } : current));
+  };
+
+  const touchAssistantThread = (threadId: string, prompt?: string) => {
+    setAssistantThreads((current) => {
+      const fallbackThread: AssistantThread = {
+        id: threadId,
+        title: prompt ? buildAssistantThreadTitle(prompt, 'New thread') : 'New thread',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      const hasThread = current.some((thread) => thread.id === threadId);
+      const nextThreads = (hasThread ? current : [fallbackThread, ...current]).map((thread) => {
+        if (thread.id !== threadId) return thread;
+
+        const shouldRename = Boolean(prompt) && /^Thread \d+$|^New thread$|^Circle thread$/.test(thread.title);
+        return {
+          ...thread,
+          title: shouldRename && prompt ? buildAssistantThreadTitle(prompt, thread.title) : thread.title,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+
+      return nextThreads
+        .sort((left, right) => new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime())
+        .slice(0, 12);
+    });
+  };
+
+  const renameAssistantThread = (threadId: string, title: string) => {
+    setAssistantThreads((current) =>
+      current.map((thread) =>
+        thread.id === threadId
+          ? {
+              ...thread,
+              title,
+              updatedAt: new Date().toISOString(),
+            }
+          : thread,
+      ),
+    );
+  };
+
+  const startAssistantThread = () => {
+    const createdAt = new Date().toISOString();
+    const nextThread: AssistantThread = {
+      id: `circle-thread-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      title: `Thread ${assistantThreads.length + 1}`,
+      createdAt,
+      updatedAt: createdAt,
+    };
+
+    setAssistantThreads((current) => [nextThread, ...current].slice(0, 12));
+    setActiveAssistantThreadId(nextThread.id);
+    closeAssistantThreadDropdown();
+    setAssistantInput('');
+    setStatus('New assistant thread opened.');
+    window.requestAnimationFrame(() => assistantInputRef.current?.focus());
+  };
+
+  const deleteAssistantThread = async () => {
+    const threadId = resolvedAssistantThreadId;
+    const savedMessageIdsToDelete = assistantMessages
+      .filter((message) => !message.project_id && getAssistantThreadId(message) === threadId && UUID_PATTERN.test(message.id))
+      .map((message) => message.id);
+    const remainingThreads = assistantThreads.filter((thread) => thread.id !== threadId);
+    const createdAt = new Date().toISOString();
+    const fallbackThread: AssistantThread = {
+      id: `circle-thread-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      title: 'Thread 1',
+      createdAt,
+      updatedAt: createdAt,
+    };
+    const nextThreads = remainingThreads.length > 0 ? remainingThreads : [fallbackThread];
+    const nextActiveThread = nextThreads[0];
+
+    setAssistantMessages((current) => current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId));
+    setAssistantThreads(nextThreads);
+    setActiveAssistantThreadId(nextActiveThread.id);
+    closeAssistantThreadDropdown();
+    setAssistantInput('');
+    setStatus('Assistant thread deleted.');
+    window.requestAnimationFrame(() => assistantInputRef.current?.focus());
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || savedMessageIdsToDelete.length === 0) return;
+
+    const { error } = await supabase
+      .schema('clarity_circle')
+      .from('assistant_messages')
+      .delete()
+      .in('id', savedMessageIdsToDelete);
+
+    if (error) {
+      setStatus('Thread was removed here, but saved thread messages could not be deleted.');
+    }
+  };
+
   const sendAssistantMessage = async () => {
     const prompt = assistantInput.trim();
     if (!prompt || isAssistantBusy) return;
 
-    const userMessage = createUiMessage('user', prompt);
+    const threadId = resolvedAssistantThreadId;
+    const userMessage = createUiMessage('user', prompt, null, threadId);
     const nextMessages = [...circleAssistantMessages, userMessage].slice(-12);
 
-    setAssistantMessages((current) => [...current.filter((message) => message.project_id), ...nextMessages]);
+    setAssistantMessages((current) => [
+      ...current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId),
+      ...nextMessages,
+    ]);
+    touchAssistantThread(threadId, prompt);
     setAssistantInput('');
     setIsAssistantBusy(true);
-    void saveAssistantMessage(userMessage);
+    const userMessageSave = saveAssistantMessage(userMessage, null, threadId);
 
     try {
       const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true }) : null;
@@ -1884,6 +2374,7 @@ export function ClarityCircle() {
             created_at: entry.created_at,
           })),
           selectedProjectId,
+          assistantPreference: assistantSettings.behaviorPreference.trim() || null,
           memories: assistantMemoriesForRequest.map((memory) => ({
             title: memory.title,
             content: memory.content,
@@ -1894,24 +2385,42 @@ export function ClarityCircle() {
 
       const data = (await response.json()) as AssistantResponse;
       const reply = data.response || data.error || 'The Circle assistant could not respond yet.';
-      const assistantMessage = createUiMessage('assistant', reply);
+      const savedUserMessage = (await userMessageSave) ?? userMessage;
+      const assistantMessage = createUiMessage('assistant', reply, null, threadId);
+      const completedMessages = [
+        ...nextMessages.map((message) => (message.id === userMessage.id ? savedUserMessage : message)),
+        assistantMessage,
+      ].slice(-12);
+      const summaryTitle = buildAssistantThreadSummaryTitle(completedMessages);
+      if (summaryTitle) {
+        assistantMessage.thread_title = summaryTitle;
+      }
 
       setAssistantMessages((current) => [
-        ...current.filter((message) => message.project_id),
-        ...[...nextMessages, assistantMessage].slice(-12),
+        ...current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId),
+        ...completedMessages,
       ]);
-      void saveAssistantMessage(assistantMessage);
+      if (summaryTitle) {
+        renameAssistantThread(threadId, summaryTitle);
+      } else {
+        touchAssistantThread(threadId, prompt);
+      }
+      const assistantMessageSave = saveAssistantMessage(assistantMessage, null, threadId, summaryTitle);
 
       await runAssistantActions(data);
+      await assistantMessageSave;
     } catch {
       const fallbackMessage = createUiMessage(
         'assistant',
         'I could not reach the Circle assistant just now. Your context is still available here, and you can try again.',
+        null,
+        threadId,
       );
       setAssistantMessages((current) => [
-        ...current.filter((message) => message.project_id),
+        ...current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId),
         ...[...nextMessages, fallbackMessage].slice(-12),
       ]);
+      touchAssistantThread(threadId, prompt);
     } finally {
       setIsAssistantBusy(false);
     }
@@ -1928,7 +2437,7 @@ export function ClarityCircle() {
     setAssistantMessages((current) => [...current.filter((message) => message.project_id !== selectedProject.id), ...nextMessages]);
     setProjectAssistantInput('');
     setIsProjectAssistantBusy(true);
-    void saveAssistantMessage(userMessage, selectedProject.id);
+    const userMessageSave = saveAssistantMessage(userMessage, selectedProject.id);
 
     try {
       const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true }) : null;
@@ -1988,6 +2497,7 @@ export function ClarityCircle() {
             created_at: entry.created_at,
           })),
           selectedProjectId: selectedProject.id,
+          assistantPreference: assistantSettings.behaviorPreference.trim() || null,
           memories: assistantMemoriesForRequest
             .filter((memory) => !memory.project_id || memory.project_id === selectedProject.id)
             .map((memory) => ({
@@ -2000,15 +2510,21 @@ export function ClarityCircle() {
 
       const data = (await response.json()) as AssistantResponse;
       const reply = data.response || data.error || 'The project assistant could not respond yet.';
+      const savedUserMessage = (await userMessageSave) ?? userMessage;
       const assistantMessage = createUiMessage('assistant', reply, selectedProject.id);
+      const completedMessages = [
+        ...nextMessages.map((message) => (message.id === userMessage.id ? savedUserMessage : message)),
+        assistantMessage,
+      ].slice(-12);
 
       setAssistantMessages((current) => [
         ...current.filter((message) => message.project_id !== selectedProject.id),
-        ...[...nextMessages, assistantMessage].slice(-12),
+        ...completedMessages,
       ]);
-      void saveAssistantMessage(assistantMessage, selectedProject.id);
+      const assistantMessageSave = saveAssistantMessage(assistantMessage, selectedProject.id);
 
       await runAssistantActions(data, { project: selectedProject });
+      await assistantMessageSave;
     } catch {
       const fallbackMessage = createUiMessage(
         'assistant',
@@ -2416,10 +2932,10 @@ export function ClarityCircle() {
                     <span>Assistant route</span>
                     <MessageCircle size={17} aria-hidden="true" />
                   </div>
-                  <h2>{circleAssistantMessages.length > 1 ? 'Continue the assistant thread' : 'Ask from the current Circle context'}</h2>
+                  <h2>{circleAssistantMessageCount > 1 ? 'Continue the assistant threads' : 'Ask from the current Circle context'}</h2>
                   <p>
-                    {circleAssistantMessages.length > 1
-                      ? `${circleAssistantMessages.length} Circle assistant messages are available.`
+                    {circleAssistantMessageCount > 1
+                      ? `${circleAssistantMessageCount} Circle assistant messages are available.`
                       : 'Use the assistant to turn this role, signal, and workspace into sharper next steps.'}
                   </p>
                   <button type="button" className={styles.secondaryButton} onClick={() => openMenu('assistant')}>
@@ -2764,28 +3280,6 @@ export function ClarityCircle() {
 
           {activeMenu === 'circle' && (
             <section className={`${styles.screen} ${styles.communityScreen}`} aria-label="Circle threads">
-              <div className={styles.communityHeader}>
-                <div>
-                  <span>{accountTrackCopy.shortLabel}</span>
-                  <h1>Founder problems meet solopreneur work</h1>
-                  <p>
-                    {isFounderAccount
-                      ? 'Your account can post founder problem statements and review solopreneur responses. Solopreneur sharing tools stay hidden.'
-                      : 'Share work, ideas, prototypes, or signals that can connect to real founder problems.'}
-                  </p>
-                </div>
-                <div className={styles.communityCounters} aria-label="Circle counts">
-                  <div>
-                    <strong>{founderProblemCount}</strong>
-                    <span>Founder problems</span>
-                  </div>
-                  <div>
-                    <strong>{builderShareCount}</strong>
-                    <span>Solopreneur shares</span>
-                  </div>
-                </div>
-              </div>
-
               <div className={styles.communityGrid}>
                 <form
                   className={styles.communityComposer}
@@ -2794,9 +3288,10 @@ export function ClarityCircle() {
                     createCommunityPost();
                   }}
                 >
-                  <span>{communityComposerCopy.label}</span>
-                  <h2>{communityComposerCopy.title}</h2>
-                  <p>{communityComposerCopy.body}</p>
+                  <div className={styles.communityComposerHeader}>
+                    <span>{communityComposerCopy.label}</span>
+                    <strong>{accountTrackCopy.shortLabel}</strong>
+                  </div>
                   <label>
                     Title
                     <input
@@ -2828,25 +3323,37 @@ export function ClarityCircle() {
                 </form>
 
                 <section className={styles.communityFeed} aria-label="Circle feed">
-                  <div className={styles.communityFilters} aria-label="Thread filters">
-                    {availableCommunityFilters.map((item) => (
-                      <button
-                        key={item.id}
-                        type="button"
-                        className={communityFilter === item.id ? styles.communityFilterActive : ''}
-                        onClick={() => setCommunityFilter(item.id)}
-                      >
-                        {item.label}
-                      </button>
-                    ))}
+                  <div className={styles.communityFeedToolbar}>
+                    <div>
+                      <strong>Circle threads</strong>
+                      <span>{founderProblemCount} problems · {builderShareCount} shares</span>
+                    </div>
+                    <div className={styles.communityFilters} aria-label="Thread filters">
+                      {availableCommunityFilters.map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          className={communityFilter === item.id ? styles.communityFilterActive : ''}
+                          onClick={() => setCommunityFilter(item.id)}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   <div className={styles.communityThreads} role="list" aria-label="Circle threads">
                     {filteredCommunityPosts.map((post) => (
                       <article key={post.id} className={styles.communityThread} role="listitem">
                         <div className={styles.communityThreadHeader}>
-                          <span>{post.kind === 'founder_problem' ? 'Founder problem' : 'Solopreneur share'}</span>
-                          <small>{post.authorLabel} - {formatProjectDate(post.createdAt)}</small>
+                          <span className={styles.communityAvatar} aria-hidden="true">
+                            {post.authorLabel.slice(0, 1)}
+                          </span>
+                          <div>
+                            <strong>{post.authorLabel}</strong>
+                            <small>{formatProjectDate(post.createdAt)}</small>
+                          </div>
+                          <em>{post.kind === 'founder_problem' ? 'Problem' : 'Share'}</em>
                         </div>
                         <h2>{post.title}</h2>
                         <p>{post.body}</p>
@@ -2893,6 +3400,196 @@ export function ClarityCircle() {
           {activeMenu === 'assistant' && (
             <section className={`${styles.screen} ${styles.assistantScreen}`} aria-label="Circle Assistant">
               <div className={styles.assistantLayout}>
+                <div className={styles.assistantMenuBar} aria-label="Assistant menu bar">
+                  <div className={styles.assistantThreadGroup} aria-label="Assistant threads">
+                    <div className={styles.assistantThreadTabs}>
+                      {visibleAssistantThreads.map((thread) => (
+                        <button
+                          key={thread.id}
+                          type="button"
+                          className={thread.id === resolvedAssistantThreadId ? styles.assistantThreadActive : ''}
+                          onClick={() => {
+                            setActiveAssistantThreadId(thread.id);
+                            closeAssistantThreadDropdown();
+                          }}
+                        >
+                          <MessageCircle size={15} aria-hidden="true" />
+                          <span>{thread.title}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <span aria-hidden="true" />
+                    <div className={styles.assistantThreadDropdownHost} ref={assistantThreadDropdownHostRef}>
+                      <button
+                        type="button"
+                        className={styles.assistantThreadViewAll}
+                        onClick={() => {
+                          if (isAssistantThreadDropdownOpen) {
+                            closeAssistantThreadDropdown();
+                            return;
+                          }
+                          closeAssistantSettings();
+                          openAssistantThreadDropdown();
+                        }}
+                        aria-expanded={isAssistantThreadDropdownOpen}
+                      >
+                        <List size={16} aria-hidden="true" />
+                        View all
+                      </button>
+                      {(isAssistantThreadDropdownOpen || isAssistantThreadDropdownClosing) && (
+                        <div
+                          className={`${styles.assistantThreadDropdown} ${
+                            isAssistantThreadDropdownClosing ? styles.assistantDropdownClosing : ''
+                          }`}
+                          role="menu"
+                          aria-label="All assistant threads"
+                        >
+                          {assistantThreads.map((thread) => (
+                            <button
+                              key={thread.id}
+                              type="button"
+                              role="menuitem"
+                              className={thread.id === resolvedAssistantThreadId ? styles.assistantThreadDropdownActive : ''}
+                              onClick={() => {
+                                setActiveAssistantThreadId(thread.id);
+                                closeAssistantThreadDropdown();
+                              }}
+                            >
+                              <MessageCircle size={15} aria-hidden="true" />
+                              <span>{thread.title}</span>
+                              <small>{formatProjectDate(thread.updatedAt)}</small>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <span aria-hidden="true" />
+
+                    <div className={styles.assistantThreadActions}>
+                      <button type="button" onClick={startAssistantThread}>
+                        <Plus size={16} aria-hidden="true" />
+                        New thread
+                      </button>
+                      <span aria-hidden="true" />
+                      <button type="button" onClick={() => void deleteAssistantThread()} disabled={isAssistantBusy}>
+                        <Trash2 size={16} aria-hidden="true" />
+                        Delete thread
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className={styles.assistantMenuButton}
+                    onClick={() =>
+                      seedAssistantPrompt(
+                        `Create next-step tasks for ${selectedProject?.title || latestProject?.title || activeSignal}.`,
+                      )
+                    }
+                  >
+                    <CheckCircle2 size={16} aria-hidden="true" />
+                    Draft tasks
+                  </button>
+
+                  <button
+                    type="button"
+                    className={styles.assistantMenuButton}
+                    onClick={() =>
+                      seedAssistantPrompt(
+                        `Remember this as a useful Circle signal: ${
+                          savedContext?.summary || latestProject?.summary || activeSignalSummary
+                        }`,
+                      )
+                    }
+                  >
+                    <Database size={16} aria-hidden="true" />
+                    Save memory
+                  </button>
+
+                  <div className={styles.assistantProjectActions}>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        seedAssistantPrompt(
+                          `Turn this into a project: ${savedContext?.intent.context || intent.context || activeSignal}`,
+                        )
+                      }
+                    >
+                      <FolderPlus size={16} aria-hidden="true" />
+                      Create project
+                    </button>
+                    <span aria-hidden="true" />
+                    <button type="button" onClick={() => openMenu('projects')}>
+                      <FolderOpen size={16} aria-hidden="true" />
+                      Open project
+                    </button>
+                  </div>
+
+                  <div className={styles.assistantSettingsHost} ref={assistantSettingsHostRef}>
+                    <button
+                      type="button"
+                      className={styles.assistantSettingsButton}
+                      onClick={() => {
+                        if (isAssistantSettingsOpen) {
+                          closeAssistantSettings();
+                          return;
+                        }
+                        closeAssistantThreadDropdown();
+                        openAssistantSettings();
+                      }}
+                      aria-expanded={isAssistantSettingsOpen}
+                      title="Assistant settings"
+                    >
+                      <Settings size={16} aria-hidden="true" />
+                      Settings
+                    </button>
+                    {(isAssistantSettingsOpen || isAssistantSettingsClosing) && (
+                      <div
+                        className={`${styles.assistantSettingsDropdown} ${
+                          isAssistantSettingsClosing ? styles.assistantDropdownClosing : ''
+                        }`}
+                        aria-label="Assistant response settings"
+                      >
+                        <textarea
+                          value={assistantSettings.behaviorPreference}
+                          onChange={(event) =>
+                            setAssistantSettings({
+                              behaviorPreference: event.target.value.slice(0, 600),
+                            })
+                          }
+                          onBlur={() => void saveAssistantSettings(assistantSettings)}
+                          placeholder="Example: be more direct, ask sharper questions, keep replies concise, challenge weak assumptions."
+                          rows={4}
+                        />
+                        <div className={styles.assistantSettingsQuickActions}>
+                          {[
+                            'Concise and direct',
+                            'Ask sharper questions',
+                            'Step-by-step',
+                          ].map((preference) => (
+                            <button
+                              key={preference}
+                              type="button"
+                              onClick={() => void saveAssistantSettings({ behaviorPreference: preference })}
+                            >
+                              {preference}
+                            </button>
+                          ))}
+                        </div>
+                        <div className={styles.assistantSettingsFooter}>
+                          <button type="button" onClick={() => void saveAssistantSettings({ behaviorPreference: '' })}>
+                            Clear
+                          </button>
+                          <button type="button" onClick={() => void saveAssistantSettings(assistantSettings, { close: true })}>
+                            Done
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 <section className={styles.chatPanel} aria-label="Circle assistant conversation">
                   <div className={styles.chatMessages}>
                     {circleAssistantMessages.map((message) => (
@@ -2965,62 +3662,6 @@ export function ClarityCircle() {
                     </button>
                   </form>
                 </section>
-
-                <aside className={styles.assistantSidePanel} aria-label="Circle assistant actions">
-                  <div>
-                    <span>Workspace actions</span>
-                    <strong>Turn conversation into structure</strong>
-                    <p>{latestProject ? `Latest project: ${latestProject.title}` : 'No saved project yet.'}</p>
-                    <div className={styles.assistantActionButtons}>
-                      <button
-                        type="button"
-                        className={styles.secondaryButton}
-                        onClick={() =>
-                          seedAssistantPrompt(
-                            `Turn this into a project: ${savedContext?.intent.context || intent.context || activeSignal}`,
-                          )
-                        }
-                      >
-                        <FolderOpen size={16} aria-hidden="true" />
-                        Create project
-                      </button>
-                      <button
-                        type="button"
-                        className={styles.secondaryButton}
-                        onClick={() =>
-                          seedAssistantPrompt(
-                            `Create next-step tasks for ${selectedProject?.title || latestProject?.title || activeSignal}.`,
-                          )
-                        }
-                      >
-                        <CheckCircle2 size={16} aria-hidden="true" />
-                        Draft tasks
-                      </button>
-                      <button
-                        type="button"
-                        className={styles.secondaryButton}
-                        onClick={() =>
-                          seedAssistantPrompt(
-                            `Remember this as a useful Circle signal: ${
-                              savedContext?.summary || latestProject?.summary || activeSignalSummary
-                            }`,
-                          )
-                        }
-                      >
-                        <Database size={16} aria-hidden="true" />
-                        Save memory
-                      </button>
-                    </div>
-                  </div>
-                  <div>
-                    <span>Current focus</span>
-                    <strong>{selectedProject?.title || latestProject?.title || activeSignal}</strong>
-                    <p>{selectedProject?.project_instruction || selectedProject?.context || activeSignalSummary}</p>
-                    <button type="button" className={styles.textButton} onClick={() => openMenu('projects')}>
-                      Open projects
-                    </button>
-                  </div>
-                </aside>
               </div>
             </section>
           )}
