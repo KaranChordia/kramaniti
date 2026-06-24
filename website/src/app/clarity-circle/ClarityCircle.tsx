@@ -77,6 +77,7 @@ type UiAssistantMessage = Pick<ClarityCircleAssistantMessage, 'role' | 'content'
   project_id?: string | null;
   thread_id?: string | null;
   thread_title?: string | null;
+  pendingAction?: AssistantPendingAction | null;
 };
 
 type AssistantThread = {
@@ -118,6 +119,13 @@ type AssistantResponse = {
   memoryDraft?: AssistantMemoryDraft | null;
   taskDrafts?: AssistantTaskDraft[] | null;
   error?: string;
+};
+
+type AssistantPendingAction = {
+  id: string;
+  data: AssistantResponse;
+  status: 'pending' | 'approved' | 'declined' | 'failed';
+  resultText?: string;
 };
 
 type AssistantSettingsDraft = {
@@ -1458,10 +1466,20 @@ export function ClarityCircle() {
         .filter((task) => task.project_id === selectedProject.id && task.status !== 'archived')
         .sort((left, right) => left.sort_order - right.sort_order || new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime())
     : [];
-  const resolvedAssistantThreadId = assistantThreads.some((thread) => thread.id === activeAssistantThreadId)
-    ? activeAssistantThreadId
-    : assistantThreads[0]?.id ?? DEFAULT_ASSISTANT_THREAD_ID;
-  const visibleAssistantThreads = assistantThreads.slice(0, 5);
+  const resolvedAssistantThreadId = activeAssistantThreadId || DEFAULT_ASSISTANT_THREAD_ID;
+  const activeAssistantThread = assistantThreads.find((thread) => thread.id === resolvedAssistantThreadId);
+  const displayedAssistantThreads = activeAssistantThread
+    ? assistantThreads
+    : [
+        {
+          id: resolvedAssistantThreadId,
+          title: resolvedAssistantThreadId === DEFAULT_ASSISTANT_THREAD_ID ? 'Circle thread' : 'New thread',
+          createdAt: '',
+          updatedAt: '',
+        },
+        ...assistantThreads,
+      ].slice(0, 12);
+  const visibleAssistantThreads = displayedAssistantThreads.slice(0, 5);
   const circleAssistantMessages = assistantMessages.filter(
     (message) => !message.project_id && getAssistantThreadId(message) === resolvedAssistantThreadId,
   );
@@ -1901,8 +1919,24 @@ export function ClarityCircle() {
       thread_title: data.project_id ? null : getMessageThreadTitleFromMetadata(data.metadata),
     };
 
-    setAssistantMessages((current) => current.map((item) => (item.id === message.id ? savedMessage : item)));
-    return savedMessage;
+    const savedMessageWithLocalState = {
+      ...savedMessage,
+      pendingAction: message.pendingAction ?? null,
+      thread_title: savedMessage.thread_title ?? message.thread_title ?? null,
+    };
+
+    setAssistantMessages((current) =>
+      current.map((item) =>
+        item.id === message.id
+          ? {
+              ...savedMessageWithLocalState,
+              pendingAction: item.pendingAction ?? savedMessageWithLocalState.pendingAction ?? null,
+              thread_title: savedMessageWithLocalState.thread_title ?? item.thread_title ?? null,
+            }
+          : item,
+      ),
+    );
+    return savedMessageWithLocalState;
   };
 
   const createManualTask = async () => {
@@ -2166,13 +2200,34 @@ export function ClarityCircle() {
     return result;
   };
 
-  const buildActionAwareAssistantReply = (data: AssistantResponse, result: AssistantActionResult, fallbackReply: string) => {
-    const requestedActions = [
+  const getAssistantActionLabels = (data: AssistantResponse) =>
+    [
       data.projectDraft ? 'project' : null,
       data.folderDraft ? 'folder' : null,
-      data.taskDrafts?.length ? 'tasks' : null,
+      data.taskDrafts?.length ? (data.taskDrafts.length === 1 ? 'task' : 'tasks') : null,
       data.memoryDraft ? 'memory' : null,
     ].filter(Boolean) as string[];
+
+  const hasAssistantActions = (data: AssistantResponse) => getAssistantActionLabels(data).length > 0;
+
+  const buildAssistantApprovalReply = (data: AssistantResponse, fallbackReply: string) => {
+    const labels = getAssistantActionLabels(data);
+    if (labels.length === 0) return fallbackReply;
+
+    const cleanedReply = fallbackReply
+      .replace(/\bProject created\b/gi, 'Project drafted')
+      .replace(/\bFolder created\b/gi, 'Folder drafted')
+      .replace(/\bTask created\b/gi, 'Task drafted')
+      .replace(/\bTasks created\b/gi, 'Tasks drafted')
+      .replace(/\bMemory saved\b/gi, 'Memory drafted')
+      .replace(/\bcreated\b/gi, 'drafted')
+      .replace(/\bsaved\b/gi, 'drafted');
+
+    return `${cleanedReply} Approve below before I save ${labels.join(', ')} to your Circle.`;
+  };
+
+  const buildActionAwareAssistantReply = (data: AssistantResponse, result: AssistantActionResult, fallbackReply: string) => {
+    const requestedActions = getAssistantActionLabels(data);
 
     if (requestedActions.length === 0) return fallbackReply;
 
@@ -2197,6 +2252,92 @@ export function ClarityCircle() {
     }
 
     return `I drafted the ${failedActions.join(', ')}, but ${failureReason}`;
+  };
+
+  const getPendingActionTitle = (pendingAction: AssistantPendingAction) => {
+    const labels = getAssistantActionLabels(pendingAction.data).join(', ');
+
+    if (pendingAction.status === 'pending') return `Save ${labels}?`;
+    if (pendingAction.status === 'approved') return 'Action approved';
+    if (pendingAction.status === 'declined') return 'Action dismissed';
+    return 'Action not saved';
+  };
+
+  const getPendingActionText = (pendingAction: AssistantPendingAction) =>
+    pendingAction.resultText ?? 'No project, folder, task, or memory will be saved until you approve.';
+
+  const approveAssistantAction = async (message: UiAssistantMessage) => {
+    const pendingAction = message.pendingAction;
+    if (!pendingAction || pendingAction.status !== 'pending') return;
+
+    setAssistantMessages((current) =>
+      current.map((item) =>
+        item.id === message.id
+          ? {
+              ...item,
+              pendingAction: {
+                ...pendingAction,
+                status: 'approved',
+                resultText: 'Saving...',
+              },
+            }
+          : item,
+      ),
+    );
+
+    let resultText = 'The save did not complete. Please try again.';
+    let failed = true;
+
+    try {
+      const actionProject = message.project_id ? projects.find((project) => project.id === message.project_id) ?? null : null;
+      const result = await runAssistantActions(pendingAction.data, { project: actionProject });
+      resultText = buildActionAwareAssistantReply(pendingAction.data, result, 'Approved.');
+      failed = getAssistantActionLabels(pendingAction.data).some((label) => {
+        if (label === 'project') return !result.project;
+        if (label === 'folder') return !result.folder;
+        if (label === 'memory') return !result.memory;
+        if (label === 'task' || label === 'tasks') return result.taskCount <= 0;
+        return false;
+      });
+    } catch (error) {
+      console.error('Assistant action approval failed', error);
+    }
+
+    setAssistantMessages((current) =>
+      current.map((item) =>
+        item.id === message.id
+          ? {
+              ...item,
+              pendingAction: {
+                ...pendingAction,
+                status: failed ? 'failed' : 'approved',
+                resultText,
+              },
+            }
+          : item,
+      ),
+    );
+  };
+
+  const declineAssistantAction = (message: UiAssistantMessage) => {
+    const pendingAction = message.pendingAction;
+    if (!pendingAction || pendingAction.status !== 'pending') return;
+
+    setAssistantMessages((current) =>
+      current.map((item) =>
+        item.id === message.id
+          ? {
+              ...item,
+              pendingAction: {
+                ...pendingAction,
+                status: 'declined',
+                resultText: 'Not saved.',
+              },
+            }
+          : item,
+      ),
+    );
+    setStatus('Assistant action dismissed.');
   };
 
   const archiveAssistantMemory = async (memory: ClarityCircleAssistantMemory) => {
@@ -2340,6 +2481,7 @@ export function ClarityCircle() {
     const userMessage = createUiMessage('user', prompt, null, threadId);
     const nextMessages = [...circleAssistantMessages, userMessage].slice(-12);
 
+    setActiveAssistantThreadId(threadId);
     setAssistantMessages((current) => [
       ...current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId),
       ...nextMessages,
@@ -2421,9 +2563,15 @@ export function ClarityCircle() {
       const data = (await response.json()) as AssistantResponse;
       const baseReply = data.response || data.error || 'The Circle assistant could not respond yet.';
       const savedUserMessage = (await userMessageSave) ?? userMessage;
-      const actionResult = await runAssistantActions(data);
-      const reply = buildActionAwareAssistantReply(data, actionResult, baseReply);
+      const reply = buildAssistantApprovalReply(data, baseReply);
       const assistantMessage = createUiMessage('assistant', reply, null, threadId);
+      if (hasAssistantActions(data)) {
+        assistantMessage.pendingAction = {
+          id: `pending-action-${assistantMessage.id}`,
+          data,
+          status: 'pending',
+        };
+      }
       const completedMessages = [
         ...nextMessages.map((message) => (message.id === userMessage.id ? savedUserMessage : message)),
         assistantMessage,
@@ -2437,6 +2585,7 @@ export function ClarityCircle() {
         ...current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId),
         ...completedMessages,
       ]);
+      setActiveAssistantThreadId(threadId);
       if (summaryTitle) {
         renameAssistantThread(threadId, summaryTitle);
       } else {
@@ -2456,6 +2605,7 @@ export function ClarityCircle() {
         ...current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId),
         ...[...nextMessages, fallbackMessage].slice(-12),
       ]);
+      setActiveAssistantThreadId(threadId);
       touchAssistantThread(threadId, prompt);
     } finally {
       setIsAssistantBusy(false);
@@ -2547,9 +2697,15 @@ export function ClarityCircle() {
       const data = (await response.json()) as AssistantResponse;
       const baseReply = data.response || data.error || 'The project assistant could not respond yet.';
       const savedUserMessage = (await userMessageSave) ?? userMessage;
-      const actionResult = await runAssistantActions(data, { project: selectedProject });
-      const reply = buildActionAwareAssistantReply(data, actionResult, baseReply);
+      const reply = buildAssistantApprovalReply(data, baseReply);
       const assistantMessage = createUiMessage('assistant', reply, selectedProject.id);
+      if (hasAssistantActions(data)) {
+        assistantMessage.pendingAction = {
+          id: `pending-action-${assistantMessage.id}`,
+          data,
+          status: 'pending',
+        };
+      }
       const completedMessages = [
         ...nextMessages.map((message) => (message.id === userMessage.id ? savedUserMessage : message)),
         assistantMessage,
@@ -3481,7 +3637,7 @@ export function ClarityCircle() {
                           role="menu"
                           aria-label="All assistant threads"
                         >
-                          {assistantThreads.map((thread) => (
+                          {displayedAssistantThreads.map((thread) => (
                             <button
                               key={thread.id}
                               type="button"
@@ -3648,7 +3804,27 @@ export function ClarityCircle() {
                           )}
                         </span>
                         <span className={styles.chatDivider} aria-hidden="true" />
-                        <p>{message.content}</p>
+                        <div className={styles.chatContent}>
+                          <p>{message.content}</p>
+                          {message.role === 'assistant' && message.pendingAction && (
+                            <div className={styles.assistantApprovalPanel}>
+                              <div>
+                                <strong>{getPendingActionTitle(message.pendingAction)}</strong>
+                                <span>{getPendingActionText(message.pendingAction)}</span>
+                              </div>
+                              {message.pendingAction.status === 'pending' && (
+                                <div className={styles.assistantApprovalActions}>
+                                  <button type="button" onClick={() => void approveAssistantAction(message)}>
+                                    Yes
+                                  </button>
+                                  <button type="button" onClick={() => declineAssistantAction(message)}>
+                                    No
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </article>
                     ))}
                     {isAssistantBusy && (
@@ -4037,7 +4213,27 @@ export function ClarityCircle() {
                                   )}
                                 </span>
                                 <span className={styles.chatDivider} aria-hidden="true" />
-                                <p>{message.content}</p>
+                                <div className={styles.chatContent}>
+                                  <p>{message.content}</p>
+                                  {message.role === 'assistant' && message.pendingAction && (
+                                    <div className={styles.assistantApprovalPanel}>
+                                      <div>
+                                        <strong>{getPendingActionTitle(message.pendingAction)}</strong>
+                                        <span>{getPendingActionText(message.pendingAction)}</span>
+                                      </div>
+                                      {message.pendingAction.status === 'pending' && (
+                                        <div className={styles.assistantApprovalActions}>
+                                          <button type="button" onClick={() => void approveAssistantAction(message)}>
+                                            Yes
+                                          </button>
+                                          <button type="button" onClick={() => declineAssistantAction(message)}>
+                                            No
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
                               </article>
                             ))
                           ) : (

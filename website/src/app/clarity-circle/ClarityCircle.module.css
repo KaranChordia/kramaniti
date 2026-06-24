@@ -2611,6 +2611,72 @@
   background: rgba(201, 168, 76, 0.24);
 }
 
+.chatContent {
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.assistantApprovalPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-control);
+  box-shadow: var(--circle-control-shadow);
+}
+
+.assistantApprovalPanel div:first-child {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.assistantApprovalPanel strong {
+  color: var(--circle-text);
+  font-size: 12px;
+  font-weight: 780;
+  line-height: 1.25;
+}
+
+.assistantApprovalPanel span {
+  color: var(--circle-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.assistantApprovalActions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.assistantApprovalActions button {
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--circle-border);
+  border-radius: 7px;
+  background: var(--circle-control);
+  color: var(--circle-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 760;
+  cursor: pointer;
+  box-shadow: var(--circle-button-shadow);
+}
+
+.assistantApprovalActions button:hover,
+.assistantApprovalActions button:focus-visible {
+  border-color: var(--circle-gold-border);
+  background: var(--circle-control-hover);
+  color: var(--circle-text);
+  outline: none;
+}
+
 .memoryItem span {
   color: var(--circle-gold-light);
   font-size: 11px;
@@ -3325,6 +3391,15 @@
 
   .chatDivider {
     display: none;
+  }
+
+  .assistantApprovalPanel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .assistantApprovalActions {
+    justify-content: flex-end;
   }
 
   .assistantComposer {
