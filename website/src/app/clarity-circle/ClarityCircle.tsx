@@ -242,6 +242,21 @@ type LoopOverviewItem = {
   detail: string;
 };
 
+type DeleteDataItem = {
+  id: string;
+  title: string;
+  detail: string;
+  meta: string;
+  onDelete: () => void | Promise<void>;
+};
+
+type DeleteDataSection = {
+  id: string;
+  title: string;
+  count: number;
+  items: DeleteDataItem[];
+};
+
 type LoopRunState = {
   loopId: LoopId;
   phase: LoopRunPhase;
@@ -2991,6 +3006,151 @@ export function ClarityCircle() {
       .eq('id', memory.id);
   };
 
+  const confirmDelete = (label: string) => window.confirm(`Delete ${label}? This cannot be undone.`);
+
+  const deleteSavedSignal = () => {
+    if (!confirmDelete('the saved Circle context')) return;
+    setSavedContext(null);
+    setStatus('Saved context removed from this Circle workspace.');
+  };
+
+  const deleteContextEntry = async (entry: ClarityCircleContextEntry) => {
+    if (!confirmDelete(`context entry "${entry.entry_type}"`)) return;
+    setContextEntries((current) => current.filter((item) => item.id !== entry.id));
+    setStatus('Context entry deleted.');
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(entry.id)) return;
+
+    const { error } = await supabase.schema('clarity_circle').from('context_entries').delete().eq('id', entry.id).eq('user_id', authUser.id);
+    if (error) {
+      setStatus('Context entry could not be deleted from storage.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteAssistantMemory = async (memory: ClarityCircleAssistantMemory) => {
+    if (!confirmDelete(`memory "${memory.title}"`)) return;
+    setAssistantMemories((current) => current.filter((item) => item.id !== memory.id));
+    setStatus('Memory deleted.');
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(memory.id)) return;
+
+    const { error } = await supabase.schema('clarity_circle').from('assistant_memories').delete().eq('id', memory.id).eq('user_id', authUser.id);
+    if (error) {
+      setStatus('Memory could not be deleted from storage.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteProjectTask = async (task: ClarityCircleProjectTask) => {
+    if (!confirmDelete(`task "${task.title}"`)) return;
+    setProjectTasks((current) => current.filter((item) => item.id !== task.id));
+    setStatus('Task deleted.');
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(task.id)) return;
+
+    const { error } = await supabase.schema('clarity_circle').from('project_tasks').delete().eq('id', task.id).eq('user_id', authUser.id);
+    if (error) {
+      setStatus('Task could not be deleted from storage.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteProjectFolder = async (folder: ClarityCircleProjectFolder) => {
+    if (!confirmDelete(`folder "${folder.name}"`)) return;
+    setProjectFolders((current) => current.filter((item) => item.id !== folder.id));
+    setProjects((current) => current.map((project) => (project.folder_id === folder.id ? { ...project, folder_id: null } : project)));
+    if (activeProjectFolder === folder.id) setActiveProjectFolder('all');
+    setStatus('Folder deleted. Projects moved to Unfiled.');
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(folder.id)) return;
+
+    const { error: projectError } = await supabase
+      .schema('clarity_circle')
+      .from('projects')
+      .update({ folder_id: null })
+      .eq('folder_id', folder.id)
+      .eq('user_id', authUser.id);
+    const { error: folderError } = await supabase
+      .schema('clarity_circle')
+      .from('project_folders')
+      .delete()
+      .eq('id', folder.id)
+      .eq('user_id', authUser.id);
+
+    if (projectError || folderError) {
+      setStatus('Folder could not be fully deleted from storage.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteProject = async (project: ClarityCircleProject) => {
+    if (!confirmDelete(`project "${project.title}" and its tasks/context`)) return;
+    setProjects((current) => current.filter((item) => item.id !== project.id));
+    setProjectTasks((current) => current.filter((task) => task.project_id !== project.id));
+    setContextEntries((current) => current.filter((entry) => entry.project_id !== project.id));
+    setAssistantMessages((current) => current.filter((message) => message.project_id !== project.id));
+    if (selectedProjectId === project.id) setSelectedProjectId(null);
+    setStatus('Project and related workspace data deleted.');
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(project.id)) return;
+
+    const [{ error: messageError }, { error: taskError }, { error: entryError }, { error: projectError }] = await Promise.all([
+      supabase.schema('clarity_circle').from('assistant_messages').delete().eq('project_id', project.id).eq('user_id', authUser.id),
+      supabase.schema('clarity_circle').from('project_tasks').delete().eq('project_id', project.id).eq('user_id', authUser.id),
+      supabase.schema('clarity_circle').from('context_entries').delete().eq('project_id', project.id).eq('user_id', authUser.id),
+      supabase.schema('clarity_circle').from('projects').delete().eq('id', project.id).eq('user_id', authUser.id),
+    ]);
+
+    if (messageError || taskError || entryError || projectError) {
+      setStatus('Project delete could not be fully saved.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteAssistantThreadById = async (threadId: string) => {
+    const thread = assistantThreads.find((item) => item.id === threadId);
+    if (!confirmDelete(`assistant thread "${thread?.title || 'Circle thread'}"`)) return;
+
+    const savedMessageIdsToDelete = assistantMessages
+      .filter((message) => !message.project_id && getAssistantThreadId(message) === threadId && UUID_PATTERN.test(message.id))
+      .map((message) => message.id);
+    const remainingThreads = assistantThreads.filter((item) => item.id !== threadId);
+    const createdAt = new Date().toISOString();
+    const fallbackThread: AssistantThread = {
+      id: DEFAULT_ASSISTANT_THREAD_ID,
+      title: 'Thread 1',
+      createdAt,
+      updatedAt: createdAt,
+    };
+    const nextThreads = remainingThreads.length > 0 ? remainingThreads : [fallbackThread];
+    const nextActiveThread = activeAssistantThreadId === threadId || resolvedAssistantThreadId === threadId ? nextThreads[0] : null;
+
+    setAssistantMessages((current) => current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId));
+    setAssistantThreads(nextThreads);
+    if (nextActiveThread) setActiveAssistantThreadId(nextActiveThread.id);
+    closeAssistantThreadDropdown();
+    setStatus('Assistant thread deleted.');
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || savedMessageIdsToDelete.length === 0) return;
+
+    const { error } = await supabase
+      .schema('clarity_circle')
+      .from('assistant_messages')
+      .delete()
+      .in('id', savedMessageIdsToDelete);
+
+    if (error) {
+      setStatus('Thread was removed here, but saved thread messages could not be deleted.');
+    }
+  };
+
   const saveAssistantSettings = async (nextSettings = assistantSettings, options?: { close?: boolean }) => {
     const normalizedSettings = normalizeAssistantSettings(nextSettings);
     setAssistantSettings(normalizedSettings);
@@ -3074,42 +3234,110 @@ export function ClarityCircle() {
   };
 
   const deleteAssistantThread = async () => {
-    const threadId = resolvedAssistantThreadId;
-    const savedMessageIdsToDelete = assistantMessages
-      .filter((message) => !message.project_id && getAssistantThreadId(message) === threadId && UUID_PATTERN.test(message.id))
-      .map((message) => message.id);
-    const remainingThreads = assistantThreads.filter((thread) => thread.id !== threadId);
-    const createdAt = new Date().toISOString();
-    const fallbackThread: AssistantThread = {
-      id: `circle-thread-${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      title: 'Thread 1',
-      createdAt,
-      updatedAt: createdAt,
-    };
-    const nextThreads = remainingThreads.length > 0 ? remainingThreads : [fallbackThread];
-    const nextActiveThread = nextThreads[0];
-
-    setAssistantMessages((current) => current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId));
-    setAssistantThreads(nextThreads);
-    setActiveAssistantThreadId(nextActiveThread.id);
-    closeAssistantThreadDropdown();
+    await deleteAssistantThreadById(resolvedAssistantThreadId);
     setAssistantInput('');
-    setStatus('Assistant thread deleted.');
     window.requestAnimationFrame(() => assistantInputRef.current?.focus());
-
-    const supabase = getClarityCircleSupabase();
-    if (!supabase || !authUser || savedMessageIdsToDelete.length === 0) return;
-
-    const { error } = await supabase
-      .schema('clarity_circle')
-      .from('assistant_messages')
-      .delete()
-      .in('id', savedMessageIdsToDelete);
-
-    if (error) {
-      setStatus('Thread was removed here, but saved thread messages could not be deleted.');
-    }
   };
+
+  const deleteDataSections: DeleteDataSection[] = [
+    {
+      id: 'context',
+      title: 'Context',
+      count: (savedContext ? 1 : 0) + contextEntries.length,
+      items: [
+        ...(savedContext
+          ? [
+              {
+                id: 'saved-context',
+                title: savedContext.intent.headline || 'Saved Circle context',
+                detail: savedContext.summary,
+                meta: `Saved ${savedContext.savedAt}`,
+                onDelete: deleteSavedSignal,
+              },
+            ]
+          : []),
+        ...contextEntries.map((entry) => {
+          const entryTitle =
+            typeof entry.payload.title === 'string'
+              ? entry.payload.title
+              : typeof entry.payload.project_title === 'string'
+                ? entry.payload.project_title
+                : `${entry.entry_type.replace('_', ' ')} entry`;
+          const project = projects.find((item) => item.id === entry.project_id);
+          return {
+            id: entry.id,
+            title: entryTitle,
+            detail: project ? `Linked to ${project.title}` : 'Standalone context entry',
+            meta: `${entry.entry_type.replace('_', ' ')} - ${formatProjectDate(entry.created_at)}`,
+            onDelete: () => deleteContextEntry(entry),
+          };
+        }),
+      ],
+    },
+    {
+      id: 'projects',
+      title: 'Projects',
+      count: projects.length,
+      items: projects.map((project) => ({
+        id: project.id,
+        title: project.title,
+        detail: project.summary || project.context,
+        meta: `${getFolderName(project.folder_id)} - ${formatProjectDate(project.updated_at)}`,
+        onDelete: () => deleteProject(project),
+      })),
+    },
+    {
+      id: 'tasks',
+      title: 'Tasks',
+      count: activeProjectTasks.length,
+      items: activeProjectTasks.map((task) => {
+        const project = taskProjectMap.get(task.project_id);
+        return {
+          id: task.id,
+          title: task.title,
+          detail: task.detail || (project ? `Project: ${project.title}` : 'Task project not loaded'),
+          meta: `${task.status} - ${task.source}`,
+          onDelete: () => deleteProjectTask(task),
+        };
+      }),
+    },
+    {
+      id: 'memory',
+      title: 'Memory',
+      count: assistantMemories.length,
+      items: assistantMemories.map((memory) => ({
+        id: memory.id,
+        title: memory.title,
+        detail: memory.content,
+        meta: `${memory.memory_type.replace('_', ' ')} - ${formatProjectDate(memory.updated_at)}`,
+        onDelete: () => deleteAssistantMemory(memory),
+      })),
+    },
+    {
+      id: 'folders',
+      title: 'Folders',
+      count: projectFolders.length,
+      items: projectFolders.map((folder) => ({
+        id: folder.id,
+        title: folder.name,
+        detail: `${projects.filter((project) => project.folder_id === folder.id).length} projects in this folder`,
+        meta: `Folder - ${formatProjectDate(folder.updated_at)}`,
+        onDelete: () => deleteProjectFolder(folder),
+      })),
+    },
+    {
+      id: 'threads',
+      title: 'Assistant threads',
+      count: assistantThreads.length,
+      items: assistantThreads.map((thread) => ({
+        id: thread.id,
+        title: thread.title,
+        detail: `${assistantMessages.filter((message) => !message.project_id && getAssistantThreadId(message) === thread.id).length} messages`,
+        meta: `Thread - ${formatProjectDate(thread.updatedAt)}`,
+        onDelete: () => deleteAssistantThreadById(thread.id),
+      })),
+    },
+  ];
 
   const sendAssistantMessage = async () => {
     const prompt = assistantInput.trim();
@@ -5422,11 +5650,36 @@ export function ClarityCircle() {
                 <button type="button" className={styles.secondaryButton} onClick={() => openMenu('settings')}>
                   Settings
                 </button>
-                {authUser && (
+                {authUser ? (
                   <button type="button" className={styles.textButton} onClick={() => void signOut()}>
                     <LogOut size={16} aria-hidden="true" />
                     Sign out
                   </button>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className={styles.primaryButton}
+                      onClick={() => {
+                        setSessionMode('signup');
+                        setAuthView('signup-email');
+                        openMenu('start');
+                      }}
+                    >
+                      Create account
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.secondaryButton}
+                      onClick={() => {
+                        setSessionMode('signin');
+                        setAuthView('signin');
+                        openMenu('start');
+                      }}
+                    >
+                      Sign in
+                    </button>
+                  </>
                 )}
               </div>
             </section>
@@ -5434,6 +5687,40 @@ export function ClarityCircle() {
 
           {activeMenu === 'settings' && (
             <section className={styles.screen} aria-label="Settings">
+              {!authUser && (
+                <div className={styles.accountAccessPanel}>
+                  <div>
+                    <span>Account access</span>
+                    <h2>Sign in or create an account</h2>
+                    <p>Use an account to keep projects, tasks, memories, and loop context saved across sessions.</p>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      className={styles.primaryButton}
+                      onClick={() => {
+                        setSessionMode('signup');
+                        setAuthView('signup-email');
+                        openMenu('start');
+                      }}
+                    >
+                      Create account
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.secondaryButton}
+                      onClick={() => {
+                        setSessionMode('signin');
+                        setAuthView('signin');
+                        openMenu('start');
+                      }}
+                    >
+                      Sign in
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className={styles.settingsList}>
                 <label>
                   <span>Preferred path</span>
@@ -5463,6 +5750,47 @@ export function ClarityCircle() {
                   <span>Keep vault entries private by default</span>
                 </label>
               </div>
+
+              <section className={styles.deleteDataSection} aria-label="Delete data">
+                <div className={styles.deleteDataHeader}>
+                  <div>
+                    <span>Delete data</span>
+                    <h2>Saved items in this Circle</h2>
+                    <p>Remove individual saved context, projects, tasks, memories, folders, and assistant threads.</p>
+                  </div>
+                  <small>{deleteDataSections.reduce((total, section) => total + section.count, 0)} saved items</small>
+                </div>
+
+                <div className={styles.deleteDataGroups}>
+                  {deleteDataSections.map((section) => (
+                    <article key={section.id} className={styles.deleteDataGroup}>
+                      <div className={styles.deleteDataGroupHeader}>
+                        <h3>{section.title}</h3>
+                        <span>{section.count}</span>
+                      </div>
+                      <div className={styles.deleteDataList}>
+                        {section.items.length > 0 ? (
+                          section.items.map((item) => (
+                            <div key={item.id} className={styles.deleteDataRow}>
+                              <div>
+                                <strong>{item.title}</strong>
+                                <p>{item.detail}</p>
+                                <small>{item.meta}</small>
+                              </div>
+                              <button type="button" className={styles.deleteDataButton} onClick={() => void item.onDelete()}>
+                                <Trash2 size={15} aria-hidden="true" />
+                                Delete
+                              </button>
+                            </div>
+                          ))
+                        ) : (
+                          <p className={styles.deleteDataEmpty}>Nothing saved here yet.</p>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
             </section>
           )}
         </section>

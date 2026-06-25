@@ -3721,12 +3721,218 @@
   padding: 18px;
 }
 
+.accountAccessPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background:
+    var(--circle-card-sheen),
+    var(--circle-panel);
+  box-shadow: var(--circle-control-shadow);
+}
+
+.accountAccessPanel > div:last-child {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+
+.accountAccessPanel span {
+  color: var(--circle-gold-light);
+  font-size: 11px;
+  font-weight: 780;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.accountAccessPanel h2 {
+  margin: 5px 0 7px;
+  color: var(--circle-text);
+  font-size: 24px;
+  line-height: 1.12;
+}
+
+.accountAccessPanel p {
+  margin: 0;
+  color: var(--circle-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .settingsList .toggleRow {
   grid-column: 1 / -1;
 }
 
 .settingsList select {
   color: var(--circle-text);
+}
+
+.deleteDataSection {
+  display: grid;
+  gap: 12px;
+}
+
+.deleteDataHeader,
+.deleteDataGroup {
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background:
+    var(--circle-card-sheen),
+    var(--circle-panel);
+  box-shadow: var(--circle-control-shadow);
+}
+
+.deleteDataHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+}
+
+.deleteDataHeader span,
+.deleteDataGroupHeader h3,
+.deleteDataRow small {
+  color: var(--circle-gold-light);
+  font-size: 11px;
+  font-weight: 780;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.deleteDataHeader h2 {
+  margin: 5px 0 7px;
+  color: var(--circle-text);
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+.deleteDataHeader p,
+.deleteDataRow p,
+.deleteDataEmpty {
+  margin: 0;
+  color: var(--circle-muted);
+  font-size: 13px;
+  line-height: 1.42;
+}
+
+.deleteDataHeader small {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid var(--circle-border);
+  border-radius: 999px;
+  background: var(--circle-row);
+  color: var(--circle-faint);
+  font-size: 12px;
+  font-weight: 720;
+  white-space: nowrap;
+}
+
+.deleteDataGroups {
+  display: grid;
+  gap: 10px;
+}
+
+.deleteDataGroup {
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+}
+
+.deleteDataGroupHeader {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--circle-border);
+  background: var(--circle-row);
+}
+
+.deleteDataGroupHeader h3 {
+  margin: 0;
+  color: var(--circle-text);
+}
+
+.deleteDataGroupHeader span {
+  min-width: 28px;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--circle-border);
+  border-radius: 999px;
+  color: var(--circle-faint);
+  font-size: 12px;
+  font-weight: 760;
+}
+
+.deleteDataList {
+  display: grid;
+}
+
+.deleteDataRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--circle-divider);
+}
+
+.deleteDataRow:last-child {
+  border-bottom: 0;
+}
+
+.deleteDataRow strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--circle-text);
+  font-size: 14px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.deleteDataRow small {
+  display: block;
+  margin-top: 6px;
+  color: var(--circle-faint);
+  text-transform: none;
+}
+
+.deleteDataButton {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 120, 120, 0.34);
+  border-radius: 8px;
+  background: rgba(160, 56, 56, 0.12);
+  color: #ffb5b5;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+.deleteDataButton:hover,
+.deleteDataButton:focus-visible {
+  border-color: rgba(255, 120, 120, 0.68);
+  background: rgba(160, 56, 56, 0.2);
+  outline: none;
+}
+
+.deleteDataEmpty {
+  padding: 14px;
 }
 
 .toggleRow {
@@ -4185,6 +4391,8 @@
   .finderShell,
   .profileDetail,
   .settingsList,
+  .accountAccessPanel,
+  .deleteDataHeader,
   .memoryList {
     grid-template-columns: 1fr;
   }
@@ -4503,6 +4711,14 @@
 
   .memoryItem {
     grid-template-columns: 1fr;
+  }
+
+  .deleteDataRow {
+    grid-template-columns: 1fr;
+  }
+
+  .deleteDataButton {
+    justify-self: start;
   }
 
   .memoryItem .iconButton {
