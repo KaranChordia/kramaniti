@@ -2414,7 +2414,7 @@
   min-height: 0;
   height: 100%;
   display: grid;
-  grid-template-columns: 218px minmax(0, 1fr) 270px;
+  grid-template-columns: 176px minmax(320px, 0.82fr) minmax(520px, 1.18fr);
   overflow: hidden;
 }
 
@@ -2429,7 +2429,7 @@
   display: grid;
   align-content: start;
   gap: 15px;
-  padding: 14px;
+  padding: 12px;
   border-right: 1px solid var(--circle-divider);
   background: var(--circle-pane);
   overflow-y: auto;
@@ -2477,17 +2477,17 @@
 }
 
 .folderGroup button {
-  min-height: 36px;
+  min-height: 34px;
   display: grid;
   grid-template-columns: 18px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 9px;
+  gap: 7px;
   border: 1px solid transparent;
   border-radius: 8px;
   background: var(--circle-control);
   color: var(--circle-muted);
   font: inherit;
-  padding: 0 9px;
+  padding: 0 8px;
   text-align: left;
   cursor: pointer;
   box-shadow: var(--circle-control-shadow);
@@ -2500,7 +2500,7 @@
 .folderGroup button strong {
   min-width: 0;
   color: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2655,12 +2655,12 @@
 }
 
 .fileToolbar {
-  min-height: 62px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 12px 14px;
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 9px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--circle-divider);
 }
 
@@ -2677,14 +2677,15 @@
 
 .fileToolbarControls {
   min-width: 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
-  justify-content: flex-end;
   gap: 8px;
 }
 
 .projectSearch {
-  width: min(220px, 100%);
+  grid-column: 1 / -1;
+  width: 100%;
   min-height: 38px;
   display: grid;
   grid-template-columns: 18px minmax(0, 1fr);
@@ -2705,7 +2706,7 @@
 
 .projectToolbarButton {
   min-height: 38px;
-  padding: 0 12px;
+  padding: 0 10px;
   white-space: nowrap;
 }
 
@@ -2731,12 +2732,12 @@
 }
 
 .projectRows button {
-  min-height: 66px;
+  min-height: 58px;
   display: grid;
-  grid-template-columns: 34px minmax(150px, 1fr) minmax(190px, auto) 18px;
+  grid-template-columns: 30px minmax(0, 1fr) 16px;
   align-items: center;
-  gap: 10px;
-  padding: 0 14px;
+  gap: 8px;
+  padding: 8px 11px;
   border: 0;
   border-bottom: 1px solid var(--circle-subtle-divider);
   background: color-mix(in srgb, var(--circle-row) 34%, transparent);
@@ -2765,8 +2766,8 @@
 }
 
 .projectFileIcon {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
 }
 
 .projectRowMain,
@@ -2779,7 +2780,7 @@
 
 .projectRows strong {
   color: inherit;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 720;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2796,16 +2797,23 @@
 }
 
 .projectRowMeta {
+  grid-column: 2;
   min-width: 0;
-  display: grid;
-  grid-template-columns: 72px 86px 58px;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
+  margin-top: 5px;
 }
 
 .projectRowMeta span {
+  max-width: 100%;
+  padding: 3px 6px;
+  border: 1px solid var(--circle-border);
+  border-radius: 999px;
+  background: var(--circle-control);
   color: var(--circle-faint);
-  font-size: 12px;
+  font-size: 10px;
   line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2819,15 +2827,17 @@
 .previewPane {
   min-height: 0;
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-content: start;
-  gap: 16px;
-  padding: 16px;
+  gap: 14px;
+  padding: 18px;
   border-left: 1px solid var(--circle-divider);
   background: var(--circle-pane);
   overflow-y: auto;
 }
 
 .previewHeader {
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 48px minmax(0, 1fr);
   gap: 12px;
@@ -2853,6 +2863,7 @@
 }
 
 .previewMeta {
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 9px;
@@ -2884,8 +2895,20 @@
 
 .previewBody,
 .moveControl {
+  grid-column: 1 / -1;
   display: grid;
   gap: 8px;
+}
+
+.projectInstructionPanel,
+.projectClarityPanel,
+.projectAssistantPanel,
+.previewActions {
+  grid-column: 1 / -1;
+}
+
+.projectAssistantPanel {
+  min-height: 360px;
 }
 
 .projectSubheader {
@@ -4644,6 +4667,7 @@
   }
 
   .previewPane {
+    grid-template-columns: 1fr;
     border: 1px solid var(--circle-border);
     border-radius: 8px;
     background:
