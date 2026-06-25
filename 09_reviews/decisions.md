@@ -579,4 +579,4 @@ This log registers the major strategic and structural decisions made during the 
     *   Guardrail: keep loops as user-facing operating cycles, not internal Kramaniti company agents. Do not turn Clarity Circle into a dense technical agent dashboard.
     *   Tasks became a dedicated main navigation page. It uses the existing `clarity_circle.project_tasks` records, grouped by project, so assistant-created tasks, auto-generated project starter tasks, and manual user tasks remain one shared task system.
     *   The Start item was removed from the persistent main navigation to make space for Tasks. The start/auth experience can still exist as an entry state, but not as a standing nav destination.
-    *   Settings now includes a Delete Data section where users can delete individual saved context entries, projects, tasks, memories, folders, and assistant threads. Destructive actions must remain explicit and confirmation-gated.
+    *   Memory now includes a Delete Data section where users can delete individual saved context entries, projects, tasks, memories, folders, and assistant threads. Destructive actions must remain explicit and confirmation-gated.

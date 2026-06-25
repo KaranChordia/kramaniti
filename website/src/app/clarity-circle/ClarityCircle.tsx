@@ -684,6 +684,7 @@ export function ClarityCircle() {
   const [authProfile, setAuthProfile] = useState<ClarityCircleProfile | null>(null);
   const [isAuthBusy, setIsAuthBusy] = useState(false);
   const [isSavingContext, setIsSavingContext] = useState(false);
+  const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
   const [projects, setProjects] = useState<ClarityCircleProject[]>([]);
   const [projectFolders, setProjectFolders] = useState<ClarityCircleProjectFolder[]>([]);
   const [projectTasks, setProjectTasks] = useState<ClarityCircleProjectTask[]>([]);
@@ -3006,17 +3007,15 @@ export function ClarityCircle() {
       .eq('id', memory.id);
   };
 
-  const confirmDelete = (label: string) => window.confirm(`Delete ${label}? This cannot be undone.`);
-
   const deleteSavedSignal = () => {
-    if (!confirmDelete('the saved Circle context')) return;
     setSavedContext(null);
+    setConfirmingDeleteId(null);
     setStatus('Saved context removed from this Circle workspace.');
   };
 
   const deleteContextEntry = async (entry: ClarityCircleContextEntry) => {
-    if (!confirmDelete(`context entry "${entry.entry_type}"`)) return;
     setContextEntries((current) => current.filter((item) => item.id !== entry.id));
+    setConfirmingDeleteId(null);
     setStatus('Context entry deleted.');
 
     const supabase = getClarityCircleSupabase();
@@ -3030,8 +3029,8 @@ export function ClarityCircle() {
   };
 
   const deleteAssistantMemory = async (memory: ClarityCircleAssistantMemory) => {
-    if (!confirmDelete(`memory "${memory.title}"`)) return;
     setAssistantMemories((current) => current.filter((item) => item.id !== memory.id));
+    setConfirmingDeleteId(null);
     setStatus('Memory deleted.');
 
     const supabase = getClarityCircleSupabase();
@@ -3045,8 +3044,8 @@ export function ClarityCircle() {
   };
 
   const deleteProjectTask = async (task: ClarityCircleProjectTask) => {
-    if (!confirmDelete(`task "${task.title}"`)) return;
     setProjectTasks((current) => current.filter((item) => item.id !== task.id));
+    setConfirmingDeleteId(null);
     setStatus('Task deleted.');
 
     const supabase = getClarityCircleSupabase();
@@ -3060,10 +3059,10 @@ export function ClarityCircle() {
   };
 
   const deleteProjectFolder = async (folder: ClarityCircleProjectFolder) => {
-    if (!confirmDelete(`folder "${folder.name}"`)) return;
     setProjectFolders((current) => current.filter((item) => item.id !== folder.id));
     setProjects((current) => current.map((project) => (project.folder_id === folder.id ? { ...project, folder_id: null } : project)));
     if (activeProjectFolder === folder.id) setActiveProjectFolder('all');
+    setConfirmingDeleteId(null);
     setStatus('Folder deleted. Projects moved to Unfiled.');
 
     const supabase = getClarityCircleSupabase();
@@ -3089,12 +3088,12 @@ export function ClarityCircle() {
   };
 
   const deleteProject = async (project: ClarityCircleProject) => {
-    if (!confirmDelete(`project "${project.title}" and its tasks/context`)) return;
     setProjects((current) => current.filter((item) => item.id !== project.id));
     setProjectTasks((current) => current.filter((task) => task.project_id !== project.id));
     setContextEntries((current) => current.filter((entry) => entry.project_id !== project.id));
     setAssistantMessages((current) => current.filter((message) => message.project_id !== project.id));
     if (selectedProjectId === project.id) setSelectedProjectId(null);
+    setConfirmingDeleteId(null);
     setStatus('Project and related workspace data deleted.');
 
     const supabase = getClarityCircleSupabase();
@@ -3114,9 +3113,6 @@ export function ClarityCircle() {
   };
 
   const deleteAssistantThreadById = async (threadId: string) => {
-    const thread = assistantThreads.find((item) => item.id === threadId);
-    if (!confirmDelete(`assistant thread "${thread?.title || 'Circle thread'}"`)) return;
-
     const savedMessageIdsToDelete = assistantMessages
       .filter((message) => !message.project_id && getAssistantThreadId(message) === threadId && UUID_PATTERN.test(message.id))
       .map((message) => message.id);
@@ -3135,6 +3131,7 @@ export function ClarityCircle() {
     setAssistantThreads(nextThreads);
     if (nextActiveThread) setActiveAssistantThreadId(nextActiveThread.id);
     closeAssistantThreadDropdown();
+    setConfirmingDeleteId(null);
     setStatus('Assistant thread deleted.');
 
     const supabase = getClarityCircleSupabase();
@@ -5217,6 +5214,68 @@ export function ClarityCircle() {
                   Add through assistant
                 </button>
               </div>
+
+              <section className={styles.deleteDataSection} aria-label="Delete data">
+                <div className={styles.deleteDataHeader}>
+                  <div>
+                    <span>Delete data</span>
+                    <h2>Saved items in this Circle</h2>
+                    <p>Remove individual saved context, projects, tasks, memories, folders, and assistant threads.</p>
+                  </div>
+                  <small>{deleteDataSections.reduce((total, section) => total + section.count, 0)} saved items</small>
+                </div>
+
+                <div className={styles.deleteDataGroups}>
+                  {deleteDataSections.map((section) => (
+                    <article key={section.id} className={styles.deleteDataGroup}>
+                      <div className={styles.deleteDataGroupHeader}>
+                        <h3>{section.title}</h3>
+                        <span>{section.count}</span>
+                      </div>
+                      <div className={styles.deleteDataList}>
+                        {section.items.length > 0 ? (
+                          section.items.map((item) => {
+                            const deleteKey = `${section.id}:${item.id}`;
+                            const isConfirming = confirmingDeleteId === deleteKey;
+                            return (
+                              <div key={item.id} className={isConfirming ? `${styles.deleteDataRow} ${styles.deleteDataRowConfirming}` : styles.deleteDataRow}>
+                                <div>
+                                  <strong>{item.title}</strong>
+                                  <p>{isConfirming ? 'Click Confirm delete to permanently remove this item.' : item.detail}</p>
+                                  <small>{item.meta}</small>
+                                </div>
+                                <div className={styles.deleteDataActions}>
+                                  {isConfirming && (
+                                    <button type="button" className={styles.deleteCancelButton} onClick={() => setConfirmingDeleteId(null)}>
+                                      Cancel
+                                    </button>
+                                  )}
+                                  <button
+                                    type="button"
+                                    className={isConfirming ? `${styles.deleteDataButton} ${styles.deleteDataButtonConfirm}` : styles.deleteDataButton}
+                                    onClick={() => {
+                                      if (!isConfirming) {
+                                        setConfirmingDeleteId(deleteKey);
+                                        return;
+                                      }
+                                      void item.onDelete();
+                                    }}
+                                  >
+                                    <Trash2 size={15} aria-hidden="true" />
+                                    {isConfirming ? 'Confirm delete' : 'Delete'}
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })
+                        ) : (
+                          <p className={styles.deleteDataEmpty}>Nothing saved here yet.</p>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
             </section>
           )}
 
@@ -5751,46 +5810,6 @@ export function ClarityCircle() {
                 </label>
               </div>
 
-              <section className={styles.deleteDataSection} aria-label="Delete data">
-                <div className={styles.deleteDataHeader}>
-                  <div>
-                    <span>Delete data</span>
-                    <h2>Saved items in this Circle</h2>
-                    <p>Remove individual saved context, projects, tasks, memories, folders, and assistant threads.</p>
-                  </div>
-                  <small>{deleteDataSections.reduce((total, section) => total + section.count, 0)} saved items</small>
-                </div>
-
-                <div className={styles.deleteDataGroups}>
-                  {deleteDataSections.map((section) => (
-                    <article key={section.id} className={styles.deleteDataGroup}>
-                      <div className={styles.deleteDataGroupHeader}>
-                        <h3>{section.title}</h3>
-                        <span>{section.count}</span>
-                      </div>
-                      <div className={styles.deleteDataList}>
-                        {section.items.length > 0 ? (
-                          section.items.map((item) => (
-                            <div key={item.id} className={styles.deleteDataRow}>
-                              <div>
-                                <strong>{item.title}</strong>
-                                <p>{item.detail}</p>
-                                <small>{item.meta}</small>
-                              </div>
-                              <button type="button" className={styles.deleteDataButton} onClick={() => void item.onDelete()}>
-                                <Trash2 size={15} aria-hidden="true" />
-                                Delete
-                              </button>
-                            </div>
-                          ))
-                        ) : (
-                          <p className={styles.deleteDataEmpty}>Nothing saved here yet.</p>
-                        )}
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
             </section>
           )}
         </section>
