@@ -127,7 +127,7 @@
   min-height: 0;
   min-width: 0;
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) auto minmax(180px, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
@@ -224,47 +224,51 @@
 
 .menu {
   grid-column: 2;
-  justify-self: center;
-  justify-content: center;
+  justify-self: stretch;
   min-height: 0;
-  display: flex;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   align-items: center;
-  gap: 6px;
-  max-width: min(100%, 720px);
+  gap: 5px;
+  width: 100%;
+  max-width: none;
   padding: 4px;
   border: 1px solid var(--circle-border);
   border-radius: 8px;
   background: var(--circle-control);
   box-shadow: var(--circle-control-shadow);
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
-}
-
-.menu::-webkit-scrollbar {
-  display: none;
+  overflow: visible;
 }
 
 .menu button {
-  width: auto;
+  width: 100%;
+  min-width: 0;
   min-height: 42px;
-  flex: 0 0 auto;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 7px;
   border: 1px solid transparent;
   border-radius: 8px;
   background: var(--circle-control);
   color: var(--circle-muted);
   font: inherit;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 650;
-  padding: 0 11px;
+  padding: 0 7px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   box-shadow: var(--circle-button-shadow);
   animation: none !important;
   transition: none !important;
+}
+
+.menu button span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .menu button svg {
@@ -3547,19 +3551,31 @@
 
   .rail {
     min-height: 0;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    overflow: hidden;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "brand utilities"
+      "menu menu";
+    overflow: visible;
   }
 
   .menu {
+    grid-area: menu;
     justify-self: stretch;
-    justify-content: flex-start;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     max-width: 100%;
-    overflow-x: auto;
+    overflow: visible;
   }
 
   .menu button {
     justify-content: center;
+  }
+
+  .productLabel {
+    grid-area: brand;
+  }
+
+  .navUtilities {
+    grid-area: utilities;
   }
 
   .profilePanel {
