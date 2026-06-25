@@ -67,7 +67,9 @@ import {
   WorkflowDecisionLedgerInfographic,
   OnePageDecisionPacketInfographic,
   HandoffPacketMapInfographic,
-  HandoffTraceRouteInfographic
+  HandoffTraceRouteInfographic,
+  QuestionToSystemRouteInfographic,
+  QuestionLibraryCompassInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -415,6 +417,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:handoff-trace-route]') {
           return <HandoffTraceRouteInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:question-to-system-route]') {
+          return <QuestionToSystemRouteInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:question-library-compass]') {
+          return <QuestionLibraryCompassInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);

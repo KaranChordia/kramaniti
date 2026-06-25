@@ -2579,3 +2579,111 @@ export function OnePageDecisionPacketInfographic() {
     </div>
   );
 }
+
+export function QuestionToSystemRouteInfographic() {
+  const stages = [
+    {
+      icon: MessageSquareText,
+      label: 'Repeated question',
+      copy: 'The same customer, team, or founder question returns across calls, chats, content, or delivery.',
+    },
+    {
+      icon: Radar,
+      label: 'Workflow moment',
+      copy: 'The team names where the question appears: intake, scoping, onboarding, handoff, review, or follow-up.',
+    },
+    {
+      icon: Workflow,
+      label: 'System support',
+      copy: 'The smallest useful artifact is added: field, note, route, owner, source, checklist, or tool.',
+    },
+    {
+      icon: Megaphone,
+      label: 'Clearer presence',
+      copy: 'The public explanation now reflects an answer the internal route can support.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Question-To-System Route</div>
+      <div className={styles.briefBoard}>
+        {stages.map((stage, index) => {
+          const Icon = stage.icon;
+          const isFinal = index === stages.length - 1;
+
+          return (
+            <React.Fragment key={stage.label}>
+              <div className={`${styles.briefCard} ${isFinal ? styles.briefCardHighlight : ''}`}>
+                <div className={isFinal ? styles.briefIconHighlight : styles.briefIcon}>
+                  <Icon size={18} />
+                </div>
+                <div className={isFinal ? styles.briefLabelGold : styles.briefLabel}>{stage.label}</div>
+                <p className={isFinal ? styles.briefCopyGold : styles.briefCopy}>{stage.copy}</p>
+              </div>
+              {index < stages.length - 1 ? (
+                <div className={styles.briefConnector}>
+                  <ArrowRight className={styles.arrowIconDesktop} size={18} />
+                  <ArrowDown className={styles.arrowIconMobile} size={18} />
+                </div>
+              ) : null}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function QuestionLibraryCompassInfographic() {
+  const directions = [
+    {
+      step: '01',
+      title: 'Decide',
+      copy: 'The question changes fit, pricing, priority, approval, or promise.',
+      tag: 'Decision record',
+    },
+    {
+      step: '02',
+      title: 'Do',
+      copy: 'The person needs the route, fields, owner, and next action.',
+      tag: 'Workflow note',
+    },
+    {
+      step: '03',
+      title: 'Understand',
+      copy: 'The audience needs a plain explanation before the work makes sense.',
+      tag: 'Presence copy',
+    },
+    {
+      step: '04',
+      title: 'Recover',
+      copy: 'The normal route has failed and the next owner needs context.',
+      tag: 'Exception path',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Question Library Compass</div>
+      <div className={styles.packetChecklist}>
+        {directions.map((direction, index) => {
+          const isHighlight = index === directions.length - 1;
+
+          return (
+            <div className={`${styles.packetItem} ${isHighlight ? styles.packetItemHighlight : ''}`} key={direction.title}>
+              <div className={isHighlight ? styles.packetIconHighlight : styles.packetIcon}>
+                <MessageSquareText size={18} />
+              </div>
+              <div className={styles.packetContent}>
+                <span className={styles.packetNumber}>{direction.step} / {direction.tag}</span>
+                <h4>{direction.title}</h4>
+                <p>{direction.copy}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
