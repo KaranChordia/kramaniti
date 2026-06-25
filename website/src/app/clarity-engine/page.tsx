@@ -48,6 +48,13 @@ type SessionState = {
   >;
   source: 'groq' | 'local';
   mockScenarioId?: string;
+  circleProject?: {
+    projectId: string;
+    folderId?: string | null;
+    projectTitle: string;
+    folderName?: string;
+    projectInstruction?: string | null;
+  } | null;
 };
 
 const STORAGE_KEY = 'kramaniti-clarity-engine-v2';
@@ -56,6 +63,12 @@ const CIRCLE_HANDOFF_KEY = 'kramaniti-clarity-circle-engine-handoff-v1';
 type ClarityCircleHandoff = {
   version: 1;
   createdAt: string;
+  source?: 'clarity_circle_project' | 'clarity_circle_context';
+  projectId?: string;
+  folderId?: string | null;
+  projectTitle?: string;
+  folderName?: string;
+  projectInstruction?: string | null;
   track: 'founder' | 'builder';
   trackLabel: string;
   headline: string;
@@ -139,13 +152,16 @@ const readClarityCircleHandoff = (): ClarityCircleHandoff | null => {
 
 const buildCircleHandoffAnswer = (handoff: ClarityCircleHandoff) => {
   const lines = [
+    handoff.projectTitle ? `Project: ${cleanHandoffValue(handoff.projectTitle)}` : '',
+    handoff.folderName ? `Folder: ${cleanHandoffValue(handoff.folderName)}` : '',
     `Clarity Circle path: ${cleanHandoffValue(handoff.trackLabel) || handoff.track}`,
     `Intent: ${cleanHandoffValue(handoff.headline)}`,
+    handoff.projectInstruction ? `Project instruction: ${cleanHandoffValue(handoff.projectInstruction)}` : '',
     `Context: ${cleanHandoffValue(handoff.context)}`,
     `Audience: ${cleanHandoffValue(handoff.audience) || 'Not clearly named yet.'}`,
     `Current blocker: ${cleanHandoffValue(handoff.blocker) || 'Not clearly named yet.'}`,
     `Desired outcome: ${cleanHandoffValue(handoff.outcome) || 'Not clearly named yet.'}`,
-  ];
+  ].filter(Boolean);
 
   return lines.join('\n');
 };
@@ -214,6 +230,16 @@ const createSessionFromCircleHandoff = (handoff: ClarityCircleHandoff): SessionS
       focusTags: ['circle', handoff.track, 'private'],
     },
     source: 'local',
+    circleProject:
+      handoff.projectId && handoff.projectTitle
+        ? {
+            projectId: handoff.projectId,
+            folderId: handoff.folderId ?? null,
+            projectTitle: cleanHandoffValue(handoff.projectTitle),
+            folderName: cleanHandoffValue(handoff.folderName),
+            projectInstruction: cleanHandoffValue(handoff.projectInstruction),
+          }
+        : null,
   };
 };
 
@@ -922,6 +948,7 @@ export default function ClarityEnginePage() {
                         aiTasks: session.aiTasks,
                         contextLog: session.contextLog,
                         mockScenarioId: session.mockScenarioId,
+                        circleProject: session.circleProject ?? null,
                       };
                       sessionStorage.setItem('kramaniti-blueprint-session', JSON.stringify(payload));
                       router.push('/clarity-engine/blueprint');

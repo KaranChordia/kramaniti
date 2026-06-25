@@ -27,6 +27,7 @@ import {
   Plus,
   RefreshCw,
   Repeat2,
+  Rocket,
   Route,
   Send,
   Settings,
@@ -45,6 +46,7 @@ import {
   type ClarityCircleProfile,
   type ClarityCircleProject,
   type ClarityCircleProjectFolder,
+  type ClarityCircleProjectReport,
   type ClarityCircleProjectTask,
 } from '@/lib/clarity-circle/supabase';
 import styles from './ClarityCircle.module.css';
@@ -221,6 +223,7 @@ type WorkspaceSnapshot = {
   projects: ClarityCircleProject[];
   folders: ClarityCircleProjectFolder[];
   tasks: ClarityCircleProjectTask[];
+  reports: ClarityCircleProjectReport[];
   contextEntries: ClarityCircleContextEntry[];
   messages: UiAssistantMessage[];
   memories: ClarityCircleAssistantMemory[];
@@ -282,6 +285,12 @@ const clearCircleLocalStorage = () => {
 type EngineHandoff = {
   version: 1;
   createdAt: string;
+  source: 'clarity_circle_project' | 'clarity_circle_context';
+  projectId?: string;
+  folderId?: string | null;
+  projectTitle?: string;
+  folderName?: string;
+  projectInstruction?: string | null;
   track: Track;
   trackLabel: string;
   headline: string;
@@ -688,6 +697,7 @@ export function ClarityCircle() {
   const [projects, setProjects] = useState<ClarityCircleProject[]>([]);
   const [projectFolders, setProjectFolders] = useState<ClarityCircleProjectFolder[]>([]);
   const [projectTasks, setProjectTasks] = useState<ClarityCircleProjectTask[]>([]);
+  const [projectReports, setProjectReports] = useState<ClarityCircleProjectReport[]>([]);
   const [contextEntries, setContextEntries] = useState<ClarityCircleContextEntry[]>([]);
   const [activeProjectFolder, setActiveProjectFolder] = useState<ProjectFolderFilter>('all');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
@@ -939,7 +949,7 @@ export function ClarityCircle() {
     const supabase = getClarityCircleSupabase();
     if (!supabase) return null;
 
-    const [projectResult, folderResult, taskResult, entryResult, messageResult, memoryResult] = await Promise.all([
+    const [projectResult, folderResult, taskResult, reportResult, entryResult, messageResult, memoryResult] = await Promise.all([
       supabase
         .schema('clarity_circle')
         .from('projects')
@@ -966,6 +976,13 @@ export function ClarityCircle() {
         .order('sort_order', { ascending: true })
         .order('updated_at', { ascending: false })
         .limit(240),
+      supabase
+        .schema('clarity_circle')
+        .from('project_reports')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(180),
       supabase
         .schema('clarity_circle')
         .from('context_entries')
@@ -1003,9 +1020,14 @@ export function ClarityCircle() {
       setStatus('Project tasks could not be loaded. The latest migration may need to be applied.');
     }
 
+    if (reportResult.error && !options?.quiet) {
+      setStatus('Project reports could not be loaded. The latest migration may need to be applied.');
+    }
+
     const nextProjects = projectResult.data ?? [];
     const nextFolders = folderResult.error ? [] : folderResult.data ?? [];
     const nextTasks = taskResult.error ? [] : taskResult.data ?? [];
+    const nextReports = reportResult.error ? [] : reportResult.data ?? [];
     const nextEntries = entryResult.error ? [] : entryResult.data ?? [];
     const nextMessageRows = !messageResult.error && messageResult.data?.length ? [...messageResult.data].reverse() : [];
     const nextMessages =
@@ -1030,6 +1052,9 @@ export function ClarityCircle() {
     if (!taskResult.error) {
       setProjectTasks(nextTasks);
     }
+    if (!reportResult.error) {
+      setProjectReports(nextReports);
+    }
     setContextEntries(nextEntries);
     if (!options?.preserveAssistantState) {
       setAssistantMessages(nextMessages);
@@ -1048,6 +1073,7 @@ export function ClarityCircle() {
       projects: nextProjects,
       folders: nextFolders,
       tasks: nextTasks,
+      reports: nextReports,
       contextEntries: nextEntries,
       messages: nextMessages,
       memories: nextMemories,
@@ -1242,6 +1268,7 @@ export function ClarityCircle() {
         setAuthProfile(null);
         setProjects([]);
         setProjectFolders([]);
+        setProjectReports([]);
       }
     });
 
@@ -1291,6 +1318,11 @@ export function ClarityCircle() {
       .on(
         'postgres_changes',
         { event: '*', schema: 'clarity_circle', table: 'project_tasks', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_circle', table: 'project_reports', filter: `user_id=eq.${authUser.id}` },
         queueRefresh,
       )
       .on(
@@ -1487,6 +1519,7 @@ export function ClarityCircle() {
     setProjects([]);
     setProjectFolders([]);
     setProjectTasks([]);
+    setProjectReports([]);
     setActiveProjectFolder('all');
     setSelectedProjectId(null);
     setProjectSearch('');
@@ -1577,6 +1610,11 @@ export function ClarityCircle() {
     ? projectTasks
         .filter((task) => task.project_id === selectedProject.id && task.status !== 'archived')
         .sort((left, right) => left.sort_order - right.sort_order || new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime())
+    : [];
+  const selectedProjectReports = selectedProject
+    ? projectReports
+        .filter((report) => report.project_id === selectedProject.id)
+        .sort((left, right) => new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime())
     : [];
   const resolvedAssistantThreadId = activeAssistantThreadId || DEFAULT_ASSISTANT_THREAD_ID;
   const activeAssistantThread = assistantThreads.find((thread) => thread.id === resolvedAssistantThreadId);
@@ -2066,6 +2104,23 @@ export function ClarityCircle() {
     return data;
   };
 
+  const getOrCreateProjectFolderId = async (folderName: string, preferredFolderId?: string | null) => {
+    if (preferredFolderId && projectFolders.some((folder) => folder.id === preferredFolderId)) {
+      return preferredFolderId;
+    }
+
+    if (activeProjectFolder !== 'all' && activeProjectFolder !== 'unfiled') {
+      return activeProjectFolder;
+    }
+
+    const fallbackName = cleanSentence(folderName, 'Project folder').slice(0, 80);
+    const existingFolder = projectFolders.find((folder) => folder.name.trim().toLowerCase() === fallbackName.toLowerCase());
+    if (existingFolder) return existingFolder.id;
+
+    const folder = await createProjectFolder(fallbackName, { keepCurrentMenu: true });
+    return folder?.id ?? null;
+  };
+
   const moveProjectToFolder = async (project: ClarityCircleProject, folderId: string | null) => {
     setProjects((current) =>
       current.map((item) => (item.id === project.id ? { ...item, folder_id: folderId, updated_at: new Date().toISOString() } : item)),
@@ -2120,11 +2175,18 @@ export function ClarityCircle() {
     const projectInstruction = buildProjectInstruction(projectIntent);
 
     setIsSavingProject(true);
+    const folderId = await getOrCreateProjectFolderId(projectTitle);
+    if (!folderId) {
+      setIsSavingProject(false);
+      setStatus('Project folder could not be prepared.');
+      return null;
+    }
     const { data: project, error } = await supabase
       .schema('clarity_circle')
       .from('projects')
       .insert({
         user_id: authUser.id,
+        folder_id: folderId,
         track: accountTrack,
         title: projectTitle,
         context: brief,
@@ -2158,6 +2220,7 @@ export function ClarityCircle() {
 
     setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
     setSelectedProjectId(project.id);
+    if (project.folder_id) setActiveProjectFolder(project.folder_id);
     setProjectBrief('');
     setProjectInstructionDraft(project.project_instruction || project.context);
     setIsCreatingProject(false);
@@ -2413,7 +2476,10 @@ export function ClarityCircle() {
     return data;
   };
 
-  const createProjectFromAssistantDraft = async (draft: AssistantProjectDraft, options?: { keepCurrentMenu?: boolean }) => {
+  const createProjectFromAssistantDraft = async (
+    draft: AssistantProjectDraft,
+    options?: { keepCurrentMenu?: boolean; folderId?: string | null },
+  ) => {
     const supabase = getClarityCircleSupabase();
     if (!authUser) {
       setStatus('Sign in before creating projects.');
@@ -2442,11 +2508,17 @@ export function ClarityCircle() {
     setSavedContext(context);
     setStep('context');
 
+    const folderId = await getOrCreateProjectFolderId(projectIntent.headline, options?.folderId);
+    if (!folderId) {
+      setStatus('Project folder could not be prepared.');
+      return null;
+    }
     const { data: project, error } = await supabase
       .schema('clarity_circle')
       .from('projects')
       .insert({
         user_id: authUser.id,
+        folder_id: folderId,
         track: draft.track,
         title: projectIntent.headline,
         context: projectIntent.context,
@@ -2483,7 +2555,7 @@ export function ClarityCircle() {
 
     setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
     setSelectedProjectId(project.id);
-    setActiveProjectFolder('all');
+    setActiveProjectFolder(project.folder_id ?? 'all');
     if (!options?.keepCurrentMenu) {
       setActiveMenu('projects');
     }
@@ -2785,7 +2857,10 @@ export function ClarityCircle() {
     }
 
     if (data.projectDraft) {
-      const project = await createProjectFromAssistantDraft(data.projectDraft, { keepCurrentMenu: activeMenu === 'assistant' });
+      const project = await createProjectFromAssistantDraft(data.projectDraft, {
+        keepCurrentMenu: activeMenu === 'assistant',
+        folderId: result.folder?.id ?? null,
+      });
       if (project) {
         result.project = project;
         actionLabels.push('project');
@@ -3058,6 +3133,21 @@ export function ClarityCircle() {
     }
   };
 
+  const deleteProjectReport = async (report: ClarityCircleProjectReport) => {
+    setProjectReports((current) => current.filter((item) => item.id !== report.id));
+    setConfirmingDeleteId(null);
+    setStatus('Report deleted.');
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(report.id)) return;
+
+    const { error } = await supabase.schema('clarity_circle').from('project_reports').delete().eq('id', report.id).eq('user_id', authUser.id);
+    if (error) {
+      setStatus('Report could not be deleted from storage.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
   const deleteProjectFolder = async (folder: ClarityCircleProjectFolder) => {
     setProjectFolders((current) => current.filter((item) => item.id !== folder.id));
     setProjects((current) => current.map((project) => (project.folder_id === folder.id ? { ...project, folder_id: null } : project)));
@@ -3090,6 +3180,7 @@ export function ClarityCircle() {
   const deleteProject = async (project: ClarityCircleProject) => {
     setProjects((current) => current.filter((item) => item.id !== project.id));
     setProjectTasks((current) => current.filter((task) => task.project_id !== project.id));
+    setProjectReports((current) => current.filter((report) => report.project_id !== project.id));
     setContextEntries((current) => current.filter((entry) => entry.project_id !== project.id));
     setAssistantMessages((current) => current.filter((message) => message.project_id !== project.id));
     if (selectedProjectId === project.id) setSelectedProjectId(null);
@@ -3099,14 +3190,15 @@ export function ClarityCircle() {
     const supabase = getClarityCircleSupabase();
     if (!supabase || !authUser || !UUID_PATTERN.test(project.id)) return;
 
-    const [{ error: messageError }, { error: taskError }, { error: entryError }, { error: projectError }] = await Promise.all([
+    const [{ error: messageError }, { error: taskError }, { error: reportError }, { error: entryError }, { error: projectError }] = await Promise.all([
       supabase.schema('clarity_circle').from('assistant_messages').delete().eq('project_id', project.id).eq('user_id', authUser.id),
       supabase.schema('clarity_circle').from('project_tasks').delete().eq('project_id', project.id).eq('user_id', authUser.id),
+      supabase.schema('clarity_circle').from('project_reports').delete().eq('project_id', project.id).eq('user_id', authUser.id),
       supabase.schema('clarity_circle').from('context_entries').delete().eq('project_id', project.id).eq('user_id', authUser.id),
       supabase.schema('clarity_circle').from('projects').delete().eq('id', project.id).eq('user_id', authUser.id),
     ]);
 
-    if (messageError || taskError || entryError || projectError) {
+    if (messageError || taskError || reportError || entryError || projectError) {
       setStatus('Project delete could not be fully saved.');
       void refreshWorkspace(authUser, { quiet: true });
     }
@@ -3295,6 +3387,21 @@ export function ClarityCircle() {
           detail: task.detail || (project ? `Project: ${project.title}` : 'Task project not loaded'),
           meta: `${task.status} - ${task.source}`,
           onDelete: () => deleteProjectTask(task),
+        };
+      }),
+    },
+    {
+      id: 'reports',
+      title: 'Reports',
+      count: projectReports.length,
+      items: projectReports.map((report) => {
+        const project = taskProjectMap.get(report.project_id);
+        return {
+          id: report.id,
+          title: report.title,
+          detail: project ? `Project: ${project.title}` : 'Project report',
+          meta: `${report.report_type} - ${formatProjectDate(report.updated_at)}`,
+          onDelete: () => deleteProjectReport(report),
         };
       }),
     },
@@ -3718,26 +3825,33 @@ export function ClarityCircle() {
     setStatus('Started a fresh Clarity Circle sequence.');
   };
 
-  const prepareEngineHandoff = () => {
-    if (!savedContext) return;
+  const prepareEngineHandoff = (project?: ClarityCircleProject | null) => {
+    const context = project ? savedContextFromProject(project) : savedContext;
+    if (!context) return;
 
     const handoff: EngineHandoff = {
       version: 1,
       createdAt: new Date().toISOString(),
-      track: savedContext.track,
-      trackLabel: TRACKS[savedContext.track].shortLabel,
-      headline: savedContext.intent.headline,
-      context: savedContext.intent.context,
-      audience: savedContext.intent.audience,
-      blocker: savedContext.intent.blocker,
-      outcome: savedContext.intent.outcome,
-      summary: savedContext.summary,
-      questions: savedContext.questions,
-      actions: savedContext.actions,
+      source: project ? 'clarity_circle_project' : 'clarity_circle_context',
+      projectId: project?.id,
+      folderId: project?.folder_id ?? null,
+      projectTitle: project?.title,
+      folderName: project ? getFolderName(project.folder_id) : undefined,
+      projectInstruction: project?.project_instruction ?? null,
+      track: context.track,
+      trackLabel: TRACKS[context.track].shortLabel,
+      headline: context.intent.headline,
+      context: context.intent.context,
+      audience: context.intent.audience,
+      blocker: context.intent.blocker,
+      outcome: context.intent.outcome,
+      summary: context.summary,
+      questions: context.questions,
+      actions: context.actions,
     };
 
     window.localStorage.setItem(ENGINE_HANDOFF_KEY, JSON.stringify(handoff));
-    setStatus('Clarity Engine connection prepared with this private Circle context.');
+    setStatus(project ? 'Clarity Engine connection prepared with this project context.' : 'Clarity Engine connection prepared with this private Circle context.');
   };
 
   const seedAssistantPrompt = (prompt: string) => {
@@ -4376,7 +4490,7 @@ export function ClarityCircle() {
                   <RefreshCw size={16} aria-hidden="true" />
                   Refine context
                 </button>
-                <Link href="/clarity-engine?from=clarity-circle" className={styles.primaryLink} onClick={prepareEngineHandoff}>
+                <Link href="/clarity-engine?from=clarity-circle" className={styles.primaryLink} onClick={() => prepareEngineHandoff()}>
                   Continue in Clarity Engine
                   <ArrowRight size={17} aria-hidden="true" />
                 </Link>
@@ -5505,6 +5619,43 @@ export function ClarityCircle() {
                           {isSavingProjectInstruction ? 'Saving...' : 'Save instruction'}
                         </button>
                       </div>
+
+                      <div className={styles.projectClarityPanel}>
+                        <div>
+                          <span>Clarity Engine</span>
+                          <p>Use this project&apos;s folder, instruction, tasks, and context to generate a deeper blueprint.</p>
+                        </div>
+                        <Link
+                          href="/clarity-engine?from=clarity-circle-project"
+                          className={styles.primaryButton}
+                          onClick={() => prepareEngineHandoff(selectedProject)}
+                        >
+                          <Rocket size={16} aria-hidden="true" />
+                          Get Clarity
+                        </Link>
+                      </div>
+
+                      <section className={styles.projectTaskPanel} aria-label="Project reports">
+                        <div className={styles.projectSubheader}>
+                          <span>Reports</span>
+                          <small>{selectedProjectReports.length} saved</small>
+                        </div>
+                        <div className={styles.projectTaskList}>
+                          {selectedProjectReports.length > 0 ? (
+                            selectedProjectReports.map((report) => (
+                              <article key={report.id} className={styles.projectReportRow}>
+                                <FileText size={16} aria-hidden="true" />
+                                <span>
+                                  <strong>{report.title}</strong>
+                                  <small>{report.report_type.replace('_', ' ')} - {formatProjectDate(report.updated_at)}</small>
+                                </span>
+                              </article>
+                            ))
+                          ) : (
+                            <p>No reports saved yet. Run Get Clarity, then save the completed reports back to this project.</p>
+                          )}
+                        </div>
+                      </section>
 
                       <section className={styles.projectTaskPanel} aria-label="Project tasks">
                         <div className={styles.projectSubheader}>

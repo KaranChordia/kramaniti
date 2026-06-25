@@ -14,6 +14,7 @@ interface BlueprintStreamerProps {
   agentId: 'strategy' | 'systems' | 'presence';
   onComplete?: () => void;
   onViewReport?: (content: string) => void;
+  onContentReady?: (agentId: 'strategy' | 'systems' | 'presence', content: string) => void;
 }
 
 const getSimulatedLogs = (title: string) => {
@@ -41,7 +42,7 @@ const getSimulatedLogs = (title: string) => {
   ];
 };
 
-export default function BlueprintStreamer({ title, endpoint, icon, payload, agentId, onComplete, onViewReport }: BlueprintStreamerProps) {
+export default function BlueprintStreamer({ title, endpoint, icon, payload, agentId, onComplete, onViewReport, onContentReady }: BlueprintStreamerProps) {
   const [content, setContent] = useState<string>('');
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [currentLogIndex, setCurrentLogIndex] = useState(0);
@@ -79,8 +80,9 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
     if (isActive || hasNotifiedComplete.current) return;
 
     hasNotifiedComplete.current = true;
+    onContentReady?.(agentId, content);
     onComplete?.();
-  }, [isActive, onComplete]);
+  }, [agentId, content, isActive, onComplete, onContentReady]);
 
   useEffect(() => {
     let isMounted = true;

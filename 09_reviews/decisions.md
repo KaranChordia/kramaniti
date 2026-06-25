@@ -580,3 +580,11 @@ This log registers the major strategic and structural decisions made during the 
     *   Tasks became a dedicated main navigation page. It uses the existing `clarity_circle.project_tasks` records, grouped by project, so assistant-created tasks, auto-generated project starter tasks, and manual user tasks remain one shared task system.
     *   The Start item was removed from the persistent main navigation to make space for Tasks. The start/auth experience can still exist as an entry state, but not as a standing nav destination.
     *   Memory now includes a Delete Data section where users can delete individual saved context entries, projects, tasks, memories, folders, and assistant threads. Destructive actions must remain explicit and confirmation-gated.
+    *   A Supabase wiring backlog is documented in `docs/kramaniti_site_implementation_plan.md`: community posts, durable preferences, pending assistant approvals, empty thread shells, loop run history, saved-signal semantics, Engine handoffs, and signed-out session import should be treated as explicit future storage work rather than assumed to be complete.
+
+*   **2026-06-25 Project-Centered Clarity Engine Writeback:**
+    *   The founder clarified that Get Clarity should live naturally inside a project, use existing project context, and write the resulting Clarity Engine blueprint reports back to the same project area.
+    *   Clarity Circle project preview now exposes a Get Clarity action that passes project identity, folder identity, project instruction, and context into Clarity Engine.
+    *   Clarity Engine Blueprint now offers "Save all to project" after the three blueprint agents finish. The Strategy, Systems, and Presence reports are saved as individual `clarity_circle.project_reports` rows linked to the originating project.
+    *   New projects created manually or through the Circle Assistant must resolve to a folder before save. If no folder is selected or supplied, the app creates or reuses a folder based on the project title.
+    *   Guardrail: blueprint reports are saved only after explicit user action. Do not silently persist generated reports during streaming.

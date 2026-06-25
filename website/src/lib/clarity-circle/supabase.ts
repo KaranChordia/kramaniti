@@ -34,6 +34,19 @@ export type ClarityCircleProjectTask = {
   updated_at: string;
 };
 
+export type ClarityCircleProjectReport = {
+  id: string;
+  project_id: string;
+  user_id: string;
+  report_type: 'strategy' | 'systems' | 'presence';
+  title: string;
+  content: string;
+  source: 'clarity_engine';
+  metadata: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+};
+
 export type ClarityCircleProjectFolder = {
   id: string;
   user_id: string;
@@ -134,6 +147,21 @@ type ClarityCircleDatabase = {
         };
         Update: Partial<
           Omit<ClarityCircleProjectTask, 'id' | 'project_id' | 'user_id' | 'created_at' | 'updated_at'>
+        >;
+      };
+      project_reports: {
+        Row: ClarityCircleProjectReport;
+        Insert: {
+          project_id: string;
+          user_id: string;
+          report_type: ClarityCircleProjectReport['report_type'];
+          title: string;
+          content: string;
+          source?: ClarityCircleProjectReport['source'];
+          metadata?: Record<string, unknown>;
+        };
+        Update: Partial<
+          Omit<ClarityCircleProjectReport, 'id' | 'project_id' | 'user_id' | 'created_at' | 'updated_at'>
         >;
       };
       project_folders: {

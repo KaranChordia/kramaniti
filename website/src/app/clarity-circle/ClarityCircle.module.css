@@ -2597,6 +2597,34 @@
   min-height: 132px;
 }
 
+.projectClarityPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--circle-gold-border);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, var(--circle-gold-soft), transparent 78%),
+    var(--circle-row);
+}
+
+.projectClarityPanel span {
+  color: var(--circle-gold-light);
+  font-size: 11px;
+  font-weight: 780;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.projectClarityPanel p {
+  margin: 5px 0 0;
+  color: var(--circle-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 .projectCreateActions {
   display: grid;
   gap: 8px;
@@ -2905,6 +2933,24 @@
 .projectTaskList button svg {
   margin-top: 1px;
   color: var(--circle-faint);
+}
+
+.projectReportRow {
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: start;
+  gap: 9px;
+  padding: 9px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-control);
+  color: var(--circle-text);
+}
+
+.projectReportRow svg {
+  margin-top: 1px;
+  color: var(--circle-gold-light);
 }
 
 .projectTaskList strong,

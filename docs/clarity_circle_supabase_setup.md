@@ -34,6 +34,10 @@ In the Supabase SQL editor, run only the SQL from:
 
 ```text
 supabase/migrations/20260623060000_clarity_circle_schema.sql
+supabase/migrations/20260623121000_clarity_circle_assistant_memory.sql
+supabase/migrations/20260623143000_clarity_circle_project_folders.sql
+supabase/migrations/20260623154500_clarity_circle_realtime_workspace.sql
+supabase/migrations/20260625120000_clarity_circle_project_reports.sql
 ```
 
 The first executable SQL line should be:
@@ -52,6 +56,7 @@ The migrations create:
 - `clarity_circle.project_folders`
 - `clarity_circle.projects`
 - `clarity_circle.project_tasks`
+- `clarity_circle.project_reports`
 - `clarity_circle.context_entries`
 - `clarity_circle.assistant_messages`
 - `clarity_circle.assistant_memories`
@@ -78,8 +83,9 @@ notify pgrst, 'reload schema';
 - New Projects-created rows are seeded from the "what is this project about?" field; assistant-created rows auto-fill the instruction from the assistant conversation.
 - Auto-built and manual tasks are stored in `clarity_circle.project_tasks` and remain user-owned through RLS.
 - Project folders are stored in `clarity_circle.project_folders`; projects reference them through `clarity_circle.projects.folder_id`.
+- Clarity Engine blueprint reports are stored in `clarity_circle.project_reports`, linked to the originating project. The project folder relationship is inherited through `clarity_circle.projects.folder_id`.
 - The folder move policy only allows a project to be assigned to a folder owned by the same signed-in user.
-- Workspace realtime is enabled for `projects`, `project_folders`, `context_entries`, `assistant_messages`, and `assistant_memories`.
+- Workspace realtime is enabled for `projects`, `project_folders`, `project_tasks`, `project_reports`, `context_entries`, `assistant_messages`, and `assistant_memories`.
 - The dashboard listens for workspace changes and refreshes project counts, folders, assistant memories, and context entries without requiring a page refresh.
 - The dedicated Circle Assistant stores signed-in conversation turns in `clarity_circle.assistant_messages`.
 - Main Circle Assistant thread identity and summary titles are stored in `clarity_circle.assistant_messages.metadata`, with project-specific threads still scoped by `project_id`.
@@ -88,4 +94,4 @@ notify pgrst, 'reload schema';
 - User-visible assistant memory notes are stored in `clarity_circle.assistant_memories` and can be archived from the Memory panel.
 - The Circle Assistant can create new private projects from user requests; those projects still use `clarity_circle.projects`.
 - Before answering, the Circle Assistant refreshes the signed-in workspace and receives folder names, projects, saved context entries, project questions/actions, selected project, and memory notes.
-- The Clarity Circle to Clarity Engine handoff remains browser-local and one-time.
+- The Clarity Circle to Clarity Engine handoff remains browser-local and one-time during diagnosis. Project reports are saved only when the user explicitly selects "Save all to project" after blueprint generation.

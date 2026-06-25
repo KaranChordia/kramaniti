@@ -12,6 +12,13 @@ export type BlueprintRequestBody = {
   aiTasks: Array<{ label: string; question: string }>;
   contextLog: string[];
   mockScenarioId?: string;
+  circleProject?: {
+    projectId: string;
+    folderId?: string | null;
+    projectTitle: string;
+    folderName?: string;
+    projectInstruction?: string | null;
+  } | null;
 };
 
 function buildLocalBlueprintFallback(systemPrompt: string, body: BlueprintRequestBody) {

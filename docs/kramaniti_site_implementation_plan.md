@@ -343,8 +343,21 @@ Related files:
 - Clarity Circle includes a dedicated Tasks page in the main navigation. It groups `clarity_circle.project_tasks` by project, includes project/status filters, shows assistant-created, auto-generated, and manual tasks in the same manager, and lets users add or complete tasks without leaving the task surface.
 - The Start screen remains available as the first-time entry/auth surface, but it is no longer a persistent main navigation item. The navigation slot is used for Tasks.
 - Memory includes a Delete Data section listing saved context, projects, tasks, memories, folders, and assistant threads. Deletes are item-level, confirmation-gated, update local UI immediately, and persist through the existing signed-in Supabase tables when available.
+- Projects now have a project-centered Get Clarity path. The action passes the selected project id, folder id, title, folder name, project instruction, and context into Clarity Engine. When the Engine blueprint agents finish, the Blueprint page can save the Strategy, Systems, and Presence reports as individual `clarity_circle.project_reports` records under the originating project.
+- New manually created and assistant-created projects must resolve to a folder before being saved. When no explicit folder is selected, the app creates or reuses a folder named from the project title so the project does not remain unfiled by default.
 - A progressive product model where future digest, public-learning, and Clarity Brief surfaces should appear after context is captured instead of being visible all at once.
 - Navigation and sitemap entries for the new route.
+
+[Recommendation] 2026-06-25 Supabase wiring backlog:
+
+- Circle/community posts, replies, interest counts, and feed filters are still local-first. Add dedicated `clarity_circle` tables before treating Circle activity as cross-device or durable account data.
+- Digest rhythm and "keep vault entries private by default" style settings are currently UI-level preferences. Persist them in `clarity_circle.profiles.assistant_settings` or a dedicated preferences table before using them as product behavior.
+- Assistant pending approvals are transient UI state. Approved actions write through the shared workspace executor, but the approval card itself can be lost on reload. Persist pending assistant actions if approval workflows need to survive refreshes or move across devices.
+- Empty assistant thread shells are local until a message exists. If blank named threads must be durable, add a thread table instead of relying only on `assistant_messages.metadata.thread_id`.
+- Loop Board scans read existing workspace data but do not store loop run history, generated scan summaries, or completion records. Add loop-run persistence only if users need audit history or recurring loop outputs.
+- The active saved signal/current context object is local UI state. Persisted projects and context entries can already be deleted through Memory, but the "saved signal" control should either map clearly to those records or remain framed as clearing the current local workspace view.
+- The Clarity Circle to Clarity Engine handoff remains browser-local and one-time while the diagnostic session is in progress. Project-originated blueprint outputs are now persisted only when the user chooses "Save all to project".
+- Signed-out local session data is not migrated into Supabase on sign-in. Add an explicit import flow before promising continuity from local sessions into accounts.
 
 [Constraint] Clarity Circle must stay distinct from Clarity Engine. Clarity Engine is the focused single diagnostic session. Clarity Circle is the ongoing ecosystem layer with member memory, community engagement, and recurring progress rhythm.
 
@@ -373,6 +386,7 @@ Related files:
 - `supabase/migrations/20260623121000_clarity_circle_assistant_memory.sql`
 - `supabase/migrations/20260623143000_clarity_circle_project_folders.sql`
 - `supabase/migrations/20260623154500_clarity_circle_realtime_workspace.sql`
+- `supabase/migrations/20260625120000_clarity_circle_project_reports.sql`
 - `supabase/migrations/20260624111719_clarity_circle_project_tasks.sql`
 - `supabase/migrations/20260624130000_clarity_circle_assistant_settings.sql`
 - `docs/clarity_circle_supabase_setup.md`

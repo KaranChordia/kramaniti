@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, Compass, Layers, Megaphone, Loader2, Moon, Sun, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, Compass, Layers, Megaphone, Loader2, Moon, Save, Sun, Volume2, VolumeX } from 'lucide-react';
 import styles from './BlueprintPage.module.css';
 import engineStyles from '../ClarityEngine.module.css';
 import BlueprintStreamer from '../BlueprintStreamer';
@@ -10,6 +10,7 @@ import { type BlueprintRequestBody } from '@/lib/clarity-engine/blueprintStreame
 import { useAudioEngine } from '@/hooks/useAudioEngine';
 import ReportReader from './ReportReader';
 import { useKramanitiTheme } from '@/hooks/useKramanitiTheme';
+import { getClarityCircleSupabase, type ClarityCircleProjectReport } from '@/lib/clarity-circle/supabase';
 
 interface ActiveReport {
   agentId: string;
@@ -18,12 +19,23 @@ interface ActiveReport {
   icon: React.ReactNode;
 }
 
+type ReportType = ClarityCircleProjectReport['report_type'];
+
+const REPORT_TITLES: Record<ReportType, string> = {
+  strategy: 'Strategy & Clarity Blueprint',
+  systems: 'Systems & Workflow Blueprint',
+  presence: 'Brand & Presence Blueprint',
+};
+
 export default function BlueprintPage() {
   const router = useRouter();
   const [payload, setPayload] = useState<BlueprintRequestBody | null>(null);
   const [hasLoadedPayload, setHasLoadedPayload] = useState(false);
   const [completedAgents, setCompletedAgents] = useState(0);
   const [activeReport, setActiveReport] = useState<ActiveReport | null>(null);
+  const [reportContents, setReportContents] = useState<Partial<Record<ReportType, string>>>({});
+  const [isSavingReports, setIsSavingReports] = useState(false);
+  const [saveStatus, setSaveStatus] = useState('');
   const { playSuccess, startAmbient, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
   const { theme, toggleTheme } = useKramanitiTheme();
 
@@ -65,6 +77,81 @@ export default function BlueprintPage() {
     });
   }, [playSuccess]);
 
+  const handleContentReady = useCallback((agentId: ReportType, content: string) => {
+    setReportContents((current) => ({
+      ...current,
+      [agentId]: content,
+    }));
+  }, []);
+
+  const canSaveReports =
+    Boolean(payload?.circleProject?.projectId) &&
+    completedAgents >= 3 &&
+    Boolean(reportContents.strategy?.trim() && reportContents.systems?.trim() && reportContents.presence?.trim());
+
+  const saveReportsToProject = async () => {
+    if (!payload?.circleProject?.projectId || !canSaveReports) return;
+
+    const supabase = getClarityCircleSupabase();
+    if (!supabase) {
+      setSaveStatus('Project report storage is not available.');
+      return;
+    }
+
+    setIsSavingReports(true);
+    setSaveStatus('Saving reports to the project...');
+
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    const user = userData.user;
+
+    if (userError || !user) {
+      setIsSavingReports(false);
+      setSaveStatus('Sign in to save reports to the project.');
+      return;
+    }
+
+    const rows = (['strategy', 'systems', 'presence'] as ReportType[]).map((reportType) => ({
+      project_id: payload.circleProject?.projectId as string,
+      user_id: user.id,
+      report_type: reportType,
+      title: REPORT_TITLES[reportType],
+      content: reportContents[reportType]?.trim() || '',
+      source: 'clarity_engine' as const,
+      metadata: {
+        saved_from: 'clarity_engine_blueprint',
+        project_title: payload.circleProject?.projectTitle,
+        folder_id: payload.circleProject?.folderId ?? null,
+        folder_name: payload.circleProject?.folderName || null,
+        saved_at: new Date().toISOString(),
+      },
+    }));
+
+    const { error: reportError } = await supabase.schema('clarity_circle').from('project_reports').insert(rows);
+
+    if (reportError) {
+      setIsSavingReports(false);
+      setSaveStatus('Reports could not be saved. The project reports migration may need to be applied.');
+      return;
+    }
+
+    await supabase.schema('clarity_circle').from('context_entries').insert({
+      project_id: payload.circleProject.projectId,
+      user_id: user.id,
+      entry_type: 'brief',
+      payload: {
+        source: 'clarity_engine_blueprint',
+        report_count: rows.length,
+        report_titles: rows.map((row) => row.title),
+        project_title: payload.circleProject.projectTitle,
+        folder_id: payload.circleProject.folderId ?? null,
+        saved_at: new Date().toISOString(),
+      },
+    });
+
+    setIsSavingReports(false);
+    setSaveStatus('All three reports saved to the project.');
+  };
+
   if (!hasLoadedPayload || !payload) {
     return (
       <div className={engineStyles.canvas}>
@@ -96,6 +183,21 @@ export default function BlueprintPage() {
           <h1 className={styles.headerTitle}>Your Growth Blueprint</h1>
         </div>
         <div className={styles.headerActions}>
+          {payload.circleProject?.projectId && (
+            <button
+              className={styles.saveProjectBtn}
+              onClick={(e) => {
+                e.stopPropagation();
+                playClick();
+                void saveReportsToProject();
+              }}
+              disabled={!canSaveReports || isSavingReports}
+              title="Save all reports to the originating project"
+            >
+              {isSavingReports ? <Loader2 size={14} className={styles.spin} /> : <Save size={14} />}
+              <span>{isSavingReports ? 'Saving...' : 'Save all to project'}</span>
+            </button>
+          )}
           <button
             className={styles.headerIconBtn}
             onClick={(e) => {
@@ -132,6 +234,13 @@ export default function BlueprintPage() {
             <div className={engineStyles.assistantBlob} />
           </div>
           <span className={styles.hubTitle}>Clarity Engine Orchestrator</span>
+          {payload.circleProject?.projectTitle && (
+            <div className={styles.projectSavePanel}>
+              <span>{payload.circleProject.folderName || 'Project folder'}</span>
+              <strong>{payload.circleProject.projectTitle}</strong>
+              <small>{saveStatus || (canSaveReports ? 'Reports are ready to save.' : 'Reports will be ready when all three agents finish.')}</small>
+            </div>
+          )}
         </div>
 
         {/* Connector Lines Removed - Replaced by Blob Spawn Animation */}
@@ -146,6 +255,7 @@ export default function BlueprintPage() {
               payload={payload}
               agentId="strategy"
               onComplete={handleAgentComplete}
+              onContentReady={handleContentReady}
               onViewReport={(content) => setActiveReport({
                 agentId: 'strategy',
                 title: 'Strategy & Clarity',
@@ -163,6 +273,7 @@ export default function BlueprintPage() {
               payload={payload}
               agentId="systems"
               onComplete={handleAgentComplete}
+              onContentReady={handleContentReady}
               onViewReport={(content) => setActiveReport({
                 agentId: 'systems',
                 title: 'Systems & Workflow',
@@ -180,6 +291,7 @@ export default function BlueprintPage() {
               payload={payload}
               agentId="presence"
               onComplete={handleAgentComplete}
+              onContentReady={handleContentReady}
               onViewReport={(content) => setActiveReport({
                 agentId: 'presence',
                 title: 'Brand & Presence',
