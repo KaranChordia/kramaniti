@@ -60,6 +60,7 @@ type MenuId =
   | 'context'
   | 'circle'
   | 'loops'
+  | 'tasks'
   | 'assistant'
   | 'memory'
   | 'projects'
@@ -68,6 +69,7 @@ type MenuId =
 type LoopId = 'signal' | 'project' | 'task' | 'reflection' | 'brief';
 type LoopStatus = 'pending' | 'working' | 'needs_approval' | 'completed';
 type LoopRunPhase = 'idle' | 'gathering' | 'ready';
+type TaskStatusFilter = 'all' | 'open' | 'done';
 
 type IntentDraft = {
   headline: string;
@@ -325,11 +327,11 @@ const STEPS: Array<{ id: StepId; label: string; detail: string }> = [
 ];
 
 const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> = [
-  { id: 'start', label: 'Start', icon: CircleDot },
   { id: 'path', label: 'Path', icon: Compass },
   { id: 'context', label: 'Context', icon: FileText },
   { id: 'circle', label: 'Circle', icon: Users },
   { id: 'loops', label: 'Loop board', icon: Repeat2 },
+  { id: 'tasks', label: 'Tasks', icon: CheckCircle2 },
   { id: 'assistant', label: 'Assistant', icon: MessageCircle },
   { id: 'memory', label: 'Memory', icon: Database },
   { id: 'projects', label: 'Projects', icon: FolderOpen },
@@ -674,6 +676,8 @@ export function ClarityCircle() {
   const [activeProjectFolder, setActiveProjectFolder] = useState<ProjectFolderFilter>('all');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [projectSearch, setProjectSearch] = useState('');
+  const [taskProjectFilter, setTaskProjectFilter] = useState<string>('all');
+  const [taskStatusFilter, setTaskStatusFilter] = useState<TaskStatusFilter>('all');
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const [projectBrief, setProjectBrief] = useState('');
   const [projectInstructionDraft, setProjectInstructionDraft] = useState<string | null>(null);
@@ -1470,6 +1474,8 @@ export function ClarityCircle() {
     setActiveProjectFolder('all');
     setSelectedProjectId(null);
     setProjectSearch('');
+    setTaskProjectFilter('all');
+    setTaskStatusFilter('all');
     setIsCreatingProject(false);
     setProjectBrief('');
     setProjectInstructionDraft(null);
@@ -1589,6 +1595,28 @@ export function ClarityCircle() {
     savedContext?.summary || latestProject?.summary || latestProject?.context || intent.context || 'Save a first signal to build the Circle context.';
   const openTaskCount = projectTasks.filter((task) => task.status === 'open').length;
   const completedTaskCount = projectTasks.filter((task) => task.status === 'done').length;
+  const activeProjectTasks = projectTasks
+    .filter((task) => task.status !== 'archived')
+    .sort((left, right) => left.sort_order - right.sort_order || new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime());
+  const taskProjectMap = new Map(projects.map((project) => [project.id, project]));
+  const filteredTaskManagerTasks = activeProjectTasks.filter((task) => {
+    const matchesProject = taskProjectFilter === 'all' || task.project_id === taskProjectFilter;
+    const matchesStatus = taskStatusFilter === 'all' || task.status === taskStatusFilter;
+    return matchesProject && matchesStatus;
+  });
+  const taskManagerProjects = projects
+    .map((project) => ({
+      project,
+      tasks: filteredTaskManagerTasks.filter((task) => task.project_id === project.id),
+    }))
+    .filter((group) => group.tasks.length > 0 || taskProjectFilter === group.project.id);
+  const orphanTaskGroup = filteredTaskManagerTasks.filter((task) => !taskProjectMap.has(task.project_id));
+  const taskCreateProject =
+    (taskProjectFilter !== 'all' ? projects.find((project) => project.id === taskProjectFilter) : null) ??
+    selectedProject ??
+    latestProject ??
+    projects[0] ??
+    null;
   const pendingAssistantActionCount = assistantMessages.filter(
     (message) => message.pendingAction?.status === 'pending',
   ).length;
@@ -1837,7 +1865,7 @@ export function ClarityCircle() {
   const loopSourceActionLabel: Record<LoopId, string> = {
     signal: savedContext || latestProject ? 'Open context' : 'Open path',
     project: 'Open projects',
-    task: 'Open tasks',
+    task: 'Open task manager',
     reflection: 'Open memory',
     brief: savedContext || sourceProjectForLoops ? 'Open context' : 'Open path',
   };
@@ -1858,9 +1886,9 @@ export function ClarityCircle() {
     {
       label: 'Open tasks',
       value: openTaskCount,
-      detail: openTaskCount > 0 ? 'Tasks waiting in Projects.' : 'No open project tasks yet.',
+      detail: openTaskCount > 0 ? 'Tasks waiting across projects.' : 'No open project tasks yet.',
       icon: CheckCircle2,
-      menu: 'projects',
+      menu: 'tasks',
     },
     {
       label: 'Active loops',
@@ -2245,16 +2273,20 @@ export function ClarityCircle() {
     return savedMessageWithLocalState;
   };
 
-  const createManualTask = async () => {
-    if (!selectedProject) return null;
+  const createManualTask = async (project = selectedProject) => {
+    if (!project) {
+      setStatus('Choose a project before adding a task.');
+      return null;
+    }
     const title = manualTaskTitle.trim();
     if (!title) {
       setStatus('Name the task first.');
       return null;
     }
 
-    const tasks = await insertProjectTasks(selectedProject, [{ title }], 'user');
+    const tasks = await insertProjectTasks(project, [{ title }], 'user');
     if (tasks.length > 0) {
+      setSelectedProjectId(project.id);
       setManualTaskTitle('');
       setStatus('Task added.');
     }
@@ -3520,7 +3552,7 @@ export function ClarityCircle() {
       return;
     }
     if (loopId === 'task') {
-      openMenu('projects');
+      openMenu('tasks');
       return;
     }
     if (loopId === 'reflection') {
@@ -4444,6 +4476,184 @@ export function ClarityCircle() {
                     </div>
                   )}
                 </section>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'tasks' && (
+            <section className={`${styles.screen} ${styles.taskManagerScreen}`} aria-label="Task manager">
+              <div className={styles.taskManagerHeader}>
+                <div>
+                  <h1>Tasks</h1>
+                  <p>Manage open, completed, assistant-created, and manually added tasks by project.</p>
+                </div>
+                <div className={styles.taskStatusStrip} aria-label="Task status summary">
+                  <span><strong>{openTaskCount}</strong> Open</span>
+                  <span><strong>{completedTaskCount}</strong> Completed</span>
+                  <span><strong>{pendingAssistantActionCount}</strong> Pending approval</span>
+                  <span><strong>{activeProjectTasks.length}</strong> Total</span>
+                </div>
+              </div>
+
+              <div className={styles.taskManagerToolbar}>
+                <label>
+                  <span>Project</span>
+                  <select value={taskProjectFilter} onChange={(event) => setTaskProjectFilter(event.target.value)}>
+                    <option value="all">All projects</option>
+                    {projects.map((project) => (
+                      <option key={project.id} value={project.id}>
+                        {project.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <div className={styles.taskStatusFilters} aria-label="Task status filter">
+                  {[
+                    { id: 'all' as TaskStatusFilter, label: 'All' },
+                    { id: 'open' as TaskStatusFilter, label: 'Open' },
+                    { id: 'done' as TaskStatusFilter, label: 'Completed' },
+                  ].map((filter) => (
+                    <button
+                      key={filter.id}
+                      type="button"
+                      className={taskStatusFilter === filter.id ? styles.taskFilterActive : ''}
+                      onClick={() => setTaskStatusFilter(filter.id)}
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.taskManagerLayout}>
+                <section className={styles.taskGroupList} aria-label="Project task groups">
+                  {taskManagerProjects.map(({ project, tasks }) => (
+                    <article key={project.id} className={styles.taskProjectGroup}>
+                      <header>
+                        <div>
+                          <span>{getFolderName(project.folder_id)}</span>
+                          <h2>{project.title}</h2>
+                          <p>{project.summary || project.context}</p>
+                        </div>
+                        <button type="button" className={styles.textButton} onClick={() => openProject(project)}>
+                          Open project
+                        </button>
+                      </header>
+                      <div className={styles.taskProjectMeta}>
+                        <span>{tasks.filter((task) => task.status === 'open').length} open</span>
+                        <span>{tasks.filter((task) => task.status === 'done').length} completed</span>
+                        <span>{formatProjectDate(project.updated_at)}</span>
+                      </div>
+                      <div className={styles.projectTaskList}>
+                        {tasks.length > 0 ? (
+                          tasks.map((task) => (
+                            <button
+                              key={task.id}
+                              type="button"
+                              className={task.status === 'done' ? styles.projectTaskDone : ''}
+                              onClick={() => void toggleProjectTask(task)}
+                            >
+                              <CheckCircle2 size={16} aria-hidden="true" />
+                              <span>
+                                <strong>{task.title}</strong>
+                                <small>
+                                  {task.detail || (task.source === 'assistant' ? 'Created by assistant' : task.source === 'auto' ? 'Starting task' : 'Manual task')}
+                                </small>
+                              </span>
+                            </button>
+                          ))
+                        ) : (
+                          <p>No tasks match this filter for this project.</p>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+
+                  {orphanTaskGroup.length > 0 && (
+                    <article className={styles.taskProjectGroup}>
+                      <header>
+                        <div>
+                          <span>Unlinked</span>
+                          <h2>Tasks without a visible project</h2>
+                          <p>These task rows exist, but their project is not currently loaded in this workspace.</p>
+                        </div>
+                      </header>
+                      <div className={styles.projectTaskList}>
+                        {orphanTaskGroup.map((task) => (
+                          <button
+                            key={task.id}
+                            type="button"
+                            className={task.status === 'done' ? styles.projectTaskDone : ''}
+                            onClick={() => void toggleProjectTask(task)}
+                          >
+                            <CheckCircle2 size={16} aria-hidden="true" />
+                            <span>
+                              <strong>{task.title}</strong>
+                              {task.detail && <small>{task.detail}</small>}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </article>
+                  )}
+
+                  {taskManagerProjects.length === 0 && orphanTaskGroup.length === 0 && (
+                    <div className={`${styles.emptyState} ${styles.taskEmptyState}`}>
+                      <CheckCircle2 size={22} aria-hidden="true" />
+                      <strong>No tasks match this view.</strong>
+                      <p>Tasks created by the assistant, generated when a project is created, or added manually will appear here by project.</p>
+                    </div>
+                  )}
+                </section>
+
+                <aside className={styles.taskAddPanel} aria-label="Add task">
+                  <div>
+                    <span>Manual task</span>
+                    <h2>Add to a project</h2>
+                    <p>Manual tasks use the same saved task path as assistant-created project tasks.</p>
+                  </div>
+                  <form
+                    className={styles.taskAddForm}
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      void createManualTask(taskCreateProject);
+                    }}
+                  >
+                    <label>
+                      <span>Project</span>
+                      <select
+                        value={taskCreateProject?.id ?? ''}
+                        onChange={(event) => {
+                          setTaskProjectFilter(event.target.value || 'all');
+                          setSelectedProjectId(event.target.value || null);
+                        }}
+                        disabled={projects.length === 0}
+                      >
+                        {projects.length === 0 ? (
+                          <option value="">No project yet</option>
+                        ) : (
+                          projects.map((project) => (
+                            <option key={project.id} value={project.id}>
+                              {project.title}
+                            </option>
+                          ))
+                        )}
+                      </select>
+                    </label>
+                    <label>
+                      <span>Task</span>
+                      <input
+                        value={manualTaskTitle}
+                        onChange={(event) => setManualTaskTitle(event.target.value)}
+                        placeholder="Add a task to the selected project"
+                        disabled={!taskCreateProject}
+                      />
+                    </label>
+                    <button type="submit" className={styles.primaryButton} disabled={!taskCreateProject}>
+                      Add task
+                    </button>
+                  </form>
+                </aside>
               </div>
             </section>
           )}

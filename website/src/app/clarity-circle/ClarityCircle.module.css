@@ -1698,6 +1698,218 @@
   align-items: center;
 }
 
+.taskManagerScreen {
+  gap: 12px;
+}
+
+.taskManagerHeader,
+.taskManagerToolbar,
+.taskProjectGroup,
+.taskAddPanel {
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background:
+    var(--circle-card-sheen),
+    var(--circle-panel);
+  box-shadow: var(--circle-control-shadow);
+}
+
+.taskManagerHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 460px);
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+}
+
+.taskManagerHeader h1 {
+  margin: 0 0 7px;
+  color: var(--circle-text);
+  font-size: clamp(30px, 4vw, 52px);
+  line-height: 0.98;
+}
+
+.taskManagerHeader p,
+.taskProjectGroup p,
+.taskAddPanel p,
+.taskEmptyState p {
+  margin: 0;
+  color: var(--circle-muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.taskStatusStrip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.taskStatusStrip span {
+  min-height: 58px;
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-row);
+  color: var(--circle-faint);
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.taskStatusStrip strong {
+  color: var(--circle-text);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.taskManagerToolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+  gap: 12px;
+  align-items: end;
+  padding: 12px;
+}
+
+.taskManagerToolbar label,
+.taskAddForm label {
+  display: grid;
+  gap: 7px;
+}
+
+.taskManagerToolbar label span,
+.taskAddForm label span,
+.taskAddPanel > div > span,
+.taskProjectGroup header span {
+  color: var(--circle-gold-light);
+  font-size: 11px;
+  font-weight: 780;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.taskManagerToolbar select,
+.taskAddForm select,
+.taskAddForm input {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-input);
+  color: var(--circle-text);
+  font: inherit;
+  font-size: 13px;
+  outline: none;
+  padding: 0 10px;
+}
+
+.taskStatusFilters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 4px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-control);
+}
+
+.taskStatusFilters button {
+  min-height: 36px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--circle-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.taskStatusFilters button:hover,
+.taskStatusFilters button:focus-visible,
+.taskStatusFilters .taskFilterActive {
+  border-color: var(--circle-gold-border);
+  background: var(--circle-control-hover);
+  color: var(--circle-text);
+  outline: none;
+}
+
+.taskManagerLayout {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 12px;
+}
+
+.taskGroupList {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.taskProjectGroup {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.taskProjectGroup header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: start;
+}
+
+.taskProjectGroup h2,
+.taskAddPanel h2 {
+  margin: 5px 0 7px;
+  color: var(--circle-text);
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+.taskProjectMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.taskProjectMeta span {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 9px;
+  border: 1px solid var(--circle-border);
+  border-radius: 999px;
+  background: var(--circle-row);
+  color: var(--circle-faint);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.taskAddPanel {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+}
+
+.taskAddForm {
+  display: grid;
+  gap: 10px;
+}
+
+.taskEmptyState {
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-row);
+}
+
 .homePanel {
   min-height: 210px;
   display: grid;
@@ -3607,7 +3819,8 @@
   }
 
   .loopBoardHeader,
-  .loopDetailHeader {
+  .loopDetailHeader,
+  .taskManagerHeader {
     grid-template-columns: 1fr;
     align-items: start;
   }
@@ -3631,8 +3844,18 @@
   .loopStatusStrip,
   .loopOverviewGrid,
   .loopBoardGrid,
-  .loopDetailGrid {
+  .loopDetailGrid,
+  .taskStatusStrip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .taskManagerLayout,
+  .taskManagerToolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .taskAddPanel {
+    position: static;
   }
 
   .communityGrid {
@@ -3809,6 +4032,8 @@
   .loopStatusStrip,
   .loopPicker,
   .loopOverviewGrid,
+  .taskStatusStrip,
+  .taskStatusFilters,
   .loopGatheringPanel,
   .loopRunnerHeader,
   .loopBoardGrid,
@@ -3855,6 +4080,17 @@
 
   .loopProjectRow span:nth-child(3) {
     display: none;
+  }
+
+  .taskManagerHeader,
+  .taskManagerToolbar,
+  .taskProjectGroup,
+  .taskAddPanel {
+    padding: 14px;
+  }
+
+  .taskProjectGroup header {
+    grid-template-columns: 1fr;
   }
 
   .homePanel,
