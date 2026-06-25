@@ -185,32 +185,6 @@
   color: var(--ce-text, rgba(255, 255, 255, 1));
 }
 
-.saveProjectBtn {
-  min-height: 40px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 0 14px;
-  border: 1px solid rgba(201, 168, 76, 0.36);
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(201, 168, 76, 0.24), rgba(255, 255, 255, 0.06));
-  color: rgba(255, 255, 255, 0.92);
-  font: 600 12px/1 var(--font-outfit), sans-serif;
-  cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-}
-
-.saveProjectBtn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  border-color: rgba(201, 168, 76, 0.68);
-}
-
-.saveProjectBtn:disabled {
-  cursor: not-allowed;
-  opacity: 0.48;
-}
-
 .spin {
   animation: spin 1s linear infinite;
 }
@@ -221,36 +195,6 @@
   }
 }
 
-.projectSavePanel {
-  width: min(360px, calc(100vw - 48px));
-  display: grid;
-  gap: 4px;
-  margin-top: 12px;
-  padding: 12px 14px;
-  border: 1px solid rgba(201, 168, 76, 0.22);
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.22);
-  text-align: center;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.projectSavePanel span {
-  color: rgba(201, 168, 76, 0.86);
-  font: 700 10px/1 var(--font-outfit), sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.projectSavePanel strong {
-  color: rgba(255, 255, 255, 0.92);
-  font: 600 14px/1.25 var(--font-outfit), sans-serif;
-}
-
-.projectSavePanel small {
-  color: rgba(255, 255, 255, 0.58);
-  font: 500 12px/1.35 var(--font-outfit), sans-serif;
-}
 .backBtn {
   display: flex;
   align-items: center;
@@ -277,6 +221,79 @@
   color: rgba(201, 168, 76, 0.9);
   text-transform: uppercase;
   margin: 0;
+}
+
+.saveReportsPanel {
+  width: min(720px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  margin-top: 28px;
+  padding: 16px 18px;
+  border: 1px solid rgba(201, 168, 76, 0.26);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(201, 168, 76, 0.16), rgba(255, 255, 255, 0.04)),
+    rgba(0, 0, 0, 0.22);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.saveReportsPanel span,
+.saveReportsPanel strong,
+.saveReportsPanel small {
+  display: block;
+  min-width: 0;
+}
+
+.saveReportsPanel span {
+  color: rgba(201, 168, 76, 0.88);
+  font: 700 10px/1 var(--font-outfit), sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.saveReportsPanel strong {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.94);
+  font: 600 15px/1.25 var(--font-outfit), sans-serif;
+}
+
+.saveReportsPanel small {
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.58);
+  font: 500 12px/1.35 var(--font-outfit), sans-serif;
+}
+
+.saveReportsButton {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 18px;
+  border: 1px solid rgba(201, 168, 76, 0.44);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.92), rgba(170, 129, 42, 0.9));
+  color: #070704;
+  font: 700 12px/1 var(--font-outfit), sans-serif;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 18px 40px rgba(201, 168, 76, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+}
+
+.saveReportsButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+.saveReportsButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+  filter: grayscale(0.35);
 }
 
 @media (max-width: 900px) {
@@ -313,19 +330,6 @@
 
   .headerActions {
     gap: 8px;
-  }
-
-  .saveProjectBtn {
-    max-width: 156px;
-    min-height: 40px;
-    padding: 0 10px;
-    border-radius: 14px;
-  }
-
-  .saveProjectBtn span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .headerIconBtn {
@@ -386,6 +390,17 @@
   .agentSlot:nth-child(3) :global(.cardContainer) {
     animation: fadeUpItem 0.7s ease forwards;
     animation-delay: 0.35s;
+  }
+
+  .saveReportsPanel {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 14px;
+  }
+
+  .saveReportsButton {
+    width: 100%;
   }
 }
 

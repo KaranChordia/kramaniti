@@ -249,7 +249,7 @@ Related files:
 
 - A standalone route at `/clarity-engine`.
 - A full-screen assistant flow that asks one question at a time instead of using a dashboard layout.
-- Adaptive follow-up questions shaped by the user's prior answers.
+- Adaptive follow-up questions shaped by the user's prior answers. The Engine should still collect the essential blueprint inputs: clarity goal, audience/problem, current workflow, friction, human/AI boundary, and proof/presence. The wording should feel specific to the user's first intent, project context, workflow, audience, or blocker rather than like a fixed survey.
 - A futuristic conversational surface with an atmospheric background scene, luminous signal paths, and floating synthesis layers.
 - A server route at `/api/clarity-engine/chat` for Groq-backed streaming when `GROQ_API_KEY` is configured.
 - A local fallback synthesis path so the interaction still works when the server route is unavailable.

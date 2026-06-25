@@ -69,6 +69,93 @@ const QUESTION_COUNT = QUESTION_SEQUENCE.length;
 
 const questionIndex = (key: QuestionId) => QUESTION_SEQUENCE.indexOf(key as (typeof QUESTION_SEQUENCE)[number]);
 
+const compactSignal = (value: string, fallback = 'this work') => {
+  const cleaned = clean(value);
+  if (!cleaned) return fallback;
+
+  const firstLine = cleaned
+    .split(/\n|\.|\?|!/)
+    .map((item) => clean(item))
+    .find(Boolean);
+  const source = firstLine || cleaned;
+
+  return source.length > 86 ? `${source.slice(0, 83).trim()}...` : source;
+};
+
+const hasAnswer = (answers: ClarityAnswers, key: (typeof QUESTION_SEQUENCE)[number]) =>
+  Boolean(clean(answers[key] || ''));
+
+const nextMissingQuestionKey = (answers: ClarityAnswers, afterKey: QuestionId): QuestionId => {
+  const startIndex = Math.max(questionIndex(afterKey) + 1, 0);
+  const next = QUESTION_SEQUENCE.slice(startIndex).find((key) => !hasAnswer(answers, key));
+  return next ?? 'complete';
+};
+
+const primarySignalFromAnswers = (answers: ClarityAnswers) =>
+  compactSignal(
+    answers.phase1_clarity_goal ||
+      answers.phase2_audience_problem ||
+      answers.phase3_current_workflow ||
+      Object.values(answers).find(Boolean) ||
+      '',
+  );
+
+const inferWorkNoun = (answers: ClarityAnswers) => {
+  const combined = Object.values(answers).join(' ').toLowerCase();
+
+  if (/content|post|linkedin|brand|presence|video|reel|website|copy/.test(combined)) return 'content or presence system';
+  if (/workflow|operation|handoff|process|crm|report|task|manual|automation/.test(combined)) return 'workflow';
+  if (/offer|service|client|buyer|sales|lead|proposal/.test(combined)) return 'offer';
+  if (/product|app|platform|tool|prototype|build/.test(combined)) return 'product idea';
+  if (/community|founder|circle|network/.test(combined)) return 'community direction';
+
+  return 'work';
+};
+
+export const buildPersonalizedQuestion = (
+  nextKey: QuestionId,
+  answers: ClarityAnswers,
+): Pick<AssistantEnvelope, 'nextQuestion' | 'nextQuestionLabel' | 'nextQuestionPlaceholder'> => {
+  const signal = primarySignalFromAnswers(answers);
+  const workNoun = inferWorkNoun(answers);
+  const workflowSignal = compactSignal(answers.phase3_current_workflow || answers.phase1_clarity_goal, `this ${workNoun}`);
+  const audienceSignal = compactSignal(answers.phase2_audience_problem || answers.phase1_clarity_goal, `this ${workNoun}`);
+
+  const questions: Record<string, Pick<AssistantEnvelope, 'nextQuestion' | 'nextQuestionLabel' | 'nextQuestionPlaceholder'>> = {
+    phase2_audience_problem: {
+      nextQuestion: `For "${signal}", who feels the problem most clearly, and what are they already trying to fix?`,
+      nextQuestionLabel: 'Who It Helps',
+      nextQuestionPlaceholder: `Name the person or team this ${workNoun} is for, and the problem they already notice...`,
+    },
+    phase3_current_workflow: {
+      nextQuestion: `If we follow "${audienceSignal}" in real life, what happens today from first signal to outcome?`,
+      nextQuestionLabel: 'Current Path',
+      nextQuestionPlaceholder: 'Walk through the current path in plain steps, even if parts are messy...',
+    },
+    phase4_main_friction: {
+      nextQuestion: `In that current path, where does "${workflowSignal}" slow down, get repeated, or become unclear?`,
+      nextQuestionLabel: 'Main Friction',
+      nextQuestionPlaceholder: 'Name the delay, repeated manual work, missing handoff, or unclear decision...',
+    },
+    phase5_ai_boundary: {
+      nextQuestion: `For that friction, what must stay human-led, and what could AI safely help prepare or organize?`,
+      nextQuestionLabel: 'Human + AI',
+      nextQuestionPlaceholder: 'Separate judgment, approval, taste, privacy, drafting, summarizing, routing, or automation...',
+    },
+    phase6_presence_proof: {
+      nextQuestion: `Once this is clearer, what should people be able to trust, see, or understand about "${signal}"?`,
+      nextQuestionLabel: 'Proof Signal',
+      nextQuestionPlaceholder: 'Describe the proof, confidence, message, report, demo, or public explanation this should create...',
+    },
+  };
+
+  return questions[nextKey] || {
+    nextQuestion: 'What should become clearer next?',
+    nextQuestionLabel: 'Next Signal',
+    nextQuestionPlaceholder: 'Add the next useful detail...',
+  };
+};
+
 const completionFromAnswers = (answers: ClarityAnswers) => {
   const filled = Object.keys(answers).length;
   return Math.min(100, Math.round((filled / QUESTION_COUNT) * 100));
@@ -163,42 +250,14 @@ export const buildFallbackResponse = (input: {
   currentQuestionKey: QuestionId;
   latestAnswer: string;
 }): AssistantEnvelope => {
-  const currentIndex = questionIndex(input.currentQuestionKey);
-  const nextIndex = currentIndex >= 0 ? currentIndex + 1 : Object.keys(input.answers).length;
-  const nextKey = nextIndex >= QUESTION_COUNT ? 'complete' : QUESTION_SEQUENCE[nextIndex];
+  const nextKey = nextMissingQuestionKey(input.answers, input.currentQuestionKey);
   const completion = completionFromAnswers(input.answers);
   const latestAnswer = clean(input.latestAnswer);
   const latestSummary = latestAnswer
     ? `Captured signal: ${latestAnswer.slice(0, 170)}${latestAnswer.length > 170 ? '...' : ''}`
     : 'Captured a diagnostic signal for the operating route.';
-
-  const nextQuestions: Record<string, Pick<AssistantEnvelope, 'nextQuestion' | 'nextQuestionLabel' | 'nextQuestionPlaceholder'>> = {
-    phase2_audience_problem: {
-      nextQuestion: 'Who is this for, and what problem are they already feeling?',
-      nextQuestionLabel: 'Buyer Problem',
-      nextQuestionPlaceholder: 'Describe the buyer and the pain they already recognize...',
-    },
-    phase3_current_workflow: {
-      nextQuestion: 'How does this work today, from first signal to delivered outcome?',
-      nextQuestionLabel: 'Current Workflow',
-      nextQuestionPlaceholder: 'Walk through the current path, even if it is messy...',
-    },
-    phase4_main_friction: {
-      nextQuestion: 'Where is the main friction, delay, or decision confusion?',
-      nextQuestionLabel: 'Main Friction',
-      nextQuestionPlaceholder: 'Name the bottleneck, repeated delay, or unclear decision point...',
-    },
-    phase5_ai_boundary: {
-      nextQuestion: 'Which parts need human judgment, and which parts could AI assist?',
-      nextQuestionLabel: 'AI Boundary',
-      nextQuestionPlaceholder: 'Separate judgment, approval, drafting, summarizing, routing, or automation...',
-    },
-    phase6_presence_proof: {
-      nextQuestion: 'What trust, proof, or public presence should this create?',
-      nextQuestionLabel: 'Proof & Presence',
-      nextQuestionPlaceholder: 'Describe the confidence, proof, or narrative this should build...',
-    },
-  };
+  const signal = primarySignalFromAnswers(input.answers);
+  const workNoun = inferWorkNoun(input.answers);
 
   if (nextKey === 'complete') {
     return {
@@ -223,11 +282,11 @@ export const buildFallbackResponse = (input: {
     };
   }
 
-  const next = nextQuestions[nextKey];
+  const next = buildPersonalizedQuestion(nextKey, input.answers);
 
   return {
     assistantReply:
-      'That signal is useful. I am keeping the diagnosis grounded in the real business problem before jumping into tools or content.',
+      `That helps. I am reading this as a ${workNoun} around "${signal}", so I will keep the next question tied to that context instead of jumping into a generic checklist.`,
     nextQuestion: next.nextQuestion,
     nextQuestionKey: nextKey,
     nextQuestionLabel: next.nextQuestionLabel,
@@ -292,13 +351,16 @@ Voice rules:
 
 Behavior rules:
 - Synthesize what the user just said.
-- Ask EXACTLY ONE next question. Make the question very simple and easy to understand.
+- Ask EXACTLY ONE next question. Make the question very simple, easy to understand, and clearly connected to the user's actual first intent/context.
+- Balance structure with flexibility: keep the six essential diagnostic areas, but rewrite each next question in the user's words and around their specific business, project, workflow, audience, or blocker.
+- Do not sound like a fixed survey. Avoid generic phrasing when the user has provided concrete context.
+- Do not ask for information the user has already clearly provided. If an answer already covers the next diagnostic area, advance to the next missing area.
 - Do NOT dive into endless deep conversation loops. You must actively drive the user through the 6-step Kramaniti diagnostic.
 - MAXIMUM QUESTIONS: Ask no more than 6 questions in total. Once the user has answered phase6_presence_proof, you MUST stop asking questions.
 - To stop the conversation, set "nextQuestionKey" to "complete", and set "nextQuestion" to "I have enough context. We are ready to build the blueprint."
 - If the user answers with an "[AI Task]" marker (meaning they don't know the answer), immediately accept it as a task for later and forcefully advance to the next logical question.
 - Keep the assistant reply to two short paragraphs maximum (strictly 3-4 sentences or 4-5 lines total). Never write long, sprawling text.
-- "nextQuestion" MUST be a full, conversational question ending in a question mark (e.g. "What specific problem are you trying to solve?"). It MUST be extremely concise (strictly 1-2 sentences maximum). Do NOT write long, sprawling questions. Do NOT put short topic phrases here.
+- "nextQuestion" MUST be a full, conversational question ending in a question mark (e.g. "For the internal reporting workflow you described, where does the handoff break most often?"). It MUST be extremely concise (strictly 1-2 sentences maximum). Do NOT write long, sprawling questions. Do NOT put short topic phrases here.
 - Exception: when "nextQuestionKey" is "complete", the assistant reply MUST NOT ask another question. It must close the diagnostic and point to the blueprint.
 - You must generate a short UI label (max 3 words) and a simple UI placeholder hint for your next question.
 - You must summarize the user's latest answer in 1-2 short lines and include it in "latestSummary".

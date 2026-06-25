@@ -373,6 +373,11 @@ This log registers the major strategic and structural decisions made during the 
     *   Should the first live Groq version save submissions to a database, email the exported brief, or remain browser-local?
     *   Should this become the primary lead magnet before the AI Workflow Audit, or stay a secondary tool in navigation?
 
+*   **2026-06-25 Clarity Engine Personalization Update:**
+    *   The founder clarified that Clarity Engine should balance the existing diagnostic pattern with more flexible, context-aware questioning.
+    *   The Engine should still gather the essential blueprint inputs, but each next question should reference the user's actual intent, project context, workflow, audience, or blocker when that context is available.
+    *   Guardrail: do not turn the flow into open-ended coaching. Keep the six diagnostic areas and maximum-question discipline, but make the wording feel personally generated rather than like a generic form.
+
 ### Decision 17: Retire Static Export To Support Clarity Engine AI Runtime
 *   **Date:** 2026-06-16
 *   **Area:** Website, deployment architecture, AI runtime

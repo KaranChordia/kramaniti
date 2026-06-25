@@ -23,6 +23,7 @@ import {
   INITIAL_ASSISTANT_REPLY,
   INITIAL_SYNTHESIS,
   buildFallbackResponse,
+  buildPersonalizedQuestion,
   createInitialSessionEnvelope,
   type AssistantEnvelope,
   type ClarityAnswers,
@@ -185,15 +186,17 @@ const createSessionFromCircleHandoff = (handoff: ClarityCircleHandoff): SessionS
     answers.phase2_audience_problem = audienceAnswer;
   }
 
+  const nextQuestion = buildPersonalizedQuestion('phase3_current_workflow', answers);
+
   return {
     ...base,
     answers,
     assistantReply:
       'I have the Clarity Circle context, so we do not need to repeat the starting point. Next, I need the current workflow so the diagnosis can separate strategy, systems, and proof-safe presence.',
-    currentQuestion: 'How does this work today, from first signal to delivered outcome?',
+    currentQuestion: nextQuestion.nextQuestion,
     currentQuestionKey: 'phase3_current_workflow',
-    currentQuestionLabel: 'Current Workflow',
-    currentQuestionPlaceholder: 'Walk through the current path, even if it is messy...',
+    currentQuestionLabel: nextQuestion.nextQuestionLabel || 'Current Path',
+    currentQuestionPlaceholder: nextQuestion.nextQuestionPlaceholder || 'Walk through the current path, even if it is messy...',
     transcript: [
       ...base.transcript,
       {

@@ -183,21 +183,6 @@ export default function BlueprintPage() {
           <h1 className={styles.headerTitle}>Your Growth Blueprint</h1>
         </div>
         <div className={styles.headerActions}>
-          {payload.circleProject?.projectId && (
-            <button
-              className={styles.saveProjectBtn}
-              onClick={(e) => {
-                e.stopPropagation();
-                playClick();
-                void saveReportsToProject();
-              }}
-              disabled={!canSaveReports || isSavingReports}
-              title="Save all reports to the originating project"
-            >
-              {isSavingReports ? <Loader2 size={14} className={styles.spin} /> : <Save size={14} />}
-              <span>{isSavingReports ? 'Saving...' : 'Save all to project'}</span>
-            </button>
-          )}
           <button
             className={styles.headerIconBtn}
             onClick={(e) => {
@@ -234,13 +219,6 @@ export default function BlueprintPage() {
             <div className={engineStyles.assistantBlob} />
           </div>
           <span className={styles.hubTitle}>Clarity Engine Orchestrator</span>
-          {payload.circleProject?.projectTitle && (
-            <div className={styles.projectSavePanel}>
-              <span>{payload.circleProject.folderName || 'Project folder'}</span>
-              <strong>{payload.circleProject.projectTitle}</strong>
-              <small>{saveStatus || (canSaveReports ? 'Reports are ready to save.' : 'Reports will be ready when all three agents finish.')}</small>
-            </div>
-          )}
         </div>
 
         {/* Connector Lines Removed - Replaced by Blob Spawn Animation */}
@@ -301,6 +279,34 @@ export default function BlueprintPage() {
             />
           </div>
         </div>
+
+        <section className={styles.saveReportsPanel} aria-label="Save blueprint reports">
+          <div>
+            <span>{payload.circleProject?.folderName || 'Project save'}</span>
+            <strong>{payload.circleProject?.projectTitle || 'Save these reports to a project'}</strong>
+            <small>
+              {saveStatus ||
+                (payload.circleProject?.projectId
+                  ? canSaveReports
+                    ? 'All three reports are ready to save under this project.'
+                    : 'The save button will activate when all three reports finish.'
+                  : 'Open Clarity Engine from a project so these reports can be saved under that project.')}
+            </small>
+          </div>
+          <button
+            className={styles.saveReportsButton}
+            onClick={(e) => {
+              e.stopPropagation();
+              playClick();
+              void saveReportsToProject();
+            }}
+            disabled={!canSaveReports || isSavingReports}
+            title="Save all reports to the originating project"
+          >
+            {isSavingReports ? <Loader2 size={16} className={styles.spin} /> : <Save size={16} />}
+            <span>{isSavingReports ? 'Saving...' : 'Save this to your project'}</span>
+          </button>
+        </section>
       </main>
 
       {activeReport && (
