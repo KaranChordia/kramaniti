@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #12141A;
+  --color-foreground: #FFFFFF;
+  --color-muted: #8A92A3;
+  --color-accent: #3AAB64;
+}
+
+:root {
+  --background: #12141A;
+  --foreground: #FFFFFF;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  
+  /* Subtle HUD Grid Overlay with infinite drift */
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: center center;
+  animation: gridDrift 60s linear infinite;
+}
+
+@keyframes gridDrift {
+  0% { background-position: 0px 0px; }
+  100% { background-position: 60px 60px; }
+}
+
+.canvas {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* V4 Neumorphic Core Dial */
+.v4-core {
+  background: linear-gradient(145deg, #161820, #0f1116);
+  border-radius: 50%;
+  box-shadow:  
+    16px 16px 32px #0a0b0f,
+    -16px -16px 32px #1a1d25,
+    inset 0 2px 4px rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* V4 Translucent Orbital Pills (Glassmorphism popping on dark) */
+.v4-pill {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 
+    inset 0 1px 1px rgba(255,255,255,0.3),
+    0 8px 32px rgba(0,0,0,0.4);
+  transition: all 0.3s ease;
+}
+
+/* High-Contrast Glow Variants */
+.pill-green {
+  background: rgba(45, 212, 100, 0.15);
+  color: #4ADE80;
+  border-color: rgba(74, 222, 128, 0.3);
+}
+.pill-blue {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38BDF8;
+  border-color: rgba(56, 189, 248, 0.3);
+}
+.pill-purple {
+  background: rgba(192, 132, 252, 0.15);
+  color: #C084FC;
+  border-color: rgba(192, 132, 252, 0.3);
+}
+.pill-gold {
+  background: rgba(250, 204, 21, 0.15);
+  color: #FACC15;
+  border-color: rgba(250, 204, 21, 0.3);
+}
+.pill-slate {
+  background: rgba(255, 255, 255, 0.05);
+  color: #FFFFFF;
+}

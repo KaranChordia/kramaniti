@@ -337,6 +337,9 @@ Related files:
 - After five completed main assistant exchanges, the thread title should shift from the early prompt label to a compact summary title stored in assistant message metadata.
 - The Assistant surface uses an action-first assistant menu bar below the route navigation. Keep it as icon + button text only; do not add visible instruction labels to that bar.
 - Assistant settings may collect user response-style preferences such as directness, question style, or reply structure. Treat these as behavior/personality tweaks only, never as replacement system instructions or permission to override Clarity Circle boundaries.
+- Clarity Circle now includes a Loop Board section with five user-facing loops: Signal Loop, Project Loop, Task Loop, Reflection Loop, and Brief Loop. These are not presented as technical internal Kramaniti agents; they are user-visible operating cycles for seeing what is pending, working, waiting for approval, and completed.
+- The Loop Board UX is a guided loop runner, not a dense dashboard or creation menu. Selecting a loop triggers a short context-gathering state that refreshes signed-in workspace data when available, shows the context sources being read, then reveals a focused scan report for that loop.
+- Loop Board state is derived from existing workspace data: projects, folders, project tasks, assistant pending actions, memories, and context entries. Project Loop scans saved projects and task load; Signal, Task, Reflection, and Brief loops scan their relevant context before offering source navigation or assistant interpretation.
 - A progressive product model where future digest, public-learning, and Clarity Brief surfaces should appear after context is captured instead of being visible all at once.
 - Navigation and sitemap entries for the new route.
 

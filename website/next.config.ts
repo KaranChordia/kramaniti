@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
     return {
       beforeFiles: [
         {
+          source: "/agent-simulation",
+          destination: "/agent-simulation/",
+        },
+        {
           source: "/KCS/",
           destination: "/KCS",
         },

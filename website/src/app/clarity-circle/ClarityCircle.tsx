@@ -26,6 +26,7 @@ import {
   Search,
   Plus,
   RefreshCw,
+  Repeat2,
   Route,
   Send,
   Settings,
@@ -52,7 +53,21 @@ type Track = 'founder' | 'builder';
 type StepId = 'entry' | 'track' | 'intent' | 'context';
 type SessionMode = 'signin' | 'signup';
 type AuthView = 'signup-email' | 'signup-credentials' | 'signin';
-type MenuId = 'home' | 'start' | 'path' | 'context' | 'circle' | 'assistant' | 'memory' | 'projects' | 'profile' | 'settings';
+type MenuId =
+  | 'home'
+  | 'start'
+  | 'path'
+  | 'context'
+  | 'circle'
+  | 'loops'
+  | 'assistant'
+  | 'memory'
+  | 'projects'
+  | 'profile'
+  | 'settings';
+type LoopId = 'signal' | 'project' | 'task' | 'reflection' | 'brief';
+type LoopStatus = 'pending' | 'working' | 'needs_approval' | 'completed';
+type LoopRunPhase = 'idle' | 'gathering' | 'ready';
 
 type IntentDraft = {
   headline: string;
@@ -209,6 +224,29 @@ type WorkspaceSnapshot = {
   memories: ClarityCircleAssistantMemory[];
 };
 
+type LoopCard = {
+  id: LoopId;
+  name: string;
+  label: string;
+  status: LoopStatus;
+  detail: string;
+  nextAction: string;
+  icon: typeof CircleDot;
+};
+
+type LoopOverviewItem = {
+  label: string;
+  value: string;
+  detail: string;
+};
+
+type LoopRunState = {
+  loopId: LoopId;
+  phase: LoopRunPhase;
+  startedAt: string | null;
+  completedAt: string | null;
+};
+
 const STORAGE_KEY = 'kramaniti-clarity-circle-sequence-v1';
 const ENGINE_HANDOFF_KEY = 'kramaniti-clarity-circle-engine-handoff-v1';
 const ASSISTANT_INPUT_MIN_HEIGHT = 42;
@@ -291,6 +329,7 @@ const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> =
   { id: 'path', label: 'Path', icon: Compass },
   { id: 'context', label: 'Context', icon: FileText },
   { id: 'circle', label: 'Circle', icon: Users },
+  { id: 'loops', label: 'Loop board', icon: Repeat2 },
   { id: 'assistant', label: 'Assistant', icon: MessageCircle },
   { id: 'memory', label: 'Memory', icon: Database },
   { id: 'projects', label: 'Projects', icon: FolderOpen },
@@ -608,6 +647,13 @@ export function ClarityCircle() {
   const [intent, setIntent] = useState<IntentDraft>(TRACKS.founder.defaults);
   const [savedContext, setSavedContext] = useState<SavedContext | null>(null);
   const [activeMenu, setActiveMenu] = useState<MenuId>('start');
+  const [activeLoopId, setActiveLoopId] = useState<LoopId>('signal');
+  const [loopRun, setLoopRun] = useState<LoopRunState>({
+    loopId: 'signal',
+    phase: 'idle',
+    startedAt: null,
+    completedAt: null,
+  });
   const [themeMode, setThemeMode] = useState<'dark' | 'light'>('dark');
   const [sessionMode, setSessionMode] = useState<SessionMode>('signup');
   const [authView, setAuthView] = useState<AuthView>('signup-email');
@@ -660,6 +706,7 @@ export function ClarityCircle() {
   const assistantSettingsHostRef = useRef<HTMLDivElement | null>(null);
   const assistantThreadDropdownCloseTimerRef = useRef<number | null>(null);
   const assistantSettingsCloseTimerRef = useRef<number | null>(null);
+  const loopRunTokenRef = useRef(0);
 
   const resizeAssistantInput = useCallback((input: HTMLTextAreaElement) => {
     input.style.height = `${ASSISTANT_INPUT_MIN_HEIGHT}px`;
@@ -1541,6 +1588,21 @@ export function ClarityCircle() {
   const activeSignalSummary =
     savedContext?.summary || latestProject?.summary || latestProject?.context || intent.context || 'Save a first signal to build the Circle context.';
   const openTaskCount = projectTasks.filter((task) => task.status === 'open').length;
+  const completedTaskCount = projectTasks.filter((task) => task.status === 'done').length;
+  const pendingAssistantActionCount = assistantMessages.filter(
+    (message) => message.pendingAction?.status === 'pending',
+  ).length;
+  const sourceProjectForLoops = selectedProject ?? latestProject;
+  const sourceSignalQuestions = sourceProjectForLoops?.questions.length ?? savedContext?.questions.length ?? 0;
+  const sourceSignalActions = sourceProjectForLoops?.actions.length ?? savedContext?.actions.length ?? 0;
+  const latestReflectionEntry =
+    contextEntries.find((entry) => entry.entry_type === 'digest' && (!sourceProjectForLoops || entry.project_id === sourceProjectForLoops.id)) ??
+    contextEntries.find((entry) => entry.entry_type === 'digest') ??
+    null;
+  const latestBriefEntry =
+    contextEntries.find((entry) => entry.entry_type === 'brief' && (!sourceProjectForLoops || entry.project_id === sourceProjectForLoops.id)) ??
+    contextEntries.find((entry) => entry.entry_type === 'brief') ??
+    null;
   const founderProblemCount = communityPosts.filter((post) => post.kind === 'founder_problem').length;
   const builderShareCount = communityPosts.filter((post) => post.kind === 'builder_share').length;
   const latestCommunityPosts = [...communityPosts]
@@ -1588,6 +1650,203 @@ export function ClarityCircle() {
         roleDetail: 'You can share work, ideas, and experiments. Founder problem-posting stays reserved for founder accounts.',
         primaryAction: savedContext || latestProject ? 'Continue solopreneur context' : 'Capture solopreneur signal',
       };
+  const journeySteps = [
+    { label: 'Path', detail: accountTrackCopy.shortLabel, active: true },
+    { label: 'Signal', detail: savedContext || latestProject ? 'Captured' : 'Awaiting input', active: Boolean(savedContext || latestProject) },
+    { label: 'Project', detail: projects.length > 0 ? `${projects.length} saved` : 'Not started', active: projects.length > 0 },
+    { label: 'Memory', detail: assistantMemories.length > 0 ? 'Assistant aware' : 'Ready to learn', active: assistantMemories.length > 0 },
+  ];
+  const loopStatusLabel: Record<LoopStatus, string> = {
+    pending: 'Pending',
+    working: 'Working',
+    needs_approval: 'Needs approval',
+    completed: 'Completed',
+  };
+  const loopCards: LoopCard[] = [
+    {
+      id: 'signal',
+      name: 'Signal Loop',
+      label: 'Capture',
+      status: savedContext || latestProject ? 'completed' : 'pending',
+      detail: activeSignal,
+      nextAction:
+        savedContext || latestProject
+          ? 'Scan the saved signal, latest project context, and assistant memory for the cleanest next direction.'
+          : 'Scan the selected path and show what context is still missing before the Circle can help.',
+      icon: Activity,
+    },
+    {
+      id: 'project',
+      name: 'Project Loop',
+      label: 'Build',
+      status: pendingAssistantActionCount > 0 ? 'needs_approval' : projects.length > 0 ? 'working' : savedContext ? 'pending' : 'pending',
+      detail: projects.length > 0 ? `${projects.length} saved projects` : 'No saved projects yet',
+      nextAction:
+        projects.length > 0
+          ? 'Scan every saved project, folder, open task, and recent update into one project overview.'
+          : 'Scan the workspace and show what project context is missing before work can be organized.',
+      icon: FolderOpen,
+    },
+    {
+      id: 'task',
+      name: 'Task Loop',
+      label: 'Move',
+      status: pendingAssistantActionCount > 0 ? 'needs_approval' : openTaskCount > 0 ? 'working' : completedTaskCount > 0 ? 'completed' : 'pending',
+      detail: `${openTaskCount} open, ${completedTaskCount} completed`,
+      nextAction:
+        openTaskCount > 0
+          ? 'Scan open, completed, and pending task movement across the workspace.'
+          : projects.length > 0
+            ? 'Scan saved projects and show where task structure is still thin.'
+            : 'Scan the workspace and show what project source is needed before tasks become useful.',
+      icon: CheckCircle2,
+    },
+    {
+      id: 'reflection',
+      name: 'Reflection Loop',
+      label: 'Review',
+      status: latestReflectionEntry ? 'completed' : openTaskCount > 0 || projects.length > 0 ? 'working' : 'pending',
+      detail: latestReflectionEntry ? `Last saved ${formatProjectDate(latestReflectionEntry.created_at)}` : 'No reflection saved yet',
+      nextAction: projects.length > 0 ? 'Scan progress, completed movement, and stuck work into a reflection overview.' : 'Scan available context and show what is missing for reflection.',
+      icon: RefreshCw,
+    },
+    {
+      id: 'brief',
+      name: 'Brief Loop',
+      label: 'Package',
+      status: latestBriefEntry ? 'completed' : projects.length > 0 || savedContext ? 'working' : 'pending',
+      detail: latestBriefEntry ? `Last saved ${formatProjectDate(latestBriefEntry.created_at)}` : 'No clarity brief saved yet',
+      nextAction: projects.length > 0 || savedContext ? 'Scan the strongest context, questions, and actions into a brief overview.' : 'Scan the workspace and show what signal context is needed for a brief.',
+      icon: FileText,
+    },
+  ];
+  const selectedLoop = loopCards.find((loop) => loop.id === activeLoopId) ?? loopCards[0];
+  const SelectedLoopIcon = selectedLoop.icon;
+  const selectedProjectLoopTasks = sourceProjectForLoops
+    ? projectTasks.filter((task) => task.project_id === sourceProjectForLoops.id && task.status !== 'archived')
+    : projectTasks.filter((task) => task.status !== 'archived');
+  const selectedLoopOpenTasks = selectedProjectLoopTasks.filter((task) => task.status === 'open');
+  const selectedLoopDoneTasks = selectedProjectLoopTasks.filter((task) => task.status === 'done');
+  const activeLoopIsRunning = loopRun.loopId === activeLoopId && loopRun.phase === 'gathering';
+  const activeLoopIsReady = loopRun.loopId === activeLoopId && loopRun.phase === 'ready';
+  const loopGatheringSteps: Record<LoopId, string[]> = {
+    signal: [
+      'Reading your selected path and starting intent.',
+      'Checking saved project context for the latest signal.',
+      'Preparing the cleanest next action from what is known.',
+    ],
+    project: [
+      'Gathering your context from Projects.',
+      'Reading folders, project instructions, open tasks, and recent updates.',
+      'Preparing a project overview that shows what needs attention.',
+    ],
+    task: [
+      'Scanning open, completed, and archived project tasks.',
+      'Grouping task movement by active project.',
+      'Preparing a task overview from the current movement.',
+    ],
+    reflection: [
+      'Reviewing current project movement.',
+      'Comparing open tasks, completed work, and saved reflections.',
+      'Preparing a short progress review.',
+    ],
+    brief: [
+      'Collecting the signal, project instruction, and desired outcome.',
+      'Checking tasks and saved context entries for useful structure.',
+      'Preparing a compact clarity brief.',
+    ],
+  };
+  const loopResultTitle: Record<LoopId, string> = {
+    signal: savedContext || latestProject ? 'Signal scan complete' : 'Signal scan needs input',
+    project: projects.length > 0 ? 'Project scan complete' : 'No saved projects found',
+    task:
+      selectedProjectLoopTasks.length > 0
+        ? `Task scan complete`
+        : 'No project tasks found',
+    reflection: latestReflectionEntry ? 'Reflection scan complete' : 'Reflection scan ready',
+    brief: latestBriefEntry ? 'Brief scan complete' : 'Brief scan ready',
+  };
+  const loopResultDetail: Record<LoopId, string> = {
+    signal: savedContext || latestProject
+      ? 'The Signal Loop found the active path, saved context, recent project source, and assistant memory.'
+      : 'The Signal Loop checked the workspace and found that a first signal is still needed.',
+    project: projects.length > 0
+      ? 'The Project Loop scanned saved projects, folders, recent movement, and task load.'
+      : 'The Project Loop scanned the workspace and did not find saved projects to summarize yet.',
+    task: selectedProjectLoopTasks.length > 0
+      ? 'The Task Loop scanned open and completed work so you can see current movement without digging.'
+      : 'The Task Loop scanned the workspace and did not find saved project tasks yet.',
+    reflection: sourceProjectForLoops
+      ? 'The Reflection Loop scanned project movement, completed work, and prior reflection history.'
+      : 'The Reflection Loop scanned available context and needs a project or signal before it can become useful.',
+    brief: sourceProjectForLoops || savedContext
+      ? 'The Brief Loop scanned the strongest context, questions, actions, and prior brief history.'
+      : 'The Brief Loop scanned the workspace and needs a signal before it can package useful context.',
+  };
+  const loopContextChips: Record<LoopId, string[]> = {
+    signal: [
+      savedContext ? 'Saved signal' : 'Intent draft',
+      latestProject ? 'Latest project' : 'No project yet',
+      `${assistantMemories.length} memories`,
+    ],
+    project: [`${projects.length} projects`, `${projectFolders.length} folders`, sourceProjectForLoops ? 'Active source ready' : 'Needs project'],
+    task: [`${selectedLoopOpenTasks.length} open`, `${selectedLoopDoneTasks.length} completed`, `${pendingAssistantActionCount} approvals`],
+    reflection: [
+      sourceProjectForLoops ? 'Project movement' : 'Needs project',
+      latestReflectionEntry ? 'Prior reflection' : 'No prior reflection',
+      `${selectedLoopDoneTasks.length} completed tasks`,
+    ],
+    brief: [
+      sourceProjectForLoops ? 'Project instruction' : savedContext ? 'Saved context' : 'Needs signal',
+      latestBriefEntry ? 'Prior brief' : 'No prior brief',
+      `${selectedLoopOpenTasks.length} open tasks`,
+    ],
+  };
+  const loopOverviewItems: Record<LoopId, LoopOverviewItem[]> = {
+    signal: [
+      { label: 'Active signal', value: activeSignal || 'None yet', detail: savedContext || latestProject ? 'Usable context found' : 'Needs first signal' },
+      { label: 'Track', value: accountTrackCopy.shortLabel, detail: 'Current Circle path' },
+      { label: 'Saved memory', value: String(assistantMemories.length), detail: latestMemory?.title || 'No assistant memory yet' },
+      { label: 'Source', value: sourceProjectForLoops ? 'Project' : savedContext ? 'Saved context' : 'Intent draft', detail: sourceProjectForLoops?.title || savedContext?.intent.context || intent.context || 'No source captured yet' },
+    ],
+    project: [
+      { label: 'Projects', value: String(projects.length), detail: latestProject ? `Latest: ${latestProject.title}` : 'No saved project yet' },
+      { label: 'Folders', value: String(projectFolders.length), detail: projectFolders.length > 0 ? 'Folder structure available' : 'No folders saved' },
+      { label: 'Open tasks', value: String(openTaskCount), detail: openTaskCount > 0 ? 'Work waiting across projects' : 'No open project tasks' },
+      { label: 'Approvals', value: String(pendingAssistantActionCount), detail: pendingAssistantActionCount > 0 ? 'Assistant actions need review' : 'No pending approvals' },
+    ],
+    task: [
+      { label: 'Open', value: String(openTaskCount), detail: openTaskCount > 0 ? 'Needs movement' : 'Nothing open right now' },
+      { label: 'Completed', value: String(completedTaskCount), detail: completedTaskCount > 0 ? 'Recorded progress' : 'No completed tasks yet' },
+      { label: 'Current source', value: String(selectedProjectLoopTasks.length), detail: sourceProjectForLoops?.title || 'All project tasks' },
+      { label: 'Approvals', value: String(pendingAssistantActionCount), detail: pendingAssistantActionCount > 0 ? 'Review before saving changes' : 'No task approvals pending' },
+    ],
+    reflection: [
+      { label: 'Last reflection', value: latestReflectionEntry ? formatProjectDate(latestReflectionEntry.created_at) : 'None', detail: latestReflectionEntry ? 'Saved reflection found' : 'No reflection saved yet' },
+      { label: 'Completed', value: String(selectedLoopDoneTasks.length), detail: 'Completed tasks in the scanned source' },
+      { label: 'Still open', value: String(selectedLoopOpenTasks.length), detail: 'Open tasks that may shape the reflection' },
+      { label: 'Source', value: sourceProjectForLoops ? 'Project' : savedContext ? 'Signal' : 'Missing', detail: sourceProjectForLoops?.title || savedContext?.intent.headline || 'Capture a signal first' },
+    ],
+    brief: [
+      { label: 'Last brief', value: latestBriefEntry ? formatProjectDate(latestBriefEntry.created_at) : 'None', detail: latestBriefEntry ? 'Saved brief found' : 'No brief saved yet' },
+      { label: 'Source', value: sourceProjectForLoops ? 'Project' : savedContext ? 'Signal' : 'Missing', detail: sourceProjectForLoops?.title || savedContext?.intent.headline || 'Capture a signal first' },
+      { label: 'Questions', value: String(sourceSignalQuestions), detail: sourceSignalQuestions > 0 ? 'Clarifying questions found' : 'No questions captured yet' },
+      { label: 'Actions', value: String(sourceSignalActions), detail: sourceSignalActions > 0 ? 'Next actions found' : 'No actions captured yet' },
+    ],
+  };
+  const loopSourceActionLabel: Record<LoopId, string> = {
+    signal: savedContext || latestProject ? 'Open context' : 'Open path',
+    project: 'Open projects',
+    task: 'Open tasks',
+    reflection: 'Open memory',
+    brief: savedContext || sourceProjectForLoops ? 'Open context' : 'Open path',
+  };
+  const loopsByStatus = {
+    pending: loopCards.filter((loop) => loop.status === 'pending').length,
+    working: loopCards.filter((loop) => loop.status === 'working').length,
+    needs_approval: loopCards.filter((loop) => loop.status === 'needs_approval').length,
+    completed: loopCards.filter((loop) => loop.status === 'completed').length,
+  };
   const homeStats: Array<{ label: string; value: number; detail: string; icon: typeof CircleDot; menu: MenuId }> = [
     {
       label: 'Projects',
@@ -1604,6 +1863,16 @@ export function ClarityCircle() {
       menu: 'projects',
     },
     {
+      label: 'Active loops',
+      value: loopsByStatus.working + loopsByStatus.needs_approval,
+      detail:
+        loopsByStatus.needs_approval > 0
+          ? `${loopsByStatus.needs_approval} loop action needs approval.`
+          : `${loopsByStatus.completed} loops completed.`,
+      icon: Repeat2,
+      menu: 'loops',
+    },
+    {
       label: 'Circle threads',
       value: communityPosts.length,
       detail: `${founderProblemCount} founder problems, ${builderShareCount} solopreneur shares.`,
@@ -1617,12 +1886,6 @@ export function ClarityCircle() {
       icon: Database,
       menu: 'memory',
     },
-  ];
-  const journeySteps = [
-    { label: 'Path', detail: accountTrackCopy.shortLabel, active: true },
-    { label: 'Signal', detail: savedContext || latestProject ? 'Captured' : 'Awaiting input', active: Boolean(savedContext || latestProject) },
-    { label: 'Project', detail: projects.length > 0 ? `${projects.length} saved` : 'Not started', active: projects.length > 0 },
-    { label: 'Memory', detail: assistantMemories.length > 0 ? 'Assistant aware' : 'Ready to learn', active: assistantMemories.length > 0 },
   ];
 
   const folderProjectCount = (folderId: ProjectFolderFilter) =>
@@ -3231,6 +3494,71 @@ export function ClarityCircle() {
     });
   };
 
+  const activateLoop = async (loopId: LoopId) => {
+    const token = loopRunTokenRef.current + 1;
+    loopRunTokenRef.current = token;
+    const startedAt = new Date().toISOString();
+    setActiveLoopId(loopId);
+    setLoopRun({ loopId, phase: 'gathering', startedAt, completedAt: null });
+
+    const refreshPromise = authUser ? refreshWorkspace(authUser, { quiet: true, preserveAssistantState: true }) : Promise.resolve(null);
+    const visibleScanPromise = new Promise((resolve) => window.setTimeout(resolve, 950));
+    await Promise.all([refreshPromise, visibleScanPromise]);
+
+    if (loopRunTokenRef.current !== token) return;
+    setLoopRun({ loopId, phase: 'ready', startedAt, completedAt: new Date().toISOString() });
+  };
+
+  const runLoopPrimaryAction = (loopId: LoopId) => {
+    setActiveLoopId(loopId);
+    if (loopId === 'signal') {
+      openMenu(savedContext || latestProject ? 'context' : 'path');
+      return;
+    }
+    if (loopId === 'project') {
+      openMenu('projects');
+      return;
+    }
+    if (loopId === 'task') {
+      openMenu('projects');
+      return;
+    }
+    if (loopId === 'reflection') {
+      openMenu('memory');
+      return;
+    }
+    openMenu(sourceProjectForLoops || savedContext ? 'context' : 'path');
+  };
+
+  const runLoopSecondaryAction = (loopId: LoopId) => {
+    setActiveLoopId(loopId);
+    if (loopId === 'signal') {
+      seedAssistantPrompt(`Review the Signal Loop scan and tell me what the current signal means: ${activeSignalSummary}`);
+      return;
+    }
+    if (loopId === 'project') {
+      seedAssistantPrompt(
+        `Review my Project Loop scan. Summarize my saved projects, folders, open tasks, and the project that needs attention next.`,
+      );
+      return;
+    }
+    if (loopId === 'task') {
+      seedAssistantPrompt(
+        `Review my Task Loop scan. Explain what is open, what is complete, what is stuck, and what should move next for ${sourceProjectForLoops?.title || activeSignal}.`,
+      );
+      return;
+    }
+    if (loopId === 'reflection') {
+      seedAssistantPrompt(
+        `Review my Reflection Loop scan for ${sourceProjectForLoops?.title || activeSignal}: what moved, what stayed stuck, and what the pattern suggests.`,
+      );
+      return;
+    }
+    seedAssistantPrompt(
+      `Review my Brief Loop scan for ${sourceProjectForLoops?.title || activeSignal}: summarize the context, audience, blocker, desired outcome, questions, and actions already available.`,
+    );
+  };
+
   const openMenu = (menuId: MenuId) => {
     setActiveMenu(menuId);
     if (menuId === 'start') setStep('entry');
@@ -3934,6 +4262,187 @@ export function ClarityCircle() {
                       </article>
                     ))}
                   </div>
+                </section>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'loops' && (
+            <section className={`${styles.screen} ${styles.loopBoardScreen}`} aria-label="Loop board">
+              <div className={styles.loopBoardHeader}>
+                <div>
+                  <h1>Loop Board</h1>
+                  <p>Signal, project, task, reflection, and brief stay in one guided workspace.</p>
+                </div>
+                <div className={styles.loopStatusStrip} aria-label="Loop status summary">
+                  <span><strong>{loopsByStatus.pending}</strong> Pending</span>
+                  <span><strong>{loopsByStatus.working}</strong> Working</span>
+                  <span><strong>{loopsByStatus.needs_approval}</strong> Needs approval</span>
+                  <span><strong>{loopsByStatus.completed}</strong> Completed</span>
+                </div>
+              </div>
+
+              <div className={styles.loopExperience}>
+                <aside className={styles.loopPicker} aria-label="Choose a loop">
+                  {loopCards.map((loop) => {
+                    const Icon = loop.icon;
+                    const isActive = activeLoopId === loop.id;
+                    return (
+                      <button
+                        key={loop.id}
+                        type="button"
+                        className={isActive ? styles.loopPickerActive : ''}
+                        onClick={() => void activateLoop(loop.id)}
+                        aria-pressed={isActive}
+                      >
+                        <span className={styles.loopPickerIcon}>
+                          <Icon size={17} aria-hidden="true" />
+                        </span>
+                        <span>
+                          <strong>{loop.name}</strong>
+                          <small>{loop.detail}</small>
+                        </span>
+                        <em className={styles[`loopStatus_${loop.status}`]}>{loopStatusLabel[loop.status]}</em>
+                      </button>
+                    );
+                  })}
+                </aside>
+
+                <section className={styles.loopRunner} aria-label={`${selectedLoop.name} workspace`}>
+                  <div className={styles.loopRunnerHeader}>
+                    <span className={styles.loopIconLarge}>
+                      <SelectedLoopIcon size={24} aria-hidden="true" />
+                    </span>
+                    <div>
+                      <span>{selectedLoop.name}</span>
+                      <h2>
+                        {activeLoopIsRunning
+                          ? selectedLoop.id === 'project'
+                            ? 'Gathering your context from Projects'
+                            : `Gathering context for ${selectedLoop.name}`
+                          : activeLoopIsReady
+                            ? loopResultTitle[selectedLoop.id]
+                            : 'Ready when you are'}
+                      </h2>
+                      <p>
+                        {activeLoopIsRunning
+                          ? 'The Circle is reading only the context this loop needs.'
+                          : activeLoopIsReady
+                            ? loopResultDetail[selectedLoop.id]
+                            : selectedLoop.nextAction}
+                      </p>
+                    </div>
+                  </div>
+
+                  {activeLoopIsRunning ? (
+                    <div className={styles.loopGatheringPanel} aria-live="polite">
+                      <div className={styles.loopGatheringOrb} aria-hidden="true">
+                        <span />
+                        <span />
+                        <span />
+                      </div>
+                      <div className={styles.loopGatheringSteps}>
+                        {loopGatheringSteps[selectedLoop.id].map((stepText, index) => (
+                          <div key={stepText} style={{ ['--step-index' as string]: index }}>
+                            <span />
+                            <p>{stepText}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={styles.loopReadyPanel}>
+                      <div className={styles.loopContextChips} aria-label="Context gathered">
+                        {loopContextChips[selectedLoop.id].map((chip) => (
+                          <span key={chip}>{chip}</span>
+                        ))}
+                      </div>
+
+                      <div className={styles.loopResultCard}>
+                        <span>Current source</span>
+                        <h3>{sourceProjectForLoops?.title || activeSignal}</h3>
+                        <p>{sourceProjectForLoops?.summary || sourceProjectForLoops?.context || activeSignalSummary}</p>
+                      </div>
+
+                      <div className={styles.loopOverviewGrid} aria-label={`${selectedLoop.name} scan overview`}>
+                        {loopOverviewItems[selectedLoop.id].map((item) => (
+                          <div key={`${item.label}-${item.value}`} className={styles.loopOverviewItem}>
+                            <span>{item.label}</span>
+                            <strong>{item.value}</strong>
+                            <p>{item.detail}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {selectedLoop.id === 'project' && (
+                        <div className={styles.loopProjectList} aria-label="Project Loop overview">
+                          <div className={styles.projectSubheader}>
+                            <span>Recent project context</span>
+                            <small>{projects.length} total</small>
+                          </div>
+                          {recentProjects.length > 0 ? (
+                            recentProjects.map((project) => {
+                              const projectOpenTasks = projectTasks.filter((task) => task.project_id === project.id && task.status === 'open');
+                              return (
+                                <button key={project.id} type="button" className={styles.loopProjectRow} onClick={() => openProject(project)}>
+                                  <span>
+                                    <strong>{project.title}</strong>
+                                    <small>{getFolderName(project.folder_id)}</small>
+                                  </span>
+                                  <span>
+                                    <strong>{projectOpenTasks.length}</strong>
+                                    <small>open</small>
+                                  </span>
+                                  <span>
+                                    <strong>{formatProjectDate(project.updated_at)}</strong>
+                                    <small>updated</small>
+                                  </span>
+                                </button>
+                              );
+                            })
+                          ) : (
+                            <p className={styles.loopEmptyText}>No saved projects were found in this scan.</p>
+                          )}
+                        </div>
+                      )}
+
+                      {selectedLoop.id === 'task' && (
+                        <div className={styles.loopTaskPreview} aria-label="Task Loop preview">
+                          <div className={styles.projectSubheader}>
+                            <span>Task movement</span>
+                            <small>{selectedLoopOpenTasks.length} open</small>
+                          </div>
+                          <div className={styles.projectTaskList}>
+                            {selectedProjectLoopTasks.slice(0, 5).map((task) => (
+                              <button
+                                key={task.id}
+                                type="button"
+                                className={task.status === 'done' ? styles.projectTaskDone : ''}
+                                onClick={() => void toggleProjectTask(task)}
+                              >
+                                <CheckCircle2 size={16} aria-hidden="true" />
+                                <span>
+                                  <strong>{task.title}</strong>
+                                  {task.detail && <small>{task.detail}</small>}
+                                </span>
+                              </button>
+                            ))}
+                            {selectedProjectLoopTasks.length === 0 && <p>No saved tasks were found in this scan.</p>}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className={styles.loopActions}>
+                        <button type="button" className={styles.primaryButton} onClick={() => runLoopPrimaryAction(selectedLoop.id)}>
+                          {loopSourceActionLabel[selectedLoop.id]}
+                          <ArrowRight size={16} aria-hidden="true" />
+                        </button>
+                        <button type="button" className={styles.secondaryButton} onClick={() => runLoopSecondaryAction(selectedLoop.id)}>
+                          Ask assistant about scan
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </section>
               </div>
             </section>

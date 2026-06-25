@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, JetBrains_Mono } from "next/font/google";
+import { Outfit, JetBrains_Mono, Geist } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -8,6 +8,9 @@ import { GlobalShockwave } from "@/components/GlobalShockwave";
 import { RouteAwareAssistant } from "@/components/assistant/RouteAwareAssistant";
 import { absoluteUrl, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -93,7 +96,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning data-theme="dark" data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning data-theme="dark" data-scroll-behavior="smooth" className={cn("font-sans", geist.variable)}>
       <head>
         <meta name="msapplication-navbutton-color" content="#C9A84C" />
       </head>

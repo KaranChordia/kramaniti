@@ -569,3 +569,11 @@ This log registers the major strategic and structural decisions made during the 
     *   The Assistant page now supports multiple main assistant chat threads, with thread identity carried in assistant message metadata.
     *   The old right-side assistant information panel was removed in favor of a horizontal assistant menu bar under the route navigation.
     *   Guardrail: assistant menu bars should use compact action controls only: icons, button text, thread buttons, and grouped project actions. Do not add visible instructional labels or explanation blocks to that bar.
+
+*   **2026-06-25 Loop Board Update:**
+    *   The founder asked to implement Clarity Circle agents as "loops" and add a Loop Board where users can access each loop directly.
+    *   Clarity Circle now exposes five user-facing loops: Signal Loop, Project Loop, Task Loop, Reflection Loop, and Brief Loop.
+    *   Loop status is derived from existing user-owned workspace state: saved signal/project context, project tasks, assistant pending approvals, memories, and context entries.
+    *   The Loop Board UX should behave as a simple guided runner: selecting a loop shows a visible context-gathering state, then a focused scan report. Avoid returning to a dense metrics-first loop dashboard.
+    *   Loops are scanner-first experiences, not creation shortcuts. Project Loop scans all saved projects, folders, task load, and recent movement; Signal, Task, Reflection, and Brief loops scan their relevant source context before offering source navigation or assistant interpretation.
+    *   Guardrail: keep loops as user-facing operating cycles, not internal Kramaniti company agents. Do not turn Clarity Circle into a dense technical agent dashboard.
