@@ -226,6 +226,10 @@
   outline: none;
 }
 
+.mobileTabBar {
+  display: none;
+}
+
 .menu {
   grid-column: 2;
   justify-self: stretch;
@@ -2664,6 +2668,64 @@
   font-weight: 700;
 }
 
+.projectFolderChips {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1 1 260px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.projectFolderChips::-webkit-scrollbar {
+  display: none;
+}
+
+.projectFolderChips button {
+  min-width: 0;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  max-width: 190px;
+  padding: 0 10px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-control);
+  color: var(--circle-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 740;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--circle-control-shadow);
+}
+
+.projectFolderChips button span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.projectFolderChips button small {
+  color: var(--circle-faint);
+  font-size: 11px;
+}
+
+.projectFolderChips button:hover,
+.projectFolderChips button:focus-visible,
+.projectFolderChipActive {
+  border-color: var(--circle-gold-border) !important;
+  background: var(--circle-control-hover) !important;
+  color: var(--circle-text) !important;
+  outline: none;
+}
+
 .projectMenuSearch {
   max-width: 360px;
   flex: 1 1 220px;
@@ -4056,6 +4118,140 @@
   opacity: 0.62;
 }
 
+.moreScreen {
+  gap: 12px;
+}
+
+.moreHeader,
+.moreAccountCard,
+.moreSectionGrid button {
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background:
+    var(--circle-card-sheen),
+    var(--circle-panel);
+  box-shadow: var(--circle-control-shadow);
+}
+
+.moreHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
+  gap: 12px;
+  align-items: stretch;
+  padding: 16px;
+}
+
+.moreHeader span,
+.moreAccountCard span {
+  color: var(--circle-gold-light);
+  font-size: 11px;
+  font-weight: 780;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.moreHeader h1 {
+  margin: 6px 0 8px;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1;
+}
+
+.moreHeader p {
+  max-width: 650px;
+  margin: 0;
+  color: var(--circle-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.moreAccountCard {
+  display: grid;
+  align-content: center;
+  gap: 7px;
+  padding: 14px;
+  background:
+    linear-gradient(135deg, var(--circle-gold-soft), transparent 82%),
+    var(--circle-row);
+}
+
+.moreAccountCard strong {
+  color: var(--circle-text);
+  font-size: 18px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.moreAccountCard small {
+  color: var(--circle-faint);
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.moreQuickActions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 9px;
+}
+
+.moreSectionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.moreSectionGrid button {
+  min-height: 84px;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 11px;
+  padding: 12px;
+  color: var(--circle-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.moreSectionGrid button:hover,
+.moreSectionGrid button:focus-visible,
+.moreSectionActive {
+  border-color: var(--circle-gold-border) !important;
+  background:
+    var(--circle-card-hover-sheen),
+    var(--circle-panel) !important;
+  outline: none;
+}
+
+.moreSectionIcon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--circle-gold-border);
+  border-radius: 8px;
+  background: var(--circle-gold-soft);
+}
+
+.moreSectionGrid strong,
+.moreSectionGrid small {
+  display: block;
+  min-width: 0;
+}
+
+.moreSectionGrid strong {
+  color: var(--circle-text);
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.moreSectionGrid small {
+  margin-top: 4px;
+  color: var(--circle-faint);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .memoryList {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -5255,5 +5451,549 @@
     width: 60px;
     height: 60px;
     font-size: 24px;
+  }
+}
+
+@media (max-width: 720px) {
+  .shell {
+    position: relative;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .rail {
+    grid-template-areas: "brand utilities";
+    grid-template-columns: minmax(0, 1fr) auto;
+    min-height: 58px;
+    padding: calc(8px + env(safe-area-inset-top)) 10px 8px;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .productLabel {
+    min-height: 42px;
+    border-radius: 8px;
+  }
+
+  .productLabel span {
+    max-width: 150px;
+  }
+
+  .stage {
+    height: 100%;
+    min-height: 0;
+    padding: 14px 12px calc(86px + env(safe-area-inset-bottom));
+    gap: 12px;
+    overflow-y: auto;
+  }
+
+  .assistantStage,
+  .projectsStage {
+    align-content: stretch;
+    padding-bottom: calc(86px + env(safe-area-inset-bottom));
+  }
+
+  .mobileTabBar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 3px;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--circle-border);
+    background:
+      linear-gradient(180deg, rgba(10, 11, 12, 0.76), rgba(7, 8, 9, 0.96)),
+      var(--circle-surface);
+    box-shadow: 0 -18px 42px rgba(0, 0, 0, 0.34);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .lightTheme .mobileTabBar {
+    background:
+      linear-gradient(180deg, rgba(255, 252, 244, 0.8), rgba(255, 250, 239, 0.96)),
+      var(--circle-surface);
+    box-shadow: 0 -18px 34px rgba(80, 65, 31, 0.12);
+  }
+
+  .mobileTabBar button {
+    min-width: 0;
+    min-height: 54px;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 4px;
+    padding: 5px 3px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--circle-faint);
+    font: inherit;
+    font-size: 10px;
+    font-weight: 760;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobileTabBar button svg {
+    color: currentColor;
+  }
+
+  .mobileTabBar button:hover,
+  .mobileTabBar button:focus-visible,
+  .mobileTabActive {
+    border-color: var(--circle-gold-border) !important;
+    background: var(--circle-control-hover) !important;
+    color: var(--circle-text) !important;
+    outline: none;
+  }
+
+  .screen {
+    gap: 12px;
+    padding-bottom: 0;
+  }
+
+  .homeHero {
+    position: relative;
+    z-index: 1;
+    min-height: 0;
+    display: grid;
+    gap: 14px;
+    padding: 16px;
+    overflow: hidden;
+  }
+
+  .homeHeroMain {
+    align-content: start;
+  }
+
+  .homeHero h1,
+  .screen h1 {
+    font-size: 30px;
+    line-height: 1.06;
+  }
+
+  .homeHero p {
+    font-size: 14px;
+  }
+
+  .homeHeroActions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .homeRoleCard {
+    min-height: 0;
+    padding: 13px;
+  }
+
+  .homeRoleCard strong {
+    font-size: 19px;
+  }
+
+  .homeStatsGrid {
+    position: relative;
+    z-index: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .homeStatCard {
+    min-height: 94px;
+    gap: 6px;
+    padding: 11px;
+  }
+
+  .homeStatCard strong {
+    font-size: 24px;
+  }
+
+  .homeStatCard small {
+    font-size: 11px;
+  }
+
+  .homeBentoGrid {
+    position: relative;
+    z-index: 2;
+    grid-template-columns: 1fr;
+    grid-auto-flow: row;
+    gap: 9px;
+  }
+
+  .homePanel {
+    min-height: 0;
+    padding: 13px;
+  }
+
+  .homeJourneyTrack div {
+    min-height: 82px;
+  }
+
+  .moreHeader {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .moreHeader h1 {
+    font-size: 30px;
+  }
+
+  .moreQuickActions,
+  .moreSectionGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .moreSectionGrid button {
+    min-height: 72px;
+    grid-template-columns: 38px minmax(0, 1fr) 16px;
+    padding: 11px;
+  }
+
+  .moreSectionIcon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .projectsScreen {
+    height: auto;
+    min-height: 100%;
+    grid-template-rows: auto minmax(0, auto);
+    gap: 10px;
+    overflow: visible;
+  }
+
+  .projectMenuBar {
+    position: sticky;
+    top: -14px;
+    z-index: 6;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin: -2px -2px 0;
+    padding: 9px;
+    border: 1px solid var(--circle-border);
+    border-radius: 8px;
+    background:
+      var(--circle-card-sheen),
+      var(--circle-panel-solid);
+    box-shadow: var(--circle-control-shadow);
+  }
+
+  .projectScopeGroup,
+  .projectFolderChips,
+  .projectMenuSearch,
+  .projectMenuActions {
+    width: 100%;
+  }
+
+  .projectFolderChips {
+    flex: none;
+    padding-bottom: 1px;
+  }
+
+  .projectFolderChips button {
+    max-width: 170px;
+  }
+
+  .projectMenuActions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .projectMoveMenu,
+  .projectMenuPrimary {
+    grid-column: 1 / -1;
+  }
+
+  .finderShell {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    height: auto;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .folderPane {
+    display: none;
+  }
+
+  .filePane {
+    min-height: 0;
+    border: 1px solid var(--circle-border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .fileToolbar {
+    border-radius: 0;
+  }
+
+  .projectRows {
+    max-height: none;
+  }
+
+  .projectRows button {
+    min-height: 78px;
+  }
+
+  .previewPane {
+    max-height: none;
+    padding: 14px;
+    border: 1px solid var(--circle-border);
+    border-radius: 8px;
+    background:
+      var(--circle-card-sheen),
+      var(--circle-panel);
+    box-shadow: var(--circle-control-shadow);
+  }
+
+  .previewHeader {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .previewIcon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .projectInstructionPanel textarea {
+    min-height: 112px;
+  }
+
+  .projectAssistantPanel {
+    min-height: 0;
+  }
+
+  .projectAssistantMessages {
+    max-height: none;
+  }
+
+  .loopBoardHeader {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 0;
+    box-sizing: border-box;
+    padding: 14px;
+    overflow: visible;
+  }
+
+  .loopBoardScreen {
+    display: block;
+  }
+
+  .loopBoardScreen > * + * {
+    margin-top: 12px;
+  }
+
+  .loopBoardHeader p {
+    font-size: 13px;
+  }
+
+  .loopExperience {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .loopRunner {
+    order: -1;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    min-height: 0;
+    padding: 14px;
+    overflow: hidden;
+  }
+
+  .loopRunnerHeader {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 11px;
+  }
+
+  .loopRunnerHeader h2 {
+    font-size: 25px;
+  }
+
+  .loopPicker {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .loopPicker::-webkit-scrollbar {
+    display: none;
+  }
+
+  .loopPicker button {
+    min-height: 72px;
+    grid-template-columns: 34px minmax(0, 1fr);
+    flex: 0 0 210px;
+    padding: 10px;
+  }
+
+  .loopPickerIcon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .loopPicker button em {
+    display: none;
+  }
+
+  .projectLoopStart,
+  .projectLoopScanningPanel,
+  .loopGatheringPanel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .projectLoopStart {
+    grid-template-columns: 1fr;
+  }
+
+  .projectLoopStartCopy,
+  .projectLoopStartMetrics,
+  .projectLoopResults {
+    min-width: 0;
+  }
+
+  .projectLoopStartCopy h3,
+  .projectLoopResultHero h3 {
+    font-size: 25px;
+    overflow-wrap: anywhere;
+  }
+
+  .projectLoopStartCopy p,
+  .projectLoopResultHero p {
+    overflow-wrap: anywhere;
+  }
+
+  .projectLoopScanButton {
+    justify-self: stretch;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    white-space: normal;
+  }
+
+  .projectLoopMetric {
+    min-height: 96px;
+  }
+
+  .projectLoopResultHero {
+    align-items: stretch;
+  }
+
+  .assistantScreen {
+    min-height: calc(100svh - 164px - env(safe-area-inset-bottom));
+  }
+
+  .assistantLayout {
+    min-height: inherit;
+    gap: 8px;
+  }
+
+  .assistantMenuBar {
+    position: sticky;
+    top: -14px;
+    z-index: 7;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    margin: -2px -2px 0;
+    padding: 8px;
+    border: 1px solid var(--circle-border);
+    border-radius: 8px;
+    background:
+      var(--circle-card-sheen),
+      var(--circle-panel-solid);
+    box-shadow: var(--circle-control-shadow);
+  }
+
+  .assistantThreadGroup,
+  .assistantProjectActions {
+    grid-column: 1 / -1;
+  }
+
+  .assistantThreadTabs {
+    max-width: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .assistantThreadTabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .assistantThreadTabs button {
+    max-width: 190px;
+    flex: 0 0 auto;
+  }
+
+  .assistantMenuButton,
+  .assistantSettingsHost {
+    min-width: 0;
+    flex: none;
+  }
+
+  .assistantProjectActions,
+  .assistantThreadActions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  }
+
+  .assistantMenuButton,
+  .assistantSettingsButton,
+  .assistantProjectActions button,
+  .assistantThreadActions button {
+    min-height: 42px;
+    padding: 0 8px;
+  }
+
+  .chatPanel {
+    min-height: 420px;
+    border: 1px solid var(--circle-border);
+    border-radius: 8px;
+    background: var(--circle-pane-soft);
+    overflow: hidden;
+  }
+
+  .chatMessages {
+    padding: 11px;
+  }
+
+  .assistantComposer {
+    min-height: 58px;
   }
 }

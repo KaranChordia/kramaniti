@@ -67,6 +67,7 @@ type MenuId =
   | 'assistant'
   | 'memory'
   | 'projects'
+  | 'more'
   | 'profile'
   | 'settings';
 type LoopId = 'signal' | 'project' | 'task' | 'reflection' | 'brief';
@@ -360,6 +361,24 @@ const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> =
   { id: 'assistant', label: 'Assistant', icon: MessageCircle },
   { id: 'memory', label: 'Memory', icon: Database },
   { id: 'projects', label: 'Projects', icon: FolderOpen },
+];
+
+const MOBILE_PRIMARY_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> = [
+  { id: 'home', label: 'Home', icon: Activity },
+  { id: 'projects', label: 'Projects', icon: FolderOpen },
+  { id: 'loops', label: 'Loops', icon: Repeat2 },
+  { id: 'assistant', label: 'Assistant', icon: MessageCircle },
+  { id: 'more', label: 'More', icon: List },
+];
+
+const MORE_MENU_ITEMS: Array<{ id: MenuId; label: string; detail: string; icon: typeof CircleDot }> = [
+  { id: 'path', label: 'Path', detail: 'Choose founder or solopreneur mode.', icon: Compass },
+  { id: 'context', label: 'Context', detail: 'Open the saved signal and next questions.', icon: FileText },
+  { id: 'circle', label: 'Circle', detail: 'Review founder problems and builder shares.', icon: Users },
+  { id: 'tasks', label: 'Tasks', detail: 'Manage open work grouped by project.', icon: CheckCircle2 },
+  { id: 'memory', label: 'Memory', detail: 'Review memories and delete saved items.', icon: Database },
+  { id: 'profile', label: 'Profile', detail: 'Check account identity and workspace state.', icon: UserRound },
+  { id: 'settings', label: 'Settings', detail: 'Adjust path, privacy, and digest preferences.', icon: Settings },
 ];
 
 const createUiMessage = (
@@ -732,6 +751,7 @@ export function ClarityCircle() {
   const [isProjectAssistantBusy, setIsProjectAssistantBusy] = useState(false);
   const [isSavingProject, setIsSavingProject] = useState(false);
   const [isSavingProjectInstruction, setIsSavingProjectInstruction] = useState(false);
+  const stageRef = useRef<HTMLElement | null>(null);
   const assistantInputRef = useRef<HTMLTextAreaElement | null>(null);
   const projectAssistantInputRef = useRef<HTMLTextAreaElement | null>(null);
   const assistantThreadDropdownHostRef = useRef<HTMLDivElement | null>(null);
@@ -1111,7 +1131,11 @@ export function ClarityCircle() {
           if (parsed.intent) setIntent(parsed.intent);
           if (parsed.savedContext) setSavedContext(parsed.savedContext);
           if (parsed.sessionMode) setSessionMode(parsed.sessionMode);
-          if (parsed.activeMenu === 'home' || (parsed.activeMenu && MENU_ITEMS.some((item) => item.id === parsed.activeMenu))) {
+          if (
+            parsed.activeMenu === 'home' ||
+            parsed.activeMenu === 'more' ||
+            (parsed.activeMenu && MENU_ITEMS.some((item) => item.id === parsed.activeMenu))
+          ) {
             setActiveMenu(parsed.activeMenu);
           }
           if (Array.isArray(parsed.assistantMessages) && parsed.assistantMessages.length > 0) {
@@ -3970,7 +3994,12 @@ export function ClarityCircle() {
     if (menuId === 'start') setStep('entry');
     if (menuId === 'path') setStep('track');
     if (menuId === 'context' && step === 'entry') setStep(savedContext ? 'context' : 'intent');
+    window.requestAnimationFrame(() => {
+      stageRef.current?.scrollTo({ top: 0, left: 0 });
+    });
   };
+
+  const mobileMoreIsActive = activeMenu === 'more' || MORE_MENU_ITEMS.some((item) => item.id === activeMenu);
 
   return (
     <main className={`clarity-circle-route ${styles.page} ${themeMode === 'light' ? styles.lightTheme : ''}`}>
@@ -4052,6 +4081,7 @@ export function ClarityCircle() {
         </header>
 
         <section
+          ref={stageRef}
           className={`${styles.stage} ${activeMenu === 'start' ? styles.entryStage : ''} ${
             activeMenu === 'assistant' ? styles.assistantStage : ''
           } ${activeMenu === 'projects' ? styles.projectsStage : ''
@@ -5442,6 +5472,71 @@ export function ClarityCircle() {
             </section>
           )}
 
+          {activeMenu === 'more' && (
+            <section className={`${styles.screen} ${styles.moreScreen}`} aria-label="More Clarity Circle sections">
+              <div className={styles.moreHeader}>
+                <div>
+                  <span>More</span>
+                  <h1>Workspace menu</h1>
+                  <p>
+                    Open secondary sections without crowding the main mobile tabs. Your projects, loops, and assistant stay one tap away.
+                  </p>
+                </div>
+                <div className={styles.moreAccountCard}>
+                  <span>{authUser ? 'Signed in' : 'Local session'}</span>
+                  <strong>{displayUsername || displayEmail || accountTrackCopy.shortLabel}</strong>
+                  <small>{status || `${projects.length} projects, ${projectTasks.length} tasks, ${assistantMemories.length} memories`}</small>
+                </div>
+              </div>
+
+              <div className={styles.moreQuickActions} aria-label="Primary workspace shortcuts">
+                <button
+                  type="button"
+                  className={styles.primaryButton}
+                  onClick={() => {
+                    if (latestProject && !savedContext) {
+                      openProject(latestProject);
+                      return;
+                    }
+                    openMenu(savedContext ? 'context' : 'path');
+                  }}
+                >
+                  {savedContext || latestProject ? 'Open current context' : 'Capture first signal'}
+                  <ArrowRight size={16} aria-hidden="true" />
+                </button>
+                <button type="button" className={styles.secondaryButton} onClick={() => openMenu('tasks')}>
+                  Tasks
+                  <CheckCircle2 size={16} aria-hidden="true" />
+                </button>
+              </div>
+
+              <div className={styles.moreSectionGrid} aria-label="Secondary sections">
+                {MORE_MENU_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  const isCurrent = activeMenu === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={isCurrent ? styles.moreSectionActive : ''}
+                      onClick={() => openMenu(item.id)}
+                      aria-pressed={isCurrent}
+                    >
+                      <span className={styles.moreSectionIcon}>
+                        <Icon size={17} aria-hidden="true" />
+                      </span>
+                      <span>
+                        <strong>{item.label}</strong>
+                        <small>{item.detail}</small>
+                      </span>
+                      <ChevronRight size={16} aria-hidden="true" />
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
           {activeMenu === 'memory' && (
             <section className={styles.screen} aria-label="Memory">
               <div className={styles.memoryList} aria-label="Assistant memories">
@@ -5567,6 +5662,23 @@ export function ClarityCircle() {
                     <small>{folderProjectCount('unfiled')}</small>
                   </button>
                 </div>
+
+                {projectFolders.length > 0 && (
+                  <div className={styles.projectFolderChips} aria-label="Project folders">
+                    {projectFolders.map((folder) => (
+                      <button
+                        key={folder.id}
+                        type="button"
+                        className={activeProjectFolder === folder.id ? styles.projectFolderChipActive : ''}
+                        onClick={() => setActiveProjectFolder(folder.id)}
+                      >
+                        <Folder size={15} aria-hidden="true" />
+                        <span>{folder.name}</span>
+                        <small>{folderProjectCount(folder.id)}</small>
+                      </button>
+                    ))}
+                  </div>
+                )}
 
                 <label className={`${styles.projectSearch} ${styles.projectMenuSearch}`}>
                   <Search size={15} aria-hidden="true" />
@@ -6140,6 +6252,26 @@ export function ClarityCircle() {
             </section>
           )}
         </section>
+
+        <nav className={styles.mobileTabBar} aria-label="Primary Clarity Circle navigation">
+          {MOBILE_PRIMARY_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isCurrent = item.id === 'more' ? mobileMoreIsActive : activeMenu === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={isCurrent ? styles.mobileTabActive : ''}
+                onClick={() => openMenu(item.id)}
+                aria-label={item.label}
+                aria-pressed={isCurrent}
+              >
+                <Icon size={18} aria-hidden="true" />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
       </section>
     </main>
   );
