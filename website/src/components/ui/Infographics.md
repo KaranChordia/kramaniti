@@ -247,6 +247,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: four-step horizontal spine from escalation detection to context transfer, human recovery, and system write-back.
 * **Selection Criteria**: Choose when the essay needs a recovery loop for customer-facing workflows, support operations, or service-quality reviews.
 
+## 32. Claim Proof Route (Proof-to-Presence Flow)
+* **Component Name**: `ClaimProofRouteInfographic`
+* **Trigger String**: `[infographic:claim-proof-route]`
+* **Best Used For**: Showing how a public claim should connect to substantiation, delivery route, and review trigger before publication.
+* **Visuals**: four-card route from public claim to substantiation, delivery route, and review trigger.
+* **Selection Criteria**: Choose when a post explains claim discipline, proof routing, public promises, or governance for brand presence.
+
+## 33. Promise Delivery Check (Claim-Support Matrix)
+* **Component Name**: `PromiseDeliveryCheckInfographic`
+* **Trigger String**: `[infographic:promise-delivery-check]`
+* **Best Used For**: Comparing weak public claims with proof-ready claims that have delivery standards behind them.
+* **Visuals**: matrix with claim moment, weak route, and proof-ready route columns.
+* **Selection Criteria**: Choose when an essay needs to audit homepage lines, founder posts, sales decks, or system promises for evidence and operating support.
+
 ## Decision Flowchart for Content Creators
 
 Use the following mental model to choose the template:

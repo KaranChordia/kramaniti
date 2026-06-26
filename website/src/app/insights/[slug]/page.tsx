@@ -50,6 +50,8 @@ import {
   DecisionRecordCardInfographic,
   OperatingSignalLedgerInfographic,
   PresenceBriefCanvasInfographic,
+  ClaimProofRouteInfographic,
+  PromiseDeliveryCheckInfographic,
   ValueGapFunnelInfographic,
   CollaborationBoundaryMapInfographic,
   SourceRouteCalendarInfographic,
@@ -363,6 +365,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:presence-brief-canvas]') {
           return <PresenceBriefCanvasInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:claim-proof-route]') {
+          return <ClaimProofRouteInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:promise-delivery-check]') {
+          return <PromiseDeliveryCheckInfographic key={index} />;
         }
         if (paragraph === '[infographic:value-gap-funnel]') {
           return <ValueGapFunnelInfographic key={index} />;

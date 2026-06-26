@@ -163,6 +163,102 @@ export function PresenceBriefCanvasInfographic() {
   );
 }
 
+export function ClaimProofRouteInfographic() {
+  const route = [
+    {
+      icon: Megaphone,
+      label: 'Public claim',
+      copy: 'The line a prospect, customer, partner, or team member will read and act on.',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Substantiation',
+      copy: 'The source, record, permission, standard, or observed workflow that supports the claim.',
+    },
+    {
+      icon: Workflow,
+      label: 'Delivery route',
+      copy: 'The operating path that can consistently make the promise true in real work.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Review trigger',
+      copy: 'The condition that forces the claim to be softened, updated, removed, or kept internal.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Claim Proof Route</div>
+      <div className={styles.briefBoard}>
+        {route.map((stage, index) => {
+          const Icon = stage.icon;
+          const isFinal = index === route.length - 1;
+
+          return (
+            <React.Fragment key={stage.label}>
+              <div className={`${styles.briefCard} ${isFinal ? styles.briefCardHighlight : ''}`}>
+                <div className={isFinal ? styles.briefIconHighlight : styles.briefIcon}>
+                  <Icon size={18} />
+                </div>
+                <div className={isFinal ? styles.briefLabelGold : styles.briefLabel}>{stage.label}</div>
+                <p className={isFinal ? styles.briefCopyGold : styles.briefCopy}>{stage.copy}</p>
+              </div>
+              {index < route.length - 1 ? (
+                <div className={styles.briefConnector}>
+                  <ArrowRight className={styles.arrowIconDesktop} size={18} />
+                  <ArrowDown className={styles.arrowIconMobile} size={18} />
+                </div>
+              ) : null}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function PromiseDeliveryCheckInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Promise Delivery Check</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Claim moment</th>
+              <th className={styles.matrixColHeader}>Weak route</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Proof-ready route</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Homepage line</td>
+              <td className={styles.matrixCell}>Sounds impressive but points to no delivery standard.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Maps to a service, owner, workflow, and review condition.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Founder post</td>
+              <td className={styles.matrixCell}>Turns a private anecdote into a broad market claim.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Separates observed signal, inference, and permission-safe language.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Sales deck</td>
+              <td className={styles.matrixCell}>Uses client names, outcomes, or metrics without status.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Labels proof as verified, softened, internal, or not publishable.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>System promise</td>
+              <td className={styles.matrixCell}>Promises automation before adoption and override rules exist.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Shows what is automated, assisted, human-led, and written back.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 export function ValueGapFunnelInfographic() {
   const steps = [
     {
