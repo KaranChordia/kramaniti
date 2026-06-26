@@ -27,6 +27,13 @@ const REPORT_TITLES: Record<ReportType, string> = {
   presence: 'Brand & Presence Blueprint',
 };
 
+type SaveProjectTarget = {
+  projectId: string;
+  folderId: string | null;
+  projectTitle: string;
+  folderName: string;
+};
+
 export default function BlueprintPage() {
   const router = useRouter();
   const [payload, setPayload] = useState<BlueprintRequestBody | null>(null);
@@ -34,6 +41,9 @@ export default function BlueprintPage() {
   const [completedAgents, setCompletedAgents] = useState(0);
   const [activeReport, setActiveReport] = useState<ActiveReport | null>(null);
   const [reportContents, setReportContents] = useState<Partial<Record<ReportType, string>>>({});
+  const [saveProjectOptions, setSaveProjectOptions] = useState<SaveProjectTarget[]>([]);
+  const [selectedSaveProjectId, setSelectedSaveProjectId] = useState('');
+  const [hasLoadedSaveProjects, setHasLoadedSaveProjects] = useState(false);
   const [isSavingReports, setIsSavingReports] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
   const { playSuccess, startAmbient, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
@@ -67,6 +77,63 @@ export default function BlueprintPage() {
     }
   }, [hasLoadedPayload, payload, router]);
 
+  useEffect(() => {
+    if (!hasLoadedPayload || !payload || payload.circleProject?.projectId) return;
+
+    const loadSaveProjects = async () => {
+      const supabase = getClarityCircleSupabase();
+
+      if (!supabase) {
+        setHasLoadedSaveProjects(true);
+        return;
+      }
+
+      const { data: userData } = await supabase.auth.getUser();
+
+      if (!userData.user) {
+        setHasLoadedSaveProjects(true);
+        return;
+      }
+
+      const [projectResult, folderResult] = await Promise.all([
+        supabase
+          .schema('clarity_circle')
+          .from('projects')
+          .select('id,title,folder_id')
+          .eq('user_id', userData.user.id)
+          .eq('status', 'active')
+          .order('updated_at', { ascending: false })
+          .limit(40),
+        supabase
+          .schema('clarity_circle')
+          .from('project_folders')
+          .select('id,name')
+          .eq('user_id', userData.user.id)
+          .eq('status', 'active'),
+      ]);
+
+      if (projectResult.error) {
+        setSaveStatus('Saved projects could not be loaded. Return to Clarity Circle and try again.');
+        setHasLoadedSaveProjects(true);
+        return;
+      }
+
+      const folderNames = new Map((folderResult.data ?? []).map((folder) => [folder.id, folder.name]));
+      const options = (projectResult.data ?? []).map((project) => ({
+        projectId: project.id,
+        folderId: project.folder_id,
+        projectTitle: project.title,
+        folderName: project.folder_id ? folderNames.get(project.folder_id) || 'Project folder' : 'Unfiled',
+      }));
+
+      setSaveProjectOptions(options);
+      setSelectedSaveProjectId((current) => current || options[0]?.projectId || '');
+      setHasLoadedSaveProjects(true);
+    };
+
+    void loadSaveProjects();
+  }, [hasLoadedPayload, payload]);
+
   const handleAgentComplete = useCallback(() => {
     setCompletedAgents(prev => {
       const nextCount = prev + 1;
@@ -84,13 +151,31 @@ export default function BlueprintPage() {
     }));
   }, []);
 
-  const canSaveReports =
-    Boolean(payload?.circleProject?.projectId) &&
+  const attachedSaveTarget = payload?.circleProject?.projectId
+    ? {
+        projectId: payload.circleProject.projectId,
+        folderId: payload.circleProject.folderId ?? null,
+        projectTitle: payload.circleProject.projectTitle,
+        folderName: payload.circleProject.folderName || 'Project save',
+      }
+    : null;
+  const selectedSaveProject = saveProjectOptions.find((project) => project.projectId === selectedSaveProjectId) ?? null;
+  const saveTarget = attachedSaveTarget ?? selectedSaveProject;
+  const reportsReady =
     completedAgents >= 3 &&
     Boolean(reportContents.strategy?.trim() && reportContents.systems?.trim() && reportContents.presence?.trim());
+  const canSaveReports = Boolean(saveTarget?.projectId) && reportsReady;
 
   const saveReportsToProject = async () => {
-    if (!payload?.circleProject?.projectId || !canSaveReports) return;
+    if (!reportsReady) {
+      setSaveStatus('The save button will activate when all three reports finish.');
+      return;
+    }
+
+    if (!saveTarget?.projectId) {
+      setSaveStatus('Choose a project before saving these reports.');
+      return;
+    }
 
     const supabase = getClarityCircleSupabase();
     if (!supabase) {
@@ -111,7 +196,7 @@ export default function BlueprintPage() {
     }
 
     const rows = (['strategy', 'systems', 'presence'] as ReportType[]).map((reportType) => ({
-      project_id: payload.circleProject?.projectId as string,
+      project_id: saveTarget.projectId,
       user_id: user.id,
       report_type: reportType,
       title: REPORT_TITLES[reportType],
@@ -119,9 +204,9 @@ export default function BlueprintPage() {
       source: 'clarity_engine' as const,
       metadata: {
         saved_from: 'clarity_engine_blueprint',
-        project_title: payload.circleProject?.projectTitle,
-        folder_id: payload.circleProject?.folderId ?? null,
-        folder_name: payload.circleProject?.folderName || null,
+        project_title: saveTarget.projectTitle,
+        folder_id: saveTarget.folderId,
+        folder_name: saveTarget.folderName,
         saved_at: new Date().toISOString(),
       },
     }));
@@ -135,15 +220,15 @@ export default function BlueprintPage() {
     }
 
     await supabase.schema('clarity_circle').from('context_entries').insert({
-      project_id: payload.circleProject.projectId,
+      project_id: saveTarget.projectId,
       user_id: user.id,
       entry_type: 'brief',
       payload: {
         source: 'clarity_engine_blueprint',
         report_count: rows.length,
         report_titles: rows.map((row) => row.title),
-        project_title: payload.circleProject.projectTitle,
-        folder_id: payload.circleProject.folderId ?? null,
+        project_title: saveTarget.projectTitle,
+        folder_id: saveTarget.folderId,
         saved_at: new Date().toISOString(),
       },
     });
@@ -282,16 +367,30 @@ export default function BlueprintPage() {
 
         <section className={styles.saveReportsPanel} aria-label="Save blueprint reports">
           <div>
-            <span>{payload.circleProject?.folderName || 'Project save'}</span>
-            <strong>{payload.circleProject?.projectTitle || 'Save these reports to a project'}</strong>
+            <span>{saveTarget?.folderName || 'Project save'}</span>
+            <strong>{saveTarget?.projectTitle || 'Save these reports to a project'}</strong>
             <small>
               {saveStatus ||
-                (payload.circleProject?.projectId
-                  ? canSaveReports
+                (saveTarget?.projectId
+                  ? reportsReady
                     ? 'All three reports are ready to save under this project.'
                     : 'The save button will activate when all three reports finish.'
-                  : 'Open Clarity Engine from a project so these reports can be saved under that project.')}
+                  : hasLoadedSaveProjects
+                    ? 'Choose a saved project to recover this report save.'
+                    : 'Looking for your saved projects...')}
             </small>
+            {!attachedSaveTarget && saveProjectOptions.length > 0 && (
+              <label className={styles.saveProjectPicker}>
+                <span>Save destination</span>
+                <select value={selectedSaveProjectId} onChange={(event) => setSelectedSaveProjectId(event.target.value)}>
+                  {saveProjectOptions.map((project) => (
+                    <option key={project.projectId} value={project.projectId}>
+                      {project.projectTitle} - {project.folderName}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
           </div>
           <button
             className={styles.saveReportsButton}

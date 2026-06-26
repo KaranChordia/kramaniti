@@ -85,6 +85,11 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
   }, [agentId, content, isActive, onComplete, onContentReady]);
 
   useEffect(() => {
+    if (!content.trim()) return;
+    onContentReady?.(agentId, content);
+  }, [agentId, content, onContentReady]);
+
+  useEffect(() => {
     let isMounted = true;
     const abortController = new AbortController();
 

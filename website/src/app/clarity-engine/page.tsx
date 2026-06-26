@@ -460,6 +460,7 @@ export default function ClarityEnginePage() {
             },
             source: envelope.source,
             mockScenarioId: prev.mockScenarioId,
+            circleProject: prev.circleProject ?? null,
           };
         });
       });

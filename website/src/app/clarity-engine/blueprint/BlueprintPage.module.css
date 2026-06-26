@@ -267,6 +267,24 @@
   font: 500 12px/1.35 var(--font-outfit), sans-serif;
 }
 
+.saveProjectPicker {
+  display: grid;
+  gap: 8px;
+  width: min(420px, 100%);
+  margin-top: 12px;
+}
+
+.saveProjectPicker select {
+  min-height: 40px;
+  width: 100%;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 12px;
+  background: rgba(9, 8, 5, 0.82);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0 12px;
+  font: 600 12px/1 var(--font-outfit), sans-serif;
+}
+
 .saveReportsButton {
   min-height: 44px;
   display: inline-flex;

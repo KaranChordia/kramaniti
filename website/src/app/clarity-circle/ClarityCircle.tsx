@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Activity,
@@ -668,6 +669,7 @@ const savedContextFromProject = (project: ClarityCircleProject): SavedContext =>
 });
 
 export function ClarityCircle() {
+  const router = useRouter();
   const [step, setStep] = useState<StepId>('entry');
   const [track, setTrack] = useState<Track>('founder');
   const [intent, setIntent] = useState<IntentDraft>(TRACKS.founder.defaults);
@@ -3854,6 +3856,11 @@ export function ClarityCircle() {
     setStatus(project ? 'Clarity Engine connection prepared with this project context.' : 'Clarity Engine connection prepared with this private Circle context.');
   };
 
+  const continueProjectInEngine = (project: ClarityCircleProject) => {
+    prepareEngineHandoff(project);
+    router.push('/clarity-engine?from=clarity-circle-project');
+  };
+
   const seedAssistantPrompt = (prompt: string) => {
     setAssistantInput(prompt);
     setActiveMenu('assistant');
@@ -5625,14 +5632,14 @@ export function ClarityCircle() {
                           <span>Clarity Engine</span>
                           <p>Use this project&apos;s folder, instruction, tasks, and context to generate a deeper blueprint.</p>
                         </div>
-                        <Link
-                          href="/clarity-engine?from=clarity-circle-project"
+                        <button
+                          type="button"
                           className={styles.primaryButton}
-                          onClick={() => prepareEngineHandoff(selectedProject)}
+                          onClick={() => continueProjectInEngine(selectedProject)}
                         >
                           <Rocket size={16} aria-hidden="true" />
                           Get Clarity
-                        </Link>
+                        </button>
                       </div>
 
                       <section className={styles.projectTaskPanel} aria-label="Project reports">
