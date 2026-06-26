@@ -50,6 +50,10 @@
   overflow: hidden;
 }
 
+:global(#codex-browser-sidebar-comments-root) {
+  pointer-events: none !important;
+}
+
 .lightTheme {
   --circle-surface: #f5f1e7;
   --circle-panel: rgba(255, 252, 244, 0.92);
@@ -413,6 +417,11 @@
 }
 
 .assistantStage {
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
+}
+
+.projectsStage {
   grid-template-rows: minmax(0, 1fr);
   gap: 0;
 }
@@ -909,7 +918,7 @@
 }
 
 .homeHero {
-  min-height: 236px;
+  min-height: 312px;
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.72fr);
   align-items: stretch;
@@ -927,7 +936,7 @@
 
 .homeHeroMain {
   display: grid;
-  align-content: end;
+  align-content: center;
   gap: 12px;
   min-width: 0;
 }
@@ -945,7 +954,8 @@
 
 .homeHero h1 {
   max-width: 880px;
-  font-size: clamp(42px, 5.4vw, 78px);
+  margin: 0;
+  font-size: clamp(38px, 4.8vw, 64px);
   letter-spacing: 0;
 }
 
@@ -969,9 +979,9 @@
 }
 
 .homeRoleCard {
-  min-height: 100%;
+  min-height: 0;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 12px;
   padding: 16px;
   border: 1px solid var(--circle-border);
@@ -995,7 +1005,7 @@
 
 .homeStatsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(164px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 10px;
 }
 
@@ -1053,6 +1063,8 @@
 .loopPicker,
 .loopRunner,
 .loopResultCard,
+.projectLoopStart,
+.projectLoopResultHero,
 .loopGatheringPanel,
 .loopDetailPanel,
 .loopCard,
@@ -1068,7 +1080,6 @@
 
 .loopBoardHeader {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 360px);
   gap: 14px;
   align-items: center;
   padding: 16px;
@@ -1077,6 +1088,9 @@
 .loopBoardHeader span,
 .loopRunnerHeader span,
 .loopResultCard span,
+.projectLoopStartCopy span,
+.projectLoopResultHero span,
+.projectLoopMetric span,
 .loopCard small,
 .loopDetailHeader span,
 .loopDetailBlock span {
@@ -1090,7 +1104,7 @@
 .loopBoardHeader h1 {
   margin: 0 0 7px;
   color: var(--circle-text);
-  font-size: clamp(30px, 4vw, 52px);
+  font-size: clamp(30px, 4vw, 48px);
   line-height: 0.98;
 }
 
@@ -1202,7 +1216,7 @@
 }
 
 .loopRunner {
-  min-height: 560px;
+  min-height: 640px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 14px;
@@ -1321,6 +1335,176 @@
   display: grid;
   align-content: start;
   gap: 12px;
+}
+
+.projectLoopWorkspace {
+  min-height: 0;
+  display: grid;
+  align-content: stretch;
+}
+
+.projectLoopStart {
+  min-height: 430px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(280px, 0.62fr);
+  gap: 14px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.projectLoopStartCopy {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 12px;
+}
+
+.projectLoopStartCopy h3,
+.projectLoopResultHero h3 {
+  margin: 0;
+  color: var(--circle-text);
+  font-size: clamp(26px, 3.8vw, 42px);
+  line-height: 1.05;
+}
+
+.projectLoopStartCopy p,
+.projectLoopResultHero p,
+.projectLoopInsight p {
+  margin: 0;
+  color: var(--circle-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.projectLoopScanButton {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid rgba(235, 203, 116, 0.68);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(235, 203, 116, 0.98), rgba(177, 140, 48, 0.96));
+  color: var(--circle-on-gold);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 780;
+  line-height: 1;
+  padding: 0 16px;
+  cursor: pointer;
+  box-shadow: var(--circle-primary-shadow);
+}
+
+.projectLoopScanButton:hover,
+.projectLoopScanButton:focus-visible {
+  border-color: rgba(235, 203, 116, 0.86);
+  outline: none;
+}
+
+.projectLoopStartMetrics,
+.projectLoopInsightGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.projectLoopMetric {
+  min-height: 128px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 13px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-row);
+}
+
+.projectLoopMetric strong {
+  color: var(--circle-text);
+  font-size: 34px;
+  line-height: 0.95;
+}
+
+.projectLoopMetric p {
+  margin: 0;
+  color: var(--circle-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.projectLoopScanningPanel {
+  min-height: 430px;
+}
+
+.projectLoopScanVisual {
+  min-width: 0;
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+}
+
+.projectLoopScanVisual .loopGatheringOrb {
+  width: min(100%, 210px);
+}
+
+.projectLoopScanNodes {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.projectLoopScanNodes span {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-row);
+  color: var(--circle-muted);
+  font-size: 12px;
+  font-weight: 740;
+}
+
+.projectLoopResults {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.projectLoopResultHero {
+  min-height: 168px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+}
+
+.projectLoopInsight {
+  min-height: 96px;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-row);
+}
+
+.projectLoopInsight svg {
+  margin-top: 2px;
+  color: var(--circle-gold-light);
+}
+
+.projectLoopInsight strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--circle-text);
+  font-size: 14px;
+  line-height: 1.25;
 }
 
 .loopContextChips {
@@ -2406,8 +2590,167 @@
 .projectsScreen {
   width: 100%;
   height: 100%;
-  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+  align-content: stretch;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
   overflow: hidden;
+}
+
+.projectMenuBar {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 9px;
+  overflow: visible;
+}
+
+.projectScopeGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  flex: 0 0 auto;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-control);
+  box-shadow: var(--circle-control-shadow);
+  overflow: hidden;
+}
+
+.projectScopeGroup button,
+.projectMenuButton,
+.projectMenuPrimary {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-control);
+  color: var(--circle-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 740;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: var(--circle-control-shadow);
+  -webkit-tap-highlight-color: transparent;
+  animation: none !important;
+  transition: none !important;
+}
+
+.projectScopeGroup button {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0 11px;
+}
+
+.projectScopeGroup button + button {
+  border-left: 1px solid var(--circle-subtle-divider);
+}
+
+.projectScopeGroup small {
+  color: var(--circle-faint);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.projectMenuSearch {
+  max-width: 360px;
+  flex: 1 1 220px;
+  min-height: 38px;
+}
+
+.projectMenuActions {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.projectMenuButton,
+.projectMenuPrimary {
+  flex: 0 0 auto;
+  padding: 0 12px;
+}
+
+.projectMenuPrimary {
+  border-color: rgba(235, 203, 116, 0.68);
+  background: linear-gradient(180deg, rgba(235, 203, 116, 0.98), rgba(177, 140, 48, 0.96));
+  color: var(--circle-on-gold);
+  box-shadow: var(--circle-primary-shadow);
+}
+
+.projectMoveMenu {
+  min-height: 38px;
+  display: grid;
+  grid-template-columns: auto minmax(126px, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid var(--circle-border);
+  border-radius: 8px;
+  background: var(--circle-control);
+  color: var(--circle-muted);
+  box-shadow: var(--circle-control-shadow);
+}
+
+.projectMoveMenu span {
+  color: var(--circle-faint);
+  font-size: 11px;
+  font-weight: 780;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.projectMoveMenu select {
+  min-width: 0;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  color: var(--circle-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 720;
+  outline: none;
+}
+
+.projectScopeGroup button:hover,
+.projectScopeGroup button:focus-visible,
+.projectScopeActive,
+.projectMenuButton:hover,
+.projectMenuButton:focus-visible,
+.projectMoveMenu:focus-within {
+  border-color: var(--circle-gold-border);
+  background: var(--circle-control-hover);
+  color: var(--circle-text);
+  outline: none;
+}
+
+.projectMenuPrimary:hover,
+.projectMenuPrimary:focus-visible {
+  border-color: rgba(235, 203, 116, 0.86);
+  color: var(--circle-on-gold);
+  outline: none;
+}
+
+.projectScopeGroup button:disabled,
+.projectMenuButton:disabled,
+.projectMenuPrimary:disabled,
+.projectMoveMenu:has(select:disabled) {
+  cursor: not-allowed;
+  opacity: 0.58;
 }
 
 .finderShell {
@@ -4348,6 +4691,10 @@
   .loopStatusStrip,
   .loopPicker,
   .loopOverviewGrid,
+  .projectLoopStart,
+  .projectLoopStartMetrics,
+  .projectLoopInsightGrid,
+  .projectLoopResultHero,
   .taskStatusStrip,
   .taskStatusFilters,
   .loopGatheringPanel,
@@ -4376,6 +4723,20 @@
 
   .loopGatheringOrb {
     width: 150px;
+  }
+
+  .projectLoopStart,
+  .projectLoopScanningPanel {
+    min-height: 0;
+  }
+
+  .projectLoopStartCopy {
+    align-content: start;
+  }
+
+  .projectLoopScanButton,
+  .projectLoopResultHero .secondaryButton {
+    width: 100%;
   }
 
   .loopDetailHeader {
@@ -4531,11 +4892,57 @@
   }
 
   .projectsScreen {
-    display: block;
+    display: grid;
     height: auto;
     min-height: 0;
-    grid-template-rows: none;
+    grid-template-rows: auto auto;
+    gap: 10px;
     overflow: visible;
+  }
+
+  .projectMenuBar {
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .projectScopeGroup {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .projectScopeGroup button {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
+  .projectScopeGroup button span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .projectMenuSearch {
+    max-width: none;
+    flex: 1 1 100%;
+  }
+
+  .projectMenuActions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-left: 0;
+  }
+
+  .projectMenuButton,
+  .projectMenuPrimary {
+    min-width: 0;
+    width: 100%;
+    padding: 0 8px;
+  }
+
+  .projectMoveMenu {
+    grid-column: 1 / -1;
   }
 
   .finderShell {
@@ -4561,6 +4968,10 @@
       var(--circle-card-sheen),
       var(--circle-panel);
     overflow: visible;
+  }
+
+  .folderPane .finderWindowDots + .folderGroup {
+    display: none;
   }
 
   .folderGroup {

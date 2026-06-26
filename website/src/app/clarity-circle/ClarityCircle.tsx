@@ -355,7 +355,7 @@ const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> =
   { id: 'path', label: 'Path', icon: Compass },
   { id: 'context', label: 'Context', icon: FileText },
   { id: 'circle', label: 'Circle', icon: Users },
-  { id: 'loops', label: 'Loop board', icon: Repeat2 },
+  { id: 'loops', label: 'Loops', icon: Repeat2 },
   { id: 'tasks', label: 'Tasks', icon: CheckCircle2 },
   { id: 'assistant', label: 'Assistant', icon: MessageCircle },
   { id: 'memory', label: 'Memory', icon: Database },
@@ -675,9 +675,9 @@ export function ClarityCircle() {
   const [intent, setIntent] = useState<IntentDraft>(TRACKS.founder.defaults);
   const [savedContext, setSavedContext] = useState<SavedContext | null>(null);
   const [activeMenu, setActiveMenu] = useState<MenuId>('start');
-  const [activeLoopId, setActiveLoopId] = useState<LoopId>('signal');
+  const [activeLoopId, setActiveLoopId] = useState<LoopId>('project');
   const [loopRun, setLoopRun] = useState<LoopRunState>({
-    loopId: 'signal',
+    loopId: 'project',
     phase: 'idle',
     startedAt: null,
     completedAt: null,
@@ -1763,12 +1763,12 @@ export function ClarityCircle() {
       id: 'project',
       name: 'Project Loop',
       label: 'Build',
-      status: pendingAssistantActionCount > 0 ? 'needs_approval' : projects.length > 0 ? 'working' : savedContext ? 'pending' : 'pending',
+      status: pendingAssistantActionCount > 0 ? 'needs_approval' : projects.length > 0 ? 'working' : 'pending',
       detail: projects.length > 0 ? `${projects.length} saved projects` : 'No saved projects yet',
       nextAction:
         projects.length > 0
-          ? 'Scan every saved project, folder, open task, and recent update into one project overview.'
-          : 'Scan the workspace and show what project context is missing before work can be organized.',
+          ? 'Press Scan Projects to read saved projects, folders, open tasks, and recent updates.'
+          : 'Press Scan Projects to check whether this workspace has enough project context to organize.',
       icon: FolderOpen,
     },
     {
@@ -1918,6 +1918,26 @@ export function ClarityCircle() {
       { label: 'Actions', value: String(sourceSignalActions), detail: sourceSignalActions > 0 ? 'Next actions found' : 'No actions captured yet' },
     ],
   };
+  const projectLoopScanTargets = [
+    { label: 'Projects', value: String(projects.length), detail: projects.length > 0 ? 'Saved project files ready to scan' : 'No saved project files yet' },
+    { label: 'Folders', value: String(projectFolders.length), detail: projectFolders.length > 0 ? 'Folder structure available' : 'No folder structure yet' },
+    { label: 'Open tasks', value: String(openTaskCount), detail: openTaskCount > 0 ? 'Task load will be included' : 'No open tasks to include' },
+    { label: 'Reports', value: String(projectReports.length), detail: projectReports.length > 0 ? 'Saved reports available' : 'No saved reports yet' },
+  ];
+  const projectLoopInsights = [
+    {
+      title: latestProject ? 'Latest movement' : 'Project source',
+      detail: latestProject ? `${latestProject.title} was updated ${formatProjectDate(latestProject.updated_at)}.` : 'Create or save a project before the scan can find movement.',
+    },
+    {
+      title: openTaskCount > 0 ? 'Work waiting' : 'Task structure',
+      detail: openTaskCount > 0 ? `${openTaskCount} open task${openTaskCount === 1 ? '' : 's'} found across projects.` : 'No open project tasks were found in this scan.',
+    },
+    {
+      title: pendingAssistantActionCount > 0 ? 'Review needed' : 'Approval queue',
+      detail: pendingAssistantActionCount > 0 ? `${pendingAssistantActionCount} assistant action${pendingAssistantActionCount === 1 ? '' : 's'} need approval.` : 'No pending assistant actions are blocking project movement.',
+    },
+  ];
   const loopSourceActionLabel: Record<LoopId, string> = {
     signal: savedContext || latestProject ? 'Open context' : 'Open path',
     project: 'Open projects',
@@ -3887,6 +3907,14 @@ export function ClarityCircle() {
     setLoopRun({ loopId, phase: 'ready', startedAt, completedAt: new Date().toISOString() });
   };
 
+  const selectLoop = (loopId: LoopId) => {
+    loopRunTokenRef.current += 1;
+    setActiveLoopId(loopId);
+    setLoopRun((current) =>
+      current.loopId === loopId ? current : { loopId, phase: 'idle', startedAt: null, completedAt: null },
+    );
+  };
+
   const runLoopPrimaryAction = (loopId: LoopId) => {
     setActiveLoopId(loopId);
     if (loopId === 'signal') {
@@ -4026,6 +4054,7 @@ export function ClarityCircle() {
         <section
           className={`${styles.stage} ${activeMenu === 'start' ? styles.entryStage : ''} ${
             activeMenu === 'assistant' ? styles.assistantStage : ''
+          } ${activeMenu === 'projects' ? styles.projectsStage : ''
           } clarity-circle-stage`}
           aria-live="polite"
         >
@@ -4646,17 +4675,11 @@ export function ClarityCircle() {
           )}
 
           {activeMenu === 'loops' && (
-            <section className={`${styles.screen} ${styles.loopBoardScreen}`} aria-label="Loop board">
+            <section className={`${styles.screen} ${styles.loopBoardScreen}`} aria-label="Loops">
               <div className={styles.loopBoardHeader}>
                 <div>
-                  <h1>Loop Board</h1>
-                  <p>Signal, project, task, reflection, and brief stay in one guided workspace.</p>
-                </div>
-                <div className={styles.loopStatusStrip} aria-label="Loop status summary">
-                  <span><strong>{loopsByStatus.pending}</strong> Pending</span>
-                  <span><strong>{loopsByStatus.working}</strong> Working</span>
-                  <span><strong>{loopsByStatus.needs_approval}</strong> Needs approval</span>
-                  <span><strong>{loopsByStatus.completed}</strong> Completed</span>
+                  <h1>Loops</h1>
+                  <p>Run one focused loop at a time. Project Loop starts by scanning saved projects, folders, tasks, reports, and recent movement.</p>
                 </div>
               </div>
 
@@ -4670,7 +4693,13 @@ export function ClarityCircle() {
                         key={loop.id}
                         type="button"
                         className={isActive ? styles.loopPickerActive : ''}
-                        onClick={() => void activateLoop(loop.id)}
+                        onClick={() => {
+                          if (loop.id === 'project') {
+                            selectLoop(loop.id);
+                            return;
+                          }
+                          void activateLoop(loop.id);
+                        }}
                         aria-pressed={isActive}
                       >
                         <span className={styles.loopPickerIcon}>
@@ -4694,25 +4723,172 @@ export function ClarityCircle() {
                     <div>
                       <span>{selectedLoop.name}</span>
                       <h2>
-                        {activeLoopIsRunning
-                          ? selectedLoop.id === 'project'
-                            ? 'Gathering your context from Projects'
-                            : `Gathering context for ${selectedLoop.name}`
-                          : activeLoopIsReady
-                            ? loopResultTitle[selectedLoop.id]
-                            : 'Ready when you are'}
+                        {selectedLoop.id === 'project'
+                          ? activeLoopIsRunning
+                            ? 'Scanning your project workspace'
+                            : activeLoopIsReady
+                              ? loopResultTitle.project
+                              : 'Scan saved projects'
+                          : activeLoopIsRunning
+                            ? `Gathering context for ${selectedLoop.name}`
+                            : activeLoopIsReady
+                              ? loopResultTitle[selectedLoop.id]
+                              : 'Ready when you are'}
                       </h2>
                       <p>
-                        {activeLoopIsRunning
-                          ? 'The Circle is reading only the context this loop needs.'
-                          : activeLoopIsReady
-                            ? loopResultDetail[selectedLoop.id]
-                            : selectedLoop.nextAction}
+                        {selectedLoop.id === 'project'
+                          ? activeLoopIsRunning
+                            ? 'The loop agent is reading project files, folders, tasks, reports, and recent updates.'
+                            : activeLoopIsReady
+                              ? loopResultDetail.project
+                              : selectedLoop.nextAction
+                          : activeLoopIsRunning
+                            ? 'The Circle is reading only the context this loop needs.'
+                            : activeLoopIsReady
+                              ? loopResultDetail[selectedLoop.id]
+                              : selectedLoop.nextAction}
                       </p>
                     </div>
                   </div>
 
-                  {activeLoopIsRunning ? (
+                  {selectedLoop.id === 'project' ? (
+                    <div className={styles.projectLoopWorkspace}>
+                      {!activeLoopIsRunning && !activeLoopIsReady && (
+                        <div className={styles.projectLoopStart}>
+                          <div className={styles.projectLoopStartCopy}>
+                            <span>Project scan</span>
+                            <h3>Let the loop agent read your project workspace.</h3>
+                            <p>
+                              The scan checks saved projects, folders, project instructions, open tasks, saved reports, and recent movement before showing the clearest project picture.
+                            </p>
+                            <button type="button" className={styles.projectLoopScanButton} onClick={() => void activateLoop('project')}>
+                              <Search size={17} aria-hidden="true" />
+                              Scan Projects
+                            </button>
+                          </div>
+                          <div className={styles.projectLoopStartMetrics} aria-label="Project scan inputs">
+                            {projectLoopScanTargets.map((item) => (
+                              <div key={item.label} className={styles.projectLoopMetric}>
+                                <span>{item.label}</span>
+                                <strong>{item.value}</strong>
+                                <p>{item.detail}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {activeLoopIsRunning && (
+                        <div className={`${styles.loopGatheringPanel} ${styles.projectLoopScanningPanel}`} aria-live="polite">
+                          <div className={styles.projectLoopScanVisual} aria-hidden="true">
+                            <div className={styles.loopGatheringOrb}>
+                              <span />
+                              <span />
+                              <span />
+                            </div>
+                            <div className={styles.projectLoopScanNodes}>
+                              <span>Projects</span>
+                              <span>Folders</span>
+                              <span>Tasks</span>
+                              <span>Reports</span>
+                            </div>
+                          </div>
+                          <div className={styles.loopGatheringSteps}>
+                            {loopGatheringSteps.project.map((stepText, index) => (
+                              <div key={stepText} style={{ ['--step-index' as string]: index }}>
+                                <span />
+                                <p>{stepText}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {activeLoopIsReady && (
+                        <div className={styles.projectLoopResults}>
+                          <div className={styles.loopContextChips} aria-label="Project context gathered">
+                            {loopContextChips.project.map((chip) => (
+                              <span key={chip}>{chip}</span>
+                            ))}
+                          </div>
+
+                          <div className={styles.projectLoopResultHero}>
+                            <div>
+                              <span>Scan result</span>
+                              <h3>{loopResultTitle.project}</h3>
+                              <p>{loopResultDetail.project}</p>
+                            </div>
+                            <button type="button" className={styles.secondaryButton} onClick={() => void activateLoop('project')}>
+                              <RefreshCw size={16} aria-hidden="true" />
+                              Scan again
+                            </button>
+                          </div>
+
+                          <div className={styles.loopOverviewGrid} aria-label="Project Loop scan overview">
+                            {loopOverviewItems.project.map((item) => (
+                              <div key={`${item.label}-${item.value}`} className={styles.loopOverviewItem}>
+                                <span>{item.label}</span>
+                                <strong>{item.value}</strong>
+                                <p>{item.detail}</p>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className={styles.projectLoopInsightGrid} aria-label="Project Loop findings">
+                            {projectLoopInsights.map((item) => (
+                              <article key={item.title} className={styles.projectLoopInsight}>
+                                <CheckCircle2 size={16} aria-hidden="true" />
+                                <div>
+                                  <strong>{item.title}</strong>
+                                  <p>{item.detail}</p>
+                                </div>
+                              </article>
+                            ))}
+                          </div>
+
+                          <div className={styles.loopProjectList} aria-label="Project Loop overview">
+                            <div className={styles.projectSubheader}>
+                              <span>Recent project context</span>
+                              <small>{projects.length} total</small>
+                            </div>
+                            {recentProjects.length > 0 ? (
+                              recentProjects.map((project) => {
+                                const projectOpenTasks = projectTasks.filter((task) => task.project_id === project.id && task.status === 'open');
+                                return (
+                                  <button key={project.id} type="button" className={styles.loopProjectRow} onClick={() => openProject(project)}>
+                                    <span>
+                                      <strong>{project.title}</strong>
+                                      <small>{getFolderName(project.folder_id)}</small>
+                                    </span>
+                                    <span>
+                                      <strong>{projectOpenTasks.length}</strong>
+                                      <small>open</small>
+                                    </span>
+                                    <span>
+                                      <strong>{formatProjectDate(project.updated_at)}</strong>
+                                      <small>updated</small>
+                                    </span>
+                                  </button>
+                                );
+                              })
+                            ) : (
+                              <p className={styles.loopEmptyText}>No saved projects were found in this scan.</p>
+                            )}
+                          </div>
+
+                          <div className={styles.loopActions}>
+                            <button type="button" className={styles.primaryButton} onClick={() => openMenu('projects')}>
+                              Open projects
+                              <ArrowRight size={16} aria-hidden="true" />
+                            </button>
+                            <button type="button" className={styles.secondaryButton} onClick={() => runLoopSecondaryAction('project')}>
+                              Ask assistant about scan
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : activeLoopIsRunning ? (
                     <div className={styles.loopGatheringPanel} aria-live="polite">
                       <div className={styles.loopGatheringOrb} aria-hidden="true">
                         <span />
@@ -4751,38 +4927,6 @@ export function ClarityCircle() {
                           </div>
                         ))}
                       </div>
-
-                      {selectedLoop.id === 'project' && (
-                        <div className={styles.loopProjectList} aria-label="Project Loop overview">
-                          <div className={styles.projectSubheader}>
-                            <span>Recent project context</span>
-                            <small>{projects.length} total</small>
-                          </div>
-                          {recentProjects.length > 0 ? (
-                            recentProjects.map((project) => {
-                              const projectOpenTasks = projectTasks.filter((task) => task.project_id === project.id && task.status === 'open');
-                              return (
-                                <button key={project.id} type="button" className={styles.loopProjectRow} onClick={() => openProject(project)}>
-                                  <span>
-                                    <strong>{project.title}</strong>
-                                    <small>{getFolderName(project.folder_id)}</small>
-                                  </span>
-                                  <span>
-                                    <strong>{projectOpenTasks.length}</strong>
-                                    <small>open</small>
-                                  </span>
-                                  <span>
-                                    <strong>{formatProjectDate(project.updated_at)}</strong>
-                                    <small>updated</small>
-                                  </span>
-                                </button>
-                              );
-                            })
-                          ) : (
-                            <p className={styles.loopEmptyText}>No saved projects were found in this scan.</p>
-                          )}
-                        </div>
-                      )}
 
                       {selectedLoop.id === 'task' && (
                         <div className={styles.loopTaskPreview} aria-label="Task Loop preview">
@@ -5402,6 +5546,98 @@ export function ClarityCircle() {
 
           {activeMenu === 'projects' && (
             <section className={`${styles.screen} ${styles.projectsScreen}`} aria-label="Projects">
+              <div className={styles.projectMenuBar} aria-label="Project menu bar">
+                <div className={styles.projectScopeGroup} aria-label="Project locations">
+                  <button
+                    type="button"
+                    className={activeProjectFolder === 'all' ? styles.projectScopeActive : ''}
+                    onClick={() => setActiveProjectFolder('all')}
+                  >
+                    <FolderOpen size={16} aria-hidden="true" />
+                    <span>All</span>
+                    <small>{folderProjectCount('all')}</small>
+                  </button>
+                  <button
+                    type="button"
+                    className={activeProjectFolder === 'unfiled' ? styles.projectScopeActive : ''}
+                    onClick={() => setActiveProjectFolder('unfiled')}
+                  >
+                    <Folder size={16} aria-hidden="true" />
+                    <span>Unfiled</span>
+                    <small>{folderProjectCount('unfiled')}</small>
+                  </button>
+                </div>
+
+                <label className={`${styles.projectSearch} ${styles.projectMenuSearch}`}>
+                  <Search size={15} aria-hidden="true" />
+                  <input
+                    value={projectSearch}
+                    onChange={(event) => setProjectSearch(event.target.value)}
+                    placeholder="Search projects"
+                  />
+                </label>
+
+                <div className={styles.projectMenuActions}>
+                  <button type="button" className={styles.projectMenuButton} onClick={() => setIsCreatingFolder(true)}>
+                    <FolderPlus size={16} aria-hidden="true" />
+                    <span>New folder</span>
+                  </button>
+                  <button type="button" className={styles.projectMenuButton} onClick={() => openNewProjectFlow()}>
+                    <Plus size={16} aria-hidden="true" />
+                    <span>New project</span>
+                  </button>
+                  <label className={styles.projectMoveMenu}>
+                    <span>Move to</span>
+                    <select
+                      value={selectedProject?.folder_id ?? 'unfiled'}
+                      disabled={!selectedProject}
+                      onChange={(event) => {
+                        if (!selectedProject) {
+                          return;
+                        }
+                        void moveProjectToFolder(
+                          selectedProject,
+                          event.target.value === 'unfiled' ? null : event.target.value,
+                        );
+                      }}
+                    >
+                      <option value="unfiled">Unfiled</option>
+                      {projectFolders.map((folder) => (
+                        <option key={folder.id} value={folder.id}>
+                          {folder.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <button
+                    type="button"
+                    className={styles.projectMenuButton}
+                    onClick={() => {
+                      if (selectedProject) {
+                        openProject(selectedProject);
+                      }
+                    }}
+                    disabled={!selectedProject}
+                  >
+                    <ArrowRight size={16} aria-hidden="true" />
+                    <span>Open</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.projectMenuPrimary}
+                    onClick={() => {
+                      if (selectedProject) {
+                        continueProjectInEngine(selectedProject);
+                      }
+                    }}
+                    disabled={!selectedProject}
+                  >
+                    <Rocket size={16} aria-hidden="true" />
+                    <span>Get Clarity</span>
+                  </button>
+                </div>
+              </div>
+
               <div className={styles.finderShell} aria-label="Project finder">
                 <aside className={styles.folderPane} aria-label="Project folders">
                   <div className={styles.finderWindowDots} aria-hidden="true">
@@ -5476,32 +5712,6 @@ export function ClarityCircle() {
                     <div className={styles.fileToolbarSummary}>
                       <span>{activeProjectFolder === 'all' ? 'All Projects' : activeProjectFolder === 'unfiled' ? 'Unfiled' : getFolderName(activeProjectFolder)}</span>
                       <strong>{filteredProjects.length} item{filteredProjects.length === 1 ? '' : 's'}</strong>
-                    </div>
-                    <div className={styles.fileToolbarControls}>
-                      <label className={styles.projectSearch}>
-                        <Search size={15} aria-hidden="true" />
-                        <input
-                          value={projectSearch}
-                          onChange={(event) => setProjectSearch(event.target.value)}
-                          placeholder="Search"
-                        />
-                      </label>
-                      <button
-                        type="button"
-                        className={`${styles.secondaryButton} ${styles.projectToolbarButton}`}
-                        onClick={() => setIsCreatingFolder(true)}
-                      >
-                        <span className={styles.projectToolbarPlus}>+</span>
-                        New folder
-                      </button>
-                      <button
-                        type="button"
-                        className={`${styles.secondaryButton} ${styles.projectToolbarButton}`}
-                        onClick={() => openNewProjectFlow()}
-                      >
-                        <span className={styles.projectToolbarPlus}>+</span>
-                        New project
-                      </button>
                     </div>
                   </div>
 
@@ -5624,21 +5834,6 @@ export function ClarityCircle() {
                           disabled={isSavingProjectInstruction}
                         >
                           {isSavingProjectInstruction ? 'Saving...' : 'Save instruction'}
-                        </button>
-                      </div>
-
-                      <div className={styles.projectClarityPanel}>
-                        <div>
-                          <span>Clarity Engine</span>
-                          <p>Use this project&apos;s folder, instruction, tasks, and context to generate a deeper blueprint.</p>
-                        </div>
-                        <button
-                          type="button"
-                          className={styles.primaryButton}
-                          onClick={() => continueProjectInEngine(selectedProject)}
-                        >
-                          <Rocket size={16} aria-hidden="true" />
-                          Get Clarity
                         </button>
                       </div>
 
@@ -5804,32 +5999,6 @@ export function ClarityCircle() {
                         </form>
                       </section>
 
-                      <label className={styles.moveControl}>
-                        <span>Move to</span>
-                        <select
-                          value={selectedProject.folder_id ?? 'unfiled'}
-                          onChange={(event) =>
-                            void moveProjectToFolder(
-                              selectedProject,
-                              event.target.value === 'unfiled' ? null : event.target.value,
-                            )
-                          }
-                        >
-                          <option value="unfiled">Unfiled</option>
-                          {projectFolders.map((folder) => (
-                            <option key={folder.id} value={folder.id}>
-                              {folder.name}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-
-                      <div className={styles.previewActions}>
-                        <button type="button" className={styles.primaryButton} onClick={() => openProject(selectedProject)}>
-                          Open project
-                          <ArrowRight size={16} aria-hidden="true" />
-                        </button>
-                      </div>
                     </>
                   ) : (
                     <div className={styles.finderEmpty}>
