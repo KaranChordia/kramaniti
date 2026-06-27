@@ -258,6 +258,59 @@ This log registers the major strategic and structural decisions made during the 
     *   `website/src/app/dashboard/` (removed)
     *   `website/AGENTS.md`
     *   `website/CLAUDE.md`
+
+### Decision 14: Start Kramaniti ChatGPT App SDK Prototype
+*   **Date:** 2026-06-27
+*   **Area:** ChatGPT App SDK, MCP server, interactive mini app, website-adjacent product surface
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Create the first Kramaniti ChatGPT Apps SDK prototype as a separate development workspace under `website/chatgpt-app/`, exposing a read-only MCP tool and interactive iframe widget rather than changing the public homepage.
+*   **Rationale:** The founder wants a richer interactive mini app inside ChatGPT, but the MCP server is a backend integration surface rather than a normal website page. Keeping the prototype separate protects the active website while allowing Developer Mode testing, tunnel-based HTTPS review, and future deployment planning.
+*   **Source or Evidence:** Founder request on 2026-06-27 to set up a ChatGPT App SDK mini app and clarify MCP server requirements and costs; official OpenAI Apps SDK architecture using MCP tools plus UI resources.
+*   **Affected Files:**
+    *   `website/chatgpt-app/package.json`
+    *   `website/chatgpt-app/package-lock.json`
+    *   `website/chatgpt-app/tsconfig.json`
+    *   `website/chatgpt-app/src/server.ts`
+    *   `website/chatgpt-app/widgets/clarity-map.html`
+    *   `docs/chatgpt_app_sdk_setup.md`
+    *   `09_reviews/decisions.md`
+*   **Alternatives Rejected:**
+    1.  *Embedding the first prototype directly into the public Next.js app:* Rejected because Apps SDK needs an MCP endpoint and iframe widget contract that should be tested separately before becoming part of the public deployment.
+    2.  *Starting with authenticated client data or write actions:* Rejected because the first version should verify the App SDK mechanics without handling credentials, private client data, or irreversible operations.
+*   **Open Questions:**
+    *   Which production host should serve the MCP endpoint if the prototype moves beyond local testing?
+    *   Should the first public app remain a clarity-map tool, or expand into saved workflow-audit sessions?
+    *   What privacy policy, support URL, logo, screenshots, and test prompts should be prepared before public submission?
+
+#### Deployment Update: 2026-06-27
+*   **Status:** Implemented (`[Fact]`)
+*   **Decision:** Deploy the standalone ChatGPT App SDK prototype to Vercel as project `chatgpt-app`.
+*   **Rationale:** ChatGPT Developer Mode and later submission need an HTTPS-accessible MCP endpoint. Vercel is already part of the Kramaniti infrastructure and can host the MCP server without adding a separate hosting provider.
+*   **Production URL:** `https://chatgpt-app-six-silk.vercel.app`
+*   **Verified Connector URL:** `https://chatgpt-app-six-silk.vercel.app/mcp`
+*   **Verification:** `tools/list` returned the `create_clarity_map` tool, and `tools/call` returned structured content for strategy, systems, content, sequence, and guardrails.
+*   **Open Questions:**
+    *   Should this remain on the generated Vercel domain or move to a branded subdomain before submission?
+    *   Which privacy policy and support URLs should be used for the Apps SDK submission package?
+    *   Should persistence be session-only, Supabase-backed, or Vercel-backed in the next iteration?
+
+#### Product Direction Update: 2026-06-27
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Evolve the prototype from a single clarity-card tool into a session-based Kramaniti Clarity Companion with separate context-analysis and operating-map tools.
+*   **Rationale:** The first technical prototype worked inside ChatGPT, but the submission candidate should better use Kramaniti's expertise: helping people turn conversation-provided context and user-confirmed memory-like signals into clarity before tool choice, workflow design, and content direction.
+*   **Affected Files:**
+    *   `website/chatgpt-app/src/mcp.ts`
+    *   `website/chatgpt-app/widgets/clarity-map.html`
+    *   `docs/chatgpt_app_sdk_setup.md`
+    *   `09_reviews/decisions.md`
+*   **Guardrails:**
+    *   The app remains read-only and No Auth for this iteration.
+    *   The app does not directly read private ChatGPT memories.
+    *   The app does not persist user memory or client data.
+    *   User correction overrides inferred or memory-like context.
+*   **Open Questions:**
+    *   Should saved workspace memory be added later with OAuth and Supabase/Vercel storage?
+    *   Which exact app name should be used for submission: Kramaniti, Kramaniti Clarity Companion, or Kramaniti Clarity Map?
     *   `website/public/manifest.json`
     *   `website/public/manifest.webmanifest`
     *   `website/public/sw.js`
@@ -593,3 +646,12 @@ This log registers the major strategic and structural decisions made during the 
     *   Clarity Engine Blueprint now offers "Save all to project" after the three blueprint agents finish. The Strategy, Systems, and Presence reports are saved as individual `clarity_circle.project_reports` rows linked to the originating project.
     *   New projects created manually or through the Circle Assistant must resolve to a folder before save. If no folder is selected or supplied, the app creates or reuses a folder based on the project title.
     *   Guardrail: blueprint reports are saved only after explicit user action. Do not silently persist generated reports during streaming.
+
+*   **2026-06-27 Clarity Circle ChatGPT Manager MVP:**
+    *   The founder approved a second ChatGPT Apps SDK app for Clarity Circle workspace management, excluding loop-related tools for the first MVP.
+    *   The app is deployed as a separate Vercel project, `clarity-circle-chatgpt-app`, with production MCP URL `https://clarity-circle-chatgpt-app.vercel.app/mcp`.
+    *   The MVP exposes tools for workspace overview, project listing/detail, project draft updates, task listing/drafting/status updates, memory listing, and memory draft creation.
+    *   The app now exposes an OAuth bridge for ChatGPT with protected-resource metadata, authorization-server metadata, dynamic client registration, authorization-code + PKCE login, and encrypted short-lived app tokens.
+    *   The OAuth login page verifies the user's Clarity Circle username/email and password through Supabase Auth. Tool calls decrypt the app token server-side and use the user's Supabase session token so `clarity_circle` RLS remains the data-access authority.
+    *   No service-role key is used.
+    *   Guardrail: this app should be configured as OAuth in ChatGPT. Do not publish or test the real user-data version as a No Auth connector.

@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/.well-known/:path*",
+      "destination": "/api/oauth?path=/.well-known/:path*"
+    },
+    {
+      "source": "/oauth/:path*",
+      "destination": "/api/oauth?path=/oauth/:path*"
+    },
+    {
+      "source": "/mcp",
+      "destination": "/api/mcp"
+    },
+    {
+      "source": "/",
+      "destination": "/api"
+    }
+  ]
+}

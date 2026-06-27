@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kramaniti Clarity Companion</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #080908;
+        --panel: rgba(245, 236, 210, 0.08);
+        --panel-strong: rgba(245, 236, 210, 0.12);
+        --line: rgba(245, 236, 210, 0.16);
+        --text: #f5ecd2;
+        --muted: rgba(245, 236, 210, 0.68);
+        --gold: #d7b46a;
+        --green: #7fb9a2;
+        --red: #cc7866;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 15% 8%, rgba(215, 180, 106, 0.16), transparent 34%),
+          radial-gradient(circle at 84% 18%, rgba(127, 185, 162, 0.12), transparent 32%),
+          linear-gradient(145deg, rgba(245, 236, 210, 0.04), transparent 42%),
+          var(--bg);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .shell {
+        display: grid;
+        gap: 16px;
+        padding: 20px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 10px;
+      }
+
+      .topline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .eyebrow,
+      .mode {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        color: var(--gold);
+        background: rgba(215, 180, 106, 0.08);
+      }
+
+      .mode {
+        color: var(--green);
+        background: rgba(127, 185, 162, 0.08);
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 980px;
+        font-size: clamp(25px, 5vw, 42px);
+        line-height: 1.05;
+        letter-spacing: 0;
+      }
+
+      .summary,
+      .boundary {
+        margin: 0;
+        max-width: 980px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.55;
+      }
+
+      .boundary {
+        border-left: 2px solid rgba(215, 180, 106, 0.55);
+        padding-left: 12px;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        gap: 12px;
+      }
+
+      .panel,
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      }
+
+      .panel {
+        display: grid;
+        gap: 12px;
+        padding: 15px;
+      }
+
+      .panel h2,
+      .card h2 {
+        margin: 0;
+        color: var(--gold);
+        font-size: 13px;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .rows {
+        display: grid;
+        gap: 9px;
+      }
+
+      .row {
+        display: grid;
+        gap: 5px;
+        padding-top: 10px;
+        border-top: 1px solid var(--line);
+      }
+
+      .row:first-child {
+        padding-top: 0;
+        border-top: 0;
+      }
+
+      .label {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .value {
+        margin: 0;
+        color: var(--text);
+        font-size: 14px;
+        line-height: 1.48;
+      }
+
+      .three {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        display: grid;
+        gap: 8px;
+        min-height: 140px;
+        padding: 14px;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .questions,
+      .signals {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pill {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 7px 10px;
+        color: var(--muted);
+        background: rgba(8, 9, 8, 0.28);
+        font-size: 12px;
+      }
+
+      .pill[data-tone="gold"] {
+        border-color: rgba(215, 180, 106, 0.45);
+        color: var(--gold);
+      }
+
+      .pill[data-tone="green"] {
+        border-color: rgba(127, 185, 162, 0.42);
+        color: var(--green);
+      }
+
+      .pill[data-tone="red"] {
+        border-color: rgba(204, 120, 102, 0.42);
+        color: var(--red);
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      @media (max-width: 860px) {
+        .layout,
+        .three,
+        .footer-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .shell {
+          padding: 16px;
+        }
+
+        .panel,
+        .card {
+          padding: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div class="topline">
+          <div class="eyebrow">Kramaniti Clarity Companion</div>
+          <div class="mode" id="mode">Session Context</div>
+        </div>
+        <h1 id="title">Clarify the goal before adding tools.</h1>
+        <p class="summary" id="summary">
+          This workspace turns conversation-provided context into a practical clarity map.
+        </p>
+        <p class="boundary" id="memoryBoundary">
+          This app is session-only and does not directly read private ChatGPT memories.
+        </p>
+      </header>
+
+      <section class="layout" aria-label="Context and clarity">
+        <article class="panel">
+          <h2>Context Signals</h2>
+          <div class="rows" id="contextSignals"></div>
+        </article>
+        <article class="panel">
+          <h2>Clarity Gaps</h2>
+          <div class="rows" id="clarityGaps"></div>
+        </article>
+      </section>
+
+      <section class="three" aria-label="Operating sequence">
+        <article class="card">
+          <h2>Strategy</h2>
+          <p id="strategy">Name the outcome, audience, and decision owner.</p>
+        </article>
+        <article class="card">
+          <h2>Systems</h2>
+          <p id="systems">Map the workflow, handoffs, and review points.</p>
+        </article>
+        <article class="card">
+          <h2>Content</h2>
+          <p id="content">Communicate only after the operating path is clear.</p>
+        </article>
+      </section>
+
+      <section class="layout" aria-label="Boundaries and next moves">
+        <article class="panel">
+          <h2>Human / AI Boundary</h2>
+          <div class="rows" id="humanAiBoundary"></div>
+        </article>
+        <article class="panel">
+          <h2>Next Moves</h2>
+          <div class="rows" id="nextMoves"></div>
+        </article>
+      </section>
+
+      <section class="footer-grid" aria-label="Review prompts and guardrails">
+        <article class="panel">
+          <h2>Questions To Ask Yourself</h2>
+          <div class="questions" id="reflectionQuestions"></div>
+        </article>
+        <article class="panel">
+          <h2>Correct The Context</h2>
+          <div class="questions" id="correctionPrompts"></div>
+        </article>
+      </section>
+
+      <section class="panel" aria-label="Guardrails">
+        <h2>Guardrails</h2>
+        <div class="signals" id="guardrails"></div>
+      </section>
+    </main>
+
+    <script>
+      const fallback = {
+        mode: "analysis",
+        title: "Clarify the goal before adding tools.",
+        summary: "Start with conversation-provided context, then name the clarity gap.",
+        memoryBoundary: "This app is session-only and does not directly read private ChatGPT memories.",
+        contextSignals: [
+          { label: "Signal 1", detail: "Use the context the user provides or confirms." },
+          { label: "Signal 2", detail: "Ask for correction before acting on inferred context." }
+        ],
+        clarityGaps: [
+          { label: "Goal Shape", detail: "The goal needs an operating outcome." },
+          { label: "Decision Gap", detail: "Name what must be decided before tools are chosen." }
+        ],
+        strategy: "Name the business outcome, user, and proof standard.",
+        systems: "Map the workflow, handoffs, and review checkpoints.",
+        content: "Turn clarity into communication after the system is real.",
+        humanAiBoundary: [
+          { label: "Human-Led", detail: "Sensitive context, tradeoffs, and final decisions." },
+          { label: "AI-Assisted", detail: "Pattern sorting, drafts, checklists, and comparisons." }
+        ],
+        nextMoves: [
+          { label: "Confirm", detail: "Correct the context signals." },
+          { label: "Choose", detail: "Pick the smallest ambiguity-reducing move." }
+        ],
+        reflectionQuestions: ["What did the app assume incorrectly?", "What decision is still unclear?"],
+        correctionPrompts: ["Correct the context signals.", "Ignore older context."],
+        guardrails: ["Session-only", "No private memory read", "Human review stays visible"]
+      };
+
+      function readToolOutput() {
+        const openai = window.openai;
+        return openai && openai.toolOutput ? openai.toolOutput : fallback;
+      }
+
+      function asArray(value, fallbackValue) {
+        return Array.isArray(value) && value.length > 0 ? value : fallbackValue;
+      }
+
+      function renderRows(id, items) {
+        const target = document.getElementById(id);
+        target.textContent = "";
+        items.forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "row";
+          row.innerHTML = `<div class="label"></div><p class="value"></p>`;
+          row.querySelector(".label").textContent = item.label || "Signal";
+          row.querySelector(".value").textContent = item.detail || "";
+          target.appendChild(row);
+        });
+      }
+
+      function renderPills(id, items, tone) {
+        const target = document.getElementById(id);
+        target.textContent = "";
+        items.forEach((text, index) => {
+          const pill = document.createElement("span");
+          pill.className = "pill";
+          pill.dataset.tone = tone || (index === 0 ? "gold" : "green");
+          pill.textContent = text;
+          target.appendChild(pill);
+        });
+      }
+
+      function render(data) {
+        const source = data || fallback;
+        document.getElementById("mode").textContent =
+          source.mode === "operating_map" ? "Operating Map" : "Context Analysis";
+        document.getElementById("title").textContent = source.title || fallback.title;
+        document.getElementById("summary").textContent = source.summary || fallback.summary;
+        document.getElementById("memoryBoundary").textContent =
+          source.memoryBoundary || fallback.memoryBoundary;
+        document.getElementById("strategy").textContent = source.strategy || fallback.strategy;
+        document.getElementById("systems").textContent = source.systems || fallback.systems;
+        document.getElementById("content").textContent = source.content || fallback.content;
+
+        renderRows("contextSignals", asArray(source.contextSignals, fallback.contextSignals));
+        renderRows("clarityGaps", asArray(source.clarityGaps, fallback.clarityGaps));
+        renderRows("humanAiBoundary", asArray(source.humanAiBoundary, fallback.humanAiBoundary));
+        renderRows("nextMoves", asArray(source.nextMoves, fallback.nextMoves));
+        renderPills(
+          "reflectionQuestions",
+          asArray(source.reflectionQuestions, fallback.reflectionQuestions),
+          "gold"
+        );
+        renderPills(
+          "correctionPrompts",
+          asArray(source.correctionPrompts, fallback.correctionPrompts),
+          "green"
+        );
+        renderPills("guardrails", asArray(source.guardrails, fallback.guardrails), "red");
+      }
+
+      render(readToolOutput());
+    </script>
+  </body>
+</html>
