@@ -23,6 +23,98 @@ import {
 } from 'lucide-react';
 import styles from './Infographics.module.css';
 
+export function OperatingThreadMapInfographic() {
+  const thread = [
+    {
+      icon: Radar,
+      label: 'Market signal',
+      copy: 'A paid tool, repeated request, customer question, or manual workaround appears.',
+    },
+    {
+      icon: Workflow,
+      label: 'Operating route',
+      copy: 'The team names the workflow, owner, trigger, handoff, and decision boundary.',
+    },
+    {
+      icon: DatabaseZap,
+      label: 'Context packet',
+      copy: 'Source record, status, exception, and write-back location travel with the work.',
+    },
+    {
+      icon: Megaphone,
+      label: 'Presence output',
+      copy: 'The public message reflects what the internal system can actually support.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Operating Thread Map</div>
+      <div className={styles.threadMap}>
+        <div className={styles.threadLine} aria-hidden="true" />
+        {thread.map((stage, index) => {
+          const Icon = stage.icon;
+
+          return (
+            <div className={`${styles.threadStage} ${index === thread.length - 1 ? styles.threadStageHighlight : ''}`} key={stage.label}>
+              <div className={index === thread.length - 1 ? styles.threadIconHighlight : styles.threadIcon}>
+                <Icon size={18} />
+              </div>
+              <span className={styles.threadStep}>{String(index + 1).padStart(2, '0')}</span>
+              <h4>{stage.label}</h4>
+              <p>{stage.copy}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function SubscriptionToSystemGateInfographic() {
+  const gates = [
+    {
+      label: 'Subscription',
+      weak: 'A paid AI service exists.',
+      useful: 'The workflow it supports is named.',
+    },
+    {
+      label: 'Usage',
+      weak: 'Someone gets faster privately.',
+      useful: 'The approved route is visible to the team.',
+    },
+    {
+      label: 'Context',
+      weak: 'Outputs move without source or status.',
+      useful: 'A context packet travels with every handoff.',
+    },
+    {
+      label: 'Adoption',
+      weak: 'The tool remains an extra task.',
+      useful: 'Learning writes back into operations and presence.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Subscription to System Gate</div>
+      <div className={styles.gateStack}>
+        {gates.map((gate, index) => (
+          <div className={styles.gateRow} key={gate.label}>
+            <div className={styles.gateIndex}>{String(index + 1).padStart(2, '0')}</div>
+            <div className={styles.gateLabel}>{gate.label}</div>
+            <div className={styles.gateWeak}>{gate.weak}</div>
+            <div className={styles.gateUseful}>
+              <ShieldCheck size={15} />
+              <span>{gate.useful}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // 1. Redesigned Side-by-Side Flow (The Classic Redesigned)
 export function DisconnectedOpsInfographic() {
   return (

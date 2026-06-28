@@ -19,6 +19,174 @@
   font-weight: 600;
 }
 
+.threadMap {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.threadLine {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: 31px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201, 168, 76, 0.16), rgba(201, 168, 76, 0.58), rgba(201, 168, 76, 0.16));
+}
+
+.threadStage {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.025);
+  min-height: 190px;
+}
+
+.threadStageHighlight {
+  border-color: rgba(201, 168, 76, 0.36);
+  background: rgba(201, 168, 76, 0.07);
+  box-shadow: 0 14px 28px rgba(201, 168, 76, 0.08);
+}
+
+.threadIcon,
+.threadIconHighlight {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  z-index: 1;
+}
+
+.threadIcon {
+  color: var(--text-secondary);
+  background: #17171b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.threadIconHighlight {
+  color: #0d0d0f;
+  background: var(--color-burnished-gold);
+  border: 1px solid rgba(201, 168, 76, 0.68);
+}
+
+.threadStep {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(201, 168, 76, 0.74);
+}
+
+.threadStage h4 {
+  margin: 0;
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.threadStage p {
+  margin: 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.gateStack {
+  display: grid;
+  gap: 10px;
+}
+
+.gateRow {
+  display: grid;
+  grid-template-columns: 54px 110px minmax(0, 1fr) minmax(0, 1.18fr);
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.gateIndex {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(201, 168, 76, 0.72);
+}
+
+.gateLabel {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.gateWeak,
+.gateUseful {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.gateWeak {
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.gateUseful {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-burnished-gold);
+}
+
+@media (max-width: 760px) {
+  .threadMap {
+    grid-template-columns: 1fr;
+  }
+
+  .threadLine {
+    top: 28px;
+    bottom: 28px;
+    left: 16px;
+    right: auto;
+    width: 1px;
+    height: auto;
+    background: linear-gradient(180deg, rgba(201, 168, 76, 0.16), rgba(201, 168, 76, 0.58), rgba(201, 168, 76, 0.16));
+  }
+
+  .threadStage {
+    min-height: 0;
+    padding-left: 48px;
+  }
+
+  .threadIcon,
+  .threadIconHighlight {
+    position: absolute;
+    left: 0;
+    top: 16px;
+  }
+
+  .gateRow {
+    grid-template-columns: 42px 1fr;
+    align-items: start;
+  }
+
+  .gateWeak,
+  .gateUseful {
+    grid-column: 2;
+  }
+}
+
 /* 1. Side-by-Side Flow Comparison */
 .comparisonGrid {
   display: grid;

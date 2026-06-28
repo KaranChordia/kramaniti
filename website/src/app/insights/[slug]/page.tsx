@@ -71,7 +71,9 @@ import {
   HandoffPacketMapInfographic,
   HandoffTraceRouteInfographic,
   QuestionToSystemRouteInfographic,
-  QuestionLibraryCompassInfographic
+  QuestionLibraryCompassInfographic,
+  OperatingThreadMapInfographic,
+  SubscriptionToSystemGateInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -431,6 +433,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:question-library-compass]') {
           return <QuestionLibraryCompassInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:operating-thread-map]') {
+          return <OperatingThreadMapInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:subscription-to-system-gate]') {
+          return <SubscriptionToSystemGateInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
