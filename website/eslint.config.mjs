@@ -11,6 +11,8 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    "chatgpt-app/**",
+    "clarity-circle-chatgpt-app/**",
     "next-env.d.ts",
   ]),
 ]);
