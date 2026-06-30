@@ -49,7 +49,7 @@ type SessionState = {
   >;
   source: 'groq' | 'local';
   mockScenarioId?: string;
-  circleProject?: {
+  squareProject?: {
     projectId: string;
     folderId?: string | null;
     projectTitle: string;
@@ -59,12 +59,13 @@ type SessionState = {
 };
 
 const STORAGE_KEY = 'kramaniti-clarity-engine-v2';
-const CIRCLE_HANDOFF_KEY = 'kramaniti-clarity-circle-engine-handoff-v1';
+const SQUARE_HANDOFF_KEY = 'kramaniti-clarity-square-engine-handoff-v1';
+const LEGACY_SQUARE_HANDOFF_KEY = 'kramaniti-clarity-circle-engine-handoff-v1';
 
-type ClarityCircleHandoff = {
+type ClaritySquareHandoff = {
   version: 1;
   createdAt: string;
-  source?: 'clarity_circle_project' | 'clarity_circle_context';
+  source?: 'clarity_square_project' | 'clarity_square_context';
   projectId?: string;
   folderId?: string | null;
   projectTitle?: string;
@@ -121,10 +122,10 @@ const createInitialSession = (): SessionState => {
 const cleanHandoffValue = (value: unknown) =>
   typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
 
-const isClarityCircleHandoff = (value: unknown): value is ClarityCircleHandoff => {
+const isClaritySquareHandoff = (value: unknown): value is ClaritySquareHandoff => {
   if (!value || typeof value !== 'object') return false;
 
-  const candidate = value as Partial<ClarityCircleHandoff>;
+  const candidate = value as Partial<ClaritySquareHandoff>;
 
   return (
     candidate.version === 1 &&
@@ -134,28 +135,31 @@ const isClarityCircleHandoff = (value: unknown): value is ClarityCircleHandoff =
   );
 };
 
-const readClarityCircleHandoff = (): ClarityCircleHandoff | null => {
+const readClaritySquareHandoff = (): ClaritySquareHandoff | null => {
   if (typeof window === 'undefined') return null;
 
   try {
-    const stored = window.localStorage.getItem(CIRCLE_HANDOFF_KEY);
+    const stored =
+      window.localStorage.getItem(SQUARE_HANDOFF_KEY) || window.localStorage.getItem(LEGACY_SQUARE_HANDOFF_KEY);
     if (!stored) return null;
 
     const parsed = JSON.parse(stored) as unknown;
-    window.localStorage.removeItem(CIRCLE_HANDOFF_KEY);
+    window.localStorage.removeItem(SQUARE_HANDOFF_KEY);
+    window.localStorage.removeItem(LEGACY_SQUARE_HANDOFF_KEY);
 
-    return isClarityCircleHandoff(parsed) ? parsed : null;
+    return isClaritySquareHandoff(parsed) ? parsed : null;
   } catch {
-    window.localStorage.removeItem(CIRCLE_HANDOFF_KEY);
+    window.localStorage.removeItem(SQUARE_HANDOFF_KEY);
+    window.localStorage.removeItem(LEGACY_SQUARE_HANDOFF_KEY);
     return null;
   }
 };
 
-const buildCircleHandoffAnswer = (handoff: ClarityCircleHandoff) => {
+const buildSquareHandoffAnswer = (handoff: ClaritySquareHandoff) => {
   const lines = [
     handoff.projectTitle ? `Project: ${cleanHandoffValue(handoff.projectTitle)}` : '',
     handoff.folderName ? `Folder: ${cleanHandoffValue(handoff.folderName)}` : '',
-    `Clarity Circle path: ${cleanHandoffValue(handoff.trackLabel) || handoff.track}`,
+    `Clarity Square path: ${cleanHandoffValue(handoff.trackLabel) || handoff.track}`,
     `Intent: ${cleanHandoffValue(handoff.headline)}`,
     handoff.projectInstruction ? `Project instruction: ${cleanHandoffValue(handoff.projectInstruction)}` : '',
     `Context: ${cleanHandoffValue(handoff.context)}`,
@@ -167,9 +171,9 @@ const buildCircleHandoffAnswer = (handoff: ClarityCircleHandoff) => {
   return lines.join('\n');
 };
 
-const createSessionFromCircleHandoff = (handoff: ClarityCircleHandoff): SessionState => {
+const createSessionFromSquareHandoff = (handoff: ClaritySquareHandoff): SessionState => {
   const base = createInitialSession();
-  const handoffAnswer = buildCircleHandoffAnswer(handoff);
+  const handoffAnswer = buildSquareHandoffAnswer(handoff);
   const audienceAnswer = cleanHandoffValue(handoff.audience);
   const phase1Answer = [
     cleanHandoffValue(handoff.headline),
@@ -192,7 +196,7 @@ const createSessionFromCircleHandoff = (handoff: ClarityCircleHandoff): SessionS
     ...base,
     answers,
     assistantReply:
-      'I have the Clarity Circle context, so we do not need to repeat the starting point. Next, I need the current workflow so the diagnosis can separate strategy, systems, and proof-safe presence.',
+      'I have the Clarity Square context, so we do not need to repeat the starting point. Next, I need the current workflow so the diagnosis can separate strategy, systems, and proof-safe presence.',
     currentQuestion: nextQuestion.nextQuestion,
     currentQuestionKey: 'phase3_current_workflow',
     currentQuestionLabel: nextQuestion.nextQuestionLabel || 'Current Path',
@@ -207,21 +211,21 @@ const createSessionFromCircleHandoff = (handoff: ClarityCircleHandoff): SessionS
       {
         role: 'assistant',
         content:
-          'I have the Clarity Circle context, so we do not need to repeat the starting point. Next, I need the current workflow so the diagnosis can separate strategy, systems, and proof-safe presence.',
+          'I have the Clarity Square context, so we do not need to repeat the starting point. Next, I need the current workflow so the diagnosis can separate strategy, systems, and proof-safe presence.',
         createdAt: new Date().toISOString(),
       },
     ],
     contextLog: [
-      cleanHandoffValue(handoff.summary) || 'Clarity Circle handoff loaded into the diagnostic session.',
+      cleanHandoffValue(handoff.summary) || 'Clarity Square handoff loaded into the diagnostic session.',
       cleanHandoffValue(handoff.blocker) ? `Current blocker: ${cleanHandoffValue(handoff.blocker)}` : '',
       cleanHandoffValue(handoff.outcome) ? `Desired outcome: ${cleanHandoffValue(handoff.outcome)}` : '',
     ].filter(Boolean),
     synthesis: {
       completion: audienceAnswer ? 34 : 17,
-      statusLabel: 'Circle context loaded',
+      statusLabel: 'Square context loaded',
       clarityContext:
         cleanHandoffValue(handoff.summary) ||
-        'The starting intent from Clarity Circle is loaded. The next step is to map workflow reality.',
+        'The starting intent from Clarity Square is loaded. The next step is to map workflow reality.',
       workflowDirection:
         'The Engine should now map the current path, then identify friction, human judgment boundaries, and the proof direction.',
       presenceIdeas: [
@@ -229,11 +233,11 @@ const createSessionFromCircleHandoff = (handoff: ClarityCircleHandoff): SessionS
         'Show the before-state, decision route, and next move without unsupported claims.',
         'Let content follow the clarified workflow instead of leading the strategy.',
       ],
-      signalTrail: ['Clarity Circle intake', 'Strategy before tools', 'Systems before scale'],
-      focusTags: ['circle', handoff.track, 'private'],
+      signalTrail: ['Clarity Square intake', 'Strategy before tools', 'Systems before scale'],
+      focusTags: ['square', handoff.track, 'private'],
     },
     source: 'local',
-    circleProject:
+    squareProject:
       handoff.projectId && handoff.projectTitle
         ? {
             projectId: handoff.projectId,
@@ -364,10 +368,10 @@ export default function ClarityEnginePage() {
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      const circleHandoff = readClarityCircleHandoff();
-      if (circleHandoff) {
-        setSession(createSessionFromCircleHandoff(circleHandoff));
-        setStatusText('Clarity Circle context loaded.');
+      const squareHandoff = readClaritySquareHandoff();
+      if (squareHandoff) {
+        setSession(createSessionFromSquareHandoff(squareHandoff));
+        setStatusText('Clarity Square context loaded.');
         setIsInputActive(true);
       } else {
         setSession(readStoredSession());
@@ -460,7 +464,7 @@ export default function ClarityEnginePage() {
             },
             source: envelope.source,
             mockScenarioId: prev.mockScenarioId,
-            circleProject: prev.circleProject ?? null,
+            squareProject: prev.squareProject ?? null,
           };
         });
       });
@@ -952,7 +956,7 @@ export default function ClarityEnginePage() {
                         aiTasks: session.aiTasks,
                         contextLog: session.contextLog,
                         mockScenarioId: session.mockScenarioId,
-                        circleProject: session.circleProject ?? null,
+                        squareProject: session.squareProject ?? null,
                       };
                       sessionStorage.setItem('kramaniti-blueprint-session', JSON.stringify(payload));
                       router.push('/clarity-engine/blueprint');

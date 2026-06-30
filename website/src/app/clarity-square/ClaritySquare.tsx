@@ -1,0 +1,6295 @@
+'use client';
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Activity,
+  Archive,
+  ArrowRight,
+  BarChart3,
+  Building2,
+  CheckCircle2,
+  ChevronRight,
+  CircleDot,
+  Compass,
+  Database,
+  FileText,
+  Folder,
+  FolderOpen,
+  FolderPlus,
+  Lightbulb,
+  List,
+  LogOut,
+  MessageCircle,
+  Moon,
+  Search,
+  Plus,
+  RefreshCw,
+  Repeat2,
+  Rocket,
+  Route,
+  Send,
+  Settings,
+  ShieldCheck,
+  Sun,
+  Trash2,
+  Users,
+  UserRound,
+} from 'lucide-react';
+import type { User } from '@supabase/supabase-js';
+import {
+  getClaritySquareSupabase,
+  type ClaritySquareAssistantMemory,
+  type ClaritySquareAssistantMessage,
+  type ClaritySquareContextEntry,
+  type ClaritySquareProfile,
+  type ClaritySquareProject,
+  type ClaritySquareProjectFolder,
+  type ClaritySquareProjectReport,
+  type ClaritySquareProjectTask,
+} from '@/lib/clarity-square/supabase';
+import styles from './ClaritySquare.module.css';
+
+type Track = 'founder' | 'builder';
+type StepId = 'entry' | 'track' | 'intent' | 'context';
+type SessionMode = 'signin' | 'signup';
+type AuthView = 'signup-email' | 'signup-credentials' | 'signin';
+type MenuId =
+  | 'home'
+  | 'start'
+  | 'path'
+  | 'context'
+  | 'square'
+  | 'loops'
+  | 'tasks'
+  | 'assistant'
+  | 'memory'
+  | 'projects'
+  | 'more'
+  | 'profile'
+  | 'settings';
+type LoopId = 'signal' | 'project' | 'task' | 'reflection' | 'brief';
+type LoopStatus = 'pending' | 'working' | 'needs_approval' | 'completed';
+type LoopRunPhase = 'idle' | 'gathering' | 'ready';
+type TaskStatusFilter = 'all' | 'open' | 'done';
+
+type IntentDraft = {
+  headline: string;
+  context: string;
+  audience: string;
+  blocker: string;
+  outcome: string;
+};
+
+type SavedContext = {
+  track: Track;
+  savedAt: string;
+  intent: IntentDraft;
+  summary: string;
+  questions: string[];
+  actions: string[];
+};
+
+type UiAssistantMessage = Pick<ClaritySquareAssistantMessage, 'role' | 'content'> & {
+  id: string;
+  createdAt: string;
+  project_id?: string | null;
+  thread_id?: string | null;
+  thread_title?: string | null;
+  pendingAction?: AssistantPendingAction | null;
+};
+
+type AssistantThread = {
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type AssistantProjectDraft = {
+  title: string;
+  track: Track;
+  context: string;
+  projectInstruction?: string;
+  audience: string;
+  blocker: string;
+  outcome: string;
+};
+
+type AssistantFolderDraft = {
+  name: string;
+};
+
+type AssistantMemoryDraft = {
+  title: string;
+  content: string;
+  memory_type: ClaritySquareAssistantMemory['memory_type'];
+};
+
+type AssistantTaskDraft = {
+  title: string;
+  detail?: string;
+};
+
+type AssistantProjectUpdateDraft = {
+  id: string;
+  title?: string;
+  track?: Track;
+  context?: string;
+  projectInstruction?: string;
+  audience?: string;
+  blocker?: string;
+  outcome?: string;
+  summary?: string;
+  folderId?: string | null;
+};
+
+type AssistantFolderUpdateDraft = {
+  id: string;
+  name?: string;
+  sortOrder?: number;
+};
+
+type AssistantTaskUpdateDraft = {
+  id: string;
+  title?: string;
+  detail?: string | null;
+  status?: ClaritySquareProjectTask['status'];
+  sortOrder?: number;
+};
+
+type AssistantMemoryUpdateDraft = {
+  id: string;
+  title?: string;
+  content?: string;
+  memory_type?: ClaritySquareAssistantMemory['memory_type'];
+  status?: ClaritySquareAssistantMemory['status'];
+};
+
+type AssistantResponse = {
+  response?: string;
+  projectDraft?: AssistantProjectDraft | null;
+  folderDraft?: AssistantFolderDraft | null;
+  memoryDraft?: AssistantMemoryDraft | null;
+  taskDrafts?: AssistantTaskDraft[] | null;
+  projectUpdate?: AssistantProjectUpdateDraft | null;
+  folderUpdate?: AssistantFolderUpdateDraft | null;
+  taskUpdates?: AssistantTaskUpdateDraft[] | null;
+  memoryUpdate?: AssistantMemoryUpdateDraft | null;
+  error?: string;
+};
+
+type AssistantPendingAction = {
+  id: string;
+  data: AssistantResponse;
+  status: 'pending' | 'approved' | 'declined' | 'failed';
+  resultText?: string;
+};
+
+type AssistantSettingsDraft = {
+  behaviorPreference: string;
+};
+
+type AssistantActionResult = {
+  project: ClaritySquareProject | null;
+  folder: ClaritySquareProjectFolder | null;
+  taskCount: number;
+  memory: ClaritySquareAssistantMemory | null;
+  projectUpdated: boolean;
+  folderUpdated: boolean;
+  taskUpdateCount: number;
+  memoryUpdated: boolean;
+};
+
+type ProjectFolderFilter = 'all' | 'unfiled' | string;
+type CommunityPostKind = 'founder_problem' | 'builder_share';
+type CommunityPostFilter = 'all' | CommunityPostKind;
+
+type CommunityPost = {
+  id: string;
+  kind: CommunityPostKind;
+  track: Track;
+  title: string;
+  body: string;
+  tags: string[];
+  authorLabel: string;
+  createdAt: string;
+  interestCount: number;
+  replyCount: number;
+  source: 'seed' | 'user';
+};
+
+type WorkspaceSnapshot = {
+  projects: ClaritySquareProject[];
+  folders: ClaritySquareProjectFolder[];
+  tasks: ClaritySquareProjectTask[];
+  reports: ClaritySquareProjectReport[];
+  contextEntries: ClaritySquareContextEntry[];
+  messages: UiAssistantMessage[];
+  memories: ClaritySquareAssistantMemory[];
+};
+
+type LoopCard = {
+  id: LoopId;
+  name: string;
+  label: string;
+  status: LoopStatus;
+  detail: string;
+  nextAction: string;
+  icon: typeof CircleDot;
+};
+
+type LoopOverviewItem = {
+  label: string;
+  value: string;
+  detail: string;
+};
+
+type DeleteDataItem = {
+  id: string;
+  title: string;
+  detail: string;
+  meta: string;
+  onDelete: () => void | Promise<void>;
+};
+
+type DeleteDataSection = {
+  id: string;
+  title: string;
+  count: number;
+  items: DeleteDataItem[];
+};
+
+type LoopRunState = {
+  loopId: LoopId;
+  phase: LoopRunPhase;
+  startedAt: string | null;
+  completedAt: string | null;
+};
+
+const STORAGE_KEY = 'kramaniti-clarity-square-sequence-v1';
+const LEGACY_STORAGE_KEY = 'kramaniti-clarity-circle-sequence-v1';
+const ENGINE_HANDOFF_KEY = 'kramaniti-clarity-square-engine-handoff-v1';
+const ASSISTANT_INPUT_MIN_HEIGHT = 42;
+const ASSISTANT_INPUT_MAX_HEIGHT = 132;
+const DEFAULT_ASSISTANT_THREAD_ID = 'square-thread-default';
+const LEGACY_ASSISTANT_THREAD_ID = 'circle-thread-default';
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+const clearSquareLocalStorage = () => {
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+    window.localStorage.removeItem(LEGACY_STORAGE_KEY);
+  } catch {
+    // Browser storage can be blocked; signed-in data still stays database-backed.
+  }
+};
+
+type EngineHandoff = {
+  version: 1;
+  createdAt: string;
+  source: 'clarity_square_project' | 'clarity_square_context';
+  projectId?: string;
+  folderId?: string | null;
+  projectTitle?: string;
+  folderName?: string;
+  projectInstruction?: string | null;
+  track: Track;
+  trackLabel: string;
+  headline: string;
+  context: string;
+  audience: string;
+  blocker: string;
+  outcome: string;
+  summary: string;
+  questions: string[];
+  actions: string[];
+};
+
+const TRACKS: Record<
+  Track,
+  {
+    label: string;
+    shortLabel: string;
+    description: string;
+    icon: typeof Building2;
+    defaults: IntentDraft;
+  }
+> = {
+  founder: {
+    label: 'I am building a business',
+    shortLabel: 'Founder Track',
+    description: 'Clarify the business, workflow, AI role, human review boundary, and proof-safe next step.',
+    icon: Building2,
+    defaults: {
+      headline: 'Where should AI actually assist this business?',
+      context:
+        'We have a business direction, but the workflow is scattered. I want clarity on what should stay human-led, what AI can assist, and what should become a repeatable system.',
+      audience: 'Founders, operators, or teams trying to adopt practical AI without losing review discipline.',
+      blocker: 'Too many tools and ideas, but not enough clarity on the first workflow worth systemizing.',
+      outcome: 'A sharper operating route and one proof-safe public explanation.',
+    },
+  },
+  builder: {
+    label: 'I am a solopreneur or solo builder',
+    shortLabel: 'Solopreneur Track',
+    description: 'Turn a rough idea, useful work, or early build into a clearer audience, validation path, and first version.',
+    icon: Lightbulb,
+    defaults: {
+      headline: 'How do I turn this rough idea into a first useful version?',
+      context:
+        'I have an idea and a few possible directions, but I am not sure who it is for, what problem matters most, or what to do first.',
+      audience: 'Solopreneurs, solo builders, or early individuals who have an idea but need a sharper first audience and use case.',
+      blocker: 'The audience, first version, and validation move are still unclear.',
+      outcome: 'A simple validation plan and one clear explanation of the idea.',
+    },
+  },
+};
+
+const STEPS: Array<{ id: StepId; label: string; detail: string }> = [
+  { id: 'entry', label: 'Enter', detail: 'Start the square' },
+  { id: 'track', label: 'Path', detail: 'Choose your context' },
+  { id: 'intent', label: 'Intent', detail: 'Capture the signal' },
+  { id: 'context', label: 'Context', detail: 'Save and develop' },
+];
+
+const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> = [
+  { id: 'path', label: 'Path', icon: Compass },
+  { id: 'context', label: 'Context', icon: FileText },
+  { id: 'square', label: 'Square', icon: Users },
+  { id: 'loops', label: 'Loops', icon: Repeat2 },
+  { id: 'tasks', label: 'Tasks', icon: CheckCircle2 },
+  { id: 'assistant', label: 'Assistant', icon: MessageCircle },
+  { id: 'memory', label: 'Memory', icon: Database },
+  { id: 'projects', label: 'Projects', icon: FolderOpen },
+];
+
+const MOBILE_PRIMARY_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> = [
+  { id: 'home', label: 'Home', icon: Activity },
+  { id: 'projects', label: 'Projects', icon: FolderOpen },
+  { id: 'loops', label: 'Loops', icon: Repeat2 },
+  { id: 'assistant', label: 'Assistant', icon: MessageCircle },
+  { id: 'more', label: 'More', icon: List },
+];
+
+const MORE_MENU_ITEMS: Array<{ id: MenuId; label: string; detail: string; icon: typeof CircleDot }> = [
+  { id: 'path', label: 'Path', detail: 'Choose founder or solopreneur mode.', icon: Compass },
+  { id: 'context', label: 'Context', detail: 'Open the saved signal and next questions.', icon: FileText },
+  { id: 'square', label: 'Square', detail: 'Review founder problems and builder shares.', icon: Users },
+  { id: 'tasks', label: 'Tasks', detail: 'Manage open work grouped by project.', icon: CheckCircle2 },
+  { id: 'memory', label: 'Memory', detail: 'Review memories and delete saved items.', icon: Database },
+  { id: 'profile', label: 'Profile', detail: 'Check account identity and workspace state.', icon: UserRound },
+  { id: 'settings', label: 'Settings', detail: 'Adjust path, privacy, and digest preferences.', icon: Settings },
+];
+
+const createUiMessage = (
+  role: UiAssistantMessage['role'],
+  content: string,
+  projectId?: string | null,
+  threadId?: string | null,
+  threadTitle?: string | null,
+): UiAssistantMessage => ({
+  id: `${role}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+  role,
+  content,
+  createdAt: new Date().toISOString(),
+  project_id: projectId ?? null,
+  thread_id: threadId ?? null,
+  thread_title: threadTitle ?? null,
+});
+
+const INITIAL_ASSISTANT_MESSAGES: UiAssistantMessage[] = [
+  createUiMessage(
+    'assistant',
+    'I can use your Square context, projects, and memory to sharpen your next move or create a new project from a rough request.',
+    null,
+    DEFAULT_ASSISTANT_THREAD_ID,
+  ),
+];
+
+const INITIAL_ASSISTANT_THREADS: AssistantThread[] = [
+  {
+    id: DEFAULT_ASSISTANT_THREAD_ID,
+    title: 'Square thread',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
+
+const normalizeAssistantThreadId = (threadId: string | null | undefined) =>
+  threadId === LEGACY_ASSISTANT_THREAD_ID ? DEFAULT_ASSISTANT_THREAD_ID : threadId || DEFAULT_ASSISTANT_THREAD_ID;
+
+const getAssistantThreadId = (message: UiAssistantMessage) => normalizeAssistantThreadId(message.thread_id);
+
+const buildAssistantThreadTitle = (content: string, fallback: string) => {
+  const clean = content.replace(/\s+/g, ' ').trim();
+  if (!clean) return fallback;
+  return clean.length > 34 ? `${clean.slice(0, 31).trim()}...` : clean;
+};
+
+const getMessageThreadIdFromMetadata = (metadata: Record<string, unknown> | null | undefined) => {
+  const threadId = metadata?.thread_id;
+  return typeof threadId === 'string' && threadId.trim()
+    ? normalizeAssistantThreadId(threadId)
+    : DEFAULT_ASSISTANT_THREAD_ID;
+};
+
+const getMessageThreadTitleFromMetadata = (metadata: Record<string, unknown> | null | undefined) => {
+  const threadTitle = metadata?.thread_title;
+  return typeof threadTitle === 'string' && threadTitle.trim() ? threadTitle : null;
+};
+
+const THREAD_TITLE_STOPWORDS = new Set([
+  'about',
+  'after',
+  'again',
+  'assistant',
+  'before',
+  'build',
+  'building',
+  'chat',
+  'square',
+  'clarity',
+  'conversation',
+  'create',
+  'draft',
+  'from',
+  'have',
+  'help',
+  'into',
+  'just',
+  'make',
+  'need',
+  'next',
+  'please',
+  'project',
+  'should',
+  'that',
+  'this',
+  'thread',
+  'through',
+  'turn',
+  'what',
+  'when',
+  'with',
+  'would',
+]);
+
+const buildAssistantThreadSummaryTitle = (messages: UiAssistantMessage[]) => {
+  const userTurns = messages.filter((message) => message.role === 'user');
+  const assistantTurns = messages.filter((message) => message.role === 'assistant');
+  if (Math.min(userTurns.length, assistantTurns.length) < 5) return null;
+
+  const source = userTurns
+    .slice(-5)
+    .map((message) => message.content)
+    .join(' ')
+    .toLowerCase();
+  const words = source.match(/[a-z0-9]+/g) ?? [];
+  const wordCounts = new Map<string, number>();
+
+  for (const word of words) {
+    if (word.length < 4 || THREAD_TITLE_STOPWORDS.has(word)) continue;
+    wordCounts.set(word, (wordCounts.get(word) ?? 0) + 1);
+  }
+
+  const keywords = [...wordCounts.entries()]
+    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+    .slice(0, 5)
+    .map(([word]) => word);
+
+  if (keywords.length === 0) {
+    return buildAssistantThreadTitle(userTurns[userTurns.length - 1]?.content ?? '', 'Square summary');
+  }
+
+  const title = keywords.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return buildAssistantThreadTitle(title, 'Square summary');
+};
+
+const buildAssistantThreads = (messages: UiAssistantMessage[], previousThreads: AssistantThread[] = []) => {
+  const threadMap = new Map<string, AssistantThread>();
+
+  for (const thread of previousThreads) {
+    threadMap.set(thread.id, thread);
+  }
+
+  for (const message of messages) {
+    if (message.project_id) continue;
+    const threadId = getAssistantThreadId(message);
+    const existing = threadMap.get(threadId);
+    const messageTime = message.createdAt || new Date().toISOString();
+    const title =
+      message.thread_title ||
+      (message.role === 'user'
+        ? buildAssistantThreadTitle(message.content, existing?.title || 'Square thread')
+        : existing?.title || 'Square thread');
+
+    threadMap.set(threadId, {
+      id: threadId,
+      title,
+      createdAt: existing?.createdAt || messageTime,
+      updatedAt: existing && new Date(existing.updatedAt).getTime() > new Date(messageTime).getTime() ? existing.updatedAt : messageTime,
+    });
+  }
+
+  if (!threadMap.size) {
+    return INITIAL_ASSISTANT_THREADS;
+  }
+
+  return [...threadMap.values()].sort((left, right) => new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime());
+};
+
+const COMMUNITY_SEED_POSTS: CommunityPost[] = [
+  {
+    id: 'seed-founder-onboarding',
+    kind: 'founder_problem',
+    track: 'founder',
+    title: 'Founder onboarding gets messy before the first AI tool is chosen',
+    body:
+      'The business has repeat leads, but every first conversation becomes a different handoff. The useful thread is how to map the intake, owner, review point, and next action before adding tools.',
+    tags: ['workflow', 'onboarding', 'handoff'],
+    authorLabel: 'Founder Track',
+    createdAt: '2026-06-24T08:00:00.000Z',
+    interestCount: 4,
+    replyCount: 3,
+    source: 'seed',
+  },
+  {
+    id: 'seed-founder-content',
+    kind: 'founder_problem',
+    track: 'founder',
+    title: 'Good internal work is not becoming clear founder content',
+    body:
+      'There are useful delivery notes, but they do not become public proof-safe posts. The problem is deciding what can be shared, what needs permission, and what should stay internal.',
+    tags: ['content', 'proof', 'founder-led'],
+    authorLabel: 'Founder Track',
+    createdAt: '2026-06-23T11:15:00.000Z',
+    interestCount: 6,
+    replyCount: 5,
+    source: 'seed',
+  },
+  {
+    id: 'seed-builder-intake-board',
+    kind: 'builder_share',
+    track: 'builder',
+    title: 'Testing a lightweight intake board for service founders',
+    body:
+      'I am sketching a board that turns scattered enquiry notes into owner, urgency, next action, and review status. The first useful version is intentionally small.',
+    tags: ['prototype', 'service', 'intake'],
+    authorLabel: 'Solopreneur Track',
+    createdAt: '2026-06-24T05:45:00.000Z',
+    interestCount: 8,
+    replyCount: 4,
+    source: 'seed',
+  },
+  {
+    id: 'seed-builder-content-repurposer',
+    kind: 'builder_share',
+    track: 'builder',
+    title: 'Idea: turn founder voice notes into weekly clarity prompts',
+    body:
+      'The idea is not a full content engine yet. It is a small routine that catches one decision, one blocker, and one next post angle from rough founder notes.',
+    tags: ['idea', 'content', 'solo-build'],
+    authorLabel: 'Solopreneur Track',
+    createdAt: '2026-06-22T16:30:00.000Z',
+    interestCount: 5,
+    replyCount: 2,
+    source: 'seed',
+  },
+];
+
+const formatProjectDate = (value: string) =>
+  new Intl.DateTimeFormat('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    timeZone: 'Asia/Kolkata',
+  }).format(new Date(value));
+
+const nowLabel = () =>
+  new Intl.DateTimeFormat('en-IN', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'Asia/Kolkata',
+  }).format(new Date());
+
+const cleanSentence = (value: string, fallback: string) => {
+  const clean = value.replace(/\s+/g, ' ').trim();
+  if (!clean) return fallback;
+  return clean.length > 210 ? `${clean.slice(0, 207).trim()}...` : clean;
+};
+
+const normalizeUsername = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+const isEmail = (value: string) => /\S+@\S+\.\S+/.test(value.trim());
+const getUserMetadataUsername = (user: User | null) => {
+  const value = user?.user_metadata?.username;
+  return typeof value === 'string' ? normalizeUsername(value) : '';
+};
+
+const normalizeAssistantSettings = (value: unknown): AssistantSettingsDraft => {
+  if (!value || typeof value !== 'object') return { behaviorPreference: '' };
+  const settings = value as Partial<AssistantSettingsDraft>;
+  return {
+    behaviorPreference: typeof settings.behaviorPreference === 'string' ? settings.behaviorPreference.slice(0, 600) : '',
+  };
+};
+
+const buildSavedContext = (track: Track, intent: IntentDraft): SavedContext => {
+  const trackCopy = TRACKS[track];
+  const summary =
+    track === 'founder'
+      ? `The current founder signal is: ${cleanSentence(
+          intent.headline,
+          trackCopy.defaults.headline
+        )} The Square should keep focusing on the current workflow, decision owner, human review boundary, and proof-safe next move before tools are selected.`
+      : `The current solopreneur signal is: ${cleanSentence(
+          intent.headline,
+          trackCopy.defaults.headline
+        )} The Square should keep focusing on audience pain, first useful version, validation, and simple proof before building too much.`;
+
+  return {
+    track,
+    savedAt: nowLabel(),
+    intent,
+    summary,
+    questions:
+      track === 'founder'
+        ? [
+            'Which workflow repeats often enough to deserve a system?',
+            'Where does human judgment need to stay final?',
+            'What proof can be shown without claiming unverified outcomes?',
+          ]
+        : [
+            'Who has the painful moment most clearly right now?',
+            'What is the smallest useful version that can be tested?',
+            'What evidence would make this idea worth continuing?',
+          ],
+    actions:
+      track === 'founder'
+        ? [
+            'Map one workflow into human-led, AI-assisted, reviewed, and automated steps.',
+            'Turn the strongest blocker into one focused community question.',
+            'Generate a Clarity Brief before publishing content or choosing tools.',
+          ]
+        : [
+            'Choose one audience and one painful moment for the first experiment.',
+            'Save two more rough notes so the context layer can compare patterns.',
+            'Turn the idea into a short validation prompt before building.',
+          ],
+  };
+};
+
+const savedContextFromProject = (project: ClaritySquareProject): SavedContext => ({
+  track: project.track,
+  savedAt: nowLabel(),
+  intent: {
+    headline: project.title,
+    context: project.project_instruction || project.context,
+    audience: project.audience ?? '',
+    blocker: project.blocker ?? '',
+    outcome: project.outcome ?? '',
+  },
+  summary: project.summary ?? buildSavedContext(project.track, TRACKS[project.track].defaults).summary,
+  questions: project.questions,
+  actions: project.actions,
+});
+
+export function ClaritySquare() {
+  const router = useRouter();
+  const [step, setStep] = useState<StepId>('entry');
+  const [track, setTrack] = useState<Track>('founder');
+  const [intent, setIntent] = useState<IntentDraft>(TRACKS.founder.defaults);
+  const [savedContext, setSavedContext] = useState<SavedContext | null>(null);
+  const [activeMenu, setActiveMenu] = useState<MenuId>('start');
+  const [activeLoopId, setActiveLoopId] = useState<LoopId>('project');
+  const [loopRun, setLoopRun] = useState<LoopRunState>({
+    loopId: 'project',
+    phase: 'idle',
+    startedAt: null,
+    completedAt: null,
+  });
+  const [themeMode, setThemeMode] = useState<'dark' | 'light'>('dark');
+  const [sessionMode, setSessionMode] = useState<SessionMode>('signup');
+  const [authView, setAuthView] = useState<AuthView>('signup-email');
+  const [status, setStatus] = useState('');
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [authEmail, setAuthEmail] = useState('');
+  const [authUsername, setAuthUsername] = useState('');
+  const [authLogin, setAuthLogin] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authProfile, setAuthProfile] = useState<ClaritySquareProfile | null>(null);
+  const [isAuthBusy, setIsAuthBusy] = useState(false);
+  const [isSavingContext, setIsSavingContext] = useState(false);
+  const [confirmingDeleteId, setConfirmingDeleteId] = useState<string | null>(null);
+  const [projects, setProjects] = useState<ClaritySquareProject[]>([]);
+  const [projectFolders, setProjectFolders] = useState<ClaritySquareProjectFolder[]>([]);
+  const [projectTasks, setProjectTasks] = useState<ClaritySquareProjectTask[]>([]);
+  const [projectReports, setProjectReports] = useState<ClaritySquareProjectReport[]>([]);
+  const [contextEntries, setContextEntries] = useState<ClaritySquareContextEntry[]>([]);
+  const [activeProjectFolder, setActiveProjectFolder] = useState<ProjectFolderFilter>('all');
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [projectSearch, setProjectSearch] = useState('');
+  const [taskProjectFilter, setTaskProjectFilter] = useState<string>('all');
+  const [taskStatusFilter, setTaskStatusFilter] = useState<TaskStatusFilter>('all');
+  const [isCreatingProject, setIsCreatingProject] = useState(false);
+  const [projectBrief, setProjectBrief] = useState('');
+  const [projectInstructionDraft, setProjectInstructionDraft] = useState<string | null>(null);
+  const [manualTaskTitle, setManualTaskTitle] = useState('');
+  const [projectAssistantInput, setProjectAssistantInput] = useState('');
+  const [newFolderName, setNewFolderName] = useState('');
+  const [isCreatingFolder, setIsCreatingFolder] = useState(false);
+  const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>(COMMUNITY_SEED_POSTS);
+  const [communityFilter, setCommunityFilter] = useState<CommunityPostFilter>('all');
+  const [communityTitle, setCommunityTitle] = useState('');
+  const [communityBody, setCommunityBody] = useState('');
+  const [communityTags, setCommunityTags] = useState('');
+  const [assistantInput, setAssistantInput] = useState('');
+  const [assistantMessages, setAssistantMessages] = useState<UiAssistantMessage[]>(INITIAL_ASSISTANT_MESSAGES);
+  const [assistantThreads, setAssistantThreads] = useState<AssistantThread[]>(INITIAL_ASSISTANT_THREADS);
+  const [activeAssistantThreadId, setActiveAssistantThreadId] = useState(DEFAULT_ASSISTANT_THREAD_ID);
+  const [isAssistantThreadDropdownOpen, setIsAssistantThreadDropdownOpen] = useState(false);
+  const [isAssistantThreadDropdownClosing, setIsAssistantThreadDropdownClosing] = useState(false);
+  const [isAssistantSettingsOpen, setIsAssistantSettingsOpen] = useState(false);
+  const [isAssistantSettingsClosing, setIsAssistantSettingsClosing] = useState(false);
+  const [assistantSettings, setAssistantSettings] = useState<AssistantSettingsDraft>({ behaviorPreference: '' });
+  const [assistantMemories, setAssistantMemories] = useState<ClaritySquareAssistantMemory[]>([]);
+  const [isAssistantBusy, setIsAssistantBusy] = useState(false);
+  const [isProjectAssistantBusy, setIsProjectAssistantBusy] = useState(false);
+  const [isSavingProject, setIsSavingProject] = useState(false);
+  const [isSavingProjectInstruction, setIsSavingProjectInstruction] = useState(false);
+  const stageRef = useRef<HTMLElement | null>(null);
+  const assistantInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const projectAssistantInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const assistantThreadDropdownHostRef = useRef<HTMLDivElement | null>(null);
+  const assistantSettingsHostRef = useRef<HTMLDivElement | null>(null);
+  const assistantThreadDropdownCloseTimerRef = useRef<number | null>(null);
+  const assistantSettingsCloseTimerRef = useRef<number | null>(null);
+  const loopRunTokenRef = useRef(0);
+
+  const resizeAssistantInput = useCallback((input: HTMLTextAreaElement) => {
+    input.style.height = `${ASSISTANT_INPUT_MIN_HEIGHT}px`;
+    if (!input.value) {
+      input.style.overflowY = 'hidden';
+      return;
+    }
+    const nextHeight = Math.min(Math.max(input.scrollHeight, ASSISTANT_INPUT_MIN_HEIGHT), ASSISTANT_INPUT_MAX_HEIGHT);
+    input.style.height = `${nextHeight}px`;
+    input.style.overflowY = input.scrollHeight > ASSISTANT_INPUT_MAX_HEIGHT ? 'auto' : 'hidden';
+  }, []);
+
+  useEffect(() => {
+    if (assistantInputRef.current) {
+      resizeAssistantInput(assistantInputRef.current);
+    }
+  }, [assistantInput, resizeAssistantInput]);
+
+  useEffect(() => {
+    if (projectAssistantInputRef.current) {
+      resizeAssistantInput(projectAssistantInputRef.current);
+    }
+  }, [projectAssistantInput, resizeAssistantInput]);
+
+  const closeAssistantThreadDropdown = useCallback(() => {
+    if (!isAssistantThreadDropdownOpen || isAssistantThreadDropdownClosing) return;
+    if (assistantThreadDropdownCloseTimerRef.current) {
+      window.clearTimeout(assistantThreadDropdownCloseTimerRef.current);
+    }
+    setIsAssistantThreadDropdownOpen(false);
+    setIsAssistantThreadDropdownClosing(true);
+    assistantThreadDropdownCloseTimerRef.current = window.setTimeout(() => {
+      setIsAssistantThreadDropdownClosing(false);
+      assistantThreadDropdownCloseTimerRef.current = null;
+    }, 160);
+  }, [isAssistantThreadDropdownClosing, isAssistantThreadDropdownOpen]);
+
+  const openAssistantThreadDropdown = useCallback(() => {
+    if (assistantThreadDropdownCloseTimerRef.current) {
+      window.clearTimeout(assistantThreadDropdownCloseTimerRef.current);
+      assistantThreadDropdownCloseTimerRef.current = null;
+    }
+    setIsAssistantThreadDropdownClosing(false);
+    setIsAssistantThreadDropdownOpen(true);
+  }, []);
+
+  const closeAssistantSettings = useCallback(() => {
+    if (!isAssistantSettingsOpen || isAssistantSettingsClosing) return;
+    if (assistantSettingsCloseTimerRef.current) {
+      window.clearTimeout(assistantSettingsCloseTimerRef.current);
+    }
+    setIsAssistantSettingsOpen(false);
+    setIsAssistantSettingsClosing(true);
+    assistantSettingsCloseTimerRef.current = window.setTimeout(() => {
+      setIsAssistantSettingsClosing(false);
+      assistantSettingsCloseTimerRef.current = null;
+    }, 160);
+  }, [isAssistantSettingsClosing, isAssistantSettingsOpen]);
+
+  const openAssistantSettings = useCallback(() => {
+    if (assistantSettingsCloseTimerRef.current) {
+      window.clearTimeout(assistantSettingsCloseTimerRef.current);
+      assistantSettingsCloseTimerRef.current = null;
+    }
+    setIsAssistantSettingsClosing(false);
+    setIsAssistantSettingsOpen(true);
+  }, []);
+
+  useEffect(() => {
+    const handleOutsidePointer = (event: MouseEvent | TouchEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+
+      if (
+        isAssistantThreadDropdownOpen &&
+        assistantThreadDropdownHostRef.current &&
+        !assistantThreadDropdownHostRef.current.contains(target)
+      ) {
+        closeAssistantThreadDropdown();
+      }
+
+      if (
+        isAssistantSettingsOpen &&
+        assistantSettingsHostRef.current &&
+        !assistantSettingsHostRef.current.contains(target)
+      ) {
+        closeAssistantSettings();
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      closeAssistantThreadDropdown();
+      closeAssistantSettings();
+    };
+
+    document.addEventListener('mousedown', handleOutsidePointer);
+    document.addEventListener('touchstart', handleOutsidePointer);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsidePointer);
+      document.removeEventListener('touchstart', handleOutsidePointer);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [closeAssistantSettings, closeAssistantThreadDropdown, isAssistantSettingsOpen, isAssistantThreadDropdownOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (assistantThreadDropdownCloseTimerRef.current) {
+        window.clearTimeout(assistantThreadDropdownCloseTimerRef.current);
+      }
+      if (assistantSettingsCloseTimerRef.current) {
+        window.clearTimeout(assistantSettingsCloseTimerRef.current);
+      }
+    };
+  }, []);
+
+  const syncProfileTrack = useCallback((profile: ClaritySquareProfile | null) => {
+    const profileTrack = profile?.preferred_track;
+    if (!profileTrack || !TRACKS[profileTrack]) return;
+
+    setTrack(profileTrack);
+    setIntent((current) => (current === TRACKS.founder.defaults || current === TRACKS.builder.defaults ? TRACKS[profileTrack].defaults : current));
+  }, []);
+
+  const upsertProfile = useCallback(async (user: User, username: string, preferredTrack: Track, options?: { quiet?: boolean }) => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase) return null;
+
+    const normalizedUsername = normalizeUsername(username);
+    const { data, error } = await supabase
+      .schema('clarity_square')
+      .from('profiles')
+      .upsert(
+        {
+          user_id: user.id,
+          email: user.email ?? null,
+          username: normalizedUsername,
+          preferred_track: preferredTrack,
+        },
+        { onConflict: 'user_id' }
+      )
+      .select('*')
+      .single();
+
+    if (error) {
+      if (!options?.quiet) {
+        setStatus(error.code === '23505' ? 'That username is already taken.' : error.message);
+      }
+      return null;
+    }
+
+    setAuthProfile(data);
+    syncProfileTrack(data);
+    return data;
+  }, [syncProfileTrack]);
+
+  const loadProfile = useCallback(async (user: User) => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase) return null;
+
+    const fallbackUsername = getUserMetadataUsername(user);
+    const fallbackProfile: ClaritySquareProfile | null =
+      fallbackUsername || user.email
+        ? {
+            user_id: user.id,
+            email: user.email ?? null,
+            username: fallbackUsername || null,
+            full_name: null,
+            preferred_track: fallbackUsername ? track : null,
+            assistant_settings: {},
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }
+        : null;
+
+    const { data, error } = await supabase
+      .schema('clarity_square')
+      .from('profiles')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      setAuthProfile(fallbackProfile);
+      setAssistantSettings(normalizeAssistantSettings(fallbackProfile?.assistant_settings));
+      return fallbackProfile;
+    }
+
+    if (data) {
+      setAuthProfile(data);
+      syncProfileTrack(data);
+      setAssistantSettings(normalizeAssistantSettings(data.assistant_settings));
+      return data;
+    }
+
+    if (fallbackUsername) {
+      const repairedProfile = await upsertProfile(user, fallbackUsername, track, { quiet: true });
+      if (repairedProfile) return repairedProfile;
+    }
+
+    setAuthProfile(fallbackProfile);
+    syncProfileTrack(fallbackProfile);
+    setAssistantSettings(normalizeAssistantSettings(fallbackProfile?.assistant_settings));
+    return fallbackProfile;
+  }, [syncProfileTrack, track, upsertProfile]);
+
+  const refreshWorkspace = useCallback(async (user: User, options?: { quiet?: boolean; preserveAssistantState?: boolean }) => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase) return null;
+
+    const [projectResult, folderResult, taskResult, reportResult, entryResult, messageResult, memoryResult] = await Promise.all([
+      supabase
+        .schema('clarity_square')
+        .from('projects')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .order('updated_at', { ascending: false })
+        .limit(120),
+      supabase
+        .schema('clarity_square')
+        .from('project_folders')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .order('sort_order', { ascending: true })
+        .order('updated_at', { ascending: false })
+        .limit(60),
+      supabase
+        .schema('clarity_square')
+        .from('project_tasks')
+        .select('*')
+        .eq('user_id', user.id)
+        .neq('status', 'archived')
+        .order('sort_order', { ascending: true })
+        .order('updated_at', { ascending: false })
+        .limit(240),
+      supabase
+        .schema('clarity_square')
+        .from('project_reports')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(180),
+      supabase
+        .schema('clarity_square')
+        .from('context_entries')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(120),
+      supabase
+        .schema('clarity_square')
+        .from('assistant_messages')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(240),
+      supabase
+        .schema('clarity_square')
+        .from('assistant_memories')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .order('updated_at', { ascending: false })
+        .limit(20),
+    ]);
+
+    if (projectResult.error) {
+      if (!options?.quiet) setStatus('Saved projects could not be loaded.');
+      return null;
+    }
+
+    if (folderResult.error && !options?.quiet) {
+      setStatus('Saved folders could not be loaded.');
+    }
+
+    if (taskResult.error && !options?.quiet) {
+      setStatus('Project tasks could not be loaded. The latest migration may need to be applied.');
+    }
+
+    if (reportResult.error && !options?.quiet) {
+      setStatus('Project reports could not be loaded. The latest migration may need to be applied.');
+    }
+
+    const nextProjects = projectResult.data ?? [];
+    const nextFolders = folderResult.error ? [] : folderResult.data ?? [];
+    const nextTasks = taskResult.error ? [] : taskResult.data ?? [];
+    const nextReports = reportResult.error ? [] : reportResult.data ?? [];
+    const nextEntries = entryResult.error ? [] : entryResult.data ?? [];
+    const nextMessageRows = !messageResult.error && messageResult.data?.length ? [...messageResult.data].reverse() : [];
+    const nextMessages =
+      nextMessageRows.length > 0
+        ? nextMessageRows.map((message) => ({
+            id: message.id,
+            role: message.role,
+            content: message.content,
+            createdAt: message.created_at,
+            project_id: message.project_id,
+            thread_id: message.project_id ? null : getMessageThreadIdFromMetadata(message.metadata),
+            thread_title: message.project_id ? null : getMessageThreadTitleFromMetadata(message.metadata),
+          }))
+        : INITIAL_ASSISTANT_MESSAGES;
+    const nextMemories = memoryResult.error ? [] : memoryResult.data ?? [];
+    const nextAssistantThreads = buildAssistantThreads(nextMessages);
+
+    setProjects(nextProjects);
+    if (!folderResult.error) {
+      setProjectFolders(nextFolders);
+    }
+    if (!taskResult.error) {
+      setProjectTasks(nextTasks);
+    }
+    if (!reportResult.error) {
+      setProjectReports(nextReports);
+    }
+    setContextEntries(nextEntries);
+    if (!options?.preserveAssistantState) {
+      setAssistantMessages(nextMessages);
+      setAssistantThreads(nextAssistantThreads);
+      setActiveAssistantThreadId((current) =>
+        nextAssistantThreads.some((thread) => thread.id === current) ? current : nextAssistantThreads[0]?.id ?? DEFAULT_ASSISTANT_THREAD_ID,
+      );
+    }
+    setAssistantMemories(nextMemories);
+    setSelectedProjectId((current) => {
+      if (current && nextProjects.some((project) => project.id === current)) return current;
+      return nextProjects[0]?.id ?? null;
+    });
+
+    return {
+      projects: nextProjects,
+      folders: nextFolders,
+      tasks: nextTasks,
+      reports: nextReports,
+      contextEntries: nextEntries,
+      messages: nextMessages,
+      memories: nextMemories,
+    } satisfies WorkspaceSnapshot;
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      try {
+        const stored = window.localStorage.getItem(STORAGE_KEY) || window.localStorage.getItem(LEGACY_STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored) as Partial<{
+            step: StepId;
+            track: Track;
+            intent: IntentDraft;
+            savedContext: SavedContext | null;
+            sessionMode: SessionMode;
+            activeMenu: MenuId | 'circle';
+            assistantMessages: UiAssistantMessage[];
+            assistantThreads: AssistantThread[];
+            activeAssistantThreadId: string;
+            assistantSettings: AssistantSettingsDraft;
+            assistantMemories: ClaritySquareAssistantMemory[];
+            projectFolders: ClaritySquareProjectFolder[];
+            activeProjectFolder: ProjectFolderFilter;
+            selectedProjectId: string | null;
+            projectSearch: string;
+            communityPosts: CommunityPost[];
+            communityFilter: CommunityPostFilter;
+          }>;
+
+          if (parsed.track && TRACKS[parsed.track]) setTrack(parsed.track);
+          if (parsed.intent) setIntent(parsed.intent);
+          if (parsed.savedContext) setSavedContext(parsed.savedContext);
+          if (parsed.sessionMode) setSessionMode(parsed.sessionMode);
+          const restoredActiveMenu = parsed.activeMenu === 'circle' ? 'square' : parsed.activeMenu;
+          if (
+            restoredActiveMenu === 'home' ||
+            restoredActiveMenu === 'more' ||
+            (restoredActiveMenu && MENU_ITEMS.some((item) => item.id === restoredActiveMenu))
+          ) {
+            setActiveMenu(restoredActiveMenu);
+          }
+          if (Array.isArray(parsed.assistantMessages) && parsed.assistantMessages.length > 0) {
+            const parsedAssistantMessages = parsed.assistantMessages.slice(-60).map((message) => ({
+              ...message,
+              thread_id: message.project_id ? null : normalizeAssistantThreadId(message.thread_id),
+              thread_title: message.project_id ? null : message.thread_title ?? null,
+            }));
+            setAssistantMessages(parsedAssistantMessages);
+            setAssistantThreads(buildAssistantThreads(parsedAssistantMessages));
+          }
+          if (Array.isArray(parsed.assistantThreads) && parsed.assistantThreads.length > 0) {
+            setAssistantThreads(
+              parsed.assistantThreads
+                .slice(0, 12)
+                .map((thread) => ({
+                  ...thread,
+                  id: normalizeAssistantThreadId(thread.id),
+                  title: thread.title === 'Circle thread' ? 'Square thread' : thread.title,
+                }))
+            );
+          }
+          if (typeof parsed.activeAssistantThreadId === 'string' && parsed.activeAssistantThreadId) {
+            setActiveAssistantThreadId(normalizeAssistantThreadId(parsed.activeAssistantThreadId));
+          }
+          if (parsed.assistantSettings && typeof parsed.assistantSettings.behaviorPreference === 'string') {
+            setAssistantSettings({
+              behaviorPreference: parsed.assistantSettings.behaviorPreference.slice(0, 600),
+            });
+          }
+          if (Array.isArray(parsed.assistantMemories)) {
+            setAssistantMemories(parsed.assistantMemories.slice(0, 10));
+          }
+          if (Array.isArray(parsed.projectFolders)) {
+            setProjectFolders(parsed.projectFolders.slice(0, 24));
+          }
+          if (typeof parsed.activeProjectFolder === 'string') {
+            setActiveProjectFolder(parsed.activeProjectFolder);
+          }
+          if (typeof parsed.selectedProjectId === 'string' || parsed.selectedProjectId === null) {
+            setSelectedProjectId(parsed.selectedProjectId);
+          }
+          if (typeof parsed.projectSearch === 'string') {
+            setProjectSearch(parsed.projectSearch);
+          }
+          if (Array.isArray(parsed.communityPosts) && parsed.communityPosts.length > 0) {
+            setCommunityPosts(parsed.communityPosts.slice(0, 40));
+          }
+          if (
+            parsed.communityFilter === 'all' ||
+            parsed.communityFilter === 'founder_problem' ||
+            parsed.communityFilter === 'builder_share'
+          ) {
+            setCommunityFilter(parsed.communityFilter);
+          }
+          if (parsed.step && STEPS.some((item) => item.id === parsed.step)) setStep(parsed.step);
+        }
+
+        const requestedView = new URLSearchParams(window.location.search).get('view');
+        if (requestedView === 'home') {
+          setActiveMenu('home');
+        }
+        if (requestedView === 'square' || requestedView === 'circle') {
+          setActiveMenu('square');
+        }
+        if (requestedView === 'assistant') {
+          setActiveMenu('assistant');
+        }
+      } catch {
+        setStatus('This session starts fresh.');
+      } finally {
+        setHasLoaded(true);
+      }
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoaded) return;
+    if (authUser) {
+      clearSquareLocalStorage();
+      return;
+    }
+
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        step,
+        track,
+        intent,
+        savedContext,
+        sessionMode,
+        activeMenu,
+        assistantMessages: assistantMessages.slice(-60),
+        assistantThreads: assistantThreads.slice(0, 12),
+        activeAssistantThreadId,
+        assistantSettings,
+        assistantMemories: assistantMemories.slice(0, 10),
+        projectFolders: projectFolders.slice(0, 24),
+        activeProjectFolder,
+        selectedProjectId,
+        projectSearch,
+        communityPosts: communityPosts.slice(0, 40),
+        communityFilter,
+      }),
+    );
+  }, [
+    activeMenu,
+    activeProjectFolder,
+    activeAssistantThreadId,
+    assistantMemories,
+    assistantMessages,
+    assistantSettings,
+    assistantThreads,
+    authUser,
+    communityFilter,
+    communityPosts,
+    hasLoaded,
+    intent,
+    projectFolders,
+    projectSearch,
+    savedContext,
+    selectedProjectId,
+    sessionMode,
+    step,
+    track,
+  ]);
+
+  useEffect(() => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase) return;
+
+    let isMounted = true;
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (!isMounted) return;
+      const user = data.session?.user ?? null;
+      setAuthUser(user);
+      if (user && step === 'entry') {
+        clearSquareLocalStorage();
+        void loadProfile(user);
+        setStep('track');
+        setActiveMenu((current) => (current === 'start' ? 'path' : current));
+        setStatus('Welcome back.');
+      }
+    });
+
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      const user = session?.user ?? null;
+      setAuthUser(user);
+      if (user) {
+        clearSquareLocalStorage();
+        void loadProfile(user);
+        setStep((current) => {
+          if (current === 'entry') {
+            setActiveMenu((currentMenu) => (currentMenu === 'start' ? 'path' : currentMenu));
+            return 'track';
+          }
+          return current;
+        });
+        setStatus('Welcome back.');
+      } else {
+        setAuthProfile(null);
+        setProjects([]);
+        setProjectFolders([]);
+        setProjectReports([]);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      data.subscription.unsubscribe();
+    };
+  }, [loadProfile, step]);
+
+  useEffect(() => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser) return;
+
+    let isMounted = true;
+
+    const initialRefresh = window.setTimeout(() => {
+      if (!isMounted) return;
+      void refreshWorkspace(authUser, { preserveAssistantState: activeMenu === 'assistant' });
+    }, 0);
+
+    return () => {
+      isMounted = false;
+      window.clearTimeout(initialRefresh);
+    };
+  }, [activeMenu, authUser, refreshWorkspace]);
+
+  useEffect(() => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser) return;
+
+    let refreshTimer: number | null = null;
+    const queueRefresh = () => {
+      if (refreshTimer) window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(() => {
+        void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: activeMenu === 'assistant' });
+      }, 180);
+    };
+
+    const channel = supabase
+      .channel(`clarity-square-workspace-${authUser.id}`)
+      .on('postgres_changes', { event: '*', schema: 'clarity_square', table: 'projects', filter: `user_id=eq.${authUser.id}` }, queueRefresh)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_square', table: 'project_folders', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_square', table: 'project_tasks', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_square', table: 'project_reports', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_square', table: 'context_entries', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_square', table: 'assistant_messages', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'clarity_square', table: 'assistant_memories', filter: `user_id=eq.${authUser.id}` },
+        queueRefresh,
+      )
+      .subscribe();
+
+    return () => {
+      if (refreshTimer) window.clearTimeout(refreshTimer);
+      void supabase.removeChannel(channel);
+    };
+  }, [activeMenu, authUser, refreshWorkspace]);
+
+  const accountTrack = authProfile?.preferred_track ?? track;
+  const accountTrackCopy = TRACKS[accountTrack];
+  const isFounderAccount = accountTrack === 'founder';
+  const isSolopreneurAccount = accountTrack === 'builder';
+  const metadataUsername = getUserMetadataUsername(authUser);
+  const displayUsername = authProfile?.username || metadataUsername;
+  const displayEmail = authUser?.email ?? authProfile?.email ?? '';
+
+  const continueSignupWithEmail = () => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase) {
+      setStatus('Account connection is not available. Please refresh and try again.');
+      return;
+    }
+
+    if (!isEmail(authEmail)) {
+      setStatus('Enter a valid email address to create your account.');
+      return;
+    }
+
+    setSessionMode('signup');
+    setAuthView('signup-credentials');
+    setStatus('Choose your path, then create your username and password.');
+  };
+
+  const createAccount = async () => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase) {
+      setStatus('Account connection is not available. Please refresh and try again.');
+      return;
+    }
+
+    const email = authEmail.trim();
+    const username = normalizeUsername(authUsername);
+    const password = authPassword.trim();
+
+    if (!isEmail(email)) {
+      setAuthView('signup-email');
+      setStatus('Enter a valid email address first.');
+      return;
+    }
+
+    if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+      setStatus('Choose a username using 3-24 lowercase letters, numbers, or underscores.');
+      return;
+    }
+
+    if (password.length < 8) {
+      setStatus('Use a password with at least 8 characters.');
+      return;
+    }
+
+    setIsAuthBusy(true);
+    const result = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { username },
+        emailRedirectTo: `${window.location.origin}/clarity-square`,
+      },
+    });
+    setIsAuthBusy(false);
+
+    if (result.error) {
+      setStatus(result.error.message);
+      return;
+    }
+
+    const user = result.data.user ?? result.data.session?.user ?? null;
+    if (user && result.data.session) {
+      const profile = await upsertProfile(user, username, track);
+      if (!profile) return;
+      clearSquareLocalStorage();
+      setAuthUser(user);
+      setAuthLogin(username);
+      setStep('track');
+      setActiveMenu('path');
+      setStatus(`Account created as ${TRACKS[track].shortLabel}. Signed in as ${username}.`);
+      return;
+    }
+
+    const retry = await supabase.auth.signInWithPassword({ email, password });
+
+    if (retry.error) {
+      const message = retry.error.message.toLowerCase();
+      if (message.includes('confirm')) {
+        setStatus('Account created. Email confirmation is still required before first sign-in.');
+        return;
+      }
+
+      setStatus('Account could not be opened yet. If this email already exists, use the Sign in tab.');
+      return;
+    }
+
+    const retryUser = retry.data.user;
+    const profile = await upsertProfile(retryUser, username, track);
+    if (!profile) return;
+
+    clearSquareLocalStorage();
+    setAuthUser(retryUser);
+    setAuthLogin(username);
+    setStep('track');
+    setActiveMenu('path');
+    setStatus(`Signed in as ${username} on the ${TRACKS[track].shortLabel}.`);
+  };
+
+  const signIn = async () => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase) {
+      setStatus('Account connection is not available. Please refresh and try again.');
+      return;
+    }
+
+    const login = authLogin.trim();
+    const password = authPassword.trim();
+
+    if (!login || !password) {
+      setStatus('Enter your username and password.');
+      return;
+    }
+
+    setIsAuthBusy(true);
+    let email = login;
+
+    if (!isEmail(login)) {
+      const { data, error } = await supabase.schema('clarity_square').rpc('resolve_login_email', {
+        login,
+      });
+
+      if (error) {
+        setIsAuthBusy(false);
+        setStatus('Username sign-in is not available yet. The latest database migration may need to be applied.');
+        return;
+      }
+
+      if (!data) {
+        setIsAuthBusy(false);
+        setStatus('No account found for that username.');
+        return;
+      }
+
+      email = data;
+    }
+
+    const result = await supabase.auth.signInWithPassword({ email, password });
+    setIsAuthBusy(false);
+
+    if (result.error) {
+      setStatus(result.error.message);
+      return;
+    }
+
+    const user = result.data.user;
+    clearSquareLocalStorage();
+    setAuthUser(user);
+    const profile = await loadProfile(user);
+    setStep('track');
+    setActiveMenu('path');
+    setStatus(`Signed in${profile?.username ? ` as ${profile.username}` : ''}.`);
+  };
+
+  const signOut = async () => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase) return;
+
+    await supabase.auth.signOut();
+    setAuthUser(null);
+    setAuthProfile(null);
+    setProjects([]);
+    setProjectFolders([]);
+    setProjectTasks([]);
+    setProjectReports([]);
+    setActiveProjectFolder('all');
+    setSelectedProjectId(null);
+    setProjectSearch('');
+    setTaskProjectFilter('all');
+    setTaskStatusFilter('all');
+    setIsCreatingProject(false);
+    setProjectBrief('');
+    setProjectInstructionDraft(null);
+    setManualTaskTitle('');
+    setProjectAssistantInput('');
+    setAssistantMessages(INITIAL_ASSISTANT_MESSAGES);
+    setAssistantThreads(INITIAL_ASSISTANT_THREADS);
+    setActiveAssistantThreadId(DEFAULT_ASSISTANT_THREAD_ID);
+    setAssistantSettings({ behaviorPreference: '' });
+    setAssistantMemories([]);
+    setAuthView('signin');
+    setActiveMenu('start');
+    setStep('entry');
+    setStatus('Signed out.');
+  };
+
+  const applyTrackChoice = async (nextTrack: Track, options?: { persist?: boolean; statusPrefix?: string }) => {
+    setTrack(nextTrack);
+    setIntent(TRACKS[nextTrack].defaults);
+
+    if (!options?.persist || !authUser) {
+      setStatus(options?.statusPrefix ?? `${TRACKS[nextTrack].shortLabel} selected.`);
+      return;
+    }
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase) {
+      setStatus('Account path could not be saved. Please refresh and try again.');
+      return;
+    }
+
+    const previousProfile = authProfile;
+    const nextProfile: ClaritySquareProfile = {
+      user_id: authUser.id,
+      email: authUser.email ?? authProfile?.email ?? null,
+      username: authProfile?.username ?? getUserMetadataUsername(authUser) ?? null,
+      full_name: authProfile?.full_name ?? null,
+      preferred_track: nextTrack,
+      assistant_settings: authProfile?.assistant_settings ?? assistantSettings,
+      created_at: authProfile?.created_at ?? new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    setAuthProfile(nextProfile);
+
+    const { error } = await supabase
+      .schema('clarity_square')
+      .from('profiles')
+      .update({ preferred_track: nextTrack })
+      .eq('user_id', authUser.id);
+
+    if (error) {
+      setAuthProfile(previousProfile);
+      setStatus('Account path could not be saved.');
+      return;
+    }
+
+    setStatus(options.statusPrefix ?? `${TRACKS[nextTrack].shortLabel} saved for this account.`);
+  };
+
+  const getFolderName = (folderId: string | null | undefined) => {
+    if (!folderId) return 'Unfiled';
+    return projectFolders.find((folder) => folder.id === folderId)?.name ?? 'Folder';
+  };
+
+  const filteredProjects = projects.filter((project) => {
+    const search = projectSearch.trim().toLowerCase();
+    const matchesFolder =
+      activeProjectFolder === 'all' ||
+      (activeProjectFolder === 'unfiled' ? !project.folder_id : project.folder_id === activeProjectFolder);
+    const matchesSearch =
+      !search ||
+      [project.title, project.context, project.audience, project.blocker, project.outcome]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(search));
+
+    return matchesFolder && matchesSearch;
+  });
+
+  const selectedProject =
+    filteredProjects.find((project) => project.id === selectedProjectId) || filteredProjects[0] || null;
+  const selectedProjectTasks = selectedProject
+    ? projectTasks
+        .filter((task) => task.project_id === selectedProject.id && task.status !== 'archived')
+        .sort((left, right) => left.sort_order - right.sort_order || new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime())
+    : [];
+  const selectedProjectReports = selectedProject
+    ? projectReports
+        .filter((report) => report.project_id === selectedProject.id)
+        .sort((left, right) => new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime())
+    : [];
+  const resolvedAssistantThreadId = activeAssistantThreadId || DEFAULT_ASSISTANT_THREAD_ID;
+  const activeAssistantThread = assistantThreads.find((thread) => thread.id === resolvedAssistantThreadId);
+  const displayedAssistantThreads = activeAssistantThread
+    ? assistantThreads
+    : [
+        {
+          id: resolvedAssistantThreadId,
+          title: resolvedAssistantThreadId === DEFAULT_ASSISTANT_THREAD_ID ? 'Square thread' : 'New thread',
+          createdAt: '',
+          updatedAt: '',
+        },
+        ...assistantThreads,
+      ].slice(0, 12);
+  const visibleAssistantThreads = displayedAssistantThreads.slice(0, 5);
+  const squareAssistantMessages = assistantMessages.filter(
+    (message) => !message.project_id && getAssistantThreadId(message) === resolvedAssistantThreadId,
+  );
+  const squareAssistantMessageCount = assistantMessages.filter((message) => !message.project_id).length;
+  const selectedProjectMessages = selectedProject
+    ? assistantMessages.filter((message) => message.project_id === selectedProject.id).slice(-12)
+    : [];
+  const selectedProjectInstruction = selectedProject?.project_instruction || selectedProject?.context || '';
+
+  const recentProjects = [...projects]
+    .sort((left, right) => new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime())
+    .slice(0, 3);
+  const latestProject = recentProjects[0] ?? null;
+  const latestMemory = assistantMemories[0] ?? null;
+  const activeSignal = savedContext?.intent.headline || latestProject?.title || intent.headline;
+  const activeSignalSummary =
+    savedContext?.summary || latestProject?.summary || latestProject?.context || intent.context || 'Save a first signal to build the Square context.';
+  const openTaskCount = projectTasks.filter((task) => task.status === 'open').length;
+  const completedTaskCount = projectTasks.filter((task) => task.status === 'done').length;
+  const activeProjectTasks = projectTasks
+    .filter((task) => task.status !== 'archived')
+    .sort((left, right) => left.sort_order - right.sort_order || new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime());
+  const taskProjectMap = new Map(projects.map((project) => [project.id, project]));
+  const filteredTaskManagerTasks = activeProjectTasks.filter((task) => {
+    const matchesProject = taskProjectFilter === 'all' || task.project_id === taskProjectFilter;
+    const matchesStatus = taskStatusFilter === 'all' || task.status === taskStatusFilter;
+    return matchesProject && matchesStatus;
+  });
+  const taskManagerProjects = projects
+    .map((project) => ({
+      project,
+      tasks: filteredTaskManagerTasks.filter((task) => task.project_id === project.id),
+    }))
+    .filter((group) => group.tasks.length > 0 || taskProjectFilter === group.project.id);
+  const orphanTaskGroup = filteredTaskManagerTasks.filter((task) => !taskProjectMap.has(task.project_id));
+  const taskCreateProject =
+    (taskProjectFilter !== 'all' ? projects.find((project) => project.id === taskProjectFilter) : null) ??
+    selectedProject ??
+    latestProject ??
+    projects[0] ??
+    null;
+  const pendingAssistantActionCount = assistantMessages.filter(
+    (message) => message.pendingAction?.status === 'pending',
+  ).length;
+  const sourceProjectForLoops = selectedProject ?? latestProject;
+  const sourceSignalQuestions = sourceProjectForLoops?.questions.length ?? savedContext?.questions.length ?? 0;
+  const sourceSignalActions = sourceProjectForLoops?.actions.length ?? savedContext?.actions.length ?? 0;
+  const latestReflectionEntry =
+    contextEntries.find((entry) => entry.entry_type === 'digest' && (!sourceProjectForLoops || entry.project_id === sourceProjectForLoops.id)) ??
+    contextEntries.find((entry) => entry.entry_type === 'digest') ??
+    null;
+  const latestBriefEntry =
+    contextEntries.find((entry) => entry.entry_type === 'brief' && (!sourceProjectForLoops || entry.project_id === sourceProjectForLoops.id)) ??
+    contextEntries.find((entry) => entry.entry_type === 'brief') ??
+    null;
+  const founderProblemCount = communityPosts.filter((post) => post.kind === 'founder_problem').length;
+  const builderShareCount = communityPosts.filter((post) => post.kind === 'builder_share').length;
+  const latestCommunityPosts = [...communityPosts]
+    .sort((left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime())
+    .slice(0, 3);
+  const availableCommunityFilters: Array<{ id: CommunityPostFilter; label: string }> = isFounderAccount
+    ? [
+        { id: 'all', label: 'All visible threads' },
+        { id: 'founder_problem', label: 'My problem statements' },
+        { id: 'builder_share', label: 'Solopreneur responses' },
+      ]
+    : [
+        { id: 'all', label: 'All visible threads' },
+        { id: 'founder_problem', label: 'Founder problems' },
+        { id: 'builder_share', label: 'My shares' },
+      ];
+  const filteredCommunityPosts = communityPosts.filter((post) => communityFilter === 'all' || post.kind === communityFilter);
+  const currentCommunityKind: CommunityPostKind = isFounderAccount ? 'founder_problem' : 'builder_share';
+  const communityComposerCopy =
+    currentCommunityKind === 'founder_problem'
+      ? {
+          label: 'Founder problem statement',
+          titlePlaceholder: 'What problem needs sharper thinking?',
+          bodyPlaceholder: 'Describe the workflow, blocker, audience, and what a useful contribution would clarify.',
+          button: 'Post problem',
+        }
+      : {
+          label: 'Solopreneur share',
+          titlePlaceholder: 'What are you working on or noticing?',
+          bodyPlaceholder: 'Describe the work, idea, signal, or experiment. Keep it specific enough for founders to understand.',
+          button: 'Share with Square',
+        };
+  const homeRoleCopy = isFounderAccount
+    ? {
+        title: 'Founder problem command center',
+        description:
+          'Post real operating problems, turn the strongest thread into a private project, and keep the assistant anchored to your current workflow.',
+        roleDetail: 'You can publish founder problem statements. Solopreneurs can respond with work, ideas, and experiments.',
+        primaryAction: savedContext || latestProject ? 'Continue founder context' : 'Capture founder signal',
+      }
+    : {
+        title: 'Solopreneur clarity command center',
+        description:
+          'Find founder problems, share useful work or ideas, and turn promising signals into private projects with assistant memory.',
+        roleDetail: 'You can share work, ideas, and experiments. Founder problem-posting stays reserved for founder accounts.',
+        primaryAction: savedContext || latestProject ? 'Continue solopreneur context' : 'Capture solopreneur signal',
+      };
+  const journeySteps = [
+    { label: 'Path', detail: accountTrackCopy.shortLabel, active: true },
+    { label: 'Signal', detail: savedContext || latestProject ? 'Captured' : 'Awaiting input', active: Boolean(savedContext || latestProject) },
+    { label: 'Project', detail: projects.length > 0 ? `${projects.length} saved` : 'Not started', active: projects.length > 0 },
+    { label: 'Memory', detail: assistantMemories.length > 0 ? 'Assistant aware' : 'Ready to learn', active: assistantMemories.length > 0 },
+  ];
+  const loopStatusLabel: Record<LoopStatus, string> = {
+    pending: 'Pending',
+    working: 'Working',
+    needs_approval: 'Needs approval',
+    completed: 'Completed',
+  };
+  const loopCards: LoopCard[] = [
+    {
+      id: 'signal',
+      name: 'Signal Loop',
+      label: 'Capture',
+      status: savedContext || latestProject ? 'completed' : 'pending',
+      detail: activeSignal,
+      nextAction:
+        savedContext || latestProject
+          ? 'Scan the saved signal, latest project context, and assistant memory for the cleanest next direction.'
+          : 'Scan the selected path and show what context is still missing before the Square can help.',
+      icon: Activity,
+    },
+    {
+      id: 'project',
+      name: 'Project Loop',
+      label: 'Build',
+      status: pendingAssistantActionCount > 0 ? 'needs_approval' : projects.length > 0 ? 'working' : 'pending',
+      detail: projects.length > 0 ? `${projects.length} saved projects` : 'No saved projects yet',
+      nextAction:
+        projects.length > 0
+          ? 'Press Scan Projects to read saved projects, folders, open tasks, and recent updates.'
+          : 'Press Scan Projects to check whether this workspace has enough project context to organize.',
+      icon: FolderOpen,
+    },
+    {
+      id: 'task',
+      name: 'Task Loop',
+      label: 'Move',
+      status: pendingAssistantActionCount > 0 ? 'needs_approval' : openTaskCount > 0 ? 'working' : completedTaskCount > 0 ? 'completed' : 'pending',
+      detail: `${openTaskCount} open, ${completedTaskCount} completed`,
+      nextAction:
+        openTaskCount > 0
+          ? 'Scan open, completed, and pending task movement across the workspace.'
+          : projects.length > 0
+            ? 'Scan saved projects and show where task structure is still thin.'
+            : 'Scan the workspace and show what project source is needed before tasks become useful.',
+      icon: CheckCircle2,
+    },
+    {
+      id: 'reflection',
+      name: 'Reflection Loop',
+      label: 'Review',
+      status: latestReflectionEntry ? 'completed' : openTaskCount > 0 || projects.length > 0 ? 'working' : 'pending',
+      detail: latestReflectionEntry ? `Last saved ${formatProjectDate(latestReflectionEntry.created_at)}` : 'No reflection saved yet',
+      nextAction: projects.length > 0 ? 'Scan progress, completed movement, and stuck work into a reflection overview.' : 'Scan available context and show what is missing for reflection.',
+      icon: RefreshCw,
+    },
+    {
+      id: 'brief',
+      name: 'Brief Loop',
+      label: 'Package',
+      status: latestBriefEntry ? 'completed' : projects.length > 0 || savedContext ? 'working' : 'pending',
+      detail: latestBriefEntry ? `Last saved ${formatProjectDate(latestBriefEntry.created_at)}` : 'No clarity brief saved yet',
+      nextAction: projects.length > 0 || savedContext ? 'Scan the strongest context, questions, and actions into a brief overview.' : 'Scan the workspace and show what signal context is needed for a brief.',
+      icon: FileText,
+    },
+  ];
+  const selectedLoop = loopCards.find((loop) => loop.id === activeLoopId) ?? loopCards[0];
+  const SelectedLoopIcon = selectedLoop.icon;
+  const selectedProjectLoopTasks = sourceProjectForLoops
+    ? projectTasks.filter((task) => task.project_id === sourceProjectForLoops.id && task.status !== 'archived')
+    : projectTasks.filter((task) => task.status !== 'archived');
+  const selectedLoopOpenTasks = selectedProjectLoopTasks.filter((task) => task.status === 'open');
+  const selectedLoopDoneTasks = selectedProjectLoopTasks.filter((task) => task.status === 'done');
+  const activeLoopIsRunning = loopRun.loopId === activeLoopId && loopRun.phase === 'gathering';
+  const activeLoopIsReady = loopRun.loopId === activeLoopId && loopRun.phase === 'ready';
+  const loopGatheringSteps: Record<LoopId, string[]> = {
+    signal: [
+      'Reading your selected path and starting intent.',
+      'Checking saved project context for the latest signal.',
+      'Preparing the cleanest next action from what is known.',
+    ],
+    project: [
+      'Gathering your context from Projects.',
+      'Reading folders, project instructions, open tasks, and recent updates.',
+      'Preparing a project overview that shows what needs attention.',
+    ],
+    task: [
+      'Scanning open, completed, and archived project tasks.',
+      'Grouping task movement by active project.',
+      'Preparing a task overview from the current movement.',
+    ],
+    reflection: [
+      'Reviewing current project movement.',
+      'Comparing open tasks, completed work, and saved reflections.',
+      'Preparing a short progress review.',
+    ],
+    brief: [
+      'Collecting the signal, project instruction, and desired outcome.',
+      'Checking tasks and saved context entries for useful structure.',
+      'Preparing a compact clarity brief.',
+    ],
+  };
+  const loopResultTitle: Record<LoopId, string> = {
+    signal: savedContext || latestProject ? 'Signal scan complete' : 'Signal scan needs input',
+    project: projects.length > 0 ? 'Project scan complete' : 'No saved projects found',
+    task:
+      selectedProjectLoopTasks.length > 0
+        ? `Task scan complete`
+        : 'No project tasks found',
+    reflection: latestReflectionEntry ? 'Reflection scan complete' : 'Reflection scan ready',
+    brief: latestBriefEntry ? 'Brief scan complete' : 'Brief scan ready',
+  };
+  const loopResultDetail: Record<LoopId, string> = {
+    signal: savedContext || latestProject
+      ? 'The Signal Loop found the active path, saved context, recent project source, and assistant memory.'
+      : 'The Signal Loop checked the workspace and found that a first signal is still needed.',
+    project: projects.length > 0
+      ? 'The Project Loop scanned saved projects, folders, recent movement, and task load.'
+      : 'The Project Loop scanned the workspace and did not find saved projects to summarize yet.',
+    task: selectedProjectLoopTasks.length > 0
+      ? 'The Task Loop scanned open and completed work so you can see current movement without digging.'
+      : 'The Task Loop scanned the workspace and did not find saved project tasks yet.',
+    reflection: sourceProjectForLoops
+      ? 'The Reflection Loop scanned project movement, completed work, and prior reflection history.'
+      : 'The Reflection Loop scanned available context and needs a project or signal before it can become useful.',
+    brief: sourceProjectForLoops || savedContext
+      ? 'The Brief Loop scanned the strongest context, questions, actions, and prior brief history.'
+      : 'The Brief Loop scanned the workspace and needs a signal before it can package useful context.',
+  };
+  const loopContextChips: Record<LoopId, string[]> = {
+    signal: [
+      savedContext ? 'Saved signal' : 'Intent draft',
+      latestProject ? 'Latest project' : 'No project yet',
+      `${assistantMemories.length} memories`,
+    ],
+    project: [`${projects.length} projects`, `${projectFolders.length} folders`, sourceProjectForLoops ? 'Active source ready' : 'Needs project'],
+    task: [`${selectedLoopOpenTasks.length} open`, `${selectedLoopDoneTasks.length} completed`, `${pendingAssistantActionCount} approvals`],
+    reflection: [
+      sourceProjectForLoops ? 'Project movement' : 'Needs project',
+      latestReflectionEntry ? 'Prior reflection' : 'No prior reflection',
+      `${selectedLoopDoneTasks.length} completed tasks`,
+    ],
+    brief: [
+      sourceProjectForLoops ? 'Project instruction' : savedContext ? 'Saved context' : 'Needs signal',
+      latestBriefEntry ? 'Prior brief' : 'No prior brief',
+      `${selectedLoopOpenTasks.length} open tasks`,
+    ],
+  };
+  const loopOverviewItems: Record<LoopId, LoopOverviewItem[]> = {
+    signal: [
+      { label: 'Active signal', value: activeSignal || 'None yet', detail: savedContext || latestProject ? 'Usable context found' : 'Needs first signal' },
+      { label: 'Track', value: accountTrackCopy.shortLabel, detail: 'Current Square path' },
+      { label: 'Saved memory', value: String(assistantMemories.length), detail: latestMemory?.title || 'No assistant memory yet' },
+      { label: 'Source', value: sourceProjectForLoops ? 'Project' : savedContext ? 'Saved context' : 'Intent draft', detail: sourceProjectForLoops?.title || savedContext?.intent.context || intent.context || 'No source captured yet' },
+    ],
+    project: [
+      { label: 'Projects', value: String(projects.length), detail: latestProject ? `Latest: ${latestProject.title}` : 'No saved project yet' },
+      { label: 'Folders', value: String(projectFolders.length), detail: projectFolders.length > 0 ? 'Folder structure available' : 'No folders saved' },
+      { label: 'Open tasks', value: String(openTaskCount), detail: openTaskCount > 0 ? 'Work waiting across projects' : 'No open project tasks' },
+      { label: 'Approvals', value: String(pendingAssistantActionCount), detail: pendingAssistantActionCount > 0 ? 'Assistant actions need review' : 'No pending approvals' },
+    ],
+    task: [
+      { label: 'Open', value: String(openTaskCount), detail: openTaskCount > 0 ? 'Needs movement' : 'Nothing open right now' },
+      { label: 'Completed', value: String(completedTaskCount), detail: completedTaskCount > 0 ? 'Recorded progress' : 'No completed tasks yet' },
+      { label: 'Current source', value: String(selectedProjectLoopTasks.length), detail: sourceProjectForLoops?.title || 'All project tasks' },
+      { label: 'Approvals', value: String(pendingAssistantActionCount), detail: pendingAssistantActionCount > 0 ? 'Review before saving changes' : 'No task approvals pending' },
+    ],
+    reflection: [
+      { label: 'Last reflection', value: latestReflectionEntry ? formatProjectDate(latestReflectionEntry.created_at) : 'None', detail: latestReflectionEntry ? 'Saved reflection found' : 'No reflection saved yet' },
+      { label: 'Completed', value: String(selectedLoopDoneTasks.length), detail: 'Completed tasks in the scanned source' },
+      { label: 'Still open', value: String(selectedLoopOpenTasks.length), detail: 'Open tasks that may shape the reflection' },
+      { label: 'Source', value: sourceProjectForLoops ? 'Project' : savedContext ? 'Signal' : 'Missing', detail: sourceProjectForLoops?.title || savedContext?.intent.headline || 'Capture a signal first' },
+    ],
+    brief: [
+      { label: 'Last brief', value: latestBriefEntry ? formatProjectDate(latestBriefEntry.created_at) : 'None', detail: latestBriefEntry ? 'Saved brief found' : 'No brief saved yet' },
+      { label: 'Source', value: sourceProjectForLoops ? 'Project' : savedContext ? 'Signal' : 'Missing', detail: sourceProjectForLoops?.title || savedContext?.intent.headline || 'Capture a signal first' },
+      { label: 'Questions', value: String(sourceSignalQuestions), detail: sourceSignalQuestions > 0 ? 'Clarifying questions found' : 'No questions captured yet' },
+      { label: 'Actions', value: String(sourceSignalActions), detail: sourceSignalActions > 0 ? 'Next actions found' : 'No actions captured yet' },
+    ],
+  };
+  const projectLoopScanTargets = [
+    { label: 'Projects', value: String(projects.length), detail: projects.length > 0 ? 'Saved project files ready to scan' : 'No saved project files yet' },
+    { label: 'Folders', value: String(projectFolders.length), detail: projectFolders.length > 0 ? 'Folder structure available' : 'No folder structure yet' },
+    { label: 'Open tasks', value: String(openTaskCount), detail: openTaskCount > 0 ? 'Task load will be included' : 'No open tasks to include' },
+    { label: 'Reports', value: String(projectReports.length), detail: projectReports.length > 0 ? 'Saved reports available' : 'No saved reports yet' },
+  ];
+  const projectLoopInsights = [
+    {
+      title: latestProject ? 'Latest movement' : 'Project source',
+      detail: latestProject ? `${latestProject.title} was updated ${formatProjectDate(latestProject.updated_at)}.` : 'Create or save a project before the scan can find movement.',
+    },
+    {
+      title: openTaskCount > 0 ? 'Work waiting' : 'Task structure',
+      detail: openTaskCount > 0 ? `${openTaskCount} open task${openTaskCount === 1 ? '' : 's'} found across projects.` : 'No open project tasks were found in this scan.',
+    },
+    {
+      title: pendingAssistantActionCount > 0 ? 'Review needed' : 'Approval queue',
+      detail: pendingAssistantActionCount > 0 ? `${pendingAssistantActionCount} assistant action${pendingAssistantActionCount === 1 ? '' : 's'} need approval.` : 'No pending assistant actions are blocking project movement.',
+    },
+  ];
+  const loopSourceActionLabel: Record<LoopId, string> = {
+    signal: savedContext || latestProject ? 'Open context' : 'Open path',
+    project: 'Open projects',
+    task: 'Open task manager',
+    reflection: 'Open memory',
+    brief: savedContext || sourceProjectForLoops ? 'Open context' : 'Open path',
+  };
+  const loopsByStatus = {
+    pending: loopCards.filter((loop) => loop.status === 'pending').length,
+    working: loopCards.filter((loop) => loop.status === 'working').length,
+    needs_approval: loopCards.filter((loop) => loop.status === 'needs_approval').length,
+    completed: loopCards.filter((loop) => loop.status === 'completed').length,
+  };
+  const homeStats: Array<{ label: string; value: number; detail: string; icon: typeof CircleDot; menu: MenuId }> = [
+    {
+      label: 'Projects',
+      value: projects.length,
+      detail: latestProject ? `Latest: ${latestProject.title}` : 'Create the first private project.',
+      icon: FolderOpen,
+      menu: 'projects',
+    },
+    {
+      label: 'Open tasks',
+      value: openTaskCount,
+      detail: openTaskCount > 0 ? 'Tasks waiting across projects.' : 'No open project tasks yet.',
+      icon: CheckCircle2,
+      menu: 'tasks',
+    },
+    {
+      label: 'Active loops',
+      value: loopsByStatus.working + loopsByStatus.needs_approval,
+      detail:
+        loopsByStatus.needs_approval > 0
+          ? `${loopsByStatus.needs_approval} loop action needs approval.`
+          : `${loopsByStatus.completed} loops completed.`,
+      icon: Repeat2,
+      menu: 'loops',
+    },
+    {
+      label: 'Square threads',
+      value: communityPosts.length,
+      detail: `${founderProblemCount} founder problems, ${builderShareCount} solopreneur shares.`,
+      icon: Users,
+      menu: 'square',
+    },
+    {
+      label: 'Memories',
+      value: assistantMemories.length,
+      detail: latestMemory ? latestMemory.title : 'No saved assistant memories.',
+      icon: Database,
+      menu: 'memory',
+    },
+  ];
+
+  const folderProjectCount = (folderId: ProjectFolderFilter) =>
+    projects.filter((project) => {
+      if (folderId === 'all') return true;
+      if (folderId === 'unfiled') return !project.folder_id;
+      return project.folder_id === folderId;
+    }).length;
+
+  const buildProjectInstruction = (draft: IntentDraft | AssistantProjectDraft | string) => {
+    if (typeof draft === 'string') {
+      return cleanSentence(draft, 'Use this project context to keep outputs focused, practical, and reviewable.');
+    }
+
+    const title = 'headline' in draft ? draft.headline : draft.title;
+    return [
+      `Project: ${cleanSentence(title, 'New clarity project')}`,
+      `Context: ${cleanSentence(draft.context, 'The project context is still being clarified.')}`,
+      draft.audience ? `Audience: ${cleanSentence(draft.audience, 'Not stated')}` : '',
+      draft.blocker ? `Current blocker: ${cleanSentence(draft.blocker, 'Not stated')}` : '',
+      draft.outcome ? `Desired outcome: ${cleanSentence(draft.outcome, 'Not stated')}` : '',
+      'Operating rule: answer from this project context first, keep recommendations practical, separate human-led from AI-assisted work, and avoid unsupported claims.',
+    ]
+      .filter(Boolean)
+      .join('\n');
+  };
+
+  const buildAutoTasks = (project: Pick<ClaritySquareProject, 'id' | 'track' | 'title' | 'context' | 'project_instruction'>) => {
+    const instruction = project.project_instruction || project.context;
+    return [
+      {
+        title: 'Clarify the project brief',
+        detail: cleanSentence(instruction, 'Review the project context and tighten the first decision.'),
+      },
+      project.track === 'founder'
+        ? {
+            title: 'Map the workflow boundary',
+            detail: 'Separate what should stay human-led, what can be AI-assisted, and what needs review before automation.',
+          }
+        : {
+            title: 'Choose the first validation move',
+            detail: 'Define the smallest test that proves whether the idea deserves more build time.',
+          },
+      {
+        title: 'Ask the project assistant for the next pass',
+        detail: 'Use the scoped assistant thread so future outputs stay tied to this project instruction.',
+      },
+    ];
+  };
+
+  const insertProjectTasks = async (
+    project: ClaritySquareProject,
+    taskDrafts: Array<{ title: string; detail?: string | null }>,
+    source: ClaritySquareProjectTask['source'],
+  ) => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || taskDrafts.length === 0) return [];
+
+    const existingCount = projectTasks.filter((task) => task.project_id === project.id).length;
+    const rows = taskDrafts.slice(0, 8).map((task, index) => ({
+      project_id: project.id,
+      user_id: authUser.id,
+      title: cleanSentence(task.title, 'New task').slice(0, 160),
+      detail: task.detail ? cleanSentence(task.detail, '') : null,
+      source,
+      sort_order: existingCount + index,
+    }));
+
+    const { data, error } = await supabase.schema('clarity_square').from('project_tasks').insert(rows).select('*');
+
+    if (error || !data) {
+      setStatus('Tasks could not be saved. The project task migration may need to be applied.');
+      return [];
+    }
+
+    setProjectTasks((current) => [...current, ...data]);
+    return data;
+  };
+
+  const openNewProjectFlow = (prefill = '') => {
+    setIsCreatingProject(true);
+    setProjectBrief(prefill || savedContext?.intent.context || '');
+    setProjectInstructionDraft(null);
+    setSelectedProjectId(null);
+    setActiveMenu('projects');
+    setStatus('Describe what the project is about.');
+  };
+
+  const createProjectFolder = async (
+    folderName = newFolderName,
+    options?: { source?: 'assistant' | 'user'; keepCurrentMenu?: boolean },
+  ) => {
+    const name = cleanSentence(folderName, '').slice(0, 80);
+    if (!name) {
+      setStatus('Name the folder first.');
+      return null;
+    }
+
+    const supabase = getClaritySquareSupabase();
+    if (!authUser) {
+      setStatus('Sign in before creating folders.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return null;
+    }
+    if (!supabase) {
+      setStatus('Folder could not be saved to your account.');
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .schema('clarity_square')
+      .from('project_folders')
+      .insert({
+        user_id: authUser.id,
+        name,
+        sort_order: projectFolders.length,
+      })
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      setStatus(error?.code === '23505' ? 'A folder with this name already exists.' : 'Folder could not be saved to your account.');
+      return null;
+    }
+
+    setProjectFolders((current) => [...current, data]);
+    setActiveProjectFolder(data.id);
+    setNewFolderName('');
+    setIsCreatingFolder(false);
+    setStatus(options?.source === 'assistant' ? 'Assistant folder created.' : 'Folder created.');
+    void refreshWorkspace(authUser, { quiet: true });
+    return data;
+  };
+
+  const getOrCreateProjectFolderId = async (folderName: string, preferredFolderId?: string | null) => {
+    if (preferredFolderId && projectFolders.some((folder) => folder.id === preferredFolderId)) {
+      return preferredFolderId;
+    }
+
+    if (activeProjectFolder !== 'all' && activeProjectFolder !== 'unfiled') {
+      return activeProjectFolder;
+    }
+
+    const fallbackName = cleanSentence(folderName, 'Project folder').slice(0, 80);
+    const existingFolder = projectFolders.find((folder) => folder.name.trim().toLowerCase() === fallbackName.toLowerCase());
+    if (existingFolder) return existingFolder.id;
+
+    const folder = await createProjectFolder(fallbackName, { keepCurrentMenu: true });
+    return folder?.id ?? null;
+  };
+
+  const moveProjectToFolder = async (project: ClaritySquareProject, folderId: string | null) => {
+    setProjects((current) =>
+      current.map((item) => (item.id === project.id ? { ...item, folder_id: folderId, updated_at: new Date().toISOString() } : item)),
+    );
+    setStatus(folderId ? `Moved to ${getFolderName(folderId)}.` : 'Moved to Unfiled.');
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || project.id.startsWith('local-project-')) return;
+
+    const { error } = await supabase
+      .schema('clarity_square')
+      .from('projects')
+      .update({ folder_id: folderId })
+      .eq('id', project.id);
+
+    if (error) {
+      setStatus('Project move could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true });
+      return;
+    }
+
+    void refreshWorkspace(authUser, { quiet: true });
+  };
+
+  const createProjectFromBrief = async () => {
+    const brief = projectBrief.trim();
+    if (!brief) {
+      setStatus('Add what this project is about first.');
+      return null;
+    }
+
+    const supabase = getClaritySquareSupabase();
+    if (!authUser) {
+      setStatus('Sign in before creating projects.');
+      openMenu('start');
+      return null;
+    }
+    if (!supabase) {
+      setStatus('Project could not be saved to your account.');
+      return null;
+    }
+
+    const projectTitle = cleanSentence(brief.split(/[.!?\n]/)[0] || brief, 'New clarity project').slice(0, 110);
+    const projectIntent: IntentDraft = {
+      headline: projectTitle,
+      context: brief,
+      audience: '',
+      blocker: 'The project needs a clearer first operating path.',
+      outcome: 'A focused project plan with useful tasks and project-specific assistant context.',
+    };
+    const context = buildSavedContext(accountTrack, projectIntent);
+    const projectInstruction = buildProjectInstruction(projectIntent);
+
+    setIsSavingProject(true);
+    const folderId = await getOrCreateProjectFolderId(projectTitle);
+    if (!folderId) {
+      setIsSavingProject(false);
+      setStatus('Project folder could not be prepared.');
+      return null;
+    }
+    const { data: project, error } = await supabase
+      .schema('clarity_square')
+      .from('projects')
+      .insert({
+        user_id: authUser.id,
+        folder_id: folderId,
+        track: accountTrack,
+        title: projectTitle,
+        context: brief,
+        project_instruction: projectInstruction,
+        blocker: projectIntent.blocker,
+        outcome: projectIntent.outcome,
+        summary: context.summary,
+        questions: context.questions,
+        actions: context.actions,
+      })
+      .select('*')
+      .single();
+
+    if (error || !project) {
+      setIsSavingProject(false);
+      setStatus('Project could not be saved to your account.');
+      return null;
+    }
+
+    await supabase.schema('clarity_square').from('context_entries').insert({
+      project_id: project.id,
+      user_id: authUser.id,
+      entry_type: 'note',
+      payload: {
+        source: 'manual_project_brief',
+        title: project.title,
+        project_instruction: project.project_instruction,
+        context: project.context,
+      },
+    });
+
+    setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
+    setSelectedProjectId(project.id);
+    if (project.folder_id) setActiveProjectFolder(project.folder_id);
+    setProjectBrief('');
+    setProjectInstructionDraft(project.project_instruction || project.context);
+    setIsCreatingProject(false);
+    setIsSavingProject(false);
+    await insertProjectTasks(project, buildAutoTasks(project), 'auto');
+    setStatus('Project created with starting tasks.');
+    void refreshWorkspace(authUser, { quiet: true });
+    return project;
+  };
+
+  const createCommunityPost = () => {
+    const title = cleanSentence(communityTitle, '');
+    const body = cleanSentence(communityBody, '');
+
+    if (!title || !body) {
+      setStatus('Add a title and enough context before posting to the Square.');
+      return null;
+    }
+
+    const tags = communityTags
+      .split(',')
+      .map((tag) => tag.trim().toLowerCase())
+      .filter(Boolean)
+      .slice(0, 4);
+    const post: CommunityPost = {
+      id: `local-thread-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      kind: currentCommunityKind,
+      track: accountTrack,
+      title,
+      body,
+      tags,
+      authorLabel:
+        displayUsername ||
+        (isFounderAccount ? 'Founder Track' : 'Solopreneur Track'),
+      createdAt: new Date().toISOString(),
+      interestCount: 0,
+      replyCount: 0,
+      source: 'user',
+    };
+
+    setCommunityPosts((current) => [post, ...current].slice(0, 40));
+    setCommunityFilter(post.kind);
+    setCommunityTitle('');
+    setCommunityBody('');
+    setCommunityTags('');
+    setStatus(post.kind === 'founder_problem' ? 'Founder problem posted locally.' : 'Solopreneur share posted locally.');
+    return post;
+  };
+
+  const markCommunityInterest = (post: CommunityPost) => {
+    setCommunityPosts((current) =>
+      current.map((item) =>
+        item.id === post.id
+          ? { ...item, interestCount: item.interestCount + 1, replyCount: item.replyCount + (post.kind === 'founder_problem' ? 1 : 0) }
+          : item,
+      ),
+    );
+    setStatus(post.kind === 'founder_problem' ? 'Contribution signal added to this founder problem.' : 'Interest signal added to this share.');
+  };
+
+  const turnCommunityPostIntoProject = (post: CommunityPost) => {
+    const prefix = post.kind === 'founder_problem' ? 'Founder problem thread' : 'Solopreneur share';
+    openNewProjectFlow(`${prefix}: ${post.title}\n\n${post.body}\n\nTags: ${post.tags.join(', ') || 'none'}`);
+  };
+
+  const askAssistantAboutCommunityPost = (post: CommunityPost) => {
+    const prompt =
+      post.kind === 'founder_problem'
+        ? `Use this founder problem thread as Square context and suggest the sharpest next questions and useful solopreneur contribution paths: ${post.title}. ${post.body}`
+        : `Use this solopreneur share as Square context and suggest which founder problem it could connect to: ${post.title}. ${post.body}`;
+    seedAssistantPrompt(prompt);
+  };
+
+  const saveAssistantMessage = async (
+    message: UiAssistantMessage,
+    projectId?: string | null,
+    threadId?: string | null,
+    threadTitle?: string | null,
+  ) => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser) return;
+
+    const { data, error } = await supabase
+      .schema('clarity_square')
+      .from('assistant_messages')
+      .insert({
+        user_id: authUser.id,
+        project_id: projectId ?? null,
+        role: message.role,
+        content: message.content,
+        metadata: {
+          created_at: message.createdAt,
+          thread_id: projectId ? null : message.thread_id || threadId || DEFAULT_ASSISTANT_THREAD_ID,
+          thread_title: projectId ? null : message.thread_title || threadTitle || null,
+        },
+      })
+      .select('*')
+      .single();
+
+    if (error || !data) return null;
+
+    const savedMessage: UiAssistantMessage = {
+      id: data.id,
+      role: data.role,
+      content: data.content,
+      createdAt: data.created_at,
+      project_id: data.project_id,
+      thread_id: data.project_id ? null : getMessageThreadIdFromMetadata(data.metadata),
+      thread_title: data.project_id ? null : getMessageThreadTitleFromMetadata(data.metadata),
+    };
+
+    const savedMessageWithLocalState = {
+      ...savedMessage,
+      pendingAction: message.pendingAction ?? null,
+      thread_title: savedMessage.thread_title ?? message.thread_title ?? null,
+    };
+
+    setAssistantMessages((current) =>
+      current.map((item) =>
+        item.id === message.id
+          ? {
+              ...savedMessageWithLocalState,
+              pendingAction: item.pendingAction ?? savedMessageWithLocalState.pendingAction ?? null,
+              thread_title: savedMessageWithLocalState.thread_title ?? item.thread_title ?? null,
+            }
+          : item,
+      ),
+    );
+    return savedMessageWithLocalState;
+  };
+
+  const createManualTask = async (project = selectedProject) => {
+    if (!project) {
+      setStatus('Choose a project before adding a task.');
+      return null;
+    }
+    const title = manualTaskTitle.trim();
+    if (!title) {
+      setStatus('Name the task first.');
+      return null;
+    }
+
+    const tasks = await insertProjectTasks(project, [{ title }], 'user');
+    if (tasks.length > 0) {
+      setSelectedProjectId(project.id);
+      setManualTaskTitle('');
+      setStatus('Task added.');
+    }
+    return tasks[0] ?? null;
+  };
+
+  const toggleProjectTask = async (task: ClaritySquareProjectTask) => {
+    const nextStatus: ClaritySquareProjectTask['status'] = task.status === 'done' ? 'open' : 'done';
+    setProjectTasks((current) =>
+      current.map((item) => (item.id === task.id ? { ...item, status: nextStatus, updated_at: new Date().toISOString() } : item)),
+    );
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser) return;
+
+    const { error } = await supabase
+      .schema('clarity_square')
+      .from('project_tasks')
+      .update({ status: nextStatus })
+      .eq('id', task.id);
+
+    if (error) {
+      setStatus('Task status could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const saveProjectInstruction = async (project: ClaritySquareProject) => {
+    const instruction = (projectInstructionDraft ?? selectedProjectInstruction).trim();
+    if (!instruction) {
+      setStatus('Add a project instruction first.');
+      return;
+    }
+
+    setIsSavingProjectInstruction(true);
+    setProjects((current) =>
+      current.map((item) =>
+        item.id === project.id ? { ...item, project_instruction: instruction, updated_at: new Date().toISOString() } : item,
+      ),
+    );
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser) {
+      setIsSavingProjectInstruction(false);
+      return;
+    }
+
+    const { error } = await supabase
+      .schema('clarity_square')
+      .from('projects')
+      .update({ project_instruction: instruction })
+      .eq('id', project.id);
+
+    setIsSavingProjectInstruction(false);
+
+    if (error) {
+      setStatus('Project instruction could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true });
+      return;
+    }
+
+    setStatus('Project instruction saved.');
+    void refreshWorkspace(authUser, { quiet: true });
+  };
+
+  const saveAssistantMemory = async (
+    draft: AssistantMemoryDraft,
+    projectId?: string | null,
+    options?: { keepCurrentMenu?: boolean },
+  ) => {
+    const supabase = getClaritySquareSupabase();
+    if (!authUser) {
+      setStatus('Sign in before saving assistant memory.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return null;
+    }
+    if (!supabase) {
+      setStatus('Assistant memory could not be saved to your account.');
+      return null;
+    }
+
+    const memoryTitle = cleanSentence(draft.title, 'Square memory');
+    const memoryContent = cleanSentence(draft.content, 'Saved assistant context');
+
+    const { data, error } = await supabase
+      .schema('clarity_square')
+      .from('assistant_memories')
+      .insert({
+        user_id: authUser.id,
+        project_id: projectId ?? null,
+        memory_type: draft.memory_type,
+        title: memoryTitle,
+        content: memoryContent,
+        source: 'assistant',
+      })
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      setStatus('Assistant memory could not be saved to your account.');
+      return null;
+    }
+
+    setAssistantMemories((current) => [data, ...current.filter((item) => item.id !== data.id)].slice(0, 12));
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+    return data;
+  };
+
+  const createProjectFromAssistantDraft = async (
+    draft: AssistantProjectDraft,
+    options?: { keepCurrentMenu?: boolean; folderId?: string | null },
+  ) => {
+    const supabase = getClaritySquareSupabase();
+    if (!authUser) {
+      setStatus('Sign in before creating projects.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return null;
+    }
+    if (!supabase) {
+      setStatus('Project could not be saved to your account.');
+      return null;
+    }
+
+    const projectIntent: IntentDraft = {
+      headline: cleanSentence(draft.title, 'New clarity project'),
+      context: cleanSentence(draft.context, 'A new project created from the Square assistant.'),
+      audience: draft.audience?.trim() || '',
+      blocker: draft.blocker?.trim() || 'The first decision is still unclear.',
+      outcome: draft.outcome?.trim() || 'A clearer next action.',
+    };
+    const context = buildSavedContext(draft.track, projectIntent);
+    const projectInstruction = draft.projectInstruction?.trim() || buildProjectInstruction(projectIntent);
+
+    setTrack(draft.track);
+    setIntent(projectIntent);
+    setSavedContext(context);
+    setStep('context');
+
+    const folderId = await getOrCreateProjectFolderId(projectIntent.headline, options?.folderId);
+    if (!folderId) {
+      setStatus('Project folder could not be prepared.');
+      return null;
+    }
+    const { data: project, error } = await supabase
+      .schema('clarity_square')
+      .from('projects')
+      .insert({
+        user_id: authUser.id,
+        folder_id: folderId,
+        track: draft.track,
+        title: projectIntent.headline,
+        context: projectIntent.context,
+        project_instruction: projectInstruction,
+        audience: projectIntent.audience || null,
+        blocker: projectIntent.blocker || null,
+        outcome: projectIntent.outcome || null,
+        summary: context.summary,
+        questions: context.questions,
+        actions: context.actions,
+      })
+      .select('*')
+      .single();
+
+    if (error || !project) {
+      setStatus('Project could not be saved to your account.');
+      return null;
+    }
+
+    await supabase.schema('clarity_square').from('context_entries').insert({
+      project_id: project.id,
+      user_id: authUser.id,
+      entry_type: 'note',
+      payload: {
+        source: 'square_assistant',
+        title: project.title,
+        project_instruction: project.project_instruction,
+        context: project.context,
+        audience: project.audience,
+        blocker: project.blocker,
+        outcome: project.outcome,
+      },
+    });
+
+    setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
+    setSelectedProjectId(project.id);
+    setActiveProjectFolder(project.folder_id ?? 'all');
+    if (!options?.keepCurrentMenu) {
+      setActiveMenu('projects');
+    }
+    setIsCreatingProject(false);
+    setProjectBrief(project.project_instruction || project.context);
+    setProjectInstructionDraft(project.project_instruction || project.context);
+    await insertProjectTasks(project, buildAutoTasks(project), 'auto');
+    setStatus('Project created with assistant context and starting tasks.');
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+    return project;
+  };
+
+  const updateProjectFromAssistantDraft = async (
+    draft: AssistantProjectUpdateDraft,
+    options?: { keepCurrentMenu?: boolean },
+  ) => {
+    const supabase = getClaritySquareSupabase();
+    const currentProject = projects.find((project) => project.id === draft.id);
+
+    if (!authUser) {
+      setStatus('Sign in before updating projects.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return null;
+    }
+    if (!supabase || !currentProject) {
+      setStatus('Project update could not be saved.');
+      return null;
+    }
+
+    const patch: Partial<ClaritySquareProject> = {};
+
+    if (draft.title !== undefined) patch.title = cleanSentence(draft.title, currentProject.title).slice(0, 110);
+    if (draft.track === 'founder' || draft.track === 'builder') patch.track = draft.track;
+    if (draft.context !== undefined) patch.context = cleanSentence(draft.context, currentProject.context);
+    if (draft.projectInstruction !== undefined) {
+      patch.project_instruction = cleanSentence(draft.projectInstruction, currentProject.project_instruction || currentProject.context);
+    }
+    if (draft.audience !== undefined) patch.audience = cleanSentence(draft.audience, '') || null;
+    if (draft.blocker !== undefined) patch.blocker = cleanSentence(draft.blocker, '') || null;
+    if (draft.outcome !== undefined) patch.outcome = cleanSentence(draft.outcome, '') || null;
+    if (draft.summary !== undefined) patch.summary = cleanSentence(draft.summary, '') || null;
+    if ('folderId' in draft) {
+      patch.folder_id = draft.folderId ?? null;
+    }
+
+    if (Object.keys(patch).length === 0) {
+      setStatus('Assistant did not include a project change to save.');
+      return null;
+    }
+
+    const optimisticProject = { ...currentProject, ...patch, updated_at: new Date().toISOString() };
+    setProjects((current) => current.map((project) => (project.id === draft.id ? optimisticProject : project)));
+
+    const { data, error } = await supabase
+      .schema('clarity_square')
+      .from('projects')
+      .update(patch)
+      .eq('id', draft.id)
+      .eq('user_id', authUser.id)
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      setStatus('Project update could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+      return null;
+    }
+
+    await supabase.schema('clarity_square').from('context_entries').insert({
+      project_id: data.id,
+      user_id: authUser.id,
+      entry_type: 'note',
+      payload: {
+        source: 'square_assistant_update',
+        changed_fields: Object.keys(patch),
+        title: data.title,
+        project_instruction: data.project_instruction,
+        context: data.context,
+      },
+    });
+
+    setProjects((current) => [data, ...current.filter((project) => project.id !== data.id)].slice(0, 80));
+    setSelectedProjectId(data.id);
+    setProjectInstructionDraft(data.project_instruction || data.context);
+    setStatus('Project updated.');
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+    return data;
+  };
+
+  const updateFolderFromAssistantDraft = async (
+    draft: AssistantFolderUpdateDraft,
+    options?: { keepCurrentMenu?: boolean },
+  ) => {
+    const supabase = getClaritySquareSupabase();
+    const currentFolder = projectFolders.find((folder) => folder.id === draft.id);
+
+    if (!authUser) {
+      setStatus('Sign in before updating folders.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return null;
+    }
+    if (!supabase || !currentFolder) {
+      setStatus('Folder update could not be saved.');
+      return null;
+    }
+
+    const patch: Partial<ClaritySquareProjectFolder> = {};
+    if (draft.name !== undefined) patch.name = cleanSentence(draft.name, currentFolder.name).slice(0, 80);
+    if (typeof draft.sortOrder === 'number' && Number.isFinite(draft.sortOrder)) patch.sort_order = Math.max(0, Math.round(draft.sortOrder));
+
+    if (Object.keys(patch).length === 0) {
+      setStatus('Assistant did not include a folder change to save.');
+      return null;
+    }
+
+    setProjectFolders((current) =>
+      current.map((folder) => (folder.id === draft.id ? { ...folder, ...patch, updated_at: new Date().toISOString() } : folder)),
+    );
+
+    const { data, error } = await supabase
+      .schema('clarity_square')
+      .from('project_folders')
+      .update(patch)
+      .eq('id', draft.id)
+      .eq('user_id', authUser.id)
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      setStatus(error?.code === '23505' ? 'A folder with this name already exists.' : 'Folder update could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+      return null;
+    }
+
+    setProjectFolders((current) => current.map((folder) => (folder.id === data.id ? data : folder)));
+    setActiveProjectFolder(data.id);
+    setStatus('Folder updated.');
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+    return data;
+  };
+
+  const updateProjectTasksFromAssistantDraft = async (
+    drafts: AssistantTaskUpdateDraft[],
+    options?: { keepCurrentMenu?: boolean },
+  ) => {
+    const supabase = getClaritySquareSupabase();
+    if (!authUser) {
+      setStatus('Sign in before updating tasks.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return 0;
+    }
+    if (!supabase) {
+      setStatus('Task updates could not be saved.');
+      return 0;
+    }
+
+    let updatedCount = 0;
+
+    for (const draft of drafts.slice(0, 8)) {
+      const currentTask = projectTasks.find((task) => task.id === draft.id);
+      if (!currentTask) continue;
+
+      const patch: Partial<ClaritySquareProjectTask> = {};
+      if (draft.title !== undefined) patch.title = cleanSentence(draft.title, currentTask.title).slice(0, 160);
+      if ('detail' in draft) patch.detail = draft.detail ? cleanSentence(draft.detail, '') : null;
+      if (draft.status === 'open' || draft.status === 'done' || draft.status === 'archived') patch.status = draft.status;
+      if (typeof draft.sortOrder === 'number' && Number.isFinite(draft.sortOrder)) patch.sort_order = Math.max(0, Math.round(draft.sortOrder));
+      if (Object.keys(patch).length === 0) continue;
+
+      const { data, error } = await supabase
+        .schema('clarity_square')
+        .from('project_tasks')
+        .update(patch)
+        .eq('id', draft.id)
+        .eq('user_id', authUser.id)
+        .select('*')
+        .single();
+
+      if (!error && data) {
+        updatedCount += 1;
+        setProjectTasks((current) => current.map((task) => (task.id === data.id ? data : task)));
+      }
+    }
+
+    if (updatedCount === 0) {
+      setStatus('Task updates could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+      return 0;
+    }
+
+    setStatus(updatedCount === 1 ? 'Task updated.' : 'Tasks updated.');
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+    return updatedCount;
+  };
+
+  const updateMemoryFromAssistantDraft = async (
+    draft: AssistantMemoryUpdateDraft,
+    options?: { keepCurrentMenu?: boolean },
+  ) => {
+    const supabase = getClaritySquareSupabase();
+    const currentMemory = assistantMemories.find((memory) => memory.id === draft.id);
+
+    if (!authUser) {
+      setStatus('Sign in before updating assistant memory.');
+      if (!options?.keepCurrentMenu) {
+        openMenu('start');
+      }
+      return null;
+    }
+    if (!supabase || !currentMemory) {
+      setStatus('Assistant memory update could not be saved.');
+      return null;
+    }
+
+    const patch: Partial<ClaritySquareAssistantMemory> = {};
+    if (draft.title !== undefined) patch.title = cleanSentence(draft.title, currentMemory.title);
+    if (draft.content !== undefined) patch.content = cleanSentence(draft.content, currentMemory.content);
+    if (draft.memory_type) patch.memory_type = draft.memory_type;
+    if (draft.status === 'active' || draft.status === 'archived') patch.status = draft.status;
+
+    if (Object.keys(patch).length === 0) {
+      setStatus('Assistant did not include a memory change to save.');
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .schema('clarity_square')
+      .from('assistant_memories')
+      .update(patch)
+      .eq('id', draft.id)
+      .eq('user_id', authUser.id)
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      setStatus('Assistant memory update could not be saved.');
+      void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+      return null;
+    }
+
+    setAssistantMemories((current) =>
+      data.status === 'active'
+        ? [data, ...current.filter((memory) => memory.id !== data.id && memory.status === 'active')].slice(0, 12)
+        : current.filter((memory) => memory.id !== data.id && memory.status === 'active'),
+    );
+    setStatus('Assistant memory updated.');
+    void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
+    return data;
+  };
+
+  const runAssistantActions = async (
+    data: AssistantResponse,
+    options?: { project?: ClaritySquareProject | null },
+  ): Promise<AssistantActionResult> => {
+    const result: AssistantActionResult = {
+      project: null,
+      folder: null,
+      taskCount: 0,
+      memory: null,
+      projectUpdated: false,
+      folderUpdated: false,
+      taskUpdateCount: 0,
+      memoryUpdated: false,
+    };
+    const actionLabels: string[] = [];
+
+    if (data.folderUpdate) {
+      const folder = await updateFolderFromAssistantDraft(data.folderUpdate, { keepCurrentMenu: activeMenu === 'assistant' });
+      if (folder) {
+        result.folderUpdated = true;
+        actionLabels.push('folder update');
+      }
+    }
+
+    if (data.folderDraft) {
+      const folder = await createProjectFolder(data.folderDraft.name, {
+        source: 'assistant',
+        keepCurrentMenu: activeMenu === 'assistant',
+      });
+      if (folder) {
+        result.folder = folder;
+        actionLabels.push('folder');
+      }
+    }
+
+    if (data.projectUpdate) {
+      const project = await updateProjectFromAssistantDraft(data.projectUpdate, { keepCurrentMenu: activeMenu === 'assistant' });
+      if (project) {
+        result.project = project;
+        result.projectUpdated = true;
+        actionLabels.push('project update');
+      }
+    }
+
+    if (data.projectDraft) {
+      const project = await createProjectFromAssistantDraft(data.projectDraft, {
+        keepCurrentMenu: activeMenu === 'assistant',
+        folderId: result.folder?.id ?? null,
+      });
+      if (project) {
+        result.project = project;
+        actionLabels.push('project');
+      }
+    }
+
+    if (data.taskUpdates?.length) {
+      const updatedCount = await updateProjectTasksFromAssistantDraft(data.taskUpdates, { keepCurrentMenu: activeMenu === 'assistant' });
+      if (updatedCount > 0) {
+        result.taskUpdateCount = updatedCount;
+        actionLabels.push(updatedCount === 1 ? 'task update' : 'task updates');
+      }
+    }
+
+    const taskTarget = result.project ?? options?.project ?? selectedProject;
+    if (data.taskDrafts?.length && taskTarget) {
+      const tasks = await insertProjectTasks(taskTarget, data.taskDrafts, 'assistant');
+      if (tasks.length > 0) {
+        result.taskCount = tasks.length;
+        actionLabels.push(tasks.length === 1 ? 'task' : 'tasks');
+      }
+    } else if (data.taskDrafts?.length && !taskTarget) {
+      setStatus('Assistant drafted tasks, but no project is selected yet.');
+    }
+
+    if (data.memoryUpdate) {
+      const memory = await updateMemoryFromAssistantDraft(data.memoryUpdate, { keepCurrentMenu: activeMenu === 'assistant' });
+      if (memory) {
+        result.memory = memory;
+        result.memoryUpdated = true;
+        actionLabels.push('memory update');
+      }
+    }
+
+    if (data.memoryDraft) {
+      const memoryProjectId = result.project?.id ?? options?.project?.id ?? null;
+      const memory = await saveAssistantMemory(data.memoryDraft, memoryProjectId, { keepCurrentMenu: activeMenu === 'assistant' });
+      if (memory) {
+        result.memory = memory;
+        actionLabels.push('memory');
+      }
+    }
+
+    if (actionLabels.length > 0) {
+      setStatus(`Assistant action complete: ${actionLabels.join(', ')} saved.`);
+    }
+
+    return result;
+  };
+
+  const getAssistantActionLabels = (data: AssistantResponse) =>
+    [
+      data.projectUpdate ? 'project update' : null,
+      data.folderUpdate ? 'folder update' : null,
+      data.taskUpdates?.length ? (data.taskUpdates.length === 1 ? 'task update' : 'task updates') : null,
+      data.memoryUpdate ? 'memory update' : null,
+      data.projectDraft ? 'project' : null,
+      data.folderDraft ? 'folder' : null,
+      data.taskDrafts?.length ? (data.taskDrafts.length === 1 ? 'task' : 'tasks') : null,
+      data.memoryDraft ? 'memory' : null,
+    ].filter(Boolean) as string[];
+
+  const hasAssistantActions = (data: AssistantResponse) => getAssistantActionLabels(data).length > 0;
+
+  const buildAssistantApprovalReply = (data: AssistantResponse, fallbackReply: string) => {
+    const labels = getAssistantActionLabels(data);
+    if (labels.length === 0) return fallbackReply;
+
+    const cleanedReply = fallbackReply
+      .replace(/\bProject created\b/gi, 'Project drafted')
+      .replace(/\bProject updated\b/gi, 'Project update drafted')
+      .replace(/\bFolder created\b/gi, 'Folder drafted')
+      .replace(/\bFolder updated\b/gi, 'Folder update drafted')
+      .replace(/\bTask created\b/gi, 'Task drafted')
+      .replace(/\bTasks created\b/gi, 'Tasks drafted')
+      .replace(/\bTask updated\b/gi, 'Task update drafted')
+      .replace(/\bTasks updated\b/gi, 'Task updates drafted')
+      .replace(/\bMemory saved\b/gi, 'Memory drafted')
+      .replace(/\bMemory updated\b/gi, 'Memory update drafted')
+      .replace(/\bcreated\b/gi, 'drafted')
+      .replace(/\bsaved\b/gi, 'drafted')
+      .replace(/\bupdated\b/gi, 'drafted an update');
+
+    return `${cleanedReply} Approve below before I save ${labels.join(', ')} to your Square.`;
+  };
+
+  const buildActionAwareAssistantReply = (data: AssistantResponse, result: AssistantActionResult, fallbackReply: string) => {
+    const requestedActions = getAssistantActionLabels(data);
+
+    if (requestedActions.length === 0) return fallbackReply;
+
+    const savedActions = [
+      result.projectUpdated ? 'project update' : null,
+      result.folderUpdated ? 'folder update' : null,
+      result.taskUpdateCount > 0 ? (result.taskUpdateCount === 1 ? 'task update' : 'task updates') : null,
+      result.memoryUpdated ? 'memory update' : null,
+      result.project && !result.projectUpdated ? 'project' : null,
+      result.folder && !result.folderUpdated ? 'folder' : null,
+      result.taskCount > 0 ? (result.taskCount === 1 ? 'task' : 'tasks') : null,
+      result.memory && !result.memoryUpdated ? 'memory' : null,
+    ].filter(Boolean) as string[];
+    const failedActions = requestedActions.filter((action) => !savedActions.includes(action));
+
+    if (failedActions.length === 0) {
+      return `${fallbackReply} Saved to your Square: ${savedActions.join(', ')}.`;
+    }
+
+    const failureReason = authUser
+      ? 'the account save did not complete. Please check that the latest Supabase migrations are applied and try again.'
+      : 'you need to sign in before I can save it to your Square workspace.';
+
+    if (savedActions.length > 0) {
+      return `${fallbackReply} Saved to your Square: ${savedActions.join(', ')}. Could not save: ${failedActions.join(', ')} because ${failureReason}`;
+    }
+
+    return `I drafted the ${failedActions.join(', ')}, but ${failureReason}`;
+  };
+
+  const getPendingActionTitle = (pendingAction: AssistantPendingAction) => {
+    const labels = getAssistantActionLabels(pendingAction.data).join(', ');
+
+    if (pendingAction.status === 'pending') return `Save ${labels}?`;
+    if (pendingAction.status === 'approved') return 'Action approved';
+    if (pendingAction.status === 'declined') return 'Action dismissed';
+    return 'Action not saved';
+  };
+
+  const getPendingActionText = (pendingAction: AssistantPendingAction) =>
+    pendingAction.resultText ?? 'No project, folder, task, or memory will be saved until you approve.';
+
+  const approveAssistantAction = async (message: UiAssistantMessage) => {
+    const pendingAction = message.pendingAction;
+    if (!pendingAction || pendingAction.status !== 'pending') return;
+
+    setAssistantMessages((current) =>
+      current.map((item) =>
+        item.id === message.id
+          ? {
+              ...item,
+              pendingAction: {
+                ...pendingAction,
+                status: 'approved',
+                resultText: 'Saving...',
+              },
+            }
+          : item,
+      ),
+    );
+
+    let resultText = 'The save did not complete. Please try again.';
+    let failed = true;
+
+    try {
+      const actionProject = message.project_id ? projects.find((project) => project.id === message.project_id) ?? null : null;
+      const result = await runAssistantActions(pendingAction.data, { project: actionProject });
+      resultText = buildActionAwareAssistantReply(pendingAction.data, result, 'Approved.');
+      failed = getAssistantActionLabels(pendingAction.data).some((label) => {
+        if (label === 'project update') return !result.projectUpdated;
+        if (label === 'folder update') return !result.folderUpdated;
+        if (label === 'memory update') return !result.memoryUpdated;
+        if (label === 'task update' || label === 'task updates') return result.taskUpdateCount <= 0;
+        if (label === 'project') return !result.project;
+        if (label === 'folder') return !result.folder;
+        if (label === 'memory') return !result.memory;
+        if (label === 'task' || label === 'tasks') return result.taskCount <= 0;
+        return false;
+      });
+    } catch (error) {
+      console.error('Assistant action approval failed', error);
+    }
+
+    setAssistantMessages((current) =>
+      current.map((item) =>
+        item.id === message.id
+          ? {
+              ...item,
+              pendingAction: {
+                ...pendingAction,
+                status: failed ? 'failed' : 'approved',
+                resultText,
+              },
+            }
+          : item,
+      ),
+    );
+  };
+
+  const declineAssistantAction = (message: UiAssistantMessage) => {
+    const pendingAction = message.pendingAction;
+    if (!pendingAction || pendingAction.status !== 'pending') return;
+
+    setAssistantMessages((current) =>
+      current.map((item) =>
+        item.id === message.id
+          ? {
+              ...item,
+              pendingAction: {
+                ...pendingAction,
+                status: 'declined',
+                resultText: 'Not saved.',
+              },
+            }
+          : item,
+      ),
+    );
+    setStatus('Assistant action dismissed.');
+  };
+
+  const archiveAssistantMemory = async (memory: ClaritySquareAssistantMemory) => {
+    setAssistantMemories((current) => current.filter((item) => item.id !== memory.id));
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || memory.id.startsWith('local-memory-')) return;
+
+    await supabase
+      .schema('clarity_square')
+      .from('assistant_memories')
+      .update({ status: 'archived' })
+      .eq('id', memory.id);
+  };
+
+  const deleteSavedSignal = () => {
+    setSavedContext(null);
+    setConfirmingDeleteId(null);
+    setStatus('Saved context removed from this Square workspace.');
+  };
+
+  const deleteContextEntry = async (entry: ClaritySquareContextEntry) => {
+    setContextEntries((current) => current.filter((item) => item.id !== entry.id));
+    setConfirmingDeleteId(null);
+    setStatus('Context entry deleted.');
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(entry.id)) return;
+
+    const { error } = await supabase.schema('clarity_square').from('context_entries').delete().eq('id', entry.id).eq('user_id', authUser.id);
+    if (error) {
+      setStatus('Context entry could not be deleted from storage.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteAssistantMemory = async (memory: ClaritySquareAssistantMemory) => {
+    setAssistantMemories((current) => current.filter((item) => item.id !== memory.id));
+    setConfirmingDeleteId(null);
+    setStatus('Memory deleted.');
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(memory.id)) return;
+
+    const { error } = await supabase.schema('clarity_square').from('assistant_memories').delete().eq('id', memory.id).eq('user_id', authUser.id);
+    if (error) {
+      setStatus('Memory could not be deleted from storage.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteProjectTask = async (task: ClaritySquareProjectTask) => {
+    setProjectTasks((current) => current.filter((item) => item.id !== task.id));
+    setConfirmingDeleteId(null);
+    setStatus('Task deleted.');
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(task.id)) return;
+
+    const { error } = await supabase.schema('clarity_square').from('project_tasks').delete().eq('id', task.id).eq('user_id', authUser.id);
+    if (error) {
+      setStatus('Task could not be deleted from storage.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteProjectReport = async (report: ClaritySquareProjectReport) => {
+    setProjectReports((current) => current.filter((item) => item.id !== report.id));
+    setConfirmingDeleteId(null);
+    setStatus('Report deleted.');
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(report.id)) return;
+
+    const { error } = await supabase.schema('clarity_square').from('project_reports').delete().eq('id', report.id).eq('user_id', authUser.id);
+    if (error) {
+      setStatus('Report could not be deleted from storage.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteProjectFolder = async (folder: ClaritySquareProjectFolder) => {
+    setProjectFolders((current) => current.filter((item) => item.id !== folder.id));
+    setProjects((current) => current.map((project) => (project.folder_id === folder.id ? { ...project, folder_id: null } : project)));
+    if (activeProjectFolder === folder.id) setActiveProjectFolder('all');
+    setConfirmingDeleteId(null);
+    setStatus('Folder deleted. Projects moved to Unfiled.');
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(folder.id)) return;
+
+    const { error: projectError } = await supabase
+      .schema('clarity_square')
+      .from('projects')
+      .update({ folder_id: null })
+      .eq('folder_id', folder.id)
+      .eq('user_id', authUser.id);
+    const { error: folderError } = await supabase
+      .schema('clarity_square')
+      .from('project_folders')
+      .delete()
+      .eq('id', folder.id)
+      .eq('user_id', authUser.id);
+
+    if (projectError || folderError) {
+      setStatus('Folder could not be fully deleted from storage.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteProject = async (project: ClaritySquareProject) => {
+    setProjects((current) => current.filter((item) => item.id !== project.id));
+    setProjectTasks((current) => current.filter((task) => task.project_id !== project.id));
+    setProjectReports((current) => current.filter((report) => report.project_id !== project.id));
+    setContextEntries((current) => current.filter((entry) => entry.project_id !== project.id));
+    setAssistantMessages((current) => current.filter((message) => message.project_id !== project.id));
+    if (selectedProjectId === project.id) setSelectedProjectId(null);
+    setConfirmingDeleteId(null);
+    setStatus('Project and related workspace data deleted.');
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || !UUID_PATTERN.test(project.id)) return;
+
+    const [{ error: messageError }, { error: taskError }, { error: reportError }, { error: entryError }, { error: projectError }] = await Promise.all([
+      supabase.schema('clarity_square').from('assistant_messages').delete().eq('project_id', project.id).eq('user_id', authUser.id),
+      supabase.schema('clarity_square').from('project_tasks').delete().eq('project_id', project.id).eq('user_id', authUser.id),
+      supabase.schema('clarity_square').from('project_reports').delete().eq('project_id', project.id).eq('user_id', authUser.id),
+      supabase.schema('clarity_square').from('context_entries').delete().eq('project_id', project.id).eq('user_id', authUser.id),
+      supabase.schema('clarity_square').from('projects').delete().eq('id', project.id).eq('user_id', authUser.id),
+    ]);
+
+    if (messageError || taskError || reportError || entryError || projectError) {
+      setStatus('Project delete could not be fully saved.');
+      void refreshWorkspace(authUser, { quiet: true });
+    }
+  };
+
+  const deleteAssistantThreadById = async (threadId: string) => {
+    const savedMessageIdsToDelete = assistantMessages
+      .filter((message) => !message.project_id && getAssistantThreadId(message) === threadId && UUID_PATTERN.test(message.id))
+      .map((message) => message.id);
+    const remainingThreads = assistantThreads.filter((item) => item.id !== threadId);
+    const createdAt = new Date().toISOString();
+    const fallbackThread: AssistantThread = {
+      id: DEFAULT_ASSISTANT_THREAD_ID,
+      title: 'Thread 1',
+      createdAt,
+      updatedAt: createdAt,
+    };
+    const nextThreads = remainingThreads.length > 0 ? remainingThreads : [fallbackThread];
+    const nextActiveThread = activeAssistantThreadId === threadId || resolvedAssistantThreadId === threadId ? nextThreads[0] : null;
+
+    setAssistantMessages((current) => current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId));
+    setAssistantThreads(nextThreads);
+    if (nextActiveThread) setActiveAssistantThreadId(nextActiveThread.id);
+    closeAssistantThreadDropdown();
+    setConfirmingDeleteId(null);
+    setStatus('Assistant thread deleted.');
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || savedMessageIdsToDelete.length === 0) return;
+
+    const { error } = await supabase
+      .schema('clarity_square')
+      .from('assistant_messages')
+      .delete()
+      .in('id', savedMessageIdsToDelete);
+
+    if (error) {
+      setStatus('Thread was removed here, but saved thread messages could not be deleted.');
+    }
+  };
+
+  const saveAssistantSettings = async (nextSettings = assistantSettings, options?: { close?: boolean }) => {
+    const normalizedSettings = normalizeAssistantSettings(nextSettings);
+    setAssistantSettings(normalizedSettings);
+
+    if (options?.close) {
+      closeAssistantSettings();
+    }
+
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser) return;
+
+    const { error } = await supabase
+      .schema('clarity_square')
+      .from('profiles')
+      .update({ assistant_settings: normalizedSettings })
+      .eq('user_id', authUser.id);
+
+    if (error) {
+      setStatus('Assistant settings could not be saved.');
+      return;
+    }
+
+    setAuthProfile((current) => (current ? { ...current, assistant_settings: normalizedSettings } : current));
+  };
+
+  const touchAssistantThread = (threadId: string, prompt?: string) => {
+    setAssistantThreads((current) => {
+      const fallbackThread: AssistantThread = {
+        id: threadId,
+        title: prompt ? buildAssistantThreadTitle(prompt, 'New thread') : 'New thread',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      const hasThread = current.some((thread) => thread.id === threadId);
+      const nextThreads = (hasThread ? current : [fallbackThread, ...current]).map((thread) => {
+        if (thread.id !== threadId) return thread;
+
+        const shouldRename = Boolean(prompt) && /^Thread \d+$|^New thread$|^Square thread$/.test(thread.title);
+        return {
+          ...thread,
+          title: shouldRename && prompt ? buildAssistantThreadTitle(prompt, thread.title) : thread.title,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+
+      return nextThreads
+        .sort((left, right) => new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime())
+        .slice(0, 12);
+    });
+  };
+
+  const renameAssistantThread = (threadId: string, title: string) => {
+    setAssistantThreads((current) =>
+      current.map((thread) =>
+        thread.id === threadId
+          ? {
+              ...thread,
+              title,
+              updatedAt: new Date().toISOString(),
+            }
+          : thread,
+      ),
+    );
+  };
+
+  const startAssistantThread = () => {
+    const createdAt = new Date().toISOString();
+    const nextThread: AssistantThread = {
+      id: `square-thread-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      title: `Thread ${assistantThreads.length + 1}`,
+      createdAt,
+      updatedAt: createdAt,
+    };
+
+    setAssistantThreads((current) => [nextThread, ...current].slice(0, 12));
+    setActiveAssistantThreadId(nextThread.id);
+    closeAssistantThreadDropdown();
+    setAssistantInput('');
+    setStatus('New assistant thread opened.');
+    window.requestAnimationFrame(() => assistantInputRef.current?.focus());
+  };
+
+  const deleteAssistantThread = async () => {
+    await deleteAssistantThreadById(resolvedAssistantThreadId);
+    setAssistantInput('');
+    window.requestAnimationFrame(() => assistantInputRef.current?.focus());
+  };
+
+  const deleteDataSections: DeleteDataSection[] = [
+    {
+      id: 'context',
+      title: 'Context',
+      count: (savedContext ? 1 : 0) + contextEntries.length,
+      items: [
+        ...(savedContext
+          ? [
+              {
+                id: 'saved-context',
+                title: savedContext.intent.headline || 'Saved Square context',
+                detail: savedContext.summary,
+                meta: `Saved ${savedContext.savedAt}`,
+                onDelete: deleteSavedSignal,
+              },
+            ]
+          : []),
+        ...contextEntries.map((entry) => {
+          const entryTitle =
+            typeof entry.payload.title === 'string'
+              ? entry.payload.title
+              : typeof entry.payload.project_title === 'string'
+                ? entry.payload.project_title
+                : `${entry.entry_type.replace('_', ' ')} entry`;
+          const project = projects.find((item) => item.id === entry.project_id);
+          return {
+            id: entry.id,
+            title: entryTitle,
+            detail: project ? `Linked to ${project.title}` : 'Standalone context entry',
+            meta: `${entry.entry_type.replace('_', ' ')} - ${formatProjectDate(entry.created_at)}`,
+            onDelete: () => deleteContextEntry(entry),
+          };
+        }),
+      ],
+    },
+    {
+      id: 'projects',
+      title: 'Projects',
+      count: projects.length,
+      items: projects.map((project) => ({
+        id: project.id,
+        title: project.title,
+        detail: project.summary || project.context,
+        meta: `${getFolderName(project.folder_id)} - ${formatProjectDate(project.updated_at)}`,
+        onDelete: () => deleteProject(project),
+      })),
+    },
+    {
+      id: 'tasks',
+      title: 'Tasks',
+      count: activeProjectTasks.length,
+      items: activeProjectTasks.map((task) => {
+        const project = taskProjectMap.get(task.project_id);
+        return {
+          id: task.id,
+          title: task.title,
+          detail: task.detail || (project ? `Project: ${project.title}` : 'Task project not loaded'),
+          meta: `${task.status} - ${task.source}`,
+          onDelete: () => deleteProjectTask(task),
+        };
+      }),
+    },
+    {
+      id: 'reports',
+      title: 'Reports',
+      count: projectReports.length,
+      items: projectReports.map((report) => {
+        const project = taskProjectMap.get(report.project_id);
+        return {
+          id: report.id,
+          title: report.title,
+          detail: project ? `Project: ${project.title}` : 'Project report',
+          meta: `${report.report_type} - ${formatProjectDate(report.updated_at)}`,
+          onDelete: () => deleteProjectReport(report),
+        };
+      }),
+    },
+    {
+      id: 'memory',
+      title: 'Memory',
+      count: assistantMemories.length,
+      items: assistantMemories.map((memory) => ({
+        id: memory.id,
+        title: memory.title,
+        detail: memory.content,
+        meta: `${memory.memory_type.replace('_', ' ')} - ${formatProjectDate(memory.updated_at)}`,
+        onDelete: () => deleteAssistantMemory(memory),
+      })),
+    },
+    {
+      id: 'folders',
+      title: 'Folders',
+      count: projectFolders.length,
+      items: projectFolders.map((folder) => ({
+        id: folder.id,
+        title: folder.name,
+        detail: `${projects.filter((project) => project.folder_id === folder.id).length} projects in this folder`,
+        meta: `Folder - ${formatProjectDate(folder.updated_at)}`,
+        onDelete: () => deleteProjectFolder(folder),
+      })),
+    },
+    {
+      id: 'threads',
+      title: 'Assistant threads',
+      count: assistantThreads.length,
+      items: assistantThreads.map((thread) => ({
+        id: thread.id,
+        title: thread.title,
+        detail: `${assistantMessages.filter((message) => !message.project_id && getAssistantThreadId(message) === thread.id).length} messages`,
+        meta: `Thread - ${formatProjectDate(thread.updatedAt)}`,
+        onDelete: () => deleteAssistantThreadById(thread.id),
+      })),
+    },
+  ];
+
+  const sendAssistantMessage = async () => {
+    const prompt = assistantInput.trim();
+    if (!prompt || isAssistantBusy) return;
+
+    const threadId = resolvedAssistantThreadId;
+    const userMessage = createUiMessage('user', prompt, null, threadId);
+    const nextMessages = [...squareAssistantMessages, userMessage].slice(-12);
+
+    setActiveAssistantThreadId(threadId);
+    setAssistantMessages((current) => [
+      ...current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId),
+      ...nextMessages,
+    ]);
+    touchAssistantThread(threadId, prompt);
+    setAssistantInput('');
+    setIsAssistantBusy(true);
+    const userMessageSave = saveAssistantMessage(userMessage, null, threadId);
+
+    try {
+      const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true, preserveAssistantState: true }) : null;
+      const assistantProjects = liveWorkspace?.projects ?? projects;
+      const assistantFolders = liveWorkspace?.folders ?? projectFolders;
+      const assistantTasks = liveWorkspace?.tasks ?? projectTasks;
+      const assistantEntries = liveWorkspace?.contextEntries ?? contextEntries;
+      const assistantMemoriesForRequest = liveWorkspace?.memories ?? assistantMemories;
+
+      const response = await fetch('/api/clarity-square/assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: nextMessages.map((message) => ({ role: message.role, content: message.content })),
+          track,
+          savedContext: savedContext
+            ? {
+                track: savedContext.track,
+                headline: savedContext.intent.headline,
+                context: savedContext.intent.context,
+                audience: savedContext.intent.audience,
+                blocker: savedContext.intent.blocker,
+                outcome: savedContext.intent.outcome,
+                summary: savedContext.summary,
+              }
+            : null,
+          projects: assistantProjects.map((project) => ({
+            id: project.id,
+            folder_id: project.folder_id,
+            folderName: project.folder_id
+              ? assistantFolders.find((folder) => folder.id === project.folder_id)?.name ?? 'Folder'
+              : 'Unfiled',
+            title: project.title,
+            track: project.track,
+            context: project.context,
+            project_instruction: project.project_instruction,
+            audience: project.audience,
+            blocker: project.blocker,
+            outcome: project.outcome,
+            summary: project.summary,
+            questions: project.questions,
+            actions: project.actions,
+          })),
+          projectTasks: assistantTasks.map((task) => ({
+            id: task.id,
+            project_id: task.project_id,
+            title: task.title,
+            detail: task.detail,
+            source: task.source,
+            status: task.status,
+          })),
+          folders: assistantFolders.map((folder) => ({
+            id: folder.id,
+            name: folder.name,
+          })),
+          contextEntries: assistantEntries.map((entry) => ({
+            project_id: entry.project_id,
+            entry_type: entry.entry_type,
+            payload: entry.payload,
+            created_at: entry.created_at,
+          })),
+          selectedProjectId,
+          assistantPreference: assistantSettings.behaviorPreference.trim() || null,
+          memories: assistantMemoriesForRequest.map((memory) => ({
+            id: memory.id,
+            project_id: memory.project_id,
+            title: memory.title,
+            content: memory.content,
+            memory_type: memory.memory_type,
+          })),
+        }),
+      });
+
+      const data = (await response.json()) as AssistantResponse;
+      const baseReply = data.response || data.error || 'The Square assistant could not respond yet.';
+      const savedUserMessage = (await userMessageSave) ?? userMessage;
+      const reply = buildAssistantApprovalReply(data, baseReply);
+      const assistantMessage = createUiMessage('assistant', reply, null, threadId);
+      if (hasAssistantActions(data)) {
+        assistantMessage.pendingAction = {
+          id: `pending-action-${assistantMessage.id}`,
+          data,
+          status: 'pending',
+        };
+      }
+      const completedMessages = [
+        ...nextMessages.map((message) => (message.id === userMessage.id ? savedUserMessage : message)),
+        assistantMessage,
+      ].slice(-12);
+      const summaryTitle = buildAssistantThreadSummaryTitle(completedMessages);
+      if (summaryTitle) {
+        assistantMessage.thread_title = summaryTitle;
+      }
+
+      setAssistantMessages((current) => [
+        ...current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId),
+        ...completedMessages,
+      ]);
+      setActiveAssistantThreadId(threadId);
+      if (summaryTitle) {
+        renameAssistantThread(threadId, summaryTitle);
+      } else {
+        touchAssistantThread(threadId, prompt);
+      }
+      const assistantMessageSave = saveAssistantMessage(assistantMessage, null, threadId, summaryTitle);
+
+      await assistantMessageSave;
+    } catch {
+      const fallbackMessage = createUiMessage(
+        'assistant',
+        'I could not reach the Square assistant just now. Your context is still available here, and you can try again.',
+        null,
+        threadId,
+      );
+      setAssistantMessages((current) => [
+        ...current.filter((message) => message.project_id || getAssistantThreadId(message) !== threadId),
+        ...[...nextMessages, fallbackMessage].slice(-12),
+      ]);
+      setActiveAssistantThreadId(threadId);
+      touchAssistantThread(threadId, prompt);
+    } finally {
+      setIsAssistantBusy(false);
+    }
+  };
+
+  const sendProjectAssistantMessage = async () => {
+    if (!selectedProject) return;
+    const prompt = projectAssistantInput.trim();
+    if (!prompt || isProjectAssistantBusy) return;
+
+    const userMessage = createUiMessage('user', prompt, selectedProject.id);
+    const nextMessages = [...selectedProjectMessages, userMessage].slice(-12);
+
+    setAssistantMessages((current) => [...current.filter((message) => message.project_id !== selectedProject.id), ...nextMessages]);
+    setProjectAssistantInput('');
+    setIsProjectAssistantBusy(true);
+    const userMessageSave = saveAssistantMessage(userMessage, selectedProject.id);
+
+    try {
+      const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true, preserveAssistantState: true }) : null;
+      const assistantProjects = liveWorkspace?.projects ?? projects;
+      const assistantFolders = liveWorkspace?.folders ?? projectFolders;
+      const assistantTasks = liveWorkspace?.tasks ?? projectTasks;
+      const assistantEntries = liveWorkspace?.contextEntries ?? contextEntries;
+      const assistantMemoriesForRequest = liveWorkspace?.memories ?? assistantMemories;
+
+      const response = await fetch('/api/clarity-square/assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: nextMessages.map((message) => ({ role: message.role, content: message.content })),
+          track: selectedProject.track,
+          savedContext: {
+            track: selectedProject.track,
+            headline: selectedProject.title,
+            context: selectedProject.project_instruction || selectedProject.context,
+            audience: selectedProject.audience || '',
+            blocker: selectedProject.blocker || '',
+            outcome: selectedProject.outcome || '',
+            summary: selectedProject.summary || selectedProject.context,
+          },
+          projects: assistantProjects.map((project) => ({
+            id: project.id,
+            folder_id: project.folder_id,
+            folderName: project.folder_id
+              ? assistantFolders.find((folder) => folder.id === project.folder_id)?.name ?? 'Folder'
+              : 'Unfiled',
+            title: project.title,
+            track: project.track,
+            context: project.context,
+            project_instruction: project.project_instruction,
+            audience: project.audience,
+            blocker: project.blocker,
+            outcome: project.outcome,
+            summary: project.summary,
+            questions: project.questions,
+            actions: project.actions,
+          })),
+          projectTasks: assistantTasks.map((task) => ({
+            id: task.id,
+            project_id: task.project_id,
+            title: task.title,
+            detail: task.detail,
+            source: task.source,
+            status: task.status,
+          })),
+          folders: assistantFolders.map((folder) => ({
+            id: folder.id,
+            name: folder.name,
+          })),
+          contextEntries: assistantEntries.map((entry) => ({
+            project_id: entry.project_id,
+            entry_type: entry.entry_type,
+            payload: entry.payload,
+            created_at: entry.created_at,
+          })),
+          selectedProjectId: selectedProject.id,
+          assistantPreference: assistantSettings.behaviorPreference.trim() || null,
+          memories: assistantMemoriesForRequest
+            .filter((memory) => !memory.project_id || memory.project_id === selectedProject.id)
+            .map((memory) => ({
+              id: memory.id,
+              project_id: memory.project_id,
+              title: memory.title,
+              content: memory.content,
+              memory_type: memory.memory_type,
+            })),
+        }),
+      });
+
+      const data = (await response.json()) as AssistantResponse;
+      const baseReply = data.response || data.error || 'The project assistant could not respond yet.';
+      const savedUserMessage = (await userMessageSave) ?? userMessage;
+      const reply = buildAssistantApprovalReply(data, baseReply);
+      const assistantMessage = createUiMessage('assistant', reply, selectedProject.id);
+      if (hasAssistantActions(data)) {
+        assistantMessage.pendingAction = {
+          id: `pending-action-${assistantMessage.id}`,
+          data,
+          status: 'pending',
+        };
+      }
+      const completedMessages = [
+        ...nextMessages.map((message) => (message.id === userMessage.id ? savedUserMessage : message)),
+        assistantMessage,
+      ].slice(-12);
+
+      setAssistantMessages((current) => [
+        ...current.filter((message) => message.project_id !== selectedProject.id),
+        ...completedMessages,
+      ]);
+      const assistantMessageSave = saveAssistantMessage(assistantMessage, selectedProject.id);
+
+      await assistantMessageSave;
+    } catch {
+      const fallbackMessage = createUiMessage(
+        'assistant',
+        'I could not reach the project assistant just now. The project instruction and tasks are still saved here.',
+        selectedProject.id,
+      );
+      setAssistantMessages((current) => [
+        ...current.filter((message) => message.project_id !== selectedProject.id),
+        ...[...nextMessages, fallbackMessage].slice(-12),
+      ]);
+    } finally {
+      setIsProjectAssistantBusy(false);
+    }
+  };
+
+  const chooseTrack = (nextTrack: Track) => {
+    setStep('intent');
+    setActiveMenu('context');
+    void applyTrackChoice(nextTrack, { persist: Boolean(authUser), statusPrefix: `${TRACKS[nextTrack].shortLabel} selected.` });
+  };
+
+  const saveIntent = async () => {
+    if (!intent.headline.trim() || !intent.context.trim()) {
+      setStatus('Add a short headline and enough context before saving this signal.');
+      return;
+    }
+
+    const supabase = getClaritySquareSupabase();
+    if (!authUser) {
+      setStatus('Sign in before saving context.');
+      openMenu('start');
+      return;
+    }
+    if (!supabase) {
+      setStatus('Context could not be saved to your account.');
+      return;
+    }
+
+    const context = buildSavedContext(accountTrack, {
+      headline: intent.headline.trim(),
+      context: intent.context.trim(),
+      audience: intent.audience.trim(),
+      blocker: intent.blocker.trim(),
+      outcome: intent.outcome.trim(),
+    });
+    const projectInstruction = buildProjectInstruction(context.intent);
+
+    setSavedContext(context);
+    setStep('context');
+    setActiveMenu('context');
+
+    setIsSavingContext(true);
+    const { data: project, error: projectError } = await supabase
+      .schema('clarity_square')
+      .from('projects')
+      .insert({
+        user_id: authUser.id,
+        track: accountTrack,
+        title: context.intent.headline,
+        context: context.intent.context,
+        project_instruction: projectInstruction,
+        audience: context.intent.audience || null,
+        blocker: context.intent.blocker || null,
+        outcome: context.intent.outcome || null,
+        summary: context.summary,
+        questions: context.questions,
+        actions: context.actions,
+      })
+      .select('*')
+      .single();
+
+    if (projectError || !project) {
+      setIsSavingContext(false);
+      setStatus('Context could not be saved to your account.');
+      return;
+    }
+
+    await supabase.schema('clarity_square').from('context_entries').insert({
+      project_id: project.id,
+      user_id: authUser.id,
+      entry_type: 'intent',
+      payload: {
+        headline: context.intent.headline,
+        project_instruction: projectInstruction,
+        context: context.intent.context,
+        audience: context.intent.audience,
+        blocker: context.intent.blocker,
+        outcome: context.intent.outcome,
+        saved_at: context.savedAt,
+      },
+    });
+
+    setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
+    setSelectedProjectId(project.id);
+    setProjectBrief(project.project_instruction || project.context);
+    setProjectInstructionDraft(project.project_instruction || project.context);
+    await insertProjectTasks(project, buildAutoTasks(project), 'auto');
+    setIsSavingContext(false);
+    setStatus('Context saved with starting tasks.');
+    void refreshWorkspace(authUser, { quiet: true });
+  };
+
+  const openProject = (project: ClaritySquareProject) => {
+    setTrack(project.track);
+    setIntent({
+      headline: project.title,
+      context: project.context,
+      audience: project.audience ?? '',
+      blocker: project.blocker ?? '',
+      outcome: project.outcome ?? '',
+    });
+    setSavedContext(savedContextFromProject(project));
+    setStep('context');
+    setActiveMenu('context');
+    setProjectBrief(project.project_instruction || project.context);
+    setProjectInstructionDraft(project.project_instruction || project.context);
+    setStatus('Project loaded.');
+  };
+
+  const refineAgain = () => {
+    setStep('intent');
+    setActiveMenu('context');
+    setStatus('Refine the signal.');
+  };
+
+  const restart = () => {
+    setStep('entry');
+    setActiveMenu('start');
+    setStatus('Started a fresh Clarity Square sequence.');
+  };
+
+  const prepareEngineHandoff = (project?: ClaritySquareProject | null) => {
+    const context = project ? savedContextFromProject(project) : savedContext;
+    if (!context) return;
+
+    const handoff: EngineHandoff = {
+      version: 1,
+      createdAt: new Date().toISOString(),
+      source: project ? 'clarity_square_project' : 'clarity_square_context',
+      projectId: project?.id,
+      folderId: project?.folder_id ?? null,
+      projectTitle: project?.title,
+      folderName: project ? getFolderName(project.folder_id) : undefined,
+      projectInstruction: project?.project_instruction ?? null,
+      track: context.track,
+      trackLabel: TRACKS[context.track].shortLabel,
+      headline: context.intent.headline,
+      context: context.intent.context,
+      audience: context.intent.audience,
+      blocker: context.intent.blocker,
+      outcome: context.intent.outcome,
+      summary: context.summary,
+      questions: context.questions,
+      actions: context.actions,
+    };
+
+    window.localStorage.setItem(ENGINE_HANDOFF_KEY, JSON.stringify(handoff));
+    setStatus(project ? 'Clarity Engine connection prepared with this project context.' : 'Clarity Engine connection prepared with this private Square context.');
+  };
+
+  const continueProjectInEngine = (project: ClaritySquareProject) => {
+    prepareEngineHandoff(project);
+    router.push('/clarity-engine?from=clarity-square-project');
+  };
+
+  const seedAssistantPrompt = (prompt: string) => {
+    setAssistantInput(prompt);
+    setActiveMenu('assistant');
+    window.requestAnimationFrame(() => {
+      assistantInputRef.current?.focus();
+      if (assistantInputRef.current) {
+        resizeAssistantInput(assistantInputRef.current);
+      }
+    });
+  };
+
+  const activateLoop = async (loopId: LoopId) => {
+    const token = loopRunTokenRef.current + 1;
+    loopRunTokenRef.current = token;
+    const startedAt = new Date().toISOString();
+    setActiveLoopId(loopId);
+    setLoopRun({ loopId, phase: 'gathering', startedAt, completedAt: null });
+
+    const refreshPromise = authUser ? refreshWorkspace(authUser, { quiet: true, preserveAssistantState: true }) : Promise.resolve(null);
+    const visibleScanPromise = new Promise((resolve) => window.setTimeout(resolve, 950));
+    await Promise.all([refreshPromise, visibleScanPromise]);
+
+    if (loopRunTokenRef.current !== token) return;
+    setLoopRun({ loopId, phase: 'ready', startedAt, completedAt: new Date().toISOString() });
+  };
+
+  const selectLoop = (loopId: LoopId) => {
+    loopRunTokenRef.current += 1;
+    setActiveLoopId(loopId);
+    setLoopRun((current) =>
+      current.loopId === loopId ? current : { loopId, phase: 'idle', startedAt: null, completedAt: null },
+    );
+  };
+
+  const runLoopPrimaryAction = (loopId: LoopId) => {
+    setActiveLoopId(loopId);
+    if (loopId === 'signal') {
+      openMenu(savedContext || latestProject ? 'context' : 'path');
+      return;
+    }
+    if (loopId === 'project') {
+      openMenu('projects');
+      return;
+    }
+    if (loopId === 'task') {
+      openMenu('tasks');
+      return;
+    }
+    if (loopId === 'reflection') {
+      openMenu('memory');
+      return;
+    }
+    openMenu(sourceProjectForLoops || savedContext ? 'context' : 'path');
+  };
+
+  const runLoopSecondaryAction = (loopId: LoopId) => {
+    setActiveLoopId(loopId);
+    if (loopId === 'signal') {
+      seedAssistantPrompt(`Review the Signal Loop scan and tell me what the current signal means: ${activeSignalSummary}`);
+      return;
+    }
+    if (loopId === 'project') {
+      seedAssistantPrompt(
+        `Review my Project Loop scan. Summarize my saved projects, folders, open tasks, and the project that needs attention next.`,
+      );
+      return;
+    }
+    if (loopId === 'task') {
+      seedAssistantPrompt(
+        `Review my Task Loop scan. Explain what is open, what is complete, what is stuck, and what should move next for ${sourceProjectForLoops?.title || activeSignal}.`,
+      );
+      return;
+    }
+    if (loopId === 'reflection') {
+      seedAssistantPrompt(
+        `Review my Reflection Loop scan for ${sourceProjectForLoops?.title || activeSignal}: what moved, what stayed stuck, and what the pattern suggests.`,
+      );
+      return;
+    }
+    seedAssistantPrompt(
+      `Review my Brief Loop scan for ${sourceProjectForLoops?.title || activeSignal}: summarize the context, audience, blocker, desired outcome, questions, and actions already available.`,
+    );
+  };
+
+  const openMenu = (menuId: MenuId) => {
+    setActiveMenu(menuId);
+    if (menuId === 'start') setStep('entry');
+    if (menuId === 'path') setStep('track');
+    if (menuId === 'context' && step === 'entry') setStep(savedContext ? 'context' : 'intent');
+    window.requestAnimationFrame(() => {
+      stageRef.current?.scrollTo({ top: 0, left: 0 });
+    });
+  };
+
+  const mobileMoreIsActive = activeMenu === 'more' || MORE_MENU_ITEMS.some((item) => item.id === activeMenu);
+
+  return (
+    <main className={`clarity-square-route ${styles.page} ${themeMode === 'light' ? styles.lightTheme : ''}`}>
+      <section className={`clarity-square-shell ${styles.shell}`} aria-label="Kramaniti Clarity Square">
+        <header
+          className={`clarity-square-rail ${styles.rail}`}
+          style={{ backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}
+          aria-label="Clarity Square navigation"
+        >
+          <button
+            type="button"
+            className={`${styles.productLabel} ${activeMenu === 'home' ? styles.productLabelActive : ''}`}
+            onClick={() => openMenu('home')}
+            aria-label="Open Clarity Square home"
+            aria-pressed={activeMenu === 'home'}
+          >
+            <Image
+              src="/assets/brand/clarity-square-mark-gold.png"
+              alt=""
+              width={34}
+              height={34}
+              className={styles.productLogo}
+              priority
+            />
+            <span>Clarity Square</span>
+          </button>
+
+          <nav className={`clarity-square-menu ${styles.menu}`} aria-label="Clarity Square sections">
+            {MENU_ITEMS.map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={activeMenu === item.id ? styles.menuActive : ''}
+                  onClick={() => openMenu(item.id)}
+                  aria-label={item.label}
+                  aria-pressed={activeMenu === item.id}
+                  title={item.label}
+                >
+                  <Icon size={16} aria-hidden="true" />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className={`clarity-square-utilities ${styles.navUtilities}`} aria-label="Account and display controls">
+            <button
+              type="button"
+              className={`${styles.navIconButton} ${activeMenu === 'profile' ? styles.navIconActive : ''}`}
+              onClick={() => openMenu('profile')}
+              aria-label="Open profile"
+              aria-pressed={activeMenu === 'profile'}
+              title="Profile"
+            >
+              <UserRound size={17} aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className={`${styles.navIconButton} ${activeMenu === 'settings' ? styles.navIconActive : ''}`}
+              onClick={() => openMenu('settings')}
+              aria-label="Open settings"
+              aria-pressed={activeMenu === 'settings'}
+              title="Settings"
+            >
+              <Settings size={17} aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className={styles.navIconButton}
+              onClick={() => setThemeMode((current) => (current === 'dark' ? 'light' : 'dark'))}
+              aria-label={themeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={themeMode === 'dark' ? 'Light mode' : 'Dark mode'}
+            >
+              {themeMode === 'dark' ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
+            </button>
+          </div>
+        </header>
+
+        <section
+          ref={stageRef}
+          className={`${styles.stage} ${activeMenu === 'start' ? styles.entryStage : ''} ${
+            activeMenu === 'assistant' ? styles.assistantStage : ''
+          } ${activeMenu === 'projects' ? styles.projectsStage : ''
+          } clarity-square-stage`}
+          aria-live="polite"
+        >
+
+          {activeMenu === 'home' && (
+            <section className={`${styles.screen} ${styles.homeScreen}`} aria-labelledby="home-title">
+              <div className={styles.homeHero}>
+                <div className={styles.homeHeroMain}>
+                  <span>{accountTrackCopy.shortLabel}</span>
+                  <h1 id="home-title">{homeRoleCopy.title}</h1>
+                  <p>{homeRoleCopy.description}</p>
+                  <div className={styles.homeHeroActions}>
+                    <button
+                      type="button"
+                      className={styles.primaryButton}
+                      onClick={() => {
+                        if (latestProject && !savedContext) {
+                          openProject(latestProject);
+                          return;
+                        }
+                        openMenu(savedContext ? 'context' : 'path');
+                      }}
+                    >
+                      {homeRoleCopy.primaryAction}
+                      <ArrowRight size={17} aria-hidden="true" />
+                    </button>
+                    <button type="button" className={styles.secondaryButton} onClick={() => openMenu('square')}>
+                      Open Square
+                    </button>
+                  </div>
+                </div>
+                <aside className={styles.homeRoleCard} aria-label="Account path">
+                  <span>Account path</span>
+                  <strong>{accountTrackCopy.shortLabel}</strong>
+                  <p>{homeRoleCopy.roleDetail}</p>
+                  <button type="button" className={styles.textButton} onClick={() => openMenu('settings')}>
+                    Adjust path
+                  </button>
+                </aside>
+              </div>
+
+              <div className={styles.homeStatsGrid} aria-label="Workspace summary">
+                {homeStats.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button key={item.label} type="button" className={styles.homeStatCard} onClick={() => openMenu(item.menu)}>
+                      <Icon size={17} aria-hidden="true" />
+                      <span>{item.label}</span>
+                      <strong>{item.value}</strong>
+                      <small>{item.detail}</small>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className={styles.homeBentoGrid}>
+                <article className={`${styles.homePanel} ${styles.homePanelWide}`}>
+                  <div className={styles.homePanelHeader}>
+                    <span>Current signal</span>
+                    <Activity size={17} aria-hidden="true" />
+                  </div>
+                  <h2>{activeSignal}</h2>
+                  <p>{activeSignalSummary}</p>
+                  <div className={styles.homePanelActions}>
+                    <button
+                      type="button"
+                      className={styles.secondaryButton}
+                      onClick={() => (latestProject && !savedContext ? openProject(latestProject) : openMenu('context'))}
+                    >
+                      Open context
+                    </button>
+                    <button type="button" className={styles.textButton} onClick={() => openMenu('path')}>
+                      Start new
+                    </button>
+                  </div>
+                </article>
+
+                <article className={styles.homePanel}>
+                  <div className={styles.homePanelHeader}>
+                    <span>Square activity</span>
+                    <Users size={17} aria-hidden="true" />
+                  </div>
+                  <div className={styles.homeActivityList}>
+                    {latestCommunityPosts.map((post) => (
+                      <button key={post.id} type="button" onClick={() => openMenu('square')}>
+                        <span>{post.kind === 'founder_problem' ? 'Founder problem' : 'Solopreneur share'}</span>
+                        <strong>{post.title}</strong>
+                      </button>
+                    ))}
+                  </div>
+                  <button type="button" className={styles.textButton} onClick={() => openMenu('square')}>
+                    {isFounderAccount ? 'Post a problem' : 'Share work'}
+                  </button>
+                </article>
+
+                <article className={`${styles.homePanel} ${styles.homeJourneyPanel}`}>
+                  <div className={styles.homePanelHeader}>
+                    <span>Workspace route</span>
+                    <Route size={17} aria-hidden="true" />
+                  </div>
+                  <div className={styles.homeJourneyTrack} aria-label="Workspace route progress">
+                    {journeySteps.map((item) => (
+                      <div key={item.label} className={item.active ? styles.homeJourneyActive : ''}>
+                        <span />
+                        <strong>{item.label}</strong>
+                        <small>{item.detail}</small>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+
+                <article className={styles.homePanel}>
+                  <div className={styles.homePanelHeader}>
+                    <span>Memory</span>
+                    <Database size={17} aria-hidden="true" />
+                  </div>
+                  <h2>{latestMemory?.title ?? 'No saved assistant memory yet'}</h2>
+                  <p>{latestMemory?.content ?? 'Ask the assistant to remember a preference, decision boundary, or useful project signal.'}</p>
+                  <button type="button" className={styles.textButton} onClick={() => openMenu('memory')}>
+                    Manage memory
+                  </button>
+                </article>
+
+                <article className={styles.homePanel}>
+                  <div className={styles.homePanelHeader}>
+                    <span>Proof-safe next move</span>
+                    <ShieldCheck size={17} aria-hidden="true" />
+                  </div>
+                  <h2>{savedContext || latestProject ? 'Turn context into a brief' : 'Capture the first signal'}</h2>
+                  <p>
+                    {savedContext || latestProject
+                      ? 'Use the saved context to shape a clearer brief, project route, or Clarity Engine handoff.'
+                      : 'Choose a path and add the first business or idea signal before the assistant starts building context.'}
+                  </p>
+                  <button
+                    type="button"
+                    className={styles.secondaryButton}
+                    onClick={() => {
+                      if (latestProject && !savedContext) {
+                        openProject(latestProject);
+                        return;
+                      }
+                      openMenu(savedContext ? 'context' : 'path');
+                    }}
+                  >
+                    Continue
+                  </button>
+                </article>
+
+                <article className={styles.homePanel}>
+                  <div className={styles.homePanelHeader}>
+                    <span>Assistant route</span>
+                    <MessageCircle size={17} aria-hidden="true" />
+                  </div>
+                  <h2>{squareAssistantMessageCount > 1 ? 'Continue the assistant threads' : 'Ask from the current Square context'}</h2>
+                  <p>
+                    {squareAssistantMessageCount > 1
+                      ? `${squareAssistantMessageCount} Square assistant messages are available.`
+                      : 'Use the assistant to turn this role, signal, and workspace into sharper next steps.'}
+                  </p>
+                  <button type="button" className={styles.secondaryButton} onClick={() => openMenu('assistant')}>
+                    Open assistant
+                  </button>
+                </article>
+
+                <article className={`${styles.homePanel} ${styles.homePanelWide}`}>
+                  <div className={styles.homePanelHeader}>
+                    <span>Recent workspace</span>
+                    <BarChart3 size={17} aria-hidden="true" />
+                  </div>
+                  <div className={styles.homeRecentList}>
+                    {recentProjects.length > 0 ? (
+                      recentProjects.map((project) => (
+                        <button key={project.id} type="button" onClick={() => openProject(project)}>
+                          <FileText size={16} aria-hidden="true" />
+                          <span>
+                            <strong>{project.title}</strong>
+                            <small>{project.track === 'founder' ? 'Founder Track' : 'Solopreneur Track'} - {formatProjectDate(project.updated_at)}</small>
+                          </span>
+                          <ChevronRight size={15} aria-hidden="true" />
+                        </button>
+                      ))
+                    ) : (
+                      <p>No recent projects yet. Save a context or ask the assistant to create one.</p>
+                    )}
+                  </div>
+                </article>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'start' && (
+            <section className={`${styles.screen} ${styles.entryScreen}`} aria-labelledby="entry-title">
+              <h1 id="entry-title">Kramaniti&apos;s Clarity Square</h1>
+              <p className={styles.lead}>
+                A focused workspace for founders and solopreneurs to turn rough thinking into clearer next steps.
+              </p>
+
+              <div className={styles.authTabs} aria-label="Authentication mode">
+                <button
+                  type="button"
+                  className={authView !== 'signin' ? styles.authTabActive : ''}
+                  onClick={() => {
+                    setSessionMode('signup');
+                    setAuthView('signup-email');
+                    setStatus('Enter your email to begin account creation.');
+                  }}
+                >
+                  Create account
+                </button>
+                <button
+                  type="button"
+                  className={authView === 'signin' ? styles.authTabActive : ''}
+                  onClick={() => {
+                    setSessionMode('signin');
+                    setAuthView('signin');
+                    setStatus('Sign in with your username and password.');
+                  }}
+                >
+                  Sign in
+                </button>
+              </div>
+
+              <p className={styles.authStatus} aria-live="polite">
+                {status ||
+                  (authView === 'signin'
+                    ? 'Enter your username and password to continue.'
+                    : 'Create an account to save projects, tasks, and project assistant memory.')}
+              </p>
+
+              {authView === 'signup-email' && (
+                <div className={styles.entryActions}>
+                  <label className={styles.authField}>
+                    <span>Email</span>
+                    <input
+                      type="email"
+                      value={authEmail}
+                      onChange={(event) => setAuthEmail(event.target.value)}
+                      placeholder="you@company.com"
+                      autoComplete="email"
+                      disabled={Boolean(authUser) || isAuthBusy}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className={styles.primaryButton}
+                    onClick={continueSignupWithEmail}
+                    disabled={isAuthBusy}
+                  >
+                    {isAuthBusy ? 'Checking...' : 'Continue'}
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </button>
+                </div>
+              )}
+
+              {authView === 'signup-credentials' && (
+                <div className={styles.entryActions}>
+                  <div className={styles.signupPathPicker} aria-label="Choose account path">
+                    {(Object.keys(TRACKS) as Track[]).map((key) => {
+                      const item = TRACKS[key];
+                      const Icon = item.icon;
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          className={track === key ? styles.signupPathActive : ''}
+                          onClick={() => {
+                            setTrack(key);
+                            setIntent(TRACKS[key].defaults);
+                            setStatus(`${TRACKS[key].shortLabel} will be used for this account.`);
+                          }}
+                          aria-pressed={track === key}
+                        >
+                          <Icon size={16} aria-hidden="true" />
+                          <span>{item.shortLabel}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <label className={styles.authField}>
+                    <span>Email</span>
+                    <input type="email" value={authEmail} readOnly />
+                  </label>
+                  <label className={styles.authField}>
+                    <span>Username</span>
+                    <input
+                      value={authUsername}
+                      onChange={(event) => setAuthUsername(normalizeUsername(event.target.value))}
+                      placeholder="your_username"
+                      autoComplete="username"
+                      disabled={Boolean(authUser) || isAuthBusy}
+                    />
+                  </label>
+                  <label className={styles.authField}>
+                    <span>Password</span>
+                    <input
+                      type="password"
+                      value={authPassword}
+                      onChange={(event) => setAuthPassword(event.target.value)}
+                      placeholder="Minimum 8 characters"
+                      autoComplete="new-password"
+                      disabled={Boolean(authUser) || isAuthBusy}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className={styles.primaryButton}
+                    onClick={() => void createAccount()}
+                    disabled={isAuthBusy}
+                  >
+                    {isAuthBusy ? 'Creating...' : 'Create account'}
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </button>
+                  <button type="button" className={styles.textButton} onClick={() => setAuthView('signup-email')}>
+                    Change email
+                  </button>
+                </div>
+              )}
+
+              {authView === 'signin' && (
+                <div className={styles.entryActions}>
+                  <label className={styles.authField}>
+                    <span>Username</span>
+                    <input
+                      value={authLogin}
+                      onChange={(event) => setAuthLogin(event.target.value)}
+                      placeholder="your_username"
+                      autoComplete="username"
+                      disabled={Boolean(authUser) || isAuthBusy}
+                    />
+                  </label>
+                  <label className={styles.authField}>
+                    <span>Password</span>
+                    <input
+                      type="password"
+                      value={authPassword}
+                      onChange={(event) => setAuthPassword(event.target.value)}
+                      placeholder="Your password"
+                      autoComplete="current-password"
+                      disabled={Boolean(authUser) || isAuthBusy}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className={styles.primaryButton}
+                    onClick={() => void signIn()}
+                    disabled={isAuthBusy}
+                  >
+                    {isAuthBusy ? 'Signing in...' : 'Sign in'}
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </button>
+                </div>
+              )}
+            </section>
+          )}
+
+          {activeMenu === 'path' && (
+            <section className={styles.screen} aria-label="Choose your path">
+              <div className={styles.trackChoices}>
+                {(Object.keys(TRACKS) as Track[]).map((key) => {
+                  const item = TRACKS[key];
+                  const Icon = item.icon;
+                  return (
+                    <button key={key} type="button" className={styles.trackChoice} onClick={() => chooseTrack(key)}>
+                      <Icon size={22} aria-hidden="true" />
+                      <span>{item.label}</span>
+                      <small>{item.description}</small>
+                      <ArrowRight size={17} aria-hidden="true" />
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'context' && step !== 'context' && (
+            <section className={styles.screen} aria-label={accountTrack === 'founder' ? 'Capture the business signal' : 'Capture the solopreneur signal'}>
+              <div className={styles.intentForm}>
+                <label>
+                  One-line intent
+                  <input
+                    value={intent.headline}
+                    onChange={(event) => setIntent((current) => ({ ...current, headline: event.target.value }))}
+                    placeholder="What are you trying to clarify?"
+                  />
+                </label>
+                <label>
+                  Current context
+                  <textarea
+                    value={intent.context}
+                    onChange={(event) => setIntent((current) => ({ ...current, context: event.target.value }))}
+                    placeholder="Describe the business, idea, workflow, or starting confusion."
+                  />
+                </label>
+                <div className={styles.formGrid}>
+                  <label>
+                    Audience
+                    <input
+                      value={intent.audience}
+                      onChange={(event) => setIntent((current) => ({ ...current, audience: event.target.value }))}
+                      placeholder="Who is this for?"
+                    />
+                  </label>
+                  <label>
+                    Current blocker
+                    <input
+                      value={intent.blocker}
+                      onChange={(event) => setIntent((current) => ({ ...current, blocker: event.target.value }))}
+                      placeholder="What is unclear right now?"
+                    />
+                  </label>
+                  <label>
+                    Desired outcome
+                    <input
+                      value={intent.outcome}
+                      onChange={(event) => setIntent((current) => ({ ...current, outcome: event.target.value }))}
+                      placeholder="What should become clearer?"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className={styles.screenActions}>
+                <button type="button" className={styles.secondaryButton} onClick={() => setStep('track')}>
+                  Back
+                </button>
+                <button type="button" className={styles.primaryButton} onClick={saveIntent}>
+                  {isSavingContext ? 'Saving...' : 'Save context'}
+                  <ArrowRight size={17} aria-hidden="true" />
+                </button>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'context' && step === 'context' && savedContext && (
+            <section className={styles.screen} aria-label="Saved context">
+              <div className={styles.contextPanel}>
+                <div className={styles.contextHeader}>
+                  <span>{TRACKS[savedContext.track].shortLabel}</span>
+                  <small>Saved {savedContext.savedAt}</small>
+                </div>
+                <h2>{savedContext.intent.headline}</h2>
+                <p>{savedContext.summary}</p>
+              </div>
+
+              <div className={styles.contextGrid}>
+                <article>
+                  <FileText size={17} aria-hidden="true" />
+                  <h2>Next questions</h2>
+                  <ul>
+                    {savedContext.questions.map((question) => (
+                      <li key={question}>{question}</li>
+                    ))}
+                  </ul>
+                </article>
+                <article>
+                  <Compass size={17} aria-hidden="true" />
+                  <h2>Suggested sequence</h2>
+                  <ul>
+                    {savedContext.actions.map((action) => (
+                      <li key={action}>{action}</li>
+                    ))}
+                  </ul>
+                </article>
+              </div>
+
+              <div className={styles.screenActions}>
+                <button type="button" className={styles.secondaryButton} onClick={refineAgain}>
+                  <RefreshCw size={16} aria-hidden="true" />
+                  Refine context
+                </button>
+                <Link href="/clarity-engine?from=clarity-square" className={styles.primaryLink} onClick={() => prepareEngineHandoff()}>
+                  Continue in Clarity Engine
+                  <ArrowRight size={17} aria-hidden="true" />
+                </Link>
+                <button type="button" className={styles.textButton} onClick={restart}>
+                  Start again
+                </button>
+                {authUser && (
+                  <button type="button" className={styles.textButton} onClick={() => void signOut()}>
+                    <LogOut size={16} aria-hidden="true" />
+                    Sign out
+                  </button>
+                )}
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'context' && step === 'context' && !savedContext && (
+            <section className={styles.screen} aria-labelledby="context-empty-title">
+              <h1 id="context-empty-title">No context yet.</h1>
+              <div className={styles.screenActions}>
+                <button type="button" className={styles.primaryButton} onClick={() => openMenu('path')}>
+                  Choose path
+                  <ArrowRight size={17} aria-hidden="true" />
+                </button>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'square' && (
+            <section className={`${styles.screen} ${styles.communityScreen}`} aria-label="Square threads">
+              <div className={styles.communityGrid}>
+                <form
+                  className={styles.communityComposer}
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    createCommunityPost();
+                  }}
+                >
+                  <div className={styles.communityComposerHeader}>
+                    <span>{communityComposerCopy.label}</span>
+                    <strong>{accountTrackCopy.shortLabel}</strong>
+                  </div>
+                  <label>
+                    Title
+                    <input
+                      value={communityTitle}
+                      onChange={(event) => setCommunityTitle(event.target.value)}
+                      placeholder={communityComposerCopy.titlePlaceholder}
+                    />
+                  </label>
+                  <label>
+                    Context
+                    <textarea
+                      value={communityBody}
+                      onChange={(event) => setCommunityBody(event.target.value)}
+                      placeholder={communityComposerCopy.bodyPlaceholder}
+                    />
+                  </label>
+                  <label>
+                    Tags
+                    <input
+                      value={communityTags}
+                      onChange={(event) => setCommunityTags(event.target.value)}
+                      placeholder="workflow, content, prototype"
+                    />
+                  </label>
+                  <button type="submit" className={styles.primaryButton}>
+                    {communityComposerCopy.button}
+                    <ArrowRight size={16} aria-hidden="true" />
+                  </button>
+                </form>
+
+                <section className={styles.communityFeed} aria-label="Square feed">
+                  <div className={styles.communityFeedToolbar}>
+                    <div>
+                      <strong>Square threads</strong>
+                      <span>{founderProblemCount} problems · {builderShareCount} shares</span>
+                    </div>
+                    <div className={styles.communityFilters} aria-label="Thread filters">
+                      {availableCommunityFilters.map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          className={communityFilter === item.id ? styles.communityFilterActive : ''}
+                          onClick={() => setCommunityFilter(item.id)}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className={styles.communityThreads} role="list" aria-label="Square threads">
+                    {filteredCommunityPosts.map((post) => (
+                      <article key={post.id} className={styles.communityThread} role="listitem">
+                        <div className={styles.communityThreadHeader}>
+                          <span className={styles.communityAvatar} aria-hidden="true">
+                            {post.authorLabel.slice(0, 1)}
+                          </span>
+                          <div>
+                            <strong>{post.authorLabel}</strong>
+                            <small>{formatProjectDate(post.createdAt)}</small>
+                          </div>
+                          <em>{post.kind === 'founder_problem' ? 'Problem' : 'Share'}</em>
+                        </div>
+                        <h2>{post.title}</h2>
+                        <p>{post.body}</p>
+                        {post.tags.length > 0 && (
+                          <div className={styles.communityTags} aria-label="Thread tags">
+                            {post.tags.map((tag) => (
+                              <span key={tag}>{tag}</span>
+                            ))}
+                          </div>
+                        )}
+                        <div className={styles.communityThreadMeta}>
+                          <span>{post.interestCount} interested</span>
+                          <span>{post.replyCount} replies</span>
+                        </div>
+                        <div className={styles.communityThreadActions}>
+                          {isSolopreneurAccount && post.kind === 'founder_problem' && (
+                            <button type="button" className={styles.secondaryButton} onClick={() => markCommunityInterest(post)}>
+                              I can contribute
+                            </button>
+                          )}
+                          {isFounderAccount && post.kind === 'builder_share' && (
+                            <button type="button" className={styles.secondaryButton} onClick={() => markCommunityInterest(post)}>
+                              Interested
+                            </button>
+                          )}
+                          <button type="button" className={styles.textButton} onClick={() => askAssistantAboutCommunityPost(post)}>
+                            Ask assistant
+                          </button>
+                          {((isFounderAccount && post.kind === 'founder_problem') ||
+                            (isSolopreneurAccount && post.kind === 'builder_share')) && (
+                            <button type="button" className={styles.textButton} onClick={() => turnCommunityPostIntoProject(post)}>
+                              Make project
+                            </button>
+                          )}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'loops' && (
+            <section className={`${styles.screen} ${styles.loopBoardScreen}`} aria-label="Loops">
+              <div className={styles.loopBoardHeader}>
+                <div>
+                  <h1>Loops</h1>
+                  <p>Run one focused loop at a time. Project Loop starts by scanning saved projects, folders, tasks, reports, and recent movement.</p>
+                </div>
+              </div>
+
+              <div className={styles.loopExperience}>
+                <aside className={styles.loopPicker} aria-label="Choose a loop">
+                  {loopCards.map((loop) => {
+                    const Icon = loop.icon;
+                    const isActive = activeLoopId === loop.id;
+                    return (
+                      <button
+                        key={loop.id}
+                        type="button"
+                        className={isActive ? styles.loopPickerActive : ''}
+                        onClick={() => {
+                          if (loop.id === 'project') {
+                            selectLoop(loop.id);
+                            return;
+                          }
+                          void activateLoop(loop.id);
+                        }}
+                        aria-pressed={isActive}
+                      >
+                        <span className={styles.loopPickerIcon}>
+                          <Icon size={17} aria-hidden="true" />
+                        </span>
+                        <span>
+                          <strong>{loop.name}</strong>
+                          <small>{loop.detail}</small>
+                        </span>
+                        <em className={styles[`loopStatus_${loop.status}`]}>{loopStatusLabel[loop.status]}</em>
+                      </button>
+                    );
+                  })}
+                </aside>
+
+                <section className={styles.loopRunner} aria-label={`${selectedLoop.name} workspace`}>
+                  <div className={styles.loopRunnerHeader}>
+                    <span className={styles.loopIconLarge}>
+                      <SelectedLoopIcon size={24} aria-hidden="true" />
+                    </span>
+                    <div>
+                      <span>{selectedLoop.name}</span>
+                      <h2>
+                        {selectedLoop.id === 'project'
+                          ? activeLoopIsRunning
+                            ? 'Scanning your project workspace'
+                            : activeLoopIsReady
+                              ? loopResultTitle.project
+                              : 'Scan saved projects'
+                          : activeLoopIsRunning
+                            ? `Gathering context for ${selectedLoop.name}`
+                            : activeLoopIsReady
+                              ? loopResultTitle[selectedLoop.id]
+                              : 'Ready when you are'}
+                      </h2>
+                      <p>
+                        {selectedLoop.id === 'project'
+                          ? activeLoopIsRunning
+                            ? 'The loop agent is reading project files, folders, tasks, reports, and recent updates.'
+                            : activeLoopIsReady
+                              ? loopResultDetail.project
+                              : selectedLoop.nextAction
+                          : activeLoopIsRunning
+                            ? 'The Square is reading only the context this loop needs.'
+                            : activeLoopIsReady
+                              ? loopResultDetail[selectedLoop.id]
+                              : selectedLoop.nextAction}
+                      </p>
+                    </div>
+                  </div>
+
+                  {selectedLoop.id === 'project' ? (
+                    <div className={styles.projectLoopWorkspace}>
+                      {!activeLoopIsRunning && !activeLoopIsReady && (
+                        <div className={styles.projectLoopStart}>
+                          <div className={styles.projectLoopStartCopy}>
+                            <span>Project scan</span>
+                            <h3>Let the loop agent read your project workspace.</h3>
+                            <p>
+                              The scan checks saved projects, folders, project instructions, open tasks, saved reports, and recent movement before showing the clearest project picture.
+                            </p>
+                            <button type="button" className={styles.projectLoopScanButton} onClick={() => void activateLoop('project')}>
+                              <Search size={17} aria-hidden="true" />
+                              Scan Projects
+                            </button>
+                          </div>
+                          <div className={styles.projectLoopStartMetrics} aria-label="Project scan inputs">
+                            {projectLoopScanTargets.map((item) => (
+                              <div key={item.label} className={styles.projectLoopMetric}>
+                                <span>{item.label}</span>
+                                <strong>{item.value}</strong>
+                                <p>{item.detail}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {activeLoopIsRunning && (
+                        <div className={`${styles.loopGatheringPanel} ${styles.projectLoopScanningPanel}`} aria-live="polite">
+                          <div className={styles.projectLoopScanVisual} aria-hidden="true">
+                            <div className={styles.loopGatheringOrb}>
+                              <span />
+                              <span />
+                              <span />
+                            </div>
+                            <div className={styles.projectLoopScanNodes}>
+                              <span>Projects</span>
+                              <span>Folders</span>
+                              <span>Tasks</span>
+                              <span>Reports</span>
+                            </div>
+                          </div>
+                          <div className={styles.loopGatheringSteps}>
+                            {loopGatheringSteps.project.map((stepText, index) => (
+                              <div key={stepText} style={{ ['--step-index' as string]: index }}>
+                                <span />
+                                <p>{stepText}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {activeLoopIsReady && (
+                        <div className={styles.projectLoopResults}>
+                          <div className={styles.loopContextChips} aria-label="Project context gathered">
+                            {loopContextChips.project.map((chip) => (
+                              <span key={chip}>{chip}</span>
+                            ))}
+                          </div>
+
+                          <div className={styles.projectLoopResultHero}>
+                            <div>
+                              <span>Scan result</span>
+                              <h3>{loopResultTitle.project}</h3>
+                              <p>{loopResultDetail.project}</p>
+                            </div>
+                            <button type="button" className={styles.secondaryButton} onClick={() => void activateLoop('project')}>
+                              <RefreshCw size={16} aria-hidden="true" />
+                              Scan again
+                            </button>
+                          </div>
+
+                          <div className={styles.loopOverviewGrid} aria-label="Project Loop scan overview">
+                            {loopOverviewItems.project.map((item) => (
+                              <div key={`${item.label}-${item.value}`} className={styles.loopOverviewItem}>
+                                <span>{item.label}</span>
+                                <strong>{item.value}</strong>
+                                <p>{item.detail}</p>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className={styles.projectLoopInsightGrid} aria-label="Project Loop findings">
+                            {projectLoopInsights.map((item) => (
+                              <article key={item.title} className={styles.projectLoopInsight}>
+                                <CheckCircle2 size={16} aria-hidden="true" />
+                                <div>
+                                  <strong>{item.title}</strong>
+                                  <p>{item.detail}</p>
+                                </div>
+                              </article>
+                            ))}
+                          </div>
+
+                          <div className={styles.loopProjectList} aria-label="Project Loop overview">
+                            <div className={styles.projectSubheader}>
+                              <span>Recent project context</span>
+                              <small>{projects.length} total</small>
+                            </div>
+                            {recentProjects.length > 0 ? (
+                              recentProjects.map((project) => {
+                                const projectOpenTasks = projectTasks.filter((task) => task.project_id === project.id && task.status === 'open');
+                                return (
+                                  <button key={project.id} type="button" className={styles.loopProjectRow} onClick={() => openProject(project)}>
+                                    <span>
+                                      <strong>{project.title}</strong>
+                                      <small>{getFolderName(project.folder_id)}</small>
+                                    </span>
+                                    <span>
+                                      <strong>{projectOpenTasks.length}</strong>
+                                      <small>open</small>
+                                    </span>
+                                    <span>
+                                      <strong>{formatProjectDate(project.updated_at)}</strong>
+                                      <small>updated</small>
+                                    </span>
+                                  </button>
+                                );
+                              })
+                            ) : (
+                              <p className={styles.loopEmptyText}>No saved projects were found in this scan.</p>
+                            )}
+                          </div>
+
+                          <div className={styles.loopActions}>
+                            <button type="button" className={styles.primaryButton} onClick={() => openMenu('projects')}>
+                              Open projects
+                              <ArrowRight size={16} aria-hidden="true" />
+                            </button>
+                            <button type="button" className={styles.secondaryButton} onClick={() => runLoopSecondaryAction('project')}>
+                              Ask assistant about scan
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : activeLoopIsRunning ? (
+                    <div className={styles.loopGatheringPanel} aria-live="polite">
+                      <div className={styles.loopGatheringOrb} aria-hidden="true">
+                        <span />
+                        <span />
+                        <span />
+                      </div>
+                      <div className={styles.loopGatheringSteps}>
+                        {loopGatheringSteps[selectedLoop.id].map((stepText, index) => (
+                          <div key={stepText} style={{ ['--step-index' as string]: index }}>
+                            <span />
+                            <p>{stepText}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={styles.loopReadyPanel}>
+                      <div className={styles.loopContextChips} aria-label="Context gathered">
+                        {loopContextChips[selectedLoop.id].map((chip) => (
+                          <span key={chip}>{chip}</span>
+                        ))}
+                      </div>
+
+                      <div className={styles.loopResultCard}>
+                        <span>Current source</span>
+                        <h3>{sourceProjectForLoops?.title || activeSignal}</h3>
+                        <p>{sourceProjectForLoops?.summary || sourceProjectForLoops?.context || activeSignalSummary}</p>
+                      </div>
+
+                      <div className={styles.loopOverviewGrid} aria-label={`${selectedLoop.name} scan overview`}>
+                        {loopOverviewItems[selectedLoop.id].map((item) => (
+                          <div key={`${item.label}-${item.value}`} className={styles.loopOverviewItem}>
+                            <span>{item.label}</span>
+                            <strong>{item.value}</strong>
+                            <p>{item.detail}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {selectedLoop.id === 'task' && (
+                        <div className={styles.loopTaskPreview} aria-label="Task Loop preview">
+                          <div className={styles.projectSubheader}>
+                            <span>Task movement</span>
+                            <small>{selectedLoopOpenTasks.length} open</small>
+                          </div>
+                          <div className={styles.projectTaskList}>
+                            {selectedProjectLoopTasks.slice(0, 5).map((task) => (
+                              <button
+                                key={task.id}
+                                type="button"
+                                className={task.status === 'done' ? styles.projectTaskDone : ''}
+                                onClick={() => void toggleProjectTask(task)}
+                              >
+                                <CheckCircle2 size={16} aria-hidden="true" />
+                                <span>
+                                  <strong>{task.title}</strong>
+                                  {task.detail && <small>{task.detail}</small>}
+                                </span>
+                              </button>
+                            ))}
+                            {selectedProjectLoopTasks.length === 0 && <p>No saved tasks were found in this scan.</p>}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className={styles.loopActions}>
+                        <button type="button" className={styles.primaryButton} onClick={() => runLoopPrimaryAction(selectedLoop.id)}>
+                          {loopSourceActionLabel[selectedLoop.id]}
+                          <ArrowRight size={16} aria-hidden="true" />
+                        </button>
+                        <button type="button" className={styles.secondaryButton} onClick={() => runLoopSecondaryAction(selectedLoop.id)}>
+                          Ask assistant about scan
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </section>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'tasks' && (
+            <section className={`${styles.screen} ${styles.taskManagerScreen}`} aria-label="Task manager">
+              <div className={styles.taskManagerHeader}>
+                <div>
+                  <h1>Tasks</h1>
+                  <p>Manage open, completed, assistant-created, and manually added tasks by project.</p>
+                </div>
+                <div className={styles.taskStatusStrip} aria-label="Task status summary">
+                  <span><strong>{openTaskCount}</strong> Open</span>
+                  <span><strong>{completedTaskCount}</strong> Completed</span>
+                  <span><strong>{pendingAssistantActionCount}</strong> Pending approval</span>
+                  <span><strong>{activeProjectTasks.length}</strong> Total</span>
+                </div>
+              </div>
+
+              <div className={styles.taskManagerToolbar}>
+                <label>
+                  <span>Project</span>
+                  <select value={taskProjectFilter} onChange={(event) => setTaskProjectFilter(event.target.value)}>
+                    <option value="all">All projects</option>
+                    {projects.map((project) => (
+                      <option key={project.id} value={project.id}>
+                        {project.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <div className={styles.taskStatusFilters} aria-label="Task status filter">
+                  {[
+                    { id: 'all' as TaskStatusFilter, label: 'All' },
+                    { id: 'open' as TaskStatusFilter, label: 'Open' },
+                    { id: 'done' as TaskStatusFilter, label: 'Completed' },
+                  ].map((filter) => (
+                    <button
+                      key={filter.id}
+                      type="button"
+                      className={taskStatusFilter === filter.id ? styles.taskFilterActive : ''}
+                      onClick={() => setTaskStatusFilter(filter.id)}
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.taskManagerLayout}>
+                <section className={styles.taskGroupList} aria-label="Project task groups">
+                  {taskManagerProjects.map(({ project, tasks }) => (
+                    <article key={project.id} className={styles.taskProjectGroup}>
+                      <header>
+                        <div>
+                          <span>{getFolderName(project.folder_id)}</span>
+                          <h2>{project.title}</h2>
+                          <p>{project.summary || project.context}</p>
+                        </div>
+                        <button type="button" className={styles.textButton} onClick={() => openProject(project)}>
+                          Open project
+                        </button>
+                      </header>
+                      <div className={styles.taskProjectMeta}>
+                        <span>{tasks.filter((task) => task.status === 'open').length} open</span>
+                        <span>{tasks.filter((task) => task.status === 'done').length} completed</span>
+                        <span>{formatProjectDate(project.updated_at)}</span>
+                      </div>
+                      <div className={styles.projectTaskList}>
+                        {tasks.length > 0 ? (
+                          tasks.map((task) => (
+                            <button
+                              key={task.id}
+                              type="button"
+                              className={task.status === 'done' ? styles.projectTaskDone : ''}
+                              onClick={() => void toggleProjectTask(task)}
+                            >
+                              <CheckCircle2 size={16} aria-hidden="true" />
+                              <span>
+                                <strong>{task.title}</strong>
+                                <small>
+                                  {task.detail || (task.source === 'assistant' ? 'Created by assistant' : task.source === 'auto' ? 'Starting task' : 'Manual task')}
+                                </small>
+                              </span>
+                            </button>
+                          ))
+                        ) : (
+                          <p>No tasks match this filter for this project.</p>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+
+                  {orphanTaskGroup.length > 0 && (
+                    <article className={styles.taskProjectGroup}>
+                      <header>
+                        <div>
+                          <span>Unlinked</span>
+                          <h2>Tasks without a visible project</h2>
+                          <p>These task rows exist, but their project is not currently loaded in this workspace.</p>
+                        </div>
+                      </header>
+                      <div className={styles.projectTaskList}>
+                        {orphanTaskGroup.map((task) => (
+                          <button
+                            key={task.id}
+                            type="button"
+                            className={task.status === 'done' ? styles.projectTaskDone : ''}
+                            onClick={() => void toggleProjectTask(task)}
+                          >
+                            <CheckCircle2 size={16} aria-hidden="true" />
+                            <span>
+                              <strong>{task.title}</strong>
+                              {task.detail && <small>{task.detail}</small>}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </article>
+                  )}
+
+                  {taskManagerProjects.length === 0 && orphanTaskGroup.length === 0 && (
+                    <div className={`${styles.emptyState} ${styles.taskEmptyState}`}>
+                      <CheckCircle2 size={22} aria-hidden="true" />
+                      <strong>No tasks match this view.</strong>
+                      <p>Tasks created by the assistant, generated when a project is created, or added manually will appear here by project.</p>
+                    </div>
+                  )}
+                </section>
+
+                <aside className={styles.taskAddPanel} aria-label="Add task">
+                  <div>
+                    <span>Manual task</span>
+                    <h2>Add to a project</h2>
+                    <p>Manual tasks use the same saved task path as assistant-created project tasks.</p>
+                  </div>
+                  <form
+                    className={styles.taskAddForm}
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      void createManualTask(taskCreateProject);
+                    }}
+                  >
+                    <label>
+                      <span>Project</span>
+                      <select
+                        value={taskCreateProject?.id ?? ''}
+                        onChange={(event) => {
+                          setTaskProjectFilter(event.target.value || 'all');
+                          setSelectedProjectId(event.target.value || null);
+                        }}
+                        disabled={projects.length === 0}
+                      >
+                        {projects.length === 0 ? (
+                          <option value="">No project yet</option>
+                        ) : (
+                          projects.map((project) => (
+                            <option key={project.id} value={project.id}>
+                              {project.title}
+                            </option>
+                          ))
+                        )}
+                      </select>
+                    </label>
+                    <label>
+                      <span>Task</span>
+                      <input
+                        value={manualTaskTitle}
+                        onChange={(event) => setManualTaskTitle(event.target.value)}
+                        placeholder="Add a task to the selected project"
+                        disabled={!taskCreateProject}
+                      />
+                    </label>
+                    <button type="submit" className={styles.primaryButton} disabled={!taskCreateProject}>
+                      Add task
+                    </button>
+                  </form>
+                </aside>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'assistant' && (
+            <section className={`${styles.screen} ${styles.assistantScreen}`} aria-label="Square Assistant">
+              <div className={styles.assistantLayout}>
+                <div className={styles.assistantMenuBar} aria-label="Assistant menu bar">
+                  <div className={styles.assistantThreadGroup} aria-label="Assistant threads">
+                    <div className={styles.assistantThreadTabs}>
+                      {visibleAssistantThreads.map((thread) => (
+                        <button
+                          key={thread.id}
+                          type="button"
+                          className={thread.id === resolvedAssistantThreadId ? styles.assistantThreadActive : ''}
+                          onClick={() => {
+                            setActiveAssistantThreadId(thread.id);
+                            closeAssistantThreadDropdown();
+                          }}
+                        >
+                          <MessageCircle size={15} aria-hidden="true" />
+                          <span>{thread.title}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <span aria-hidden="true" />
+                    <div className={styles.assistantThreadDropdownHost} ref={assistantThreadDropdownHostRef}>
+                      <button
+                        type="button"
+                        className={styles.assistantThreadViewAll}
+                        onClick={() => {
+                          if (isAssistantThreadDropdownOpen) {
+                            closeAssistantThreadDropdown();
+                            return;
+                          }
+                          closeAssistantSettings();
+                          openAssistantThreadDropdown();
+                        }}
+                        aria-expanded={isAssistantThreadDropdownOpen}
+                      >
+                        <List size={16} aria-hidden="true" />
+                        View all
+                      </button>
+                      {(isAssistantThreadDropdownOpen || isAssistantThreadDropdownClosing) && (
+                        <div
+                          className={`${styles.assistantThreadDropdown} ${
+                            isAssistantThreadDropdownClosing ? styles.assistantDropdownClosing : ''
+                          }`}
+                          role="menu"
+                          aria-label="All assistant threads"
+                        >
+                          {displayedAssistantThreads.map((thread) => (
+                            <button
+                              key={thread.id}
+                              type="button"
+                              role="menuitem"
+                              className={thread.id === resolvedAssistantThreadId ? styles.assistantThreadDropdownActive : ''}
+                              onClick={() => {
+                                setActiveAssistantThreadId(thread.id);
+                                closeAssistantThreadDropdown();
+                              }}
+                            >
+                              <MessageCircle size={15} aria-hidden="true" />
+                              <span>{thread.title}</span>
+                              <small>{formatProjectDate(thread.updatedAt)}</small>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <span aria-hidden="true" />
+
+                    <div className={styles.assistantThreadActions}>
+                      <button type="button" onClick={startAssistantThread}>
+                        <Plus size={16} aria-hidden="true" />
+                        New thread
+                      </button>
+                      <span aria-hidden="true" />
+                      <button type="button" onClick={() => void deleteAssistantThread()} disabled={isAssistantBusy}>
+                        <Trash2 size={16} aria-hidden="true" />
+                        Delete thread
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className={styles.assistantMenuButton}
+                    onClick={() =>
+                      seedAssistantPrompt(
+                        `Create next-step tasks for ${selectedProject?.title || latestProject?.title || activeSignal}.`,
+                      )
+                    }
+                  >
+                    <CheckCircle2 size={16} aria-hidden="true" />
+                    Draft tasks
+                  </button>
+
+                  <button
+                    type="button"
+                    className={styles.assistantMenuButton}
+                    onClick={() =>
+                      seedAssistantPrompt(
+                        `Remember this as a useful Square signal: ${
+                          savedContext?.summary || latestProject?.summary || activeSignalSummary
+                        }`,
+                      )
+                    }
+                  >
+                    <Database size={16} aria-hidden="true" />
+                    Save memory
+                  </button>
+
+                  <div className={styles.assistantProjectActions}>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        seedAssistantPrompt(
+                          `Turn this into a project: ${savedContext?.intent.context || intent.context || activeSignal}`,
+                        )
+                      }
+                    >
+                      <FolderPlus size={16} aria-hidden="true" />
+                      Create project
+                    </button>
+                    <span aria-hidden="true" />
+                    <button type="button" onClick={() => openMenu('projects')}>
+                      <FolderOpen size={16} aria-hidden="true" />
+                      Open project
+                    </button>
+                  </div>
+
+                  <div className={styles.assistantSettingsHost} ref={assistantSettingsHostRef}>
+                    <button
+                      type="button"
+                      className={styles.assistantSettingsButton}
+                      onClick={() => {
+                        if (isAssistantSettingsOpen) {
+                          closeAssistantSettings();
+                          return;
+                        }
+                        closeAssistantThreadDropdown();
+                        openAssistantSettings();
+                      }}
+                      aria-expanded={isAssistantSettingsOpen}
+                      title="Assistant settings"
+                    >
+                      <Settings size={16} aria-hidden="true" />
+                      Settings
+                    </button>
+                    {(isAssistantSettingsOpen || isAssistantSettingsClosing) && (
+                      <div
+                        className={`${styles.assistantSettingsDropdown} ${
+                          isAssistantSettingsClosing ? styles.assistantDropdownClosing : ''
+                        }`}
+                        aria-label="Assistant response settings"
+                      >
+                        <textarea
+                          value={assistantSettings.behaviorPreference}
+                          onChange={(event) =>
+                            setAssistantSettings({
+                              behaviorPreference: event.target.value.slice(0, 600),
+                            })
+                          }
+                          onBlur={() => void saveAssistantSettings(assistantSettings)}
+                          placeholder="Example: be more direct, ask sharper questions, keep replies concise, challenge weak assumptions."
+                          rows={4}
+                        />
+                        <div className={styles.assistantSettingsQuickActions}>
+                          {[
+                            'Concise and direct',
+                            'Ask sharper questions',
+                            'Step-by-step',
+                          ].map((preference) => (
+                            <button
+                              key={preference}
+                              type="button"
+                              onClick={() => void saveAssistantSettings({ behaviorPreference: preference })}
+                            >
+                              {preference}
+                            </button>
+                          ))}
+                        </div>
+                        <div className={styles.assistantSettingsFooter}>
+                          <button type="button" onClick={() => void saveAssistantSettings({ behaviorPreference: '' })}>
+                            Clear
+                          </button>
+                          <button type="button" onClick={() => void saveAssistantSettings(assistantSettings, { close: true })}>
+                            Done
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <section className={styles.chatPanel} aria-label="Square assistant conversation">
+                  <div className={styles.chatMessages}>
+                    {squareAssistantMessages.map((message) => (
+                      <article
+                        key={message.id}
+                        className={message.role === 'assistant' ? styles.assistantBubble : styles.userBubble}
+                      >
+                        <span className={styles.chatAvatar} aria-label={message.role === 'assistant' ? 'Square Assistant' : 'You'}>
+                          {message.role === 'assistant' ? (
+                            <Image
+                              src="/assets/brand/clarity-square-mark-gold.png"
+                              alt=""
+                              width={24}
+                              height={24}
+                              aria-hidden="true"
+                            />
+                          ) : (
+                            (displayUsername || displayEmail || 'U').slice(0, 1).toUpperCase()
+                          )}
+                        </span>
+                        <span className={styles.chatDivider} aria-hidden="true" />
+                        <div className={styles.chatContent}>
+                          <p>{message.content}</p>
+                          {message.role === 'assistant' && message.pendingAction && (
+                            <div className={styles.assistantApprovalPanel}>
+                              <div>
+                                <strong>{getPendingActionTitle(message.pendingAction)}</strong>
+                                <span>{getPendingActionText(message.pendingAction)}</span>
+                              </div>
+                              {message.pendingAction.status === 'pending' && (
+                                <div className={styles.assistantApprovalActions}>
+                                  <button type="button" onClick={() => void approveAssistantAction(message)}>
+                                    Yes
+                                  </button>
+                                  <button type="button" onClick={() => declineAssistantAction(message)}>
+                                    No
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </article>
+                    ))}
+                    {isAssistantBusy && (
+                      <article className={styles.assistantBubble}>
+                        <span className={styles.chatAvatar} aria-label="Square Assistant">
+                          <Image
+                            src="/assets/brand/clarity-square-mark-gold.png"
+                            alt=""
+                            width={24}
+                            height={24}
+                            aria-hidden="true"
+                          />
+                        </span>
+                        <span className={styles.chatDivider} aria-hidden="true" />
+                        <p>Thinking through your Square context...</p>
+                      </article>
+                    )}
+                  </div>
+
+                  <form
+                    className={styles.assistantComposer}
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      void sendAssistantMessage();
+                    }}
+                  >
+                    <textarea
+                      ref={assistantInputRef}
+                      value={assistantInput}
+                      onChange={(event) => {
+                        setAssistantInput(event.target.value);
+                        resizeAssistantInput(event.currentTarget);
+                      }}
+                      onInput={(event) => resizeAssistantInput(event.currentTarget)}
+                      placeholder="Ask, create, or save context..."
+                      rows={1}
+                      disabled={isAssistantBusy}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' && !event.shiftKey) {
+                          event.preventDefault();
+                          void sendAssistantMessage();
+                        }
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      className={styles.iconPrimaryButton}
+                      disabled={isAssistantBusy || !assistantInput.trim()}
+                      aria-label="Send message"
+                    >
+                      <Send size={17} aria-hidden="true" />
+                      <span>Send</span>
+                    </button>
+                  </form>
+                </section>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'more' && (
+            <section className={`${styles.screen} ${styles.moreScreen}`} aria-label="More Clarity Square sections">
+              <div className={styles.moreHeader}>
+                <div>
+                  <span>More</span>
+                  <h1>Workspace menu</h1>
+                  <p>
+                    Open secondary sections without crowding the main mobile tabs. Your projects, loops, and assistant stay one tap away.
+                  </p>
+                </div>
+                <div className={styles.moreAccountCard}>
+                  <span>{authUser ? 'Signed in' : 'Local session'}</span>
+                  <strong>{displayUsername || displayEmail || accountTrackCopy.shortLabel}</strong>
+                  <small>{status || `${projects.length} projects, ${projectTasks.length} tasks, ${assistantMemories.length} memories`}</small>
+                </div>
+              </div>
+
+              <div className={styles.moreQuickActions} aria-label="Primary workspace shortcuts">
+                <button
+                  type="button"
+                  className={styles.primaryButton}
+                  onClick={() => {
+                    if (latestProject && !savedContext) {
+                      openProject(latestProject);
+                      return;
+                    }
+                    openMenu(savedContext ? 'context' : 'path');
+                  }}
+                >
+                  {savedContext || latestProject ? 'Open current context' : 'Capture first signal'}
+                  <ArrowRight size={16} aria-hidden="true" />
+                </button>
+                <button type="button" className={styles.secondaryButton} onClick={() => openMenu('tasks')}>
+                  Tasks
+                  <CheckCircle2 size={16} aria-hidden="true" />
+                </button>
+              </div>
+
+              <div className={styles.moreSectionGrid} aria-label="Secondary sections">
+                {MORE_MENU_ITEMS.map((item) => {
+                  const Icon = item.icon;
+                  const isCurrent = activeMenu === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={isCurrent ? styles.moreSectionActive : ''}
+                      onClick={() => openMenu(item.id)}
+                      aria-pressed={isCurrent}
+                    >
+                      <span className={styles.moreSectionIcon}>
+                        <Icon size={17} aria-hidden="true" />
+                      </span>
+                      <span>
+                        <strong>{item.label}</strong>
+                        <small>{item.detail}</small>
+                      </span>
+                      <ChevronRight size={16} aria-hidden="true" />
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'memory' && (
+            <section className={styles.screen} aria-label="Memory">
+              <div className={styles.memoryList} aria-label="Assistant memories">
+                {assistantMemories.length > 0 ? (
+                  assistantMemories.map((memory) => (
+                    <article key={memory.id} className={styles.memoryItem}>
+                      <div>
+                        <span>{memory.memory_type.replace('_', ' ')}</span>
+                        <h2>{memory.title}</h2>
+                        <p>{memory.content}</p>
+                      </div>
+                      <button
+                        type="button"
+                        className={styles.iconButton}
+                        onClick={() => void archiveAssistantMemory(memory)}
+                        aria-label={`Archive ${memory.title}`}
+                        title="Archive memory"
+                      >
+                        <Archive size={16} aria-hidden="true" />
+                      </button>
+                    </article>
+                  ))
+                ) : (
+                  <div className={styles.emptyState}>
+                    <Database size={18} aria-hidden="true" />
+                    <strong>No assistant memories yet.</strong>
+                    <p>Ask the assistant to remember a preference, decision boundary, or useful project signal.</p>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.screenActions}>
+                <button type="button" className={styles.primaryButton} onClick={() => openMenu('assistant')}>
+                  <Plus size={16} aria-hidden="true" />
+                  Add through assistant
+                </button>
+              </div>
+
+              <section className={styles.deleteDataSection} aria-label="Delete data">
+                <div className={styles.deleteDataHeader}>
+                  <div>
+                    <span>Delete data</span>
+                    <h2>Saved items in this Square</h2>
+                    <p>Remove individual saved context, projects, tasks, memories, folders, and assistant threads.</p>
+                  </div>
+                  <small>{deleteDataSections.reduce((total, section) => total + section.count, 0)} saved items</small>
+                </div>
+
+                <div className={styles.deleteDataGroups}>
+                  {deleteDataSections.map((section) => (
+                    <article key={section.id} className={styles.deleteDataGroup}>
+                      <div className={styles.deleteDataGroupHeader}>
+                        <h3>{section.title}</h3>
+                        <span>{section.count}</span>
+                      </div>
+                      <div className={styles.deleteDataList}>
+                        {section.items.length > 0 ? (
+                          section.items.map((item) => {
+                            const deleteKey = `${section.id}:${item.id}`;
+                            const isConfirming = confirmingDeleteId === deleteKey;
+                            return (
+                              <div key={item.id} className={isConfirming ? `${styles.deleteDataRow} ${styles.deleteDataRowConfirming}` : styles.deleteDataRow}>
+                                <div>
+                                  <strong>{item.title}</strong>
+                                  <p>{isConfirming ? 'Click Confirm delete to permanently remove this item.' : item.detail}</p>
+                                  <small>{item.meta}</small>
+                                </div>
+                                <div className={styles.deleteDataActions}>
+                                  {isConfirming && (
+                                    <button type="button" className={styles.deleteCancelButton} onClick={() => setConfirmingDeleteId(null)}>
+                                      Cancel
+                                    </button>
+                                  )}
+                                  <button
+                                    type="button"
+                                    className={isConfirming ? `${styles.deleteDataButton} ${styles.deleteDataButtonConfirm}` : styles.deleteDataButton}
+                                    onClick={() => {
+                                      if (!isConfirming) {
+                                        setConfirmingDeleteId(deleteKey);
+                                        return;
+                                      }
+                                      void item.onDelete();
+                                    }}
+                                  >
+                                    <Trash2 size={15} aria-hidden="true" />
+                                    {isConfirming ? 'Confirm delete' : 'Delete'}
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })
+                        ) : (
+                          <p className={styles.deleteDataEmpty}>Nothing saved here yet.</p>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            </section>
+          )}
+
+          {activeMenu === 'projects' && (
+            <section className={`${styles.screen} ${styles.projectsScreen}`} aria-label="Projects">
+              <div className={styles.projectMenuBar} aria-label="Project menu bar">
+                <div className={styles.projectScopeGroup} aria-label="Project locations">
+                  <button
+                    type="button"
+                    className={activeProjectFolder === 'all' ? styles.projectScopeActive : ''}
+                    onClick={() => setActiveProjectFolder('all')}
+                  >
+                    <FolderOpen size={16} aria-hidden="true" />
+                    <span>All</span>
+                    <small>{folderProjectCount('all')}</small>
+                  </button>
+                  <button
+                    type="button"
+                    className={activeProjectFolder === 'unfiled' ? styles.projectScopeActive : ''}
+                    onClick={() => setActiveProjectFolder('unfiled')}
+                  >
+                    <Folder size={16} aria-hidden="true" />
+                    <span>Unfiled</span>
+                    <small>{folderProjectCount('unfiled')}</small>
+                  </button>
+                </div>
+
+                {projectFolders.length > 0 && (
+                  <div className={styles.projectFolderChips} aria-label="Project folders">
+                    {projectFolders.map((folder) => (
+                      <button
+                        key={folder.id}
+                        type="button"
+                        className={activeProjectFolder === folder.id ? styles.projectFolderChipActive : ''}
+                        onClick={() => setActiveProjectFolder(folder.id)}
+                      >
+                        <Folder size={15} aria-hidden="true" />
+                        <span>{folder.name}</span>
+                        <small>{folderProjectCount(folder.id)}</small>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <label className={`${styles.projectSearch} ${styles.projectMenuSearch}`}>
+                  <Search size={15} aria-hidden="true" />
+                  <input
+                    value={projectSearch}
+                    onChange={(event) => setProjectSearch(event.target.value)}
+                    placeholder="Search projects"
+                  />
+                </label>
+
+                <div className={styles.projectMenuActions}>
+                  <button type="button" className={styles.projectMenuButton} onClick={() => setIsCreatingFolder(true)}>
+                    <FolderPlus size={16} aria-hidden="true" />
+                    <span>New folder</span>
+                  </button>
+                  <button type="button" className={styles.projectMenuButton} onClick={() => openNewProjectFlow()}>
+                    <Plus size={16} aria-hidden="true" />
+                    <span>New project</span>
+                  </button>
+                  <label className={styles.projectMoveMenu}>
+                    <span>Move to</span>
+                    <select
+                      value={selectedProject?.folder_id ?? 'unfiled'}
+                      disabled={!selectedProject}
+                      onChange={(event) => {
+                        if (!selectedProject) {
+                          return;
+                        }
+                        void moveProjectToFolder(
+                          selectedProject,
+                          event.target.value === 'unfiled' ? null : event.target.value,
+                        );
+                      }}
+                    >
+                      <option value="unfiled">Unfiled</option>
+                      {projectFolders.map((folder) => (
+                        <option key={folder.id} value={folder.id}>
+                          {folder.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <button
+                    type="button"
+                    className={styles.projectMenuButton}
+                    onClick={() => {
+                      if (selectedProject) {
+                        openProject(selectedProject);
+                      }
+                    }}
+                    disabled={!selectedProject}
+                  >
+                    <ArrowRight size={16} aria-hidden="true" />
+                    <span>Open</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.projectMenuPrimary}
+                    onClick={() => {
+                      if (selectedProject) {
+                        continueProjectInEngine(selectedProject);
+                      }
+                    }}
+                    disabled={!selectedProject}
+                  >
+                    <Rocket size={16} aria-hidden="true" />
+                    <span>Get Clarity</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className={styles.finderShell} aria-label="Project finder">
+                <aside className={styles.folderPane} aria-label="Project folders">
+                  <div className={styles.finderWindowDots} aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <div className={styles.folderGroup}>
+                    <span>Locations</span>
+                    <button
+                      type="button"
+                      className={activeProjectFolder === 'all' ? styles.folderActive : ''}
+                      onClick={() => setActiveProjectFolder('all')}
+                    >
+                      <FolderOpen size={16} aria-hidden="true" />
+                      <strong>All Projects</strong>
+                      <small>{folderProjectCount('all')}</small>
+                    </button>
+                    <button
+                      type="button"
+                      className={activeProjectFolder === 'unfiled' ? styles.folderActive : ''}
+                      onClick={() => setActiveProjectFolder('unfiled')}
+                    >
+                      <Folder size={16} aria-hidden="true" />
+                      <strong>Unfiled</strong>
+                      <small>{folderProjectCount('unfiled')}</small>
+                    </button>
+                  </div>
+
+                  <div className={styles.folderGroup}>
+                    <span>Folders</span>
+                    {projectFolders.map((folder) => (
+                      <button
+                        key={folder.id}
+                        type="button"
+                        className={activeProjectFolder === folder.id ? styles.folderActive : ''}
+                        onClick={() => setActiveProjectFolder(folder.id)}
+                      >
+                        <Folder size={16} aria-hidden="true" />
+                        <strong>{folder.name}</strong>
+                        <small>{folderProjectCount(folder.id)}</small>
+                      </button>
+                    ))}
+
+                    {isCreatingFolder ? (
+                      <form
+                        className={styles.newFolderForm}
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          void createProjectFolder();
+                        }}
+                      >
+                        <input
+                          value={newFolderName}
+                          onChange={(event) => setNewFolderName(event.target.value)}
+                          placeholder="Folder name"
+                          autoFocus
+                        />
+                        <button type="submit">Create</button>
+                      </form>
+                    ) : (
+                      <button type="button" className={styles.folderGhostButton} onClick={() => setIsCreatingFolder(true)}>
+                        <FolderPlus size={16} aria-hidden="true" />
+                        <strong>Add folder</strong>
+                      </button>
+                    )}
+                  </div>
+                </aside>
+
+                <section className={styles.filePane} aria-label="Projects in selected folder">
+                  <div className={styles.fileToolbar}>
+                    <div className={styles.fileToolbarSummary}>
+                      <span>{activeProjectFolder === 'all' ? 'All Projects' : activeProjectFolder === 'unfiled' ? 'Unfiled' : getFolderName(activeProjectFolder)}</span>
+                      <strong>{filteredProjects.length} item{filteredProjects.length === 1 ? '' : 's'}</strong>
+                    </div>
+                  </div>
+
+                  {isCreatingProject && (
+                    <form
+                      className={styles.projectCreatePanel}
+                      onSubmit={(event) => {
+                        event.preventDefault();
+                        void createProjectFromBrief();
+                      }}
+                    >
+                      <label>
+                        <span>What is this project about?</span>
+                        <textarea
+                          value={projectBrief}
+                          onChange={(event) => setProjectBrief(event.target.value)}
+                          placeholder="Describe the project, idea, workflow, or outcome. This becomes the project instruction for future outputs."
+                          autoFocus
+                        />
+                      </label>
+                      <div className={styles.projectCreateActions}>
+                        <button type="submit" className={styles.primaryButton} disabled={isSavingProject}>
+                          {isSavingProject ? 'Creating...' : 'Create project'}
+                          <ArrowRight size={16} aria-hidden="true" />
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.textButton}
+                          onClick={() => {
+                            setIsCreatingProject(false);
+                            setProjectBrief(selectedProjectInstruction);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  )}
+
+                  <div className={styles.projectRows} role="list" aria-label="Project list">
+                    {filteredProjects.length > 0 ? (
+                      filteredProjects.map((project) => (
+                        <button
+                          key={project.id}
+                          type="button"
+                          className={selectedProject?.id === project.id ? styles.projectRowActive : ''}
+                          onClick={() => {
+                            setSelectedProjectId(project.id);
+                            setProjectInstructionDraft(project.project_instruction || project.context);
+                            setIsCreatingProject(false);
+                          }}
+                        >
+                          <span className={styles.projectFileIcon}>
+                            <FileText size={16} aria-hidden="true" />
+                          </span>
+                          <span className={styles.projectRowMain}>
+                            <strong>{project.title}</strong>
+                            <small>{project.context}</small>
+                          </span>
+                          <span className={styles.projectRowMeta}>
+                            <span>{project.track === 'founder' ? 'Founder' : 'Solopreneur'}</span>
+                            <span>{getFolderName(project.folder_id)}</span>
+                            <span>{formatProjectDate(project.updated_at)}</span>
+                          </span>
+                          <ChevronRight className={styles.projectRowChevron} size={15} aria-hidden="true" />
+                        </button>
+                      ))
+                    ) : (
+                      <div className={styles.finderEmpty}>
+                        <FolderOpen size={20} aria-hidden="true" />
+                        <strong>No projects here.</strong>
+                        <p>Create a project or move an existing one into this folder.</p>
+                      </div>
+                    )}
+                  </div>
+                </section>
+
+                <aside className={styles.previewPane} aria-label="Project preview">
+                  {selectedProject ? (
+                    <>
+                      <div className={styles.previewHeader}>
+                        <span className={styles.previewIcon}>
+                          <FileText size={22} aria-hidden="true" />
+                        </span>
+                        <div>
+                          <h2>{selectedProject.title}</h2>
+                          <p>{selectedProject.track === 'founder' ? 'Founder Track' : 'Solopreneur Track'}</p>
+                        </div>
+                      </div>
+
+                      <dl className={styles.previewMeta}>
+                        <div>
+                          <dt>Folder</dt>
+                          <dd>{getFolderName(selectedProject.folder_id)}</dd>
+                        </div>
+                        <div>
+                          <dt>Updated</dt>
+                          <dd>{formatProjectDate(selectedProject.updated_at)}</dd>
+                        </div>
+                      </dl>
+
+                      <div className={styles.previewBody}>
+                        <span>Context</span>
+                        <p>{selectedProject.summary || selectedProject.context}</p>
+                      </div>
+
+                      <div className={styles.projectInstructionPanel}>
+                        <label>
+                          <span>Project instruction</span>
+                          <textarea
+                            value={projectInstructionDraft ?? selectedProjectInstruction}
+                            onChange={(event) => setProjectInstructionDraft(event.target.value)}
+                            placeholder="Set how this project should behave and what future outputs should stay anchored to."
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          className={styles.secondaryButton}
+                          onClick={() => void saveProjectInstruction(selectedProject)}
+                          disabled={isSavingProjectInstruction}
+                        >
+                          {isSavingProjectInstruction ? 'Saving...' : 'Save instruction'}
+                        </button>
+                      </div>
+
+                      <section className={styles.projectTaskPanel} aria-label="Project reports">
+                        <div className={styles.projectSubheader}>
+                          <span>Reports</span>
+                          <small>{selectedProjectReports.length} saved</small>
+                        </div>
+                        <div className={styles.projectTaskList}>
+                          {selectedProjectReports.length > 0 ? (
+                            selectedProjectReports.map((report) => (
+                              <article key={report.id} className={styles.projectReportRow}>
+                                <FileText size={16} aria-hidden="true" />
+                                <span>
+                                  <strong>{report.title}</strong>
+                                  <small>{report.report_type.replace('_', ' ')} - {formatProjectDate(report.updated_at)}</small>
+                                </span>
+                              </article>
+                            ))
+                          ) : (
+                            <p>No reports saved yet. Run Get Clarity, then save the completed reports back to this project.</p>
+                          )}
+                        </div>
+                      </section>
+
+                      <section className={styles.projectTaskPanel} aria-label="Project tasks">
+                        <div className={styles.projectSubheader}>
+                          <span>Tasks</span>
+                          <small>{selectedProjectTasks.filter((task) => task.status !== 'done').length} open</small>
+                        </div>
+                        <div className={styles.projectTaskList}>
+                          {selectedProjectTasks.length > 0 ? (
+                            selectedProjectTasks.map((task) => (
+                              <button
+                                key={task.id}
+                                type="button"
+                                className={task.status === 'done' ? styles.projectTaskDone : ''}
+                                onClick={() => void toggleProjectTask(task)}
+                              >
+                                <CheckCircle2 size={16} aria-hidden="true" />
+                                <span>
+                                  <strong>{task.title}</strong>
+                                  {task.detail && <small>{task.detail}</small>}
+                                </span>
+                              </button>
+                            ))
+                          ) : (
+                            <p>No tasks yet. Add one manually or ask the project assistant.</p>
+                          )}
+                        </div>
+                        <form
+                          className={styles.manualTaskForm}
+                          onSubmit={(event) => {
+                            event.preventDefault();
+                            void createManualTask();
+                          }}
+                        >
+                          <input
+                            value={manualTaskTitle}
+                            onChange={(event) => setManualTaskTitle(event.target.value)}
+                            placeholder="Add a manual task"
+                          />
+                          <button type="submit">Add</button>
+                        </form>
+                      </section>
+
+                      <section className={styles.projectAssistantPanel} aria-label="Project assistant">
+                        <div className={styles.projectSubheader}>
+                          <span>Project assistant</span>
+                          <small>Uses this instruction</small>
+                        </div>
+                        <div className={styles.projectAssistantMessages}>
+                          {selectedProjectMessages.length > 0 ? (
+                            selectedProjectMessages.map((message) => (
+                              <article
+                                key={message.id}
+                                className={message.role === 'assistant' ? styles.assistantBubble : styles.userBubble}
+                              >
+                                <span className={styles.chatAvatar} aria-label={message.role === 'assistant' ? 'Project assistant' : 'You'}>
+                                  {message.role === 'assistant' ? (
+                                    <Image
+                                      src="/assets/brand/clarity-square-mark-gold.png"
+                                      alt=""
+                                      width={24}
+                                      height={24}
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    (displayUsername || displayEmail || 'U').slice(0, 1).toUpperCase()
+                                  )}
+                                </span>
+                                <span className={styles.chatDivider} aria-hidden="true" />
+                                <div className={styles.chatContent}>
+                                  <p>{message.content}</p>
+                                  {message.role === 'assistant' && message.pendingAction && (
+                                    <div className={styles.assistantApprovalPanel}>
+                                      <div>
+                                        <strong>{getPendingActionTitle(message.pendingAction)}</strong>
+                                        <span>{getPendingActionText(message.pendingAction)}</span>
+                                      </div>
+                                      {message.pendingAction.status === 'pending' && (
+                                        <div className={styles.assistantApprovalActions}>
+                                          <button type="button" onClick={() => void approveAssistantAction(message)}>
+                                            Yes
+                                          </button>
+                                          <button type="button" onClick={() => declineAssistantAction(message)}>
+                                            No
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              </article>
+                            ))
+                          ) : (
+                            <p>Ask from this project&apos;s context. Replies, tasks, and memories stay scoped to this project.</p>
+                          )}
+                          {isProjectAssistantBusy && (
+                            <article className={styles.assistantBubble}>
+                              <span className={styles.chatAvatar} aria-label="Project assistant">
+                                <Image
+                                  src="/assets/brand/clarity-square-mark-gold.png"
+                                  alt=""
+                                  width={24}
+                                  height={24}
+                                  aria-hidden="true"
+                                />
+                              </span>
+                              <span className={styles.chatDivider} aria-hidden="true" />
+                              <p>Thinking from this project instruction...</p>
+                            </article>
+                          )}
+                        </div>
+                        <form
+                          className={styles.assistantComposer}
+                          onSubmit={(event) => {
+                            event.preventDefault();
+                            void sendProjectAssistantMessage();
+                          }}
+                        >
+                          <textarea
+                            ref={projectAssistantInputRef}
+                            value={projectAssistantInput}
+                            onChange={(event) => {
+                              setProjectAssistantInput(event.target.value);
+                              resizeAssistantInput(event.currentTarget);
+                            }}
+                            onInput={(event) => resizeAssistantInput(event.currentTarget)}
+                            placeholder="Ask this project assistant..."
+                            rows={1}
+                            disabled={isProjectAssistantBusy}
+                          />
+                          <button
+                            type="submit"
+                            className={styles.iconPrimaryButton}
+                            disabled={isProjectAssistantBusy || !projectAssistantInput.trim()}
+                            aria-label="Send project message"
+                          >
+                            <Send size={17} aria-hidden="true" />
+                            <span>Send</span>
+                          </button>
+                        </form>
+                      </section>
+
+                    </>
+                  ) : (
+                    <div className={styles.finderEmpty}>
+                      <FileText size={20} aria-hidden="true" />
+                      <strong>Select a project.</strong>
+                      <p>Your project details will appear here.</p>
+                    </div>
+                  )}
+                </aside>
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'profile' && (
+            <section className={styles.screen} aria-label="Profile">
+              <div className={styles.profileDetail}>
+                <div className={styles.profileAvatarLarge}>
+                  {(displayUsername || displayEmail || 'U').slice(0, 1).toUpperCase()}
+                </div>
+                <div>
+                  <span>Username</span>
+                  <strong>{displayUsername || 'Username syncing'}</strong>
+                </div>
+                <div>
+                  <span>Email</span>
+                  <strong>{displayEmail || 'Not signed in'}</strong>
+                </div>
+                <div>
+                  <span>Path</span>
+                  <strong>{accountTrackCopy.shortLabel}</strong>
+                </div>
+              </div>
+
+              <div className={styles.screenActions}>
+                <button type="button" className={styles.secondaryButton} onClick={() => openMenu('settings')}>
+                  Settings
+                </button>
+                {authUser ? (
+                  <button type="button" className={styles.textButton} onClick={() => void signOut()}>
+                    <LogOut size={16} aria-hidden="true" />
+                    Sign out
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className={styles.primaryButton}
+                      onClick={() => {
+                        setSessionMode('signup');
+                        setAuthView('signup-email');
+                        openMenu('start');
+                      }}
+                    >
+                      Create account
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.secondaryButton}
+                      onClick={() => {
+                        setSessionMode('signin');
+                        setAuthView('signin');
+                        openMenu('start');
+                      }}
+                    >
+                      Sign in
+                    </button>
+                  </>
+                )}
+              </div>
+            </section>
+          )}
+
+          {activeMenu === 'settings' && (
+            <section className={styles.screen} aria-label="Settings">
+              {!authUser && (
+                <div className={styles.accountAccessPanel}>
+                  <div>
+                    <span>Account access</span>
+                    <h2>Sign in or create an account</h2>
+                    <p>Use an account to keep projects, tasks, memories, and loop context saved across sessions.</p>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      className={styles.primaryButton}
+                      onClick={() => {
+                        setSessionMode('signup');
+                        setAuthView('signup-email');
+                        openMenu('start');
+                      }}
+                    >
+                      Create account
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.secondaryButton}
+                      onClick={() => {
+                        setSessionMode('signin');
+                        setAuthView('signin');
+                        openMenu('start');
+                      }}
+                    >
+                      Sign in
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className={styles.settingsList}>
+                <label>
+                  <span>Preferred path</span>
+                  <select
+                    value={accountTrack}
+                    onChange={(event) => {
+                      const nextTrack = event.target.value as Track;
+                      void applyTrackChoice(nextTrack, {
+                        persist: Boolean(authUser),
+                        statusPrefix: `${TRACKS[nextTrack].shortLabel} saved for this account.`,
+                      });
+                    }}
+                  >
+                    <option value="founder">Founder Track</option>
+                    <option value="builder">Solopreneur Track</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Digest rhythm</span>
+                  <select defaultValue="weekly">
+                    <option value="weekly">Weekly</option>
+                    <option value="paused">Paused</option>
+                  </select>
+                </label>
+                <label className={styles.toggleRow}>
+                  <input type="checkbox" defaultChecked />
+                  <span>Keep vault entries private by default</span>
+                </label>
+              </div>
+
+            </section>
+          )}
+        </section>
+
+        <nav className={styles.mobileTabBar} aria-label="Primary Clarity Square navigation">
+          {MOBILE_PRIMARY_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isCurrent = item.id === 'more' ? mobileMoreIsActive : activeMenu === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={isCurrent ? styles.mobileTabActive : ''}
+                onClick={() => openMenu(item.id)}
+                aria-label={item.label}
+                aria-pressed={isCurrent}
+              >
+                <Icon size={18} aria-hidden="true" />
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+      </section>
+    </main>
+  );
+}

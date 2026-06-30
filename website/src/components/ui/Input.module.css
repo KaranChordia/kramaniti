@@ -35,6 +35,11 @@
   box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.2);
 }
 
+:global(.brand-blue-preview) .input:focus {
+  border-color: var(--action-accent-light);
+  box-shadow: 0 0 0 2px rgba(var(--action-accent-light-rgb), 0.2);
+}
+
 :global(html[data-theme='light']) .input {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 247, 249, 0.92)),

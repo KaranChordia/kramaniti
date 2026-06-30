@@ -29,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
-      url: absoluteUrl('/clarity-circle/'),
+      url: absoluteUrl('/clarity-square/'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.75,

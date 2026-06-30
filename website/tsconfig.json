@@ -39,6 +39,6 @@
   "exclude": [
     "node_modules",
     "chatgpt-app",
-    "clarity-circle-chatgpt-app"
+    "clarity-square-chatgpt-app"
   ]
 }

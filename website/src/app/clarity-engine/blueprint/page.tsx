@@ -10,7 +10,7 @@ import { type BlueprintRequestBody } from '@/lib/clarity-engine/blueprintStreame
 import { useAudioEngine } from '@/hooks/useAudioEngine';
 import ReportReader from './ReportReader';
 import { useKramanitiTheme } from '@/hooks/useKramanitiTheme';
-import { getClarityCircleSupabase, type ClarityCircleProjectReport } from '@/lib/clarity-circle/supabase';
+import { getClaritySquareSupabase, type ClaritySquareProjectReport } from '@/lib/clarity-square/supabase';
 
 interface ActiveReport {
   agentId: string;
@@ -19,7 +19,7 @@ interface ActiveReport {
   icon: React.ReactNode;
 }
 
-type ReportType = ClarityCircleProjectReport['report_type'];
+type ReportType = ClaritySquareProjectReport['report_type'];
 
 const REPORT_TITLES: Record<ReportType, string> = {
   strategy: 'Strategy & Clarity Blueprint',
@@ -78,10 +78,10 @@ export default function BlueprintPage() {
   }, [hasLoadedPayload, payload, router]);
 
   useEffect(() => {
-    if (!hasLoadedPayload || !payload || payload.circleProject?.projectId) return;
+    if (!hasLoadedPayload || !payload || payload.squareProject?.projectId) return;
 
     const loadSaveProjects = async () => {
-      const supabase = getClarityCircleSupabase();
+      const supabase = getClaritySquareSupabase();
 
       if (!supabase) {
         setHasLoadedSaveProjects(true);
@@ -97,7 +97,7 @@ export default function BlueprintPage() {
 
       const [projectResult, folderResult] = await Promise.all([
         supabase
-          .schema('clarity_circle')
+          .schema('clarity_square')
           .from('projects')
           .select('id,title,folder_id')
           .eq('user_id', userData.user.id)
@@ -105,7 +105,7 @@ export default function BlueprintPage() {
           .order('updated_at', { ascending: false })
           .limit(40),
         supabase
-          .schema('clarity_circle')
+          .schema('clarity_square')
           .from('project_folders')
           .select('id,name')
           .eq('user_id', userData.user.id)
@@ -113,7 +113,7 @@ export default function BlueprintPage() {
       ]);
 
       if (projectResult.error) {
-        setSaveStatus('Saved projects could not be loaded. Return to Clarity Circle and try again.');
+        setSaveStatus('Saved projects could not be loaded. Return to Clarity Square and try again.');
         setHasLoadedSaveProjects(true);
         return;
       }
@@ -151,12 +151,12 @@ export default function BlueprintPage() {
     }));
   }, []);
 
-  const attachedSaveTarget = payload?.circleProject?.projectId
+  const attachedSaveTarget = payload?.squareProject?.projectId
     ? {
-        projectId: payload.circleProject.projectId,
-        folderId: payload.circleProject.folderId ?? null,
-        projectTitle: payload.circleProject.projectTitle,
-        folderName: payload.circleProject.folderName || 'Project save',
+        projectId: payload.squareProject.projectId,
+        folderId: payload.squareProject.folderId ?? null,
+        projectTitle: payload.squareProject.projectTitle,
+        folderName: payload.squareProject.folderName || 'Project save',
       }
     : null;
   const selectedSaveProject = saveProjectOptions.find((project) => project.projectId === selectedSaveProjectId) ?? null;
@@ -177,7 +177,7 @@ export default function BlueprintPage() {
       return;
     }
 
-    const supabase = getClarityCircleSupabase();
+    const supabase = getClaritySquareSupabase();
     if (!supabase) {
       setSaveStatus('Project report storage is not available.');
       return;
@@ -211,7 +211,7 @@ export default function BlueprintPage() {
       },
     }));
 
-    const { error: reportError } = await supabase.schema('clarity_circle').from('project_reports').insert(rows);
+    const { error: reportError } = await supabase.schema('clarity_square').from('project_reports').insert(rows);
 
     if (reportError) {
       setIsSavingReports(false);
@@ -219,7 +219,7 @@ export default function BlueprintPage() {
       return;
     }
 
-    await supabase.schema('clarity_circle').from('context_entries').insert({
+    await supabase.schema('clarity_square').from('context_entries').insert({
       project_id: saveTarget.projectId,
       user_id: user.id,
       entry_type: 'brief',

@@ -193,6 +193,11 @@
   box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.15) !important;
 }
 
+:global(.brand-blue-preview) .contactInput:focus {
+  border-color: var(--action-accent-light) !important;
+  box-shadow: 0 0 0 2px rgba(var(--action-accent-light-rgb), 0.18) !important;
+}
+
 .submitBtn {
   margin-top: 8px;
   border-radius: 8px;
@@ -237,6 +242,24 @@
     linear-gradient(135deg, rgba(201, 168, 76, 0.78), rgba(244, 218, 135, 0.68)),
     rgba(20, 20, 24, 0.28) !important;
   color: #0a0a0f !important;
+}
+
+:global(.brand-blue-preview) .submitProgress {
+  background:
+    linear-gradient(90deg, rgba(var(--action-accent-rgb), 0.28), rgba(var(--action-accent-light-rgb), 0.72)),
+    rgba(255, 255, 255, 0.06);
+}
+
+:global(.brand-blue-preview) .submitBtnSuccess {
+  border-color: rgba(var(--action-accent-light-rgb), 0.72) !important;
+  background:
+    linear-gradient(135deg, rgba(var(--action-accent-light-rgb), 0.9), rgba(var(--action-accent-rgb), 0.82)),
+    rgba(20, 20, 24, 0.28) !important;
+  color: var(--action-accent-foreground) !important;
+}
+
+:global(.brand-blue-preview) .submitBtnSuccess .submitProgress {
+  background: linear-gradient(135deg, rgba(var(--action-accent-light-rgb), 0.86), rgba(var(--action-accent-rgb), 0.72));
 }
 
 .submitBtnSuccess .submitProgress {

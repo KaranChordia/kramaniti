@@ -1,0 +1,11 @@
+.previewTheme {
+  --action-accent: #08242c;
+  --action-accent-rgb: 8, 36, 44;
+  --action-accent-light: #1c5a66;
+  --action-accent-light-rgb: 28, 90, 102;
+  --action-accent-foreground: #f2fbf9;
+  --action-accent-shadow: rgba(28, 90, 102, 0.24);
+  --primary: var(--action-accent);
+  --primary-foreground: var(--action-accent-foreground);
+  --ring: var(--action-accent-light);
+}

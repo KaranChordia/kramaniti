@@ -94,7 +94,7 @@ https://chatgpt-app-six-silk.vercel.app/mcp
 - Preview deployments for testing before production.
 - Observability through function logs and deployment logs.
 - Blob/object storage through Vercel Blob if the app needs files or generated exports later.
-- Postgres-style storage through Vercel Marketplace integrations, or Supabase if Clarity Circle's existing database path should stay consistent.
+- Postgres-style storage through Vercel Marketplace integrations, or Supabase if Clarity Square's existing database path should stay consistent.
 - AI/model calls through Vercel AI Gateway or direct provider SDKs if a later version adds model-backed synthesis.
 
 [Constraint] The current app is deployed for testing, but it should not be treated as a finished public submission yet. It still needs ChatGPT Developer Mode testing, privacy/support metadata, final branding assets, and a decision on whether state should live in Vercel storage, Supabase, or remain session-only.

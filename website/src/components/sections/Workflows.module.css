@@ -398,6 +398,18 @@
   transform: translateY(-1px);
 }
 
+:global(.brand-blue-preview) .revealButton {
+  background: rgba(var(--action-accent-rgb), 0.12);
+  border-color: rgba(var(--action-accent-light-rgb), 0.36);
+  box-shadow: 0 0 18px rgba(var(--action-accent-rgb), 0.08);
+}
+
+:global(.brand-blue-preview) .revealButton:hover {
+  background: rgba(var(--action-accent-rgb), 0.2);
+  border-color: rgba(var(--action-accent-light-rgb), 0.68);
+  box-shadow: 0 0 18px rgba(var(--action-accent-light-rgb), 0.22);
+}
+
 .chevronIcon {
   transition: transform 300ms ease;
 }

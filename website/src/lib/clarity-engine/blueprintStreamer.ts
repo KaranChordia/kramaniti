@@ -12,7 +12,7 @@ export type BlueprintRequestBody = {
   aiTasks: Array<{ label: string; question: string }>;
   contextLog: string[];
   mockScenarioId?: string;
-  circleProject?: {
+  squareProject?: {
     projectId: string;
     folderId?: string | null;
     projectTitle: string;

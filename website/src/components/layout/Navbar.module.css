@@ -221,6 +221,14 @@
   filter: none !important;
 }
 
+:global(.brand-blue-preview) .ctaButton:hover,
+:global(.brand-blue-preview) .ctaButton:focus-visible {
+  background: linear-gradient(92deg, var(--action-accent-light) 0%, var(--action-accent) 54%, var(--action-accent-light) 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  text-shadow: 0 0 18px var(--action-accent-shadow);
+}
+
 @media (min-width: 768px) {
   .desktopNav {
     display: flex;
@@ -240,6 +248,10 @@
   color: var(--color-burnished-gold);
   cursor: pointer;
   padding: 4px;
+}
+
+:global(.brand-blue-preview) .mobileMenuBtn {
+  color: var(--action-accent-light);
 }
 
 @media (min-width: 768px) {

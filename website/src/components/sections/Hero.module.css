@@ -328,6 +328,42 @@
     0 0 0 6px rgba(201, 168, 76, 0.16);
 }
 
+:global(.brand-blue-preview) .heroCta {
+  border-color: rgba(var(--action-accent-light-rgb), 0.58);
+  color: var(--action-accent-foreground);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04)),
+    linear-gradient(135deg, rgba(var(--action-accent-light-rgb), 0.72), rgba(var(--action-accent-rgb), 0.94));
+  box-shadow:
+    0 0 0 1px rgba(var(--action-accent-light-rgb), 0.16),
+    0 18px 42px rgba(var(--action-accent-rgb), 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+:global(.brand-blue-preview) .heroCta::after {
+  background: radial-gradient(circle at 50% 0%, rgba(var(--action-accent-light-rgb), 0.42), transparent 70%);
+  opacity: 0.38;
+}
+
+:global(.brand-blue-preview) .heroCta:hover {
+  border-color: rgba(var(--action-accent-light-rgb), 0.78);
+  color: var(--action-accent-foreground);
+  background:
+    linear-gradient(135deg, rgba(var(--action-accent-light-rgb), 0.92), rgba(var(--action-accent-rgb), 0.98)),
+    rgba(var(--action-accent-rgb), 0.84);
+  box-shadow:
+    0 0 0 1px rgba(var(--action-accent-light-rgb), 0.2),
+    0 18px 44px rgba(var(--action-accent-rgb), 0.28),
+    0 0 26px rgba(var(--action-accent-light-rgb), 0.16);
+}
+
+:global(.brand-blue-preview) .heroCta:focus-visible {
+  box-shadow:
+    0 0 0 2px rgba(var(--action-accent-light-rgb), 0.66),
+    0 0 0 6px rgba(var(--action-accent-light-rgb), 0.18),
+    0 18px 44px rgba(var(--action-accent-rgb), 0.24);
+}
+
 @keyframes textEnter {
   to {
     opacity: 1;

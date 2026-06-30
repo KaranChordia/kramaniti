@@ -515,17 +515,17 @@ This log registers the major strategic and structural decisions made during the 
     *   It should answer employee/operator workflow questions by explaining Kramaniti's service approach: understand the role, map recurring tasks and handoffs, separate human-led, AI-assisted, and automated steps, define review and override rules, and guide serious prospects toward an AI Workflow Audit.
     *   Local fallback behavior now includes founder and workflow-service answers so the widget remains coherent when Groq is not configured.
 
-### Decision 20: Add Kramaniti Clarity Circle as an Ongoing Public Clarity Ecosystem
+### Decision 20: Add Kramaniti Clarity Square as an Ongoing Public Clarity Ecosystem
 *   **Date:** 2026-06-22
 *   **Area:** Website, public platform, community strategy, offer entry point
 *   **Status:** Implemented (`[Recommendation]`)
-*   **Decision:** Add a standalone `/clarity-circle` route for Kramaniti Clarity Circle, a free AI-assisted clarity network for founders and early builders that combines a curated forum, private idea vault, weekly digest, and clarity brief generator.
+*   **Decision:** Add a standalone `/clarity-square` route for Kramaniti Clarity Square, a free AI-assisted clarity network for founders and early builders that combines a curated forum, private idea vault, weekly digest, and clarity brief generator.
 *   **Rationale:** The founder described a possible company platform for founders who want clarity on harnessing AI and individuals who want to start an idea but lack a clear path. The accepted foundation positions the product as an AI-assisted clarity ecosystem, not a generic AI social network. This route gives the concept a usable v1 while keeping it distinct from Clarity Engine and avoiding premature backend complexity.
-*   **Source or Evidence:** Founder request on 2026-06-22 to implement the Clarity Circle foundation plan with two separated tracks, private memory, public learning, weekly AI digest, and clarity brief output.
+*   **Source or Evidence:** Founder request on 2026-06-22 to implement the Clarity Square foundation plan with two separated tracks, private memory, public learning, weekly AI digest, and clarity brief output.
 *   **Affected Files:**
-    *   `website/src/app/clarity-circle/page.tsx`
-    *   `website/src/app/clarity-circle/ClarityCircle.tsx`
-    *   `website/src/app/clarity-circle/ClarityCircle.module.css`
+    *   `website/src/app/clarity-square/page.tsx`
+    *   `website/src/app/clarity-square/ClaritySquare.tsx`
+    *   `website/src/app/clarity-square/ClaritySquare.module.css`
     *   `website/src/components/layout/Navbar.tsx`
     *   `website/src/components/layout/Navbar.module.css`
     *   `website/src/app/sitemap.ts`
@@ -534,10 +534,10 @@ This log registers the major strategic and structural decisions made during the 
 *   **Alternatives Rejected:**
     1.  *Building a generic community feed:* Rejected because Kramaniti's value is clarity, workflow thinking, and proof-safe operating direction, not engagement volume.
     2.  *Making v1 a paid membership product:* Rejected because the current role is a free ecosystem and lead path toward AI Workflow Audit and deeper services.
-    3.  *Merging the product into Clarity Engine:* Rejected because Clarity Engine is a single diagnostic session, while Clarity Circle is ongoing memory, community engagement, and weekly progress.
+    3.  *Merging the product into Clarity Engine:* Rejected because Clarity Engine is a single diagnostic session, while Clarity Square is ongoing memory, community engagement, and weekly progress.
     4.  *Adding accounts, emails, or backend persistence immediately:* Rejected because browser-local state is enough to validate the interaction model without handling private user data in production infrastructure.
 *   **Guardrails:**
-    *   Do not call Clarity Circle an AI social network.
+    *   Do not call Clarity Square an AI social network.
     *   Keep private idea vault entries private by default.
     *   Keep AI as an assistive layer for summaries, sharper questions, digest memos, and briefs; humans own strategy, claims, pricing, and decisions.
     *   Any future external market or tool updates must be source-linked and date-stamped.
@@ -548,80 +548,80 @@ This log registers the major strategic and structural decisions made during the 
     *   Should public forum posts be moderated by Kramaniti agents before publishing?
 
 *   **2026-06-22 UX Update:**
-    *   The Clarity Circle route was redesigned from a traditional webpage-like surface into a premium dashboard experience.
+    *   The Clarity Square route was redesigned from a traditional webpage-like surface into a premium dashboard experience.
     *   The canonical UX direction is now an app shell with left navigation, a compact top command bar, track switcher, privacy status, command intake, private vault, public learning, weekly digest, clarity brief, and workflow route panels.
-    *   Future Clarity Circle UI work should preserve the dashboard/operating-console model unless the founder explicitly asks to return to a landing-page style.
+    *   Future Clarity Square UI work should preserve the dashboard/operating-console model unless the founder explicitly asks to return to a landing-page style.
 
 *   **2026-06-23 Sketch Alignment Update:**
-    *   The founder supplied a rough Clarity Circle sketch that clarified the platform model: target audience and problem first, then community/platform, AI-enabled assistance, and founder/individual circle.
+    *   The founder supplied a rough Clarity Square sketch that clarified the platform model: target audience and problem first, then community/platform, AI-enabled assistance, and founder/individual square.
     *   The dashboard was updated to show Who/Why, founders harnessing AI, individuals starting out, storage for ideas/projects, intelligent engagement, journey tracking, personalised insights, contribution connection, and engagement/validation loops.
-    *   Future Clarity Circle work should treat this sketch model as product structure, not as a literal visual wireframe.
+    *   Future Clarity Square work should treat this sketch model as product structure, not as a literal visual wireframe.
 
 *   **2026-06-23 Sequential UX Update:**
-    *   The founder asked for the Clarity Circle experience to stay very simple and unfold sequentially rather than showing every product block on one dashboard screen.
+    *   The founder asked for the Clarity Square experience to stay very simple and unfold sequentially rather than showing every product block on one dashboard screen.
     *   The canonical UX is now: modern entry/sign-in screen, founder vs individual path selection, focused private intent capture, then a saved-context workspace that can progressively introduce digest, public-learning, and Clarity Brief actions.
-    *   Future Clarity Circle UI work should preserve this staged flow unless the founder explicitly asks for a dashboard mode again.
+    *   Future Clarity Square UI work should preserve this staged flow unless the founder explicitly asks for a dashboard mode again.
 
 *   **2026-06-23 Clarity Engine Handoff Update:**
-    *   The Clarity Circle context workspace now prepares a browser-local handoff when the user chooses to continue into Clarity Engine.
-    *   Clarity Engine consumes the handoff once, seeds its diagnostic session with the Circle's intent, context, audience, blocker, and desired outcome, then continues from the current workflow question.
+    *   The Clarity Square context workspace now prepares a browser-local handoff when the user chooses to continue into Clarity Engine.
+    *   Clarity Engine consumes the handoff once, seeds its diagnostic session with the Square's intent, context, audience, blocker, and desired outcome, then continues from the current workflow question.
     *   This is not authenticated account memory or backend persistence; it is a v1 local bridge between two public diagnostic surfaces.
 
 *   **2026-06-23 Supabase Storage Update:**
-    *   The founder asked to connect Clarity Circle to the existing Supabase project without creating a new project and without overlapping with recruiting-company database structures.
-    *   Clarity Circle now uses Supabase auth when env vars are configured, with email-first signup followed by username/password creation. Sign-in uses username/password through a schema-local username lookup function.
-    *   The database design uses a dedicated `clarity_circle` schema with `profiles`, `projects`, and `context_entries` tables, RLS policies scoped to `auth.uid()`, and explicit grants only for authenticated users.
+    *   The founder asked to connect Clarity Square to the existing Supabase project without creating a new project and without overlapping with recruiting-company database structures.
+    *   Clarity Square now uses Supabase auth when env vars are configured, with email-first signup followed by username/password creation. Sign-in uses username/password through a schema-local username lookup function.
+    *   The database design uses a dedicated `clarity_square` schema with `profiles`, `projects`, and `context_entries` tables, RLS policies scoped to `auth.uid()`, and explicit grants only for authenticated users.
     *   The signed-in UI now includes a profile/settings panel placeholder for future account, settings, and project-management surfaces.
-    *   Future Clarity Circle storage work must remain inside the `clarity_circle` schema unless a newer database decision explicitly changes that boundary.
+    *   Future Clarity Square storage work must remain inside the `clarity_square` schema unless a newer database decision explicitly changes that boundary.
 
-*   **2026-06-23 Dedicated Circle Assistant Update:**
-    *   The founder asked to disable the current global Kramaniti assistant on Clarity Circle and replace it with a dedicated Clarity Circle assistant.
-    *   The global public assistant remains available on the rest of the website, but is route-hidden on `/clarity-circle`.
-    *   Clarity Circle now has its own assistant menu surface, conversation UI, and user-visible Memory panel.
-    *   The Circle Assistant uses the member's saved context, project list, memory notes, and Kramaniti's curated repository context.
-    *   Signed-in assistant conversations are stored in `clarity_circle.assistant_messages`; assistant memory notes are stored in `clarity_circle.assistant_memories`; both are RLS-protected and user-owned.
-    *   The Circle Assistant can create new private projects from a user query, while keeping all project rows under `clarity_circle.projects`.
+*   **2026-06-23 Dedicated Square Assistant Update:**
+    *   The founder asked to disable the current global Kramaniti assistant on Clarity Square and replace it with a dedicated Clarity Square assistant.
+    *   The global public assistant remains available on the rest of the website, but is route-hidden on `/clarity-square`.
+    *   Clarity Square now has its own assistant menu surface, conversation UI, and user-visible Memory panel.
+    *   The Square Assistant uses the member's saved context, project list, memory notes, and Kramaniti's curated repository context.
+    *   Signed-in assistant conversations are stored in `clarity_square.assistant_messages`; assistant memory notes are stored in `clarity_square.assistant_memories`; both are RLS-protected and user-owned.
+    *   The Square Assistant can create new private projects from a user query, while keeping all project rows under `clarity_square.projects`.
     *   Guardrail: this assistant may summarize, challenge, remember, and draft projects, but it must not make founder decisions, invent proof, promise outcomes, or present unsupported current-market/tool claims without dated sources.
 
 *   **2026-06-23 Projects Finder Update:**
     *   The founder asked to polish the Projects section first and make it behave like a folder-based workspace inspired by Mac Finder navigation.
     *   Projects now use a three-pane workspace: folder rail, project rows, and preview/action pane.
     *   Users can create folders, browse All Projects or Unfiled, search project rows, select a project, preview its context, open it, and move it into a folder.
-    *   Signed-in folders are stored in `clarity_circle.project_folders`; projects reference them through `clarity_circle.projects.folder_id`.
-    *   Guardrail: folder storage and project moves must remain inside the isolated `clarity_circle` schema with RLS ownership checks. Do not reuse recruiting-company tables.
+    *   Signed-in folders are stored in `clarity_square.project_folders`; projects reference them through `clarity_square.projects.folder_id`.
+    *   Guardrail: folder storage and project moves must remain inside the isolated `clarity_square` schema with RLS ownership checks. Do not reuse recruiting-company tables.
 
 *   **2026-06-23 Realtime Workspace Context Update:**
-    *   The founder clarified that the Circle Assistant must know manually created and assistant-created project context, and that counts/state should update across the platform in realtime.
-    *   Clarity Circle now refreshes the signed-in workspace before assistant requests and sends folder names, project data, project questions/actions, selected project, context entries, and memory notes to the Circle Assistant.
-    *   The frontend subscribes to realtime changes for `clarity_circle.projects`, `project_folders`, `context_entries`, `assistant_messages`, and `assistant_memories`.
-    *   The Supabase realtime publication now includes those Clarity Circle workspace tables.
+    *   The founder clarified that the Square Assistant must know manually created and assistant-created project context, and that counts/state should update across the platform in realtime.
+    *   Clarity Square now refreshes the signed-in workspace before assistant requests and sends folder names, project data, project questions/actions, selected project, context entries, and memory notes to the Square Assistant.
+    *   The frontend subscribes to realtime changes for `clarity_square.projects`, `project_folders`, `context_entries`, `assistant_messages`, and `assistant_memories`.
+    *   The Supabase realtime publication now includes those Clarity Square workspace tables.
     *   Guardrail: realtime must remain scoped to user-owned rows through existing RLS policies and must not expose recruiting-company tables or unrelated schemas.
 
 *   **2026-06-24 Project Workspace Update:**
     *   The founder asked for project creation to begin with a direct "what is this project about?" input, and for assistant-created projects to prefill that operating context from the assistant conversation.
     *   Projects now include `project_instruction`, which acts as the project-level operating context for future output.
     *   Projects now support auto-built starter tasks, manually added user tasks, and project-specific assistant threads.
-    *   The Circle Assistant now uses one shared intelligent-action executor across the main assistant and project assistant, so project, folder, task, and memory drafts can save into the same workspace model instead of stopping as chat-only advice.
-    *   Project tasks are stored in `clarity_circle.project_tasks`; project assistant conversations continue to use `clarity_circle.assistant_messages.project_id`.
-    *   Guardrail: project instructions, tasks, and assistant threads must remain private, user-owned, and scoped inside the isolated `clarity_circle` schema with RLS ownership checks.
+    *   The Square Assistant now uses one shared intelligent-action executor across the main assistant and project assistant, so project, folder, task, and memory drafts can save into the same workspace model instead of stopping as chat-only advice.
+    *   Project tasks are stored in `clarity_square.project_tasks`; project assistant conversations continue to use `clarity_square.assistant_messages.project_id`.
+    *   Guardrail: project instructions, tasks, and assistant threads must remain private, user-owned, and scoped inside the isolated `clarity_square` schema with RLS ownership checks.
 
-*   **2026-06-24 Founder/Solopreneur Circle Update:**
-    *   The founder clarified that Clarity Circle should behave like a focused social platform for founders and solopreneurs, with two distinct paths.
+*   **2026-06-24 Founder/Solopreneur Square Update:**
+    *   The founder clarified that Clarity Square should behave like a focused social platform for founders and solopreneurs, with two distinct paths.
     *   Founder Track users should be able to post real problem statements as threads that solopreneurs can see and respond to with useful work, ideas, or experiments.
     *   Solopreneur Track users should be able to share work, ideas, prototypes, or interesting signals that can connect back to founder problems.
-    *   The first implementation adds a local-first Circle feed, seeded founder problem threads, seeded solopreneur shares, a path-aware composer, filters, contribution signals, assistant handoff, and project creation from a thread.
-    *   Guardrail: keep this as a founder/solopreneur clarity network, not a generic social media feed optimized for engagement volume. Future persistence should stay inside the `clarity_circle` schema with RLS and an explicit moderation/privacy model.
+    *   The first implementation adds a local-first Square feed, seeded founder problem threads, seeded solopreneur shares, a path-aware composer, filters, contribution signals, assistant handoff, and project creation from a thread.
+    *   Guardrail: keep this as a founder/solopreneur clarity network, not a generic social media feed optimized for engagement volume. Future persistence should stay inside the `clarity_square` schema with RLS and an explicit moderation/privacy model.
 
 *   **2026-06-24 Account Path Boundary Update:**
-    *   The founder clarified that the selected signup path should determine the user's Circle capabilities.
-    *   Clarity Circle now stores the selected signup path in `clarity_circle.profiles.preferred_track` and restores that path after sign-in.
+    *   The founder clarified that the selected signup path should determine the user's Square capabilities.
+    *   Clarity Square now stores the selected signup path in `clarity_square.profiles.preferred_track` and restores that path after sign-in.
     *   Founder accounts are routed toward founder problem statements, founder-owned context capture, and founder-typed projects. Solopreneur accounts are routed toward work/idea sharing, solopreneur context capture, and solopreneur-typed projects.
     *   Guardrail: do not expose founder-only creation controls to solopreneur accounts, or solopreneur-only creation controls to founder accounts, unless a newer product decision explicitly changes the account-role model.
 
-*   **2026-06-24 Circle Thread UX Density Update:**
-    *   The founder clarified that the Circle page should behave more like a social-media thread surface, with room for future post-level functionality.
-    *   The large informational Circle header was removed. The Circle tab now prioritizes the composer, feed filters, thread cards, metadata, tags, and action rows.
-    *   Guardrail: avoid Clarity Circle sections that use space only to convey information. Use screen area for effective UI: composers, filters, threads, actions, project/task surfaces, and interaction-ready workspace objects.
+*   **2026-06-24 Square Thread UX Density Update:**
+    *   The founder clarified that the Square page should behave more like a social-media thread surface, with room for future post-level functionality.
+    *   The large informational Square header was removed. The Square tab now prioritizes the composer, feed filters, thread cards, metadata, tags, and action rows.
+    *   Guardrail: avoid Clarity Square sections that use space only to convey information. Use screen area for effective UI: composers, filters, threads, actions, project/task surfaces, and interaction-ready workspace objects.
 
 *   **2026-06-24 Assistant Menu Bar Update:**
     *   The Assistant page now supports multiple main assistant chat threads, with thread identity carried in assistant message metadata.
@@ -629,29 +629,35 @@ This log registers the major strategic and structural decisions made during the 
     *   Guardrail: assistant menu bars should use compact action controls only: icons, button text, thread buttons, and grouped project actions. Do not add visible instructional labels or explanation blocks to that bar.
 
 *   **2026-06-25 Loop Board Update:**
-    *   The founder asked to implement Clarity Circle agents as "loops" and add a Loop Board where users can access each loop directly.
-    *   Clarity Circle now exposes five user-facing loops: Signal Loop, Project Loop, Task Loop, Reflection Loop, and Brief Loop.
+    *   The founder asked to implement Clarity Square agents as "loops" and add a Loop Board where users can access each loop directly.
+    *   Clarity Square now exposes five user-facing loops: Signal Loop, Project Loop, Task Loop, Reflection Loop, and Brief Loop.
     *   Loop status is derived from existing user-owned workspace state: saved signal/project context, project tasks, assistant pending approvals, memories, and context entries.
     *   The Loop Board UX should behave as a simple guided runner: selecting a loop shows a visible context-gathering state, then a focused scan report. Avoid returning to a dense metrics-first loop dashboard.
     *   Loops are scanner-first experiences, not creation shortcuts. Project Loop scans all saved projects, folders, task load, and recent movement; Signal, Task, Reflection, and Brief loops scan their relevant source context before offering source navigation or assistant interpretation.
-    *   Guardrail: keep loops as user-facing operating cycles, not internal Kramaniti company agents. Do not turn Clarity Circle into a dense technical agent dashboard.
-    *   Tasks became a dedicated main navigation page. It uses the existing `clarity_circle.project_tasks` records, grouped by project, so assistant-created tasks, auto-generated project starter tasks, and manual user tasks remain one shared task system.
+    *   Guardrail: keep loops as user-facing operating cycles, not internal Kramaniti company agents. Do not turn Clarity Square into a dense technical agent dashboard.
+    *   Tasks became a dedicated main navigation page. It uses the existing `clarity_square.project_tasks` records, grouped by project, so assistant-created tasks, auto-generated project starter tasks, and manual user tasks remain one shared task system.
     *   The Start item was removed from the persistent main navigation to make space for Tasks. The start/auth experience can still exist as an entry state, but not as a standing nav destination.
     *   Memory now includes a Delete Data section where users can delete individual saved context entries, projects, tasks, memories, folders, and assistant threads. Destructive actions must remain explicit and confirmation-gated.
     *   A Supabase wiring backlog is documented in `docs/kramaniti_site_implementation_plan.md`: community posts, durable preferences, pending assistant approvals, empty thread shells, loop run history, saved-signal semantics, Engine handoffs, and signed-out session import should be treated as explicit future storage work rather than assumed to be complete.
 
 *   **2026-06-25 Project-Centered Clarity Engine Writeback:**
     *   The founder clarified that Get Clarity should live naturally inside a project, use existing project context, and write the resulting Clarity Engine blueprint reports back to the same project area.
-    *   Clarity Circle project preview now exposes a Get Clarity action that passes project identity, folder identity, project instruction, and context into Clarity Engine.
-    *   Clarity Engine Blueprint now offers "Save all to project" after the three blueprint agents finish. The Strategy, Systems, and Presence reports are saved as individual `clarity_circle.project_reports` rows linked to the originating project.
-    *   New projects created manually or through the Circle Assistant must resolve to a folder before save. If no folder is selected or supplied, the app creates or reuses a folder based on the project title.
+    *   Clarity Square project preview now exposes a Get Clarity action that passes project identity, folder identity, project instruction, and context into Clarity Engine.
+    *   Clarity Engine Blueprint now offers "Save all to project" after the three blueprint agents finish. The Strategy, Systems, and Presence reports are saved as individual `clarity_square.project_reports` rows linked to the originating project.
+    *   New projects created manually or through the Square Assistant must resolve to a folder before save. If no folder is selected or supplied, the app creates or reuses a folder based on the project title.
     *   Guardrail: blueprint reports are saved only after explicit user action. Do not silently persist generated reports during streaming.
 
-*   **2026-06-27 Clarity Circle ChatGPT Manager MVP:**
-    *   The founder approved a second ChatGPT Apps SDK app for Clarity Circle workspace management, excluding loop-related tools for the first MVP.
-    *   The app is deployed as a separate Vercel project, `clarity-circle-chatgpt-app`, with production MCP URL `https://clarity-circle-chatgpt-app.vercel.app/mcp`.
+*   **2026-06-27 Clarity Square ChatGPT Manager MVP:**
+    *   The founder approved a second ChatGPT Apps SDK app for Clarity Square workspace management, excluding loop-related tools for the first MVP.
+    *   The app is implemented as a separate Vercel-ready project, `clarity-square-chatgpt-app`. The target production MCP URL after Vercel project rename or alias setup is `https://clarity-square-chatgpt-app.vercel.app/mcp`.
     *   The MVP exposes tools for workspace overview, project listing/detail, project draft updates, task listing/drafting/status updates, memory listing, and memory draft creation.
     *   The app now exposes an OAuth bridge for ChatGPT with protected-resource metadata, authorization-server metadata, dynamic client registration, authorization-code + PKCE login, and encrypted short-lived app tokens.
-    *   The OAuth login page verifies the user's Clarity Circle username/email and password through Supabase Auth. Tool calls decrypt the app token server-side and use the user's Supabase session token so `clarity_circle` RLS remains the data-access authority.
+    *   The OAuth login page verifies the user's Clarity Square username/email and password through Supabase Auth. Tool calls decrypt the app token server-side and use the user's Supabase session token so `clarity_square` RLS remains the data-access authority.
     *   No service-role key is used.
     *   Guardrail: this app should be configured as OAuth in ChatGPT. Do not publish or test the real user-data version as a No Auth connector.
+
+*   **2026-06-30 Clarity Square Rename Update:**
+    *   [Fact] The founder decided the service name is Clarity Square.
+    *   [Fact] The website route, API route, browser-local storage keys, Supabase schema references, ChatGPT manager package, support docs, and brand asset path were renamed to Clarity Square naming.
+    *   [Fact] Compatibility remains for existing links, local browser handoffs, and already-applied database schemas through explicit redirect, local-storage import, and schema-rename migration paths.
+    *   Guardrail: future product work should use Clarity Square for public copy, internal identifiers, database schema references, and ChatGPT manager naming. Legacy-name references should appear only where needed for migration or redirect compatibility.

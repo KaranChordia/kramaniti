@@ -230,6 +230,11 @@
   white-space: nowrap;
 }
 
+:global(.brand-blue-preview) .popularBadge {
+  background: linear-gradient(135deg, var(--action-accent-light), var(--action-accent));
+  color: var(--action-accent-foreground);
+}
+
 .tierHeader {
   margin-bottom: 16px;
 }
@@ -296,6 +301,24 @@
 .tierCta {
   width: 100%;
   border-radius: 8px;
+}
+
+:global(.brand-blue-preview) .tierCta {
+  --primary: var(--action-accent);
+  --primary-foreground: var(--action-accent-foreground);
+  --secondary: rgba(var(--action-accent-rgb), 0.18);
+  --secondary-foreground: var(--action-accent-foreground);
+  border-color: rgba(var(--action-accent-light-rgb), 0.32) !important;
+}
+
+:global(.brand-blue-preview) .tierCta:hover {
+  background:
+    linear-gradient(135deg, rgba(var(--action-accent-light-rgb), 0.84), rgba(var(--action-accent-rgb), 0.96)) !important;
+  color: var(--action-accent-foreground) !important;
+  border-color: rgba(var(--action-accent-light-rgb), 0.7) !important;
+  box-shadow:
+    0 0 0 1px rgba(var(--action-accent-light-rgb), 0.18),
+    0 16px 34px rgba(var(--action-accent-rgb), 0.2) !important;
 }
 
 .enablementPanel {
