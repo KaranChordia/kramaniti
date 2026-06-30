@@ -73,7 +73,9 @@ import {
   QuestionToSystemRouteInfographic,
   QuestionLibraryCompassInfographic,
   OperatingThreadMapInfographic,
-  SubscriptionToSystemGateInfographic
+  SubscriptionToSystemGateInfographic,
+  FirstSystemTriageInfographic,
+  ConstraintToBuildMapInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -439,6 +441,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:subscription-to-system-gate]') {
           return <SubscriptionToSystemGateInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:first-system-triage]') {
+          return <FirstSystemTriageInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:constraint-to-build-map]') {
+          return <ConstraintToBuildMapInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);

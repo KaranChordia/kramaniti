@@ -261,6 +261,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: matrix with claim moment, weak route, and proof-ready route columns.
 * **Selection Criteria**: Choose when an essay needs to audit homepage lines, founder posts, sales decks, or system promises for evidence and operating support.
 
+## 34. First System Triage (Priority Selection Matrix)
+* **Component Name**: `FirstSystemTriageInfographic`
+* **Trigger String**: `[infographic:first-system-triage]`
+* **Best Used For**: Choosing the first workflow or support system to build from repeated operating signals.
+* **Visuals**: matrix with observed signal, weak selection habit, and priority build test columns.
+* **Selection Criteria**: Choose when an essay compares tool-first prioritization with workflow-first constraint selection.
+
+## 35. Constraint to Build Map (Constraint Route)
+* **Component Name**: `ConstraintToBuildMapInfographic`
+* **Trigger String**: `[infographic:constraint-to-build-map]`
+* **Best Used For**: Showing how a visible workflow constraint becomes the smallest useful system build.
+* **Visuals**: four-card route from pressure location to constraint, support design, and retained learning.
+* **Selection Criteria**: Choose when an essay explains build sequencing, workflow prioritization, or alignment audit outputs.
+
 ## Decision Flowchart for Content Creators
 
 Use the following mental model to choose the template:

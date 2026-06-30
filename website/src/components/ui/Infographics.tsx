@@ -115,6 +115,102 @@ export function SubscriptionToSystemGateInfographic() {
   );
 }
 
+export function FirstSystemTriageInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>First System Triage</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Signal</th>
+              <th className={styles.matrixColHeader}>Weak selection habit</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Priority build test</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Repeated wait</td>
+              <td className={styles.matrixCell}>Add a tool where work is loudest.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Find the stage where value stops moving.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Founder correction</td>
+              <td className={styles.matrixCell}>Ask for better drafts each cycle.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Retain the standard, source, and review boundary.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Customer confusion</td>
+              <td className={styles.matrixCell}>Publish more explanation.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Clarify the route that creates the confusion.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Content drift</td>
+              <td className={styles.matrixCell}>Increase production volume.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Connect message, proof, owner, and operating record.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export function ConstraintToBuildMapInfographic() {
+  const route = [
+    {
+      icon: Radar,
+      label: 'Locate pressure',
+      copy: 'Watch where work waits, repeats, restarts, or loses context in the real route.',
+    },
+    {
+      icon: CircleAlert,
+      label: 'Name constraint',
+      copy: 'Identify the limiting point: decision, handoff, source quality, review, or adoption.',
+    },
+    {
+      icon: Workflow,
+      label: 'Shape support',
+      copy: 'Build the smallest route, packet, note, or tool that protects the constraint.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Retain learning',
+      copy: 'Write back the standard so the next cycle moves with less reconstruction.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Constraint to Build Map</div>
+      <div className={styles.briefBoard}>
+        {route.map((stage, index) => {
+          const Icon = stage.icon;
+          const isFinal = index === route.length - 1;
+
+          return (
+            <React.Fragment key={stage.label}>
+              <div className={`${styles.briefCard} ${isFinal ? styles.briefCardHighlight : ''}`}>
+                <div className={isFinal ? styles.briefIconHighlight : styles.briefIcon}>
+                  <Icon size={18} />
+                </div>
+                <div className={isFinal ? styles.briefLabelGold : styles.briefLabel}>{stage.label}</div>
+                <p className={isFinal ? styles.briefCopyGold : styles.briefCopy}>{stage.copy}</p>
+              </div>
+              {index < route.length - 1 ? (
+                <div className={styles.briefConnector}>
+                  <ArrowRight className={styles.arrowIconDesktop} size={18} />
+                  <ArrowDown className={styles.arrowIconMobile} size={18} />
+                </div>
+              ) : null}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // 1. Redesigned Side-by-Side Flow (The Classic Redesigned)
 export function DisconnectedOpsInfographic() {
   return (
