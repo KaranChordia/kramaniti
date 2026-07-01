@@ -75,7 +75,9 @@ import {
   OperatingThreadMapInfographic,
   SubscriptionToSystemGateInfographic,
   FirstSystemTriageInfographic,
-  ConstraintToBuildMapInfographic
+  ConstraintToBuildMapInfographic,
+  SupportRouteRolloutInfographic,
+  SupportSignalLedgerInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -447,6 +449,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:constraint-to-build-map]') {
           return <ConstraintToBuildMapInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:support-route-rollout]') {
+          return <SupportRouteRolloutInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:support-signal-ledger]') {
+          return <SupportSignalLedgerInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);

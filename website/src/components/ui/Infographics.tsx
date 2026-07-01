@@ -211,6 +211,102 @@ export function ConstraintToBuildMapInfographic() {
   );
 }
 
+export function SupportRouteRolloutInfographic() {
+  const route = [
+    {
+      icon: Radar,
+      label: 'Expected questions',
+      copy: 'Name the clarification, access, status, exception, and claim-boundary questions before launch.',
+    },
+    {
+      icon: Workflow,
+      label: 'Support route',
+      copy: 'Define the channel, owner, response path, and escalation condition for real use.',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Reusable answer',
+      copy: 'Retain the accepted answer beside the workflow so the next cycle starts with context.',
+    },
+    {
+      icon: FolderSync,
+      label: 'System update',
+      copy: 'Turn repeated support into a form label, handoff note, training snippet, or public explanation.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Support Route Before Rollout</div>
+      <div className={styles.briefBoard}>
+        {route.map((stage, index) => {
+          const Icon = stage.icon;
+          const isFinal = index === route.length - 1;
+
+          return (
+            <React.Fragment key={stage.label}>
+              <div className={`${styles.briefCard} ${isFinal ? styles.briefCardHighlight : ''}`}>
+                <div className={isFinal ? styles.briefIconHighlight : styles.briefIcon}>
+                  <Icon size={18} />
+                </div>
+                <div className={isFinal ? styles.briefLabelGold : styles.briefLabel}>{stage.label}</div>
+                <p className={isFinal ? styles.briefCopyGold : styles.briefCopy}>{stage.copy}</p>
+              </div>
+              {index < route.length - 1 ? (
+                <div className={styles.briefConnector}>
+                  <ArrowRight className={styles.arrowIconDesktop} size={18} />
+                  <ArrowDown className={styles.arrowIconMobile} size={18} />
+                </div>
+              ) : null}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function SupportSignalLedgerInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Support Signal Ledger</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Rollout signal</th>
+              <th className={styles.matrixColHeader}>Weak support habit</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Useful route update</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Repeated clarification</td>
+              <td className={styles.matrixCell}>Answer again in chat.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Update the workflow note or public explanation.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Exception request</td>
+              <td className={styles.matrixCell}>Ask the founder each time.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Define escalation condition and decision owner.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>AI correction</td>
+              <td className={styles.matrixCell}>Fix the output privately.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Retain source, review rule, and accepted standard.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Public confusion</td>
+              <td className={styles.matrixCell}>Publish more content.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Clarify the route before increasing volume.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 // 1. Redesigned Side-by-Side Flow (The Classic Redesigned)
 export function DisconnectedOpsInfographic() {
   return (

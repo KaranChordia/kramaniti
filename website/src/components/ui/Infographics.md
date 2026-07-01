@@ -275,6 +275,20 @@ When writing new essays/insights, future agents or writers should choose the inf
 * **Visuals**: four-card route from pressure location to constraint, support design, and retained learning.
 * **Selection Criteria**: Choose when an essay explains build sequencing, workflow prioritization, or alignment audit outputs.
 
+## 36. Support Route Before Rollout (Adoption Route)
+* **Component Name**: `SupportRouteRolloutInfographic`
+* **Trigger String**: `[infographic:support-route-rollout]`
+* **Best Used For**: Making support ownership, expected questions, reusable answers, and workflow updates visible before a rollout.
+* **Visuals**: four-card route from expected questions to support route, retained answer, and system update.
+* **Selection Criteria**: Choose when an essay explains adoption support, rollout readiness, user support, or practical enablement.
+
+## 37. Support Signal Ledger (Support Feedback Matrix)
+* **Component Name**: `SupportSignalLedgerInfographic`
+* **Trigger String**: `[infographic:support-signal-ledger]`
+* **Best Used For**: Turning repeated support questions, exceptions, AI corrections, and public confusion into route updates.
+* **Visuals**: matrix with rollout signal, weak support habit, and useful route update columns.
+* **Selection Criteria**: Choose when an essay compares reactive help with support signals that improve workflows and public presence.
+
 ## Decision Flowchart for Content Creators
 
 Use the following mental model to choose the template:
