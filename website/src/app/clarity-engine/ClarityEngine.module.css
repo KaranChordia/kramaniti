@@ -17,13 +17,11 @@
 }
 
 .introActive .canvasBgGlow {
-  opacity: 0;
-  animation: introBackdropGlow 10s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 1;
 }
 
 .introActive .canvasNoise {
-  opacity: 0;
-  animation: introNoiseReveal 10s ease forwards;
+  opacity: 0.04;
 }
 
 .introActive .header {
@@ -191,6 +189,189 @@
   cursor: not-allowed;
 }
 
+.themeSwitch {
+  font-size: 17px;
+  position: relative;
+  display: inline-block;
+  width: 64px;
+  height: 34px;
+  flex: 0 0 64px;
+}
+
+.themeSwitchInput {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.themeSlider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: rgba(201, 168, 76, 0.88);
+  transition: 0.4s;
+  border-radius: 30px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.themeSlider::before {
+  position: absolute;
+  content: "";
+  height: 30px;
+  width: 30px;
+  border-radius: 20px;
+  left: 2px;
+  bottom: 2px;
+  z-index: 2;
+  background-color: rgb(255, 248, 224);
+  transition: 0.4s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+}
+
+.themeSun svg,
+.themeMoon svg {
+  position: absolute;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+}
+
+.themeSun svg {
+  top: 5px;
+  left: 36px;
+  color: rgba(255, 248, 224, 0.95);
+  animation: themeRotate 15s linear infinite;
+}
+
+.themeMoon svg {
+  top: 5px;
+  left: 5px;
+  color: rgb(201, 168, 76);
+  fill: rgba(201, 168, 76, 0.18);
+  animation: themeTilt 5s linear infinite;
+}
+
+.themeSwitchInput:checked + .themeSlider {
+  background-color: rgb(18, 16, 10);
+}
+
+.themeSwitchInput:focus-visible + .themeSlider {
+  box-shadow:
+    0 0 0 1px rgba(255, 248, 224, 0.74),
+    0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.themeSwitchInput:checked + .themeSlider::before {
+  transform: translateX(30px);
+}
+
+@keyframes themeRotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes themeTilt {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-10deg);
+  }
+
+  75% {
+    transform: rotate(10deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.resetButton {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 50%;
+  background-color: rgb(20, 20, 20);
+  border: none;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: relative;
+}
+
+.resetButtonIcon {
+  width: 14px;
+  height: 14px;
+  transition-duration: 0.3s;
+  color: white;
+  stroke-width: 2;
+}
+
+.resetButton::before {
+  position: absolute;
+  top: -18px;
+  content: "Reset";
+  color: white;
+  transition-duration: 0.3s;
+  font-size: 2px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.resetButton:not(:disabled):hover,
+.resetButton:focus-visible {
+  width: 104px;
+  flex-basis: 104px;
+  border-radius: 50px;
+  transition-duration: 0.3s;
+  background-color: rgb(201, 168, 76);
+  color: rgb(18, 16, 10);
+  align-items: center;
+}
+
+.resetButton:not(:disabled):hover .resetButtonIcon,
+.resetButton:focus-visible .resetButtonIcon {
+  width: 34px;
+  height: 34px;
+  transition-duration: 0.3s;
+  transform: translateY(60%);
+  color: rgb(18, 16, 10);
+}
+
+.resetButton:not(:disabled):hover::before,
+.resetButton:focus-visible::before {
+  font-size: 11px;
+  opacity: 1;
+  transform: translateY(25px);
+  transition-duration: 0.3s;
+  color: rgb(18, 16, 10);
+}
+
+.resetButton:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.82);
+  outline-offset: 3px;
+}
+
+.resetButton:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
 .controlDivider {
   width: 1px;
   height: 18px;
@@ -254,7 +435,152 @@
   justify-content: center;
   margin-top: 0;
   gap: 0;
-  animation: introContainerSettle 10s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: none;
+}
+
+.introLoaderMain {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(160px, 24vw, 240px);
+  height: clamp(160px, 24vw, 240px);
+  font-size: clamp(9px, 1.2vw, 14px);
+  filter: drop-shadow(0 0 32px rgba(201, 168, 76, 0.2));
+}
+
+.introLoaders,
+.introLoadersB {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.introLoader {
+  position: absolute;
+  width: 1.15em;
+  height: 13em;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.18);
+  animation: introLoaderSpoke 3.63s ease-in-out infinite;
+}
+
+.introLoader::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.15em;
+  height: 5em;
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    inset 5px 5px 15px rgba(211, 210, 210, 0.4),
+    inset -5px -5px 15px rgba(255, 255, 255, 0.24);
+  mask-image: linear-gradient(
+    to bottom,
+    black calc(100% - 48px),
+    transparent 100%
+  );
+  animation: introLoaderSpokeCap 3.63s ease-in-out infinite;
+}
+
+.introLoader::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 1.15em;
+  height: 4.5em;
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    inset 5px 5px 15px rgba(211, 210, 210, 0.4),
+    inset -5px -5px 15px rgba(255, 255, 255, 0.24);
+  mask-image: linear-gradient(
+    to top,
+    black calc(100% - 48px),
+    transparent 100%
+  );
+  animation: introLoaderSpokeCap 3.63s ease-in-out infinite;
+}
+
+@keyframes introLoaderSpoke {
+  0% {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  50% {
+    background: rgba(255, 229, 154, 0.28);
+  }
+
+  100% {
+    background: rgba(255, 255, 255, 0.18);
+  }
+}
+
+@keyframes introLoaderSpokeCap {
+  0% {
+    background: rgba(255, 255, 255, 0.82);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  50% {
+    background: rgba(255, 229, 154, 0.82);
+    border-color: rgba(255, 229, 154, 0.32);
+  }
+
+  100% {
+    background: rgba(255, 255, 255, 0.82);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+}
+
+.introLoaderBallTrack {
+  position: absolute;
+  width: 1.15em;
+  height: 13em;
+  border-radius: 50px;
+  background: transparent;
+}
+
+.introLoaderBall {
+  width: 1.15em;
+  height: 1.15em;
+  box-shadow:
+    rgba(0, 0, 0, 0.17) 0 -10px 10px 0 inset,
+    rgba(0, 0, 0, 0.15) 0 -15px 15px 0 inset,
+    rgba(0, 0, 0, 0.1) 0 -40px 20px 0 inset,
+    rgba(0, 0, 0, 0.06) 0 2px 1px,
+    rgba(0, 0, 0, 0.09) 0 4px 2px,
+    rgba(0, 0, 0, 0.09) 0 8px 4px,
+    rgba(0, 0, 0, 0.09) 0 16px 8px,
+    rgba(0, 0, 0, 0.09) 0 32px 16px,
+    0 -1px 15px -8px rgba(201, 168, 76, 0.5);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.98);
+  animation: introLoaderMove 3.63s ease-in-out infinite;
+}
+
+@keyframes introLoaderMove {
+  0% {
+    transform: translateY(0);
+    background-color: rgba(255, 255, 255, 0.98);
+  }
+
+  50% {
+    transform: translateY(12em);
+    background-color: rgb(255, 229, 154);
+  }
+
+  100% {
+    transform: translateY(0);
+    background-color: rgba(255, 255, 255, 0.98);
+  }
 }
 
 @keyframes blobEntrance {
@@ -1078,7 +1404,7 @@
 }
 
 .morphStateBtn .btnContent,
-.secondaryActionBtn span {
+.secondaryActionBtn > span {
   color: currentColor;
 }
 
@@ -1110,6 +1436,217 @@
   box-shadow: 0 12px 40px rgba(201, 168, 76, 0.15);
 }
 
+.signalActionButton {
+  --signal-border-radius: 24px;
+  --signal-padding: 4px;
+  --signal-transition: 0.4s;
+  --signal-button-color: #101010;
+  --signal-highlight-hue: 43deg;
+  position: relative;
+  z-index: 0;
+  user-select: none;
+  box-sizing: border-box;
+  width: 230px;
+  height: 54px;
+  flex: 0 0 230px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  font-family: var(--font-outfit), "Inter", "Segoe UI", sans-serif;
+  font-size: 1em;
+  font-weight: 400;
+  background-color: var(--signal-button-color);
+  border: solid 1px rgba(255, 255, 255, 0.14);
+  border-radius: var(--signal-border-radius);
+  overflow: visible;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    inset 0 2px 2px rgba(255, 255, 255, 0.15),
+    inset 0 4px 4px rgba(255, 255, 255, 0.1),
+    inset 0 8px 8px rgba(255, 255, 255, 0.05),
+    inset 0 16px 16px rgba(255, 255, 255, 0.05),
+    0 -1px 1px rgba(0, 0, 0, 0.02),
+    0 -2px 2px rgba(0, 0, 0, 0.03),
+    0 -4px 4px rgba(0, 0, 0, 0.05),
+    0 -8px 8px rgba(0, 0, 0, 0.06),
+    0 -16px 16px rgba(0, 0, 0, 0.08);
+  transition:
+    box-shadow var(--signal-transition),
+    border var(--signal-transition),
+    background-color var(--signal-transition),
+    transform var(--signal-transition);
+}
+
+.signalActionButton::before {
+  content: "";
+  position: absolute;
+  top: calc(0px - var(--signal-padding));
+  left: calc(0px - var(--signal-padding));
+  width: calc(100% + var(--signal-padding) * 2);
+  height: calc(100% + var(--signal-padding) * 2);
+  border-radius: calc(var(--signal-border-radius) + var(--signal-padding));
+  pointer-events: none;
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.62));
+  z-index: -1;
+  transition:
+    box-shadow var(--signal-transition),
+    filter var(--signal-transition);
+  box-shadow:
+    0 -8px 8px -6px transparent inset,
+    0 -16px 16px -8px transparent inset,
+    1px 1px 1px rgba(255, 255, 255, 0.14),
+    2px 2px 2px rgba(255, 255, 255, 0.07),
+    -1px -1px 1px rgba(0, 0, 0, 0.14),
+    -2px -2px 2px rgba(0, 0, 0, 0.07);
+}
+
+.signalActionButton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: linear-gradient(
+    0deg,
+    #fff,
+    hsl(var(--signal-highlight-hue), 58%, 67%),
+    hsla(var(--signal-highlight-hue), 58%, 67%, 0.5),
+    8%,
+    transparent
+  );
+  background-position: 0 0;
+  opacity: 0;
+  transition:
+    opacity var(--signal-transition),
+    filter var(--signal-transition);
+  z-index: 1;
+}
+
+.signalButtonContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.signalButtonText {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.signalButtonLetter {
+  position: relative;
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.45);
+  animation: signalLetterAnim 2s ease-in-out infinite;
+  transition:
+    color var(--signal-transition),
+    text-shadow var(--signal-transition),
+    opacity var(--signal-transition);
+}
+
+@keyframes signalLetterAnim {
+  50% {
+    text-shadow: 0 0 4px rgba(255, 229, 154, 0.52);
+    color: rgba(255, 229, 154, 0.96);
+  }
+}
+
+.signalButtonIcon {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  color: rgba(255, 255, 255, 0.45);
+  animation: signalIconShimmer 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 2px rgba(255, 229, 154, 0.28));
+  transition:
+    color var(--signal-transition),
+    filter var(--signal-transition),
+    opacity var(--signal-transition);
+}
+
+@keyframes signalIconShimmer {
+  50% {
+    color: rgba(255, 229, 154, 0.96);
+    filter: drop-shadow(0 0 4px rgba(255, 229, 154, 0.52));
+  }
+}
+
+.signalActionButton:hover,
+.signalActionButton:focus-visible {
+  border: solid 1px hsla(var(--signal-highlight-hue), 72%, 72%, 0.44);
+}
+
+.signalActionButton:hover::before,
+.signalActionButton:focus-visible::before {
+  box-shadow:
+    0 -8px 8px -6px rgba(255, 255, 255, 0.64) inset,
+    0 -16px 16px -8px hsla(var(--signal-highlight-hue), 72%, 67%, 0.32) inset,
+    1px 1px 1px rgba(255, 255, 255, 0.14),
+    2px 2px 2px rgba(255, 255, 255, 0.07),
+    -1px -1px 1px rgba(0, 0, 0, 0.14),
+    -2px -2px 2px rgba(0, 0, 0, 0.07);
+}
+
+.signalActionButton:hover::after,
+.signalActionButton:focus-visible::after {
+  opacity: 1;
+  mask-image: linear-gradient(0deg, #fff, transparent);
+}
+
+.signalActionButton:hover .signalButtonIcon,
+.signalActionButton:focus-visible .signalButtonIcon {
+  color: rgb(255, 229, 154);
+  filter:
+    drop-shadow(0 0 3px hsl(var(--signal-highlight-hue), 72%, 67%))
+    drop-shadow(0 -4px 6px rgba(0, 0, 0, 0.58));
+  animation: none;
+}
+
+.signalActionButton:hover .signalButtonLetter,
+.signalActionButton:focus-visible .signalButtonLetter {
+  color: rgb(255, 229, 154);
+  text-shadow: none;
+  animation: none;
+}
+
+.signalActionButton:active {
+  border: solid 1px hsla(var(--signal-highlight-hue), 80%, 80%, 0.7);
+  background-color: hsla(var(--signal-highlight-hue), 50%, 20%, 0.5);
+}
+
+.signalActionButton:active::before {
+  box-shadow:
+    0 -8px 12px -6px rgba(255, 255, 255, 0.66) inset,
+    0 -16px 16px -8px hsla(var(--signal-highlight-hue), 72%, 67%, 0.72) inset,
+    1px 1px 1px rgba(255, 255, 255, 0.22),
+    2px 2px 2px rgba(255, 255, 255, 0.12),
+    -1px -1px 1px rgba(0, 0, 0, 0.14),
+    -2px -2px 2px rgba(0, 0, 0, 0.07);
+}
+
+.signalActionButton:active::after {
+  opacity: 1;
+  mask-image: linear-gradient(0deg, #fff, transparent);
+  filter: brightness(200%);
+}
+
+.signalActionButton:active .signalButtonLetter {
+  text-shadow: 0 0 1px hsla(var(--signal-highlight-hue), 80%, 90%, 0.9);
+  animation: none;
+}
+
 .btnContent {
   display: flex;
   align-items: center;
@@ -1126,21 +1663,61 @@
   width: 100%;
   min-height: 180px;
   height: auto;
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.4);
-  border-color: rgba(201, 168, 76, 0.3);
+  max-width: 720px;
+  border-radius: 34px;
+  background: linear-gradient(135deg, rgb(126, 96, 24) 0%, rgb(201, 168, 76) 52%, rgb(89, 68, 18) 100%);
+  border: none;
   align-items: stretch;
   justify-content: flex-start;
-  padding: 24px;
+  padding: 10px;
+  position: relative;
+  z-index: 0;
+  overflow: visible;
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.24),
+    0 0 28px rgba(201, 168, 76, 0.18);
 }
 
 .fieldContent {
   display: flex;
   flex-direction: column;
+  position: relative;
   width: 100%;
   height: 100%;
+  min-height: 160px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, rgba(32, 27, 15, 0.96) 0%, rgba(15, 13, 9, 0.98) 100%);
+  padding: 14px;
   opacity: 0;
   transition: opacity 0.4s ease 0.3s;
+  z-index: 1;
+}
+
+.fieldContent::before,
+.fieldContent::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  position: absolute;
+  pointer-events: none;
+}
+
+.fieldContent::before {
+  top: -1px;
+  left: -1px;
+  background: linear-gradient(0deg, rgba(92, 70, 20, 0.34) 0%, rgba(255, 242, 187, 0.5) 100%);
+  z-index: -1;
+}
+
+.fieldContent::after {
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(0deg, rgba(132, 101, 26, 0.7) 0%, rgba(230, 196, 103, 0.7) 100%);
+  box-shadow:
+    rgba(201, 168, 76, 0.28) 3px 3px 5px 0,
+    rgba(201, 168, 76, 0.22) 5px 5px 20px 0;
+  z-index: -2;
 }
 
 .morphStateField .fieldContent {
@@ -1150,28 +1727,46 @@
 .glassInput {
   width: 100%;
   flex: 1;
-  background: transparent;
+  min-height: 96px;
+  background: linear-gradient(135deg, rgba(24, 21, 14, 0.96) 0%, rgba(35, 29, 16, 0.96) 100%);
   border: none;
-  color: #fff;
+  color: rgba(255, 248, 224, 0.94);
   font-size: clamp(16px, 2vw, 24px);
   font-family: inherit;
   font-weight: 300;
   line-height: 1.4;
+  border-radius: 22px;
+  padding: 16px 18px;
   resize: none;
   outline: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(201, 168, 76, 0.12);
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    color 0.3s ease;
+}
+
+.glassInput:focus {
+  background: linear-gradient(135deg, rgba(41, 34, 19, 0.98) 0%, rgba(25, 22, 15, 0.98) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(255, 230, 160, 0.22),
+    0 0 24px rgba(201, 168, 76, 0.18);
 }
 
 .glassInput::placeholder {
-  color: rgba(255, 255, 255, 0.15);
+  color: rgba(201, 168, 76, 0.38);
 }
 
 .inputFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 12px;
+  padding: 10px 4px 0;
+  border-top: 1px solid rgba(201, 168, 76, 0.12);
   font-size: 12px;
   color: rgba(255, 255, 255, 0.4);
   text-transform: uppercase;
@@ -1203,6 +1798,107 @@
 .submitBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.blueprintButtonWrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 32px;
+}
+
+.blueprintButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  gap: 0;
+  width: 268px;
+  height: 58px;
+  padding: 0 54px;
+  border: 2px solid transparent;
+  font-size: 16px;
+  background-color: transparent;
+  border-radius: 100px;
+  font-family: var(--font-outfit), sans-serif;
+  font-weight: 600;
+  color: rgb(255, 229, 154);
+  box-shadow: 0 0 0 2px rgb(201, 168, 76);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.blueprintButtonArrow {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  color: rgb(255, 229, 154);
+  z-index: 9;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.blueprintButtonArrowOne {
+  right: 22px;
+}
+
+.blueprintButtonArrowTwo {
+  left: -25%;
+}
+
+.blueprintButtonCircle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: rgb(201, 168, 76);
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.blueprintButtonText {
+  position: relative;
+  z-index: 1;
+  transform: translateX(-10px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  white-space: nowrap;
+}
+
+.blueprintButton:hover {
+  box-shadow: 0 0 0 12px transparent;
+  color: rgb(18, 16, 10);
+  border-radius: 12px;
+}
+
+.blueprintButton:hover .blueprintButtonArrowOne {
+  right: -25%;
+}
+
+.blueprintButton:hover .blueprintButtonArrowTwo {
+  left: 22px;
+}
+
+.blueprintButton:hover .blueprintButtonText {
+  transform: translateX(10px);
+}
+
+.blueprintButton:hover .blueprintButtonArrow {
+  color: rgb(18, 16, 10);
+}
+
+.blueprintButton:active {
+  scale: 0.95;
+  box-shadow: 0 0 0 4px rgb(201, 168, 76);
+}
+
+.blueprintButton:hover .blueprintButtonCircle {
+  width: 280px;
+  height: 280px;
+  opacity: 1;
 }
 
 .spin {
@@ -1544,6 +2240,39 @@
     border-radius: 12px;
   }
 
+  .themeSwitch {
+    width: 58px;
+    height: 32px;
+    flex-basis: 58px;
+  }
+
+  .themeSlider::before {
+    height: 28px;
+    width: 28px;
+  }
+
+  .themeSwitchInput:checked + .themeSlider::before {
+    transform: translateX(26px);
+  }
+
+  .themeSun svg {
+    left: 32px;
+  }
+
+  .resetButton {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+    border-radius: 50%;
+  }
+
+  .resetButton:not(:disabled):hover,
+  .resetButton:focus-visible {
+    width: 96px;
+    flex-basis: 96px;
+    border-radius: 24px;
+  }
+
   .progressContainer {
     flex: 0 0 auto;
     min-height: 40px;
@@ -1699,8 +2428,15 @@
   .morphStateBtn,
   .secondaryActionBtn {
     width: 100%;
+    flex-basis: auto;
     height: 50px;
     border-radius: 16px;
+  }
+
+  .signalActionButton {
+    width: 100%;
+    flex: 0 1 auto;
+    padding: 0 18px;
   }
 
   .morphStateField {
@@ -1752,6 +2488,16 @@
   .submitBtn {
     flex: 1;
     padding: 0 14px;
+  }
+
+  .blueprintButton {
+    width: 100%;
+    max-width: 268px;
+    height: 56px;
+    min-width: 0;
+    justify-content: center;
+    padding: 0 48px;
+    font-size: 14px;
   }
 
   .contextSidebar {
@@ -1954,7 +2700,6 @@
 }
 
 .glassPanel,
-.morphStateField,
 .contextSidebar,
 .modalContent {
   background: var(--ce-panel);
@@ -1989,12 +2734,8 @@
   background: rgba(201, 168, 76, 0.16);
 }
 
-.glassInput {
+.markdownPreview {
   background: transparent;
-}
-
-.glassInput::placeholder {
-  color: var(--ce-text-muted);
 }
 
 .contextSidebar {
@@ -2035,7 +2776,6 @@
 }
 
 :global(html[data-theme='light']) .glassPanel,
-:global(html[data-theme='light']) .morphStateField,
 :global(html[data-theme='light']) .contextSidebar,
 :global(html[data-theme='light']) .modalContent {
   background: rgba(255, 255, 255, 0.58);

@@ -4,15 +4,18 @@ import Link from 'next/link';
 import { startTransition, useDeferredValue, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
+  ArrowRight,
+  ArrowUp,
   CornerDownLeft,
+  CircleHelp,
   Download,
   Home,
   Loader2,
   Moon,
-  RefreshCw,
   Sun,
   ChevronDown,
   ChevronUp,
+  Trash2,
   Volume2,
   VolumeX,
   Wand2
@@ -324,6 +327,54 @@ function BlurTypingText({ text, activeKey }: { text: string, activeKey: string }
   );
 }
 
+function AnimatedButtonLabel({ text }: { text: string }) {
+  return (
+    <span className={styles.signalButtonText}>
+      {text.split('').map((char, index) => (
+        <span
+          key={`${char}-${index}`}
+          className={styles.signalButtonLetter}
+          style={{ animationDelay: `${index * 0.08}s` }}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function IntroLoader() {
+  const loaderItems = Array.from({ length: 9 });
+
+  return (
+    <div className={styles.introLoaderMain} aria-label="Loading Clarity Engine">
+      <div className={styles.introLoaders} aria-hidden="true">
+        {loaderItems.map((_, index) => (
+          <div
+            key={`loader-${index}`}
+            className={styles.introLoader}
+            style={{ transform: `rotate(${index * 20}deg)` }}
+          />
+        ))}
+      </div>
+      <div className={styles.introLoadersB} aria-hidden="true">
+        {loaderItems.map((_, index) => (
+          <div
+            key={`loader-ball-track-${index}`}
+            className={styles.introLoaderBallTrack}
+            style={{ transform: `rotate(${index * 20}deg)` }}
+          >
+            <div
+              className={styles.introLoaderBall}
+              style={{ animationDelay: `${index * 0.2}s` }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 import { useAudioEngine } from '@/hooks/useAudioEngine';
 
 export default function ClarityEnginePage() {
@@ -355,7 +406,7 @@ export default function ClarityEnginePage() {
       setIsIntroActive(false);
       setIsBlobLoaded(true);
       startAmbient();
-    }, 10000);
+    }, 4200);
 
     return () => window.clearTimeout(introTimer);
   }, [playIntro, startAmbient]);
@@ -492,6 +543,12 @@ export default function ClarityEnginePage() {
   const resetSession = (preserveMockId?: string) => {
     transitionTimers.current.forEach((timer) => window.clearTimeout(timer));
     transitionTimers.current = [];
+    window.localStorage.removeItem(STORAGE_KEY);
+    window.sessionStorage.removeItem('kramaniti-blueprint-session');
+    if (!preserveMockId) {
+      setIsDemoMode(false);
+      demoScenarioRef.current = null;
+    }
     const next = createInitialSession();
     if (preserveMockId) {
       next.mockScenarioId = preserveMockId;
@@ -769,18 +826,30 @@ export default function ClarityEnginePage() {
             Load Sample
           </button>
           <div className={styles.controlDock} onClick={playClick}>
-            <button
-              className={`${styles.controlIconBtn} ${styles.actionBtn}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                playClick();
-                toggleTheme();
-              }}
+            <label
+              className={styles.themeSwitch}
               title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+              onClick={(e) => e.stopPropagation()}
             >
-              {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
-            </button>
+              <input
+                className={styles.themeSwitchInput}
+                type="checkbox"
+                checked={theme === 'dark'}
+                onChange={() => {
+                  playClick();
+                  toggleTheme();
+                }}
+              />
+              <span className={styles.themeSlider}>
+                <span className={styles.themeMoon}>
+                  <Moon size={24} />
+                </span>
+                <span className={styles.themeSun}>
+                  <Sun size={24} />
+                </span>
+              </span>
+            </label>
             <button
               className={`${styles.controlIconBtn} ${styles.actionBtn}`}
               onClick={(e) => {
@@ -794,13 +863,13 @@ export default function ClarityEnginePage() {
               {isAmbientMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
             </button>
             <button
-              className={`${styles.controlIconBtn} ${styles.actionBtn} no-shockwave`}
+              className={`${styles.resetButton} no-shockwave`}
               onClick={(e) => { e.stopPropagation(); playClick(); resetSession(); }}
               disabled={isDemoMode}
-              title="Reset diagnostic"
-              aria-label="Reset diagnostic"
+              title="Reset diagnostic session"
+              aria-label="Reset diagnostic session"
             >
-              <RefreshCw size={14} />
+              <Trash2 className={styles.resetButtonIcon} size={16} aria-hidden="true" />
             </button>
             {hasSynthesis && (
               <>
@@ -829,27 +898,15 @@ export default function ClarityEnginePage() {
         <div className={styles.interactionColumn}>
           {/* Central Character Entity */}
           <div className={styles.characterContainer}>
-            <div className={`${styles.blobWrapper} ${charStateClass}`}>
-              <div className={styles.introHalo} aria-hidden="true" />
-              <div className={styles.introScanLine} aria-hidden="true" />
-              <div className={`${styles.introPrinciple} ${styles.introPrincipleStrategy}`} aria-hidden="true">
-                Strategy
+            {isIntroActive ? (
+              <IntroLoader />
+            ) : (
+              <div className={`${styles.blobWrapper} ${charStateClass}`}>
+                <div className={styles.orbit1} />
+                <div className={styles.orbit2} />
+                <div className={styles.assistantBlob} />
               </div>
-              <div className={`${styles.introPrinciple} ${styles.introPrincipleSystems}`} aria-hidden="true">
-                Systems
-              </div>
-              <div className={`${styles.introPrinciple} ${styles.introPrinciplePresence}`} aria-hidden="true">
-                Presence
-              </div>
-              <div className={styles.orbit1} />
-              <div className={styles.orbit2} />
-              <div className={styles.assistantBlob} />
-            </div>
-            <div className={styles.introCaption} aria-hidden={!isIntroActive}>
-              <span>Kramaniti Clarity Engine</span>
-              <strong>Strategy before tools.</strong>
-              <p>Systems before scale. Content after clarity.</p>
-            </div>
+            )}
           </div>
 
           {/* Main Stage (Glass Panel with Questions & Input) */}
@@ -878,14 +935,17 @@ export default function ClarityEnginePage() {
                     {!isInputActive && (
                       <button
                         type="button"
-                        className={`${styles.morphElement} shockwave-btn ${styles.morphStateBtn}`}
+                        className={`${styles.morphElement} shockwave-btn ${styles.signalActionButton} ${styles.morphStateBtn}`}
                         onClick={(event) => {
                           event.stopPropagation();
                           playClick();
                           handleMorphClick();
                         }}
                       >
-                        <span className={styles.btnContent}>Provide Signal</span>
+                        <span className={styles.signalButtonContent}>
+                          <ArrowUp className={styles.signalButtonIcon} size={22} aria-hidden="true" />
+                          <AnimatedButtonLabel text="Provide Signal" />
+                        </span>
                       </button>
                     )}
 
@@ -928,14 +988,17 @@ export default function ClarityEnginePage() {
                     {/* Secondary AI Task Button */}
                     {!isInputActive && (
                       <button
-                        className={`${styles.morphElement} ${styles.secondaryActionBtn}`}
+                        className={`${styles.morphElement} ${styles.signalActionButton} ${styles.secondaryActionBtn}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           playClick();
                           void submitAnswer("[AI Task] I am not sure about this yet. Please mark this as a task for the AI to figure out and move to the next step.");
                         }}
                       >
-                        <span>I don&apos;t know</span>
+                        <span className={styles.signalButtonContent}>
+                          <CircleHelp className={styles.signalButtonIcon} size={22} aria-hidden="true" />
+                          <AnimatedButtonLabel text="I don't know" />
+                        </span>
                       </button>
                     )}
 
@@ -944,10 +1007,9 @@ export default function ClarityEnginePage() {
               )}
 
               {session.currentQuestionKey === 'complete' && (
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
+                <div className={styles.blueprintButtonWrap}>
                   <button
-                    className={styles.submitBtn}
-                    style={{ height: '48px', padding: '0 32px', fontSize: '14px', borderRadius: '24px' }}
+                    className={styles.blueprintButton}
                     onClick={() => {
                       playClick();
                       const payload = {
@@ -962,7 +1024,10 @@ export default function ClarityEnginePage() {
                       router.push('/clarity-engine/blueprint');
                     }}
                   >
-                    Generate Blueprint
+                    <ArrowRight className={`${styles.blueprintButtonArrow} ${styles.blueprintButtonArrowOne}`} size={24} aria-hidden="true" />
+                    <span className={styles.blueprintButtonCircle} aria-hidden="true" />
+                    <span className={styles.blueprintButtonText}>Generate Blueprint</span>
+                    <ArrowRight className={`${styles.blueprintButtonArrow} ${styles.blueprintButtonArrowTwo}`} size={24} aria-hidden="true" />
                   </button>
                 </div>
               )}
