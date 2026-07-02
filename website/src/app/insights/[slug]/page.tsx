@@ -77,7 +77,9 @@ import {
   FirstSystemTriageInfographic,
   ConstraintToBuildMapInfographic,
   SupportRouteRolloutInfographic,
-  SupportSignalLedgerInfographic
+  SupportSignalLedgerInfographic,
+  PresenceTranslationRouteInfographic,
+  PublicPageRealityCheckInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -455,6 +457,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:support-signal-ledger]') {
           return <SupportSignalLedgerInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:presence-translation-route]') {
+          return <PresenceTranslationRouteInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:public-page-reality-check]') {
+          return <PublicPageRealityCheckInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);

@@ -23,6 +23,95 @@ import {
 } from 'lucide-react';
 import styles from './Infographics.module.css';
 
+export function PresenceTranslationRouteInfographic() {
+  const route = [
+    {
+      icon: Radar,
+      label: 'Operating signal',
+      copy: 'A repeated question, handoff gap, support pattern, or proof boundary appears in real work.',
+    },
+    {
+      icon: Workflow,
+      label: 'Service route',
+      copy: 'The team names what happens frontstage, what happens backstage, and what evidence supports it.',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Public brief',
+      copy: 'The page, post, deck line, or article receives the source, owner, promise, and limitation.',
+    },
+    {
+      icon: Megaphone,
+      label: 'Presence output',
+      copy: 'The message says what the business can actually support, in language the audience can use.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Presence Translation Route</div>
+      <div className={styles.threadMap}>
+        <div className={styles.threadLine} aria-hidden="true" />
+        {route.map((stage, index) => {
+          const Icon = stage.icon;
+
+          return (
+            <div className={`${styles.threadStage} ${index === route.length - 1 ? styles.threadStageHighlight : ''}`} key={stage.label}>
+              <div className={index === route.length - 1 ? styles.threadIconHighlight : styles.threadIcon}>
+                <Icon size={18} />
+              </div>
+              <span className={styles.threadStep}>{String(index + 1).padStart(2, '0')}</span>
+              <h4>{stage.label}</h4>
+              <p>{stage.copy}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function PublicPageRealityCheckInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Public Page Reality Check</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Page element</th>
+              <th className={styles.matrixColHeader}>Weak translation habit</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Workflow-backed test</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Headline</td>
+              <td className={styles.matrixCell}>Names the tool or trend first.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Names the audience outcome and operating reality.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Service promise</td>
+              <td className={styles.matrixCell}>Sounds polished but has no delivery route.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Maps to owner, handoff, evidence, and review boundary.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>CTA</td>
+              <td className={styles.matrixCell}>Asks for a vague call or generic demo.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Asks for the workflow, decision loop, or gap to clarify.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Support copy</td>
+              <td className={styles.matrixCell}>Explains features without usage context.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Shows when people act, override, escalate, or learn.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 export function OperatingThreadMapInfographic() {
   const thread = [
     {
