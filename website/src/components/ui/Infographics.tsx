@@ -3156,3 +3156,93 @@ export function QuestionLibraryCompassInfographic() {
     </div>
   );
 }
+
+export function WorkflowNoteLibraryInfographic() {
+  const stages = [
+    {
+      icon: MessageSquareText,
+      label: 'Question',
+      copy: 'A repeated question, exception, or handoff gap appears in real work.',
+    },
+    {
+      icon: Workflow,
+      label: 'Workflow moment',
+      copy: 'The note is placed beside the intake, review, support, delivery, or presence route.',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Reusable note',
+      copy: 'The answer records context, owner, decision, boundary, and next action.',
+    },
+    {
+      icon: ShieldCheck,
+      label: 'Working system',
+      copy: 'People can act without reconstructing the same logic from memory.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Workflow Note Library</div>
+      <div className={styles.threadMap}>
+        <div className={styles.threadLine} aria-hidden="true" />
+        {stages.map((stage, index) => {
+          const Icon = stage.icon;
+          const isFinal = index === stages.length - 1;
+
+          return (
+            <div className={`${styles.threadStage} ${isFinal ? styles.threadStageHighlight : ''}`} key={stage.label}>
+              <div className={isFinal ? styles.threadIconHighlight : styles.threadIcon}>
+                <Icon size={18} />
+              </div>
+              <span className={styles.threadStep}>{String(index + 1).padStart(2, '0')}</span>
+              <h4>{stage.label}</h4>
+              <p>{stage.copy}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function DocumentationModeSelectorInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Documentation Mode Selector</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Workflow need</th>
+              <th className={styles.matrixColHeader}>Wrong habit</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Useful artifact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Someone must learn the route</td>
+              <td className={styles.matrixCell}>Send them a scattered chat history.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>A guided onboarding note or walkthrough.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Someone must complete a task</td>
+              <td className={styles.matrixCell}>Describe the whole system again.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>A short how-to with fields, owner, and done state.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Someone must check the source</td>
+              <td className={styles.matrixCell}>Depend on founder memory.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>A reference note with source, status, and proof boundary.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Someone must understand why</td>
+              <td className={styles.matrixCell}>Argue the decision again in meetings.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>A decision note with context, options, tradeoff, and review trigger.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

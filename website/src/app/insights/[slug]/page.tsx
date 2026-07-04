@@ -79,7 +79,9 @@ import {
   SupportRouteRolloutInfographic,
   SupportSignalLedgerInfographic,
   PresenceTranslationRouteInfographic,
-  PublicPageRealityCheckInfographic
+  PublicPageRealityCheckInfographic,
+  WorkflowNoteLibraryInfographic,
+  DocumentationModeSelectorInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -463,6 +465,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:public-page-reality-check]') {
           return <PublicPageRealityCheckInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:workflow-note-library]') {
+          return <WorkflowNoteLibraryInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:documentation-mode-selector]') {
+          return <DocumentationModeSelectorInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
