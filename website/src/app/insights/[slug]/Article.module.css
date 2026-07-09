@@ -156,6 +156,17 @@
   color: var(--text-primary);
 }
 
+.ctaEyebrow {
+  display: inline-flex;
+  margin-bottom: 14px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-burnished-gold);
+}
+
 .ctaBox p {
   color: var(--text-secondary);
   margin: 0 0 32px;
@@ -189,6 +200,27 @@
   color: var(--color-burnished-gold);
   font-weight: 600;
   text-shadow: 0 0 12px rgba(201, 168, 76, 0.2);
+}
+
+.articleContent a {
+  color: var(--color-burnished-gold);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(201, 168, 76, 0.45);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.articleContent a:hover {
+  color: var(--text-primary);
+  text-decoration-color: var(--color-burnished-gold);
+}
+
+.articleContent a:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid rgba(201, 168, 76, 0.7);
+  outline-offset: 3px;
 }
 
 .sourceBox,

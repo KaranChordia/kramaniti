@@ -51,6 +51,8 @@
 
 [Fact] The article template supports outbound source links through the optional `sourceLinks` field on each Insight object.
 
+[Fact] Kramaniti also has an Insights Growth Steward at `06_ai_agent_context/agents/insights_growth_steward.json`, with the operating playbook at `04_content_system/insights_growth_playbook.md`.
+
 ## Source Link Policy
 
 [Constraint] Do not fabricate source links.
@@ -69,6 +71,17 @@ sourceLinks: [
 ```
 
 [Recommendation] For older posts, backfill source links in small batches by checking the original research notes or rerunning source verification. Do not add generic search-result URLs as citations.
+
+## Growth Steward Layer
+
+[Recommendation] Future Insights publishing should use the Insights Growth Steward for:
+
+- 2-3 contextual internal links to relevant Kramaniti routes when they genuinely help the reader.
+- source freshness judgment, preferring current primary sources for market, product, legal, regulatory, and AI capability claims while allowing canonical evergreen standards when stronger.
+- category-matched soft CTAs rendered by the article template.
+- periodic cluster posts that synthesize 3-5 related Insights into a stronger pillar article.
+
+[Constraint] Do not claim traffic, rankings, backlinks, leads, or conversion impact unless analytics evidence was inspected in the current run.
 
 ## Where To Run It
 

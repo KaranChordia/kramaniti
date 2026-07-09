@@ -21,6 +21,7 @@ Memory to maintain:
 - Cinematic Scriptwriter: writes founder-led scripts and video outlines.
 - Distribution Editor: adapts copy for LinkedIn, X, Medium, email, and short-form video.
 - Distribution & Analytics Agent: owns recurring publishing checklist, analytics log, and repeat/revise/stop recommendations.
+- Insights Growth Steward: improves Insights posts with contextual internal links, source freshness judgment, category-matched CTAs, and periodic cluster-post opportunities.
 - Digital Presence Orchestrator: coordinates content with brand strategy, website direction, distribution, assets, and proof review when the work is campaign-level.
 
 ## Core Files
@@ -31,6 +32,7 @@ Memory to maintain:
 - `content_ideas_backlog.md`
 - `publishing_checklist.md`
 - `analytics_log.md`
+- `insights_growth_playbook.md`
 - `drafts/`
 
 ## Responsibilities

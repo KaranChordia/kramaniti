@@ -27,9 +27,11 @@ Memory to maintain:
 ## Current Growth-Orchestration Agents
 
 - `agents/digital_presence_orchestrator.json`
+- `agents/insights_growth_steward.json`
 - `agents/brand_identity_agent.json`
 - `agents/distribution_analytics_agent.json`
 - `memory/digital_presence_orchestrator/`
+- `memory/insights_growth_steward/`
 
 ## Agent Definition Standard
 

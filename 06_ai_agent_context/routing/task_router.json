@@ -142,6 +142,25 @@
       ]
     },
     {
+      "intent": "insights_growth_system",
+      "lead_agent": "insights_growth_steward",
+      "supporting_agents": [
+        "content_director",
+        "website_steward",
+        "brand_strategist",
+        "proof_governance_auditor",
+        "distribution_analytics_agent"
+      ],
+      "triggers": [
+        "Insights growth",
+        "internal links",
+        "source freshness",
+        "cluster post",
+        "article CTA",
+        "backlinks"
+      ]
+    },
+    {
       "intent": "distribution_analytics",
       "lead_agent": "distribution_analytics_agent",
       "supporting_agents": [

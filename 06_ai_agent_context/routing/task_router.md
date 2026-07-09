@@ -22,6 +22,7 @@ When a new task or request is received, the Master Coordinator evaluates the pri
 | **Workflow Diagnosis & Roadmaps** | Workflow Architect | Systems Designer, Sales Operator | "workflow audit", "process map", "AI readiness" |
 | **System Specs & Documentation** | Systems Designer | Workflow Architect, Handoff QA Agent | "build this system", "integration map", "handoff docs", "prototype spec" |
 | **Content Creation & Planning** | Content Director | Narrative Editor, Brand Strategist | "LinkedIn post", "newsletter", "editorial calendar", "video script" |
+| **Insights Growth System** | Insights Growth Steward | Content Director, Website Steward, Brand Strategist, Proof and Governance Auditor, Distribution & Analytics Agent | "Insights growth", "internal links", "source freshness", "cluster post", "article CTA", "backlinks" |
 | **Distribution & Analytics** | Distribution & Analytics Agent | Content Director, Website Steward, Proof and Governance Auditor | "publishing checklist", "analytics log", "performance review", "distribution", "repeat revise stop" |
 | **Sales & Proposals** | Sales Operator | Offer Architect, Workflow Architect | "discovery call", "client proposal", "lead follow-up" |
 | **Business Operations & CRM** | Operations Lead | Website Steward, Sales Operator | "launch checklist", "setup CRM", "domain config", "client onboarding" |

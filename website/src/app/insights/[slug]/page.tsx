@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Navbar } from '../../../components/layout/Navbar';
 import { Footer } from '../../../components/layout/Footer';
 import { insights } from '../../../data/insights';
+import type { Insight } from '../../../data/insights';
 import {
   DEFAULT_OG_IMAGE,
   SITE_NAME,
@@ -110,6 +111,64 @@ function formatPublishedMeta(date: string, publishedAt?: string) {
 
 type ArticlePageProps = { params: Promise<{ slug: string }> };
 
+const insightCtas: Record<Insight['category'], {
+  eyebrow: string;
+  title: string;
+  body: string;
+  href: string;
+  label: string;
+}> = {
+  Strategy: {
+    eyebrow: 'Strategy',
+    title: 'Turn the idea into a workflow route.',
+    body: 'Use an AI Workflow Audit to find the first decision, handoff, or operating constraint worth systemizing.',
+    href: '/#contact',
+    label: 'Book an audit',
+  },
+  Systems: {
+    eyebrow: 'Systems',
+    title: 'Review the system behind the work.',
+    body: 'Map the route, owner, source packet, and handoff before adding more tools to the workflow.',
+    href: '/#services',
+    label: 'Explore systems work',
+  },
+  Adoption: {
+    eyebrow: 'Adoption',
+    title: 'Make the workflow easier to use.',
+    body: 'Design the support path, review points, and handoff notes that help practical AI become daily operating behavior.',
+    href: '/#workflows',
+    label: 'See the process',
+  },
+  Governance: {
+    eyebrow: 'Governance',
+    title: 'Put proof beside the claim.',
+    body: 'Clarify which sources, owners, and review gates need to exist before a promise becomes public.',
+    href: '/#method',
+    label: 'Review the method',
+  },
+  Content: {
+    eyebrow: 'Content',
+    title: 'Build content from operating clarity.',
+    body: 'Connect internal signals, source routes, and founder judgment before turning insight into public presence.',
+    href: '/#services',
+    label: 'Explore content infrastructure',
+  },
+  'AI Infrastructure': {
+    eyebrow: 'Infrastructure',
+    title: 'Scope the operating layer first.',
+    body: 'Define the workflow boundary, review route, and system owner before choosing the AI stack.',
+    href: '/#contact',
+    label: 'Scope the system',
+  },
+  Spatial: {
+    eyebrow: 'Spatial',
+    title: 'Map the experience system.',
+    body: 'Connect the audience journey, content layer, and operating route before turning an experience into presence.',
+    href: '/work',
+    label: 'View selected work',
+  },
+};
+
 export function generateStaticParams() {
   return insights.map((post) => ({
     slug: post.slug,
@@ -182,6 +241,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const relatedInsights = getRelatedInsights(post, insights);
   const articleUrl = getInsightUrl(post);
   const publishedDate = getInsightPublishedDate(post);
+  const cta = insightCtas[post.category];
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -498,10 +558,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
 
             <div className={styles.ctaBox}>
-              <h3>Ready to engineer your pipeline?</h3>
-              <p>Align your strategy, operational tech, and content under one roof.</p>
-              <Link href="/#contact" className={styles.ctaLink}>
-                Reach Out
+              <span className={styles.ctaEyebrow}>{cta.eyebrow}</span>
+              <h3>{cta.title}</h3>
+              <p>{cta.body}</p>
+              <Link href={cta.href} className={styles.ctaLink}>
+                {cta.label}
               </Link>
             </div>
 

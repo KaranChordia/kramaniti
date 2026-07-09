@@ -661,3 +661,26 @@ This log registers the major strategic and structural decisions made during the 
     *   [Fact] The website route, API route, browser-local storage keys, Supabase schema references, ChatGPT manager package, support docs, and brand asset path were renamed to Clarity Square naming.
     *   [Fact] Compatibility remains for existing links, local browser handoffs, and already-applied database schemas through explicit redirect, local-storage import, and schema-rename migration paths.
     *   Guardrail: future product work should use Clarity Square for public copy, internal identifiers, database schema references, and ChatGPT manager naming. Legacy-name references should appear only where needed for migration or redirect compatibility.
+
+### Decision 21: Add Insights Growth Steward for Editorial SEO Support
+*   **Date:** 2026-07-07
+*   **Area:** Content system, agent operations, website SEO, Insights publishing
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Add an Insights Growth Steward as a focused growth specialist for Kramaniti Insights, instead of overloading the recurring publisher automation with every editorial SEO enhancement.
+*   **Rationale:** The twice-weekly Insights publisher should remain responsible for drafting, validation, commit, and push. Internal contextual links, source freshness judgment, category-matched soft CTAs, and periodic cluster-post opportunities are recurring editorial-growth checks that need a durable owner and playbook.
+*   **Affected Files:**
+    *   `06_ai_agent_context/agents/insights_growth_steward.json`
+    *   `06_ai_agent_context/memory/insights_growth_steward/active_context.md`
+    *   `04_content_system/insights_growth_playbook.md`
+    *   `06_ai_agent_context/AGENTS.md`
+    *   `04_content_system/AGENTS.md`
+    *   `06_ai_agent_context/routing/task_router.md`
+    *   `06_ai_agent_context/routing/task_router.json`
+    *   `docs/insights_seo_agent.md`
+    *   `website/src/app/insights/[slug]/page.tsx`
+    *   `website/src/app/insights/[slug]/Article.module.css`
+*   **Guardrails:**
+    *   Do not claim traffic, backlink, ranking, lead, revenue, or conversion impact unless analytics evidence is inspected.
+    *   Do not add client proof, logos, testimonials, metrics, or case-study outcomes without proof and permission clearance.
+    *   Do not add internal links for density alone; every link must improve reader navigation or context.
+    *   Source links, inline citations, internal links, and cluster posts must preserve Kramaniti's core sequence: strategy before tools, systems before scale, content after clarity.
