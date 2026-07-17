@@ -23,6 +23,54 @@ import {
 } from 'lucide-react';
 import styles from './Infographics.module.css';
 
+export function AlignmentRouteMapInfographic() {
+  const route = [
+    {
+      icon: Radar,
+      label: 'Operating reality',
+      copy: 'The team names the repeated friction, decision loop, handoff, or customer-facing gap.',
+    },
+    {
+      icon: GitBranch,
+      label: 'Alignment route',
+      copy: 'Requirement, owner, source packet, risk boundary, and priority are tied to one route.',
+    },
+    {
+      icon: Workflow,
+      label: 'Useful system',
+      copy: 'Only the support that changes the route is built: tool, note, review gate, or handoff.',
+    },
+    {
+      icon: FolderSync,
+      label: 'Growth signal',
+      copy: 'Learning writes back into operations, intelligence, adoption, and public communication.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Alignment Route Map</div>
+      <div className={styles.threadMap}>
+        <div className={styles.threadLine} aria-hidden="true" />
+        {route.map((stage, index) => {
+          const Icon = stage.icon;
+
+          return (
+            <div className={`${styles.threadStage} ${index === route.length - 1 ? styles.threadStageHighlight : ''}`} key={stage.label}>
+              <div className={index === route.length - 1 ? styles.threadIconHighlight : styles.threadIcon}>
+                <Icon size={18} />
+              </div>
+              <span className={styles.threadStep}>{String(index + 1).padStart(2, '0')}</span>
+              <h4>{stage.label}</h4>
+              <p>{stage.copy}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function PresenceTranslationRouteInfographic() {
   const route = [
     {

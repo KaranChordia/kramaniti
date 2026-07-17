@@ -33,6 +33,7 @@
 
 | Date | Channel | Format | Working Title | Pillar | Campaign | Draft Owner | Proof Status | Approval Status | Publish Status | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 17 Jul 2026 | Website | Insights Cluster Article | Alignment Turns Scattered Intelligence Into Systems | Strategy | Alignment Route | Content Director | Governance reviewed | Approved | Published | Added to website/src/data/insights.ts |
 | 04 Jul 2026 | Website | Insights Article | Keep the Note Beside the Workflow | Systems | Operating Documentation | Content Director | Governance reviewed | Approved | Published | Added to website/src/data/insights.ts |
 | 03 Jul 2026 | Website | Insights Article | The Multi-Agent Coordination Tax: Why Orchestration Beats Automation | Systems & Risk | Agentic Orchestration | Content Director | Governance reviewed | Approved | Published | Added to website/src/data/insights.ts |
 | 22 Jun 2026 | Website | Insights Article | Why 90% AI Adoption Yields Only 6% Enterprise Value | Strategy | Operational Value | Content Director | Governance reviewed | Approved | Published | Added to website/src/data/insights.ts |

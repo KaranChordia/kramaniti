@@ -16,6 +16,7 @@ import {
   stripInlineMarkup,
 } from '../../../lib/seo';
 import { 
+  AlignmentRouteMapInfographic,
   TechStackInfographic, 
   DisconnectedOpsInfographic, 
   AgenticWorkflowsInfographic, 
@@ -331,6 +332,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             <div className={styles.articleContent}>
               {post.content.map((paragraph, index) => {
+                if (paragraph === '[infographic:alignment-route-map]') {
+                  return <AlignmentRouteMapInfographic key={index} />;
+                }
                 if (paragraph === '[infographic:tech-stack]') {
                   return <TechStackInfographic key={index} />;
                 }
