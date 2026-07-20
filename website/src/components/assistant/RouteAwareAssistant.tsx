@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { KramanitiAssistant } from './KramanitiAssistant';
 
-const HIDDEN_ASSISTANT_ROUTES = ['/clarity-square', '/agent-simulation'];
+const HIDDEN_ASSISTANT_ROUTES = ['/clarity-square', '/client-hub', '/hq', '/agent-simulation'];
 
 export function RouteAwareAssistant() {
   const pathname = usePathname();

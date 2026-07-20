@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './Hero.module.css';
 
 const heroHeadline = 'Align how your brand operates, thinks, and shows up.';
@@ -51,20 +51,67 @@ const signalDots = [
   { x: '86%', y: '39%', size: 3, delay: '-1.8s', duration: '6.7s' },
 ];
 
-export function Hero() {
-  const [isIntroVisible, setIsIntroVisible] = useState(false);
+type HeroProps = {
+  isActive?: boolean;
+};
+
+export function Hero({ isActive = true }: HeroProps) {
+  const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => setIsIntroVisible(true));
-    return () => window.cancelAnimationFrame(frame);
+    const hero = heroRef.current;
+    if (!hero) return;
+
+    let frame = 0;
+
+    const updateScrollDepth = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const rect = hero.getBoundingClientRect();
+        const progress = Math.min(1, Math.max(0, -rect.top / Math.max(rect.height * 0.72, 1)));
+        hero.style.setProperty('--hero-scroll', progress.toFixed(4));
+      });
+    };
+
+    const updatePointerDepth = (event: PointerEvent) => {
+      const rect = hero.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      hero.style.setProperty('--hero-pointer-x', x.toFixed(3));
+      hero.style.setProperty('--hero-pointer-y', y.toFixed(3));
+    };
+
+    const resetPointerDepth = () => {
+      hero.style.setProperty('--hero-pointer-x', '0');
+      hero.style.setProperty('--hero-pointer-y', '0');
+    };
+
+    updateScrollDepth();
+    window.addEventListener('scroll', updateScrollDepth, { passive: true });
+    hero.addEventListener('pointermove', updatePointerDepth, { passive: true });
+    hero.addEventListener('pointerleave', resetPointerDepth);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', updateScrollDepth);
+      hero.removeEventListener('pointermove', updatePointerDepth);
+      hero.removeEventListener('pointerleave', resetPointerDepth);
+    };
   }, []);
 
   return (
-    <section className={styles.heroSection} id="hero">
+    <section ref={heroRef} className={styles.heroSection} id="hero">
       <div className={styles.background} aria-hidden="true">
         <div className={`${styles.glow} ${styles.glowLeft}`} />
         <div className={`${styles.glow} ${styles.glowRight}`} />
         <div className={styles.grid} />
+        <div className={styles.scrollArchitecture}>
+          <span className={`${styles.architectureWave} ${styles.architectureWaveOuter}`} />
+          <span className={`${styles.architectureWave} ${styles.architectureWaveMiddle}`} />
+          <span className={`${styles.architectureWave} ${styles.architectureWaveInner}`} />
+          <span className={styles.architectureAxis} />
+          <span className={styles.architectureSignal} />
+        </div>
         <div className={styles.flowField}>
           {flowLines.map((line) => (
             <span
@@ -98,7 +145,7 @@ export function Hero() {
       </div>
 
       <div className={styles.container}>
-        <div className={`${styles.content} ${isIntroVisible ? styles.visible : ''}`}>
+        <div className={`${styles.content} ${isActive ? styles.visible : ''}`}>
           <span className={styles.heroBrandText} data-text="Kramaniti">
             Kramaniti
           </span>

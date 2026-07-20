@@ -100,6 +100,29 @@ export type ClaritySquareProfile = {
   updated_at: string;
 };
 
+export type ClaritySquareProductEventName =
+  | 'page_view'
+  | 'return_visit'
+  | 'path_chosen'
+  | 'context_started'
+  | 'context_completed'
+  | 'assistant_first_message'
+  | 'clarity_brief_produced'
+  | 'project_created'
+  | 'task_drafted'
+  | 'task_approved'
+  | 'square_post'
+  | 'response_saved'
+  | 'loop_completed';
+
+export type ClaritySquareProductEvent = {
+  id: string;
+  user_id: string;
+  event_name: ClaritySquareProductEventName;
+  metadata: Record<string, unknown>;
+  created_at: string;
+};
+
 type ClaritySquareDatabase = {
   clarity_square: {
     Tables: {
@@ -209,6 +232,15 @@ type ClaritySquareDatabase = {
         Update: Partial<
           Omit<ClaritySquareAssistantMemory, 'id' | 'user_id' | 'created_at' | 'updated_at'>
         >;
+      };
+      product_events: {
+        Row: ClaritySquareProductEvent;
+        Insert: {
+          user_id: string;
+          event_name: ClaritySquareProductEventName;
+          metadata?: Record<string, unknown>;
+        };
+        Update: never;
       };
     };
     Functions: {

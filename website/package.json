@@ -3,10 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run hq:sync",
     "dev": "next dev",
+    "prebuild": "npm run hq:sync",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "client-hub:sync": "node ../scripts/sync-client-hub.mjs",
+    "hq:sync": "node ../scripts/sync-kramaniti-hq.mjs",
+    "hq:watch": "node ../scripts/sync-kramaniti-hq.mjs --watch"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

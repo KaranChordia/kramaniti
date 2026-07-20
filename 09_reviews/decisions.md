@@ -684,3 +684,101 @@ This log registers the major strategic and structural decisions made during the 
     *   Do not add client proof, logos, testimonials, metrics, or case-study outcomes without proof and permission clearance.
     *   Do not add internal links for density alone; every link must improve reader navigation or context.
     *   Source links, inline citations, internal links, and cluster posts must preserve Kramaniti's core sequence: strategy before tools, systems before scale, content after clarity.
+
+### Decision 22: Clarity Square Early-Journey and Community Quality Guardrails
+*   **Date:** 2026-07-13
+*   **Area:** Clarity Square product, privacy, activation, community
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Treat the first useful Clarity Square journey as a private, reviewed sequence: choose a path, create a Clarity Brief, approve a private project, and approve its first actions. Measure only the authenticated user's journey events by default.
+*   **Rationale:** Product learning should not require exposing a member's context or creating an unprotected founder-wide analytics surface. The early community should reward specific, proof-safe contributions and project follow-through rather than generic engagement.
+*   **Affected Files:**
+    *   `supabase/migrations/20260713094600_clarity_square_product_events.sql`
+    *   `website/src/app/clarity-square/ClaritySquare.tsx`
+    *   `website/src/lib/clarity-square/supabase.ts`
+*   **Guardrails:**
+    *   Product-event rows are owner-readable and owner-insertable only through `clarity_square` RLS; do not expose cross-user analytics in the browser without an explicitly authorized, secured admin surface.
+    *   Community posts remain visibility-confirmed and should foreground a real workflow, a testable contribution, or a human review boundary. Do not promise paid opportunities, outcomes, or engagement rewards.
+    *   Saving a thread to a project prepares private follow-through; it must not publish a user's workspace context back to the Square.
+
+### Decision 23: Private Client Hub as a Separate Delivery System
+*   **Date:** 2026-07-13
+*   **Area:** Client delivery, communication, project operations, assistant governance, website
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Add a private `/client-hub` workroom for Kramaniti and its clients rather than extending the public Clarity Square product. Each client receives a founder-provisioned login and membership-isolated workspace for projects, nested tasks, notes, messages, assistant drafts, and curated repository references.
+*   **Rationale:** Client delivery needs a shared operating thread with explicit ownership, review, and privacy boundaries. Clarity Square serves a different public clarity-network purpose and should not become the storage or identity layer for private client work.
+*   **Affected Files:**
+    *   `website/src/app/client-hub/`
+    *   `website/src/app/api/client-hub/`
+    *   `website/src/lib/client-hub/`
+    *   `website/src/data/client-hub-repositories.generated.json`
+    *   `client-hub.config.json`
+    *   `scripts/sync-client-hub.mjs`
+    *   `supabase/migrations/20260713100327_kramaniti_client_hub.sql`
+    *   `supabase/migrations/20260713102945_kramaniti_client_hub_fk_indexes.sql`
+    *   `supabase/functions/client-hub-admin/`
+    *   `docs/kramaniti_client_hub_setup.md`
+*   **Guardrails:**
+    *   Keep Client Hub data inside the isolated `kramaniti_hub` schema with membership-based RLS. Do not reuse Clarity Square or unrelated public tables.
+    *   Keep public signup disabled. Client accounts are created by a verified owner through the protected `client-hub-admin` Edge Function and must replace temporary passwords at first sign-in.
+    *   Assistant writes remain visible and approval-gated. Task decomposition should create an operating sequence, not generic busywork.
+    *   Repository reflection is metadata-only and allowlist-first. Do not expose file contents, absolute paths, remotes, secrets, finance material, or unapproved client directories.
+    *   Shared notes are client-visible; internal notes and internal repository references remain owner/collaborator-only.
+    *   Keep the route private, excluded from the public sitemap, and hidden from the global public assistant.
+
+### Decision 24: Kramaniti HQ as the Founder Operating Layer
+*   **Date:** 2026-07-20
+*   **Area:** Company operations, portfolio, client delivery, repository intelligence, website
+*   **Status:** Implemented (`[Recommendation]`)
+*   **Decision:** Add an owner-only `/hq` command centre as a separate founder experience while reusing the Client Hub authentication, workspace, Supabase and repository-sync foundation. Keep `/client-hub` scoped to client collaboration and delivery.
+*   **Rationale:** Kramaniti is the primary company and needs one operating picture across internal product work, client engagements, relationship follow-ups and repository movement. Placing cross-client commercial and priority context inside Client Hub would confuse its purpose and risk inappropriate visibility. Building an unrelated standalone app would duplicate the secure foundation and create another system to maintain.
+*   **Affected Files:**
+    *   `website/src/app/hq/`
+    *   `website/src/app/api/hq/repository-sync/`
+    *   `website/src/lib/client-hub/supabase.ts`
+    *   `website/src/components/assistant/RouteAwareAssistant.tsx`
+    *   `kramaniti-hq.config.json`
+    *   `scripts/sync-kramaniti-hq.mjs`
+    *   `supabase/migrations/20260720040451_kramaniti_hq_portfolio.sql`
+    *   `docs/kramaniti_hq_operating_guide.md`
+*   **Guardrails:**
+    *   HQ portfolio and founder-action records remain globally owner-only through explicit RLS. Do not grant client or collaborator access to cross-workspace commercial, relationship or priority context.
+    *   Founder actions remain separate from client-visible delivery tasks. Use Client Hub for work a client may see and HQ for founder commitments, follow-ups and portfolio decisions.
+    *   Repository pulse is explicit-allowlist, metadata-only and path-sanitized. Do not index file contents, remotes, secrets, credentials, finance material or unapproved client data.
+    *   Keep repositories, HQ and Client Hub as distinct sources of truth for implementation, company decisions and client-visible delivery respectively.
+    *   Do not add autonomous messaging, silent record changes or task generation from every code TODO. Human control remains the operating boundary.
+
+### Decision 25: Make Kramaniti HQ a Read-Only Tracking Surface
+*   **Date:** 2026-07-20
+*   **Area:** HQ product boundary, navigation, themes, repository tracking
+*   **Status:** Implemented (`[Fact]`)
+*   **Decision:** Simplify `/hq` into a read-only tracking surface with Today, Projects and Repositories views. Remove portfolio editing, action creation and status changes, and repository publishing from the interface. Replace the sidebar with a persistent floating top navigation, use the original Kramaniti mark, support light and dark themes, and increase the default reading size.
+*   **Rationale:** HQ is intended to help the founder regain context and understand movement across projects. Editing business records or publishing repository snapshots from the same surface makes its authority unclear and increases cognitive load.
+*   **Guardrails:**
+    *   HQ may read authenticated owner-only operating data and listen for source-data changes.
+    *   HQ must not create, update, complete, delete or publish records from its interface.
+    *   Repository activity must be described as snapshot-based unless a true hosted webhook or scheduled sync is implemented.
+
+### Decision 26: Add One Controlled Write Surface for Shared Client Tasks
+*   **Date:** 2026-07-20
+*   **Area:** HQ task management, Client Hub interoperability, client access control
+*   **Status:** Implemented (`[Fact]`)
+*   **Decision:** Preserve project status and repository tracking as read-only, but add a dedicated Tasks view that creates and updates `kramaniti_hub.tasks` inside the selected client workspace. Add a persistent client-focus rail that scopes Today, Tasks, Projects and Repositories to one workspace.
+*   **Rationale:** Task management is a deliberate operational action rather than an accidental edit to tracked business or repository state. Reusing Client Hub tasks gives the founder one task source that can later be shown to each client through their existing workspace credentials.
+*   **Access boundary:**
+    *   Workspace clients may select tasks in their own workspace through the existing membership-scoped RLS policy.
+    *   Only owner and collaborator roles may insert or update tasks.
+    *   HQ portfolio records, founder-only actions and repository snapshots retain their existing privacy boundaries.
+    *   Client access belongs in Client Hub; clients do not receive access to the cross-client HQ route.
+
+### Decision 27: Add a Workspace-Scoped Natural-Language Task Assistant
+*   **Date:** 2026-07-20
+*   **Area:** HQ task operations, AI assistant, Supabase authorization and auditability
+*   **Status:** Implemented (`[Fact]`)
+*   **Decision:** Add an owner-authenticated HQ assistant that reads and manages tasks only inside the workspace currently selected in the client-focus rail. Reuse the configured Groq assistant provider and the existing Client Hub task, assistant-message and assistant-action tables.
+*   **Capabilities:** Create tasks; modify title, description, priority, due date, project and status; start, wait, review, complete, reopen or archive tasks; answer questions from the selected task list.
+*   **Guardrails:**
+    *   The server validates every task and project identifier against the selected workspace before applying an operation.
+    *   Cross-workspace requests, invented identifiers and ambiguous task matches must not be applied.
+    *   The route requires the global owner role and uses the authenticated user client, preserving workspace RLS.
+    *   Applied actions are recorded in the existing assistant audit tables.
+    *   The assistant has no tools for messaging clients, editing portfolio state, changing repositories, publishing, finance or deleting data permanently.

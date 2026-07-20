@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-13T10:35:16.558Z",
+  "workspaces": [
+    {
+      "slug": "kramaniti-internal",
+      "name": "Kramaniti Internal",
+      "repositorySummary": {
+        "repositoryLabel": "Kramaniti",
+        "branch": "main",
+        "revision": "6c1767a61232",
+        "dirty": true,
+        "itemCount": 3
+      },
+      "items": [
+        {
+          "sourceKey": "kramaniti-internal:05_ai_strategy",
+          "repositoryLabel": "Kramaniti",
+          "repositoryPath": "05_ai_strategy",
+          "itemType": "directory",
+          "title": "AI strategy and delivery",
+          "summary": "Workflow audits, system design, and delivery methods.",
+          "visibility": "internal",
+          "sourceHash": "6c1767a61232",
+          "metadata": {
+            "branch": "main",
+            "dirty": true
+          }
+        },
+        {
+          "sourceKey": "kramaniti-internal:07_business_build",
+          "repositoryLabel": "Kramaniti",
+          "repositoryPath": "07_business_build",
+          "itemType": "directory",
+          "title": "Business operations",
+          "summary": "Launch, onboarding, delivery, and operating checklists.",
+          "visibility": "internal",
+          "sourceHash": "6c1767a61232",
+          "metadata": {
+            "branch": "main",
+            "dirty": true
+          }
+        },
+        {
+          "sourceKey": "kramaniti-internal:docs",
+          "repositoryLabel": "Kramaniti",
+          "repositoryPath": "docs",
+          "itemType": "directory",
+          "title": "Implementation documentation",
+          "summary": "Current technical plans, handoffs, and setup notes.",
+          "visibility": "internal",
+          "sourceHash": "6c1767a61232",
+          "metadata": {
+            "branch": "main",
+            "dirty": true
+          }
+        }
+      ]
+    }
+  ]
+}

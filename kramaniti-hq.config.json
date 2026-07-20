@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repositories": [
+    {
+      "slug": "kramaniti-internal",
+      "repositoryKey": "kramaniti",
+      "name": "Kramaniti",
+      "repositoryPath": "."
+    },
+    {
+      "slug": "maitri-circle",
+      "repositoryKey": "maitri-circle",
+      "name": "Maitri Circle",
+      "repositoryPath": "../Maitri"
+    },
+    {
+      "slug": "basispoint-studio",
+      "repositoryKey": "basispoint-studio",
+      "name": "Basispoint Studio",
+      "repositoryPath": "../../BasisPoints Studio"
+    },
+    {
+      "slug": "trust-data",
+      "repositoryKey": "trust-data",
+      "name": "Trust Data",
+      "repositoryPath": "../Trust Data"
+    },
+    {
+      "slug": "raju-bafna",
+      "repositoryKey": "raju-bafna",
+      "name": "Raju Bafna",
+      "repositoryPath": "../Raju Bafna"
+    }
+  ]
+}

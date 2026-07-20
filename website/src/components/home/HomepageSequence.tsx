@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { useCallback, useEffect, useState } from 'react';
 import styles from './HomepageSequence.module.css';
+import { OpeningFilm } from './OpeningFilm';
 import { Navbar } from '../layout/Navbar';
 import { Hero } from '../sections/Hero';
 import { Problem } from '../sections/Problem';
@@ -14,35 +14,27 @@ import { FounderPreview } from '../sections/FounderPreview';
 import { Contact } from '../sections/Contact';
 import { Footer } from '../layout/Footer';
 
-type IntroPhase = 'dark' | 'logo-in' | 'logo-out' | 'done';
+type IntroPhase = 'film' | 'done';
 
-const DARK_PHASE_MS = 220;
-const LOGO_IN_MS = 760;
-const LOGO_OUT_MS = 420;
+const OPENING_FILM_MS = 7800;
 const ENABLE_NAV_HERO_SEQUENCE_SYNC = false;
 
 export function HomepageSequence() {
-  const [phase, setPhase] = useState<IntroPhase>('dark');
+  const [phase, setPhase] = useState<IntroPhase>('film');
+
+  const finishIntro = useCallback(() => setPhase('done'), []);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const prefersFastMobile = window.matchMedia('(max-width: 768px)').matches;
-
-    if (prefersReducedMotion || prefersFastMobile) {
-      const reducedMotionTimer = window.setTimeout(() => setPhase('done'), 0);
+    if (prefersReducedMotion) {
+      const reducedMotionTimer = window.setTimeout(finishIntro, 1100);
       return () => window.clearTimeout(reducedMotionTimer);
     }
 
-    const logoInTimer = window.setTimeout(() => setPhase('logo-in'), DARK_PHASE_MS);
-    const logoOutTimer = window.setTimeout(() => setPhase('logo-out'), DARK_PHASE_MS + LOGO_IN_MS);
-    const doneTimer = window.setTimeout(() => setPhase('done'), DARK_PHASE_MS + LOGO_IN_MS + LOGO_OUT_MS);
+    const doneTimer = window.setTimeout(finishIntro, OPENING_FILM_MS);
 
-    return () => {
-      window.clearTimeout(logoInTimer);
-      window.clearTimeout(logoOutTimer);
-      window.clearTimeout(doneTimer);
-    };
-  }, []);
+    return () => window.clearTimeout(doneTimer);
+  }, [finishIntro]);
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -87,49 +79,27 @@ export function HomepageSequence() {
   const showOverlay = phase !== 'done';
 
   return (
-    <div className={styles.shell}>
+    <div className={`${styles.shell} ${showOverlay ? styles.introActive : ''}`}>
       <Navbar isVisible={showContent} />
 
-      {showOverlay && (
-        <div
-          className={[
-            styles.overlay,
-            phase === 'dark' ? styles.overlayDark : '',
-            phase === 'logo-in' ? styles.overlayLogoIn : '',
-            phase === 'logo-out' ? styles.overlayLogoOut : '',
-          ].join(' ')}
-          aria-hidden="true"
-        >
-          <div className={styles.logoStage}>
-            <div className={styles.stageLight}></div>
-            <div className={styles.logoHalo}></div>
-            <Image
-              src="/assets/brand/kramaniti-mark-gold.png"
-              alt=""
-              width={176}
-              height={176}
-              priority
-              className={styles.logoMark}
-            />
-          </div>
-        </div>
-      )}
+      {showOverlay && <OpeningFilm onSkip={finishIntro} />}
 
-      {showContent && (
-        <div className={styles.chrome}>
-          <main className={styles.main}>
-            <Hero />
-            <Problem />
-            <Story />
-            <BrandFilm />
-            <Services />
-            <Workflows />
-            <FounderPreview />
-            <Contact />
-          </main>
-          <Footer />
-        </div>
-      )}
+      <div
+        className={`${styles.chrome} ${showContent ? styles.chromeVisible : ''}`}
+        aria-hidden={!showContent}
+      >
+        <main className={styles.main}>
+          <Hero isActive={showContent} />
+          <Problem />
+          <Story />
+          <BrandFilm />
+          <Services />
+          <Workflows />
+          <FounderPreview />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }

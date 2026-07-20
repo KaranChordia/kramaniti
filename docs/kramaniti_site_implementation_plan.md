@@ -393,6 +393,91 @@ Related files:
 - `website/src/components/layout/Navbar.tsx`
 - `website/src/app/sitemap.ts`
 
+## 10.6 Homepage Opening Film and Scroll Depth
+
+2026-07-12 update: the short logo splash was replaced with an approximately eight-second homepage opening film that explains the Kramaniti sequence before handing off to the existing hero.
+
+[Fact] The opening film now:
+
+- Builds Strategy, Systems, and Content one at a time as three close, concentric square signal layers with sharp, deliberately disconnected corners around one shared focal point.
+- Uses the approved Obsidian, Graphite, Burnished Gold, Ice White, and Silver Mist palette with Outfit and JetBrains Mono.
+- Reveals the Kramaniti mark without a surrounding container, then resolves into the line "One connected growth system" before the standard homepage appears.
+- Includes a visible skip control and a shortened static resolution for visitors who prefer reduced motion.
+- Runs as a simplified responsive composition on mobile instead of removing the brand explanation entirely.
+
+[Fact] The existing hero now responds to normal document scroll and pointer position through subtle atmospheric depth, ring rotation, and content recession. It does not intercept wheel, touch, or keyboard scrolling.
+
+[Constraint] Keep this layer concise and business-first. Future iterations should preserve the sequential layer logic, the skip control, reduced-motion handling, and traditional continuous homepage scrolling.
+
+Related files:
+
+- `website/src/components/home/OpeningFilm.tsx`
+- `website/src/components/home/OpeningFilm.module.css`
+- `website/src/components/home/HomepageSequence.tsx`
+- `website/src/components/home/HomepageSequence.module.css`
+- `website/src/components/sections/Hero.tsx`
+- `website/src/components/sections/Hero.module.css`
+
+## 10.7 Kramaniti Client Hub
+
+2026-07-13 update: the website now includes a private `/client-hub` delivery workroom for Kramaniti and its clients.
+
+[Fact] The implementation includes:
+
+- founder-provisioned client usernames and temporary passwords, with forced replacement at first sign-in;
+- membership-isolated workrooms backed by the dedicated `kramaniti_hub` Supabase schema;
+- projects, nested tasks, priorities, due dates, notes, messages, and Realtime refreshes;
+- shared notes plus owner/collaborator-only internal notes;
+- an assistant that reads the signed-in member's visible workspace data and drafts reviewable writes;
+- automatic decomposition of manually added tasks into ordered subtask proposals;
+- a durable approval queue for assistant-created projects, tasks, notes, task updates, and messages;
+- an allowlist-driven repository index that reflects relative directory metadata without exposing file contents, absolute paths, remote URLs, or secrets;
+- a private `noindex` route that is absent from the sitemap and does not mount the global public assistant.
+- a JWT-protected Supabase Edge Function that keeps privileged Auth administration out of the website runtime.
+
+[Constraint] Client Hub is a private delivery system, not a public Clarity Square extension. Keep its authentication, storage, assistant actions, and repository visibility rules separate.
+
+[Constraint] Supabase's secret or service-role key remains inside the hosted Edge Function runtime. Client access must remain membership-scoped through RLS, and internal records must not become visible to client-role members.
+
+[Recommendation] Before the first real client is invited, complete the disposable two-session isolation test described in `docs/kramaniti_client_hub_setup.md`.
+
+Related files:
+
+- `website/src/app/client-hub/page.tsx`
+- `website/src/app/client-hub/ClientHub.tsx`
+- `website/src/app/client-hub/ClientHub.module.css`
+- `website/src/app/api/client-hub/`
+- `website/src/lib/client-hub/`
+- `client-hub.config.json`
+- `scripts/sync-client-hub.mjs`
+- `supabase/migrations/20260713100327_kramaniti_client_hub.sql`
+- `supabase/functions/client-hub-admin/`
+- `docs/kramaniti_client_hub_setup.md`
+
+## 10.8 Kramaniti HQ
+
+2026-07-20 update: the website now includes an owner-only `/hq` command centre for running Kramaniti across internal work, client delivery and relationship opportunities.
+
+[Fact] HQ is a separate founder experience built on the existing Client Hub foundation. It combines a daily overview, read-only portfolio records, founder-only action context, delivery counts and sanitized repository pulse data without exposing cross-client context inside Client Hub.
+
+[Fact] The initial portfolio covers Kramaniti, Maitri Circle, Basispoint Studio, Trust Data and Raju Bafna. The live database is seeded with the current operating stages and first follow-up actions, all of which can be changed from the interface.
+
+[Constraint] HQ portfolio and action rows are globally owner-only through `kramaniti_hub` RLS. Founder actions remain distinct from client-visible delivery tasks. Repository pulse output excludes file contents, remotes, secrets, credentials and absolute paths.
+
+[Constraint] Keep HQ decision-oriented. It should answer what needs attention, what is waiting, which opportunity is moving and what changed in the repositories. Do not turn it into a generic metrics dashboard or a second Client Hub.
+
+[Constraint] HQ remains read-only for portfolio and repository state and does not publish. Its one controlled write surface is shared workspace task management backed by `kramaniti_hub.tasks`. Clients may later view their scoped tasks through Client Hub credentials, while task writes remain restricted to owner and collaborator roles. Repository movement is snapshot-based until a hosted webhook or scheduled sync is deliberately implemented.
+
+[Fact] HQ also includes an owner-only natural-language task assistant. It reuses the configured assistant provider, reads only the selected workspace task context, applies validated task operations through the authenticated Supabase client and records every applied operation in the existing assistant audit tables.
+
+Related files:
+
+- `website/src/app/hq/`
+- `kramaniti-hq.config.json`
+- `scripts/sync-kramaniti-hq.mjs`
+- `supabase/migrations/20260720040451_kramaniti_hq_portfolio.sql`
+- `docs/kramaniti_hq_operating_guide.md`
+
 ## 11. Nexocean Portfolio Page
 
 - Added a dedicated selected-work page at `/work/nexocean`.

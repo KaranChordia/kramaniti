@@ -1,0 +1,217 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-20T05:17:05.133Z",
+  "privacy": "sanitized-metadata-only",
+  "workspaces": [
+    {
+      "slug": "kramaniti-internal",
+      "repositoryKey": "kramaniti",
+      "name": "Kramaniti",
+      "available": true,
+      "versioned": true,
+      "repositorySummary": {
+        "repositoryLabel": "Kramaniti",
+        "branch": "main",
+        "revision": "b958f2244698",
+        "dirty": true,
+        "dirtyFileCount": 56,
+        "trackedFileCount": 399,
+        "lastCommitAt": "2026-07-17T14:37:53+05:30",
+        "lastCommitSubject": "Publish alignment route insight",
+        "ahead": 0,
+        "behind": 0,
+        "itemCount": 1
+      },
+      "items": [
+        {
+          "sourceKey": "kramaniti-internal:.",
+          "repositoryLabel": "Kramaniti",
+          "repositoryPath": ".",
+          "itemType": "repository",
+          "title": "Kramaniti repository",
+          "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
+          "visibility": "internal",
+          "sourceHash": "b958f2244698",
+          "metadata": {
+            "branch": "main",
+            "dirty": true,
+            "dirtyFileCount": 56,
+            "trackedFileCount": 399,
+            "lastCommitAt": "2026-07-17T14:37:53+05:30",
+            "lastCommitSubject": "Publish alignment route insight",
+            "ahead": 0,
+            "behind": 0
+          }
+        }
+      ]
+    },
+    {
+      "slug": "maitri-circle",
+      "repositoryKey": "maitri-circle",
+      "name": "Maitri Circle",
+      "available": true,
+      "versioned": true,
+      "repositorySummary": {
+        "repositoryLabel": "Maitri Circle",
+        "branch": "main",
+        "revision": "824615e18ebf",
+        "dirty": true,
+        "dirtyFileCount": 43,
+        "trackedFileCount": 659,
+        "lastCommitAt": "2026-07-15T15:46:17+05:30",
+        "lastCommitSubject": "Add Maitri planning and design artifacts",
+        "ahead": 0,
+        "behind": 0,
+        "itemCount": 1
+      },
+      "items": [
+        {
+          "sourceKey": "maitri-circle:.",
+          "repositoryLabel": "Maitri Circle",
+          "repositoryPath": ".",
+          "itemType": "repository",
+          "title": "Maitri Circle repository",
+          "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
+          "visibility": "internal",
+          "sourceHash": "824615e18ebf",
+          "metadata": {
+            "branch": "main",
+            "dirty": true,
+            "dirtyFileCount": 43,
+            "trackedFileCount": 659,
+            "lastCommitAt": "2026-07-15T15:46:17+05:30",
+            "lastCommitSubject": "Add Maitri planning and design artifacts",
+            "ahead": 0,
+            "behind": 0
+          }
+        }
+      ]
+    },
+    {
+      "slug": "basispoint-studio",
+      "repositoryKey": "basispoint-studio",
+      "name": "Basispoint Studio",
+      "available": true,
+      "versioned": true,
+      "repositorySummary": {
+        "repositoryLabel": "Basispoint Studio",
+        "branch": "main",
+        "revision": null,
+        "dirty": true,
+        "dirtyFileCount": 5,
+        "trackedFileCount": 0,
+        "lastCommitAt": null,
+        "lastCommitSubject": null,
+        "ahead": 0,
+        "behind": 0,
+        "itemCount": 1
+      },
+      "items": [
+        {
+          "sourceKey": "basispoint-studio:.",
+          "repositoryLabel": "Basispoint Studio",
+          "repositoryPath": ".",
+          "itemType": "repository",
+          "title": "Basispoint Studio repository",
+          "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
+          "visibility": "internal",
+          "sourceHash": null,
+          "metadata": {
+            "branch": "main",
+            "dirty": true,
+            "dirtyFileCount": 5,
+            "trackedFileCount": 0,
+            "lastCommitAt": null,
+            "lastCommitSubject": null,
+            "ahead": 0,
+            "behind": 0
+          }
+        }
+      ]
+    },
+    {
+      "slug": "trust-data",
+      "repositoryKey": "trust-data",
+      "name": "Trust Data",
+      "available": true,
+      "versioned": true,
+      "repositorySummary": {
+        "repositoryLabel": "Trust Data",
+        "branch": "main",
+        "revision": "32825839f093",
+        "dirty": true,
+        "dirtyFileCount": 11,
+        "trackedFileCount": 41,
+        "lastCommitAt": "2026-07-09T20:44:21+05:30",
+        "lastCommitSubject": "Add frosted glass nav transparency",
+        "ahead": 0,
+        "behind": 0,
+        "itemCount": 1
+      },
+      "items": [
+        {
+          "sourceKey": "trust-data:.",
+          "repositoryLabel": "Trust Data",
+          "repositoryPath": ".",
+          "itemType": "repository",
+          "title": "Trust Data repository",
+          "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
+          "visibility": "internal",
+          "sourceHash": "32825839f093",
+          "metadata": {
+            "branch": "main",
+            "dirty": true,
+            "dirtyFileCount": 11,
+            "trackedFileCount": 41,
+            "lastCommitAt": "2026-07-09T20:44:21+05:30",
+            "lastCommitSubject": "Add frosted glass nav transparency",
+            "ahead": 0,
+            "behind": 0
+          }
+        }
+      ]
+    },
+    {
+      "slug": "raju-bafna",
+      "repositoryKey": "raju-bafna",
+      "name": "Raju Bafna",
+      "available": true,
+      "versioned": false,
+      "repositorySummary": {
+        "repositoryLabel": "Raju Bafna",
+        "branch": null,
+        "revision": null,
+        "dirty": false,
+        "dirtyFileCount": 0,
+        "trackedFileCount": 0,
+        "lastCommitAt": null,
+        "lastCommitSubject": null,
+        "ahead": 0,
+        "behind": 0,
+        "itemCount": 1
+      },
+      "items": [
+        {
+          "sourceKey": "raju-bafna:.",
+          "repositoryLabel": "Raju Bafna",
+          "repositoryPath": ".",
+          "itemType": "repository",
+          "title": "Raju Bafna repository",
+          "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
+          "visibility": "internal",
+          "sourceHash": null,
+          "metadata": {
+            "branch": null,
+            "dirty": false,
+            "dirtyFileCount": 0,
+            "trackedFileCount": 0,
+            "lastCommitAt": null,
+            "lastCommitSubject": null,
+            "ahead": 0,
+            "behind": 0
+          }
+        }
+      ]
+    }
+  ]
+}

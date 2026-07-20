@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -49,6 +48,8 @@ import {
   type ClaritySquareProjectFolder,
   type ClaritySquareProjectReport,
   type ClaritySquareProjectTask,
+  type ClaritySquareProductEvent,
+  type ClaritySquareProductEventName,
 } from '@/lib/clarity-square/supabase';
 import styles from './ClaritySquare.module.css';
 
@@ -218,6 +219,8 @@ type CommunityPost = {
   createdAt: string;
   interestCount: number;
   replyCount: number;
+  helpfulCount: number;
+  savedCount: number;
   source: 'seed' | 'user';
 };
 
@@ -403,7 +406,7 @@ const createUiMessage = (
 const INITIAL_ASSISTANT_MESSAGES: UiAssistantMessage[] = [
   createUiMessage(
     'assistant',
-    'I can use your Square context, projects, and memory to sharpen your next move or create a new project from a rough request.',
+    'I can use your Square context, projects, and memory to sharpen your next move or draft a new project from a rough request for your approval.',
     null,
     DEFAULT_ASSISTANT_THREAD_ID,
   ),
@@ -420,6 +423,13 @@ const INITIAL_ASSISTANT_THREADS: AssistantThread[] = [
 
 const normalizeAssistantThreadId = (threadId: string | null | undefined) =>
   threadId === LEGACY_ASSISTANT_THREAD_ID ? DEFAULT_ASSISTANT_THREAD_ID : threadId || DEFAULT_ASSISTANT_THREAD_ID;
+
+const normalizeLegacySquareLanguage = (value: string) =>
+  value
+    .replace(/\bClarity Circle\b/g, 'Clarity Square')
+    .replace(/\bCircle context\b/g, 'Square context')
+    .replace(/or create a new project from a rough request\.?/gi, 'or draft a new project from a rough request for your approval.')
+    .replace(/\bI[’']ll set up a project\b/gi, 'I can draft a project for your review');
 
 const getAssistantThreadId = (message: UiAssistantMessage) => normalizeAssistantThreadId(message.thread_id);
 
@@ -554,6 +564,8 @@ const COMMUNITY_SEED_POSTS: CommunityPost[] = [
     createdAt: '2026-06-24T08:00:00.000Z',
     interestCount: 4,
     replyCount: 3,
+    helpfulCount: 5,
+    savedCount: 2,
     source: 'seed',
   },
   {
@@ -568,6 +580,8 @@ const COMMUNITY_SEED_POSTS: CommunityPost[] = [
     createdAt: '2026-06-23T11:15:00.000Z',
     interestCount: 6,
     replyCount: 5,
+    helpfulCount: 7,
+    savedCount: 4,
     source: 'seed',
   },
   {
@@ -582,6 +596,8 @@ const COMMUNITY_SEED_POSTS: CommunityPost[] = [
     createdAt: '2026-06-24T05:45:00.000Z',
     interestCount: 8,
     replyCount: 4,
+    helpfulCount: 9,
+    savedCount: 3,
     source: 'seed',
   },
   {
@@ -596,9 +612,53 @@ const COMMUNITY_SEED_POSTS: CommunityPost[] = [
     createdAt: '2026-06-22T16:30:00.000Z',
     interestCount: 5,
     replyCount: 2,
+    helpfulCount: 4,
+    savedCount: 2,
     source: 'seed',
   },
+  {
+    id: 'seed-founder-review', kind: 'founder_problem', track: 'founder',
+    title: 'Where should a founder keep review ownership in a client-intake workflow?',
+    body: 'The intake can be structured, but the team needs a clear point where an owner checks nuance before a proposal or promise is sent.',
+    tags: ['review', 'intake', 'ownership'], authorLabel: 'Founder Track', createdAt: '2026-06-21T09:00:00.000Z', interestCount: 3, replyCount: 4, helpfulCount: 6, savedCount: 2, source: 'seed',
+  },
+  {
+    id: 'seed-founder-followup', kind: 'founder_problem', track: 'founder',
+    title: 'Follow-up is happening, but nobody can see which next action matters',
+    body: 'A small service team has enquiry notes and reminders in several places. The useful first step may be a shared view of owner, stage, and reason for the next action.',
+    tags: ['follow-up', 'operations', 'visibility'], authorLabel: 'Founder Track', createdAt: '2026-06-20T13:20:00.000Z', interestCount: 5, replyCount: 3, helpfulCount: 5, savedCount: 3, source: 'seed',
+  },
+  {
+    id: 'seed-founder-proof', kind: 'founder_problem', track: 'founder',
+    title: 'How do we turn delivery notes into proof without exposing client context?',
+    body: 'The team wants to share useful learning, but needs a repeatable way to remove confidential detail and retain the operational insight.',
+    tags: ['proof', 'privacy', 'content'], authorLabel: 'Founder Track', createdAt: '2026-06-19T10:10:00.000Z', interestCount: 4, replyCount: 2, helpfulCount: 4, savedCount: 4, source: 'seed',
+  },
+  {
+    id: 'seed-builder-review-checklist', kind: 'builder_share', track: 'builder',
+    title: 'A simple human-review checklist before a drafted reply goes out',
+    body: 'I am testing four checks: factual accuracy, tone, missing decision owner, and anything that should stay confidential. It keeps the AI step useful without making it the approver.',
+    tags: ['review', 'human-led', 'workflow'], authorLabel: 'Solopreneur Track', createdAt: '2026-06-21T07:30:00.000Z', interestCount: 6, replyCount: 3, helpfulCount: 8, savedCount: 4, source: 'seed',
+  },
+  {
+    id: 'seed-builder-experiment', kind: 'builder_share', track: 'builder',
+    title: 'First experiment: one weekly founder signal, one decision, one next move',
+    body: 'Instead of building a broad dashboard, I am testing a short weekly ritual that records the strongest signal, the decision owner, and the next action.',
+    tags: ['experiment', 'founder', 'signal'], authorLabel: 'Solopreneur Track', createdAt: '2026-06-20T06:00:00.000Z', interestCount: 7, replyCount: 4, helpfulCount: 7, savedCount: 5, source: 'seed',
+  },
+  {
+    id: 'seed-builder-handoff', kind: 'builder_share', track: 'builder',
+    title: 'Workflow sketch: hand off a qualified enquiry without losing the reasoning',
+    body: 'The sketch keeps source, customer need, owner, confidence, and review note together. The open question is which fields a small team will actually keep current.',
+    tags: ['handoff', 'prototype', 'service'], authorLabel: 'Solopreneur Track', createdAt: '2026-06-19T15:10:00.000Z', interestCount: 5, replyCount: 3, helpfulCount: 6, savedCount: 3, source: 'seed',
+  },
 ];
+
+const COMMUNITY_RESPONSE_TEMPLATES = [
+  { label: 'Assumption to test', title: 'Assumption to test: ', body: 'The assumption I would test first is ___. A small way to test it this week is ___. The evidence that would change the next decision is ___.', tags: 'assumption, experiment' },
+  { label: 'Workflow sketch', title: 'Workflow sketch: ', body: 'Start with ___. Assign __ as the decision owner. Add a human review at ___. The next action is ___.', tags: 'workflow, handoff' },
+  { label: 'Proof-safe contribution', title: 'Proof-safe contribution: ', body: 'A useful pattern I have seen is ___. It may help here because ___. Keep the final decision and any confidential detail with the owner.', tags: 'practical, review' },
+] as const;
 
 const formatProjectDate = (value: string) =>
   new Intl.DateTimeFormat('en-IN', {
@@ -669,13 +729,13 @@ const buildSavedContext = (track: Track, intent: IntentDraft): SavedContext => {
       track === 'founder'
         ? [
             'Map one workflow into human-led, AI-assisted, reviewed, and automated steps.',
-            'Turn the strongest blocker into one focused community question.',
-            'Generate a Clarity Brief before publishing content or choosing tools.',
+            'Name the decision owner and review point before any action is automated.',
+            'Choose the one proof-safe next action that will reduce the blocker.',
           ]
         : [
             'Choose one audience and one painful moment for the first experiment.',
-            'Save two more rough notes so the context layer can compare patterns.',
-            'Turn the idea into a short validation prompt before building.',
+            'Define the smallest useful version and the evidence that would validate it.',
+            'Choose one practical next action before building more.',
           ],
   };
 };
@@ -701,10 +761,11 @@ export function ClaritySquare() {
   const [track, setTrack] = useState<Track>('founder');
   const [intent, setIntent] = useState<IntentDraft>(TRACKS.founder.defaults);
   const [savedContext, setSavedContext] = useState<SavedContext | null>(null);
+  const [clarityBriefProjectId, setClarityBriefProjectId] = useState<string | null>(null);
   const [activeMenu, setActiveMenu] = useState<MenuId>('start');
-  const [activeLoopId, setActiveLoopId] = useState<LoopId>('project');
+  const [activeLoopId, setActiveLoopId] = useState<LoopId>('signal');
   const [loopRun, setLoopRun] = useState<LoopRunState>({
-    loopId: 'project',
+    loopId: 'signal',
     phase: 'idle',
     startedAt: null,
     completedAt: null,
@@ -745,6 +806,8 @@ export function ClaritySquare() {
   const [communityTitle, setCommunityTitle] = useState('');
   const [communityBody, setCommunityBody] = useState('');
   const [communityTags, setCommunityTags] = useState('');
+  const [communityVisibilityConfirmed, setCommunityVisibilityConfirmed] = useState(false);
+  const [productEvents, setProductEvents] = useState<ClaritySquareProductEvent[]>([]);
   const [assistantInput, setAssistantInput] = useState('');
   const [assistantMessages, setAssistantMessages] = useState<UiAssistantMessage[]>(INITIAL_ASSISTANT_MESSAGES);
   const [assistantThreads, setAssistantThreads] = useState<AssistantThread[]>(INITIAL_ASSISTANT_THREADS);
@@ -767,6 +830,7 @@ export function ClaritySquare() {
   const assistantThreadDropdownCloseTimerRef = useRef<number | null>(null);
   const assistantSettingsCloseTimerRef = useRef<number | null>(null);
   const loopRunTokenRef = useRef(0);
+  const visitTrackedRef = useRef<string | null>(null);
 
   const resizeAssistantInput = useCallback((input: HTMLTextAreaElement) => {
     input.style.height = `${ASSISTANT_INPUT_MIN_HEIGHT}px`;
@@ -778,6 +842,25 @@ export function ClaritySquare() {
     input.style.height = `${nextHeight}px`;
     input.style.overflowY = input.scrollHeight > ASSISTANT_INPUT_MAX_HEIGHT ? 'auto' : 'hidden';
   }, []);
+
+  const trackProductEvent = useCallback(
+    async (eventName: ClaritySquareProductEventName, metadata: Record<string, unknown> = {}) => {
+      const supabase = getClaritySquareSupabase();
+      if (!supabase || !authUser) return;
+
+      const { data, error } = await supabase
+        .schema('clarity_square')
+        .from('product_events')
+        .insert({ user_id: authUser.id, event_name: eventName, metadata })
+        .select('*')
+        .single();
+
+      if (!error && data) {
+        setProductEvents((current) => [data, ...current].slice(0, 80));
+      }
+    },
+    [authUser],
+  );
 
   useEffect(() => {
     if (assistantInputRef.current) {
@@ -979,7 +1062,7 @@ export function ClaritySquare() {
     const supabase = getClaritySquareSupabase();
     if (!supabase) return null;
 
-    const [projectResult, folderResult, taskResult, reportResult, entryResult, messageResult, memoryResult] = await Promise.all([
+    const [projectResult, folderResult, taskResult, reportResult, entryResult, messageResult, memoryResult, eventResult] = await Promise.all([
       supabase
         .schema('clarity_square')
         .from('projects')
@@ -1035,6 +1118,13 @@ export function ClaritySquare() {
         .eq('status', 'active')
         .order('updated_at', { ascending: false })
         .limit(20),
+      supabase
+        .schema('clarity_square')
+        .from('product_events')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(80),
     ]);
 
     if (projectResult.error) {
@@ -1065,7 +1155,7 @@ export function ClaritySquare() {
         ? nextMessageRows.map((message) => ({
             id: message.id,
             role: message.role,
-            content: message.content,
+            content: normalizeLegacySquareLanguage(message.content),
             createdAt: message.created_at,
             project_id: message.project_id,
             thread_id: message.project_id ? null : getMessageThreadIdFromMetadata(message.metadata),
@@ -1085,6 +1175,7 @@ export function ClaritySquare() {
     if (!reportResult.error) {
       setProjectReports(nextReports);
     }
+    setProductEvents(eventResult.error ? [] : eventResult.data ?? []);
     setContextEntries(nextEntries);
     if (!options?.preserveAssistantState) {
       setAssistantMessages(nextMessages);
@@ -1139,17 +1230,23 @@ export function ClaritySquare() {
           if (parsed.intent) setIntent(parsed.intent);
           if (parsed.savedContext) setSavedContext(parsed.savedContext);
           if (parsed.sessionMode) setSessionMode(parsed.sessionMode);
+          const hasMeaningfulSavedWork =
+            Boolean(parsed.savedContext) ||
+            parsed.step === 'context' ||
+            parsed.assistantMessages?.some((message) => message.role === 'user');
           const restoredActiveMenu = parsed.activeMenu === 'circle' ? 'square' : parsed.activeMenu;
           if (
-            restoredActiveMenu === 'home' ||
-            restoredActiveMenu === 'more' ||
-            (restoredActiveMenu && MENU_ITEMS.some((item) => item.id === restoredActiveMenu))
+            hasMeaningfulSavedWork &&
+            (restoredActiveMenu === 'home' ||
+              restoredActiveMenu === 'more' ||
+              (restoredActiveMenu && MENU_ITEMS.some((item) => item.id === restoredActiveMenu)))
           ) {
             setActiveMenu(restoredActiveMenu);
           }
           if (Array.isArray(parsed.assistantMessages) && parsed.assistantMessages.length > 0) {
             const parsedAssistantMessages = parsed.assistantMessages.slice(-60).map((message) => ({
               ...message,
+              content: normalizeLegacySquareLanguage(message.content),
               thread_id: message.project_id ? null : normalizeAssistantThreadId(message.thread_id),
               thread_title: message.project_id ? null : message.thread_title ?? null,
             }));
@@ -1337,6 +1434,19 @@ export function ClaritySquare() {
       window.clearTimeout(initialRefresh);
     };
   }, [activeMenu, authUser, refreshWorkspace]);
+
+  useEffect(() => {
+    if (!authUser || !hasLoaded) return;
+    if (visitTrackedRef.current === authUser.id) return;
+    visitTrackedRef.current = authUser.id;
+    const visitTimer = window.setTimeout(() => {
+      void trackProductEvent(productEvents.some((event) => event.event_name === 'page_view') ? 'return_visit' : 'page_view', {
+        surface: 'clarity_square',
+      });
+    }, 0);
+    // One compact visit marker per mounted Square session; never user-written context.
+    return () => window.clearTimeout(visitTimer);
+  }, [authUser, hasLoaded, productEvents, trackProductEvent]);
 
   useEffect(() => {
     const supabase = getClaritySquareSupabase();
@@ -1558,6 +1668,7 @@ export function ClaritySquare() {
 
     await supabase.auth.signOut();
     setAuthUser(null);
+    visitTrackedRef.current = null;
     setAuthProfile(null);
     setProjects([]);
     setProjectFolders([]);
@@ -1573,6 +1684,8 @@ export function ClaritySquare() {
     setProjectInstructionDraft(null);
     setManualTaskTitle('');
     setProjectAssistantInput('');
+    setClarityBriefProjectId(null);
+    setCommunityVisibilityConfirmed(false);
     setAssistantMessages(INITIAL_ASSISTANT_MESSAGES);
     setAssistantThreads(INITIAL_ASSISTANT_THREADS);
     setActiveAssistantThreadId(DEFAULT_ASSISTANT_THREAD_ID);
@@ -1899,7 +2012,7 @@ export function ClaritySquare() {
       ? 'The Project Loop scanned saved projects, folders, recent movement, and task load.'
       : 'The Project Loop scanned the workspace and did not find saved projects to summarize yet.',
     task: selectedProjectLoopTasks.length > 0
-      ? 'The Task Loop scanned open and completed work so you can see current movement without digging.'
+      ? `The clearest next move is “${selectedLoopOpenTasks[0]?.title ?? selectedLoopDoneTasks[0]?.title}”. Complete it or update it with the learning it unlocks.`
       : 'The Task Loop scanned the workspace and did not find saved project tasks yet.',
     reflection: sourceProjectForLoops
       ? 'The Reflection Loop scanned project movement, completed work, and prior reflection history.'
@@ -1992,6 +2105,14 @@ export function ClaritySquare() {
     needs_approval: loopCards.filter((loop) => loop.status === 'needs_approval').length,
     completed: loopCards.filter((loop) => loop.status === 'completed').length,
   };
+  const hasProducedBrief = productEvents.some((event) => event.event_name === 'clarity_brief_produced') || Boolean(savedContext);
+  const hasApprovedProject = productEvents.some((event) => event.event_name === 'project_created') || projects.length > 0;
+  const hasApprovedTask = productEvents.some((event) => event.event_name === 'task_approved') || projectTasks.length > 0;
+  const journeyActivationCount = [hasProducedBrief, hasApprovedProject, hasApprovedTask].filter(Boolean).length;
+  const newestProductEventAt = productEvents[0]?.created_at;
+  const weeklyEventCount = newestProductEventAt
+    ? productEvents.filter((event) => new Date(newestProductEventAt).getTime() - new Date(event.created_at).getTime() <= 7 * 24 * 60 * 60 * 1000).length
+    : 0;
   const homeStats: Array<{ label: string; value: number; detail: string; icon: typeof CircleDot; menu: MenuId }> = [
     {
       label: 'Projects',
@@ -2107,6 +2228,7 @@ export function ClaritySquare() {
     }
 
     setProjectTasks((current) => [...current, ...data]);
+    void trackProductEvent(source === 'assistant' ? 'task_approved' : 'task_drafted', { source, count: data.length });
     return data;
   };
 
@@ -2289,6 +2411,7 @@ export function ClaritySquare() {
     setIsCreatingProject(false);
     setIsSavingProject(false);
     await insertProjectTasks(project, buildAutoTasks(project), 'auto');
+    void trackProductEvent('project_created', { source: 'manual_brief', track: accountTrack });
     setStatus('Project created with starting tasks.');
     void refreshWorkspace(authUser, { quiet: true });
     return project;
@@ -2300,6 +2423,10 @@ export function ClaritySquare() {
 
     if (!title || !body) {
       setStatus('Add a title and enough context before posting to the Square.');
+      return null;
+    }
+    if (!communityVisibilityConfirmed) {
+      setStatus('Confirm that this shared Square post is safe to show to other members before publishing.');
       return null;
     }
 
@@ -2321,6 +2448,8 @@ export function ClaritySquare() {
       createdAt: new Date().toISOString(),
       interestCount: 0,
       replyCount: 0,
+      helpfulCount: 0,
+      savedCount: 0,
       source: 'user',
     };
 
@@ -2329,7 +2458,9 @@ export function ClaritySquare() {
     setCommunityTitle('');
     setCommunityBody('');
     setCommunityTags('');
+    setCommunityVisibilityConfirmed(false);
     setStatus(post.kind === 'founder_problem' ? 'Founder problem posted locally.' : 'Solopreneur share posted locally.');
+    void trackProductEvent('square_post', { kind: post.kind, track: post.track });
     return post;
   };
 
@@ -2344,9 +2475,24 @@ export function ClaritySquare() {
     setStatus(post.kind === 'founder_problem' ? 'Contribution signal added to this founder problem.' : 'Interest signal added to this share.');
   };
 
+  const markCommunityQuality = (post: CommunityPost, action: 'helpful' | 'save') => {
+    setCommunityPosts((current) =>
+      current.map((item) =>
+        item.id === post.id
+          ? action === 'helpful'
+            ? { ...item, helpfulCount: item.helpfulCount + 1 }
+            : { ...item, savedCount: item.savedCount + 1 }
+          : item,
+      ),
+    );
+    setStatus(action === 'helpful' ? 'Marked as helpful. Specific contributions rise above generic engagement.' : 'Saved as a useful thread for project follow-through.');
+  };
+
   const turnCommunityPostIntoProject = (post: CommunityPost) => {
     const prefix = post.kind === 'founder_problem' ? 'Founder problem thread' : 'Solopreneur share';
     openNewProjectFlow(`${prefix}: ${post.title}\n\n${post.body}\n\nTags: ${post.tags.join(', ') || 'none'}`);
+    setCommunityPosts((current) => current.map((item) => (item.id === post.id ? { ...item, savedCount: item.savedCount + 1 } : item)));
+    void trackProductEvent('response_saved', { post_kind: post.kind, source: post.source });
   };
 
   const askAssistantAboutCommunityPost = (post: CommunityPost) => {
@@ -2453,6 +2599,8 @@ export function ClaritySquare() {
     if (error) {
       setStatus('Task status could not be saved.');
       void refreshWorkspace(authUser, { quiet: true });
+    } else if (nextStatus === 'done') {
+      void trackProductEvent('loop_completed', { loop: 'task', source: task.source });
     }
   };
 
@@ -2625,7 +2773,14 @@ export function ClaritySquare() {
     setIsCreatingProject(false);
     setProjectBrief(project.project_instruction || project.context);
     setProjectInstructionDraft(project.project_instruction || project.context);
-    await insertProjectTasks(project, buildAutoTasks(project), 'auto');
+    await insertProjectTasks(
+      project,
+      context.actions.map((title) => ({
+        title,
+        detail: 'Approved from the Clarity Brief as a reviewed first action.',
+      })),
+      'auto',
+    );
     setStatus('Project created with assistant context and starting tasks.');
     void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
     return project;
@@ -3511,6 +3666,7 @@ export function ClaritySquare() {
     if (!prompt || isAssistantBusy) return;
 
     const threadId = resolvedAssistantThreadId;
+    const isFirstAssistantMessage = !assistantMessages.some((message) => message.role === 'user');
     const userMessage = createUiMessage('user', prompt, null, threadId);
     const nextMessages = [...squareAssistantMessages, userMessage].slice(-12);
 
@@ -3523,6 +3679,7 @@ export function ClaritySquare() {
     setAssistantInput('');
     setIsAssistantBusy(true);
     const userMessageSave = saveAssistantMessage(userMessage, null, threadId);
+    if (isFirstAssistantMessage) void trackProductEvent('assistant_first_message', { track: accountTrack });
 
     try {
       const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true, preserveAssistantState: true }) : null;
@@ -3776,22 +3933,13 @@ export function ClaritySquare() {
     setStep('intent');
     setActiveMenu('context');
     void applyTrackChoice(nextTrack, { persist: Boolean(authUser), statusPrefix: `${TRACKS[nextTrack].shortLabel} selected.` });
+    void trackProductEvent('path_chosen', { track: nextTrack });
+    void trackProductEvent('context_started', { track: nextTrack });
   };
 
-  const saveIntent = async () => {
+  const prepareClarityBrief = () => {
     if (!intent.headline.trim() || !intent.context.trim()) {
-      setStatus('Add a short headline and enough context before saving this signal.');
-      return;
-    }
-
-    const supabase = getClaritySquareSupabase();
-    if (!authUser) {
-      setStatus('Sign in before saving context.');
-      openMenu('start');
-      return;
-    }
-    if (!supabase) {
-      setStatus('Context could not be saved to your account.');
+      setStatus('Add a short headline and enough context before creating your Clarity Brief.');
       return;
     }
 
@@ -3802,11 +3950,32 @@ export function ClaritySquare() {
       blocker: intent.blocker.trim(),
       outcome: intent.outcome.trim(),
     });
-    const projectInstruction = buildProjectInstruction(context.intent);
-
     setSavedContext(context);
+    setClarityBriefProjectId(null);
     setStep('context');
     setActiveMenu('context');
+    setStatus('Clarity Brief ready. Review the problem, boundary, and first three actions before approving a private project.');
+    void trackProductEvent('context_completed', { track: accountTrack });
+    void trackProductEvent('clarity_brief_produced', { track: accountTrack, action_count: context.actions.length });
+    void trackProductEvent('task_drafted', { source: 'clarity_brief', action_count: context.actions.length });
+  };
+
+  const approveClarityBrief = async () => {
+    if (!savedContext) return;
+
+    const supabase = getClaritySquareSupabase();
+    if (!authUser) {
+      setStatus('Create an account or sign in before approving this private project.');
+      openMenu('start');
+      return;
+    }
+    if (!supabase) {
+      setStatus('The private project could not be saved to your account.');
+      return;
+    }
+
+    const context = savedContext;
+    const projectInstruction = buildProjectInstruction(context.intent);
 
     setIsSavingContext(true);
     const { data: project, error: projectError } = await supabase
@@ -3830,7 +3999,7 @@ export function ClaritySquare() {
 
     if (projectError || !project) {
       setIsSavingContext(false);
-      setStatus('Context could not be saved to your account.');
+      setStatus('The private project could not be saved to your account.');
       return;
     }
 
@@ -3851,11 +4020,14 @@ export function ClaritySquare() {
 
     setProjects((current) => [project, ...current.filter((item) => item.id !== project.id)].slice(0, 80));
     setSelectedProjectId(project.id);
+    setClarityBriefProjectId(project.id);
     setProjectBrief(project.project_instruction || project.context);
     setProjectInstructionDraft(project.project_instruction || project.context);
     await insertProjectTasks(project, buildAutoTasks(project), 'auto');
     setIsSavingContext(false);
-    setStatus('Context saved with starting tasks.');
+    setStatus('Private project approved with three starting actions.');
+    void trackProductEvent('project_created', { source: 'clarity_brief', project_id: project.id });
+    void trackProductEvent('task_approved', { source: 'clarity_brief', project_id: project.id, action_count: context.actions.length });
     void refreshWorkspace(authUser, { quiet: true });
   };
 
@@ -3869,6 +4041,7 @@ export function ClaritySquare() {
       outcome: project.outcome ?? '',
     });
     setSavedContext(savedContextFromProject(project));
+    setClarityBriefProjectId(project.id);
     setStep('context');
     setActiveMenu('context');
     setProjectBrief(project.project_instruction || project.context);
@@ -3879,6 +4052,7 @@ export function ClaritySquare() {
   const refineAgain = () => {
     setStep('intent');
     setActiveMenu('context');
+    setClarityBriefProjectId(null);
     setStatus('Refine the signal.');
   };
 
@@ -3946,6 +4120,7 @@ export function ClaritySquare() {
 
     if (loopRunTokenRef.current !== token) return;
     setLoopRun({ loopId, phase: 'ready', startedAt, completedAt: new Date().toISOString() });
+    void trackProductEvent('loop_completed', { loop: loopId });
   };
 
   const selectLoop = (loopId: LoopId) => {
@@ -4158,6 +4333,21 @@ export function ClaritySquare() {
               </div>
 
               <div className={styles.homeBentoGrid}>
+                <article className={styles.homePanel} aria-label="Your activation signal">
+                  <div className={styles.homePanelHeader}>
+                    <span>Your activation signal</span>
+                    <Activity size={17} aria-hidden="true" />
+                  </div>
+                  <h2>{journeyActivationCount}/3 early steps complete</h2>
+                  <p>
+                    {weeklyEventCount} private workspace signal{weeklyEventCount === 1 ? '' : 's'} recorded in the last seven days. A journey is activated when a brief becomes an approved project with a reviewed task.
+                  </p>
+                  <div className={styles.homePanelActions}>
+                    <button type="button" className={styles.textButton} onClick={() => openMenu(hasProducedBrief ? 'projects' : 'context')}>
+                      {hasProducedBrief ? 'Open private project' : 'Create Clarity Brief'}
+                    </button>
+                  </div>
+                </article>
                 <article className={`${styles.homePanel} ${styles.homePanelWide}`}>
                   <div className={styles.homePanelHeader}>
                     <span>Current signal</span>
@@ -4479,6 +4669,13 @@ export function ClaritySquare() {
 
           {activeMenu === 'context' && step !== 'context' && (
             <section className={styles.screen} aria-label={accountTrack === 'founder' ? 'Capture the business signal' : 'Capture the solopreneur signal'}>
+              <aside className={styles.workspacePrivacyNote} aria-label="Private workspace guidance">
+                <ShieldCheck size={18} aria-hidden="true" />
+                <div>
+                  <strong>Your context stays in your private workspace.</strong>
+                  <p>The assistant can use this signal to draft your Clarity Brief, projects, tasks, and memories. It is not added to the public Square feed. You stay in control of what is saved and can delete saved workspace items from Memory.</p>
+                </div>
+              </aside>
               <div className={styles.intentForm}>
                 <label>
                   One-line intent
@@ -4528,8 +4725,8 @@ export function ClaritySquare() {
                 <button type="button" className={styles.secondaryButton} onClick={() => setStep('track')}>
                   Back
                 </button>
-                <button type="button" className={styles.primaryButton} onClick={saveIntent}>
-                  {isSavingContext ? 'Saving...' : 'Save context'}
+                <button type="button" className={styles.primaryButton} onClick={prepareClarityBrief}>
+                  Create Clarity Brief
                   <ArrowRight size={17} aria-hidden="true" />
                 </button>
               </div>
@@ -4537,46 +4734,79 @@ export function ClaritySquare() {
           )}
 
           {activeMenu === 'context' && step === 'context' && savedContext && (
-            <section className={styles.screen} aria-label="Saved context">
+            <section className={styles.screen} aria-label="Clarity Brief">
               <div className={styles.contextPanel}>
                 <div className={styles.contextHeader}>
                   <span>{TRACKS[savedContext.track].shortLabel}</span>
-                  <small>Saved {savedContext.savedAt}</small>
+                  <small>First outcome</small>
                 </div>
-                <h2>{savedContext.intent.headline}</h2>
-                <p>{savedContext.summary}</p>
+                <h1>Your Clarity Brief</h1>
+                <p>Review this one-page route before anything is saved to your workspace.</p>
               </div>
 
-              <div className={styles.contextGrid}>
+              <div className={styles.clarityBriefFacts}>
                 <article>
                   <FileText size={17} aria-hidden="true" />
-                  <h2>Next questions</h2>
-                  <ul>
-                    {savedContext.questions.map((question) => (
-                      <li key={question}>{question}</li>
-                    ))}
-                  </ul>
+                  <span>Problem</span>
+                  <h2>{savedContext.intent.headline}</h2>
+                  <p>{savedContext.intent.blocker || savedContext.intent.context}</p>
                 </article>
                 <article>
                   <Compass size={17} aria-hidden="true" />
-                  <h2>Suggested sequence</h2>
-                  <ul>
-                    {savedContext.actions.map((action) => (
-                      <li key={action}>{action}</li>
-                    ))}
-                  </ul>
+                  <span>Audience and workflow</span>
+                  <h2>{savedContext.intent.audience || 'Audience still to be confirmed'}</h2>
+                  <p>{savedContext.intent.context}</p>
+                </article>
+                <article>
+                  <ShieldCheck size={17} aria-hidden="true" />
+                  <span>AI and human boundary</span>
+                  <h2>AI assists. You decide.</h2>
+                  <p>{savedContext.track === 'founder' ? 'Use AI to structure the workflow; keep the decision owner and final review human-led.' : 'Use AI to sharpen the idea and evidence; keep the validation decision human-led.'}</p>
+                </article>
+                <article>
+                  <CheckCircle2 size={17} aria-hidden="true" />
+                  <span>Desired outcome</span>
+                  <h2>{savedContext.intent.outcome || 'A clear, reviewed next move.'}</h2>
+                  <p>{savedContext.summary}</p>
                 </article>
               </div>
+
+              <article className={styles.clarityBriefActions}>
+                <div>
+                  <span>Reviewed first actions</span>
+                  <h2>The first three moves</h2>
+                </div>
+                <ol>
+                  {savedContext.actions.map((action) => (
+                    <li key={action}>{action}</li>
+                  ))}
+                </ol>
+                <p>Approving creates one private project with these three actions. Nothing is saved to your Square workspace until you approve.</p>
+              </article>
 
               <div className={styles.screenActions}>
                 <button type="button" className={styles.secondaryButton} onClick={refineAgain}>
                   <RefreshCw size={16} aria-hidden="true" />
                   Refine context
                 </button>
-                <Link href="/clarity-engine?from=clarity-square" className={styles.primaryLink} onClick={() => prepareEngineHandoff()}>
-                  Continue in Clarity Engine
-                  <ArrowRight size={17} aria-hidden="true" />
-                </Link>
+                {clarityBriefProjectId ? (
+                  <button
+                    type="button"
+                    className={styles.primaryButton}
+                    onClick={() => {
+                      const project = projects.find((item) => item.id === clarityBriefProjectId);
+                      if (project) openProject(project);
+                    }}
+                  >
+                    Open approved project
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </button>
+                ) : (
+                  <button type="button" className={styles.primaryButton} onClick={() => void approveClarityBrief()} disabled={isSavingContext}>
+                    {isSavingContext ? 'Approving...' : 'Approve private project'}
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </button>
+                )}
                 <button type="button" className={styles.textButton} onClick={restart}>
                   Start again
                 </button>
@@ -4616,6 +4846,24 @@ export function ClaritySquare() {
                     <span>{communityComposerCopy.label}</span>
                     <strong>{accountTrackCopy.shortLabel}</strong>
                   </div>
+                  {currentCommunityKind === 'builder_share' && (
+                    <div className={styles.communityResponseTemplates} aria-label="Useful response templates">
+                      <span>Start with a useful contribution</span>
+                      {COMMUNITY_RESPONSE_TEMPLATES.map((template) => (
+                        <button
+                          key={template.label}
+                          type="button"
+                          onClick={() => {
+                            setCommunityTitle(template.title);
+                            setCommunityBody(template.body);
+                            setCommunityTags(template.tags);
+                          }}
+                        >
+                          {template.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   <label>
                     Title
                     <input
@@ -4640,6 +4888,15 @@ export function ClaritySquare() {
                       placeholder="workflow, content, prototype"
                     />
                   </label>
+                  <label className={styles.communityVisibilityCheck}>
+                    <input
+                      type="checkbox"
+                      checked={communityVisibilityConfirmed}
+                      onChange={(event) => setCommunityVisibilityConfirmed(event.target.checked)}
+                    />
+                    <span>I understand this post is intended for other Square members. I will not include confidential client, financial, or personal information.</span>
+                  </label>
+                  <p className={styles.communityQualityNote}>Useful threads name a real workflow, a testable contribution, or a review boundary. Do not use the Square for promotion. Confidential, promotional, or irrelevant material should be removed.</p>
                   <button type="submit" className={styles.primaryButton}>
                     {communityComposerCopy.button}
                     <ArrowRight size={16} aria-hidden="true" />
@@ -4691,6 +4948,8 @@ export function ClaritySquare() {
                         <div className={styles.communityThreadMeta}>
                           <span>{post.interestCount} interested</span>
                           <span>{post.replyCount} replies</span>
+                          <span>{post.helpfulCount} helpful</span>
+                          <span>{post.savedCount} saved</span>
                         </div>
                         <div className={styles.communityThreadActions}>
                           {isSolopreneurAccount && post.kind === 'founder_problem' && (
@@ -4706,10 +4965,13 @@ export function ClaritySquare() {
                           <button type="button" className={styles.textButton} onClick={() => askAssistantAboutCommunityPost(post)}>
                             Ask assistant
                           </button>
+                          <button type="button" className={styles.textButton} onClick={() => markCommunityQuality(post, 'helpful')}>
+                            Helpful
+                          </button>
                           {((isFounderAccount && post.kind === 'founder_problem') ||
                             (isSolopreneurAccount && post.kind === 'builder_share')) && (
                             <button type="button" className={styles.textButton} onClick={() => turnCommunityPostIntoProject(post)}>
-                              Make project
+                              Save to private project
                             </button>
                           )}
                         </div>
@@ -4726,7 +4988,7 @@ export function ClaritySquare() {
               <div className={styles.loopBoardHeader}>
                 <div>
                   <h1>Loops</h1>
-                  <p>Run one focused loop at a time. Project Loop starts by scanning saved projects, folders, tasks, reports, and recent movement.</p>
+                  <p>Start with Signal Loop to capture the decision that matters. Then use Project, Task, Reflection, and Brief loops to turn that signal into reviewed movement.</p>
                 </div>
               </div>
 
@@ -5388,6 +5650,11 @@ export function ClaritySquare() {
                   </div>
                 </div>
 
+                <aside className={styles.assistantBoundaryNote} aria-label="Assistant approval rule">
+                  <ShieldCheck size={17} aria-hidden="true" />
+                  <p>The assistant can use the Square context you provide and draft projects, tasks, or memories. It does not save or publish those changes until you approve them.</p>
+                </aside>
+
                 <section className={styles.chatPanel} aria-label="Square assistant conversation">
                   <div className={styles.chatMessages}>
                     {squareAssistantMessages.map((message) => (
@@ -5410,7 +5677,7 @@ export function ClaritySquare() {
                         </span>
                         <span className={styles.chatDivider} aria-hidden="true" />
                         <div className={styles.chatContent}>
-                          <p>{message.content}</p>
+                          <p>{normalizeLegacySquareLanguage(message.content)}</p>
                           {message.role === 'assistant' && message.pendingAction && (
                             <div className={styles.assistantApprovalPanel}>
                               <div>

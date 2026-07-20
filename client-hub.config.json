@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "workspaces": [
+    {
+      "slug": "kramaniti-internal",
+      "name": "Kramaniti Internal",
+      "repositoryPath": ".",
+      "repositoryLabel": "Kramaniti",
+      "items": [
+        {
+          "path": "05_ai_strategy",
+          "title": "AI strategy and delivery",
+          "summary": "Workflow audits, system design, and delivery methods.",
+          "visibility": "internal",
+          "itemType": "directory"
+        },
+        {
+          "path": "07_business_build",
+          "title": "Business operations",
+          "summary": "Launch, onboarding, delivery, and operating checklists.",
+          "visibility": "internal",
+          "itemType": "directory"
+        },
+        {
+          "path": "docs",
+          "title": "Implementation documentation",
+          "summary": "Current technical plans, handoffs, and setup notes.",
+          "visibility": "internal",
+          "itemType": "directory"
+        }
+      ]
+    }
+  ]
+}
