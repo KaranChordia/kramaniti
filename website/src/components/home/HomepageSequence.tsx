@@ -17,14 +17,17 @@ import { Footer } from '../layout/Footer';
 type IntroPhase = 'film' | 'done';
 
 const OPENING_FILM_MS = 7800;
+const ENABLE_OPENING_FILM = false;
 const ENABLE_NAV_HERO_SEQUENCE_SYNC = false;
 
 export function HomepageSequence() {
-  const [phase, setPhase] = useState<IntroPhase>('film');
+  const [phase, setPhase] = useState<IntroPhase>(ENABLE_OPENING_FILM ? 'film' : 'done');
 
   const finishIntro = useCallback(() => setPhase('done'), []);
 
   useEffect(() => {
+    if (!ENABLE_OPENING_FILM) return;
+
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
       const reducedMotionTimer = window.setTimeout(finishIntro, 1100);
