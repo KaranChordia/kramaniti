@@ -63,7 +63,7 @@ export function Contact() {
 
       form.reset();
       setSubmitState('success');
-      setMessage('Your enquiry has been received. We will review the workflow context and respond shortly.');
+      setMessage('Your enquiry has been received. We will review it and respond shortly.');
     } catch (error) {
       setSubmitState('error');
       setMessage(error instanceof Error ? error.message : 'Unable to submit the enquiry right now.');
@@ -79,8 +79,8 @@ export function Contact() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Start here</span>
-          <AnimatedHeading isVisible={isVisible}>Start with an Alignment Audit.</AnimatedHeading>
-          <p className="text-secondary">Share the workflow, handoff, decision loop, or communication gap you want to clarify. The first conversation is about finding the highest-impact system to build first, not adding more tools for their own sake.</p>
+          <AnimatedHeading isVisible={isVisible}>Start with a Workflow Audit.</AnimatedHeading>
+          <p className="text-secondary">Tell us what feels slow, manual, scattered, or unclear. We will begin by identifying the first workflow worth improving.</p>
         </div>
 
         <div className={styles.grid}>
@@ -104,7 +104,7 @@ export function Contact() {
                 variant="primary"
                 className={`${styles.submitBtn} ${submitState === 'submitting' ? styles.submitBtnLoading : ''} ${submitState === 'success' ? styles.submitBtnSuccess : ''}`}
                 disabled={submitState === 'submitting'}
-                aria-label={submitState === 'success' ? 'Enquiry submitted' : 'Request Alignment Audit'}
+                aria-label={submitState === 'success' ? 'Enquiry submitted' : 'Request a Workflow Audit'}
               >
                 <span className={styles.submitProgress} aria-hidden="true" />
                 <span className={styles.submitContent}>
@@ -114,7 +114,7 @@ export function Contact() {
                       <span>Enquiry Received</span>
                     </>
                   ) : (
-                    <span>{submitState === 'submitting' ? 'Sending...' : 'Request Alignment Audit'}</span>
+                    <span>{submitState === 'submitting' ? 'Sending...' : 'Request a Workflow Audit'}</span>
                   )}
                 </span>
               </Button>
@@ -130,12 +130,12 @@ export function Contact() {
 
           <div className={`${styles.calendlyColumn} ${isVisible ? styles.visible : ''}`}>
             <div className={styles.calendlyPlaceholder}>
-              <span className="micro-label">Alignment focus</span>
-              <h3>Find the first system worth building.</h3>
-              <p className="text-secondary caption">A useful audit should leave you with clearer business logic, a priority workflow, and a practical next step across operations, intelligence, and presence.</p>
+              <span className="micro-label">Where to begin</span>
+              <h3>Find the right place to begin.</h3>
+              <p className="text-secondary caption">The audit gives you a clearer view of the problem, one priority workflow, and a practical next step.</p>
               <div className={styles.auditList}>
-                <span>Operational clarity</span>
-                <span>Priority workflow</span>
+                <span>A clearer view of the problem</span>
+                <span>One priority workflow</span>
                 <span>Practical next step</span>
               </div>
             </div>

@@ -163,9 +163,9 @@ export default function NexoceanWorkPage() {
             <div className={styles.heroLayout}>
               <div className={styles.heroCopy}>
                 <span className={styles.eyebrow}>Selected Work / Nexocean</span>
-                <h1>Building a recruiter operating layer through Wingman Assistants.</h1>
+                <h1>Building practical tools for recruiter workflows.</h1>
                 <p className={styles.lead}>
-                  Over a five-month contract engagement, Kramaniti supported Nexocean with internal recruiter tools and brand content, connecting practical AI workflows with a clearer digital presence.
+                  During a five-month contract, Kramaniti supported Nexocean with internal recruiter tools and brand content—helping connect everyday recruitment work with clearer AI support.
                 </p>
                 <div className={styles.metaGrid} aria-label="Project summary">
                   <div>
@@ -186,7 +186,7 @@ export default function NexoceanWorkPage() {
               <aside className={styles.heroPanel}>
                 <span className="micro-label">Project Thesis</span>
                 <p>
-                  Recruiters do not need disconnected AI experiments. They need a working operating flow: intake, analysis, sourcing, outreach, learning, and follow-up moving through tools that match their daily rhythm.
+                  Recruiters need tools that support the way they already work—from intake and analysis to sourcing, outreach, and follow-up.
                 </p>
                 <Link href="#videos" className={styles.panelLink}>
                   View the showcases
@@ -200,9 +200,9 @@ export default function NexoceanWorkPage() {
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <span className="micro-label">System Built</span>
-              <h2>A suite of recruiter tools, designed as one assistant ecosystem.</h2>
+              <h2>A connected set of tools for everyday recruiter work.</h2>
               <p>
-                The work was organized around Wingman Assistants: named, focused tools that supported different stages of recruiter operations while keeping the experience approachable.
+                Wingman Assistants supported different parts of the recruitment process while keeping each tool focused and easy to understand.
               </p>
             </div>
 
@@ -244,7 +244,7 @@ export default function NexoceanWorkPage() {
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <span className="micro-label">Video Showcases</span>
-              <h2>Systems work and brand presence, shown through product and content films.</h2>
+              <h2>Internal tools and brand content, shown through video.</h2>
               <p>
                 These videos show both sides of the engagement: a deeper internal-tools walkthrough, plus the cinematic content layer that helped shape Nexocean&apos;s public-facing communication.
               </p>

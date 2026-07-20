@@ -6,16 +6,16 @@ import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 const signals = [
   {
-    title: 'Operations drift',
-    copy: 'Important workflows live inside inboxes, meetings, memory, and manual handoffs.',
+    title: 'Work gets lost',
+    copy: 'Important tasks and decisions depend on memory and manual follow-ups.',
   },
   {
-    title: 'Intelligence stays scattered',
-    copy: 'Decisions, data, tools, and AI experiments do not connect to one clear operating rhythm.',
+    title: 'Tools do not connect',
+    copy: 'Teams use multiple tools, but information and responsibility remain scattered.',
   },
   {
-    title: 'Presence becomes disconnected',
-    copy: 'Content keeps moving, but the message no longer reflects how the business actually creates value.',
+    title: 'The message becomes unclear',
+    copy: 'The brand’s communication no longer reflects the value being created inside the business.',
   }
 ];
 
@@ -37,9 +37,9 @@ export function Problem() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">The problem</span>
-          <AnimatedHeading isVisible={isVisible}>Most brands do not have an AI problem. They have a workflow alignment problem.</AnimatedHeading>
+          <AnimatedHeading isVisible={isVisible}>Most businesses do not need more AI tools. They need clearer ways of working.</AnimatedHeading>
           <p className="text-secondary">
-            Operations evolve one way. Tools get added another way. Content starts saying something the business cannot consistently deliver. Kramaniti fixes the foundation first, so the way your brand works, thinks, and communicates comes from the same operating logic.
+            When work is spread across inboxes, meetings, documents, and memory, adding another tool creates more noise. We first clarify how the work gets done, where it slows down, and what is worth improving.
           </p>
         </div>
 

@@ -7,21 +7,21 @@ import { AnimatedHeading } from '../ui/AnimatedHeading';
 const layers = [
   {
     number: '01',
-    label: 'Operations',
-    title: 'Operations',
-    description: 'Understand how the business actually works: workflows, handoffs, bottlenecks, decisions, people, and priorities.',
+    label: 'Strategy',
+    title: 'Strategy',
+    description: 'Understand the business, its workflows, and the most important problem to solve.',
   },
   {
     number: '02',
-    label: 'Intelligence',
-    title: 'Intelligence',
-    description: 'Design practical systems, AI support, internal tools, documentation, and decision loops around the work that matters.',
+    label: 'Systems',
+    title: 'Systems',
+    description: 'Build practical tools and processes that make the work easier to run.',
   },
   {
     number: '03',
-    label: 'Presence',
-    title: 'Presence',
-    description: 'Translate the brand\u2019s internal clarity into content, narrative, and communication that accurately reflects its value.',
+    label: 'Communication',
+    title: 'Communication',
+    description: 'Turn that clarity into stronger content and a clearer brand message.',
   }
 ];
 
@@ -37,9 +37,9 @@ export function Story() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">The method</span>
-          <AnimatedHeading isVisible={isVisible}>One foundation. Three connected layers.</AnimatedHeading>
+          <AnimatedHeading isVisible={isVisible}>Understand the work. Build the right system. Communicate it clearly.</AnimatedHeading>
           <p className="text-secondary">
-            Kramaniti aligns the operating layer, intelligence layer, and presence layer of a brand so every system, tool, and piece of communication is tied back to how the business actually creates value.
+            Kramaniti connects three parts of the business so improvements are useful, practical, and easier to maintain.
           </p>
         </div>
 
@@ -104,9 +104,9 @@ export function Story() {
             </svg>
 
             {/* Ring labels directly on the visual */}
-            <span className={`${styles.ringLabel} ${styles.ringLabel1} ${isVisible ? styles.ringLabelVisible : ''}`}>Operations</span>
-            <span className={`${styles.ringLabel} ${styles.ringLabel2} ${isVisible ? styles.ringLabelVisible : ''}`}>Intelligence</span>
-            <span className={`${styles.ringLabel} ${styles.ringLabel3} ${isVisible ? styles.ringLabelVisible : ''}`}>Presence</span>
+            <span className={`${styles.ringLabel} ${styles.ringLabel1} ${isVisible ? styles.ringLabelVisible : ''}`}>Strategy</span>
+            <span className={`${styles.ringLabel} ${styles.ringLabel2} ${isVisible ? styles.ringLabelVisible : ''}`}>Systems</span>
+            <span className={`${styles.ringLabel} ${styles.ringLabel3} ${isVisible ? styles.ringLabelVisible : ''}`}>Communication</span>
           </div>
 
           {/* Text descriptions — no cards, just flowing text */}

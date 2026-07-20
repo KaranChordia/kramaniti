@@ -8,7 +8,7 @@ import styles from './Founder.module.css';
 export const metadata: Metadata = {
   title: 'Founder | Kramaniti',
   description:
-    'Meet Karan Chordia, founder of Kramaniti, and the operating principles behind strategy-first AI systems, workflow clarity, and coherent brand presence.',
+    'Meet Karan Chordia, founder of Kramaniti, and learn how he connects business strategy, practical AI systems, and clear communication.',
   alternates: {
     canonical: absoluteUrl('/founder/'),
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: 'Founder | Kramaniti',
     description:
-      'Karan Chordia founded Kramaniti to connect operational clarity, practical intelligence systems, and brand presence.',
+      'Karan Chordia founded Kramaniti to connect business strategy, practical systems, and clear communication.',
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
@@ -39,19 +39,19 @@ export const metadata: Metadata = {
 
 const timeline = [
   {
-    title: 'Operations',
-    copy: 'Understanding the brand, team rhythm, workflows, bottlenecks, decisions, and handoffs before recommending any tool or system.',
-    tags: ['Workflow clarity', 'Business logic', 'Priority map']
+    title: 'Strategy',
+    copy: 'Understand the business, its workflows, and the problem worth solving before recommending a tool.',
+    tags: ['Workflow review', 'Business priorities', 'Action plan']
   },
   {
-    title: 'Intelligence',
-    copy: 'Designing practical AI-assisted workflows, internal tools, documentation, and decision-support systems that make the business easier to run.',
-    tags: ['Practical systems', 'Internal tools', 'Decision support']
+    title: 'Systems',
+    copy: 'Build practical workflows, internal tools, and AI support that make the business easier to run.',
+    tags: ['Practical systems', 'Internal tools', 'AI support']
   },
   {
-    title: 'Presence',
-    copy: 'Turning operational clarity into sharper communication, useful content, and a brand narrative that reflects how the business actually creates value.',
-    tags: ['Founder narrative', 'Content direction', 'Brand coherence']
+    title: 'Communication',
+    copy: 'Turn business clarity into useful content and a message that reflects the value being created.',
+    tags: ['Founder story', 'Content direction', 'Clear message']
   }
 ];
 
@@ -82,7 +82,7 @@ const advisoryTeam = [
 const principles = [
   {
     title: 'One Foundation',
-    copy: 'Operations, intelligence, and presence should not be built separately. The way the business works should inform the systems it uses and the way it communicates.'
+    copy: 'Strategy, systems, and communication should support one another. The way the business works should guide what it builds and how it communicates.'
   },
   {
     title: 'Practical Leverage',
@@ -93,8 +93,8 @@ const principles = [
     copy: 'AI should assist. Humans should lead. Some steps can be automated, some should be AI-assisted, and some must stay with the people closest to the context.'
   },
   {
-    title: 'Coherent Presence',
-    copy: 'Content should not exist for volume alone. It should make the brand easier to understand, easier to trust, and more accurately connected to the value being created inside the business.'
+    title: 'Clear Communication',
+    copy: 'Content should not exist for volume alone. It should make the business easier to understand and reflect the value being created.'
   }
 ];
 
@@ -112,7 +112,7 @@ export default function FounderPage() {
     url: absoluteUrl('/founder/'),
     image: absoluteUrl('/assets/founder_real.jpg'),
     description:
-      'Karan Chordia leads Kramaniti across strategy, operating diagnosis, intelligence-system design, and brand-presence direction.',
+      'Karan Chordia leads Kramaniti across business strategy, workflow reviews, practical system design, and communication.',
     knowsAbout: [
       'workflow strategy',
       'AI systems',
@@ -143,14 +143,14 @@ export default function FounderPage() {
           <div className={styles.container}>
             <div className={styles.heroIntro}>
               <span className={styles.eyebrow}>Founder Profile</span>
-              <h1>Building alignment between how brands work and how they are seen.</h1>
+              <h1>Helping businesses improve how they work and how they are understood.</h1>
               <p className={styles.lead}>
-                Karan Chordia founded Kramaniti to help brands connect their internal operating reality with their external presence by turning workflows, systems, and communication into one coherent growth foundation.
+                Karan Chordia founded Kramaniti to connect practical systems with clear communication. The work begins by understanding how a business operates, then building what it needs and helping it explain its value.
               </p>
               <div className={styles.heroPills}>
-                <span className={styles.heroPill}>Operations</span>
-                <span className={styles.heroPill}>Intelligence</span>
-                <span className={styles.heroPill}>Presence</span>
+                <span className={styles.heroPill}>Strategy</span>
+                <span className={styles.heroPill}>Systems</span>
+                <span className={styles.heroPill}>Communication</span>
               </div>
             </div>
 
@@ -178,19 +178,19 @@ export default function FounderPage() {
               <div className={styles.contentColumn}>
                 <article className={styles.storyCard}>
                   <span className="micro-label">Background</span>
-                  <h2>Seeing both sides of brand growth.</h2>
+                  <h2>From brand storytelling to business systems.</h2>
                   <div className={styles.bio}>
                     <p>
-                      Karan is a Bengaluru-based strategist and systems partner who began his work in commercial media, helping brands shape how they were seen.
+                      Karan began in commercial media, helping brands shape how they were seen.
                     </p>
                     <p>
-                      That experience revealed a deeper problem: strong content cannot compensate for unclear operations. When the internal workflow is scattered, the external message eventually becomes scattered too.
+                      That work revealed a recurring problem: strong content cannot make up for unclear operations.
                     </p>
                     <p>
                       Kramaniti was built from that realization.
                     </p>
                     <p>
-                      Today, Karan helps founder-led brands clarify how they operate, design practical intelligence systems around that reality, and translate the resulting clarity into a more coherent brand presence.
+                      Today, Karan helps businesses clarify their workflows, build practical systems, and communicate with greater confidence.
                     </p>
                   </div>
                 </article>
@@ -212,12 +212,12 @@ export default function FounderPage() {
 
                 <article className={styles.summaryCard}>
                   <span className="micro-label">Current Focus</span>
-                  <h3>Making the inside and outside of the brand match.</h3>
+                  <h3>Making the business and its message work together.</h3>
                   <p className="text-secondary caption" style={{ marginBottom: '1rem' }}>
-                    Kramaniti helps brands close the gap between internal reality and external perception.
+                    Kramaniti helps businesses close the gap between how they work and how they communicate.
                   </p>
                   <p className="text-secondary caption">
-                    The work begins with how the business actually operates: its workflows, decisions, handoffs, bottlenecks, tools, and team rhythm. From there, Kramaniti builds practical intelligence systems and translates that clarity into a more coherent brand presence.
+                    We begin with the current workflow, identify what matters most, build practical support, and turn that clarity into a stronger message.
                   </p>
                 </article>
               </div>
@@ -227,16 +227,16 @@ export default function FounderPage() {
 
         <section className={styles.sectionBlock}>
           <div className={styles.atmosphere} aria-hidden="true">
-            <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Operations</span>
-            <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Presence</span>
+            <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Strategy</span>
+            <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Communication</span>
           </div>
 
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <span className="micro-label">The Approach</span>
-              <h2>Three layers, one foundation.</h2>
+              <h2>Strategy, systems, and communication.</h2>
               <p className={styles.sectionLead}>
-                Kramaniti’s work is built around alignment: understanding how the business operates, designing intelligence systems around that reality, and shaping a brand presence that reflects the value being created inside.
+                Kramaniti understands the work first, builds the right support, and then helps the business communicate its value clearly.
               </p>
             </div>
 
@@ -270,9 +270,9 @@ export default function FounderPage() {
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
 <span className="micro-label">Team</span>
-              <h2>A focused structure for serious work.</h2>
+              <h2>A small, focused team.</h2>
               <p className={styles.sectionLead}>
-                Kramaniti is founder-led by design. Strategy, system architecture, and client execution stay close to the founder so the work remains coherent from diagnosis to delivery.
+                Kramaniti is founder-led. Strategy, system design, and client delivery stay close to Karan from the first review to the final handover.
               </p>
             </div>
 
@@ -312,7 +312,7 @@ className={styles.teamPhoto}
               <span className="micro-label">Working Style</span>
               <h2>The principles behind the work.</h2>
               <p className={styles.sectionLead}>
-                Every Kramaniti engagement is designed to create alignment, not noise. The goal is to make the business clearer internally and more coherent externally.
+                Every engagement aims to make the business easier to run and easier to understand.
               </p>
             </div>
 

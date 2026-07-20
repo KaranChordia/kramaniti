@@ -8,7 +8,7 @@ import styles from './Work.module.css';
 export const metadata: Metadata = {
   title: 'Selected Work | Kramaniti',
   description:
-    'Selected Kramaniti work across strategy, systems, workflow infrastructure, brand growth, and public-facing digital presence.',
+    'Selected Kramaniti work across business strategy, practical systems, and clear communication.',
   alternates: {
     canonical: absoluteUrl('/work/'),
   },
@@ -42,7 +42,7 @@ const workFolders = [
     title: 'Nexocean',
     href: '/work/nexocean',
     labels: ['Recruitment operations', 'Internal tools', 'Brand content'],
-    copy: 'A five-month contract engagement focused on recruiter workflow tooling, practical AI support, and cinematic brand presence.',
+    copy: 'A five-month contract focused on recruiter tools, practical AI support, and brand content.',
     footer: 'Open Nexocean folder',
     status: 'Selected work',
   },
@@ -50,7 +50,7 @@ const workFolders = [
     title: 'Maitri',
     href: '/work/maitri',
     labels: ['Consumer brand', 'Product strategy', 'Content systems'],
-    copy: 'A foundation retainer shaping a story-first companion doll universe through strategy, the Manu character system, validation, content, and a live pre-launch demo.',
+    copy: 'An ongoing engagement shaping a story-led companion doll world through product strategy, validation, content, and a live pre-launch demo.',
     footer: 'Open Maitri folder',
     status: 'Work in progress',
   },
@@ -85,9 +85,9 @@ export default function WorkIndexPage() {
           <div className={styles.container}>
             <div className={styles.heroCopy}>
               <span className={styles.eyebrow}>Selected Work</span>
-              <h1>Project folders for strategy, systems, and brand growth work.</h1>
+              <h1>Selected work across strategy, systems, and communication.</h1>
               <p className={styles.lead}>
-                A concise view into Kramaniti work where clarity, operating infrastructure, and content systems are built together instead of treated as separate efforts.
+                See how Kramaniti turns complex business and product challenges into clear plans, practical systems, and stronger public experiences.
               </p>
             </div>
           </div>

@@ -23,10 +23,10 @@ export function BrandFilm() {
             <span className="micro-label">Brand Film</span>
             <AnimatedHeading isVisible={isVisible}>Clarity before scale.</AnimatedHeading>
             <p className="text-secondary">
-              A short introduction to Kramaniti&apos;s operating belief: strategy before tools, systems before scale, and content after clarity.
+              See why Kramaniti starts with the business, chooses the right system, and uses content only after the direction is clear.
             </p>
             <a className={styles.inlineLink} href="#contact">
-              Start with an alignment audit
+              See how we work
             </a>
           </div>
 

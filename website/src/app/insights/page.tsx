@@ -8,7 +8,7 @@ import styles from './Insights.module.css';
 
 export const metadata: Metadata = {
   title: 'Insights | Kramaniti',
-  description: 'Kramaniti insights on strategy, systems, adoption, governance, AI infrastructure, and content after clarity.',
+  description: 'Practical Kramaniti articles on workflow strategy, useful AI, team adoption, governance, and clear communication.',
   alternates: {
     canonical: absoluteUrl('/insights/'),
   },
@@ -61,9 +61,9 @@ export default function InsightsPage() {
           <div className={styles.container}>
             <div className={styles.heroIntro}>
               <span className={styles.eyebrow}>Insights</span>
-              <h1>The Logic Behind the Pipeline.</h1>
+              <h1>Practical ideas for better business systems.</h1>
               <p className={styles.lead}>
-                Deep dives into strategy, systems, adoption, governance, and content after clarity. Search the archive by business problem, operating layer, or topic.
+                Articles on workflow strategy, useful AI, team adoption, governance, and clear communication.
               </p>
             </div>
 

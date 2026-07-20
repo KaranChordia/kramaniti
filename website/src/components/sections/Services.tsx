@@ -8,29 +8,29 @@ import { AnimatedHeading } from '../ui/AnimatedHeading';
 const tiers = [
   {
     id: 1,
-    title: 'Foundation Alignment Audit',
+    title: 'Workflow Audit',
     label: 'CLARITY',
-    summary: 'For brands that need clarity before adding tools, AI, or content volume.',
-    deliverables: ['Business and workflow deep-dive', 'Operational bottleneck mapping', 'AI and tool readiness review', 'Alignment gaps across operations, intelligence, and presence', 'Practical roadmap for the first system worth building'],
-    ctaText: 'Book an Alignment Audit',
+    summary: 'For businesses that need to decide what to improve first.',
+    deliverables: ['Business and workflow review', 'Bottleneck and handoff mapping', 'AI and tool readiness check', 'Recommended first system', 'Practical action plan'],
+    ctaText: 'Book a Workflow Audit',
     isPopular: false
   },
   {
     id: 2,
-    title: 'Intelligence System Build',
+    title: 'System Build',
     label: 'PRACTICAL BUILD',
-    summary: 'For brands ready to turn operational clarity into practical workflows, internal tools, and decision-support systems people can actually use.',
-    deliverables: ['Workflow architecture', 'Practical AI-assisted systems', 'CRM, documentation, and process integrations', 'Internal tool design', 'Usage documentation, override rules, and human review checkpoints'],
-    ctaText: 'Scope the First System',
+    summary: 'For businesses ready to improve a real workflow with practical tools and AI support.',
+    deliverables: ['Workflow design', 'Internal tools and AI support', 'CRM and process connections', 'Documentation and team handover', 'Human review and override rules'],
+    ctaText: 'Discuss a System Build',
     isPopular: true
   },
   {
     id: 3,
-    title: 'Alignment Retainer',
+    title: 'Ongoing Partnership',
     label: 'CONTINUITY',
-    summary: 'For brands that want their systems, workflows, adoption habits, and brand communication to keep improving together.',
-    deliverables: ['System refinement and maintenance', 'Workflow optimization', 'Adoption support and team enablement', 'Content and narrative direction', 'Monthly alignment review'],
-    ctaText: 'Explore Ongoing Alignment',
+    summary: 'For businesses that want continued support across systems, adoption, and communication.',
+    deliverables: ['System maintenance', 'Workflow improvements', 'Team support and training', 'Content and message direction', 'Regular progress reviews'],
+    ctaText: 'Explore Ongoing Support',
     isPopular: false
   }
 ];
@@ -60,8 +60,8 @@ export function Services() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Services</span>
-          <AnimatedHeading isVisible={isVisible}>Choose the level of alignment your brand needs.</AnimatedHeading>
-          <p className="text-secondary">Start by clarifying how the business works, then build the systems and communication layer that help it operate and grow with coherence.</p>
+          <AnimatedHeading isVisible={isVisible}>Start with what your business needs now.</AnimatedHeading>
+          <p className="text-secondary">Begin with a clear problem. Build the right system. Continue improving it as the business grows.</p>
         </div>
 
         <div className={styles.servicesGrid}>
@@ -106,20 +106,19 @@ export function Services() {
 
         <div className={`${styles.enablementPanel} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.enablementCopy}>
-            <span className="micro-label">AI Enablement & Adoption</span>
-            <h4>Human-collaborative, not fully automated.</h4>
+            <span className="micro-label">AI Adoption</span>
+            <h4>AI should support your team, not replace its judgment.</h4>
             <p className="text-secondary caption">
-              We help your team understand, adopt, and use the intelligent systems created for your brand. The work defines when AI should assist, when people should override it, and which decisions must remain human-led.
+              We show your team how to use each system, when AI can help, and when a person should make the final decision.
             </p>
           </div>
           <div className={styles.enablementPrinciples} aria-label="AI enablement principles">
-            <span>Automated where useful</span>
-            <span>AI-assisted where judgment needs support</span>
-            <span>Human-led where trust, context, or taste matters</span>
+            <span>Automate repetitive work</span>
+            <span>Use AI to support decisions</span>
+            <span>Keep people in control where context and trust matter</span>
           </div>
         </div>
       </div>
     </section>
   );
 }
-

@@ -10,7 +10,7 @@ export default function Home() {
     logo: absoluteUrl(DEFAULT_OG_IMAGE),
     email: 'ask@kramaniti.com',
     description:
-      'Kramaniti is a first-principles AI systems partner connecting strategy, operational infrastructure, and cinematic content into one brand growth pipeline.',
+      'Kramaniti helps businesses improve their workflows, build practical AI systems, and communicate their value clearly.',
     founder: {
       '@type': 'Person',
       name: 'Karan Chordia',
@@ -30,7 +30,7 @@ export default function Home() {
     name: SITE_NAME,
     url: absoluteUrl('/'),
     description:
-      'Strategy-first AI systems, operating infrastructure, and cinematic content for brand growth.',
+      'Clear strategy, practical AI systems, and stronger business communication.',
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

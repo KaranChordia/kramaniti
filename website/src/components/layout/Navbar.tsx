@@ -47,7 +47,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             </Link>
             
             <nav className={styles.desktopNav}>
-              <Link href="/#method" className={styles.navLink}>Method</Link>
+              <Link href="/#method" className={styles.navLink}>How We Work</Link>
               <Link href="/#services" className={styles.navLink}>Services</Link>
               <Link href="/clarity-engine" className={styles.navLink}>Clarity Engine</Link>
               <Link href="/clarity-square" className={styles.navLink}>Clarity Square</Link>
@@ -60,7 +60,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <div className={styles.actions}>
               <ThemeToggle />
               <Button variant="primary" className={styles.ctaButton} onClick={scrollToContact}>
-                Book Audit
+                Book a Workflow Audit
               </Button>
               <button className={styles.mobileMenuBtn} aria-label="Toggle Menu" onClick={toggleMobileMenu}>
                 {isMobileMenuOpen ? (
@@ -86,7 +86,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
         <div className={styles.mobileMenuOverlay}>
           <nav className={styles.mobileNavLinks}>
             <Link href="/" className={styles.mobileLink} onClick={closeMobileMenu}>Home</Link>
-            <Link href="/#method" className={styles.mobileLink} onClick={closeMobileMenu}>Method</Link>
+            <Link href="/#method" className={styles.mobileLink} onClick={closeMobileMenu}>How We Work</Link>
             <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
             <Link href="/clarity-engine" className={styles.mobileLink} onClick={closeMobileMenu}>Clarity Engine</Link>
             <Link href="/clarity-square" className={styles.mobileLink} onClick={closeMobileMenu}>Clarity Square</Link>
@@ -99,7 +99,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
                 closeMobileMenu();
                 scrollToContact();
               }}>
-                Book Audit
+                Book a Workflow Audit
               </Button>
             </div>
           </nav>

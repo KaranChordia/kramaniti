@@ -120,9 +120,9 @@ export default function MaitriWorkPage() {
             <div className={styles.heroLayout}>
               <div className={styles.heroCopy}>
                 <span className={styles.eyebrow}>Selected Work / Maitri</span>
-                <h1>Building a story-first companion doll universe around Manu.</h1>
+                <h1>Building a story-led companion doll world around Manu.</h1>
                 <p className={styles.lead}>
-                  Kramaniti is supporting Maitri through a foundation retainer that connects brand strategy, product architecture, Manu&apos;s character world, validation systems, content planning, and a live pre-launch digital experience.
+                  Kramaniti is helping Maitri shape its first product, character world, validation plan, content system, and pre-launch experience—starting with one clear character and one focused box.
                 </p>
                 <div className={styles.metaGrid} aria-label="Project summary">
                   <div>
@@ -157,9 +157,9 @@ export default function MaitriWorkPage() {
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <span className="micro-label">Foundation Built</span>
-              <h2>One connected operating layer for product, story, validation, and content.</h2>
+              <h2>One clear plan for the product, story, validation, and content.</h2>
               <p>
-                The work turns a large consumer-brand vision into focused next steps: prove attachment to Manu, build the first box clearly, capture real demand signals, and publish from an approved story system.
+                The work turns a large brand idea into focused next steps: build attachment to Manu, define the first box, gather real feedback, and create content from an approved story system.
               </p>
             </div>
 
@@ -183,7 +183,7 @@ export default function MaitriWorkPage() {
             <div className={styles.splitSection}>
               <div>
                 <span className="micro-label">Kramaniti Pattern</span>
-                <h2>Strategy before product scale. Systems before launch pressure. Content after character clarity.</h2>
+                <h2>Start with Manu. Test the idea. Build from what families value.</h2>
               </div>
               <div className={styles.outcomeList}>
                 {outcomes.map((outcome) => (
@@ -201,7 +201,7 @@ export default function MaitriWorkPage() {
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
               <span className="micro-label">Digital Experience</span>
-              <h2>Maitri Circle makes the strategy visible as a pre-launch world.</h2>
+              <h2>A pre-launch world where families can meet Manu.</h2>
               <p>
                 The current demo introduces Maitri as a story-first companion universe, brings Manu forward as the first character anchor, and supports future waitlist, parent survey, beta reader, school, and preorder validation flows.
               </p>

@@ -87,23 +87,23 @@ export function OpeningFilm({ onSkip }: OpeningFilmProps) {
           <div className={`${styles.readout} ${styles.strategyReadout}`}>
             <span>01 / Clarity</span>
             <strong>Strategy</strong>
-            <small>before tools</small>
+            <small>understand first</small>
           </div>
           <div className={`${styles.readout} ${styles.systemsReadout}`}>
             <span>02 / Infrastructure</span>
             <strong>Systems</strong>
-            <small>before scale</small>
+            <small>build what matters</small>
           </div>
           <div className={`${styles.readout} ${styles.contentReadout}`}>
-            <span>03 / Presence</span>
-            <strong>Content</strong>
-            <small>after clarity</small>
+            <span>03 / Communication</span>
+            <strong>Communication</strong>
+            <small>explain it clearly</small>
           </div>
         </div>
 
         <div className={styles.resolution}>
           <span>Kramaniti</span>
-          <p>One connected growth system.</p>
+          <p>Strategy, systems, and communication—working together.</p>
         </div>
       </div>
 

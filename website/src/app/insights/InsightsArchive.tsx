@@ -62,7 +62,7 @@ function InsightCard({ insight }: { insight: ArchiveItem }) {
           {insight.author ? `${insight.author} · ${insight.readTime}` : insight.readTime}
         </span>
         <span className={styles.readMore}>
-          Read Essay
+          Read Article
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
@@ -120,7 +120,7 @@ export function InsightsArchive({ insights }: { insights: ArchiveItem[] }) {
     <div className={styles.archiveShell}>
       {featuredInsight ? (
         <section className={styles.featuredSection} aria-label="Latest insight">
-          <div className={styles.sectionLabel}>Latest essay</div>
+          <div className={styles.sectionLabel}>Latest article</div>
           <Link href={`/insights/${featuredInsight.slug}`} className={styles.featuredCard}>
             <div className={styles.featuredMeta}>
               <span className={styles.categoryPill}>{featuredInsight.category}</span>
@@ -128,7 +128,7 @@ export function InsightsArchive({ insights }: { insights: ArchiveItem[] }) {
             </div>
             <h2>{featuredInsight.title}</h2>
             <p>{featuredInsight.summary}</p>
-            <span className={styles.featuredLink}>Read latest essay</span>
+            <span className={styles.featuredLink}>Read latest article</span>
           </Link>
         </section>
       ) : null}

@@ -6,32 +6,32 @@ import { AnimatedHeading } from '../ui/AnimatedHeading';
 
 const steps = [
   {
-    title: 'Diagnose reality',
-    copy: 'Identify the workflow, handoff, decision loop, or message gap creating the most friction.'
+    title: 'Understand',
+    copy: 'See how the work currently gets done.'
   },
   {
-    title: 'Define the operating logic',
-    copy: 'Clarify what the business needs to do consistently before choosing tools or formats.'
+    title: 'Prioritise',
+    copy: 'Choose the problem worth solving first.'
   },
   {
-    title: 'Design the system',
-    copy: 'Map the simplest workflow, intelligence layer, and supporting process.'
+    title: 'Design',
+    copy: 'Plan the simplest useful system.'
   },
   {
-    title: 'Build practical support',
-    copy: 'Create the AI-assisted tools, documents, automations, or internal systems that make the workflow easier to run.'
+    title: 'Build',
+    copy: 'Create the workflow, tool, or supporting documents.'
   },
   {
-    title: 'Enable adoption',
-    copy: 'Train the team on usage, edge cases, override points, and handoffs so AI assists clearly while humans continue to lead the work.'
+    title: 'Train',
+    copy: 'Help the team use it with confidence.'
   },
   {
-    title: 'Translate into presence',
-    copy: 'Turn internal clarity into sharper brand communication, founder narrative, and useful content.'
+    title: 'Communicate',
+    copy: 'Turn the new clarity into a stronger message.'
   },
   {
-    title: 'Refine continuously',
-    copy: 'Review what is working, remove complexity, and keep the system aligned as the brand evolves.'
+    title: 'Improve',
+    copy: 'Review what works and remove what does not.'
   }
 ];
 
@@ -48,25 +48,25 @@ export function Workflows() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Process</span>
-          <AnimatedHeading isVisible={isVisible}>From business reality to aligned growth system.</AnimatedHeading>
-          <p className="text-secondary">Every engagement begins with how the business actually works. Only then do we design the systems, intelligence, and communication layer around it.</p>
+          <AnimatedHeading isVisible={isVisible}>A simple path from problem to working system.</AnimatedHeading>
+          <p className="text-secondary">Every engagement starts with the way your business works today—not with a tool.</p>
         </div>
 
         <div className={`${styles.flowShell} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.flowSummary}>
             <div className={styles.summaryItem}>
               <span className="micro-label">Input</span>
-              <span className={styles.summaryValue}>Business Reality</span>
+              <span className={styles.summaryValue}>Current Workflow</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
               <span className="micro-label">Process</span>
-              <span className={styles.summaryValue}>Aligned Systems</span>
+              <span className={styles.summaryValue}>Practical Build</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
               <span className="micro-label">Output</span>
-              <span className={styles.summaryValue}>Coherent Growth</span>
+              <span className={styles.summaryValue}>Clearer Work</span>
             </div>
           </div>
 
@@ -110,7 +110,7 @@ export function Workflows() {
                 onClick={() => setIsExpanded(true)}
                 aria-label="Reveal full process steps"
               >
-                <span>Reveal Full Process</span>
+                <span>See the Full Process</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.chevronIcon}>
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>

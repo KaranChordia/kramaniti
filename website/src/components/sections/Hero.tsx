@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './Hero.module.css';
 
-const heroHeadline = 'Align how your brand operates, thinks, and shows up.';
+const heroHeadline = 'Simplify how your business works, uses AI, and communicates.';
 const heroHeadlineWords = heroHeadline.split(' ');
 const flowLines = [
   { left: '8%', top: '18%', width: '24%', rotate: '0deg', opacity: 0.34, duration: '5.8s', delay: '-1.2s' },
@@ -162,10 +162,10 @@ export function Hero({ isActive = true }: HeroProps) {
             ))}
           </h1>
           <p className={styles.subheading}>
-            Kramaniti aligns your operations, intelligence systems, and brand presence into one coherent growth pipeline.
+            We study your workflows, build practical systems around the work that matters, and help your brand explain its value clearly.
           </p>
           <a href="#contact" className={styles.heroCta}>
-            Book a Strategic Audit
+            Book a Workflow Audit
           </a>
         </div>
       </div>
