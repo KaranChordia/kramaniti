@@ -340,6 +340,10 @@
   padding-top: 2px;
 }
 
+.layerOrb {
+  margin-top: 1px;
+}
+
 .layerContent {
   display: flex;
   flex-direction: column;

@@ -115,6 +115,22 @@
   z-index: 1;
 }
 
+.searchOrb {
+  position: absolute;
+  left: 5.6%;
+  top: 55%;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 420ms ease 180ms, scale 560ms cubic-bezier(0.22, 1, 0.36, 1) 180ms;
+  scale: 0.76;
+}
+
+.stageVisible .searchOrb {
+  opacity: 1;
+  scale: 1;
+}
+
 /* ---- Origin ---- */
 .originLabel {
   font-family: var(--font-outfit), sans-serif;
@@ -348,6 +364,12 @@
     transition: none !important;
   }
 
+  .searchOrb {
+    opacity: 1;
+    scale: 1;
+    transition: none;
+  }
+
   .header,
   .flowText {
     opacity: 1;
@@ -389,6 +411,15 @@
     gap: 0;
   }
 
+  .searchOrb {
+    position: relative;
+    left: 20px;
+    top: auto;
+    align-self: flex-start;
+    margin-bottom: 10px;
+    transform: translateX(-50%);
+  }
+
   /* Hide the horizontal SVG on mobile */
   .divergeSvg {
     display: none;
@@ -427,16 +458,7 @@
 
   /* Origin dot at the very top of the line */
   .textLayer::after {
-    content: '';
-    position: absolute;
-    top: -6px;
-    left: -1px;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(201, 168, 76, 0.9);
-    box-shadow: 0 0 10px rgba(201, 168, 76, 0.4), 0 0 20px rgba(201, 168, 76, 0.2);
+    content: none;
   }
 
   .flowText {

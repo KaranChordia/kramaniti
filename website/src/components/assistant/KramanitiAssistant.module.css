@@ -76,110 +76,25 @@
   outline-offset: 4px;
 }
 
-.assistantBlob {
+.launcherOrb {
   position: absolute;
-  inset: 13px;
-  border-radius: 45% 55% 42% 58% / 55% 45% 58% 42%;
-  overflow: hidden;
+  inset: 4px;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 1px solid rgba(246, 223, 157, 0.16);
+  border-radius: 50%;
   background:
-    radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.78) 0%, rgba(246, 223, 157, 0.42) 24%, rgba(201, 168, 76, 0.26) 48%, rgba(30, 20, 50, 0.18) 74%, transparent 100%);
+    radial-gradient(circle at 50% 46%, rgba(246, 223, 157, 0.08), transparent 58%),
+    rgba(10, 10, 15, 0.84);
   box-shadow:
-    0 0 38px rgba(201, 168, 76, 0.38),
-    inset 0 0 24px rgba(255, 255, 255, 0.56),
-    inset 18px 0 34px rgba(201, 168, 76, 0.14);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  transform: translate3d(0, 0, 0);
-  will-change: transform, border-radius;
-  animation:
-    liquidShape 6.4s ease-in-out infinite alternate,
-    blobFloat 4.8s ease-in-out infinite alternate;
-}
-
-.assistantBlob::before,
-.assistantBlob::after {
-  content: '';
-  position: absolute;
-  inset: -34%;
-  border-radius: 45%;
-  pointer-events: none;
-  transform: translate3d(0, 0, 0);
-}
-
-.assistantBlob::before {
-  background:
-    radial-gradient(circle at 30% 34%, rgba(255, 255, 255, 0.86), transparent 20%),
-    radial-gradient(circle at 64% 58%, rgba(246, 223, 157, 0.44), transparent 26%);
-  mix-blend-mode: screen;
-  opacity: 0.62;
-  animation: blobInnerSwirl 8.8s ease-in-out infinite alternate;
-}
-
-.assistantBlob::after {
-  inset: -18%;
-  border: 1px solid rgba(246, 223, 157, 0.18);
-  background: radial-gradient(circle at 52% 46%, transparent 38%, rgba(201, 168, 76, 0.16) 70%, transparent 100%);
-  opacity: 0.5;
-  animation: blobSurfacePulse 5.6s ease-in-out infinite alternate;
-}
-
-.blobButton:hover .assistantBlob {
-  box-shadow:
-    0 0 52px rgba(201, 168, 76, 0.58),
-    0 0 96px rgba(201, 168, 76, 0.2),
-    inset 0 0 28px rgba(255, 255, 255, 0.72),
-    inset 18px 0 34px rgba(201, 168, 76, 0.18);
-  animation:
-    liquidShapeHover 3.2s ease-in-out infinite alternate,
-    blobHoverFloat 3.4s ease-in-out infinite alternate;
-}
-
-.blobButton:hover .assistantBlob::before {
-  opacity: 0.78;
-  animation-duration: 4.6s;
-}
-
-.blobButton:hover .assistantBlob::after {
-  opacity: 0.72;
-  animation-duration: 3.4s;
-}
-
-.rootTyping .assistantBlob {
-  filter: brightness(1.32) saturate(1.12);
-  box-shadow:
-    0 0 62px rgba(201, 168, 76, 0.78),
-    0 0 118px rgba(201, 168, 76, 0.28),
-    inset 0 0 34px rgba(255, 255, 255, 0.86),
-    inset 18px 0 34px rgba(201, 168, 76, 0.22);
-}
-
-.rootResponding .assistantBlob {
-  box-shadow:
-    0 0 58px rgba(201, 168, 76, 0.68),
-    0 0 104px rgba(201, 168, 76, 0.22),
-    inset 0 0 30px rgba(255, 255, 255, 0.78),
-    inset 18px 0 34px rgba(201, 168, 76, 0.2);
-}
-
-.rootOpen .assistantBlob {
-  inset: 13px;
-  filter: brightness(1.18);
-  animation:
-    liquidShape 3.6s ease-in-out infinite alternate,
-    blobFloat 3.2s ease-in-out infinite alternate;
-}
-
-.rootOpen.rootTyping .assistantBlob {
-  filter: brightness(1.36) saturate(1.14);
-  box-shadow:
-    0 0 68px rgba(201, 168, 76, 0.84),
-    0 0 132px rgba(201, 168, 76, 0.32),
-    inset 0 0 38px rgba(255, 255, 255, 0.9),
-    inset 18px 0 34px rgba(201, 168, 76, 0.24);
-}
-
-.rootOpen.rootResponding .assistantBlob {
-  filter: brightness(1.3) saturate(1.12);
+    0 0 34px rgba(201, 168, 76, 0.3),
+    inset 0 0 28px rgba(246, 223, 157, 0.045);
+  transition:
+    border-color 260ms ease,
+    box-shadow 260ms ease,
+    background 260ms ease;
 }
 
 .rootPassive:not(.rootOpen) .blobButton {
@@ -195,14 +110,25 @@
   transform: none;
 }
 
-.rootPassive:not(.rootOpen) .assistantBlob {
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  animation: none;
+.orbCanvas {
+  display: block;
+  max-width: none;
+}
+
+.blobButton:hover .launcherOrb,
+.rootTyping .launcherOrb,
+.rootResponding .launcherOrb {
+  border-color: rgba(246, 223, 157, 0.36);
   box-shadow:
-    0 0 24px rgba(201, 168, 76, 0.24),
-    inset 0 0 20px rgba(255, 255, 255, 0.48),
-    inset 14px 0 26px rgba(201, 168, 76, 0.12);
+    0 0 44px rgba(201, 168, 76, 0.46),
+    inset 0 0 30px rgba(246, 223, 157, 0.075);
+}
+
+.rootPassive:not(.rootOpen) .launcherOrb {
+  border-color: rgba(246, 223, 157, 0.1);
+  box-shadow:
+    0 0 22px rgba(201, 168, 76, 0.2),
+    inset 0 0 22px rgba(246, 223, 157, 0.035);
 }
 
 .stage {
@@ -308,78 +234,32 @@
   border-bottom: 1px solid rgba(246, 223, 157, 0.11);
 }
 
-.panelBlob {
-  position: relative;
+.panelOrb {
   flex: 0 0 auto;
   width: 66px;
   height: 66px;
   margin-top: 2px;
-  filter: drop-shadow(0 0 22px rgba(201, 168, 76, 0.38));
-}
-
-.panelBlobCore {
-  position: absolute;
-  inset: 12px;
-  border-radius: 45% 55% 42% 58% / 55% 45% 58% 42%;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.78) 0%, rgba(246, 223, 157, 0.42) 24%, rgba(201, 168, 76, 0.26) 48%, rgba(30, 20, 50, 0.18) 74%, transparent 100%);
-  box-shadow:
-    0 0 36px rgba(201, 168, 76, 0.42),
-    inset 0 0 22px rgba(255, 255, 255, 0.56),
-    inset 16px 0 30px rgba(201, 168, 76, 0.14);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  animation:
-    liquidShape 6s ease-in-out infinite alternate,
-    blobFloat 4s ease-in-out infinite alternate;
-}
-
-.panelBlobOrbitOne,
-.panelBlobOrbitTwo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 2;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(246, 223, 157, 0.13);
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.84) 0%, rgba(201, 168, 76, 0.6) 52%, transparent 100%);
-  box-shadow: 0 0 18px rgba(201, 168, 76, 0.42);
-}
-
-.panelBlobOrbitOne {
-  width: 12px;
-  height: 12px;
-  animation: panelOrbitOne 4.4s linear infinite;
-}
-
-.panelBlobOrbitTwo {
-  width: 8px;
-  height: 8px;
-  animation: panelOrbitTwo 3.6s linear infinite reverse;
-}
-
-.rootTyping .panelBlob {
-  filter: brightness(1.18) drop-shadow(0 0 28px rgba(201, 168, 76, 0.66));
-}
-
-.rootResponding .panelBlob {
-  filter: brightness(1.15) drop-shadow(0 0 26px rgba(201, 168, 76, 0.58));
-}
-
-.rootTyping .panelBlobCore {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(246, 223, 157, 0.065), transparent 62%),
+    rgba(10, 10, 15, 0.5);
   box-shadow:
-    0 0 54px rgba(201, 168, 76, 0.72),
-    0 0 92px rgba(201, 168, 76, 0.24),
-    inset 0 0 30px rgba(255, 255, 255, 0.8),
-    inset 16px 0 30px rgba(201, 168, 76, 0.2);
+    0 0 26px rgba(201, 168, 76, 0.2),
+    inset 0 0 24px rgba(246, 223, 157, 0.04);
+  transition:
+    border-color 240ms ease,
+    box-shadow 240ms ease;
 }
 
-.rootResponding .panelBlobCore {
+.rootTyping .panelOrb,
+.rootResponding .panelOrb {
+  border-color: rgba(246, 223, 157, 0.28);
   box-shadow:
-    0 0 48px rgba(201, 168, 76, 0.62),
-    0 0 86px rgba(201, 168, 76, 0.2),
-    inset 0 0 28px rgba(255, 255, 255, 0.72),
-    inset 16px 0 30px rgba(201, 168, 76, 0.18);
+    0 0 34px rgba(201, 168, 76, 0.34),
+    inset 0 0 26px rgba(246, 223, 157, 0.065);
 }
 
 .identity {
@@ -396,6 +276,16 @@
   letter-spacing: 0.16em;
   line-height: 1.2;
   text-transform: uppercase;
+}
+
+.status {
+  display: block;
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
 }
 
 .headerActions {
@@ -508,25 +398,16 @@
 
 .thinking {
   display: inline-flex;
-  gap: 7px;
+  gap: 10px;
   align-items: center;
-  min-width: 72px;
+  min-width: 156px;
 }
 
 .thinking span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(246, 223, 157, 0.84);
-  animation: thinking 1.1s ease-in-out infinite;
-}
-
-.thinking span:nth-child(2) {
-  animation-delay: 140ms;
-}
-
-.thinking span:nth-child(3) {
-  animation-delay: 280ms;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
 }
 
 .promptRail {
@@ -619,80 +500,11 @@
   opacity: 0.42;
 }
 
-@keyframes liquidShape {
-  0% { border-radius: 45% 55% 42% 58% / 55% 45% 58% 42%; }
-  25% { border-radius: 55% 45% 58% 42% / 45% 55% 42% 58%; }
-  50% { border-radius: 42% 58% 48% 52% / 58% 42% 52% 48%; }
-  75% { border-radius: 58% 42% 52% 48% / 42% 58% 48% 52%; }
-  100% { border-radius: 45% 55% 42% 58% / 55% 45% 58% 42%; }
-}
-
-@keyframes liquidShapeHover {
-  0% { border-radius: 40% 60% 45% 55% / 58% 42% 56% 44%; }
-  22% { border-radius: 58% 42% 62% 38% / 40% 60% 42% 58%; }
-  48% { border-radius: 44% 56% 38% 62% / 62% 38% 58% 42%; }
-  74% { border-radius: 62% 38% 55% 45% / 46% 54% 38% 62%; }
-  100% { border-radius: 42% 58% 48% 52% / 55% 45% 62% 38%; }
-}
-
 @keyframes launcherDrift {
   0% { translate: 0 0; }
   42% { translate: -2px -8px; }
   76% { translate: 2px -4px; }
   100% { translate: -1px 3px; }
-}
-
-@keyframes blobFloat {
-  0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
-  50% { transform: translate3d(-1px, -7px, 0) rotate(3deg) scale(1.025); }
-  100% { transform: translate3d(1px, 4px, 0) rotate(-3deg) scale(0.985); }
-}
-
-@keyframes blobHoverFloat {
-  0% { transform: translate3d(0, 1px, 0) rotate(-2deg) scale(1.04); }
-  42% { transform: translate3d(-2px, -8px, 0) rotate(4deg) scale(1.1); }
-  100% { transform: translate3d(2px, 3px, 0) rotate(-5deg) scale(1.05); }
-}
-
-@keyframes blobInnerSwirl {
-  0% { transform: translate3d(-8%, -6%, 0) rotate(0deg) scale(0.94); }
-  50% { transform: translate3d(5%, 7%, 0) rotate(62deg) scale(1.05); }
-  100% { transform: translate3d(10%, -4%, 0) rotate(128deg) scale(0.98); }
-}
-
-@keyframes blobSurfacePulse {
-  0% { transform: translate3d(-2%, 2%, 0) rotate(0deg) scale(0.9); opacity: 0.38; }
-  50% { transform: translate3d(2%, -3%, 0) rotate(18deg) scale(1.1); opacity: 0.7; }
-  100% { transform: translate3d(3%, 2%, 0) rotate(-14deg) scale(0.98); opacity: 0.5; }
-}
-
-@keyframes orbitOne {
-  0% { transform: rotate(0deg) translateX(42px) rotate(0deg); }
-  50% { transform: rotate(180deg) translateX(48px) rotate(-180deg); }
-  100% { transform: rotate(360deg) translateX(42px) rotate(-360deg); }
-}
-
-@keyframes orbitTwo {
-  0% { transform: rotate(0deg) translateX(36px) rotate(0deg); }
-  50% { transform: rotate(180deg) translateX(43px) rotate(-180deg); }
-  100% { transform: rotate(360deg) translateX(36px) rotate(-360deg); }
-}
-
-@keyframes panelOrbitOne {
-  0% { transform: rotate(0deg) translateX(36px) rotate(0deg); }
-  50% { transform: rotate(180deg) translateX(40px) rotate(-180deg); }
-  100% { transform: rotate(360deg) translateX(36px) rotate(-360deg); }
-}
-
-@keyframes panelOrbitTwo {
-  0% { transform: rotate(0deg) translateX(31px) rotate(0deg); }
-  50% { transform: rotate(180deg) translateX(35px) rotate(-180deg); }
-  100% { transform: rotate(360deg) translateX(31px) rotate(-360deg); }
-}
-
-@keyframes thinking {
-  0%, 100% { transform: translateY(0); opacity: 0.42; }
-  50% { transform: translateY(-5px); opacity: 1; }
 }
 
 @keyframes streamCaretPulse {
@@ -719,23 +531,13 @@
     height: 52px;
   }
 
-  .rootPassive:not(.rootOpen) .assistantBlob {
-    inset: 10px;
+  .launcherOrb {
+    inset: 0;
   }
 
-  .assistantBlob {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    animation: none;
-    box-shadow:
-      0 0 26px rgba(201, 168, 76, 0.28),
-      inset 0 0 20px rgba(255, 255, 255, 0.44),
-      inset 12px 0 22px rgba(201, 168, 76, 0.1);
-  }
-
-  .assistantBlob::before,
-  .assistantBlob::after {
-    display: none;
+  .rootPassive:not(.rootOpen) .launcherOrb {
+    inset: -6px;
+    transform: scale(0.75);
   }
 
   .rootOpen .blobButton {
@@ -786,22 +588,14 @@
     padding: calc(16px + env(safe-area-inset-top)) 18px 16px;
   }
 
-  .panelBlob {
+  .panelOrb {
     width: 54px;
     height: 54px;
     margin-top: 0;
   }
 
-  .panelBlobCore {
-    inset: 10px;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    animation: none;
-  }
-
-  .panelBlobOrbitOne,
-  .panelBlobOrbitTwo {
-    display: none;
+  .panelOrb .orbCanvas {
+    transform: scale(0.82);
   }
 
   .messages,
@@ -834,19 +628,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .blobButton,
-  .assistantBlob,
-  .assistantBlob::before,
-  .assistantBlob::after,
-  .orbitOne,
-  .orbitTwo,
-  .panelBlobCore,
-  .panelBlobOrbitOne,
-  .panelBlobOrbitTwo,
   .panel,
   .stage,
   .backdrop,
-  .streamCaret,
-  .thinking span {
+  .streamCaret {
     animation: none;
     transition-duration: 1ms;
   }
@@ -855,6 +640,17 @@
 :global(html[data-theme='light']) .blobButton {
   background: transparent;
   box-shadow: none;
+}
+
+:global(html[data-theme='light']) .launcherOrb,
+:global(html[data-theme='light']) .panelOrb {
+  border-color: rgba(90, 74, 27, 0.16);
+  background:
+    radial-gradient(circle at 50% 46%, rgba(201, 168, 76, 0.1), transparent 58%),
+    rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 28px rgba(90, 74, 27, 0.16),
+    inset 0 0 24px rgba(90, 74, 27, 0.045);
 }
 
 :global(html[data-theme='light']) .backdrop {
@@ -874,8 +670,13 @@
 }
 
 :global(html[data-theme='light']) .message p,
-:global(html[data-theme='light']) .inputDock textarea {
+:global(html[data-theme='light']) .inputDock textarea,
+:global(html[data-theme='light']) .thinking span {
   color: rgba(10, 10, 15, 0.9);
+}
+
+:global(html[data-theme='light']) .status {
+  color: rgba(10, 10, 15, 0.54);
 }
 
 :global(html[data-theme='light']) .assistantMessage p,

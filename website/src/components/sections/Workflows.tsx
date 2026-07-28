@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styles from './Workflows.module.css';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
+import { KramanitiOrb } from '../ui/KramanitiOrb';
 
 const steps = [
   {
@@ -55,17 +56,26 @@ export function Workflows() {
         <div className={`${styles.flowShell} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.flowSummary}>
             <div className={styles.summaryItem}>
-              <span className="micro-label">Input</span>
+              <span className={styles.summarySignal}>
+                <KramanitiOrb state="listening" size={20} paused={!isVisible} />
+                <span className="micro-label">Input</span>
+              </span>
               <span className={styles.summaryValue}>Current Workflow</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
-              <span className="micro-label">Process</span>
+              <span className={styles.summarySignal}>
+                <KramanitiOrb state="solving" size={20} paused={!isVisible} />
+                <span className="micro-label">Process</span>
+              </span>
               <span className={styles.summaryValue}>Practical Build</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
-              <span className="micro-label">Output</span>
+              <span className={styles.summarySignal}>
+                <KramanitiOrb state="composing" size={20} paused={!isVisible} />
+                <span className="micro-label">Output</span>
+              </span>
               <span className={styles.summaryValue}>Clearer Work</span>
             </div>
           </div>

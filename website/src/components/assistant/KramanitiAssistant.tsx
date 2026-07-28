@@ -3,6 +3,8 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { RotateCcw, Send, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { type OrbState } from 'thinking-orbs';
+import { KramanitiOrb } from '../ui/KramanitiOrb';
 import styles from './KramanitiAssistant.module.css';
 
 type AssistantRole = 'assistant' | 'user';
@@ -52,6 +54,16 @@ const RESPONSE_WORD_INTERVAL_MS = 58;
 const RESPONSE_PUNCTUATION_PAUSE_MS = 120;
 const RESPONSE_PARAGRAPH_PAUSE_MS = 180;
 const STREAM_RENDER_INTERVAL_MS = 110;
+const RESPONSE_ORB_STATES: OrbState[] = ['working', 'solving', 'composing'];
+
+const ORB_STATUS_LABELS: Record<OrbState, string> = {
+  working: 'Working through it',
+  searching: 'Searching the context',
+  solving: 'Resolving the response',
+  listening: 'Listening',
+  composing: 'Composing',
+  shaping: 'Ready to shape an idea',
+};
 
 const tokenizeAssistantResponse = (value: string) => value.match(/\S+\s*/g) || [];
 
@@ -70,6 +82,7 @@ export function KramanitiAssistant() {
   const [messages, setMessages] = useState<AssistantMessage[]>(INITIAL_MESSAGES);
   const [isSending, setIsSending] = useState(false);
   const [isStreamingResponse, setIsStreamingResponse] = useState(false);
+  const [busyOrbIndex, setBusyOrbIndex] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const streamTimersRef = useRef<StreamTimer[]>([]);
@@ -77,6 +90,16 @@ export function KramanitiAssistant() {
   const isTyping = draft.length > 0;
   const isBusy = isSending || isStreamingResponse;
   const isMotionHeavyRoute = pathname?.toLowerCase().startsWith('/kcs') ?? false;
+  const orbState: OrbState = isSending
+    ? 'searching'
+    : isStreamingResponse
+      ? RESPONSE_ORB_STATES[busyOrbIndex]
+      : isTyping
+        ? 'shaping'
+        : isOpen
+          ? 'listening'
+          : 'shaping';
+  const orbStatusLabel = ORB_STATUS_LABELS[orbState];
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -153,7 +176,9 @@ export function KramanitiAssistant() {
     const runId = streamRunRef.current + 1;
     const messageId = `assistant-stream-${runId}`;
     let lastRenderTime = 0;
+    let lastOrbIndex = 0;
     streamRunRef.current = runId;
+    setBusyOrbIndex(0);
     setIsStreamingResponse(true);
 
     const streamingMessage: AssistantMessage = {
@@ -171,6 +196,16 @@ export function KramanitiAssistant() {
 
       const now = window.performance.now();
       const isLastToken = index === tokens.length - 1;
+      const nextOrbIndex = Math.min(
+        RESPONSE_ORB_STATES.length - 1,
+        Math.floor((index / Math.max(tokens.length, 1)) * RESPONSE_ORB_STATES.length),
+      );
+
+      if (nextOrbIndex !== lastOrbIndex) {
+        lastOrbIndex = nextOrbIndex;
+        setBusyOrbIndex(nextOrbIndex);
+      }
+
       if (isLastToken || now - lastRenderTime >= STREAM_RENDER_INTERVAL_MS) {
         lastRenderTime = now;
         const visibleText = tokens.slice(0, index + 1).join('');
@@ -209,6 +244,7 @@ export function KramanitiAssistant() {
 
     setMessages(nextMessages);
     setDraft('');
+    setBusyOrbIndex(0);
     setIsSending(true);
 
     try {
@@ -265,7 +301,14 @@ export function KramanitiAssistant() {
         aria-expanded={isOpen}
         title={isOpen ? 'Close assistant' : 'Open Kramaniti assistant'}
       >
-        <span className={styles.assistantBlob} aria-hidden="true" />
+        <span className={styles.launcherOrb} aria-hidden="true">
+          <KramanitiOrb
+            state="shaping"
+            size={64}
+            paused={isMotionHeavyRoute && !isOpen}
+            className={styles.orbCanvas}
+          />
+        </span>
       </button>
 
       {hasOpened ? (
@@ -287,15 +330,18 @@ export function KramanitiAssistant() {
             <div className={styles.panelGlow} aria-hidden="true" />
 
             <header className={styles.header}>
-              <div className={styles.panelBlob} aria-hidden="true">
-                <span className={styles.panelBlobOrbitOne} />
-                <span className={styles.panelBlobOrbitTwo} />
-                <span className={styles.panelBlobCore} />
+              <div className={styles.panelOrb} aria-hidden="true">
+                <KramanitiOrb
+                  state={orbState}
+                  size={64}
+                  className={styles.orbCanvas}
+                />
               </div>
               <div className={styles.identity}>
                 <span className={styles.kicker}>
                   Kramaniti Assistant
                 </span>
+                <span className={styles.status}>{orbStatusLabel}</span>
               </div>
               <div className={styles.headerActions}>
                 <button type="button" className={styles.iconButton} onClick={resetThread} title="Reset chat" aria-label="Reset chat">
@@ -325,9 +371,11 @@ export function KramanitiAssistant() {
                 <article className={`${styles.message} ${styles.assistantMessage}`}>
                   <span className={styles.messageLabel}>Kramaniti</span>
                   <div className={styles.thinking}>
-                    <span />
-                    <span />
-                    <span />
+                    <KramanitiOrb
+                      state={orbState}
+                      size={20}
+                    />
+                    <span>{orbStatusLabel}</span>
                   </div>
                 </article>
               )}

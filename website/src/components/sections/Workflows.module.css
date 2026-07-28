@@ -178,6 +178,13 @@
   gap: 4px;
 }
 
+.summarySignal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 20px;
+}
+
 .summaryValue {
   font-family: var(--font-outfit), sans-serif;
   font-size: 16px;

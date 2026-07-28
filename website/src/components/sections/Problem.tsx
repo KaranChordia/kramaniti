@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './Problem.module.css';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
+import { KramanitiOrb } from '../ui/KramanitiOrb';
 
 const signals = [
   {
@@ -45,6 +46,9 @@ export function Problem() {
 
         {/* Diverging Paths — text flows directly from the lines */}
         <div className={`${styles.divergeStage} ${isVisible ? styles.stageVisible : ''}`} aria-hidden="false">
+          <div className={styles.searchOrb} aria-hidden="true">
+            <KramanitiOrb state="searching" size={64} paused={!isVisible} />
+          </div>
           <svg
             className={styles.divergeSvg}
             viewBox="0 0 1000 400"
@@ -72,7 +76,6 @@ export function Problem() {
 
             {/* Origin dot */}
             <circle cx="56" cy="220" r="24" className={styles.originRing} />
-            <circle cx="56" cy="220" r="5" className={styles.originDot} filter="url(#dotGlow)" />
 
             {/* Stem */}
             <line x1="56" y1="220" x2="180" y2="220" className={styles.stemLine} />

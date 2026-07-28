@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './Story.module.css';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
+import { KramanitiOrb } from '../ui/KramanitiOrb';
 
 const layers = [
   {
@@ -10,18 +11,21 @@ const layers = [
     label: 'Strategy',
     title: 'Strategy',
     description: 'Understand the business, its workflows, and the most important problem to solve.',
+    orbState: 'shaping' as const,
   },
   {
     number: '02',
     label: 'Systems',
     title: 'Systems',
     description: 'Build practical tools and processes that make the work easier to run.',
+    orbState: 'working' as const,
   },
   {
     number: '03',
     label: 'Communication',
     title: 'Communication',
     description: 'Turn that clarity into stronger content and a clearer brand message.',
+    orbState: 'composing' as const,
   }
 ];
 
@@ -118,6 +122,12 @@ export function Story() {
                 style={{ '--row-delay': index } as React.CSSProperties}
               >
                 <span className={styles.layerNumber}>{layer.number}</span>
+                <KramanitiOrb
+                  state={layer.orbState}
+                  size={20}
+                  paused={!isVisible}
+                  className={styles.layerOrb}
+                />
                 <div className={styles.layerContent}>
                   <span className={styles.layerTitle}>{layer.title}</span>
                   <span className={styles.layerDesc}>{layer.description}</span>
