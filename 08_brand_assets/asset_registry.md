@@ -36,6 +36,7 @@
 | Founder cinematic references | `08_brand_assets/founder_media/` | Founder media | Internal-only | [Fact] Folder contains founder and era reference images moved out of public website assets. | Use as private reference material until public contexts are approved. | Asset Librarian |
 | Insights graphics | `08_brand_assets/insight_graphics/` | Article graphics | Needs review | [Fact] Source/reference copies exist for current Insights graphics. | Public runtime copies remain under `website/public/assets/insights/` for article rendering. | Asset Librarian |
 | Kramaniti brochure | `08_brand_assets/exports/kramaniti_brochure.pdf` | PDF export | Needs review | [Fact] Moved out of website public root because it was not referenced by website source. | Decide whether this should become a public download, stay internal, or be retired. | Asset Librarian |
+| Kramaniti Brand Book v1.0 | `08_brand_assets/exports/kramaniti_brand_book.pdf` | Brand book PDF | Internal-only | [Fact] Created on 2026-07-29 from the current master context, decision log, brand system, proof rules, live implementation, and registered Kramaniti mark. Editable source: `03_brand_strategy/kramaniti_brand_book.md`; renderer: `scripts/render_kramaniti_brand_book.py`. | Use as the consolidated internal working reference for identity, voice, applications, and governance. Public release, formal mark specifications, and proof-sensitive examples still require founder review. | Digital Presence Orchestrator / Asset Librarian |
 
 ## Campaign Asset Intake
 
