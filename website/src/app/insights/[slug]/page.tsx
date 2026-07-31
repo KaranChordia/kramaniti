@@ -16,6 +16,7 @@ import {
   stripInlineMarkup,
 } from '../../../lib/seo';
 import { 
+  ExceptionLearningLoopInfographic,
   AlignmentRouteMapInfographic,
   TechStackInfographic, 
   DisconnectedOpsInfographic, 
@@ -332,6 +333,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             <div className={styles.articleContent}>
               {post.content.map((paragraph, index) => {
+                if (paragraph === '[infographic:exception-learning-loop]') {
+                  return <ExceptionLearningLoopInfographic key={index} />;
+                }
                 if (paragraph === '[infographic:alignment-route-map]') {
                   return <AlignmentRouteMapInfographic key={index} />;
                 }

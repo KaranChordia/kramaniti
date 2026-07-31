@@ -23,6 +23,61 @@ import {
 } from 'lucide-react';
 import styles from './Infographics.module.css';
 
+export function ExceptionLearningLoopInfographic() {
+  const stages = [
+    {
+      icon: CircleAlert,
+      label: 'Observe',
+      copy: 'Capture the override, correction, support question, or edge case where the normal route stopped.',
+    },
+    {
+      icon: Radar,
+      label: 'Classify',
+      copy: 'Name the gap: source, ownership, policy, handoff, human review, or customer communication.',
+    },
+    {
+      icon: FileCheck2,
+      label: 'Write back',
+      copy: 'Change the smallest useful artifact: rule, note, field, source packet, checkpoint, or system behavior.',
+    },
+    {
+      icon: FolderSync,
+      label: 'Verify',
+      copy: 'Check whether the next cycle needs less reconstruction, correction, escalation, or founder intervention.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Exception Learning Loop</div>
+      <div className={styles.briefBoard}>
+        {stages.map((stage, index) => {
+          const Icon = stage.icon;
+          const isFinal = index === stages.length - 1;
+
+          return (
+            <React.Fragment key={stage.label}>
+              <div className={`${styles.briefCard} ${isFinal ? styles.briefCardHighlight : ''}`}>
+                <div className={isFinal ? styles.briefIconHighlight : styles.briefIcon}>
+                  <Icon size={18} />
+                </div>
+                <div className={isFinal ? styles.briefLabelGold : styles.briefLabel}>{stage.label}</div>
+                <p className={isFinal ? styles.briefCopyGold : styles.briefCopy}>{stage.copy}</p>
+              </div>
+              {index < stages.length - 1 ? (
+                <div className={styles.briefConnector}>
+                  <ArrowRight className={styles.arrowIconDesktop} size={18} />
+                  <ArrowDown className={styles.arrowIconMobile} size={18} />
+                </div>
+              ) : null}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function AlignmentRouteMapInfographic() {
   const route = [
     {
