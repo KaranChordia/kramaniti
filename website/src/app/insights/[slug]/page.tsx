@@ -16,6 +16,7 @@ import {
   stripInlineMarkup,
 } from '../../../lib/seo';
 import { 
+  FounderReviewBoundaryInfographic,
   ExceptionLearningLoopInfographic,
   AlignmentRouteMapInfographic,
   TechStackInfographic, 
@@ -333,6 +334,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             <div className={styles.articleContent}>
               {post.content.map((paragraph, index) => {
+                if (paragraph === '[infographic:founder-review-boundary]') {
+                  return <FounderReviewBoundaryInfographic key={index} />;
+                }
                 if (paragraph === '[infographic:exception-learning-loop]') {
                   return <ExceptionLearningLoopInfographic key={index} />;
                 }

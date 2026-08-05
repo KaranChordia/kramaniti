@@ -23,6 +23,47 @@ import {
 } from 'lucide-react';
 import styles from './Infographics.module.css';
 
+export function FounderReviewBoundaryInfographic() {
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Founder Review Boundary</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Workflow condition</th>
+              <th className={styles.matrixColHeader}>Review state</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Founder attention</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={styles.matrixCellLabel}>Known and reversible</td>
+              <td className={styles.matrixCell}>Move under the agreed standard.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>No item-level review.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Repeatable but drift-prone</td>
+              <td className={styles.matrixCell}>Sample a small set on a fixed rhythm.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Review the pattern, not the queue.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>Ambiguous or incomplete</td>
+              <td className={styles.matrixCell}>Pause and attach the missing context.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Clarify the decision boundary.</td>
+            </tr>
+            <tr>
+              <td className={styles.matrixCellLabel}>External or consequential</td>
+              <td className={styles.matrixCell}>Escalate before commitment.</td>
+              <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>Own the judgment and rationale.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 export function ExceptionLearningLoopInfographic() {
   const stages = [
     {
