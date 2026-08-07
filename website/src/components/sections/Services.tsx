@@ -8,27 +8,27 @@ import { AnimatedHeading } from '../ui/AnimatedHeading';
 const tiers = [
   {
     id: 1,
-    title: 'Workflow Audit',
+    title: 'Foundation Strategy',
     label: 'CLARITY',
-    summary: 'For businesses that need to decide what to improve first.',
-    deliverables: ['Business and workflow review', 'Bottleneck and handoff mapping', 'AI and tool readiness check', 'Recommended first system', 'Practical action plan'],
+    summary: 'For organizations requiring operational clarity before implementation.',
+    deliverables: ['Business workflow audit', 'Bottleneck identification', 'AI readiness review', 'Recommended system architecture', 'Practical implementation roadmap'],
     ctaText: 'Book a Workflow Audit',
     isPopular: false
   },
   {
     id: 2,
-    title: 'System Build',
+    title: 'Systems Engineering',
     label: 'PRACTICAL BUILD',
-    summary: 'For businesses ready to improve a real workflow with practical tools and AI support.',
-    deliverables: ['Workflow design', 'Internal tools and AI support', 'CRM and process connections', 'Documentation and team handover', 'Human review and override rules'],
+    summary: 'For organizations ready to upgrade their workflows with practical infrastructure.',
+    deliverables: ['Custom workflow design', 'Internal AI-assisted tools', 'CRM and process integrations', 'Team handoff documentation', 'Human-in-the-loop review protocols'],
     ctaText: 'Discuss a System Build',
     isPopular: true
   },
   {
     id: 3,
-    title: 'Ongoing Partnership',
+    title: 'Complete Lifecycle Retainer',
     label: 'CONTINUITY',
-    summary: 'For businesses that want continued support across systems, adoption, and communication.',
+    summary: 'For brands seeking continuous alignment across systems, adoption, and content.',
     deliverables: ['System maintenance', 'Workflow improvements', 'Team support and training', 'Content and message direction', 'Regular progress reviews'],
     ctaText: 'Explore Ongoing Support',
     isPopular: false
@@ -60,8 +60,8 @@ export function Services() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Services</span>
-          <AnimatedHeading isVisible={isVisible}>Start with what your business needs now.</AnimatedHeading>
-          <p className="text-secondary">Begin with a clear problem. Build the right system. Continue improving it as the business grows.</p>
+          <AnimatedHeading isVisible={isVisible}>Targeted solutions for your current stage of growth.</AnimatedHeading>
+          <p className="text-secondary">Start with a strategic diagnosis, build the necessary infrastructure, and scale with an ongoing operational partnership.</p>
         </div>
 
         <div className={styles.servicesGrid}>
@@ -107,9 +107,9 @@ export function Services() {
         <div className={`${styles.enablementPanel} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.enablementCopy}>
             <span className="micro-label">AI Adoption</span>
-            <h4>AI should support your team, not replace its judgment.</h4>
+            <h4>AI should empower your team, not replace human judgment.</h4>
             <p className="text-secondary caption">
-              We show your team how to use each system, when AI can help, and when a person should make the final decision.
+              We guide your team through system adoption—defining where automation accelerates work and where human oversight remains essential.
             </p>
           </div>
           <div className={styles.enablementPrinciples} aria-label="AI enablement principles">

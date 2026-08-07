@@ -288,6 +288,17 @@ export function KramanitiAssistant() {
     setIsOpen((current) => !current);
   };
 
+  const [isTabletOrMobile, setIsTabletOrMobile] = useState(false);
+
+  useEffect(() => {
+    const checkViewport = () => {
+      setIsTabletOrMobile(window.innerWidth <= 1024);
+    };
+    checkViewport();
+    window.addEventListener('resize', checkViewport, { passive: true });
+    return () => window.removeEventListener('resize', checkViewport);
+  }, []);
+
   return (
     <div
       className={`${styles.root} ${isOpen ? styles.rootOpen : ''} ${isTyping ? styles.rootTyping : ''} ${isBusy ? styles.rootResponding : ''} ${isMotionHeavyRoute ? styles.rootPassive : ''}`}
@@ -305,7 +316,7 @@ export function KramanitiAssistant() {
           <KramanitiOrb
             state="shaping"
             size={64}
-            paused={isMotionHeavyRoute && !isOpen}
+            paused={(isMotionHeavyRoute || isTabletOrMobile) && !isOpen}
             className={styles.orbCanvas}
           />
         </span>

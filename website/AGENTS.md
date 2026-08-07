@@ -72,8 +72,11 @@ Do not reintroduce public homepage pricing unless the founder explicitly approve
 ## Visual Rules
 
 - Preserve the premium, practical, founder-led visual direction.
-- Keep sections readable on mobile and desktop.
-- Avoid decorative changes that weaken clarity.
+- Keep sections readable on mobile, tablet, and desktop.
+- Avoid decorative changes that weaken clarity or cause rendering sluggishness.
+- Glass layer blur radii must stay optimized (<= 12px on desktop, <= 6px on tablet, 0px/none on mobile) to prevent GPU fill-rate degradation.
+- Ensure offscreen section containment (`content-visibility: auto`) and hardware layer promotion (`will-change: transform`) are maintained on heavy graphics elements.
+- Keep scroll and pointer listeners throttled with `requestAnimationFrame` and `IntersectionObserver` viewport gating.
 - Keep accessibility basics intact: semantic sections, readable contrast, meaningful links, and visible focus states.
 
 ## Checks

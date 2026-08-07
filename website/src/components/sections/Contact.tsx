@@ -79,8 +79,8 @@ export function Contact() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Start here</span>
-          <AnimatedHeading isVisible={isVisible}>Start with a Workflow Audit.</AnimatedHeading>
-          <p className="text-secondary">Tell us what feels slow, manual, scattered, or unclear. We will begin by identifying the first workflow worth improving.</p>
+          <AnimatedHeading isVisible={isVisible}>Initiate a Workflow Audit.</AnimatedHeading>
+          <p className="text-secondary">Describe your operational bottlenecks or areas lacking clarity. We will start by diagnosing the core issues and identifying the highest-impact system to build.</p>
         </div>
 
         <div className={styles.grid}>
@@ -90,7 +90,7 @@ export function Contact() {
               <Input label="Work Email" name="email" type="email" placeholder="name@company.com" required className={styles.contactInput} />
               <Input label="Company / Brand" name="company" placeholder="Company or brand name" required className={styles.contactInput} />
               <Select label="Budget Range" name="budget" options={budgetOptions} className={styles.contactInput} />
-              <Textarea label="Workflow / Goal" name="goal" placeholder="Tell us what feels messy, manual, unclear, or ready to improve" required className={styles.contactInput} />
+              <Textarea label="Workflow / Goal" name="goal" placeholder="Describe the workflows that currently feel inefficient, disconnected, or ready for optimization." required className={styles.contactInput} />
               <input
                 type="text"
                 name="website"
@@ -131,12 +131,12 @@ export function Contact() {
           <div className={`${styles.calendlyColumn} ${isVisible ? styles.visible : ''}`}>
             <div className={styles.calendlyPlaceholder}>
               <span className="micro-label">Where to begin</span>
-              <h3>Find the right place to begin.</h3>
-              <p className="text-secondary caption">The audit gives you a clearer view of the problem, one priority workflow, and a practical next step.</p>
+              <h3>Determine the most effective starting point.</h3>
+              <p className="text-secondary caption">The audit provides a comprehensive diagnosis of your operations, a prioritized workflow map, and a practical implementation roadmap.</p>
               <div className={styles.auditList}>
-                <span>A clearer view of the problem</span>
-                <span>One priority workflow</span>
-                <span>Practical next step</span>
+                <span>Comprehensive diagnosis</span>
+                <span>Prioritized workflow map</span>
+                <span>Implementation roadmap</span>
               </div>
             </div>
           </div>

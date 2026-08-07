@@ -7,16 +7,16 @@ import { KramanitiOrb } from '../ui/KramanitiOrb';
 
 const signals = [
   {
-    title: 'Work gets lost',
-    copy: 'Important tasks and decisions depend on memory and manual follow-ups.',
+    title: 'Fragmented Operations',
+    copy: 'Critical tasks and decisions rely on manual follow-ups and undocumented processes.',
   },
   {
-    title: 'Tools do not connect',
-    copy: 'Teams use multiple tools, but information and responsibility remain scattered.',
+    title: 'Disconnected Infrastructure',
+    copy: 'Teams operate across multiple platforms, leaving data and responsibilities siloed.',
   },
   {
-    title: 'The message becomes unclear',
-    copy: 'The brand’s communication no longer reflects the value being created inside the business.',
+    title: 'Inconsistent Messaging',
+    copy: 'Your brand’s public communication fails to reflect the true value generated within the business.',
   }
 ];
 
@@ -38,9 +38,9 @@ export function Problem() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">The problem</span>
-          <AnimatedHeading isVisible={isVisible}>Most businesses do not need more AI tools. They need clearer ways of working.</AnimatedHeading>
+          <AnimatedHeading isVisible={isVisible}>Most businesses don&apos;t need more AI tools. They need stronger operational clarity.</AnimatedHeading>
           <p className="text-secondary">
-            When work is spread across inboxes, meetings, documents, and memory, adding another tool creates more noise. We first clarify how the work gets done, where it slows down, and what is worth improving.
+            When operations are fragmented across inboxes, meetings, and isolated documents, adding new tools only amplifies the noise. We first diagnose how your business functions, identify bottlenecks, and determine what is actually worth systemizing.
           </p>
         </div>
 
@@ -54,23 +54,6 @@ export function Problem() {
             viewBox="0 0 1000 400"
             preserveAspectRatio="xMidYMid meet"
           >
-            <defs>
-              <filter id="softGlow">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-              <filter id="dotGlow">
-                <feGaussianBlur stdDeviation="5" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-
             {/* Origin label */}
             <text x="56" y="206" className={styles.originLabel} textAnchor="middle">Your brand</text>
 
@@ -81,19 +64,19 @@ export function Problem() {
             <line x1="56" y1="220" x2="180" y2="220" className={styles.stemLine} />
 
             {/* Fork point */}
-            <circle cx="180" cy="220" r="3.5" className={styles.forkDot} filter="url(#dotGlow)" />
+            <circle cx="180" cy="220" r="3.5" className={styles.forkDot} />
 
             {/* Path 1 — up */}
-            <path d="M 180 220 C 260 220, 280 60, 380 60 L 540 60" className={styles.branchPath} style={{ '--branch-delay': '0' } as React.CSSProperties} filter="url(#softGlow)" />
-            <circle cx="540" cy="60" r="4" className={styles.terminalDot} style={{ '--dot-delay': '0' } as React.CSSProperties} filter="url(#dotGlow)" />
+            <path d="M 180 220 C 260 220, 280 60, 380 60 L 540 60" className={styles.branchPath} style={{ '--branch-delay': '0' } as React.CSSProperties} />
+            <circle cx="540" cy="60" r="4" className={styles.terminalDot} style={{ '--dot-delay': '0' } as React.CSSProperties} />
 
             {/* Path 2 — straight */}
-            <path d="M 180 220 L 540 220" className={styles.branchPath} style={{ '--branch-delay': '1' } as React.CSSProperties} filter="url(#softGlow)" />
-            <circle cx="540" cy="220" r="4" className={styles.terminalDot} style={{ '--dot-delay': '1' } as React.CSSProperties} filter="url(#dotGlow)" />
+            <path d="M 180 220 L 540 220" className={styles.branchPath} style={{ '--branch-delay': '1' } as React.CSSProperties} />
+            <circle cx="540" cy="220" r="4" className={styles.terminalDot} style={{ '--dot-delay': '1' } as React.CSSProperties} />
 
             {/* Path 3 — down */}
-            <path d="M 180 220 C 260 220, 280 370, 380 370 L 540 370" className={styles.branchPath} style={{ '--branch-delay': '2' } as React.CSSProperties} filter="url(#softGlow)" />
-            <circle cx="540" cy="370" r="4" className={styles.terminalDot} style={{ '--dot-delay': '2' } as React.CSSProperties} filter="url(#dotGlow)" />
+            <path d="M 180 220 C 260 220, 280 370, 380 370 L 540 370" className={styles.branchPath} style={{ '--branch-delay': '2' } as React.CSSProperties} />
+            <circle cx="540" cy="370" r="4" className={styles.terminalDot} style={{ '--dot-delay': '2' } as React.CSSProperties} />
 
             {/* Traveling beams */}
             <path d="M 180 220 C 260 220, 280 60, 380 60 L 540 60" className={styles.beamPath} style={{ '--beam-delay': '0' } as React.CSSProperties} />

@@ -7,32 +7,32 @@ import { KramanitiOrb } from '../ui/KramanitiOrb';
 
 const steps = [
   {
-    title: 'Understand',
-    copy: 'See how the work currently gets done.'
+    title: 'Diagnose',
+    copy: 'Map current-state workflows and identify operational friction.'
   },
   {
-    title: 'Prioritise',
-    copy: 'Choose the problem worth solving first.'
+    title: 'Prioritize',
+    copy: 'Select the highest-impact bottleneck to resolve first.'
   },
   {
-    title: 'Design',
-    copy: 'Plan the simplest useful system.'
+    title: 'Architect',
+    copy: 'Design the most effective, minimal-complexity system.'
   },
   {
-    title: 'Build',
-    copy: 'Create the workflow, tool, or supporting documents.'
+    title: 'Implement',
+    copy: 'Build the customized workflow, tools, and documentation.'
   },
   {
-    title: 'Train',
-    copy: 'Help the team use it with confidence.'
+    title: 'Enable',
+    copy: 'Guide the team through adoption with clear operating rules.'
   },
   {
-    title: 'Communicate',
-    copy: 'Turn the new clarity into a stronger message.'
+    title: 'Articulate',
+    copy: 'Translate the newfound clarity into a stronger market presence.'
   },
   {
-    title: 'Improve',
-    copy: 'Review what works and remove what does not.'
+    title: 'Iterate',
+    copy: 'Monitor performance, refine processes, and eliminate inefficiencies.'
   }
 ];
 
@@ -49,8 +49,8 @@ export function Workflows() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Process</span>
-          <AnimatedHeading isVisible={isVisible}>A simple path from problem to working system.</AnimatedHeading>
-          <p className="text-secondary">Every engagement starts with the way your business works today—not with a tool.</p>
+          <AnimatedHeading isVisible={isVisible}>A first-principles approach to workflow design.</AnimatedHeading>
+          <p className="text-secondary">We start by analyzing your current operational realities—not by forcing a predefined toolset.</p>
         </div>
 
         <div className={`${styles.flowShell} ${isVisible ? styles.visible : ''}`}>

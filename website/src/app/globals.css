@@ -318,7 +318,7 @@ code {
   --glass-border-layer-fill-top: rgba(255, 255, 255, 0.10);
   --glass-border-layer-fill-bottom: rgba(255, 255, 255, 0.03);
   --glass-border-layer-fill-solid: rgba(255, 255, 255, 0.04);
-  --glass-border-layer-blur: 22px;
+  --glass-border-layer-blur: 12px;
   --glass-border-layer-saturate: 1.08;
   --glass-border-layer-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
@@ -371,12 +371,20 @@ code {
   --glass-border-layer-fill-solid: rgba(255, 255, 255, 0.22);
 }
 
-@media (max-width: 768px) {
-  main > section:not(:first-child) {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 760px;
-  }
+/* Offscreen section containment across viewports */
+main > section:not(:first-child) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 760px;
+}
 
+@media (max-width: 1024px) {
+  .glass-border-layer {
+    --glass-border-layer-blur: 6px;
+    --glass-border-layer-fill-solid: rgba(18, 18, 22, 0.65);
+  }
+}
+
+@media (max-width: 768px) {
   .glass-border-layer::before {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;

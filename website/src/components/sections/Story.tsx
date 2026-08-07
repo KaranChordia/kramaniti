@@ -10,21 +10,21 @@ const layers = [
     number: '01',
     label: 'Strategy',
     title: 'Strategy',
-    description: 'Understand the business, its workflows, and the most important problem to solve.',
+    description: 'Audit your business workflows to identify high-leverage opportunities and the most critical bottlenecks to solve.',
     orbState: 'shaping' as const,
   },
   {
     number: '02',
     label: 'Systems',
     title: 'Systems',
-    description: 'Build practical tools and processes that make the work easier to run.',
+    description: 'Engineer practical internal infrastructure and AI-assisted processes that streamline daily operations.',
     orbState: 'working' as const,
   },
   {
     number: '03',
     label: 'Communication',
     title: 'Communication',
-    description: 'Turn that clarity into stronger content and a clearer brand message.',
+    description: 'Translate operational clarity into premium brand narratives and a consistent content distribution engine.',
     orbState: 'composing' as const,
   }
 ];
@@ -41,9 +41,9 @@ export function Story() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">The method</span>
-          <AnimatedHeading isVisible={isVisible}>Understand the work. Build the right system. Communicate it clearly.</AnimatedHeading>
+          <AnimatedHeading isVisible={isVisible}>Strategy before tools. Systems before scale. Content after clarity.</AnimatedHeading>
           <p className="text-secondary">
-            Kramaniti connects three parts of the business so improvements are useful, practical, and easier to maintain.
+            Kramaniti connects the three foundational layers of your business, ensuring that operational improvements are practical, scalable, and easy to maintain.
           </p>
         </div>
 
@@ -52,28 +52,11 @@ export function Story() {
           {/* SVG Rings */}
           <div className={styles.orbitVisual}>
             <svg className={styles.orbitSvg} viewBox="0 0 500 500" aria-hidden="true">
-              <defs>
-                <filter id="ringGlow">
-                  <feGaussianBlur stdDeviation="2.5" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-                <filter id="coreGlow">
-                  <feGaussianBlur stdDeviation="8" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-
               {/* Ring 1 — Operations (outermost) */}
               <circle cx="250" cy="250" r="210" className={`${styles.ring} ${styles.ring1}`} />
               <circle cx="250" cy="250" r="210" className={`${styles.ringBeam} ${styles.ringBeam1}`} />
               {/* Orbiting dot */}
-              <circle r="5" className={`${styles.orbitDot} ${styles.orbitDot1}`} filter="url(#ringGlow)">
+              <circle r="5" className={`${styles.orbitDot} ${styles.orbitDot1}`}>
                 <animateMotion dur="12s" repeatCount="indefinite" begin="0s">
                   <mpath href="#orbitPath1" />
                 </animateMotion>
@@ -83,7 +66,7 @@ export function Story() {
               {/* Ring 2 — Intelligence (middle) */}
               <circle cx="250" cy="250" r="155" className={`${styles.ring} ${styles.ring2}`} />
               <circle cx="250" cy="250" r="155" className={`${styles.ringBeam} ${styles.ringBeam2}`} />
-              <circle r="5" className={`${styles.orbitDot} ${styles.orbitDot2}`} filter="url(#ringGlow)">
+              <circle r="5" className={`${styles.orbitDot} ${styles.orbitDot2}`}>
                 <animateMotion dur="9s" repeatCount="indefinite" begin="-3s">
                   <mpath href="#orbitPath2" />
                 </animateMotion>
@@ -93,7 +76,7 @@ export function Story() {
               {/* Ring 3 — Presence (innermost) */}
               <circle cx="250" cy="250" r="100" className={`${styles.ring} ${styles.ring3}`} />
               <circle cx="250" cy="250" r="100" className={`${styles.ringBeam} ${styles.ringBeam3}`} />
-              <circle r="4" className={`${styles.orbitDot} ${styles.orbitDot3}`} filter="url(#ringGlow)">
+              <circle r="4" className={`${styles.orbitDot} ${styles.orbitDot3}`}>
                 <animateMotion dur="7s" repeatCount="indefinite" begin="-1s">
                   <mpath href="#orbitPath3" />
                 </animateMotion>
@@ -102,7 +85,7 @@ export function Story() {
 
               {/* Center core */}
               <circle cx="250" cy="250" r="38" className={styles.corePulse} />
-              <circle cx="250" cy="250" r="24" className={styles.coreOuter} filter="url(#coreGlow)" />
+              <circle cx="250" cy="250" r="24" className={styles.coreOuter} />
               <circle cx="250" cy="250" r="14" className={styles.coreInner} />
               <text x="250" y="254" className={styles.coreLabel} textAnchor="middle" dominantBaseline="middle">Foundation</text>
             </svg>

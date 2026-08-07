@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './Hero.module.css';
 
-const heroHeadline = 'Simplify how your business works, uses AI, and communicates.';
+const heroHeadline = 'Turn scattered operations into a connected system for growth.';
 const heroHeadlineWords = heroHeadline.split(' ');
 const flowLines = [
   { left: '8%', top: '18%', width: '24%', rotate: '0deg', opacity: 0.34, duration: '5.8s', delay: '-1.2s' },
@@ -62,23 +62,40 @@ export function Hero({ isActive = true }: HeroProps) {
     const hero = heroRef.current;
     if (!hero) return;
 
-    let frame = 0;
+    let scrollFrame = 0;
+    let pointerFrame = 0;
+    let isIntersecting = true;
+    let cachedHeroHeight = hero.offsetHeight || 800;
+    let cachedHeroTop = hero.offsetTop || 0;
+
+    const updateDimensions = () => {
+      cachedHeroHeight = hero.offsetHeight || 800;
+      cachedHeroTop = hero.offsetTop || 0;
+    };
 
     const updateScrollDepth = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        const rect = hero.getBoundingClientRect();
-        const progress = Math.min(1, Math.max(0, -rect.top / Math.max(rect.height * 0.72, 1)));
-        hero.style.setProperty('--hero-scroll', progress.toFixed(4));
+      if (!isIntersecting) return;
+      window.cancelAnimationFrame(scrollFrame);
+      scrollFrame = window.requestAnimationFrame(() => {
+        const scrollY = window.scrollY || window.pageYOffset;
+        const offset = scrollY - cachedHeroTop;
+        const progress = Math.min(1, Math.max(0, offset / Math.max(cachedHeroHeight * 0.72, 1)));
+        hero.style.setProperty('--hero-scroll', progress.toFixed(3));
       });
     };
 
     const updatePointerDepth = (event: PointerEvent) => {
-      const rect = hero.getBoundingClientRect();
-      const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-      const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
-      hero.style.setProperty('--hero-pointer-x', x.toFixed(3));
-      hero.style.setProperty('--hero-pointer-y', y.toFixed(3));
+      if (!isIntersecting) return;
+      window.cancelAnimationFrame(pointerFrame);
+      const clientX = event.clientX;
+      const clientY = event.clientY;
+      pointerFrame = window.requestAnimationFrame(() => {
+        const rect = hero.getBoundingClientRect();
+        const x = ((clientX - rect.left) / rect.width - 0.5) * 2;
+        const y = ((clientY - rect.top) / rect.height - 0.5) * 2;
+        hero.style.setProperty('--hero-pointer-x', x.toFixed(2));
+        hero.style.setProperty('--hero-pointer-y', y.toFixed(2));
+      });
     };
 
     const resetPointerDepth = () => {
@@ -86,13 +103,28 @@ export function Hero({ isActive = true }: HeroProps) {
       hero.style.setProperty('--hero-pointer-y', '0');
     };
 
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        isIntersecting = entry.isIntersecting;
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(hero);
+    updateDimensions();
     updateScrollDepth();
+
+    window.addEventListener('resize', updateDimensions, { passive: true });
     window.addEventListener('scroll', updateScrollDepth, { passive: true });
     hero.addEventListener('pointermove', updatePointerDepth, { passive: true });
     hero.addEventListener('pointerleave', resetPointerDepth);
 
     return () => {
-      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.cancelAnimationFrame(scrollFrame);
+      window.cancelAnimationFrame(pointerFrame);
+      window.removeEventListener('resize', updateDimensions);
       window.removeEventListener('scroll', updateScrollDepth);
       hero.removeEventListener('pointermove', updatePointerDepth);
       hero.removeEventListener('pointerleave', resetPointerDepth);
@@ -162,7 +194,7 @@ export function Hero({ isActive = true }: HeroProps) {
             ))}
           </h1>
           <p className={styles.subheading}>
-            We study your workflows, build practical systems around the work that matters, and help your brand explain its value clearly.
+            We audit your workflows, build practical AI-assisted infrastructure, and translate operational clarity into premium brand communication.
           </p>
           <a href="#contact" className={styles.heroCta}>
             Book a Workflow Audit
