@@ -23,6 +23,50 @@ import {
 } from 'lucide-react';
 import styles from './Infographics.module.css';
 
+export function MapToDecisionGateInfographic() {
+  const gates = [
+    {
+      label: 'Reality',
+      weak: 'The diagram shows the expected route.',
+      useful: 'Variants, workarounds, missing inputs, and real owners are validated.',
+    },
+    {
+      label: 'Priority',
+      weak: 'The most visible pain becomes the project.',
+      useful: 'One material constraint is chosen with evidence and consequence.',
+    },
+    {
+      label: 'Boundary',
+      weak: 'Every adjacent problem enters the scope.',
+      useful: 'Inputs, outputs, exclusions, and human judgment are explicit.',
+    },
+    {
+      label: 'Proof',
+      weak: 'Success means the new tool is live.',
+      useful: 'One operating signal and one guardrail test the change.',
+    },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>Map-to-Decision Gate</div>
+      <div className={styles.gateStack}>
+        {gates.map((gate, index) => (
+          <div className={styles.gateRow} key={gate.label}>
+            <div className={styles.gateIndex}>{String(index + 1).padStart(2, '0')}</div>
+            <div className={styles.gateLabel}>{gate.label}</div>
+            <div className={styles.gateWeak}>{gate.weak}</div>
+            <div className={styles.gateUseful}>
+              <ShieldCheck size={15} />
+              <span>{gate.useful}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function FounderReviewBoundaryInfographic() {
   return (
     <div className={styles.infographicWrapper}>

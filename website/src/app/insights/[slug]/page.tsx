@@ -16,6 +16,7 @@ import {
   stripInlineMarkup,
 } from '../../../lib/seo';
 import { 
+  MapToDecisionGateInfographic,
   FounderReviewBoundaryInfographic,
   ExceptionLearningLoopInfographic,
   AlignmentRouteMapInfographic,
@@ -334,6 +335,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             <div className={styles.articleContent}>
               {post.content.map((paragraph, index) => {
+                if (paragraph === '[infographic:map-to-decision-gate]') {
+                  return <MapToDecisionGateInfographic key={index} />;
+                }
                 if (paragraph === '[infographic:founder-review-boundary]') {
                   return <FounderReviewBoundaryInfographic key={index} />;
                 }
