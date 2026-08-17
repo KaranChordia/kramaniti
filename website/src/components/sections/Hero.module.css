@@ -4,7 +4,6 @@
   --hero-pointer-y: 0;
   position: relative;
   min-height: 94svh;
-  overflow: hidden;
   overflow: clip;
   background:
     radial-gradient(circle at 50% 20%, rgba(201, 168, 76, 0.12), transparent 30%),
@@ -538,11 +537,6 @@
 }
 
 @media (max-width: 860px) {
-  .background {
-    transform: none;
-    transition: none;
-  }
-
   .container {
     width: min(100% - 32px, 680px);
     padding-top: clamp(112px, 14vh, 138px);
@@ -578,44 +572,29 @@
 
 @media (max-width: 520px) {
   .heroSection {
-    min-height: 100svh;
+    min-height: 92svh;
   }
 
   .container {
-    min-height: 100svh;
-    width: min(100% - 28px, 420px);
-    padding: calc(86px + env(safe-area-inset-top)) 0 54px;
-    place-items: center;
+    min-height: 92svh;
+    padding: calc(92px + env(safe-area-inset-top)) 0 44px;
   }
 
   .content {
     gap: 15px;
-    width: 100%;
-    transform: none;
-    transition: opacity 520ms ease;
   }
 
   .heroBrandText {
-    font-size: clamp(28px, 10vw, 40px);
+    font-size: clamp(30px, 11vw, 44px);
   }
 
   .headline {
-    max-width: 13ch;
-    font-size: clamp(31px, 8.8vw, 40px);
-    line-height: 1.04;
-  }
-
-  .subheading {
-    max-width: 31ch;
-    font-size: 14.5px;
-    line-height: 1.55;
+    max-width: 14ch;
+    line-height: 1.02;
   }
 
   .heroCta {
-    width: min(100%, 260px);
-    min-height: 46px;
-    white-space: normal;
-    text-align: center;
+    width: min(100%, 250px);
   }
 
   .flowLine,
@@ -634,11 +613,8 @@
   }
 
   .scrollArchitecture {
-    display: none;
-  }
-
-  .flowField {
-    opacity: 0.45;
+    width: 136vw;
+    top: 51%;
   }
 }
 
