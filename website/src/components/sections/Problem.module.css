@@ -1,5 +1,9 @@
 .problem {
+  padding: 100px 0;
   background: transparent;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .problem::before {
@@ -64,17 +68,31 @@
 
 /* ---- Container / Header ---- */
 .container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
   position: relative;
   z-index: 1;
 }
 
 .header {
+  max-width: 820px;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
 
 .header.visible { opacity: 1; transform: translateY(0); }
+
+.header h2 { margin-top: 12px; max-width: 760px; }
+
+.header p {
+  margin: 0.75rem 0 0;
+  max-width: 720px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 18px;
+  line-height: 1.65;
+}
 
 /* =============================================
    DIVERGING PATHS — NO CARDS
@@ -244,7 +262,7 @@
 .flowText {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   --text-delay: 0;
   opacity: 0;
   transform: translateX(18px);
@@ -280,29 +298,24 @@
   transition-delay: calc(1300ms + var(--text-delay) * 200ms);
 }
 
-.flowHeading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 .flowTitle {
   font-family: var(--font-outfit), sans-serif;
-  font-size: clamp(16px, 1.8vw, 20px);
+  font-size: clamp(16px, 1.8vw, 22px);
   font-weight: 600;
   line-height: 1.2;
-  color: var(--text-primary);
+  color: var(--color-burnished-gold);
   letter-spacing: 0;
 }
 
+
+
 .flowDesc {
   font-family: var(--font-inter), sans-serif;
-  font-size: 15px;
+  font-size: clamp(13px, 1.2vw, 15px);
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--text-secondary);
   max-width: 38ch;
-  padding-left: 48px;
 }
 
 /* ---- Light theme adjustments ---- */
@@ -493,9 +506,16 @@
 }
 
 @media (max-width: 768px) {
+  .problem { padding: 80px 0; }
+  .header p { font-size: 15px; }
   .divergeStage { margin-top: 40px; }
 
+  .flowTitle {
+    font-size: 16px;
+  }
+
   .flowDesc {
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1.5;
   }
 }

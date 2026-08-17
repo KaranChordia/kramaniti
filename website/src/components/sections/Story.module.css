@@ -1,5 +1,8 @@
 .story {
+  padding: 120px 0;
   background: transparent;
+  position: relative;
+  isolation: isolate;
 }
 
 .story::before {
@@ -91,17 +94,31 @@
 
 /* ---- Container / Header ---- */
 .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
   position: relative;
   z-index: 1;
 }
 
 .header {
+  text-align: center;
+  margin-bottom: 72px;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
 
 .header.visible { opacity: 1; transform: translateY(0); }
+
+.header p {
+  margin: 0.75rem auto 0;
+  max-width: 680px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 18px;
+  line-height: 1.65;
+  text-align: center;
+}
 
 /* =============================================
    ORBIT VISUALIZATION
@@ -289,7 +306,7 @@
 .layerRow {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 18px;
   padding: 28px 0;
   border-bottom: 1px solid rgba(201, 168, 76, 0.08);
   --row-delay: 0;
@@ -312,17 +329,14 @@
 }
 
 .layerNumber {
-  display: flex;
-  align-items: center;
-  width: 28px;
-  height: 36px;
   font-family: var(--font-jetbrains-mono, 'JetBrains Mono'), monospace;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--color-burnished-gold);
-  line-height: 1;
-  opacity: 0.55;
+  line-height: 1.4;
+  opacity: 0.5;
   flex-shrink: 0;
+  padding-top: 2px;
 }
 
 .layerOrb {
@@ -339,7 +353,7 @@
   font-family: var(--font-outfit), sans-serif;
   font-size: 20px;
   font-weight: 600;
-  line-height: 36px;
+  line-height: 1.3;
   color: var(--text-primary);
 }
 
@@ -435,6 +449,8 @@
 }
 
 @media (max-width: 768px) {
+  .story { padding: 80px 0; }
+
   .atmosWord,
   .atmosphere::before,
   .atmosphere::after,
@@ -443,6 +459,12 @@
   .orbitDot circle {
     animation: none !important;
   }
+
+  .header {
+    margin-bottom: 48px;
+  }
+
+  .header p { font-size: 15px; }
 
   .orbitVisual { max-width: 280px; }
 

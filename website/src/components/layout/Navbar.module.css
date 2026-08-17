@@ -306,11 +306,6 @@
 .mobileNavLinks > *:nth-child(6) { animation-delay: 290ms; }
 .mobileNavLinks > *:nth-child(7) { animation-delay: 340ms; }
 .mobileNavLinks > *:nth-child(8) { animation-delay: 390ms; }
-.mobileNavLinks > *:nth-child(9) { animation-delay: 440ms; }
-
-.mobileCta {
-  margin-top: 8px;
-}
 
 .mobileLink {
   font-family: var(--font-outfit), sans-serif;

@@ -300,91 +300,11 @@ code {
 
 /* Micro-labels */
 .micro-label {
-  display: inline-flex;
-  align-items: center;
   text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  font-weight: 650;
-  line-height: 1;
-  color: var(--color-burnished-gold);
-}
-
-.home-section {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  padding: 120px 0;
-}
-
-.home-container {
-  width: min(1120px, calc(100% - 48px));
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-.home-header {
-  max-width: 680px;
-  margin-bottom: 64px;
-  text-align: left;
-}
-
-.home-header h2 {
-  margin: 16px 0 0;
-}
-
-.home-lede {
-  margin: 16px 0 0;
-  max-width: 58ch;
-  color: var(--text-secondary);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 17px;
-  line-height: 1.7;
-}
-
-.home-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-.text-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--color-burnished-gold);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 14px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  line-height: 1;
-  text-decoration: none;
-}
-
-.text-cta:hover {
   color: var(--color-burnished-gold);
-  opacity: 0.86;
-}
-
-@media (max-width: 768px) {
-  .home-section {
-    padding: 80px 0;
-  }
-
-  .home-container {
-    width: min(100% - 32px, 680px);
-  }
-
-  .home-header {
-    margin-bottom: 48px;
-  }
-
-  .home-lede {
-    font-size: 15px;
-  }
 }
 
 /* Reusable outer frosted shell around cards, images, or panels. */

@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { ArrowRight } from 'lucide-react';
 import styles from './Hero.module.css';
-import { BrandButton } from '../ui/BrandButton';
-import { SectionKicker } from '../ui/SectionKicker';
 
 const heroHeadline = 'Turn scattered operations into a connected system for growth.';
 const heroHeadlineWords = heroHeadline.split(' ');
@@ -181,7 +178,6 @@ export function Hero({ isActive = true }: HeroProps) {
 
       <div className={styles.container}>
         <div className={`${styles.content} ${isActive ? styles.visible : ''}`}>
-          <SectionKicker className={styles.kicker}>First-principles systems partner</SectionKicker>
           <span className={styles.heroBrandText} data-text="Kramaniti">
             Kramaniti
           </span>
@@ -200,15 +196,9 @@ export function Hero({ isActive = true }: HeroProps) {
           <p className={styles.subheading}>
             We audit your workflows, build practical AI-assisted infrastructure, and translate operational clarity into premium brand communication.
           </p>
-          <div className={styles.actions}>
-            <BrandButton href="#contact" className={styles.heroCta}>
-              Book a Workflow Audit
-            </BrandButton>
-            <BrandButton href="#method" variant="secondary" className={styles.heroSecondary}>
-              See the method
-              <ArrowRight size={16} strokeWidth={1.75} aria-hidden="true" />
-            </BrandButton>
-          </div>
+          <a href="#contact" className={styles.heroCta}>
+            Book a Workflow Audit
+          </a>
         </div>
       </div>
     </section>

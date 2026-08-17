@@ -1,13 +1,11 @@
 'use client';
 import React from 'react';
-import { Check, Map, Route, Stethoscope } from 'lucide-react';
+import { Check } from 'lucide-react';
 import styles from './Contact.module.css';
 import { Input, Textarea, Select } from '../ui/Input';
-import { BrandButton } from '../ui/BrandButton';
+import { Button } from '../ui/Button';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
-import { IconMark } from '../ui/IconMark';
-import { SectionKicker } from '../ui/SectionKicker';
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error';
 const MIN_PROGRESS_MS = 750;
@@ -73,16 +71,16 @@ export function Contact() {
   }
 
   return (
-    <section className={`${styles.contact} home-section`} id="contact" ref={ref as React.RefObject<HTMLDivElement>}>
+    <section className={styles.contact} id="contact" ref={ref as React.RefObject<HTMLDivElement>}>
       <div className={styles.atmosphere} aria-hidden="true">
         <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Connect</span>
         <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Start</span>
       </div>
-      <div className={`${styles.container} home-container`}>
-        <div className={`${styles.header} home-header ${isVisible ? styles.visible : ''}`}>
-          <SectionKicker>Start here</SectionKicker>
+      <div className={styles.container}>
+        <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
+          <span className="micro-label">Start here</span>
           <AnimatedHeading isVisible={isVisible}>Initiate a Workflow Audit.</AnimatedHeading>
-          <p className="home-lede">Describe your operational bottlenecks or areas lacking clarity. We will start by diagnosing the core issues and identifying the highest-impact system to build.</p>
+          <p className="text-secondary">Describe your operational bottlenecks or areas lacking clarity. We will start by diagnosing the core issues and identifying the highest-impact system to build.</p>
         </div>
 
         <div className={styles.grid}>
@@ -101,7 +99,7 @@ export function Contact() {
                 className={styles.honeypot}
                 aria-hidden="true"
               />
-              <BrandButton
+              <Button
                 type="submit"
                 variant="primary"
                 className={`${styles.submitBtn} ${submitState === 'submitting' ? styles.submitBtnLoading : ''} ${submitState === 'success' ? styles.submitBtnSuccess : ''}`}
@@ -119,7 +117,7 @@ export function Contact() {
                     <span>{submitState === 'submitting' ? 'Sending...' : 'Request a Workflow Audit'}</span>
                   )}
                 </span>
-              </BrandButton>
+              </Button>
               <p
                 className={`${styles.formMessage} ${submitState === 'error' ? styles.errorMessage : ''} ${submitState === 'success' ? styles.successMessage : ''}`}
                 role="status"
@@ -132,28 +130,13 @@ export function Contact() {
 
           <div className={`${styles.calendlyColumn} ${isVisible ? styles.visible : ''}`}>
             <div className={styles.calendlyPlaceholder}>
-              <SectionKicker>Where to begin</SectionKicker>
+              <span className="micro-label">Where to begin</span>
               <h3>Determine the most effective starting point.</h3>
-              <p className="home-lede">The audit provides a comprehensive diagnosis of your operations, a prioritized workflow map, and a practical implementation roadmap.</p>
+              <p className="text-secondary caption">The audit provides a comprehensive diagnosis of your operations, a prioritized workflow map, and a practical implementation roadmap.</p>
               <div className={styles.auditList}>
-                <span>
-                  <IconMark>
-                    <Stethoscope strokeWidth={1.75} />
-                  </IconMark>
-                  Comprehensive diagnosis
-                </span>
-                <span>
-                  <IconMark>
-                    <Map strokeWidth={1.75} />
-                  </IconMark>
-                  Prioritized workflow map
-                </span>
-                <span>
-                  <IconMark>
-                    <Route strokeWidth={1.75} />
-                  </IconMark>
-                  Implementation roadmap
-                </span>
+                <span>Comprehensive diagnosis</span>
+                <span>Prioritized workflow map</span>
+                <span>Implementation roadmap</span>
               </div>
             </div>
           </div>

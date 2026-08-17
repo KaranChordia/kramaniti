@@ -4,8 +4,7 @@ import styles from './Navbar.module.css';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { BrandButton } from '../ui/BrandButton';
-import { Menu, X } from 'lucide-react';
+import { Button } from '../ui/Button';
 
 const ThemeToggle = dynamic(() => import('../ui/ThemeToggle').then((mod) => mod.ThemeToggle), {
   ssr: false,
@@ -59,14 +58,21 @@ export function Navbar({ isVisible = true }: NavbarProps) {
 
             <div className={styles.actions}>
               <ThemeToggle />
-              <BrandButton variant="primary" className={styles.ctaButton} onClick={scrollToContact}>
+              <Button variant="primary" className={styles.ctaButton} onClick={scrollToContact}>
                 Book a Workflow Audit
-              </BrandButton>
+              </Button>
               <button className={styles.mobileMenuBtn} aria-label="Toggle Menu" onClick={toggleMobileMenu}>
                 {isMobileMenuOpen ? (
-                  <X size={22} strokeWidth={1.75} />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
                 ) : (
-                  <Menu size={22} strokeWidth={1.75} />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                  </svg>
                 )}
               </button>
             </div>
@@ -86,13 +92,13 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <Link href="/work" className={styles.mobileLink} onClick={closeMobileMenu}>Work</Link>
             <Link href="/founder" className={styles.mobileLink} onClick={closeMobileMenu}>Founder</Link>
             <Link href="/insights" className={styles.mobileLink} onClick={closeMobileMenu}>Insights</Link>
-            <div className={styles.mobileCta}>
-              <BrandButton variant="primary" onClick={() => {
+            <div style={{ marginTop: '24px' }}>
+              <Button variant="primary" onClick={() => {
                 closeMobileMenu();
                 scrollToContact();
               }}>
                 Book a Workflow Audit
-              </BrandButton>
+              </Button>
             </div>
           </nav>
         </div>

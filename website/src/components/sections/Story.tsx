@@ -1,30 +1,31 @@
 'use client';
 import React from 'react';
-import { Clapperboard, Compass, Workflow } from 'lucide-react';
 import styles from './Story.module.css';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
-import { IconMark } from '../ui/IconMark';
-import { SectionKicker } from '../ui/SectionKicker';
+import { KramanitiOrb } from '../ui/KramanitiOrb';
 
 const layers = [
   {
     number: '01',
+    label: 'Strategy',
     title: 'Strategy',
     description: 'Audit your business workflows to identify high-leverage opportunities and the most critical bottlenecks to solve.',
-    icon: Compass,
+    orbState: 'shaping' as const,
   },
   {
     number: '02',
+    label: 'Systems',
     title: 'Systems',
     description: 'Engineer practical internal infrastructure and AI-assisted processes that streamline daily operations.',
-    icon: Workflow,
+    orbState: 'working' as const,
   },
   {
     number: '03',
+    label: 'Communication',
     title: 'Communication',
     description: 'Translate operational clarity into premium brand narratives and a consistent content distribution engine.',
-    icon: Clapperboard,
+    orbState: 'composing' as const,
   }
 ];
 
@@ -32,16 +33,16 @@ export function Story() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
 
   return (
-    <section className={`${styles.story} home-section`} id="method" ref={ref as React.RefObject<HTMLDivElement>}>
+    <section className={styles.story} id="method" ref={ref as React.RefObject<HTMLDivElement>}>
       <div className={styles.atmosphere} aria-hidden="true">
         <span className={`${styles.atmosWord} ${styles.atmosWordOne}`}>Method</span>
         <span className={`${styles.atmosWord} ${styles.atmosWordTwo}`}>Layers</span>
       </div>
-      <div className={`${styles.container} home-container`}>
-        <div className={`${styles.header} home-header ${isVisible ? styles.visible : ''}`}>
-          <SectionKicker>The method</SectionKicker>
+      <div className={styles.container}>
+        <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
+          <span className="micro-label">The method</span>
           <AnimatedHeading isVisible={isVisible}>Strategy before tools. Systems before scale. Content after clarity.</AnimatedHeading>
-          <p className="home-lede">
+          <p className="text-secondary">
             Kramaniti connects the three foundational layers of your business, ensuring that operational improvements are practical, scalable, and easy to maintain.
           </p>
         </div>
@@ -97,25 +98,25 @@ export function Story() {
 
           {/* Text descriptions — no cards, just flowing text */}
           <div className={styles.layerTexts}>
-            {layers.map((layer, index) => {
-              const Icon = layer.icon;
-              return (
+            {layers.map((layer, index) => (
               <div
                 key={layer.number}
                 className={`${styles.layerRow} ${isVisible ? styles.layerRowVisible : ''}`}
                 style={{ '--row-delay': index } as React.CSSProperties}
               >
                 <span className={styles.layerNumber}>{layer.number}</span>
-                <IconMark>
-                  <Icon strokeWidth={1.75} />
-                </IconMark>
+                <KramanitiOrb
+                  state={layer.orbState}
+                  size={20}
+                  paused={!isVisible}
+                  className={styles.layerOrb}
+                />
                 <div className={styles.layerContent}>
                   <span className={styles.layerTitle}>{layer.title}</span>
                   <span className={styles.layerDesc}>{layer.description}</span>
                 </div>
               </div>
-              );
-            })}
+            ))}
           </div>
         </div>
       </div>
