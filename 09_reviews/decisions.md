@@ -782,3 +782,24 @@ This log registers the major strategic and structural decisions made during the 
     *   The route requires the global owner role and uses the authenticated user client, preserving workspace RLS.
     *   Applied actions are recorded in the existing assistant audit tables.
     *   The assistant has no tools for messaging clients, editing portfolio state, changing repositories, publishing, finance or deleting data permanently.
+
+### Decision 28: Establish Kramaniti Blocks as a Modular Workflow Workspace
+*   **Date:** 2026-08-17
+*   **Area:** Product architecture, workflow execution, review governance, website
+*   **Status:** First vertical slice implemented (`[Recommendation]`)
+*   **Decision:** Add Kramaniti Blocks as an isolated `/blocks` route inside the existing `website/` app. Define Blocks as the reusable workflow-execution layer: each block has explicit inputs, outputs, ownership, execution modes, and human review gates. Keep the initial slice local and mock-backed until tenancy, the first executable workflow, and the production data boundary are founder-approved.
+*   **Rationale:** Kramaniti has adjacent surfaces for agent routing, founder tracking, client delivery, and guided clarity, but no product whose primary object is a repeatable, reviewable workflow. Keeping Blocks inside the single active web app preserves Decision 13 while an isolated route prevents its operating-console model from leaking into the public website.
+*   **Affected Files:**
+    *   `website/src/app/blocks/`
+    *   `website/src/lib/blocks/blocksData.ts`
+    *   `website/src/components/assistant/RouteAwareAssistant.tsx`
+    *   `docs/kramaniti_blocks_architecture.md`
+*   **Guardrails:**
+    *   Blocks owns reusable workflow execution; Studio owns agent routing; HQ owns founder tracking; Client Hub owns client-visible delivery.
+    *   The first slice does not call models, persist data, contact external systems, or imply live integrations.
+    *   A block cannot be labeled available until its input contract, output contract, review owner, and failure path are implemented.
+    *   Consequential actions remain paused behind named human review.
+*   **Open Questions:**
+    *   Is Blocks internal, client-facing, or a tiered combination of both?
+    *   Which workflow should become the first real executable block?
+    *   Should Blocks reuse Client Hub tenancy or receive an isolated schema?
