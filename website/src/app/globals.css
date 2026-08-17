@@ -171,7 +171,8 @@
 html, body {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  /* Clip horizontal decoration without turning <body> into a nested scroller. */
+  overflow-x: clip;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
