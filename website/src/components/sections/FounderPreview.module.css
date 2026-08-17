@@ -1,9 +1,6 @@
 .founder {
-  padding: 110px 0;
-  background: transparent;
   position: relative;
-  overflow: hidden;
-  isolation: isolate;
+  background: transparent;
 }
 
 .founder::before {
@@ -59,15 +56,10 @@
 }
 
 .container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 42px;
   align-items: center;
-  position: relative;
-  z-index: 1;
 }
 
 @media (min-width: 900px) {
@@ -81,7 +73,7 @@
   position: relative;
   width: min(100%, 360px);
   aspect-ratio: 4 / 5;
-  border-radius: 8px;
+  border-radius: 16px;
   border: 1px solid rgba(201, 168, 76, 0.24);
   background: var(--surface-panel-strong);
   box-shadow: var(--shadow-elevation-2);
@@ -111,55 +103,13 @@
   max-width: 680px;
 }
 
-.content h2 {
-  margin-top: 12px;
+.content :global(h2) {
+  margin-top: 16px;
   max-width: 680px;
 }
 
-.content p {
-  margin: 0.75rem 0 0;
-  max-width: 680px;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 18px;
-  line-height: 1.65;
-}
-
-.link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
+.content :global(.text-cta) {
   margin-top: 28px;
-  padding: 12px 22px;
-  border-radius: 10px;
-  border: 1px solid rgba(201, 168, 76, 0.36);
-  color: var(--text-primary);
-  background: rgba(201, 168, 76, 0.08);
-  font-family: var(--font-inter), sans-serif;
-  font-weight: 700;
-  font-size: 15px;
-  text-decoration: none;
-  transition:
-    transform 220ms ease,
-    border-color 220ms ease,
-    background-color 220ms ease,
-    color 220ms ease,
-    box-shadow 220ms ease;
-}
-
-.link:hover {
-  color: var(--color-burnished-gold);
-  border-color: rgba(201, 168, 76, 0.58);
-  background: rgba(201, 168, 76, 0.12);
-  transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(201, 168, 76, 0.12);
-}
-
-.link:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px rgba(201, 168, 76, 0.45),
-    0 0 0 6px rgba(201, 168, 76, 0.15);
 }
 
 @keyframes wordFloat {
@@ -173,27 +123,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .atmosWord,
-  .link {
+  .atmosWord {
     animation: none !important;
     transition: none !important;
   }
 }
 
 @media (max-width: 768px) {
-  .founder {
-    padding: 80px 0;
-  }
-
-  .atmosWord {
-    animation: none !important;
-  }
-
   .imageWrap {
     margin: 0 auto;
-  }
-
-  .content p {
-    font-size: 15px;
   }
 }

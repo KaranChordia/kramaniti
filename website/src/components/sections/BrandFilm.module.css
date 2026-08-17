@@ -1,8 +1,5 @@
 .brandFilm {
-  position: relative;
-  padding: 112px 0;
-  overflow: hidden;
-  isolation: isolate;
+  background: transparent;
 }
 
 .brandFilm::before {
@@ -65,10 +62,6 @@
 .container {
   position: relative;
   z-index: 1;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
 }
 
 .layout {
@@ -90,37 +83,8 @@
   max-width: 420px;
 }
 
-.copy p {
-  margin: 16px 0 0;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 17px;
-  line-height: 1.7;
-}
-
-.inlineLink {
-  display: inline-flex;
-  align-items: center;
+.copy :global(.text-cta) {
   margin-top: 28px;
-  color: var(--color-burnished-gold);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.inlineLink::after {
-  content: '';
-  width: 54px;
-  height: 1px;
-  margin-left: 14px;
-  background: currentColor;
-  transform-origin: left center;
-  transition: transform 220ms ease;
-}
-
-.inlineLink:hover::after {
-  transform: scaleX(1.18);
 }
 
 .videoShell {
@@ -132,7 +96,8 @@
     linear-gradient(135deg, rgba(201, 168, 76, 0.12), rgba(255, 255, 255, 0.028) 42%, rgba(255, 255, 255, 0.018)),
     rgba(255, 255, 255, 0.025);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .videoShell::before {
@@ -177,10 +142,6 @@
 }
 
 @media (max-width: 900px) {
-  .brandFilm {
-    padding: 88px 0;
-  }
-
   .layout {
     grid-template-columns: 1fr;
   }
@@ -191,19 +152,6 @@
 }
 
 @media (max-width: 640px) {
-  .container {
-    padding: 0 18px;
-  }
-
-  .copy p {
-    font-size: 15px;
-  }
-
-  .inlineLink {
-    font-size: 12px;
-    letter-spacing: 0.1em;
-  }
-
   .videoShell {
     padding: 7px;
     border-radius: 14px;
