@@ -54,6 +54,11 @@ export function HomepageSequence() {
       root.dataset.homeSequence = 'true';
     }
 
+    if (!ENABLE_OPENING_FILM) {
+      root.style.removeProperty('overflow-y');
+      body.style.removeProperty('overflow-y');
+    }
+
     return () => {
       if (previous.rootOverflowY) root.style.overflowY = previous.rootOverflowY;
       else root.style.removeProperty('overflow-y');

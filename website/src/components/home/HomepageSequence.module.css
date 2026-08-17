@@ -1,8 +1,7 @@
 .shell {
   position: relative;
   min-height: 100vh;
-  overflow-x: clip;
-  overflow-y: visible;
+  overflow: visible;
   isolation: isolate;
   background:
     radial-gradient(circle at 14% 12%, rgba(201, 168, 76, 0.13), transparent 28%),
