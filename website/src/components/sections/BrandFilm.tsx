@@ -40,6 +40,15 @@ export function BrandFilm() {
                 referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
               />
+              <a
+                className={styles.mobileVideoLink}
+                href={`https://www.youtube.com/watch?v=${YOUTUBE_VIDEO_ID}`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Watch Clarity Before Scale on YouTube"
+              >
+                <span>Watch the film</span>
+              </a>
             </div>
           </div>
         </div>

@@ -162,6 +162,10 @@
   border: 0;
 }
 
+.mobileVideoLink {
+  display: none;
+}
+
 :global(html[data-theme='light']) .brandFilm::before {
   background:
     radial-gradient(circle at 15% 20%, rgba(201, 168, 76, 0.14), transparent 28%),
@@ -211,5 +215,34 @@
 
   .videoFrame {
     border-radius: 10px;
+  }
+
+  .videoFrame iframe {
+    pointer-events: none;
+  }
+
+  .mobileVideoLink {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 18px;
+    color: var(--color-ice-white);
+    text-decoration: none;
+    touch-action: pan-y;
+  }
+
+  .mobileVideoLink span {
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    background: rgba(10, 10, 15, 0.78);
+    font-family: var(--font-inter), sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 }
