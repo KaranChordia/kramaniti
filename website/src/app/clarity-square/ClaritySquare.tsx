@@ -22,7 +22,6 @@ import {
   List,
   LogOut,
   MessageCircle,
-  Moon,
   Search,
   Plus,
   RefreshCw,
@@ -32,7 +31,6 @@ import {
   Send,
   Settings,
   ShieldCheck,
-  Sun,
   Trash2,
   Users,
   UserRound,
@@ -770,7 +768,6 @@ export function ClaritySquare() {
     startedAt: null,
     completedAt: null,
   });
-  const [themeMode, setThemeMode] = useState<'dark' | 'light'>('dark');
   const [sessionMode, setSessionMode] = useState<SessionMode>('signup');
   const [authView, setAuthView] = useState<AuthView>('signup-email');
   const [status, setStatus] = useState('');
@@ -4194,7 +4191,7 @@ export function ClaritySquare() {
   const mobileMoreIsActive = activeMenu === 'more' || MORE_MENU_ITEMS.some((item) => item.id === activeMenu);
 
   return (
-    <main className={`clarity-square-route ${styles.page} ${themeMode === 'light' ? styles.lightTheme : ''}`}>
+    <main className={`clarity-square-route ${styles.page}`}>
       <section className={`clarity-square-shell ${styles.shell}`} aria-label="Kramaniti Clarity Square">
         <header
           className={`clarity-square-rail ${styles.rail}`}
@@ -4259,15 +4256,6 @@ export function ClaritySquare() {
               title="Settings"
             >
               <Settings size={17} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className={styles.navIconButton}
-              onClick={() => setThemeMode((current) => (current === 'dark' ? 'light' : 'dark'))}
-              aria-label={themeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              title={themeMode === 'dark' ? 'Light mode' : 'Dark mode'}
-            >
-              {themeMode === 'dark' ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
             </button>
           </div>
         </header>

@@ -2,13 +2,8 @@
 import React, { useState } from 'react';
 import styles from './Navbar.module.css';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { Button } from '../ui/Button';
-
-const ThemeToggle = dynamic(() => import('../ui/ThemeToggle').then((mod) => mod.ThemeToggle), {
-  ssr: false,
-});
 
 interface NavbarProps {
   isVisible?: boolean;
@@ -57,7 +52,6 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             </nav>
 
             <div className={styles.actions}>
-              <ThemeToggle />
               <Button variant="primary" className={styles.ctaButton} onClick={scrollToContact}>
                 Book a Workflow Audit
               </Button>

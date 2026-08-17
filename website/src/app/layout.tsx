@@ -82,7 +82,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  colorScheme: "light",
+  colorScheme: "dark",
   themeColor: "#C9A84C",
   width: "device-width",
   initialScale: 1,
@@ -110,8 +110,7 @@ export default function RootLayout({
             __html: `
               try {
                 localStorage.removeItem("kramaniti-theme");
-                const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                document.documentElement.setAttribute("data-theme", prefersDark ? "dark" : "light");
+                document.documentElement.setAttribute("data-theme", "dark");
               } catch (e) {}
             `
           }}

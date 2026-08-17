@@ -11,8 +11,6 @@ import {
   Download,
   Home,
   Loader2,
-  Moon,
-  Sun,
   ChevronDown,
   ChevronUp,
   Trash2,
@@ -34,7 +32,6 @@ import {
   type QuestionId,
 } from '@/lib/clarity-engine/assistant';
 import { type MockScenario } from '@/lib/clarity-engine/mockData';
-import { useKramanitiTheme } from '@/hooks/useKramanitiTheme';
 
 type SessionState = {
   answers: ClarityAnswers;
@@ -396,7 +393,6 @@ export default function ClarityEnginePage() {
   const submitAnswerRef = useRef<(overrideAnswer?: string) => Promise<void>>(async () => {});
 
   const { startAmbient, playIntro, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
-  const { theme, toggleTheme } = useKramanitiTheme();
   const [hasLoadedStoredSession, setHasLoadedStoredSession] = useState(false);
 
   useEffect(() => {
@@ -826,30 +822,6 @@ export default function ClarityEnginePage() {
             Load Sample
           </button>
           <div className={styles.controlDock} onClick={playClick}>
-            <label
-              className={styles.themeSwitch}
-              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <input
-                className={styles.themeSwitchInput}
-                type="checkbox"
-                checked={theme === 'dark'}
-                onChange={() => {
-                  playClick();
-                  toggleTheme();
-                }}
-              />
-              <span className={styles.themeSlider}>
-                <span className={styles.themeMoon}>
-                  <Moon size={24} />
-                </span>
-                <span className={styles.themeSun}>
-                  <Sun size={24} />
-                </span>
-              </span>
-            </label>
             <button
               className={`${styles.controlIconBtn} ${styles.actionBtn}`}
               onClick={(e) => {

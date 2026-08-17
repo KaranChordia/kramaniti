@@ -312,14 +312,12 @@ export function KramanitiAssistant() {
         aria-expanded={isOpen}
         title={isOpen ? 'Close assistant' : 'Open Kramaniti assistant'}
       >
-        <span className={styles.launcherOrb} aria-hidden="true">
-          <KramanitiOrb
-            state="shaping"
-            size={64}
-            paused={(isMotionHeavyRoute || isTabletOrMobile) && !isOpen}
-            className={styles.orbCanvas}
-          />
-        </span>
+        <KramanitiOrb
+          state={orbState}
+          size={64}
+          paused={(isMotionHeavyRoute || isTabletOrMobile) && !isOpen}
+          className={styles.orbCanvas}
+        />
       </button>
 
       {hasOpened ? (

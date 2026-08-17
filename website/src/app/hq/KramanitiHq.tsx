@@ -15,11 +15,9 @@ import {
   GitBranch,
   ListTodo,
   LogOut,
-  Moon,
   Plus,
   Send,
   ShieldCheck,
-  Sun,
 } from 'lucide-react';
 import manifest from '@/data/kramaniti-hq-repositories.generated.json';
 import {
@@ -41,7 +39,6 @@ import {
 import styles from './KramanitiHq.module.css';
 
 type HqView = 'overview' | 'tasks' | 'assistant' | 'projects' | 'repositories';
-type Theme = 'dark' | 'light';
 type TaskFilter = 'open' | 'done' | 'all';
 type HqAssistantMessage = {
   id: string;
@@ -117,7 +114,6 @@ function Brand({ compact = false }: { compact?: boolean }) {
 
 export function KramanitiHq() {
   const [activeView, setActiveView] = useState<HqView>('overview');
-  const [theme, setTheme] = useState<Theme>('dark');
   const [authReady, setAuthReady] = useState(() => !isClientHubSupabaseConfigured());
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<ClientHubProfile | null>(null);
@@ -188,23 +184,6 @@ export function KramanitiHq() {
   const waitingItems = focusedPortfolio.filter((item) => item.health === 'waiting' || item.waiting_on);
   const attentionItems = focusedPortfolio.filter((item) => item.health === 'attention');
   const selectedWorkspace = selectedWorkspaceId === 'all' ? null : workspaceMap.get(selectedWorkspaceId) ?? null;
-
-  useEffect(() => {
-    const storedTheme = window.localStorage.getItem('kramaniti-hq-theme');
-    const preferredTheme = storedTheme === 'light' || storedTheme === 'dark'
-      ? storedTheme
-      : window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-    const frame = window.requestAnimationFrame(() => setTheme(preferredTheme));
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
-
-  const toggleTheme = () => {
-    setTheme((current) => {
-      const next = current === 'dark' ? 'light' : 'dark';
-      window.localStorage.setItem('kramaniti-hq-theme', next);
-      return next;
-    });
-  };
 
   const selectWorkspace = async (workspaceId: string) => {
     setSelectedWorkspaceId(workspaceId);
@@ -447,7 +426,7 @@ export function KramanitiHq() {
 
   if (!configured) {
     return (
-      <main className={styles.centeredState} data-theme={theme}>
+      <main className={styles.centeredState} data-theme="dark">
         <Brand compact />
         <span className={styles.eyebrow}>Kramaniti HQ</span>
         <h1>Private operating access is not configured.</h1>
@@ -458,7 +437,7 @@ export function KramanitiHq() {
 
   if (!authReady || (authUser && isLoading && !profile)) {
     return (
-      <main className={styles.centeredState} data-theme={theme}>
+      <main className={styles.centeredState} data-theme="dark">
         <div className={styles.loadingOrbit}><span /></div>
         <span className={styles.eyebrow}>Kramaniti HQ</span>
         <h1>Assembling your operating picture.</h1>
@@ -468,10 +447,7 @@ export function KramanitiHq() {
 
   if (!authUser) {
     return (
-      <main className={styles.loginShell} data-theme={theme}>
-        <button className={styles.loginThemeButton} onClick={toggleTheme} aria-label={`Use ${theme === 'dark' ? 'light' : 'dark'} theme`}>
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
+      <main className={styles.loginShell} data-theme="dark">
         <div className={styles.loginAtmosphere} aria-hidden="true" />
         <section className={styles.loginStory}>
           <Brand />
@@ -496,7 +472,7 @@ export function KramanitiHq() {
 
   if (profile && !isOwner) {
     return (
-      <main className={styles.centeredState} data-theme={theme}>
+      <main className={styles.centeredState} data-theme="dark">
         <ShieldCheck size={38} />
         <span className={styles.eyebrow}>Owner-only boundary</span>
         <h1>This account belongs in Client Hub.</h1>
@@ -722,7 +698,7 @@ export function KramanitiHq() {
   );
 
   return (
-    <main className={styles.hqShell} data-theme={theme}>
+    <main className={styles.hqShell} data-theme="dark">
       <header className={styles.topBar}>
         <Brand />
         <nav aria-label="HQ sections">
@@ -733,7 +709,6 @@ export function KramanitiHq() {
         </nav>
         <div className={styles.navActions}>
           <span className={styles.readOnlyStatus}><i /> Tracking + tasks</span>
-          <button className={styles.iconButton} onClick={toggleTheme} aria-label={`Use ${theme === 'dark' ? 'light' : 'dark'} theme`}>{theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}</button>
           <button className={styles.iconButton} onClick={signOut} aria-label="Sign out"><LogOut size={19} /></button>
         </div>
       </header>

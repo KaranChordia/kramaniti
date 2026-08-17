@@ -2,14 +2,13 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, Compass, Layers, Megaphone, Loader2, Moon, Save, Sun, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, Compass, Layers, Megaphone, Loader2, Save, Volume2, VolumeX } from 'lucide-react';
 import styles from './BlueprintPage.module.css';
 import engineStyles from '../ClarityEngine.module.css';
 import BlueprintStreamer from '../BlueprintStreamer';
 import { type BlueprintRequestBody } from '@/lib/clarity-engine/blueprintStreamer';
 import { useAudioEngine } from '@/hooks/useAudioEngine';
 import ReportReader from './ReportReader';
-import { useKramanitiTheme } from '@/hooks/useKramanitiTheme';
 import { getClaritySquareSupabase, type ClaritySquareProjectReport } from '@/lib/clarity-square/supabase';
 
 interface ActiveReport {
@@ -47,7 +46,6 @@ export default function BlueprintPage() {
   const [isSavingReports, setIsSavingReports] = useState(false);
   const [saveStatus, setSaveStatus] = useState('');
   const { playSuccess, startAmbient, playClick, isAmbientMuted, toggleAmbientMute } = useAudioEngine();
-  const { theme, toggleTheme } = useKramanitiTheme();
 
   useEffect(() => {
     startAmbient();
@@ -268,18 +266,6 @@ export default function BlueprintPage() {
           <h1 className={styles.headerTitle}>Your Growth Blueprint</h1>
         </div>
         <div className={styles.headerActions}>
-          <button
-            className={styles.headerIconBtn}
-            onClick={(e) => {
-              e.stopPropagation();
-              playClick();
-              toggleTheme();
-            }}
-            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-          >
-            {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
-          </button>
           <button 
             className={styles.headerIconBtn}
             onClick={(e) => { 

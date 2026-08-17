@@ -19,11 +19,12 @@
   height: 72px;
   padding: 0;
   border: 0;
-  border-radius: 50%;
   background: transparent;
   box-shadow: none;
   cursor: pointer;
   pointer-events: auto;
+  display: grid;
+  place-items: center;
   transition:
     width 620ms var(--assistant-ios-spring),
     height 620ms var(--assistant-ios-spring),
@@ -76,27 +77,6 @@
   outline-offset: 4px;
 }
 
-.launcherOrb {
-  position: absolute;
-  inset: 4px;
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  border: 1px solid rgba(246, 223, 157, 0.16);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 50% 46%, rgba(246, 223, 157, 0.08), transparent 58%),
-    rgba(10, 10, 15, 0.84);
-  box-shadow:
-    0 0 34px rgba(201, 168, 76, 0.3),
-    inset 0 0 28px rgba(246, 223, 157, 0.045);
-  transition:
-    border-color 260ms ease,
-    box-shadow 260ms ease,
-    background 260ms ease;
-}
-
 .rootPassive:not(.rootOpen) .blobButton {
   opacity: 0.76;
   animation: none;
@@ -113,22 +93,6 @@
 .orbCanvas {
   display: block;
   max-width: none;
-}
-
-.blobButton:hover .launcherOrb,
-.rootTyping .launcherOrb,
-.rootResponding .launcherOrb {
-  border-color: rgba(246, 223, 157, 0.36);
-  box-shadow:
-    0 0 44px rgba(201, 168, 76, 0.46),
-    inset 0 0 30px rgba(246, 223, 157, 0.075);
-}
-
-.rootPassive:not(.rootOpen) .launcherOrb {
-  border-color: rgba(246, 223, 157, 0.1);
-  box-shadow:
-    0 0 22px rgba(201, 168, 76, 0.2),
-    inset 0 0 22px rgba(246, 223, 157, 0.035);
 }
 
 .stage {
@@ -531,12 +495,7 @@
     height: 52px;
   }
 
-  .launcherOrb {
-    inset: 0;
-  }
-
-  .rootPassive:not(.rootOpen) .launcherOrb {
-    inset: -6px;
+  .rootPassive:not(.rootOpen) .orbCanvas {
     transform: scale(0.75);
   }
 
@@ -642,7 +601,6 @@
   box-shadow: none;
 }
 
-:global(html[data-theme='light']) .launcherOrb,
 :global(html[data-theme='light']) .panelOrb {
   border-color: rgba(90, 74, 27, 0.16);
   background:
