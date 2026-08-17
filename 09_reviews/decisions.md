@@ -803,3 +803,30 @@ This log registers the major strategic and structural decisions made during the 
     *   Is Blocks internal, client-facing, or a tiered combination of both?
     *   Which workflow should become the first real executable block?
     *   Should Blocks reuse Client Hub tenancy or receive an isolated schema?
+
+### Decision 29: Establish Semantic Signals as the Spatial Experience Language
+*   **Date:** 2026-08-17
+*   **Area:** Public website, brand interaction system, accessibility, motion
+*   **Status:** Implemented (`[Fact]`)
+*   **Decision:** Add a dedicated `/experience` route that uses the brand-book flow-line, node, orbit, grid, and evidence principles as one scroll-led operating narrative. Treat light as a semantic state—not decoration—with the shared sequence `dormant`, `input`, `handoff`, `focus`, and `complete`. Tie section brightness continuously to the travelling scroll signal, give the focused section a clearly stronger warm-white crest against graphite dormant sections, and present Insights as a maintainable vertical evidence relay whose three thresholds resolve against one focused article. Expose the route through a compact `EXP` control in the public header on desktop and mobile.
+*   **Rationale:** The public website remains the primary information surface. The spatial experience adds a more memorable entry into Kramaniti's strategy-to-system logic while preserving proof-safe copy and a direct return to the information-led site. Scroll, keyboard, touch, and pointer interactions all resolve to the same visible states; reduced-motion users receive the same information without transitional animation. The stronger luminance range makes the signal-to-section relationship legible instead of merely atmospheric. The compact `EXP` control makes the alternative experience discoverable without displacing the AI Workflow Audit as the primary public action. The evidence relay preserves the selected dot-and-line language across devices without the geometry and rendering overhead of a deeper 3D corridor.
+*   **Source or Evidence:** Founder-selected spatial concept; Kramaniti brand book pages 50–55; verified local `/experience` implementation and design QA.
+*   **Affected Files:**
+    *   `website/src/app/experience/`
+    *   `website/src/lib/signalProtocol.ts`
+    *   `website/design-references/kramaniti-signal-corridor-selected.png`
+    *   `website/design-references/kramaniti-insights-evidence-relay-selected.png`
+    *   `website/src/components/GlobalShockwave.tsx`
+    *   `website/src/components/assistant/RouteAwareAssistant.tsx`
+    *   `website/src/components/layout/Navbar.tsx`
+    *   `website/src/app/sitemap.ts`
+    *   `website/design-qa.md`
+*   **Alternatives Rejected:** A purely decorative 3D page, a simulated account experience, independent animation effects without a shared meaning, and the perspective insight corridor whose maintenance and cross-device smoothness costs exceeded its information value.
+*   **Guardrails:**
+    *   Every illuminated node must identify a current input, focus, handoff, or completed outcome.
+    *   Scroll-linked motion must never intercept normal scrolling, hide required content, or become the only way to understand state.
+    *   Keep personalisation browser-local and transient; the entry form does not create an account or persist user data.
+    *   Preserve reduced-motion behavior, native controls, visible keyboard focus, textual state labels, and proof-safe public copy.
+    *   Keep the public website available as the direct information-led alternative.
+    *   Keep `EXP` secondary to the AI Workflow Audit CTA and label its destination accessibly.
+*   **Open Questions:** Whether the semantic signal protocol should later extend to product surfaces beyond the public experience route.

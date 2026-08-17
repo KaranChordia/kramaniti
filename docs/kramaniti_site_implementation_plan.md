@@ -478,6 +478,39 @@ Related files:
 - `supabase/migrations/20260720040451_kramaniti_hq_portfolio.sql`
 - `docs/kramaniti_hq_operating_guide.md`
 
+## 10.9 Spatial Experience and Semantic Signal Protocol
+
+2026-08-17 update: the public site now includes a dedicated `/experience` route as a premium, scroll-led alternative to the standard information architecture.
+
+[Fact] The implementation includes:
+
+- a clearly labelled experience-mode entry form with optional, non-persisted personalisation and no simulated account creation;
+- a continuous scroll-linked journey rail whose active dot and chapter label track the reader's actual position;
+- continuous high-contrast section focus where content and local geometry rise to a warm-white luminance crest as the journey signal traverses them, then settle into a readable graphite dormant state;
+- one shared signal protocol—Dormant, Input received, Handoff, In focus, and Complete—defined in `website/src/lib/signalProtocol.ts`;
+- a Services sequence where scrolling, keyboard focus, touch, pointer, or click can advance the same Foundation Strategy, Systems Engineering, and Complete Lifecycle Retainer states;
+- an Insights evidence relay where scroll position or direct interaction advances three labelled thresholds on one vertical line and changes the focused article while every threshold remains a native button;
+- a direct AI Workflow Audit handoff plus clear routes back to the standard website and the full Insights library;
+- a compact, accessible `EXP` button in the standard public header on desktop and mobile; it opens `/experience` while the AI Workflow Audit remains the primary CTA;
+- textual state labels, native controls, visible focus treatment, a signal-state key, an assistive live chapter announcement, responsive layouts, and reduced-motion behavior;
+- isolation from the global public assistant and generic click shockwave so unrelated effects cannot compete with the semantic signal system.
+
+[Constraint] Illumination must communicate an input, active decision, handoff, or completed result. Do not add ambient pulses, particles, lines, or scroll effects that have no operating meaning.
+
+[Constraint] Scroll-linked behavior must remain passive and requestAnimationFrame-throttled. It must not intercept wheel, touch, or keyboard scrolling, and content must remain readable without animation.
+
+[Constraint] The experience route is a public narrative layer, not an authentication or client-data surface. Do not persist entry-form values or imply that an account has been created.
+
+Related files:
+
+- `website/src/app/experience/page.tsx`
+- `website/src/app/experience/KramanitiExperience.tsx`
+- `website/src/app/experience/Experience.module.css`
+- `website/src/lib/signalProtocol.ts`
+- `website/design-references/kramaniti-signal-corridor-selected.png`
+- `website/design-references/kramaniti-insights-evidence-relay-selected.png`
+- `website/design-qa.md`
+
 ## 11. Nexocean Portfolio Page
 
 - Added a dedicated selected-work page at `/work/nexocean`.

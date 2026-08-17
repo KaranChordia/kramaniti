@@ -341,6 +341,75 @@
   height: 100%;
 }
 
+.expButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 30px;
+  padding: 0 11px 0 18px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 168, 76, 0.46);
+  border-radius: 999px;
+  color: #e3c45f;
+  background:
+    linear-gradient(110deg, rgba(201, 168, 76, 0.13), rgba(201, 168, 76, 0.025)),
+    rgba(12, 12, 16, 0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 190, 0.08),
+    0 0 0 rgba(201, 168, 76, 0);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.expButton::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-burnished-gold);
+  box-shadow: 0 0 8px rgba(226, 194, 91, 0.48);
+}
+
+.expButton:hover,
+.expButton:focus-visible {
+  border-color: rgba(232, 203, 112, 0.88);
+  color: #f3d982;
+  background:
+    linear-gradient(110deg, rgba(201, 168, 76, 0.24), rgba(201, 168, 76, 0.06)),
+    rgba(12, 12, 16, 0.58);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 190, 0.14),
+    0 0 18px rgba(201, 168, 76, 0.2);
+  transform: translateY(-1px);
+}
+
+.expButton:focus-visible {
+  outline: 2px solid rgba(232, 203, 112, 0.78);
+  outline-offset: 3px;
+}
+
+:global(html[data-theme='light']) .expButton {
+  color: #765d14;
+  border-color: rgba(143, 111, 24, 0.38);
+  background:
+    linear-gradient(110deg, rgba(201, 168, 76, 0.16), rgba(255, 255, 255, 0.44)),
+    rgba(255, 255, 255, 0.68);
+}
+
 @keyframes mobileMenuDrop {
   from {
     opacity: 0;
@@ -390,6 +459,13 @@
     filter: none;
     opacity: 0.52;
     animation: none;
+  }
+
+  .expButton {
+    min-width: 46px;
+    height: 30px;
+    padding-right: 9px;
+    padding-left: 17px;
   }
 
   :global(html[data-theme='light']) .header {

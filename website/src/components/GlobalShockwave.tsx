@@ -11,6 +11,10 @@ export function GlobalShockwave() {
     const handleClick = (e: MouseEvent) => {
       // Find closest button or a link acting as a button
       const target = e.target as HTMLElement;
+      if (target.closest('[data-disable-global-shockwave="true"]')) {
+        return;
+      }
+
       const button = target.closest(
         'button:not(.no-shockwave), [role="button"]:not(.no-shockwave), .shockwave-btn:not(.no-shockwave)'
       ) as HTMLElement;

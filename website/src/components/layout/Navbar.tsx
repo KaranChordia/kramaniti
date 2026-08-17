@@ -52,6 +52,13 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             </nav>
 
             <div className={styles.actions}>
+              <Link
+                href="/experience"
+                className={styles.expButton}
+                aria-label="Open the Kramaniti spatial experience"
+              >
+                EXP
+              </Link>
               <Button variant="primary" className={styles.ctaButton} onClick={scrollToContact}>
                 Book a Workflow Audit
               </Button>
