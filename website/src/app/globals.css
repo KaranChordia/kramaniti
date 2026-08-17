@@ -169,6 +169,9 @@
 }
 
 html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
@@ -183,6 +186,13 @@ html, body {
     font-size: 15px;
     scroll-behavior: auto;
   }
+}
+
+img,
+svg,
+canvas,
+video {
+  max-width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
