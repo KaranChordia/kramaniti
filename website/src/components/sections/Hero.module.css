@@ -221,7 +221,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(18px, 2.6vh, 28px);
+  gap: clamp(16px, 2.2vh, 24px);
   max-width: 1040px;
   margin: 0 auto;
   text-align: center;
@@ -232,6 +232,16 @@
 
 .visible {
   opacity: calc(1 - var(--hero-scroll) * 0.72);
+}
+
+.kicker {
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(10px);
+}
+
+.visible .kicker {
+  animation: textEnter 440ms cubic-bezier(0.16, 1, 0.3, 1) 20ms forwards;
 }
 
 .heroBrandText {
@@ -343,76 +353,28 @@
   animation: textEnter 440ms cubic-bezier(0.16, 1, 0.3, 1) 320ms forwards;
 }
 
-.heroCta {
-  position: relative;
-  isolation: isolate;
-  display: inline-flex;
-  min-height: 48px;
+.actions {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  padding: 12px 22px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  color: var(--text-primary);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
-    rgba(20, 20, 24, 0.36);
-  box-shadow:
-    0 16px 36px rgba(0, 0, 0, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 15px;
-  font-weight: 650;
-  line-height: 1;
-  text-decoration: none;
-  white-space: nowrap;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.heroCta,
+.heroSecondary {
   opacity: 0;
   transform: translateY(16px);
   filter: blur(12px);
-  transition:
-    transform 260ms ease,
-    border-color 260ms ease,
-    background 260ms ease,
-    box-shadow 260ms ease,
-    color 260ms ease;
-}
-
-.heroCta::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  z-index: -1;
-  border-radius: inherit;
-  background: radial-gradient(circle at 50% 0%, rgba(201, 168, 76, 0.42), transparent 70%);
-  opacity: 0;
-  transition: opacity 220ms ease;
 }
 
 .visible .heroCta {
   animation: textEnter 440ms cubic-bezier(0.16, 1, 0.3, 1) 430ms forwards;
 }
 
-.heroCta:hover {
-  transform: translateY(-2px);
-  border-color: rgba(246, 223, 157, 0.54);
-  color: #0a0a0f;
-  background:
-    linear-gradient(135deg, rgba(246, 223, 157, 0.94), rgba(201, 168, 76, 0.86)),
-    rgba(201, 168, 76, 0.72);
-  box-shadow:
-    0 0 0 1px rgba(201, 168, 76, 0.12),
-    0 18px 40px rgba(201, 168, 76, 0.14);
-}
-
-.heroCta:hover::after {
-  opacity: 1;
-}
-
-.heroCta:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px rgba(201, 168, 76, 0.52),
-    0 0 0 6px rgba(201, 168, 76, 0.16);
+.visible .heroSecondary {
+  animation: textEnter 440ms cubic-bezier(0.16, 1, 0.3, 1) 500ms forwards;
 }
 
 :global(.brand-blue-preview) .heroCta {
@@ -593,8 +555,14 @@
     line-height: 1.02;
   }
 
-  .heroCta {
-    width: min(100%, 250px);
+  .actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .heroCta,
+  .heroSecondary {
+    width: min(100%, 280px);
   }
 
   .flowLine,
@@ -620,10 +588,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .content,
+  .kicker,
   .heroBrandText,
   .headlineWord,
   .subheading,
   .heroCta,
+  .heroSecondary,
   .flowLine::after,
   .signalDot,
   .scrollArchitecture {
@@ -632,10 +602,12 @@
   }
 
   .content,
+  .kicker,
   .heroBrandText,
   .headlineWord,
   .subheading,
-  .heroCta {
+  .heroCta,
+  .heroSecondary {
     opacity: 1;
     transform: none;
     filter: none;
