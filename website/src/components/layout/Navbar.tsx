@@ -98,7 +98,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <Link href="/work" className={styles.mobileLink} onClick={closeMobileMenu}>Work</Link>
             <Link href="/founder" className={styles.mobileLink} onClick={closeMobileMenu}>Founder</Link>
             <Link href="/insights" className={styles.mobileLink} onClick={closeMobileMenu}>Insights</Link>
-            <div style={{ marginTop: '24px' }}>
+            <div className={styles.mobileAuditAction}>
               <Button variant="primary" onClick={() => {
                 closeMobileMenu();
                 scrollToContact();

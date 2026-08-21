@@ -57,6 +57,12 @@
   --shadow-elevation-2: 0 18px 42px rgba(0, 0, 0, 0.16);
   --shadow-inset-soft: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
+  /* Shared public action geometry */
+  --public-button-height: 50px;
+  --public-button-radius: 8px;
+  --public-button-padding-x: 20px;
+  --public-button-font-size: 14px;
+
   color-scheme: dark;
 
   --background: oklch(1 0 0);

@@ -97,6 +97,10 @@
     opacity: 0.1;
     transform: none;
   }
+
+  .shell::before {
+    inset: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -240,15 +240,21 @@
 .panelLink,
 .closingLink {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: fit-content;
+  min-height: var(--public-button-height);
+  padding: 0 var(--public-button-padding-x);
   margin-top: 22px;
-  color: var(--color-burnished-gold);
+  border: 1px solid rgba(255, 236, 178, 0.22);
+  border-radius: var(--public-button-radius);
+  background: rgba(255, 255, 255, 0.045);
+  color: #f5f1e7;
   font-family: var(--font-inter), sans-serif;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
+  font-size: var(--public-button-font-size);
+  font-weight: 650;
+  letter-spacing: 0;
   text-decoration: none;
-  text-transform: uppercase;
 }
 
 .sectionHeader {

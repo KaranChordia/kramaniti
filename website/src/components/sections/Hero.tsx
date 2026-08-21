@@ -1,206 +1,102 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import type { CSSProperties } from 'react';
 import styles from './Hero.module.css';
 
-const heroHeadline = 'Turn scattered operations into a connected system for growth.';
-const heroHeadlineWords = heroHeadline.split(' ');
-const flowLines = [
-  { left: '8%', top: '18%', width: '24%', rotate: '0deg', opacity: 0.34, duration: '5.8s', delay: '-1.2s' },
-  { left: '28%', top: '16%', width: '22%', rotate: '90deg', opacity: 0.28, duration: '6.4s', delay: '-3.4s' },
-  { left: '42%', top: '31%', width: '20%', rotate: '0deg', opacity: 0.3, duration: '5.9s', delay: '-0.8s' },
-  { left: '54%', top: '28%', width: '24%', rotate: '90deg', opacity: 0.33, duration: '6.8s', delay: '-4.6s' },
-  { left: '68%', top: '36%', width: '22%', rotate: '0deg', opacity: 0.31, duration: '6.2s', delay: '-2.3s' },
-  { left: '8%', top: '52%', width: '31%', rotate: '0deg', opacity: 0.32, duration: '7.1s', delay: '-5.1s' },
-  { left: '33%', top: '48%', width: '22%', rotate: '90deg', opacity: 0.28, duration: '6.6s', delay: '-1.7s' },
-  { left: '49%', top: '67%', width: '28%', rotate: '0deg', opacity: 0.34, duration: '7.4s', delay: '-6s' },
-  { left: '74%', top: '56%', width: '24%', rotate: '90deg', opacity: 0.29, duration: '6.9s', delay: '-3s' },
-  { left: '16%', top: '76%', width: '20%', rotate: '0deg', opacity: 0.27, duration: '6.1s', delay: '-4.1s' },
-  { left: '57%', top: '18%', width: '18%', rotate: '90deg', opacity: 0.27, duration: '5.7s', delay: '-2.6s' },
-  { left: '78%', top: '48%', width: '18%', rotate: '0deg', opacity: 0.3, duration: '6.3s', delay: '-0.9s' },
-];
+type HeroProps = { isActive?: boolean };
 
-const signalDots = [
-  { x: '8%', y: '17%', size: 2, delay: '-0.4s', duration: '5.8s' },
-  { x: '18%', y: '38%', size: 3, delay: '-2.1s', duration: '6.6s' },
-  { x: '27%', y: '24%', size: 2, delay: '-4.2s', duration: '7.1s' },
-  { x: '34%', y: '68%', size: 4, delay: '-1.5s', duration: '6.2s' },
-  { x: '42%', y: '31%', size: 3, delay: '-3.6s', duration: '7.6s' },
-  { x: '49%', y: '79%', size: 2, delay: '-5.2s', duration: '6.9s' },
-  { x: '57%', y: '22%', size: 4, delay: '-1.1s', duration: '7.8s' },
-  { x: '63%', y: '54%', size: 2, delay: '-4.7s', duration: '6.4s' },
-  { x: '71%', y: '35%', size: 3, delay: '-2.8s', duration: '7.4s' },
-  { x: '82%', y: '63%', size: 2, delay: '-0.9s', duration: '6.8s' },
-  { x: '91%', y: '28%', size: 3, delay: '-3.3s', duration: '7.2s' },
-  { x: '14%', y: '73%', size: 2, delay: '-5.6s', duration: '6.5s' },
-  { x: '22%', y: '84%', size: 3, delay: '-1.9s', duration: '7.7s' },
-  { x: '37%', y: '47%', size: 2, delay: '-4.9s', duration: '6.1s' },
-  { x: '53%', y: '42%', size: 3, delay: '-2.5s', duration: '7s' },
-  { x: '66%', y: '76%', size: 2, delay: '-0.6s', duration: '6.7s' },
-  { x: '78%', y: '18%', size: 4, delay: '-4.4s', duration: '7.9s' },
-  { x: '88%', y: '81%', size: 2, delay: '-2.2s', duration: '6.3s' },
-  { x: '6%', y: '51%', size: 3, delay: '-3.8s', duration: '7.3s' },
-  { x: '31%', y: '12%', size: 2, delay: '-1.3s', duration: '6.6s' },
-  { x: '46%', y: '59%', size: 4, delay: '-5.1s', duration: '7.5s' },
-  { x: '59%', y: '87%', size: 2, delay: '-3.1s', duration: '6.2s' },
-  { x: '73%', y: '49%', size: 3, delay: '-0.7s', duration: '7.6s' },
-  { x: '95%', y: '46%', size: 2, delay: '-4.1s', duration: '6.9s' },
-  { x: '11%', y: '30%', size: 2, delay: '-2.9s', duration: '7.4s' },
-  { x: '25%', y: '58%', size: 4, delay: '-0.2s', duration: '6.4s' },
-  { x: '68%', y: '11%', size: 2, delay: '-5.8s', duration: '7.8s' },
-  { x: '86%', y: '39%', size: 3, delay: '-1.8s', duration: '6.7s' },
-];
-
-type HeroProps = {
-  isActive?: boolean;
-};
+const headlineLines = [
+  [
+    { text: 'Turn', index: 0 },
+    { text: 'scattered', index: 1 },
+    { text: 'operations', index: 2 },
+  ],
+  [
+    { text: 'into', index: 3 },
+    { text: 'a', index: 4 },
+    { text: 'connected', index: 5, accent: true },
+    { text: 'system', index: 6, accent: true },
+  ],
+  [
+    { text: 'for', index: 7 },
+    { text: 'growth.', index: 8 },
+  ],
+] as const;
 
 export function Hero({ isActive = true }: HeroProps) {
-  const heroRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    let scrollFrame = 0;
-    let pointerFrame = 0;
-    let isIntersecting = true;
-    let cachedHeroHeight = hero.offsetHeight || 800;
-    let cachedHeroTop = hero.offsetTop || 0;
-
-    const updateDimensions = () => {
-      cachedHeroHeight = hero.offsetHeight || 800;
-      cachedHeroTop = hero.offsetTop || 0;
-    };
-
-    const updateScrollDepth = () => {
-      if (!isIntersecting) return;
-      window.cancelAnimationFrame(scrollFrame);
-      scrollFrame = window.requestAnimationFrame(() => {
-        const scrollY = window.scrollY || window.pageYOffset;
-        const offset = scrollY - cachedHeroTop;
-        const progress = Math.min(1, Math.max(0, offset / Math.max(cachedHeroHeight * 0.72, 1)));
-        hero.style.setProperty('--hero-scroll', progress.toFixed(3));
-      });
-    };
-
-    const updatePointerDepth = (event: PointerEvent) => {
-      if (!isIntersecting) return;
-      window.cancelAnimationFrame(pointerFrame);
-      const clientX = event.clientX;
-      const clientY = event.clientY;
-      pointerFrame = window.requestAnimationFrame(() => {
-        const rect = hero.getBoundingClientRect();
-        const x = ((clientX - rect.left) / rect.width - 0.5) * 2;
-        const y = ((clientY - rect.top) / rect.height - 0.5) * 2;
-        hero.style.setProperty('--hero-pointer-x', x.toFixed(2));
-        hero.style.setProperty('--hero-pointer-y', y.toFixed(2));
-      });
-    };
-
-    const resetPointerDepth = () => {
-      hero.style.setProperty('--hero-pointer-x', '0');
-      hero.style.setProperty('--hero-pointer-y', '0');
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        isIntersecting = entry.isIntersecting;
-      },
-      { threshold: 0 }
-    );
-
-    observer.observe(hero);
-    updateDimensions();
-    updateScrollDepth();
-
-    window.addEventListener('resize', updateDimensions, { passive: true });
-    window.addEventListener('scroll', updateScrollDepth, { passive: true });
-    hero.addEventListener('pointermove', updatePointerDepth, { passive: true });
-    hero.addEventListener('pointerleave', resetPointerDepth);
-
-    return () => {
-      observer.disconnect();
-      window.cancelAnimationFrame(scrollFrame);
-      window.cancelAnimationFrame(pointerFrame);
-      window.removeEventListener('resize', updateDimensions);
-      window.removeEventListener('scroll', updateScrollDepth);
-      hero.removeEventListener('pointermove', updatePointerDepth);
-      hero.removeEventListener('pointerleave', resetPointerDepth);
-    };
-  }, []);
-
   return (
-    <section ref={heroRef} className={styles.heroSection} id="hero">
-      <div className={styles.background} aria-hidden="true">
-        <div className={`${styles.glow} ${styles.glowLeft}`} />
-        <div className={`${styles.glow} ${styles.glowRight}`} />
-        <div className={styles.grid} />
-        <div className={styles.scrollArchitecture}>
-          <span className={`${styles.architectureWave} ${styles.architectureWaveOuter}`} />
-          <span className={`${styles.architectureWave} ${styles.architectureWaveMiddle}`} />
-          <span className={`${styles.architectureWave} ${styles.architectureWaveInner}`} />
-          <span className={styles.architectureAxis} />
-          <span className={styles.architectureSignal} />
-        </div>
-        <div className={styles.flowField}>
-          {flowLines.map((line) => (
-            <span
-              key={`flow-line-${line.left}-${line.top}`}
-              className={styles.flowLine}
-              style={{
-                '--line-left': line.left,
-                '--line-top': line.top,
-                '--line-width': line.width,
-                '--line-rotate': line.rotate,
-                '--line-opacity': line.opacity,
-                '--line-duration': line.duration,
-                '--line-delay': line.delay,
-              } as React.CSSProperties}
-            />
-          ))}
-          {signalDots.map((dot, index) => (
-            <span
-              key={`signal-dot-${dot.x}-${dot.y}`}
-              className={`${styles.signalDot} ${index > 19 ? styles.mobileOptional : ''}`}
-              style={{
-                '--dot-x': dot.x,
-                '--dot-y': dot.y,
-                '--dot-size': `${dot.size + 1.2}px`,
-                '--dot-delay': dot.delay,
-                '--dot-duration': dot.duration,
-              } as React.CSSProperties}
-            />
-          ))}
-        </div>
+    <section
+      className={`${styles.heroSection} ${isActive ? styles.isActive : ''}`}
+      id="hero"
+      aria-labelledby="hero-heading"
+    >
+      <div className={styles.lineField} aria-hidden="true">
+        <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+          <path d="M-20 214 H252 V126 H410" />
+          <path d="M1032 124 H1194 V294 H1460" />
+          <path d="M-20 700 H304 V790 H462" />
+          <path d="M1038 726 H1248 V920" />
+          <path d="M520 -20 V106 H666" />
+          <path d="M842 900 V798 H972" />
+          <path className={`${styles.signalRoute} ${styles.signalRouteOne}`} pathLength="1" d="M-20 214 H252 V126 H410" />
+          <path className={`${styles.signalRoute} ${styles.signalRouteTwo}`} pathLength="1" d="M1032 124 H1194 V294 H1460" />
+          <path className={`${styles.signalRoute} ${styles.signalRouteThree}`} pathLength="1" d="M-20 700 H304 V790 H462" />
+          <path className={`${styles.signalRoute} ${styles.signalRouteFour}`} pathLength="1" d="M1038 726 H1248 V920" />
+          <path className={`${styles.signalRoute} ${styles.signalRouteFive}`} pathLength="1" d="M520 -20 V106 H666" />
+          <path className={`${styles.signalRoute} ${styles.signalRouteSix}`} pathLength="1" d="M842 900 V798 H972" />
+          <rect className={`${styles.connector} ${styles.connectorOne}`} x="248.5" y="210.5" width="7" height="7" />
+          <rect className={`${styles.connector} ${styles.connectorTwo}`} x="1190.5" y="290.5" width="7" height="7" />
+          <rect className={`${styles.connector} ${styles.connectorThree}`} x="300.5" y="696.5" width="7" height="7" />
+          <rect className={`${styles.connector} ${styles.connectorFour}`} x="1244.5" y="722.5" width="7" height="7" />
+          <rect className={`${styles.connector} ${styles.connectorFive}`} x="516.5" y="102.5" width="7" height="7" />
+          <rect className={`${styles.connector} ${styles.connectorSix}`} x="838.5" y="794.5" width="7" height="7" />
+        </svg>
       </div>
 
       <div className={styles.container}>
-        <div className={`${styles.content} ${isActive ? styles.visible : ''}`}>
-          <span className={styles.heroBrandText} data-text="Kramaniti">
-            Kramaniti
-          </span>
-          <h1 className={styles.headline}>
-            {heroHeadlineWords.map((word, index) => (
-              <span
-                key={`${word}-${index}`}
-                className={styles.headlineWord}
-                style={{ '--word-index': index } as React.CSSProperties}
-              >
-                {word}
-                {index < heroHeadlineWords.length - 1 ? '\u00a0' : ''}
+        <div className={styles.copy}>
+          <h1 className={styles.headline} id="hero-heading">
+            {headlineLines.map((line, lineIndex) => (
+              <span className={styles.headlineLine} key={`headline-line-${lineIndex}`}>
+                {line.map((word, wordIndex) => (
+                  <span
+                    className={`${styles.headlineWord} ${'accent' in word ? styles.headlineAccent : ''}`}
+                    key={`${word.text}-${word.index}`}
+                    style={{ '--word-index': word.index } as CSSProperties}
+                  >
+                    {word.text}
+                    {wordIndex < line.length - 1 ? '\u00a0' : ''}
+                  </span>
+                ))}
               </span>
             ))}
           </h1>
+
           <p className={styles.subheading}>
-            We audit your workflows, build practical AI-assisted infrastructure, and translate operational clarity into premium brand communication.
+            We audit your workflows, build practical AI-assisted infrastructure, and translate
+            operational clarity into premium brand communication.
           </p>
-          <a href="#contact" className={styles.heroCta}>
-            Book a Workflow Audit
-          </a>
+
+          <div className={styles.actions} aria-label="Hero actions">
+            <a href="#contact" className={styles.primaryAction}>
+              <span>Book a Workflow Audit</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4" /></svg>
+            </a>
+            <a href="#method" className={styles.secondaryAction}>
+              See the method <span aria-hidden="true">↘</span>
+            </a>
+          </div>
+
+          <p className={styles.credibility}>
+            Experience across co-working, hospitality, education, startup, and B2B technology ecosystems.
+          </p>
         </div>
       </div>
+
+      <a href="#problem" className={styles.scrollCue} aria-label="Continue to the problem">
+        <span>Continue</span>
+        <span className={styles.scrollTrack} aria-hidden="true"><span /></span>
+      </a>
     </section>
   );
 }
