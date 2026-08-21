@@ -34,9 +34,10 @@
 }
 
 .header {
-  --nav-radius: 18px;
-  --glass-border-layer-inset: -8px;
-  --glass-border-layer-radius: 24px;
+  --nav-radius: var(--public-button-radius);
+  --nav-shine-offset: 4px;
+  --glass-border-layer-inset: calc(var(--nav-shine-offset) * -1);
+  --glass-border-layer-radius: calc(var(--nav-radius) + var(--nav-shine-offset));
   --glass-border-layer-blur: 26px;
   --glass-border-layer-saturate: 1.12;
   --glass-border-layer-border: rgba(255, 255, 255, 0.18);
@@ -71,7 +72,7 @@
   position: absolute;
   inset: var(--glass-border-layer-inset);
   border-radius: var(--glass-border-layer-radius);
-  padding: calc(var(--nav-radius) * 0.45);
+  padding: var(--nav-shine-offset);
   background:
     linear-gradient(
       110deg,
@@ -94,7 +95,7 @@
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
   mask-composite: exclude;
-  filter: blur(11px) saturate(1.18);
+  filter: blur(6px) saturate(1.16);
   pointer-events: none;
   opacity: 0.94;
   z-index: 1;
@@ -106,8 +107,8 @@
   position: absolute;
   left: 5%;
   right: 5%;
-  bottom: -18px;
-  height: 34px;
+  bottom: -14px;
+  height: 28px;
   background:
     linear-gradient(
       90deg,
@@ -123,8 +124,8 @@
     );
   background-size: 220% 100%;
   background-position: 140% 50%;
-  filter: blur(20px);
-  opacity: 0.56;
+  filter: blur(16px);
+  opacity: 0.48;
   pointer-events: none;
   z-index: 0;
   animation: navGlassFlow 5.8s linear infinite alternate;
