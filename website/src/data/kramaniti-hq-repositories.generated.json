@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-07T12:15:01.621Z",
+  "generatedAt": "2026-08-21T06:35:05.986Z",
   "privacy": "sanitized-metadata-only",
   "workspaces": [
     {
@@ -8,18 +8,18 @@
       "repositoryKey": "kramaniti",
       "name": "Kramaniti",
       "available": true,
-      "versioned": false,
+      "versioned": true,
       "repositorySummary": {
         "repositoryLabel": "Kramaniti",
-        "branch": null,
-        "revision": null,
-        "dirty": false,
-        "dirtyFileCount": 0,
-        "trackedFileCount": 0,
-        "lastCommitAt": null,
-        "lastCommitSubject": null,
+        "branch": "main",
+        "revision": "754389fc94eb",
+        "dirty": true,
+        "dirtyFileCount": 70,
+        "trackedFileCount": 464,
+        "lastCommitAt": "2026-08-17T19:46:40+05:30",
+        "lastCommitSubject": "Refine dark mode and assistant orb",
         "ahead": 0,
-        "behind": 0,
+        "behind": 1,
         "itemCount": 1
       },
       "items": [
@@ -31,16 +31,16 @@
           "title": "Kramaniti repository",
           "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
           "visibility": "internal",
-          "sourceHash": null,
+          "sourceHash": "754389fc94eb",
           "metadata": {
-            "branch": null,
-            "dirty": false,
-            "dirtyFileCount": 0,
-            "trackedFileCount": 0,
-            "lastCommitAt": null,
-            "lastCommitSubject": null,
+            "branch": "main",
+            "dirty": true,
+            "dirtyFileCount": 70,
+            "trackedFileCount": 464,
+            "lastCommitAt": "2026-08-17T19:46:40+05:30",
+            "lastCommitSubject": "Refine dark mode and assistant orb",
             "ahead": 0,
-            "behind": 0
+            "behind": 1
           }
         }
       ]
@@ -50,16 +50,16 @@
       "repositoryKey": "maitri-circle",
       "name": "Maitri Circle",
       "available": true,
-      "versioned": false,
+      "versioned": true,
       "repositorySummary": {
         "repositoryLabel": "Maitri Circle",
-        "branch": null,
-        "revision": null,
+        "branch": "main",
+        "revision": "6fa02b5c6e9a",
         "dirty": false,
         "dirtyFileCount": 0,
-        "trackedFileCount": 0,
-        "lastCommitAt": null,
-        "lastCommitSubject": null,
+        "trackedFileCount": 451,
+        "lastCommitAt": "2026-08-21T10:50:30+05:30",
+        "lastCommitSubject": "Add Nandini companion and finalize Maitri pages",
         "ahead": 0,
         "behind": 0,
         "itemCount": 1
@@ -73,14 +73,14 @@
           "title": "Maitri Circle repository",
           "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
           "visibility": "internal",
-          "sourceHash": null,
+          "sourceHash": "6fa02b5c6e9a",
           "metadata": {
-            "branch": null,
+            "branch": "main",
             "dirty": false,
             "dirtyFileCount": 0,
-            "trackedFileCount": 0,
-            "lastCommitAt": null,
-            "lastCommitSubject": null,
+            "trackedFileCount": 451,
+            "lastCommitAt": "2026-08-21T10:50:30+05:30",
+            "lastCommitSubject": "Add Nandini companion and finalize Maitri pages",
             "ahead": 0,
             "behind": 0
           }
@@ -92,16 +92,16 @@
       "repositoryKey": "basispoint-studio",
       "name": "Basispoint Studio",
       "available": true,
-      "versioned": false,
+      "versioned": true,
       "repositorySummary": {
         "repositoryLabel": "Basispoint Studio",
-        "branch": null,
-        "revision": null,
+        "branch": "main",
+        "revision": "6aff5d9c9984",
         "dirty": false,
         "dirtyFileCount": 0,
-        "trackedFileCount": 0,
-        "lastCommitAt": null,
-        "lastCommitSubject": null,
+        "trackedFileCount": 15,
+        "lastCommitAt": "2026-07-21T12:08:49+05:30",
+        "lastCommitSubject": "Project Initialisation",
         "ahead": 0,
         "behind": 0,
         "itemCount": 1
@@ -115,14 +115,14 @@
           "title": "Basispoint Studio repository",
           "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
           "visibility": "internal",
-          "sourceHash": null,
+          "sourceHash": "6aff5d9c9984",
           "metadata": {
-            "branch": null,
+            "branch": "main",
             "dirty": false,
             "dirtyFileCount": 0,
-            "trackedFileCount": 0,
-            "lastCommitAt": null,
-            "lastCommitSubject": null,
+            "trackedFileCount": 15,
+            "lastCommitAt": "2026-07-21T12:08:49+05:30",
+            "lastCommitSubject": "Project Initialisation",
             "ahead": 0,
             "behind": 0
           }
@@ -133,7 +133,7 @@
       "slug": "trust-data",
       "repositoryKey": "trust-data",
       "name": "Trust Data",
-      "available": true,
+      "available": false,
       "versioned": false,
       "repositorySummary": {
         "repositoryLabel": "Trust Data",
@@ -146,30 +146,9 @@
         "lastCommitSubject": null,
         "ahead": 0,
         "behind": 0,
-        "itemCount": 1
+        "itemCount": 0
       },
-      "items": [
-        {
-          "sourceKey": "trust-data:.",
-          "repositoryLabel": "Trust Data",
-          "repositoryPath": ".",
-          "itemType": "repository",
-          "title": "Trust Data repository",
-          "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
-          "visibility": "internal",
-          "sourceHash": null,
-          "metadata": {
-            "branch": null,
-            "dirty": false,
-            "dirtyFileCount": 0,
-            "trackedFileCount": 0,
-            "lastCommitAt": null,
-            "lastCommitSubject": null,
-            "ahead": 0,
-            "behind": 0
-          }
-        }
-      ]
+      "items": []
     },
     {
       "slug": "raju-bafna",

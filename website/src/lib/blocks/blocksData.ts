@@ -2,6 +2,55 @@ export type BlockStatus = 'Ready' | 'Working copy' | 'Needs setup';
 export type RunStageStatus = 'Complete' | 'Active' | 'Waiting' | 'Queued';
 export type ExecutionMode = 'System' | 'AI-assisted' | 'Human review' | 'Human action';
 
+export type DelegationAgent = {
+  id: string;
+  coordinate: string;
+  name: string;
+  role: string;
+  mode: ExecutionMode;
+  description: string;
+  handoff: string;
+};
+
+export const delegationAgents: DelegationAgent[] = [
+  {
+    id: 'master-coordinator',
+    coordinate: '01',
+    name: 'Master Coordinator',
+    role: 'Frame the question and route the work.',
+    mode: 'Human action',
+    description: 'Holds the operating intent, names the decision owner, and sends each question to the right specialist.',
+    handoff: 'Routes a clear brief to Workflow Architect.',
+  },
+  {
+    id: 'workflow-architect',
+    coordinate: '02',
+    name: 'Workflow Architect',
+    role: 'Map the work before choosing tools.',
+    mode: 'AI-assisted',
+    description: 'Turns scattered steps, friction, and handoffs into a visible workflow with a smallest useful intervention.',
+    handoff: 'Returns the friction map to Systems Engineer.',
+  },
+  {
+    id: 'systems-engineer',
+    coordinate: '03',
+    name: 'Systems Engineer',
+    role: 'Shape the practical support layer.',
+    mode: 'AI-assisted',
+    description: 'Designs the support route, data boundary, override rule, and write-back path without hiding the human owner.',
+    handoff: 'Prepares a reviewable system brief.',
+  },
+  {
+    id: 'governance-reviewer',
+    coordinate: '04',
+    name: 'Governance Reviewer',
+    role: 'Protect the decision before action.',
+    mode: 'Human review',
+    description: 'Checks evidence, claims, permissions, and downstream consequences before the work can move forward.',
+    handoff: 'Returns an approved or revised next action to the owner.',
+  },
+];
+
 export type BlockDefinition = {
   id: string;
   name: string;
