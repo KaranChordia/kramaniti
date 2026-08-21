@@ -3,7 +3,7 @@
   inset: 0;
   z-index: 95;
   pointer-events: none;
-  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-family: var(--font-comfortaa), system-ui, sans-serif;
   contain: layout style paint;
   --assistant-ios-spring: cubic-bezier(0.16, 1, 0.3, 1);
   --assistant-ios-close: cubic-bezier(0.45, 0, 0.55, 1);

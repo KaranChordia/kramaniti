@@ -51,7 +51,7 @@
 
 .headerCell {
   padding: 1.25rem 1.5rem;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -146,7 +146,7 @@
 
 .dimensionCell {
   padding: 1rem 1.5rem;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-secondary);
@@ -158,7 +158,7 @@
 
 .valueCell {
   padding: 1rem 1.5rem;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 0.9375rem;
   line-height: 1.5;
   color: var(--text-tertiary);

@@ -14,9 +14,10 @@
  */
 
 :root {
-  --font-inter: var(--font-outfit);
-  --font-sora: var(--font-outfit);
-  --font-geist-sans: var(--font-outfit);
+  --font-inter: var(--font-comfortaa);
+  --font-sora: var(--font-comfortaa);
+  --font-geist-sans: var(--font-comfortaa);
+  --font-sans: var(--font-comfortaa);
 
   /* Colors - Light Theme Default Variables (though we default to dark below) */
   --color-obsidian: #0A0A0F;
@@ -175,7 +176,7 @@ html, body {
   overflow-x: clip;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-comfortaa), system-ui, -apple-system, sans-serif;
   line-height: 1.7;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
@@ -195,11 +196,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1, h2, h3 {
-  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-family: var(--font-comfortaa), system-ui, sans-serif;
 }
 
 h4, h5, h6 {
-  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-family: var(--font-comfortaa), system-ui, sans-serif;
 }
 
 h1 {
@@ -449,7 +450,7 @@ input, textarea, select {
     radial-gradient(circle at 100% 100%, rgba(201, 168, 76, 0.2), transparent 38%),
     linear-gradient(135deg, #11100d 0%, #090a0b 48%, #151617 78%, #2d2f31 100%);
   color: var(--square-fallback-text);
-  font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-comfortaa), system-ui, -apple-system, sans-serif;
   line-height: 1.5;
 }
 
@@ -769,8 +770,8 @@ button:not(.no-shockwave):active,
  */
 
 @theme inline {
-  --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
+  --font-heading: var(--font-comfortaa);
+  --font-sans: var(--font-comfortaa);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);

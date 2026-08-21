@@ -20,7 +20,7 @@
 
 .atmosWord {
   position: absolute;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(80px, 15vw, 240px);
   font-weight: 700;
   color: transparent;
@@ -56,7 +56,7 @@
 }
 
 .title {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 56px;
   font-weight: 600;
   color: var(--text-primary);
@@ -125,7 +125,7 @@
 }
 
 .focus {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
@@ -140,7 +140,7 @@
 }
 
 .cardTitle {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 26px;
   font-weight: 500;
   color: var(--text-primary);

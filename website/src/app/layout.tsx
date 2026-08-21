@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Outfit, JetBrains_Mono, Geist } from "next/font/google";
+import localFont from "next/font/local";
+import { JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -10,12 +11,11 @@ import { absoluteUrl, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
+const comfortaa = localFont({
+  src: "../fonts/Comfortaa-VariableFont_wght.ttf",
+  variable: "--font-comfortaa",
   display: "swap",
+  weight: "300 700",
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -96,12 +96,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning data-theme="dark" data-scroll-behavior="smooth" className={cn("font-sans", geist.variable)}>
+    <html lang="en" suppressHydrationWarning data-theme="dark" data-scroll-behavior="smooth" className={cn("font-sans", comfortaa.variable)}>
       <head>
         <meta name="msapplication-navbutton-color" content="#C9A84C" />
       </head>
       <body
-        className={`${outfit.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${comfortaa.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <Script 
           id="theme-init" 

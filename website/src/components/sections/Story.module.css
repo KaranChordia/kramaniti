@@ -69,7 +69,7 @@
 
 .atmosWord {
   position: absolute;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(56px, 11vw, 150px);
   font-weight: 700;
   letter-spacing: 0;
@@ -232,7 +232,7 @@
 .stageVisible .coreInner { opacity: 1; }
 
 .coreLabel {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -350,7 +350,7 @@
 }
 
 .layerTitle {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 20px;
   font-weight: 600;
   line-height: 1.3;

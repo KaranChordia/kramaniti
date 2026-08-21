@@ -34,7 +34,7 @@
 
 .atmosWord {
   position: absolute;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(56px, 11vw, 150px);
   font-weight: 700;
   color: transparent;
@@ -71,7 +71,7 @@
 
 /* Origin */
 .originLabel {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -193,7 +193,7 @@
 }
 
 .flowTitle {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 26px;
   font-weight: 600;
   color: var(--color-burnished-gold);

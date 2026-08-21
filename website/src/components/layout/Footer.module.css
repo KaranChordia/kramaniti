@@ -33,7 +33,7 @@
 
 .atmosWord {
   position: absolute;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(64px, 13vw, 168px);
   font-weight: 700;
   line-height: 0.86;
@@ -104,7 +104,7 @@
 }
 
 .brandName {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(28px, 3vw, 40px);
   font-weight: 700;
   line-height: 0.95;

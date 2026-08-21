@@ -31,7 +31,7 @@
 
 .atmosWord {
   position: absolute;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(60px, 12vw, 180px);
   font-weight: 700;
   color: transparent;
@@ -123,7 +123,7 @@
 }
 
 .nodeTitle {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 24px;
   font-weight: 600;
   color: var(--text-primary);

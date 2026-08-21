@@ -96,7 +96,7 @@
 
 .title {
   margin: 0 0 24px;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(36px, 5vw, 56px);
   font-weight: 400;
   line-height: 1.1;
@@ -126,7 +126,7 @@
 
 .articleSubheading {
   margin: 56px 0 18px;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(24px, 3vw, 32px);
   font-weight: 500;
   line-height: 1.25;
@@ -151,7 +151,7 @@
 
 .ctaBox h3 {
   margin: 0 0 16px;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 28px;
   color: var(--text-primary);
 }
@@ -241,7 +241,7 @@
 .sourceBox h3,
 .relatedBox h3 {
   margin: 0 0 18px;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 22px;
   color: var(--text-primary);
 }
@@ -297,7 +297,7 @@
 }
 
 .relatedCard strong {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 18px;
   font-weight: 500;
   line-height: 1.25;

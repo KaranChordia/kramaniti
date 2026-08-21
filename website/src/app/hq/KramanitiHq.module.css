@@ -16,7 +16,7 @@
   min-height: 100vh;
   color: var(--hq-text);
   background: var(--hq-bg);
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 18px;
 }
 
@@ -136,7 +136,7 @@
   border-radius: 11px;
   color: var(--hq-muted);
   background: transparent;
-  font: 500 0.79rem var(--font-outfit), sans-serif;
+  font: 500 0.79rem var(--font-comfortaa), sans-serif;
   cursor: pointer;
   transition: color 160ms ease, background 160ms ease, transform 160ms ease;
 }
@@ -243,7 +243,7 @@
   border-radius: 999px;
   color: var(--hq-muted);
   background: transparent;
-  font: 500 0.72rem var(--font-outfit), sans-serif;
+  font: 500 0.72rem var(--font-comfortaa), sans-serif;
   cursor: pointer;
 }
 
@@ -634,7 +634,7 @@
   border-radius: 11px;
   color: var(--hq-text);
   background: var(--hq-bg);
-  font: 0.82rem var(--font-outfit), sans-serif;
+  font: 0.82rem var(--font-comfortaa), sans-serif;
   outline: none;
 }
 
@@ -864,7 +864,7 @@
   border-radius: 999px;
   color: var(--hq-muted);
   background: var(--hq-bg);
-  font: 0.72rem var(--font-outfit), sans-serif;
+  font: 0.72rem var(--font-comfortaa), sans-serif;
   cursor: pointer;
 }
 
@@ -956,7 +956,7 @@
   border-radius: 14px;
   color: var(--hq-text);
   background: var(--hq-bg);
-  font: 0.86rem var(--font-outfit), sans-serif;
+  font: 0.86rem var(--font-comfortaa), sans-serif;
   line-height: 1.45;
   outline: none;
 }
@@ -1120,7 +1120,7 @@
   border-radius: 12px;
   color: #12110d;
   background: #c9a84c;
-  font: 600 0.82rem var(--font-outfit), sans-serif;
+  font: 600 0.82rem var(--font-comfortaa), sans-serif;
   cursor: pointer;
 }
 
@@ -1230,7 +1230,7 @@
   border-radius: 11px;
   color: var(--hq-text);
   background: var(--hq-panel);
-  font: 0.91rem var(--font-outfit), sans-serif;
+  font: 0.91rem var(--font-comfortaa), sans-serif;
   text-transform: none;
   outline: none;
 }

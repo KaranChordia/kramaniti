@@ -308,7 +308,7 @@
 .mobileNavLinks > *:nth-child(8) { animation-delay: 390ms; }
 
 .mobileLink {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 32px;
   font-weight: 600;
   color: var(--text-primary);

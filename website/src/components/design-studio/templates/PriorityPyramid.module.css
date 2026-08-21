@@ -129,7 +129,7 @@
 }
 
 .layerTitle {
-  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-family: var(--font-comfortaa), system-ui, sans-serif;
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
@@ -138,7 +138,7 @@
 }
 
 .layerDescription {
-  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-family: var(--font-comfortaa), system-ui, sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: var(--text-secondary);

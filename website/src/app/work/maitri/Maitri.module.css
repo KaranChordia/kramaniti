@@ -101,7 +101,7 @@
 
 .atmosWord {
   position: absolute;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(58px, 11vw, 154px);
   font-weight: 700;
   letter-spacing: 0;
@@ -157,7 +157,7 @@
 .section h2,
 .closing h2 {
   margin: 0;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   letter-spacing: 0;
   color: var(--text-primary);
 }
@@ -303,7 +303,7 @@
 
 .moduleTop > span:first-child {
   color: rgba(201, 168, 76, 0.82);
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 26px;
   font-weight: 700;
 }
@@ -312,7 +312,7 @@
 .demoPanel h3 {
   margin: 0;
   color: var(--text-primary);
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 24px;
   line-height: 1.15;
   letter-spacing: 0;

@@ -203,7 +203,7 @@
 .readout strong {
   margin-top: 6px;
   color: #f0f0f5;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(26px, 3vw, 42px);
   font-weight: 560;
   line-height: 1;
@@ -213,7 +213,7 @@
 .readout small {
   margin-top: 7px;
   color: #9b9ba8;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 11px;
   letter-spacing: 0.055em;
 }
@@ -241,7 +241,7 @@
 .resolution p {
   margin: 0;
   color: #f0f0f5;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(20px, 2.25vw, 32px);
   font-weight: 520;
   letter-spacing: -0.025em;

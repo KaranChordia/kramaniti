@@ -117,7 +117,7 @@
 
 .atmosWord {
   position: absolute;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(56px, 11vw, 156px);
   font-weight: 700;
   letter-spacing: 0;
@@ -175,7 +175,7 @@
 
 .heroIntro h1 {
   margin: 0;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(44px, 6vw, 72px);
   line-height: 1.04;
   letter-spacing: 0;
@@ -369,7 +369,7 @@
 
 .statValue {
   display: block;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: 32px;
   font-weight: 700;
   line-height: 1;
@@ -408,7 +408,7 @@
 
 .sectionHeader h2 {
   margin: 10px 0 0;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-comfortaa), sans-serif;
   font-size: clamp(30px, 4vw, 46px);
   line-height: 1.15;
   letter-spacing: 0;
@@ -529,7 +529,7 @@ border-radius: 50%;
 border: 1px solid rgba(201, 168, 76, 0.34);
 background: rgba(10, 10, 12, 0.42);
 color: var(--color-burnished-gold);
-font-family: var(--font-outfit), sans-serif;
+font-family: var(--font-comfortaa), sans-serif;
 font-size: 26px;
 font-weight: 700;
 letter-spacing: 0;
