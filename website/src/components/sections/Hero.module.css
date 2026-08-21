@@ -65,6 +65,18 @@
 .signalRouteSix,
 .connectorSix { --signal-duration: 5.5s; --signal-delay: -3.9s; }
 
+.signalRouteSeven,
+.connectorSeven { --signal-duration: 6.7s; --signal-delay: -2.2s; }
+
+.signalRouteEight,
+.connectorEight { --signal-duration: 7.4s; --signal-delay: -5.8s; }
+
+.signalRouteNine,
+.connectorNine { --signal-duration: 5.9s; --signal-delay: -3.1s; }
+
+.signalRouteTen,
+.connectorTen { --signal-duration: 6.3s; --signal-delay: -0.4s; }
+
 .container {
   position: relative;
   z-index: 2;
@@ -82,11 +94,17 @@
   text-align: center;
 }
 
-.subheading,
-.actions,
-.credibility {
-  opacity: 0;
-  transform: translate3d(0, 18px, 0);
+.brandName {
+  width: fit-content;
+  margin: 0 auto clamp(24px, 3.2vh, 32px);
+  color: #f0d891;
+  font-family: var(--font-comfortaa), sans-serif;
+  font-size: clamp(20px, 1.55vw, 24px);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-shadow: 0 0 24px rgba(201, 168, 76, 0.24);
 }
 
 .headline {
@@ -105,7 +123,7 @@
   white-space: nowrap;
 }
 
-.headlineWord {
+.revealWord {
   display: inline-block;
   opacity: 0;
   transform: translateY(18px);
@@ -141,6 +159,12 @@
   justify-content: center;
   gap: 28px;
   margin-top: 32px;
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition:
+    opacity 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 0s;
 }
 
 .primaryAction,
@@ -189,7 +213,8 @@
   line-height: 1;
 }
 
-.secondaryAction span { color: #c9a84c; }
+.actionLabel { display: inline; }
+.secondaryAction .directionMark { color: #c9a84c; }
 .secondaryAction:hover { color: #fff; }
 
 .primaryAction:focus-visible,
@@ -197,19 +222,6 @@
 .scrollCue:focus-visible {
   outline: 2px solid rgba(240, 216, 145, 0.78);
   outline-offset: 5px;
-}
-
-.credibility {
-  width: fit-content;
-  max-width: 64ch;
-  margin: 27px auto 0;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.065);
-  color: rgba(184, 183, 191, 0.5);
-  font-family: var(--font-inter), sans-serif;
-  font-size: 11px;
-  line-height: 1.55;
-  letter-spacing: 0.015em;
 }
 
 .scrollCue {
@@ -226,26 +238,36 @@
   letter-spacing: 0.15em;
   text-decoration: none;
   text-transform: uppercase;
+  opacity: 0;
   transform: translateX(-50%);
+  transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 0s;
 }
 
 .scrollCue:hover { color: rgba(240, 216, 145, 0.82); }
 .scrollTrack { width: 48px; height: 1px; background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(201, 168, 76, 0.48)); }
 .scrollTrack span { display: none; }
 
-.isActive .headlineWord {
+.isActive .revealWord {
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 55ms * var(--word-index));
+}
+
+.isActive .headlineWord {
   transition-delay: calc(80ms + 55ms * var(--word-index));
 }
 
-.isActive .subheading { animation: entranceFade 700ms cubic-bezier(0.16, 1, 0.3, 1) 580ms forwards; }
-.isActive .actions { animation: entranceFade 700ms cubic-bezier(0.16, 1, 0.3, 1) 680ms forwards; }
-.isActive .credibility { animation: entranceFade 700ms cubic-bezier(0.16, 1, 0.3, 1) 770ms forwards; }
+.isActive .actions {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 640ms;
+}
 
-@keyframes entranceFade {
-  to { opacity: 1; transform: translate3d(0, 0, 0); }
+.isActive .scrollCue {
+  opacity: 1;
+  transition-delay: 900ms;
 }
 
 @keyframes routeSignal {
@@ -274,7 +296,6 @@
   .actions { align-items: stretch; flex-direction: column; gap: 10px; margin-top: 26px; }
   .primaryAction { width: 100%; justify-content: space-between; }
   .secondaryAction { justify-content: center; min-height: 40px; }
-  .credibility { margin-top: 19px; padding-top: 16px; font-size: 10px; }
   .lineField { opacity: 0.48; }
 }
 
@@ -284,13 +305,19 @@
     animation: none !important;
   }
 
-  .headlineWord,
-  .subheading,
-  .actions,
-  .credibility {
+  .revealWord {
     opacity: 1;
     filter: none;
     transform: none;
     animation: none !important;
+  }
+
+  .actions {
+    opacity: 1;
+    transform: none;
+  }
+
+  .scrollCue {
+    opacity: 1;
   }
 }

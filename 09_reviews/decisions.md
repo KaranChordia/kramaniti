@@ -830,3 +830,24 @@ This log registers the major strategic and structural decisions made during the 
     *   Keep the public website available as the direct information-led alternative.
     *   Keep `EXP` secondary to the AI Workflow Audit CTA and label its destination accessibly.
 *   **Open Questions:** Whether the semantic signal protocol should later extend to product surfaces beyond the public experience route.
+
+### Decision 30: Establish a Square-First Website Design Language
+*   **Date:** 2026-08-21
+*   **Area:** Public website, brand identity, interface system, motion
+*   **Status:** Founder-directed working standard (`[Fact]`)
+*   **Decision:** Use the current homepage hero and floating navigation as the reference implementation for Kramaniti's evolving website design language. Retire circular nodes, orbit systems, radial diagrams, circular image masks, and decorative dot fields from new supporting-brand work. Express connection through orthogonal rails, persistent routes, travelling signals, square connectors, square gates, modular fields, and restrained 8 px interface geometry. Preserve the supplied Kramaniti mark without geometric redrawing; the square-first rule governs the supporting visual system, not the official identity asset.
+*   **Rationale:** The current hero demonstrates a stronger balance of speed, clarity, premium restraint, and semantic motion than the earlier orbit-led approach. Square handoffs make system relationships legible without the rendering cost or visual heaviness of circular motion objects.
+*   **Reference Artifact:** `08_brand_assets/exports/kramaniti_website_design_kit.pdf`
+*   **Affected Files:**
+    *   `website/src/components/sections/Hero.tsx`
+    *   `website/src/components/sections/Hero.module.css`
+    *   `website/src/components/layout/Navbar.tsx`
+    *   `website/src/components/layout/Navbar.module.css`
+    *   `scripts/render_kramaniti_website_design_kit.py`
+*   **Migration Boundary:** The hero and navigation are the present reference baseline. Existing circular/orbital motifs elsewhere, including the optional spatial experience, remain legacy implementation until those surfaces are deliberately revised; this decision does not authorize an unreviewed site-wide rewrite.
+*   **Guardrails:**
+    *   A square should indicate an origin, handoff, decision, review gate, state, or completion—not become decorative noise.
+    *   Motion must preserve native scrolling, avoid heavy continuous JavaScript, and provide an equivalent reduced-motion state.
+    *   Rounded 8 px corners remain valid for ergonomic controls and functional containers.
+    *   Public copy and diagrams remain proof-safe; do not invent clients, metrics, or outcomes.
+    *   Formal print production values, alternate wordmark construction, and final approval cadence remain founder-approval items.
