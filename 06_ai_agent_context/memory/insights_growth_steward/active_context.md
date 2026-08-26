@@ -16,7 +16,28 @@
 
 **Next Review:** During each successful Insights publish run, record internal links, source freshness, CTA category, and cluster-post status in automation memory.
 
-## Latest Successful Publish — 24 Aug 2026
+## Latest Successful Publish — 26 Aug 2026
+
+- **Article:** `The Founder’s Judgment Is a Content Standard`
+- **Path:** `/insights/the-founders-judgment-is-a-content-standard/`
+- **Topic lane:** Founder-led clarity and coherent growth; turning internal founder judgment into a usable bridge for external communication.
+- **Genre:** Editorial calibration playbook.
+- **Headline pattern:** Possessive declarative capability statement (`The Founder’s judgment is…`).
+- **Category:** `Content`
+- **Focus:** `Founder-Led Judgment`
+- **Lead sources:** Content Marketing Institute, *How To Build Marketing Judgment Without Producing Clones* (11 Aug 2026); Google Search Central, *Creating helpful, reliable, people-first content* (updated 10 Dec 2025).
+- **SourceLinks status:** Two verified, current public URLs included in the visible `Source links` section; the lead organization and two-source mix differ from the 24 Aug publish.
+- **Inline source links:** Two contextual source anchors, one for each source.
+- **Internal links:** `/insights/founder-review-should-be-conditional-not-constant`, `/insights/the-content-calendar-needs-a-source-route`, and `/founder`.
+- **Source freshness decision:** Both sources fall within the 24-month preference. CMI provides current practitioner guidance on developing judgment; Google provides current official platform guidance on original, audience-led, first-hand content.
+- **CTA category:** Content; category CTA rendered as `Explore content infrastructure` linking to `/#services`.
+- **Cluster-post status:** Not due. This is the second fresh post after the 21 Aug 2026 cluster pillar.
+- **Visual decision:** No infographic added; another checklist or route visual would repeat recent patterns, and the calibration playbook is clearer in prose.
+- **SEO verification:** Passed for title, description, trailing-slash canonical, author, exact IST timestamp, Article JSON-LD, Breadcrumb JSON-LD, contextual inline source anchors, internal links, visible sources, category CTA, and `/sitemap.xml` inclusion.
+- **Validation path:** Source URL and freshness verification; `git diff --check`; ESLint; `tsc --noEmit`; production Next.js build; rendered production HTTP assertions for the article page and sitemap; Vercel required check.
+- **Publication commit:** `bd15b7dc453c447128d6e018ca1f6ef6c31d5690`
+
+## Previous Successful Publish — 24 Aug 2026
 
 - **Article:** `Can the Workflow Run Without Its Builder?`
 - **Path:** `/insights/can-the-workflow-run-without-its-builder/`
