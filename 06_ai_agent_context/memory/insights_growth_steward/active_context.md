@@ -16,7 +16,29 @@
 
 **Next Review:** During each successful Insights publish run, record internal links, source freshness, CTA category, and cluster-post status in automation memory.
 
-## Latest Successful Publish — 26 Aug 2026
+## Latest Successful Publish — 28 Aug 2026
+
+- **Article:** `An AI Audit Should Produce a Non-Build List`
+- **Path:** `/insights/an-ai-audit-should-produce-a-non-build-list/`
+- **Topic lane:** Foundation alignment audits and strategy before tools; using explicit non-build decisions to keep weak AI ideas out of the implementation roadmap.
+- **Genre:** Audit disposition framework and decision-register guide.
+- **Headline pattern:** Institutional prescription (`An AI Audit Should...`).
+- **Category:** `Strategy`
+- **Focus:** `Non-Build Decisions`
+- **Lead sources:** Australian National AI Centre, *Guidance for AI adoption: implementation guidance*; UK Government Digital Service, *Artificial Intelligence Playbook for the UK Government* (10 Feb 2025).
+- **SourceLinks status:** Two verified, current primary public URLs included in the visible `Source links` section; the Australian National AI Centre leads, changing both the lead organisation and source mix from the 26 Aug publish.
+- **Inline source links:** Two contextual source anchors, one for each lead source.
+- **Internal links:** `/insights/a-workflow-map-is-not-yet-a-build-decision`, `/insights/the-smallest-useful-ai-policy-is-a-workflow-note`, and `/#method`.
+- **Source freshness decision:** Both sources fall within the 24-month preference. The Australian guidance was published in October 2025 and is the current implementation guidance; the UK playbook was published in February 2025. Both are used as practical primary guidance, not as market-performance evidence.
+- **CTA category:** Strategy; category CTA rendered as `Book an audit` linking to `/#contact`.
+- **Cluster-post status:** Not due. This is the third fresh post after the 21 Aug 2026 cluster pillar; the 4-6-post cadence has not yet been reached.
+- **Visual decision:** No infographic added. The article's disposition states, reason codes, and eight-field register are clearer as a concise operating artifact, and another route diagram would repeat recent visual patterns.
+- **SEO verification:** Passed for title, description, trailing-slash canonical, author, exact IST timestamp, Article JSON-LD, Breadcrumb JSON-LD, contextual inline source anchors, internal links, visible sources, Strategy CTA, and `/sitemap.xml` inclusion.
+- **Validation path:** Source URL and freshness verification; `git diff --check`; ESLint; `tsc --noEmit`; production Next.js build; rendered local HTTP assertions for the article page and sitemap; Vercel preview and production checks; live browser verification of the public article and sitemap.
+- **Publication branch commit:** `1688b3342ebe1cce3bbda1a06cdb82b01a4c795b`
+- **Publication merge commit:** `897ea83bfc7a5f836eebde473ee4bcb91fe9303f`
+
+## Previous Successful Publish — 26 Aug 2026
 
 - **Article:** `The Founder’s Judgment Is a Content Standard`
 - **Path:** `/insights/the-founders-judgment-is-a-content-standard/`
@@ -37,7 +59,7 @@
 - **Validation path:** Source URL and freshness verification; `git diff --check`; ESLint; `tsc --noEmit`; production Next.js build; rendered production HTTP assertions for the article page and sitemap; Vercel required check.
 - **Publication commit:** `bd15b7dc453c447128d6e018ca1f6ef6c31d5690`
 
-## Previous Successful Publish — 24 Aug 2026
+## Earlier Successful Publish — 24 Aug 2026
 
 - **Article:** `Can the Workflow Run Without Its Builder?`
 - **Path:** `/insights/can-the-workflow-run-without-its-builder/`
