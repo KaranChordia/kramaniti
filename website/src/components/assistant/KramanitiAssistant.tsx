@@ -39,15 +39,15 @@ const INITIAL_MESSAGES: AssistantMessage[] = [
     id: 'assistant-welcome',
     role: 'assistant',
     content:
-      'I am the Kramaniti assistant. Ask about the method, services, founder context, Clarity Engine, Studio, or the first workflow worth clarifying.',
+      'Tell me where work feels stuck—or ask how Kramaniti would help make it clearer.',
     createdAt: new Date(0).toISOString(),
   },
 ];
 
 const starterPrompts = [
-  'What does Kramaniti do?',
-  'Which service fits my situation?',
-  'Explain the Clarity Engine',
+  'Where should I start?',
+  'Can AI help this workflow?',
+  'What happens in a workflow audit?',
 ];
 
 const RESPONSE_WORD_INTERVAL_MS = 58;
@@ -57,12 +57,12 @@ const STREAM_RENDER_INTERVAL_MS = 110;
 const RESPONSE_ORB_STATES: OrbState[] = ['working', 'solving', 'composing'];
 
 const ORB_STATUS_LABELS: Record<OrbState, string> = {
-  working: 'Working through it',
-  searching: 'Searching the context',
-  solving: 'Resolving the response',
+  working: 'Thinking it through',
+  searching: 'Reviewing the context',
+  solving: 'Shaping an answer',
   listening: 'Listening',
-  composing: 'Composing',
-  shaping: 'Ready to shape an idea',
+  composing: 'Writing the answer',
+  shaping: 'Ready when you are',
 };
 
 const tokenizeAssistantResponse = (value: string) => value.match(/\S+\s*/g) || [];
@@ -271,7 +271,7 @@ export function KramanitiAssistant() {
     } catch {
       setIsSending(false);
       await streamAssistantResponse(
-        'I could not reach the hosted intelligence layer. The safest next step is to check that GROQ_API_KEY is configured, then try again.',
+        'I cannot respond right now. You can still start with a workflow audit below, or try again in a moment.',
       );
     } finally {
       setIsSending(false);
@@ -418,7 +418,7 @@ export function KramanitiAssistant() {
                     void submitMessage();
                   }
                 }}
-                placeholder="Ask about Kramaniti or a workflow..."
+                placeholder="Ask about your workflow or Kramaniti..."
                 rows={1}
                 maxLength={900}
                 disabled={isBusy}

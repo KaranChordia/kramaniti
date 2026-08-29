@@ -28,12 +28,12 @@ export type AssistantEnvelope = {
 };
 
 export const INITIAL_ASSISTANT_REPLY =
-  "I'm the Kramaniti Clarity Engine. We'll diagnose the work before naming tools: first the business clarity, then the workflow, then the presence it should create.";
+  "Let’s understand the work before choosing a tool. We’ll look at what matters, how it works today, where it gets stuck, where AI could help, and what should stay with people.";
 
 export const INITIAL_STATUS_LABEL = 'Listening';
 
 const COMPLETE_ASSISTANT_REPLY =
-  'That gives enough signal for a Kramaniti-style diagnosis: the business problem, the workflow reality, the AI boundary, and the presence direction are visible. The next step is a reflective blueprint, not a sales pitch.';
+  'That is enough to see the problem, the current workflow, where AI may help, and what should stay human-led. Your clarity plan is ready.';
 
 export const DEFAULT_ANSWERS: ClarityAnswers = {};
 
@@ -43,15 +43,15 @@ export const INITIAL_SYNTHESIS: Omit<
 > = {
   completion: 0,
   statusLabel: INITIAL_STATUS_LABEL,
-  clarityContext: 'Waiting for the first operating signal.',
-  workflowDirection: 'The route appears once the business problem and current workflow are visible.',
+  clarityContext: 'Waiting for your starting point.',
+  workflowDirection: 'The next step becomes clear once we can see the problem and the work around it.',
   presenceIdeas: [
-    'Presence comes after the offer, workflow, and proof are grounded.',
-    'Useful proof comes from real operating artifacts, not slogans.',
-    'The right channel is the one closest to the buyer and the decision moment.',
+    'Communication comes after the work is clear.',
+    'Useful proof comes from real work, not slogans.',
+    'Use the channel closest to the customer and the decision.',
   ],
-  signalTrail: ['Business clarity', 'Workflow reality', 'Proof-safe presence'],
-  focusTags: ['private', 'diagnostic'],
+  signalTrail: ['What matters', 'How the work happens', 'What should become clear'],
+  focusTags: ['private', 'focused'],
 };
 
 const clean = (value: string) => value.replace(/\s+/g, ' ').trim();
@@ -128,30 +128,30 @@ export const buildPersonalizedQuestion = (
       nextQuestionPlaceholder: `Name the person or team this ${workNoun} is for, and the problem they already notice...`,
     },
     phase3_current_workflow: {
-      nextQuestion: `If we follow "${audienceSignal}" in real life, what happens today from first signal to outcome?`,
-      nextQuestionLabel: 'Current Path',
+      nextQuestion: `If we follow "${audienceSignal}" in real life, what happens today from start to finish?`,
+      nextQuestionLabel: 'How It Works Now',
       nextQuestionPlaceholder: 'Walk through the current path in plain steps, even if parts are messy...',
     },
     phase4_main_friction: {
       nextQuestion: `In that current path, where does "${workflowSignal}" slow down, get repeated, or become unclear?`,
-      nextQuestionLabel: 'Main Friction',
+      nextQuestionLabel: 'Where It Gets Stuck',
       nextQuestionPlaceholder: 'Name the delay, repeated manual work, missing handoff, or unclear decision...',
     },
     phase5_ai_boundary: {
-      nextQuestion: `For that friction, what must stay human-led, and what could AI safely help prepare or organize?`,
-      nextQuestionLabel: 'Human + AI',
+      nextQuestion: `For that problem, what should people decide, and what could AI help prepare or organize?`,
+      nextQuestionLabel: 'People + AI',
       nextQuestionPlaceholder: 'Separate judgment, approval, taste, privacy, drafting, summarizing, routing, or automation...',
     },
     phase6_presence_proof: {
       nextQuestion: `Once this is clearer, what should people be able to trust, see, or understand about "${signal}"?`,
-      nextQuestionLabel: 'Proof Signal',
+      nextQuestionLabel: 'What Should Be Clear',
       nextQuestionPlaceholder: 'Describe the proof, confidence, message, report, demo, or public explanation this should create...',
     },
   };
 
   return questions[nextKey] || {
     nextQuestion: 'What should become clearer next?',
-    nextQuestionLabel: 'Next Signal',
+    nextQuestionLabel: 'Next Step',
     nextQuestionPlaceholder: 'Add the next useful detail...',
   };
 };
@@ -172,8 +172,8 @@ export const createInitialSessionEnvelope = (): AssistantEnvelope => ({
   assistantReply: INITIAL_ASSISTANT_REPLY,
   nextQuestion: 'What are you trying to build, improve, or make clearer?',
   nextQuestionKey: 'phase1_clarity_goal',
-  nextQuestionLabel: 'Business Signal',
-  nextQuestionPlaceholder: 'Name the business, offer, workflow, or presence problem...',
+  nextQuestionLabel: 'Your Starting Point',
+  nextQuestionPlaceholder: 'Name the piece of work, business problem, or idea you want to make clearer...',
   latestSummary: '',
   source: 'local',
   ...INITIAL_SYNTHESIS,
@@ -207,12 +207,12 @@ export const parseAssistantEnvelope = (
     return {
       assistantReply: isComplete ? COMPLETE_ASSISTANT_REPLY : clean(assistantReplyRaw),
       nextQuestion: isComplete
-        ? 'I have enough context. We are ready to build the blueprint.'
+        ? 'I have enough context. Your clarity plan is ready.'
         : clean(parsed.nextQuestion || 'Ready for the next step?'),
       nextQuestionKey,
-      nextQuestionLabel: isComplete ? 'Blueprint Ready' : clean(parsed.nextQuestionLabel || 'Next Step'),
+      nextQuestionLabel: isComplete ? 'Clarity Plan Ready' : clean(parsed.nextQuestionLabel || 'Next Step'),
       nextQuestionPlaceholder: isComplete
-        ? 'Generate the diagnostic blueprint...'
+        ? 'Open your clarity plan...'
         : clean(parsed.nextQuestionPlaceholder || 'Provide your thoughts...'),
       latestSummary: clean(parsed.latestSummary || ''),
       completion:
@@ -262,22 +262,22 @@ export const buildFallbackResponse = (input: {
   if (nextKey === 'complete') {
     return {
       assistantReply: COMPLETE_ASSISTANT_REPLY,
-      nextQuestion: 'I have enough context. We are ready to build the blueprint.',
+      nextQuestion: 'I have enough context. Your clarity plan is ready.',
       nextQuestionKey: 'complete',
-      nextQuestionLabel: 'Blueprint Ready',
-      nextQuestionPlaceholder: 'Generate the diagnostic blueprint...',
+      nextQuestionLabel: 'Clarity Plan Ready',
+      nextQuestionPlaceholder: 'Open your clarity plan...',
       latestSummary,
       completion: 100,
       statusLabel: 'Blueprint ready',
-      clarityContext: 'The core business signal and buyer problem are clear enough for diagnosis.',
-      workflowDirection: 'The workflow can now be mapped into human-led decisions and AI-assisted support.',
+      clarityContext: 'The core business problem and the person it affects are clear enough to review.',
+      workflowDirection: 'The workflow can now be separated into people-led decisions and useful AI support.',
       presenceIdeas: [
-        'Turn the clearest operating artifact into proof.',
-        'Use content to show the before-state, process, and sharper after-state.',
+        'Turn the clearest part of the work into proof.',
+        'Use communication to show the problem, the work, and what became clearer.',
         'Keep public claims grounded in what the workflow can actually deliver.',
       ],
       signalTrail: ['Strategy before tools', 'Systems before scale', 'Content after clarity'],
-      focusTags: ['diagnosis', 'workflow', 'presence'],
+      focusTags: ['clarity', 'workflow', 'communication'],
       source: 'local',
     };
   }
@@ -286,7 +286,7 @@ export const buildFallbackResponse = (input: {
 
   return {
     assistantReply:
-      `That helps. I am reading this as a ${workNoun} around "${signal}", so I will keep the next question tied to that context instead of jumping into a generic checklist.`,
+      `That helps. I’ll keep the next question tied to your ${workNoun} around "${signal}" instead of moving into a generic checklist.`,
     nextQuestion: next.nextQuestion,
     nextQuestionKey: nextKey,
     nextQuestionLabel: next.nextQuestionLabel,
@@ -294,15 +294,15 @@ export const buildFallbackResponse = (input: {
     latestSummary,
     completion,
     statusLabel: deriveStatus(completion),
-    clarityContext: 'The diagnosis is moving from broad goal to buyer, workflow, boundary, and proof.',
-    workflowDirection: 'The operating route is still being mapped from the user’s current reality.',
+    clarityContext: 'We are moving from the goal to the person, the work, the boundary, and the proof.',
+    workflowDirection: 'The next step is still being shaped from how the work happens today.',
     presenceIdeas: [
       'Proof should come from the work itself.',
-      'Presence should explain the operating change, not decorate it.',
-      'Content comes after the workflow is clear.',
+      'Communication should explain what changed, not decorate it.',
+      'Content comes after the work is clear.',
     ],
-    signalTrail: ['Business clarity', 'Workflow reality', 'Human + AI boundary'],
-    focusTags: ['diagnostic', 'practical', 'proof-safe'],
+    signalTrail: ['What matters', 'How the work happens', 'People + AI'],
+    focusTags: ['focused', 'practical', 'human-led'],
     source: 'local',
   };
 };
@@ -341,7 +341,7 @@ Question arc and allowed keys:
 - phase4_main_friction: Where is the main friction, delay, or decision confusion?
 - phase5_ai_boundary: Which parts need human judgment, and which parts could AI assist?
 - phase6_presence_proof: What trust, proof, or public presence should this create?
-- complete: I have enough context. We are ready to build the blueprint.
+- complete: I have enough context. Your clarity plan is ready.
 
 Voice rules:
 - USE EXTREMELY SIMPLE, PLAIN ENGLISH. No jargon, no complex startup terminology. Speak like a clear, practical partner.
@@ -357,7 +357,7 @@ Behavior rules:
 - Do not ask for information the user has already clearly provided. If an answer already covers the next diagnostic area, advance to the next missing area.
 - Do NOT dive into endless deep conversation loops. You must actively drive the user through the 6-step Kramaniti diagnostic.
 - MAXIMUM QUESTIONS: Ask no more than 6 questions in total. Once the user has answered phase6_presence_proof, you MUST stop asking questions.
-- To stop the conversation, set "nextQuestionKey" to "complete", and set "nextQuestion" to "I have enough context. We are ready to build the blueprint."
+- To stop the conversation, set "nextQuestionKey" to "complete", and set "nextQuestion" to "I have enough context. Your clarity plan is ready."
 - If the user answers with an "[AI Task]" marker (meaning they don't know the answer), immediately accept it as a task for later and forcefully advance to the next logical question.
 - Keep the assistant reply to two short paragraphs maximum (strictly 3-4 sentences or 4-5 lines total). Never write long, sprawling text.
 - "nextQuestion" MUST be a full, conversational question ending in a question mark (e.g. "For the internal reporting workflow you described, where does the handoff break most often?"). It MUST be extremely concise (strictly 1-2 sentences maximum). Do NOT write long, sprawling questions. Do NOT put short topic phrases here.

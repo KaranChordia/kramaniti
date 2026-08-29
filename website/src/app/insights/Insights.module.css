@@ -324,6 +324,15 @@
   gap: 10px;
 }
 
+.categoryDescription {
+  margin: -4px 0 0;
+  max-width: 68ch;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
 .categoryButton,
 .clearButton,
 .emptyState button {

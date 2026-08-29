@@ -8,24 +8,25 @@ type HeroProps = { isActive?: boolean };
 
 const headlineLines = [
   [
-    { text: 'Turn', index: 0 },
-    { text: 'scattered', index: 1 },
-    { text: 'operations', index: 2 },
+    { text: 'Make', index: 0 },
+    { text: 'your', index: 1 },
+    { text: 'business', index: 2 },
   ],
   [
-    { text: 'into', index: 3 },
-    { text: 'a', index: 4 },
-    { text: 'connected', index: 5, accent: true },
-    { text: 'system', index: 6, accent: true },
+    { text: 'easier', index: 3, accent: true },
+    { text: 'to', index: 4 },
+    { text: 'run', index: 5 },
   ],
   [
-    { text: 'for', index: 7 },
-    { text: 'growth.', index: 8 },
+    { text: 'and', index: 6 },
+    { text: 'easier', index: 7, accent: true },
+    { text: 'to', index: 8 },
+    { text: 'understand.', index: 9 },
   ],
 ] as const;
 
 const subheading =
-  'We audit your workflows, build practical AI-assisted infrastructure, and translate operational clarity into premium brand communication.';
+  'We help businesses work better, use AI where it matters, and communicate their value clearly.';
 
 function revealWords(text: string, delay: number) {
   const words = text.split(' ');
@@ -117,11 +118,11 @@ export function Hero({ isActive = true }: HeroProps) {
 
           <div className={styles.actions} aria-label="Hero actions">
             <a href="#contact" className={styles.primaryAction}>
-              <span className={styles.actionLabel}>{revealWords('Book a Workflow Audit', 700)}</span>
+              <span className={styles.actionLabel}>{revealWords('Start with a workflow audit', 700)}</span>
               <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4" /></svg>
             </a>
             <a href="#method" className={styles.secondaryAction}>
-              <span className={styles.actionLabel}>{revealWords('See the method', 820)}</span>
+              <span className={styles.actionLabel}>{revealWords('See how it works', 820)}</span>
               <span className={styles.directionMark} aria-hidden="true">↘</span>
             </a>
           </div>
@@ -129,8 +130,8 @@ export function Hero({ isActive = true }: HeroProps) {
         </div>
       </div>
 
-      <a href="#problem" className={styles.scrollCue} aria-label="Continue to the problem">
-        <span>{revealWords('Continue', 980)}</span>
+      <a href="#problem" className={styles.scrollCue} aria-label="Why this matters">
+        <span>{revealWords('Why this matters', 980)}</span>
         <span className={styles.scrollTrack} aria-hidden="true"><span /></span>
       </a>
     </section>

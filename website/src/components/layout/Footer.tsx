@@ -24,7 +24,7 @@ export function Footer() {
             </Link>
             <div className={styles.brandText}>
               <span className={styles.brandName}>Kramaniti</span>
-              <span className={styles.brandLabel}>Logic in Sequence.</span>
+              <span className={styles.brandLabel}>Clearer work. Clearer communication.</span>
             </div>
           </div>
 
@@ -45,16 +45,23 @@ export function Footer() {
               <span className={styles.label}>Founder</span>
               <a href="mailto:karan@kramaniti.com" className={styles.linkValue}>karan@kramaniti.com</a>
             </div>
-            <div className={styles.legalLinks}>
-              <Link href="/privacy" className={styles.legalLink}>Privacy Policy</Link>
-              <span className={styles.separator}>•</span>
-              <Link href="/terms" className={styles.legalLink}>Terms & Conditions</Link>
+            <div className={styles.contactItem}>
+              <span className={styles.label}>Explore</span>
+              <div className={styles.legalLinks}>
+                <Link href="/work" className={styles.legalLink}>Work</Link>
+                <span className={styles.separator}>•</span>
+                <Link href="/founder" className={styles.legalLink}>Founder</Link>
+                <span className={styles.separator}>•</span>
+                <Link href="/insights" className={styles.legalLink}>Insights</Link>
+                <span className={styles.separator}>•</span>
+                <Link href="/clarity-engine" className={styles.legalLink}>Clarity Engine</Link>
+              </div>
             </div>
           </div>
         </div>
 
         <div className={styles.bottomBar}>
-          <p className={styles.bottomNote}>Built for brands that need clarity before scale.</p>
+          <p className={styles.bottomNote}>Practical systems. Human judgment. Clear communication.</p>
           <p className={styles.copyright}>© {new Date().getFullYear()} Kramaniti. All rights reserved.</p>
         </div>
       </div>

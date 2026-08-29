@@ -72,11 +72,11 @@ export const mockScenarios: MockScenario[] = [
           'That boundary is strong. AI can support the memory, synthesis, and drafting, while the founder keeps control of diagnosis, promise, and approval.',
       },
       complete: {
-        question: 'I have enough context. We are ready to build the blueprint.',
-        label: 'Blueprint Ready',
-        placeholder: 'Generate the diagnostic blueprint...',
+        question: 'I have enough context. Your clarity plan is ready.',
+        label: 'Clarity Plan Ready',
+        placeholder: 'Open your clarity plan...',
         assistantReply:
-          'The diagnostic signal is complete: buyer, problem, workflow, friction, AI boundary, and presence direction are visible. The blueprint can now reflect how Kramaniti would think through the operating route.',
+          'The starting point is clear: the person, problem, workflow, friction, people-and-AI boundary, and communication direction are visible. Your clarity plan can now show the next useful steps.',
       },
     },
     blueprint: {
@@ -88,7 +88,7 @@ export const mockScenarios: MockScenario[] = [
 
 #### Recommended Positioning
 - Position the offer as a **clarity-to-operating-system diagnostic** for founder-led businesses.
-- The promise should be practical: turn scattered conversations into one clear scope, workflow, and proof-safe presence direction.
+- The promise should be practical: turn scattered conversations into one clear scope, workflow, and communication direction grounded in real work.
 
 #### First Decisions
 - Decide the one buyer profile this diagnostic is for first.
@@ -135,7 +135,7 @@ export const mockScenarios: MockScenario[] = [
 
 #### Core Narrative
 - Repeat this story: scattered business signals become clear strategy, then reusable systems, then useful content.
-- Keep the language grounded in clarity, workflows, infrastructure, and practical AI.
+- Keep the language grounded in work, clarity, systems, practical AI, and communication.
 
 #### First Content Moves
 - Publish one post on why unclear scope slows founder-led businesses.
@@ -147,7 +147,7 @@ export const mockScenarios: MockScenario[] = [
 #### 30-Day Presence Plan
 - Week 1: finalize the core narrative and offer-page outline.
 - Week 2: publish problem/process content.
-- Week 3: publish proof-safe workflow artifacts.
+- Week 3: publish workflow examples grounded in real work.
 - Week 4: refine the website copy from the strongest audience signal.
 
 #### Claims To Avoid
@@ -209,9 +209,9 @@ export const mockScenarios: MockScenario[] = [
           'That is a healthy AI boundary. The system can assist classification and context, while people keep control of sensitive communication and decisions.',
       },
       complete: {
-        question: 'I have enough context. We are ready to build the blueprint.',
-        label: 'Blueprint Ready',
-        placeholder: 'Generate the diagnostic blueprint...',
+        question: 'I have enough context. Your clarity plan is ready.',
+        label: 'Clarity Plan Ready',
+        placeholder: 'Open your clarity plan...',
         assistantReply:
           'The operating route is visible now: messy intake, weak handoff, clear human judgment, and a trust-led presence goal. The blueprint can stay practical and reflective.',
       },
@@ -221,7 +221,7 @@ export const mockScenarios: MockScenario[] = [
 
 #### Strategic Diagnosis
 - The business does not need a broad AI rollout yet. It needs one operational lane where better intake and handoff will improve student experience.
-- The strongest strategic route is to frame AI as support infrastructure, not as the public promise.
+- The strongest route is to frame AI as practical support, not as the public promise.
 
 #### Recommended Positioning
 - Position the initiative as **responsive student operations**.
@@ -277,14 +277,14 @@ export const mockScenarios: MockScenario[] = [
 #### First Content Moves
 - Rewrite the enquiry/onboarding page around responsiveness and clarity.
 - Publish one post about why handoffs matter in student support.
-- Create one proof-safe process graphic showing enquiry-to-next-step.
+- Create one process graphic showing enquiry-to-next-step, using only supported claims.
 - Publish one internal standard publicly as a trust signal, without private data.
 - Turn common student questions into clear explainers.
 
 #### 30-Day Presence Plan
 - Week 1: clarify the student-support narrative.
 - Week 2: publish process and FAQ content.
-- Week 3: show the improved enquiry workflow in proof-safe form.
+- Week 3: show the improved enquiry workflow with claims grounded in evidence.
 - Week 4: refine website copy around responsiveness and care.
 
 #### Claims To Avoid

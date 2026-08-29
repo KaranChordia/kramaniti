@@ -20,13 +20,13 @@ export function BrandFilm() {
       <div className={styles.container}>
         <div className={`${styles.layout} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.copy}>
-            <span className="micro-label">Brand Film</span>
-            <AnimatedHeading isVisible={isVisible}>Clarity before scale.</AnimatedHeading>
+            <span className="micro-label">Short film</span>
+            <AnimatedHeading isVisible={isVisible}>Why clarity comes first.</AnimatedHeading>
             <p className="text-secondary">
-              See why Kramaniti starts with the business, chooses the right system, and uses content only after the direction is clear.
+              See why Kramaniti starts with the work, chooses the right system, and communicates only after the direction is clear.
             </p>
             <a className={styles.inlineLink} href="#contact">
-              See how we work
+              Start with a workflow audit
             </a>
           </div>
 

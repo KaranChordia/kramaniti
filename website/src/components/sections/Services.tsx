@@ -10,27 +10,27 @@ const tiers = [
     id: 1,
     title: 'Foundation Strategy',
     label: 'CLARITY',
-    summary: 'For organizations requiring operational clarity before implementation.',
-    deliverables: ['Business workflow audit', 'Bottleneck identification', 'AI readiness review', 'Recommended system architecture', 'Practical implementation roadmap'],
-    ctaText: 'Book a Workflow Audit',
-    isPopular: false
+    summary: 'For teams that need to see what is slowing the work before choosing a solution.',
+    deliverables: ['Workflow audit', 'The bottleneck worth fixing', 'Where AI can genuinely help', 'What should stay human-led', 'A practical next-step plan'],
+    ctaText: 'Start with an Audit',
+    isPopular: true
   },
   {
     id: 2,
     title: 'Systems Engineering',
-    label: 'PRACTICAL BUILD',
-    summary: 'For organizations ready to upgrade their workflows with practical infrastructure.',
-    deliverables: ['Custom workflow design', 'Internal AI-assisted tools', 'CRM and process integrations', 'Team handoff documentation', 'Human-in-the-loop review protocols'],
-    ctaText: 'Discuss a System Build',
-    isPopular: true
+    label: 'BUILD',
+    summary: 'For teams that know which workflow to improve and need practical support built around it.',
+    deliverables: ['A clearer workflow', 'Practical internal tools', 'Useful AI support', 'Connections between existing tools', 'Simple handover and review rules'],
+    ctaText: 'Discuss the Workflow',
+    isPopular: false
   },
   {
     id: 3,
     title: 'Complete Lifecycle Retainer',
-    label: 'CONTINUITY',
-    summary: 'For brands seeking continuous alignment across systems, adoption, and content.',
-    deliverables: ['System maintenance', 'Workflow improvements', 'Team support and training', 'Content and message direction', 'Regular progress reviews'],
-    ctaText: 'Explore Ongoing Support',
+    label: 'KEEP IMPROVING',
+    summary: 'For teams that want their systems, adoption, and communication to improve together.',
+    deliverables: ['System care', 'Workflow improvements', 'Team support', 'Communication and content direction', 'Regular reviews'],
+    ctaText: 'Explore Ongoing Work',
     isPopular: false
   }
 ];
@@ -60,8 +60,8 @@ export function Services() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Services</span>
-          <AnimatedHeading isVisible={isVisible}>Targeted solutions for your current stage of growth.</AnimatedHeading>
-          <p className="text-secondary">Start with a strategic diagnosis, build the necessary infrastructure, and scale with an ongoing operational partnership.</p>
+          <AnimatedHeading isVisible={isVisible}>Start with the problem in front of you.</AnimatedHeading>
+          <p className="text-secondary">First understand the work. Then choose whether you need a clear plan, a practical build, or ongoing support.</p>
         </div>
 
         <div className={styles.servicesGrid}>
@@ -71,7 +71,7 @@ export function Services() {
               className={`${styles.tierColumn} ${tier.isPopular ? styles.popularTier : ''} ${isVisible ? styles.visible : ''}`}
               style={{ transitionDelay: isVisible ? `${index * 120}ms` : '0ms' }}
             >
-              {tier.isPopular && <div className={styles.popularBadge}>RECOMMENDED</div>}
+              {tier.isPopular && <div className={styles.popularBadge}>START HERE</div>}
               
               <div className={styles.tierHeader}>
                 <span className={styles.tierCoordinate}>{getCoordinate(tier.id)}</span>
@@ -106,16 +106,16 @@ export function Services() {
 
         <div className={`${styles.enablementPanel} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.enablementCopy}>
-            <span className="micro-label">AI Adoption</span>
-            <h4>AI should empower your team, not replace human judgment.</h4>
+            <span className="micro-label">People stay in control</span>
+            <h4>Use AI where it helps. Keep judgment with people.</h4>
             <p className="text-secondary caption">
-              We guide your team through system adoption—defining where automation accelerates work and where human oversight remains essential.
+              Every system makes the boundary clear: what AI can prepare, what people should review, and who makes the final call.
             </p>
           </div>
           <div className={styles.enablementPrinciples} aria-label="AI enablement principles">
-            <span>Automate repetitive work</span>
-            <span>Use AI to support decisions</span>
-            <span>Keep people in control where context and trust matter</span>
+            <span>Reduce repeated work</span>
+            <span>Use AI to prepare and organize</span>
+            <span>Keep people in charge of context and trust</span>
           </div>
         </div>
       </div>

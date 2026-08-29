@@ -7,16 +7,16 @@ import { KramanitiOrb } from '../ui/KramanitiOrb';
 
 const signals = [
   {
-    title: 'Fragmented Operations',
-    copy: 'Critical tasks and decisions rely on manual follow-ups and undocumented processes.',
+    title: 'Work is scattered',
+    copy: 'Important details sit across inboxes, spreadsheets, meetings, and people’s memory.',
   },
   {
-    title: 'Disconnected Infrastructure',
-    copy: 'Teams operate across multiple platforms, leaving data and responsibilities siloed.',
+    title: 'Follow-ups get missed',
+    copy: 'The next step is unclear, ownership moves between people, and decisions take longer.',
   },
   {
-    title: 'Inconsistent Messaging',
-    copy: 'Your brand’s public communication fails to reflect the true value generated within the business.',
+    title: 'More tools add noise',
+    copy: 'AI subscriptions pile up without making the workflow simpler or the work easier to trust.',
   }
 ];
 
@@ -38,9 +38,9 @@ export function Problem() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">The problem</span>
-          <AnimatedHeading isVisible={isVisible}>Most businesses don&apos;t need more AI tools. They need stronger operational clarity.</AnimatedHeading>
+          <AnimatedHeading isVisible={isVisible}>More AI will not fix a broken way of working.</AnimatedHeading>
           <p className="text-secondary">
-            When operations are fragmented across inboxes, meetings, and isolated documents, adding new tools only amplifies the noise. We first diagnose how your business functions, identify bottlenecks, and determine what is actually worth systemizing.
+            Important work is often spread across inboxes, spreadsheets, meetings, and people&apos;s memory. Decisions take longer. Follow-ups get missed. New tools add more noise. We first understand how the work really happens. Then we find the bottleneck worth fixing.
           </p>
         </div>
 
@@ -55,7 +55,7 @@ export function Problem() {
             preserveAspectRatio="xMidYMid meet"
           >
             {/* Origin label */}
-            <text x="56" y="206" className={styles.originLabel} textAnchor="middle">Your brand</text>
+            <text x="56" y="206" className={styles.originLabel} textAnchor="middle">Your work</text>
 
             {/* Origin dot */}
             <circle cx="56" cy="220" r="24" className={styles.originRing} />

@@ -21,9 +21,9 @@ interface ActiveReport {
 type ReportType = ClaritySquareProjectReport['report_type'];
 
 const REPORT_TITLES: Record<ReportType, string> = {
-  strategy: 'Strategy & Clarity Blueprint',
-  systems: 'Systems & Workflow Blueprint',
-  presence: 'Brand & Presence Blueprint',
+  strategy: 'What Matters and Why',
+  systems: 'How the Work Could Improve',
+  presence: 'How to Communicate the Value',
 };
 
 type SaveProjectTarget = {
@@ -242,7 +242,7 @@ export default function BlueprintPage() {
         <div className={engineStyles.canvasNoise} />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '16px' }}>
           <Loader2 size={32} style={{ animation: 'spin 1s linear infinite' }} />
-          <p>Loading your session data...</p>
+          <p>Preparing your clarity plan...</p>
         </div>
       </div>
     );
@@ -263,7 +263,7 @@ export default function BlueprintPage() {
           >
             <ChevronLeft size={20} />
           </button>
-          <h1 className={styles.headerTitle}>Your Growth Blueprint</h1>
+          <h1 className={styles.headerTitle}>Your Clarity Plan</h1>
         </div>
         <div className={styles.headerActions}>
           <button 
@@ -289,7 +289,7 @@ export default function BlueprintPage() {
             <div className={engineStyles.orbit2} />
             <div className={engineStyles.assistantBlob} />
           </div>
-          <span className={styles.hubTitle}>Clarity Engine Orchestrator</span>
+          <span className={styles.hubTitle}>Clarity Engine</span>
         </div>
 
         {/* Connector Lines Removed - Replaced by Blob Spawn Animation */}

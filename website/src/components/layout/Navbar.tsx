@@ -47,11 +47,8 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <nav className={styles.desktopNav}>
               <Link href="/#method" className={styles.navLink}>How We Work</Link>
               <Link href="/#services" className={styles.navLink}>Services</Link>
-              <Link href="/clarity-engine" className={styles.navLink}>Clarity Engine</Link>
               <Link href="/library" className={styles.navLink}>Library</Link>
-              <Link href="/#workflows" className={styles.navLink}>Process</Link>
               <Link href="/work" className={styles.navLink}>Work</Link>
-              <Link href="/founder" className={styles.navLink}>Founder</Link>
               <Link href="/insights" className={styles.navLink}>Insights</Link>
             </nav>
 
@@ -66,9 +63,9 @@ export function Navbar({ isVisible = true }: NavbarProps) {
                 </Link>
               )}
               <Button variant="primary" className={styles.ctaButton} onClick={scrollToContact}>
-                Book a Workflow Audit
+                Start with a Workflow Audit
               </Button>
-              <button className={styles.mobileMenuBtn} aria-label="Toggle Menu" onClick={toggleMobileMenu}>
+              <button className={styles.mobileMenuBtn} aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'} onClick={toggleMobileMenu}>
                 {isMobileMenuOpen ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -94,18 +91,15 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <Link href="/" className={styles.mobileLink} onClick={closeMobileMenu}>Home</Link>
             <Link href="/#method" className={styles.mobileLink} onClick={closeMobileMenu}>How We Work</Link>
             <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
-            <Link href="/clarity-engine" className={styles.mobileLink} onClick={closeMobileMenu}>Clarity Engine</Link>
             <Link href="/library" className={styles.mobileLink} onClick={closeMobileMenu}>Library</Link>
-            <Link href="/#workflows" className={styles.mobileLink} onClick={closeMobileMenu}>Process</Link>
             <Link href="/work" className={styles.mobileLink} onClick={closeMobileMenu}>Work</Link>
-            <Link href="/founder" className={styles.mobileLink} onClick={closeMobileMenu}>Founder</Link>
             <Link href="/insights" className={styles.mobileLink} onClick={closeMobileMenu}>Insights</Link>
             <div className={styles.mobileAuditAction}>
               <Button variant="primary" onClick={() => {
                 closeMobileMenu();
                 scrollToContact();
               }}>
-                Book a Workflow Audit
+                Start with a Workflow Audit
               </Button>
             </div>
           </nav>

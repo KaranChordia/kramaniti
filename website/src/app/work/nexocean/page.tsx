@@ -8,7 +8,7 @@ import styles from './Nexocean.module.css';
 export const metadata: Metadata = {
   title: 'Nexocean Selected Work | Kramaniti',
   description:
-    'A Kramaniti selected-work page on a five-month Nexocean contract engagement involving internal recruiter workflow tools and brand content.',
+    'Selected Kramaniti work from a five-month Nexocean contract: practical tools for recruiter workflows and clearer brand communication.',
   alternates: {
     canonical: absoluteUrl('/work/nexocean/'),
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: 'Nexocean Selected Work | Kramaniti',
     description:
-      'Selected work covering internal recruiter workflow tools, practical AI support, and brand content for a five-month Nexocean contract engagement.',
+      'See practical internal tools and brand communication from a five-month Nexocean contract focused on everyday recruiter work.',
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'Nexocean Selected Work | Kramaniti',
     description:
-      'Internal workflow tooling and brand-content support from a five-month Nexocean contract engagement.',
+      'Practical recruiter tools and brand communication from a five-month Nexocean contract.',
     images: [absoluteUrl(DEFAULT_OG_IMAGE)],
   },
 };
@@ -40,47 +40,47 @@ export const metadata: Metadata = {
 const systemModules = [
   {
     title: 'Wingman Launchpad',
-    label: 'Operating entry point',
-    copy: 'A central access layer for recruiters to move between the Wingman tools, shared workspace, assistant surfaces, and tool-specific workflows.'
+    label: 'One starting point',
+    copy: 'A central place for recruiters to open the Wingman tools, shared work, assistant support, and focused workflows.'
   },
   {
     title: 'Wingmanager',
     label: 'Recruiter workspace',
-    copy: 'A day-to-day workspace for tasks, notes, files, conversations, and shared context so recruiter follow-through could stay organized.'
+    copy: 'A day-to-day place for tasks, notes, files, conversations, and shared context so follow-ups could stay organized.'
   },
   {
     title: 'Atlas',
-    label: 'Resume intelligence',
-    copy: 'A resume analysis assistant for PDF and text intake, structured scoring, ATS-oriented suggestions, recruiter notes, and follow-up planning.'
+    label: 'Resume review',
+    copy: 'Support for reading resumes, organizing key details, adding recruiter notes, and planning the next step.'
   },
   {
     title: 'Blaze',
-    label: 'JD to sourcing pack',
-    copy: 'A job-description workflow that converts raw role input into company context, role summaries, skill priorities, candidate explanations, and boolean/X-ray search strings.'
+    label: 'Role to search plan',
+    copy: 'A workflow that turns a raw job description into company context, a clear role summary, skill priorities, candidate notes, and search strings.'
   },
   {
     title: 'Zephyr',
-    label: 'Outreach copilot',
-    copy: 'A communication system for email, WhatsApp, and LinkedIn drafting, reusable templates, tone control, call examples, and recruiter learning resources.'
+    label: 'Outreach support',
+    copy: 'Support for drafting email, WhatsApp, and LinkedIn messages, with reusable examples, tone choices, and recruiter learning notes.'
   },
   {
     title: 'Radar',
-    label: 'Talent intelligence',
-    copy: 'An AI-talent database concept focused on resume extraction, role and skill tagging, AI-relevance review, candidate filtering, shortlist exports, and profile-quality checks.'
+    label: 'Talent search',
+    copy: 'A talent database concept for reading resumes, tagging roles and skills, filtering candidates, preparing shortlists, and checking profile quality.'
   }
 ];
 
 const outcomes = [
-  'Connected intake, analysis, sourcing, outreach, and follow-up into a clearer recruiter operating flow.',
-  'Translated AI capability into practical tools recruiters could understand through named assistants and focused workflows.',
-  'Built brand-facing content alongside internal infrastructure so the digital presence and product story could move together.'
+  'Brought intake, review, sourcing, outreach, and follow-up into a clearer recruiter workflow.',
+  'Turned AI capability into focused tools that were easier for recruiters to understand.',
+  'Built brand communication alongside the internal tools so the work and the story could move together.'
 ];
 
 const featuredWalkthrough = {
   id: 'cfRzZO1UDEU',
   title: 'Nexocean Internal Tools Portfolio',
   type: 'Portfolio walkthrough',
-  copy: 'A screen-recorded walkthrough of the Wingman Assistant ecosystem, showing the internal tools, UI decisions, product flow, and recruiter-facing experience across the operating layer.'
+  copy: 'A screen-recorded walkthrough of the Wingman tools, their interface, and the recruiter workflow they were designed to support.'
 };
 
 const videos = [
@@ -88,37 +88,37 @@ const videos = [
     id: 'EKnkY0vO0sw',
     title: 'Introducing Wingman Assistants',
     type: 'System showcase',
-    copy: 'Introduces the assistant ecosystem and the idea of giving recruiters focused Wingman support across daily workflows.'
+    copy: 'Introduces the Wingman tools and how they support different parts of a recruiter’s day.'
   },
   {
     id: 'rmFfTZcY1V8',
     title: 'Embracing AI | Wingman Assistants',
     type: 'Adoption narrative',
-    copy: 'Frames practical AI adoption for the recruitment team without making the system feel abstract or overly technical.'
+    copy: 'Explains practical AI support for the recruitment team in clear, non-technical language.'
   },
   {
     id: '8Po5MElNfD4',
     title: 'Introducing Radar',
     type: 'Product showcase',
-    copy: 'Shows the dedicated talent intelligence layer built around cleaner AI candidate discovery and recruiter-ready signals.'
+    copy: 'Shows the talent-search concept for finding and reviewing relevant candidates.'
   },
   {
     id: 'hNgzGDUBErI',
     title: 'Nexocean Impact 2025',
     type: 'Brand presence',
-    copy: 'A broader brand-impact film for Nexocean, connecting the company story to a more polished public presence.'
+    copy: 'A broader Nexocean film that presents the company story through polished brand communication.'
   },
   {
     id: 'fH0McDMkKCc',
     title: 'Great Hire Begins Here',
     type: 'Cinematic brand film',
-    copy: 'A key content showcase: cinematic recruiting communication designed to make Nexocean feel sharper, more human, and more memorable.'
+    copy: 'Cinematic recruiting communication designed to present Nexocean with a clear, human voice.'
   },
   {
     id: 'hYqmTED3DVs',
     title: 'WAVES by Nexocean',
     type: 'Event brand system',
-    copy: 'Positions the Waves event experience as part of Nexocean&apos;s digital presence and talent-community communication.'
+    copy: 'Presents the Waves event as part of Nexocean’s communication with its talent community.'
   }
 ];
 
@@ -129,7 +129,7 @@ export default function NexoceanWorkPage() {
     name: 'Nexocean selected work',
     url: absoluteUrl('/work/nexocean/'),
     description:
-      'A selected-work page about internal recruiter workflow tools and brand content support during a five-month Nexocean contract engagement.',
+      'Selected work from a five-month Nexocean contract focused on practical recruiter tools and brand communication.',
     creator: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -138,7 +138,7 @@ export default function NexoceanWorkPage() {
     about: [
       'recruiter workflow tools',
       'internal AI support',
-      'brand content',
+      'brand communication',
       'workflow systems',
     ],
   };
@@ -163,9 +163,9 @@ export default function NexoceanWorkPage() {
             <div className={styles.heroLayout}>
               <div className={styles.heroCopy}>
                 <span className={styles.eyebrow}>Selected Work / Nexocean</span>
-                <h1>Building practical tools for recruiter workflows.</h1>
+                <h1>Making everyday recruiter work easier to follow.</h1>
                 <p className={styles.lead}>
-                  During a five-month contract, Kramaniti supported Nexocean with internal recruiter tools and brand content—helping connect everyday recruitment work with clearer AI support.
+                  During a five-month contract, Kramaniti supported Nexocean with internal tools and brand communication—connecting everyday recruitment work with practical AI support.
                 </p>
                 <div className={styles.metaGrid} aria-label="Project summary">
                   <div>
@@ -174,7 +174,7 @@ export default function NexoceanWorkPage() {
                   </div>
                   <div>
                     <span>Scope</span>
-                    <strong>Internal tools + content</strong>
+                    <strong>Internal tools + communication</strong>
                   </div>
                   <div>
                     <span>Environment</span>
@@ -184,7 +184,7 @@ export default function NexoceanWorkPage() {
               </div>
 
               <aside className={styles.heroPanel}>
-                <span className="micro-label">Project Thesis</span>
+                <span className="micro-label">Starting point</span>
                 <p>
                   Recruiters need tools that support the way they already work—from intake and analysis to sourcing, outreach, and follow-up.
                 </p>
@@ -199,10 +199,10 @@ export default function NexoceanWorkPage() {
         <section className={styles.section}>
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className="micro-label">System Built</span>
-              <h2>A connected set of tools for everyday recruiter work.</h2>
+              <span className="micro-label">What was built</span>
+              <h2>Focused tools for the main parts of recruiter work.</h2>
               <p>
-                Wingman Assistants supported different parts of the recruitment process while keeping each tool focused and easy to understand.
+                Each Wingman tool supported a clear part of the recruitment process, from reading a role to following up with candidates.
               </p>
             </div>
 
@@ -225,8 +225,8 @@ export default function NexoceanWorkPage() {
           <div className={styles.container}>
             <div className={styles.splitSection}>
               <div>
-                <span className="micro-label">Kramaniti Pattern</span>
-                <h2>Strategy before tools. Systems before scale. Content after clarity.</h2>
+                <span className="micro-label">The approach</span>
+                <h2>Understand the work. Build what helps. Communicate it clearly.</h2>
               </div>
               <div className={styles.outcomeList}>
                 {outcomes.map((outcome) => (
@@ -243,10 +243,10 @@ export default function NexoceanWorkPage() {
         <section className={styles.section} id="videos">
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className="micro-label">Video Showcases</span>
-              <h2>Internal tools and brand content, shown through video.</h2>
+              <span className="micro-label">Watch the work</span>
+              <h2>Internal tools and brand communication, shown through video.</h2>
               <p>
-                These videos show both sides of the engagement: a deeper internal-tools walkthrough, plus the cinematic content layer that helped shape Nexocean&apos;s public-facing communication.
+                These videos show both sides of the engagement: the internal tools and the brand communication built around them.
               </p>
             </div>
 
@@ -293,17 +293,17 @@ export default function NexoceanWorkPage() {
         <section className={styles.closing}>
           <div className={styles.container}>
             <div className={styles.closingCard}>
-              <span className="micro-label">Selected Work Note</span>
-              <h2>Private internal infrastructure, presented with public-safe clarity.</h2>
+              <span className="micro-label">What this page shows</span>
+              <h2>The public view of private internal work.</h2>
               <p>
-                The internal repository remains reference-only. This page focuses on the business-facing shape of the work: practical AI systems for recruiters, supported by premium brand communication.
+                The internal repository is not public. The videos and descriptions here show the practical recruiter tools and the communication built around them, without claiming business results.
               </p>
               <div className={styles.closingActions}>
                 <Link href="/#contact" className={styles.closingLink}>
-                  Discuss a workflow audit
+                  Start with a workflow audit
                 </Link>
                 <Link href="/work" className={styles.closingLink}>
-                  Back to work folders
+                  Back to selected work
                 </Link>
               </div>
             </div>

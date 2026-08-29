@@ -8,7 +8,7 @@ import styles from './Maitri.module.css';
 export const metadata: Metadata = {
   title: 'Maitri Selected Work | Kramaniti',
   description:
-    'A Kramaniti selected-work page on the Maitri foundation retainer: strategy, Manu-first product direction, content systems, validation, and a pre-launch demo.',
+    'Active Kramaniti foundation work for Maitri: one clear product direction, a Manu-first story world, validation, communication, and a live demo.',
   alternates: {
     canonical: absoluteUrl('/work/maitri/'),
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: 'Maitri Selected Work | Kramaniti',
     description:
-      'Selected work covering strategy, product architecture, Manu character development, validation systems, content planning, and digital demo work for Maitri.',
+      'See how Kramaniti is helping Maitri turn a large story-world idea into one focused product, validation plan, communication system, and live demo.',
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'Maitri Selected Work | Kramaniti',
     description:
-      'Strategy, systems, content, validation, and demo work for the Maitri story-first companion doll universe.',
+      'Active foundation work for Maitri across product direction, validation, communication, and a live Manu-first demo.',
     images: [absoluteUrl(DEFAULT_OG_IMAGE)],
   },
 };
@@ -40,39 +40,39 @@ export const metadata: Metadata = {
 const workModules = [
   {
     title: 'Strategy and positioning',
-    label: 'Foundation clarity',
-    copy: 'Organized Maitri around a story-first companion universe: children should befriend the character before the doll becomes the purchase moment.',
+    label: 'Clear direction',
+    copy: 'Focused Maitri on a simple starting point: let children befriend the character before the doll becomes the purchase moment.',
   },
   {
     title: 'Manu character system',
-    label: 'Character universe',
-    copy: 'Built Manu as the first anchor with a reusable character bible, story direction, parent prompts, value themes, and child-safe emotional framing.',
+    label: 'First character',
+    copy: 'Made Manu the first anchor, with a clear character guide, story direction, parent prompts, value themes, and child-safe emotional framing.',
   },
   {
-    title: 'First box architecture',
-    label: 'Product strategy',
-    copy: 'Shaped the first product around one complete Manu box: doll, 32-page storybook, character letter, activities, and stickers before scaling add-ons.',
+    title: 'The first box',
+    label: 'Product direction',
+    copy: 'Shaped one complete Manu box: doll, 32-page storybook, character letter, activities, and stickers before adding more products.',
   },
   {
-    title: 'Validation and signal design',
-    label: 'Demand proof',
-    copy: 'Defined the waitlist, parent survey, beta-reader signals, school-interest checks, preorder objections, and monthly signal report structure.',
+    title: 'Test before expanding',
+    label: 'Real feedback',
+    copy: 'Defined a waitlist, parent survey, beta-reader feedback, school-interest checks, preorder questions, and a simple monthly review.',
   },
   {
-    title: 'Content operating rhythm',
-    label: 'Brand presence',
-    copy: 'Created month-one Instagram, YouTube Shorts, newsletter, and story-prompt systems so public communication grows from the character world.',
+    title: 'A clear communication rhythm',
+    label: 'Communication',
+    copy: 'Created the first Instagram, YouTube Shorts, newsletter, and story-prompt rhythm so communication grows from the character world.',
   },
   {
-    title: 'ChatGPT Business setup',
-    label: 'Internal workflows',
-    copy: 'Mapped focused ChatGPT Projects and reusable agents so Maitri can keep strategy, product, content, and validation work organized with human review.',
+    title: 'Organized internal work',
+    label: 'Workflows',
+    copy: 'Mapped focused ChatGPT Projects and reusable support so strategy, product, communication, and validation stay organized with human review.',
   },
 ];
 
 const outcomes = [
   'Kept the launch narrow: emotional attachment to Manu first, ecosystem expansion later.',
-  'Connected product, story, content, waitlist, and operating workflows into one foundation retainer.',
+  'Connected the product, story, communication, waitlist, and internal work into one clear foundation.',
   'Built a live Maitri Circle demo and Manu-first character page to make the strategy tangible.',
   'Protected product, safety, history, and preorder claims behind review instead of premature public promises.',
 ];
@@ -84,7 +84,7 @@ export default function MaitriWorkPage() {
     name: 'Maitri selected work',
     url: absoluteUrl('/work/maitri/'),
     description:
-      'A selected-work page about Maitri strategy, product direction, character-universe development, validation systems, content planning, and demo work.',
+      'Active Maitri foundation work across product direction, a Manu-first story world, validation, communication, and a live demo.',
     creator: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -120,9 +120,9 @@ export default function MaitriWorkPage() {
             <div className={styles.heroLayout}>
               <div className={styles.heroCopy}>
                 <span className={styles.eyebrow}>Selected Work / Maitri</span>
-                <h1>Building a story-led companion doll world around Manu.</h1>
+                <h1>Turning a large story-world idea into one clear first product.</h1>
                 <p className={styles.lead}>
-                  Kramaniti is helping Maitri shape its first product, character world, validation plan, content system, and pre-launch experience—starting with one clear character and one focused box.
+                  Kramaniti is helping Maitri shape its first product, character world, validation plan, communication, and live demo—starting with Manu and one focused box.
                 </p>
                 <div className={styles.metaGrid} aria-label="Project summary">
                   <div>
@@ -131,7 +131,7 @@ export default function MaitriWorkPage() {
                   </div>
                   <div>
                     <span>Scope</span>
-                    <strong>Strategy + content + systems</strong>
+                    <strong>Product + systems + communication</strong>
                   </div>
                   <div>
                     <span>Environment</span>
@@ -141,7 +141,7 @@ export default function MaitriWorkPage() {
               </div>
 
               <aside className={styles.heroPanel}>
-                <span className="micro-label">Project Thesis</span>
+                <span className="micro-label">Starting point</span>
                 <p>
                   Maitri should not scale a full ecosystem on day one. The first job is to help parents see educational and cultural value while helping children fall in love with Manu.
                 </p>
@@ -156,10 +156,10 @@ export default function MaitriWorkPage() {
         <section className={styles.section}>
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className="micro-label">Foundation Built</span>
-              <h2>One clear plan for the product, story, validation, and content.</h2>
+              <span className="micro-label">What we clarified</span>
+              <h2>One plan for the product, story, feedback, and communication.</h2>
               <p>
-                The work turns a large brand idea into focused next steps: build attachment to Manu, define the first box, gather real feedback, and create content from an approved story system.
+                The work turns a large idea into focused next steps: build attachment to Manu, define the first box, gather real feedback, and communicate from an approved story system.
               </p>
             </div>
 
@@ -182,7 +182,7 @@ export default function MaitriWorkPage() {
           <div className={styles.container}>
             <div className={styles.splitSection}>
               <div>
-                <span className="micro-label">Kramaniti Pattern</span>
+                <span className="micro-label">The approach</span>
                 <h2>Start with Manu. Test the idea. Build from what families value.</h2>
               </div>
               <div className={styles.outcomeList}>
@@ -200,19 +200,19 @@ export default function MaitriWorkPage() {
         <section className={styles.section} id="demo">
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className="micro-label">Digital Experience</span>
+              <span className="micro-label">Live demo</span>
               <h2>A pre-launch world where families can meet Manu.</h2>
               <p>
-                The current demo introduces Maitri as a story-first companion universe, brings Manu forward as the first character anchor, and supports future waitlist, parent survey, beta reader, school, and preorder validation flows.
+                The current demo introduces the Maitri world, brings Manu forward as the first character, and creates a place to test future waitlist, parent, reader, school, and preorder interest.
               </p>
             </div>
 
             <article className={styles.demoPanel}>
               <div>
-                <span className="micro-label">Prototype Surface</span>
+                <span className="micro-label">What families can see</span>
                 <h3>Consumer-facing website and Manu character world</h3>
                 <p>
-                  The live prototype work moved away from internal planning language and toward a polished, child-facing experience where families can explore the Maitri world, meet Manu, and understand the emotional promise before product launch.
+                  The live demo gives families a simple way to explore the Maitri world, meet Manu, and understand the emotional promise before the product is ready to launch.
                 </p>
               </div>
               <div className={styles.demoLinks}>
@@ -230,14 +230,15 @@ export default function MaitriWorkPage() {
         <section className={styles.closing}>
           <div className={styles.container}>
             <div className={styles.closingCard}>
-              <span className="micro-label">Selected Work Note</span>
-              <h2>A public snapshot of active foundation work.</h2>
+              <span className="micro-label">Current status</span>
+              <h2>Maitri is still active foundation work.</h2>
               <p>
-                This page presents the business-facing shape of the Maitri engagement without claiming launch outcomes, sales numbers, product approvals, or final manufacturing readiness.
+                This page shows the current direction and live demo. It does not present Maitri as a finished product or claim launch, sales, approval, or manufacturing results.
               </p>
-              <Link href="/work" className={styles.closingLink}>
-                Back to work folders
-              </Link>
+              <div className={styles.demoLinks}>
+                <Link href="/#contact" className={styles.closingLink}>Start with a workflow audit</Link>
+                <Link href="/work" className={styles.closingLink}>Back to selected work</Link>
+              </div>
             </div>
           </div>
         </section>
