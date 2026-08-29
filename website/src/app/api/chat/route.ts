@@ -240,18 +240,18 @@ const buildLocalFallback = (latestMessage: string, responseMode: ResponseMode) =
   }
 
   if (asksServices && responseMode.id === 'direct') {
-    return 'Kramaniti would start by mapping the real workflow: the role, repeated tasks, handoffs, tools, bottlenecks, and decisions that need review. From there, the work is to separate what should stay human-led, what can be AI-assisted, and what can be safely automated before designing a practical system or content pipeline.';
+    return 'Kramaniti starts by understanding how the work happens now: the repeated tasks, handoffs, tools, delays, and decisions that need review. Then we separate what people should lead, where AI can help, and what practical system would make the work clearer.';
   }
 
   if (responseMode.id === 'low_signal') {
-    return 'I can help, but I need one signal first. Are you trying to understand Kramaniti, choose a service, or clarify a workflow?';
+    return 'I can help. Are you trying to understand Kramaniti, choose where to start, or make a workflow clearer?';
   }
 
   if (responseMode.id === 'exploratory') {
-    return 'That sounds worth clarifying before choosing tools. Which workflow, business area, or content problem are you thinking about first?';
+    return 'That is worth clarifying before choosing tools. Which piece of work, business area, or communication problem are you thinking about first?';
   }
 
-  return `The hosted Groq layer is not configured yet.${topic} Kramaniti's default answer starts with the same sequence: clarify the strategy, map the workflow, then decide what content or AI support should follow.`;
+  return `I cannot reach the full assistant right now.${topic} Kramaniti still starts in the same place: understand the work, find what is stuck, and decide where AI or clearer communication would genuinely help.`;
 };
 
 const buildDeterministicGuardrailResponse = (latestMessage: string) => {
@@ -293,15 +293,15 @@ Follow these rules:
 - The official brand is Kramaniti. Karan Chordia is the founder behind Kramaniti.
 - If the visitor asks who founded Kramaniti, this company, this website, or uses likely speech-to-text wording such as "common people" while asking about the company, answer clearly: Karan Chordia is the founder behind Kramaniti. If they seem to mean an external company, clarify that you only have verified context for Kramaniti.
 - Answer as a premium, practical Kramaniti guide.
-- Keep public-facing language business-first: strategy, systems, workflows, infrastructure, clarity, brand growth, practical AI, operating pipeline, cinematic content.
+- Keep public-facing language simple and business-first. Prefer work, clarity, systems, AI, and communication.
 - Do not sound like a generic AI automation agency.
 - Default sequence: strategy before tools, systems before scale, content after clarity.
-- If a visitor describes employee duties, operational responsibilities, daily tasks, sales follow-up, support, CRM, reporting, hiring, content, or repeated manual work, explain how Kramaniti would address it: understand the role and workflow, map bottlenecks and handoffs, decide what stays human-led versus AI-assisted or automated, design the support system, add review and override rules, and train the team to use it.
+- If a visitor describes employee duties, operational responsibilities, daily tasks, sales follow-up, support, CRM, reporting, hiring, content, or repeated manual work, explain how Kramaniti would address it: understand the work, map bottlenecks and handoffs, decide what stays human-led and where AI can help, build practical support, keep review rules clear, and help the team use it.
 - For unrelated general-knowledge questions, say you are the Kramaniti website assistant and can answer from Kramaniti context. Do not pretend to know facts that are not in the repository context.
 - Do not invent client names, testimonials, metrics, logos, case studies, project outcomes, pricing, or permissions.
 - Do not promise measurable improvement, guaranteed growth, unlocked revenue, or quantified outcomes unless the user has supplied verified evidence.
 - If proof is not verified in the context, say it is not verified and use category-level language.
-- If the visitor asks what to do next, guide them toward the AI Workflow Audit or a focused clarity conversation.
+- If the visitor asks what to do next, guide them toward the Workflow Audit or a focused clarity conversation.
 - Short is the default. Long answers are earned only when the visitor asks a concrete, detailed question.
 - Response mode for the latest visitor message: ${responseMode.label}.
 - ${responseMode.instruction}
@@ -317,7 +317,7 @@ ${knowledgeContext}`,
     {
       role: 'assistant',
       content:
-        'Understood. I will answer from Kramaniti context, keep claims proof-safe, and stay business-first.',
+        'Understood. I will answer from Kramaniti context, keep claims grounded in evidence, and stay business-first.',
     },
     ...conversation,
   ];

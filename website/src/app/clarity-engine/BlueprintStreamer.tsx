@@ -17,28 +17,28 @@ interface BlueprintStreamerProps {
   onContentReady?: (agentId: 'strategy' | 'systems' | 'presence', content: string) => void;
 }
 
-const getSimulatedLogs = (title: string) => {
-  if (title.includes('Strategy')) {
+const getSimulatedLogs = (agentId: BlueprintStreamerProps['agentId']) => {
+  if (agentId === 'strategy') {
     return [
-      'Scanning transcript history...',
-      'Isolating primary business workflow...',
-      'Deriving target audience patterns...',
-      'Generating strategic foundation...'
+      'Reviewing your answers...',
+      'Finding the core problem...',
+      'Clarifying who it helps...',
+      'Shaping the first decisions...'
     ];
   }
-  if (title.includes('Systems')) {
+  if (agentId === 'systems') {
     return [
-      'Analyzing current workarounds...',
-      'Identifying high-friction touchpoints...',
-      'Designing system architecture...',
-      'Orchestrating agent workflows...'
+      'Following the current workflow...',
+      'Finding where it gets stuck...',
+      'Separating people-led decisions and AI support...',
+      'Shaping a practical plan...'
     ];
   }
   return [
-    'Mapping presence goals...',
-    'Reviewing preferred content channels...',
-    'Synthesizing brand authority angles...',
-    'Compiling 30-day presence plan...'
+    'Reviewing what people need to trust...',
+    'Finding the clearest story...',
+    'Choosing the most useful channels...',
+    'Shaping the communication plan...'
   ];
 };
 
@@ -47,7 +47,7 @@ export default function BlueprintStreamer({ title, endpoint, icon, payload, agen
   const [isFetching, setIsFetching] = useState<boolean>(true);
   const [currentLogIndex, setCurrentLogIndex] = useState(0);
   const hasNotifiedComplete = useRef(false);
-  const logs = useMemo(() => getSimulatedLogs(title), [title]);
+  const logs = useMemo(() => getSimulatedLogs(agentId), [agentId]);
   const { playClick } = useAudioEngine();
   
   // Wait to start simulation until agent card appears

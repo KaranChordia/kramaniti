@@ -8,7 +8,7 @@ import styles from './Insights.module.css';
 
 export const metadata: Metadata = {
   title: 'Insights | Kramaniti',
-  description: 'Practical Kramaniti articles on workflow strategy, useful AI, team adoption, governance, and clear communication.',
+  description: 'Clear Kramaniti articles on how work gets stuck, what to fix, where AI helps, and how to communicate the value.',
   alternates: {
     canonical: absoluteUrl('/insights/'),
   },
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     url: absoluteUrl('/insights/'),
     siteName: SITE_NAME,
     title: 'Insights | Kramaniti',
-    description: 'Strategy-first essays on practical AI systems, operating infrastructure, governance, and content after clarity.',
+    description: 'Ideas for understanding the work, building useful systems, using AI carefully, and communicating clearly.',
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary',
     title: 'Insights | Kramaniti',
-    description: 'Strategy-first essays on practical AI systems, operating infrastructure, governance, and content after clarity.',
+    description: 'Ideas for understanding the work, building useful systems, using AI carefully, and communicating clearly.',
     images: [absoluteUrl(DEFAULT_OG_IMAGE)],
   },
 };
@@ -61,9 +61,9 @@ export default function InsightsPage() {
           <div className={styles.container}>
             <div className={styles.heroIntro}>
               <span className={styles.eyebrow}>Insights</span>
-              <h1>Practical ideas for better business systems.</h1>
+              <h1>Ideas for making work clearer.</h1>
               <p className={styles.lead}>
-                Articles on workflow strategy, useful AI, team adoption, governance, and clear communication.
+                Start with where work gets stuck. Then decide what to fix, where AI can help, and how to explain the value.
               </p>
             </div>
 

@@ -3,9 +3,9 @@ import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl } from '../../lib/seo';
 import { KramanitiExperience } from './KramanitiExperience';
 
 export const metadata: Metadata = {
-  title: 'Enter the System | Kramaniti',
+  title: 'How Kramaniti Works | Interactive Experience',
   description:
-    'An interactive Kramaniti experience connecting strategy, systems, and practical insight through one visible operating signal.',
+    'Follow one simple Kramaniti path: understand the work, build what helps, keep people in control, and communicate clearly.',
   alternates: {
     canonical: absoluteUrl('/experience/'),
   },
@@ -13,9 +13,9 @@ export const metadata: Metadata = {
     type: 'website',
     url: absoluteUrl('/experience/'),
     siteName: SITE_NAME,
-    title: 'Enter the System | Kramaniti',
+    title: 'How Kramaniti Works | Interactive Experience',
     description:
-      'Move from scattered signals to a connected system for growth through Kramaniti\'s strategy-first operating sequence.',
+      'See how Kramaniti moves from stuck work to a useful system and clearer communication.',
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),

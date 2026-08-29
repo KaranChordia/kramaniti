@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Clarity Blueprint | Kramaniti',
+  title: 'Your Clarity Plan | Kramaniti',
   description:
-    'A reflective Kramaniti blueprint that turns diagnostic answers into practical strategy, systems, and presence recommendations.',
+    'A private Kramaniti plan that turns your answers into clear next steps for the work, the system, and the communication.',
   robots: {
     index: false,
     follow: false,

@@ -9,22 +9,22 @@ const layers = [
   {
     number: '01',
     label: 'Strategy',
-    title: 'Strategy',
-    description: 'Audit your business workflows to identify high-leverage opportunities and the most critical bottlenecks to solve.',
+    title: 'Understand the work',
+    description: 'Follow how work really moves, where it slows down, and which problem is worth solving first.',
     orbState: 'shaping' as const,
   },
   {
     number: '02',
     label: 'Systems',
-    title: 'Systems',
-    description: 'Engineer practical internal infrastructure and AI-assisted processes that streamline daily operations.',
+    title: 'Build what helps',
+    description: 'Fix the important bottleneck with a practical system, using AI only where it makes the work better.',
     orbState: 'working' as const,
   },
   {
     number: '03',
     label: 'Communication',
-    title: 'Communication',
-    description: 'Translate operational clarity into premium brand narratives and a consistent content distribution engine.',
+    title: 'Communicate clearly',
+    description: 'Turn clearer work into a message people can understand, trust, and act on.',
     orbState: 'composing' as const,
   }
 ];
@@ -41,9 +41,9 @@ export function Story() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">The method</span>
-          <AnimatedHeading isVisible={isVisible}>Strategy before tools. Systems before scale. Content after clarity.</AnimatedHeading>
+          <AnimatedHeading isVisible={isVisible}>First understand the work. Then build what helps. Then communicate it clearly.</AnimatedHeading>
           <p className="text-secondary">
-            Kramaniti connects the three foundational layers of your business, ensuring that operational improvements are practical, scalable, and easy to maintain.
+            Three connected steps. Practical AI where it helps. People making the important calls.
           </p>
         </div>
 
@@ -87,7 +87,7 @@ export function Story() {
               <circle cx="250" cy="250" r="38" className={styles.corePulse} />
               <circle cx="250" cy="250" r="24" className={styles.coreOuter} />
               <circle cx="250" cy="250" r="14" className={styles.coreInner} />
-              <text x="250" y="254" className={styles.coreLabel} textAnchor="middle" dominantBaseline="middle">Foundation</text>
+              <text x="250" y="254" className={styles.coreLabel} textAnchor="middle" dominantBaseline="middle">The work</text>
             </svg>
 
             {/* Ring labels directly on the visual */}

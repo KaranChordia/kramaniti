@@ -59,7 +59,7 @@ export async function POST(request: Request) {
 
   if (!webhookUrl) {
     return NextResponse.json(
-      { error: 'Contact storage is not configured yet.' },
+      { error: 'The form is unavailable right now. Please email ask@kramaniti.com.' },
       { status: 503 },
     );
   }
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
     if (!response.ok || responseBody?.ok === false) {
       const webhookError = typeof responseBody?.error === 'string'
         ? responseBody.error
-        : 'Unable to save the enquiry right now.';
+        : 'We could not send your note right now. Please email ask@kramaniti.com.';
 
       return NextResponse.json(
         { error: webhookError },
@@ -117,7 +117,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json(
-      { error: 'Unable to save the enquiry right now.' },
+      { error: 'We could not send your note right now. Please email ask@kramaniti.com.' },
       { status: 502 },
     );
   }

@@ -16,7 +16,7 @@ export function Contact() {
   const [message, setMessage] = React.useState('');
 
   const budgetOptions = [
-    { value: '', label: 'Select budget range' },
+    { value: '', label: 'Choose one, or leave this blank' },
     { value: 'under_75k', label: 'Under ₹75K' },
     { value: '75k_1.5L', label: '₹75K – ₹1.5L' },
     { value: '1.5L_3L', label: '₹1.5L – ₹3L' },
@@ -63,7 +63,7 @@ export function Contact() {
 
       form.reset();
       setSubmitState('success');
-      setMessage('Your enquiry has been received. We will review it and respond shortly.');
+      setMessage('Thanks—your note is with us. We will review it and reply soon.');
     } catch (error) {
       setSubmitState('error');
       setMessage(error instanceof Error ? error.message : 'Unable to submit the enquiry right now.');
@@ -79,18 +79,18 @@ export function Contact() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Start here</span>
-          <AnimatedHeading isVisible={isVisible}>Initiate a Workflow Audit.</AnimatedHeading>
-          <p className="text-secondary">Describe your operational bottlenecks or areas lacking clarity. We will start by diagnosing the core issues and identifying the highest-impact system to build.</p>
+          <AnimatedHeading isVisible={isVisible}>Start with one workflow that feels harder than it should.</AnimatedHeading>
+          <p className="text-secondary">Tell us where work slows down, gets repeated, or depends too much on memory. We will review it and suggest a clear starting point.</p>
         </div>
 
         <div className={styles.grid}>
           <div className={`${styles.formColumn} ${isVisible ? styles.visible : ''}`}>
             <form className={styles.form} onSubmit={handleSubmit}>
               <Input label="Name" name="name" placeholder="Your full name" required className={styles.contactInput} />
-              <Input label="Work Email" name="email" type="email" placeholder="name@company.com" required className={styles.contactInput} />
-              <Input label="Company / Brand" name="company" placeholder="Company or brand name" required className={styles.contactInput} />
-              <Select label="Budget Range" name="budget" options={budgetOptions} className={styles.contactInput} />
-              <Textarea label="Workflow / Goal" name="goal" placeholder="Describe the workflows that currently feel inefficient, disconnected, or ready for optimization." required className={styles.contactInput} />
+              <Input label="Email" name="email" type="email" placeholder="name@company.com" required className={styles.contactInput} />
+              <Input label="Business / Team" name="company" placeholder="Where do you work?" required className={styles.contactInput} />
+              <Select label="Do you have a budget in mind? (Optional)" name="budget" options={budgetOptions} className={styles.contactInput} />
+              <Textarea label="Where does the work get stuck?" name="goal" placeholder="For example: follow-ups are missed, reporting takes too long, or important context lives in too many places." required className={styles.contactInput} />
               <input
                 type="text"
                 name="website"
@@ -104,17 +104,17 @@ export function Contact() {
                 variant="primary"
                 className={`${styles.submitBtn} ${submitState === 'submitting' ? styles.submitBtnLoading : ''} ${submitState === 'success' ? styles.submitBtnSuccess : ''}`}
                 disabled={submitState === 'submitting'}
-                aria-label={submitState === 'success' ? 'Enquiry submitted' : 'Request a Workflow Audit'}
+                aria-label={submitState === 'success' ? 'Workflow audit request received' : 'Request a workflow audit'}
               >
                 <span className={styles.submitProgress} aria-hidden="true" />
                 <span className={styles.submitContent}>
                   {submitState === 'success' ? (
                     <>
                       <Check size={18} strokeWidth={2.5} aria-hidden="true" />
-                      <span>Enquiry Received</span>
+                      <span>Request received</span>
                     </>
                   ) : (
-                    <span>{submitState === 'submitting' ? 'Sending...' : 'Request a Workflow Audit'}</span>
+                    <span>{submitState === 'submitting' ? 'Sending...' : 'Request a workflow audit'}</span>
                   )}
                 </span>
               </Button>
@@ -130,13 +130,13 @@ export function Contact() {
 
           <div className={`${styles.calendlyColumn} ${isVisible ? styles.visible : ''}`}>
             <div className={styles.calendlyPlaceholder}>
-              <span className="micro-label">Where to begin</span>
-              <h3>Determine the most effective starting point.</h3>
-              <p className="text-secondary caption">The audit provides a comprehensive diagnosis of your operations, a prioritized workflow map, and a practical implementation roadmap.</p>
+              <span className="micro-label">What happens next</span>
+              <h3>We look for the clearest place to begin.</h3>
+              <p className="text-secondary caption">The audit looks at how the work happens now, where it gets stuck, and what would make a useful first change.</p>
               <div className={styles.auditList}>
-                <span>Comprehensive diagnosis</span>
-                <span>Prioritized workflow map</span>
-                <span>Implementation roadmap</span>
+                <span>A clear view of the current workflow</span>
+                <span>The bottleneck worth fixing first</span>
+                <span>A practical next step</span>
               </div>
             </div>
           </div>

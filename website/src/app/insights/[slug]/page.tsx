@@ -102,15 +102,8 @@ function formatPublishedMeta(date: string, publishedAt?: string) {
     month: 'long',
     year: 'numeric',
   }).format(value);
-  const displayTime = new Intl.DateTimeFormat('en-IN', {
-    timeZone: 'Asia/Kolkata',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  }).format(value);
 
-  return `${displayDate} · ${displayTime} IST`;
+  return displayDate;
 }
 
 type ArticlePageProps = { params: Promise<{ slug: string }> };
@@ -124,52 +117,52 @@ const insightCtas: Record<Insight['category'], {
 }> = {
   Strategy: {
     eyebrow: 'Strategy',
-    title: 'Turn the idea into a workflow route.',
-    body: 'Use an AI Workflow Audit to find the first decision, handoff, or operating constraint worth systemizing.',
+    title: 'Start with the work, not the tool.',
+    body: 'A workflow audit helps you find the first delay, handoff, or decision worth fixing.',
     href: '/#contact',
-    label: 'Book an audit',
+    label: 'Start with a workflow audit',
   },
   Systems: {
     eyebrow: 'Systems',
-    title: 'Review the system behind the work.',
-    body: 'Map the route, owner, source packet, and handoff before adding more tools to the workflow.',
-    href: '/#services',
-    label: 'Explore systems work',
+    title: 'Find the system worth building.',
+    body: 'See how the work moves, who owns each step, and where a practical system would help most.',
+    href: '/#contact',
+    label: 'Start with a workflow audit',
   },
   Adoption: {
     eyebrow: 'Adoption',
-    title: 'Make the workflow easier to use.',
-    body: 'Design the support path, review points, and handoff notes that help practical AI become daily operating behavior.',
-    href: '/#workflows',
-    label: 'See the process',
+    title: 'Make AI useful in daily work.',
+    body: 'Clarify what AI can prepare, what people should review, and how the team will use the workflow.',
+    href: '/#contact',
+    label: 'Start with a workflow audit',
   },
   Governance: {
     eyebrow: 'Governance',
-    title: 'Put proof beside the claim.',
-    body: 'Clarify which sources, owners, and review gates need to exist before a promise becomes public.',
-    href: '/#method',
-    label: 'Review the method',
+    title: 'Keep important decisions with people.',
+    body: 'Put the source, owner, and review step beside the work before a claim or decision moves forward.',
+    href: '/#contact',
+    label: 'Start with a workflow audit',
   },
   Content: {
     eyebrow: 'Content',
-    title: 'Build content from operating clarity.',
-    body: 'Connect internal signals, source routes, and founder judgment before turning insight into public presence.',
-    href: '/#services',
-    label: 'Explore content infrastructure',
+    title: 'Communicate from real work.',
+    body: 'Use what the business genuinely knows and does before turning an idea into public communication.',
+    href: '/#contact',
+    label: 'Start with a workflow audit',
   },
   'AI Infrastructure': {
-    eyebrow: 'Infrastructure',
-    title: 'Scope the operating layer first.',
-    body: 'Define the workflow boundary, review route, and system owner before choosing the AI stack.',
+    eyebrow: 'AI Infrastructure',
+    title: 'Give AI a clear job.',
+    body: 'Define the workflow, owner, and review boundary before choosing the technical stack.',
     href: '/#contact',
-    label: 'Scope the system',
+    label: 'Start with a workflow audit',
   },
   Spatial: {
     eyebrow: 'Spatial',
-    title: 'Map the experience system.',
-    body: 'Connect the audience journey, content layer, and operating route before turning an experience into presence.',
-    href: '/work',
-    label: 'View selected work',
+    title: 'Make the experience easier to understand.',
+    body: 'Connect the audience journey, the communication, and the work behind it before adding more technology.',
+    href: '/#contact',
+    label: 'Start with a workflow audit',
   },
 };
 
@@ -320,7 +313,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
               </svg>
-              Back to Insights
+              Back to insights
             </Link>
 
             <header className={styles.articleHeader}>

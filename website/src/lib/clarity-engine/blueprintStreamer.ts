@@ -96,19 +96,19 @@ function buildLocalBlueprintFallback(systemPrompt: string, body: BlueprintReques
 
 #### Core Narrative
 - Repeat this structure: the messy before-state, the operating logic, and the sharper next step.
-- Keep AI as infrastructure unless the buyer specifically cares about the AI method.
+- Keep AI as practical support unless the buyer specifically cares about the AI method.
 
 #### First Content Moves
 - Publish one post explaining the repeated problem.
 - Publish one walkthrough of the diagnostic process.
-- Create one proof-safe workflow map or checklist.
+- Create one workflow map or checklist grounded in real work.
 - Rewrite one website section around the buyer's felt problem.
 - Turn one real operating artifact into an anonymized insight.
 
 #### 30-Day Presence Plan
 - Week 1: clarify the core narrative and one primary channel.
 - Week 2: publish problem/process content.
-- Week 3: publish proof-safe workflow content.
+- Week 3: publish workflow content grounded in real work.
 - Week 4: refine the offer page or service explainer from the strongest signal.
 
 #### Claims To Avoid

@@ -1,5 +1,89 @@
 # Kramaniti Site Implementation Plan
 
+## 2026-08-29 Public Messaging Simplification
+
+Status: local implementation and verification complete. Commit, push, deployment, publication, and live-integration changes remain behind KC approval.
+
+### Objective
+
+Make the public website simple, powerful, and recognizably Kramaniti without changing the service architecture, proof boundaries, product functions, or primary conversion path.
+
+Core promise:
+
+> Make your business easier to run and easier to understand.
+
+Supporting idea: Kramaniti finds where work gets stuck, builds practical AI systems where they genuinely help, keeps people in control, and turns operational clarity into stronger communication.
+
+Public sequence:
+
+1. Understand the work.
+2. Fix the workflow that matters most.
+3. Use AI where it genuinely helps.
+4. Keep human judgment visible.
+5. Communicate the resulting value clearly.
+
+Preferred public vocabulary: work, clarity, systems, AI, and communication. Content remains a delivery capability beneath communication.
+
+### Ownership and source boundary
+
+- Lead: Website Steward.
+- Supporting review roles: Brand Strategist, Narrative Editor, Proof and Governance Auditor, and Content Director for Insights framing.
+- `docs/Kramaniti Foundation Document.pdf` is absent after a repository-wide filename search. No substitute PDF is being treated as the missing source.
+- Canonical sources used: root and website agent rules, master context, agent roster, decision log, and this implementation plan.
+- Starting state: clean detached worktree at `0b9ea372ae71e3ad691127ecbd4dad8be2c2123c`, matching the source checkout's `main` commit but not its unrelated uncommitted changes.
+- Kramaniti Kosh exists only in the separate source checkout as uncommitted Library work. Its orientation copy is reviewed in place, but those files are not imported into this worktree or absorbed into this change set.
+
+### Public route and surface inventory
+
+In scope for implementation and rendered QA:
+
+- `/`: navigation, hero, problem, method, film bridge, services, process, founder preview, contact form, footer, structured data, and global metadata.
+- `/founder`: page framing, founder story, principles, team/advisory language, CTAs, and metadata.
+- `/work`, `/work/maitri`, `/work/nexocean`: selected-work framing, project summaries, proof-safe notes, CTAs, and metadata.
+- `/insights`: archive framing, filters, card actions, category language, and metadata.
+- `/insights/[slug]`: category CTAs and shared article navigation. Source-backed article titles and factual/research claims remain unchanged.
+- `/clarity-engine`: entry language, first-question path, controls, visitor-facing status text, and metadata. `/clarity-engine/blueprint` is checked as a downstream functional handoff, not rewritten as a marketing page.
+- `/experience`: secondary public narrative route, audit handoff, and metadata. It remains hidden from primary navigation.
+- Global assistant: welcome text, starter questions, prompt, failure language, fallback responses, and public answer guidance.
+- Machine-facing public descriptions: JSON-LD, `llms.txt`, `llms-full.txt`, sitemap boundaries, and route SEO/social descriptions.
+
+Reviewed without importing or editing in this worktree:
+
+- `/library` and `/library/workspace`: uncommitted Kosh guide/workspace in the separate source checkout. Current orientation already uses plain, human-led language and preserves the intended provider-neutral library boundary.
+
+Intentionally excluded from public marketing copy scope:
+
+- Private or owner/client surfaces: `/hq`, `/client-hub`.
+- Internal or prototype workbenches: `/KCS`, `/studio`, `/design-studio`, `/blocks`, `/agent-simulation`, `/brand-blue-preview`, and `/workflow-intelligence`.
+- Product UI outside the requested marketing journey: `/clarity-square`, except for ensuring the public route boundary is not misrepresented elsewhere.
+- Article bodies, research titles, citations, and factual claims in `website/src/data/insights.ts`.
+
+### Implementation checklist
+
+- [x] Reduce first-visit navigation choices while keeping Work, Founder, Insights, Clarity Engine, and the optional Experience route reachable through appropriate secondary paths.
+- [x] Rewrite the complete homepage journey around the approved promise and relatable operational situations.
+- [x] Make the Workflow Audit the natural primary action across pages and article CTAs.
+- [x] Simplify Founder and selected-work copy without adding or strengthening unverified proof.
+- [x] Clarify Clarity Engine as a focused way to think through one piece of work before choosing tools.
+- [x] Frame Insights with clear editorial group language while preserving article identity and source-backed claims.
+- [x] Align global assistant and form language with the same small vocabulary.
+- [x] Align SEO, social, JSON-LD, and LLM-facing descriptions.
+- [x] Run `git diff --check`, lint, TypeScript checking, and production build; remove generated side effects.
+- [x] Complete desktop and genuine-mobile rendered QA across the route inventory, including console, overflow, keyboard/focus basics, CTA destinations, form states, and assistant behavior.
+- [x] Finish this section with implemented files, validation results, open gaps, and approval-gated next steps.
+
+### Verification and handoff snapshot
+
+- Static checks: `git diff --check`, ESLint, and `tsc --noEmit` pass.
+- Production build: Next.js 16 production build passes with 83 generated pages. The build-created HQ repository pulse diff was reviewed and restored; it is not part of this change.
+- Rendered QA: production server checked at 1440×900, 390×844, and 320×800. The homepage, Founder, Work index, Maitri, Nexocean, Insights archive, one complete Insight article, Clarity Engine entry, Experience route, global footer, and assistant render without console errors, broken images, or horizontal overflow.
+- Interaction checks: reduced desktop/mobile navigation, audit CTA scroll, seven-step process expansion, empty-form focus, local form failure copy, assistant open/close and starter questions, Insights search/category filter, Clarity Engine example entry, Experience start state, CTA destinations, and first keyboard focus were exercised.
+- Claim boundary: no new metrics, testimonials, client claims, outcomes, logos, pricing, or permissions were added. Insight titles, article bodies, citations, and research claims remain unchanged.
+- Source gap: `docs/Kramaniti Foundation Document.pdf` remains absent. The existing embedded brand film remains an external media asset and still contains its original on-video language.
+- Kosh gap: `/library` and `/library/workspace` are absent from this clean worktree and return 404 here. Their uncommitted source-checkout copy was reviewed without importing it, so rendered Kosh QA remains with that separate Library work.
+- Integration gap: the local contact webhook is not configured, so the rendered unavailable/error path was verified; a real success submission was not sent.
+- Approval gate: no commit, push, deploy, publication, external communication, or live integration change has been made.
+
 ## 1. Strategic Direction
 
 The website has been refined around the foundation document's central positioning: Kramaniti is a first-principles AI systems partner, not a generic AI automation agency. The homepage now explains the business value in a simple sequence:

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
 import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl } from '../../lib/seo';
@@ -8,7 +9,7 @@ import styles from './Founder.module.css';
 export const metadata: Metadata = {
   title: 'Founder | Kramaniti',
   description:
-    'Meet Karan Chordia, founder of Kramaniti, and learn how he connects business strategy, practical AI systems, and clear communication.',
+    'Meet Karan Chordia, founder of Kramaniti, and the thinking behind clearer work, practical AI systems, and stronger communication.',
   alternates: {
     canonical: absoluteUrl('/founder/'),
   },
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: 'Founder | Kramaniti',
     description:
-      'Karan Chordia founded Kramaniti to connect business strategy, practical systems, and clear communication.',
+      'Karan Chordia founded Kramaniti to make businesses easier to run and easier to understand.',
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'Founder | Kramaniti',
     description:
-      'The founder profile and operating principles behind Kramaniti.',
+      'Meet Karan Chordia and the simple principles behind Kramaniti.',
     images: [absoluteUrl(DEFAULT_OG_IMAGE)],
   },
 };
@@ -40,18 +41,18 @@ export const metadata: Metadata = {
 const timeline = [
   {
     title: 'Strategy',
-    copy: 'Understand the business, its workflows, and the problem worth solving before recommending a tool.',
-    tags: ['Workflow review', 'Business priorities', 'Action plan']
+    copy: 'Understand how the work happens and which problem is worth solving before recommending a tool.',
+    tags: ['The current work', 'The real bottleneck', 'A clear plan']
   },
   {
     title: 'Systems',
-    copy: 'Build practical workflows, internal tools, and AI support that make the business easier to run.',
-    tags: ['Practical systems', 'Internal tools', 'AI support']
+    copy: 'Build practical workflows, tools, and AI support that make the business easier to run.',
+    tags: ['Useful systems', 'Simple tools', 'Practical AI']
   },
   {
     title: 'Communication',
-    copy: 'Turn business clarity into useful content and a message that reflects the value being created.',
-    tags: ['Founder story', 'Content direction', 'Clear message']
+    copy: 'Turn clearer work into useful content and a message that reflects the value being created.',
+    tags: ['Founder story', 'Useful content', 'Clear message']
   }
 ];
 
@@ -61,40 +62,40 @@ const advisoryTeam = [
     role: 'Founder',
     initials: 'KC',
     image: '/assets/founder_real.jpg',
-    copy: 'Karan leads Kramaniti’s strategy, operating diagnosis, intelligence-system design, and brand-presence direction. His role is to identify the workflows and decisions that matter, then design practical systems and communication around them.'
+    copy: 'Karan leads Kramaniti’s strategy, workflow reviews, practical system design, and communication. He identifies the work and decisions that matter, then builds useful support around them.'
   },
   {
     name: 'Kashiesh Chordia',
     role: 'Legal & Compliance Advisor',
     initials: 'KC',
     image: null,
-    copy: 'Kashiesh supports Kramaniti on agreements, documentation, compliance structure, governance practices, company-secretarial matters, filings, and regulatory paperwork. Her advisory role brings legal and operational discipline to the way engagements are structured and delivered.'
+    copy: 'Kashiesh advises Kramaniti on agreements, documentation, compliance, filings, and regulatory matters. Her role helps keep engagements clear and responsibly structured.'
   },
   {
     name: 'Sachin Chougule',
     role: 'Business & Strategy Advisor',
     initials: 'SC',
     image: null,
-    copy: 'Sachin supports Kramaniti on business direction, strategic judgment, and advisory perspective as the practice grows. His role strengthens the commercial thinking behind how opportunities are assessed, structured, and developed.'
+    copy: 'Sachin advises Kramaniti on business direction and commercial judgment. He helps Karan assess opportunities and shape how the practice grows.'
   }
 ];
 
 const principles = [
   {
-    title: 'One Foundation',
-    copy: 'Strategy, systems, and communication should support one another. The way the business works should guide what it builds and how it communicates.'
+    title: 'One connected view',
+    copy: 'The way a business works should guide what it builds and how it communicates.'
   },
   {
-    title: 'Practical Leverage',
-    copy: 'Systems should reduce friction, support better decisions, and preserve human judgment. Complexity is not a sign of sophistication.'
+    title: 'Useful over impressive',
+    copy: 'A good system reduces friction and supports better decisions. Extra complexity proves nothing.'
   },
   {
-    title: 'Human-Collaborative Systems',
-    copy: 'AI should assist. Humans should lead. Some steps can be automated, some should be AI-assisted, and some must stay with the people closest to the context.'
+    title: 'People stay in control',
+    copy: 'AI can prepare, organize, and support. People closest to the context should make the important calls.'
   },
   {
-    title: 'Clear Communication',
-    copy: 'Content should not exist for volume alone. It should make the business easier to understand and reflect the value being created.'
+    title: 'Communication follows clarity',
+    copy: 'Content should make the business easier to understand and reflect the value it genuinely creates.'
   }
 ];
 
@@ -116,7 +117,7 @@ export default function FounderPage() {
     knowsAbout: [
       'workflow strategy',
       'AI systems',
-      'brand presence',
+      'business communication',
       'cinematic content',
       'business operations',
     ],
@@ -142,10 +143,10 @@ export default function FounderPage() {
 
           <div className={styles.container}>
             <div className={styles.heroIntro}>
-              <span className={styles.eyebrow}>Founder Profile</span>
-              <h1>Helping businesses improve how they work and how they are understood.</h1>
+              <span className={styles.eyebrow}>Founder</span>
+              <h1>Make the work clearer. Build what helps. Explain the value well.</h1>
               <p className={styles.lead}>
-                Karan Chordia founded Kramaniti to connect practical systems with clear communication. The work begins by understanding how a business operates, then building what it needs and helping it explain its value.
+                Karan Chordia founded Kramaniti to make businesses easier to run and easier to understand. The work begins with how a business really operates, then builds what it needs and helps it explain its value.
               </p>
               <div className={styles.heroPills}>
                 <span className={styles.heroPill}>Strategy</span>
@@ -169,7 +170,7 @@ export default function FounderPage() {
                   </div>
                   <div className={styles.imageMeta}>
                     <span className={styles.metaLabel}>Karan Chordia</span>
-                    <span className={styles.metaValue}>Founder / Systems Partner</span>
+                    <span className={styles.metaValue}>Founder / AI systems partner</span>
                   </div>
                 </div>
 
@@ -178,7 +179,7 @@ export default function FounderPage() {
               <div className={styles.contentColumn}>
                 <article className={styles.storyCard}>
                   <span className="micro-label">Background</span>
-                  <h2>From brand storytelling to business systems.</h2>
+                  <h2>From telling the story to improving the work behind it.</h2>
                   <div className={styles.bio}>
                     <p>
                       Karan began in commercial media, helping brands shape how they were seen.
@@ -190,35 +191,36 @@ export default function FounderPage() {
                       Kramaniti was built from that realization.
                     </p>
                     <p>
-                      Today, Karan helps businesses clarify their workflows, build practical systems, and communicate with greater confidence.
+                      Today, Karan helps businesses understand their workflows, build practical systems, and communicate more clearly.
                     </p>
                   </div>
                 </article>
 
                 <div className={styles.statRow}>
                   <div className={styles.statCard}>
-                    <span className={styles.statValue}>8+ Years</span>
+                    <span className={styles.statValue}>Story</span>
                     <span className={styles.statLabel}>Commercial media and brand storytelling</span>
                   </div>
                   <div className={styles.statCard}>
-                    <span className={styles.statValue}>3+ Years</span>
-                    <span className={styles.statLabel}>Workflow systems, AI tools, and operating design</span>
+                    <span className={styles.statValue}>Systems</span>
+                    <span className={styles.statLabel}>Workflows, practical AI, and internal tools</span>
                   </div>
                   <div className={styles.statCard}>
-                    <span className={styles.statValue}>1 Practice</span>
-                    <span className={styles.statLabel}>Built around operations, intelligence, and presence</span>
+                    <span className={styles.statValue}>One practice</span>
+                    <span className={styles.statLabel}>Clearer work and clearer communication</span>
                   </div>
                 </div>
 
                 <article className={styles.summaryCard}>
                   <span className="micro-label">Current Focus</span>
-                  <h3>Making the business and its message work together.</h3>
+                  <h3>Make the business and its message work together.</h3>
                   <p className="text-secondary caption" style={{ marginBottom: '1rem' }}>
-                    Kramaniti helps businesses close the gap between how they work and how they communicate.
+                    Kramaniti closes the gap between how a business works and how it communicates.
                   </p>
                   <p className="text-secondary caption">
-                    We begin with the current workflow, identify what matters most, build practical support, and turn that clarity into a stronger message.
+                    We begin with the current workflow, find what matters most, build practical support, and turn that clarity into a stronger message.
                   </p>
+                  <Link href="/#contact" className={styles.summaryLink}>Start with a workflow audit</Link>
                 </article>
               </div>
             </div>
@@ -233,10 +235,10 @@ export default function FounderPage() {
 
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className="micro-label">The Approach</span>
-              <h2>Strategy, systems, and communication.</h2>
+              <span className="micro-label">How the work moves</span>
+              <h2>Understand. Build. Communicate.</h2>
               <p className={styles.sectionLead}>
-                Kramaniti understands the work first, builds the right support, and then helps the business communicate its value clearly.
+                Understand the work first. Build the right support. Then communicate the value clearly.
               </p>
             </div>
 
@@ -269,7 +271,7 @@ export default function FounderPage() {
 
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-<span className="micro-label">Team</span>
+              <span className="micro-label">Team</span>
               <h2>A small, focused team.</h2>
               <p className={styles.sectionLead}>
                 Kramaniti is founder-led. Strategy, system design, and client delivery stay close to Karan from the first review to the final handover.
@@ -277,25 +279,25 @@ export default function FounderPage() {
             </div>
 
             <div className={styles.proofGrid}>
-{advisoryTeam.map((member) => (
-<article key={member.name} className={styles.proofCard}>
-<div className={styles.teamPhotoFrame}>
-{member.image ? (
-<Image
-src={member.image}
-alt={member.name}
-fill
-sizes="(min-width: 900px) 320px, 100vw"
-className={styles.teamPhoto}
-/>
-) : (
-<span className={styles.teamInitials}>{member.initials}</span>
-)}
-</div>
-<span className="micro-label">{member.role}</span>
-<h3>{member.name}</h3>
-<p className="text-secondary caption">{member.copy}</p>
-</article>
+              {advisoryTeam.map((member) => (
+                <article key={member.name} className={styles.proofCard}>
+                  <div className={styles.teamPhotoFrame}>
+                    {member.image ? (
+                      <Image
+                        src={member.image}
+                        alt={member.name}
+                        fill
+                        sizes="(min-width: 900px) 320px, 100vw"
+                        className={styles.teamPhoto}
+                      />
+                    ) : (
+                      <span className={styles.teamInitials}>{member.initials}</span>
+                    )}
+                  </div>
+                  <span className="micro-label">{member.role}</span>
+                  <h3>{member.name}</h3>
+                  <p className="text-secondary caption">{member.copy}</p>
+                </article>
               ))}
             </div>
           </div>
@@ -309,8 +311,8 @@ className={styles.teamPhoto}
 
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className="micro-label">Working Style</span>
-              <h2>The principles behind the work.</h2>
+              <span className="micro-label">Working principles</span>
+              <h2>Simple rules for useful work.</h2>
               <p className={styles.sectionLead}>
                 Every engagement aims to make the business easier to run and easier to understand.
               </p>

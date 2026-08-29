@@ -7,32 +7,32 @@ import { KramanitiOrb } from '../ui/KramanitiOrb';
 
 const steps = [
   {
-    title: 'Diagnose',
-    copy: 'Map current-state workflows and identify operational friction.'
+    title: 'Understand',
+    copy: 'See how the work actually happens today.'
   },
   {
-    title: 'Prioritize',
-    copy: 'Select the highest-impact bottleneck to resolve first.'
+    title: 'Find the bottleneck',
+    copy: 'Choose the one delay, handoff, or decision worth fixing first.'
   },
   {
-    title: 'Architect',
-    copy: 'Design the most effective, minimal-complexity system.'
+    title: 'Design',
+    copy: 'Shape the simplest useful system around the real work.'
   },
   {
-    title: 'Implement',
-    copy: 'Build the customized workflow, tools, and documentation.'
+    title: 'Build',
+    copy: 'Create the workflow, tools, and clear instructions.'
   },
   {
-    title: 'Enable',
-    copy: 'Guide the team through adoption with clear operating rules.'
+    title: 'Put it into use',
+    copy: 'Help the team use it, review it, and know when to step in.'
   },
   {
-    title: 'Articulate',
-    copy: 'Translate the newfound clarity into a stronger market presence.'
+    title: 'Communicate',
+    copy: 'Explain the value in language customers can understand.'
   },
   {
-    title: 'Iterate',
-    copy: 'Monitor performance, refine processes, and eliminate inefficiencies.'
+    title: 'Improve',
+    copy: 'Learn from real use and make the system better over time.'
   }
 ];
 
@@ -49,8 +49,8 @@ export function Workflows() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">Process</span>
-          <AnimatedHeading isVisible={isVisible}>A first-principles approach to workflow design.</AnimatedHeading>
-          <p className="text-secondary">We start by analyzing your current operational realities—not by forcing a predefined toolset.</p>
+          <AnimatedHeading isVisible={isVisible}>A clear path from stuck work to a useful system.</AnimatedHeading>
+          <p className="text-secondary">We start with how the work really happens, not with a tool we want to sell.</p>
         </div>
 
         <div className={`${styles.flowShell} ${isVisible ? styles.visible : ''}`}>
@@ -60,7 +60,7 @@ export function Workflows() {
                 <KramanitiOrb state="listening" size={20} paused={!isVisible} />
                 <span className="micro-label">Input</span>
               </span>
-              <span className={styles.summaryValue}>Current Workflow</span>
+              <span className={styles.summaryValue}>How work happens now</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
@@ -68,7 +68,7 @@ export function Workflows() {
                 <KramanitiOrb state="solving" size={20} paused={!isVisible} />
                 <span className="micro-label">Process</span>
               </span>
-              <span className={styles.summaryValue}>Practical Build</span>
+              <span className={styles.summaryValue}>Fix what matters</span>
             </div>
             <div className={styles.summaryDivider}></div>
             <div className={styles.summaryItem}>
@@ -76,7 +76,7 @@ export function Workflows() {
                 <KramanitiOrb state="composing" size={20} paused={!isVisible} />
                 <span className="micro-label">Output</span>
               </span>
-              <span className={styles.summaryValue}>Clearer Work</span>
+              <span className={styles.summaryValue}>Clearer work and communication</span>
             </div>
           </div>
 
@@ -118,9 +118,9 @@ export function Workflows() {
               <button 
                 className={styles.revealButton} 
                 onClick={() => setIsExpanded(true)}
-                aria-label="Reveal full process steps"
+                aria-label="Show all seven process steps"
               >
-                <span>See the Full Process</span>
+                <span>See all seven steps</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.chevronIcon}>
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>

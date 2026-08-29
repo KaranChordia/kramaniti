@@ -13,23 +13,23 @@ const services = [
   {
     coordinate: '01',
     title: 'Foundation Strategy',
-    outcome: 'Clarity before implementation.',
+    outcome: 'Understand the work before building.',
     description:
-      'Define the real constraint, align the decision, and establish the signal that should guide everything built after it.',
+      'Find the real bottleneck, decide what matters most, and choose a clear first step.',
   },
   {
     coordinate: '02',
     title: 'Systems Engineering',
-    outcome: 'Infrastructure that carries the work.',
+    outcome: 'Build practical support around the work.',
     description:
-      'Translate the chosen workflow into practical tools, handoffs, review points, and operating documentation.',
+      'Turn the chosen workflow into useful tools, clear handoffs, review points, and simple instructions.',
   },
   {
     coordinate: '03',
     title: 'Complete Lifecycle Retainer',
-    outcome: 'One connected growth system.',
+    outcome: 'Keep the system and communication improving.',
     description:
-      'Keep strategy, systems, adoption, and content improving together while human judgment remains visible.',
+      'Keep the work, AI support, team adoption, and communication moving together while people stay in control.',
   },
 ] as const;
 
@@ -381,8 +381,8 @@ export function KramanitiExperience() {
         <div className={styles.thresholdGrid}>
           <div className={styles.thresholdCopy}>
             <div className={styles.coordinate}><span>01</span> Signal corridor</div>
-            <h1 id="experience-title">Enter the system</h1>
-            <p className={styles.modeNote}>Experience mode — no account created</p>
+            <h1 id="experience-title">Follow the work from problem to system.</h1>
+            <p className={styles.modeNote}>A guided view. Nothing is saved.</p>
 
             <form className={styles.entryForm} onSubmit={beginJourney}>
               <label>
@@ -396,23 +396,23 @@ export function KramanitiExperience() {
                 />
               </label>
               <label>
-                <span>What needs clarity?</span>
+                <span>What feels harder than it should?</span>
                 <input
                   value={intent}
                   onChange={(event) => setIntent(event.target.value)}
                   onFocus={() => setThresholdState('focus')}
                   onBlur={() => setThresholdState('dormant')}
-                  placeholder="A workflow, decision, or growth constraint"
+                  placeholder="A workflow, handoff, follow-up, or decision"
                 />
               </label>
 
               <button type="submit" className={styles.primaryAction}>
-                <span>Enter the system</span>
+                <span>Start the journey</span>
                 <ArrowRight size={18} aria-hidden="true" />
               </button>
 
               <button type="button" className={styles.textAction} onClick={() => beginJourney()}>
-                Explore without personalising
+                Explore without adding context
               </button>
             </form>
           </div>
@@ -442,7 +442,7 @@ export function KramanitiExperience() {
 
         {journeyStarted ? (
           <button type="button" className={styles.continueCue} onClick={() => moveTo('services')}>
-            <span>Follow the signal</span>
+            <span>See the next step</span>
             <ArrowDown size={16} aria-hidden="true" />
           </button>
         ) : null}
@@ -461,9 +461,9 @@ export function KramanitiExperience() {
             <div className={styles.sectionFrame}>
               <div className={styles.sectionIntro}>
                 <div className={styles.coordinate}><span>02</span> Services</div>
-                <h2 id="services-title">Built on a shared foundation.</h2>
+                <h2 id="services-title">Three ways to make the work clearer.</h2>
                 <p>
-                  Strategy, systems, and continuous improvement move as one signal—not as disconnected handoffs.
+                  Start with a clear plan, build practical support, or keep the whole system improving over time.
                 </p>
                 <div className={styles.visitorReadout}>
                   <span>Current context</span>
@@ -541,12 +541,12 @@ export function KramanitiExperience() {
             <div className={styles.sectionFrame}>
               <div className={styles.sectionIntro}>
                 <div className={styles.coordinate}><span>03</span> Insights</div>
-                <h2 id="insights-title">Evidence before decoration.</h2>
+                <h2 id="insights-title">Ideas grounded in real work.</h2>
                 <p>
-                  Ideas, field notes, and operating patterns illuminate only when they clarify the decision in focus.
+                  Practical notes on where work breaks, what to build, and how to keep people in control.
                 </p>
                 <Link href="/insights" className={styles.inlineLink}>
-                  Explore all insights <ArrowRight size={16} aria-hidden="true" />
+                  Read all insights <ArrowRight size={16} aria-hidden="true" />
                 </Link>
               </div>
 
@@ -601,7 +601,7 @@ export function KramanitiExperience() {
                   <h3>{insightSignals[activeInsight].title}</h3>
                   <p>{insightSignals[activeInsight].summary}</p>
                   <Link href={`/insights/${insightSignals[activeInsight].slug}`}>
-                    Read insight <ArrowRight size={17} aria-hidden="true" />
+                    Read the article <ArrowRight size={17} aria-hidden="true" />
                   </Link>
                 </article>
               </div>
@@ -622,14 +622,14 @@ export function KramanitiExperience() {
             </div>
             <div className={styles.auditCopy}>
               <div className={styles.coordinate}><span>Next step</span> Complete</div>
-              <h2 id="audit-title">Move from signal to system.</h2>
+              <h2 id="audit-title">Start with the workflow that matters most.</h2>
             </div>
             <div className={styles.auditAction}>
               <p>
-                Get a senior-led review of your current workflow, the evidence around it, and the smallest useful path forward.
+                We will look at how the work happens now, where it gets stuck, and what would make a useful first change.
               </p>
               <Link href="/#contact" className={styles.primaryAction}>
-                <span>Book an AI Workflow Audit</span>
+                <span>Start with a workflow audit</span>
                 <CornerDownRight size={18} aria-hidden="true" />
               </Link>
             </div>
@@ -637,7 +637,7 @@ export function KramanitiExperience() {
 
           <footer className={styles.experienceFooter}>
             <span>Kramaniti · Logic in sequence</span>
-            <Link href="/">Return to the information-led website</Link>
+            <Link href="/">Back to the main website</Link>
           </footer>
         </>
       ) : null}

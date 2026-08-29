@@ -21,6 +21,17 @@ const categoryFilters: CategoryFilter[] = [
   'Spatial',
 ];
 
+const categoryDescriptions: Record<CategoryFilter, string> = {
+  All: 'Start with the work: where it breaks, what to build, how people use it, and how to explain it.',
+  Strategy: 'Understand the problem before choosing a tool.',
+  Systems: 'Turn repeated work into a clear, usable system.',
+  Adoption: 'Help people use AI without losing judgment.',
+  Governance: 'Keep proof, review, and responsibility close to the work.',
+  Content: 'Communicate what the business can genuinely deliver.',
+  'AI Infrastructure': 'Build the technical layer around a real workflow.',
+  Spatial: 'Design digital experiences around clear user value.',
+};
+
 function getTimeValue(insight: ArchiveItem) {
   return new Date(insight.publishedAt ?? insight.date).getTime();
 }
@@ -34,15 +45,7 @@ function getDisplayMeta(insight: ArchiveItem) {
       month: 'short',
       year: 'numeric',
     }).format(publishedAt);
-    const time = new Intl.DateTimeFormat('en-IN', {
-      timeZone: 'Asia/Kolkata',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    }).format(publishedAt);
-
-    return `${date} · ${time} IST`;
+    return date;
   }
 
   return insight.date;
@@ -62,7 +65,7 @@ function InsightCard({ insight }: { insight: ArchiveItem }) {
           {insight.author ? `${insight.author} · ${insight.readTime}` : insight.readTime}
         </span>
         <span className={styles.readMore}>
-          Read Article
+          Read article
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
@@ -128,7 +131,7 @@ export function InsightsArchive({ insights }: { insights: ArchiveItem[] }) {
             </div>
             <h2>{featuredInsight.title}</h2>
             <p>{featuredInsight.summary}</p>
-            <span className={styles.featuredLink}>Read latest article</span>
+            <span className={styles.featuredLink}>Read the latest article</span>
           </Link>
         </section>
       ) : null}
@@ -140,7 +143,7 @@ export function InsightsArchive({ insights }: { insights: ArchiveItem[] }) {
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search title, topic, or summary"
+            placeholder="Search by question or topic"
             aria-label="Search insights"
           />
         </div>
@@ -167,6 +170,8 @@ export function InsightsArchive({ insights }: { insights: ArchiveItem[] }) {
           </button>
         ))}
       </div>
+
+      <p className={styles.categoryDescription}>{categoryDescriptions[activeCategory]}</p>
 
       <div className={styles.resultsHeader}>
         <span>{resultLabel}</span>

@@ -8,7 +8,7 @@ import styles from './Work.module.css';
 export const metadata: Metadata = {
   title: 'Selected Work | Kramaniti',
   description:
-    'Selected Kramaniti work across business strategy, practical systems, and clear communication.',
+    'See how Kramaniti understands the work, builds practical systems, and communicates the value clearly.',
   alternates: {
     canonical: absoluteUrl('/work/'),
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: 'Selected Work | Kramaniti',
     description:
-      'A folder-style view of selected Kramaniti work across internal systems, product strategy, content, and public-facing digital presence.',
+      'Selected Kramaniti work across workflow clarity, practical systems, and communication.',
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'Selected Work | Kramaniti',
     description:
-      'Selected Kramaniti work across strategy, systems, workflow infrastructure, and content.',
+      'Selected work that shows how Kramaniti moves from a real problem to a useful system and clearer communication.',
     images: [absoluteUrl(DEFAULT_OG_IMAGE)],
   },
 };
@@ -41,18 +41,18 @@ const workFolders = [
   {
     title: 'Nexocean',
     href: '/work/nexocean',
-    labels: ['Recruitment operations', 'Internal tools', 'Brand content'],
-    copy: 'A five-month contract focused on recruiter tools, practical AI support, and brand content.',
-    footer: 'Open Nexocean folder',
+    labels: ['Recruitment work', 'Internal tools', 'Communication'],
+    copy: 'A five-month contract focused on clearer recruiter workflows, practical AI support, and brand communication.',
+    footer: 'View Nexocean work',
     status: 'Selected work',
   },
   {
     title: 'Maitri',
     href: '/work/maitri',
-    labels: ['Consumer brand', 'Product strategy', 'Content systems'],
-    copy: 'An ongoing engagement shaping a story-led companion doll world through product strategy, validation, content, and a live pre-launch demo.',
-    footer: 'Open Maitri folder',
-    status: 'Work in progress',
+    labels: ['Consumer brand', 'Product direction', 'Communication'],
+    copy: 'Active foundation work shaping a story-led companion doll world through product direction, validation, content, and a live demo.',
+    footer: 'View Maitri work',
+    status: 'Active work',
   },
 ];
 
@@ -63,7 +63,7 @@ export default function WorkIndexPage() {
     name: 'Kramaniti selected work',
     url: absoluteUrl('/work/'),
     description:
-      'A selected-work index for Kramaniti projects across strategy, systems, content, and brand growth.',
+      'Selected Kramaniti work across workflow clarity, practical systems, and communication.',
     isPartOf: {
       '@type': 'WebSite',
       name: SITE_NAME,
@@ -85,9 +85,9 @@ export default function WorkIndexPage() {
           <div className={styles.container}>
             <div className={styles.heroCopy}>
               <span className={styles.eyebrow}>Selected Work</span>
-              <h1>Selected work across strategy, systems, and communication.</h1>
+              <h1>See how clearer work becomes a useful system.</h1>
               <p className={styles.lead}>
-                See how Kramaniti turns complex business and product challenges into clear plans, practical systems, and stronger public experiences.
+                Each project starts with the real work: what matters, where it gets stuck, what should be built, and how the value should be explained.
               </p>
             </div>
           </div>

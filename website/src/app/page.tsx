@@ -10,7 +10,7 @@ export default function Home() {
     logo: absoluteUrl(DEFAULT_OG_IMAGE),
     email: 'ask@kramaniti.com',
     description:
-      'Kramaniti helps businesses improve their workflows, build practical AI systems, and communicate their value clearly.',
+      'Kramaniti finds where work gets stuck, builds practical AI systems where they help, and turns that clarity into stronger communication.',
     founder: {
       '@type': 'Person',
       name: 'Karan Chordia',
@@ -20,7 +20,7 @@ export default function Home() {
       'practical AI systems',
       'workflow strategy',
       'business operations',
-      'brand presence',
+      'business communication',
       'cinematic content',
     ],
   };
@@ -30,7 +30,7 @@ export default function Home() {
     name: SITE_NAME,
     url: absoluteUrl('/'),
     description:
-      'Clear strategy, practical AI systems, and stronger business communication.',
+      'Make your business easier to run and easier to understand.',
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

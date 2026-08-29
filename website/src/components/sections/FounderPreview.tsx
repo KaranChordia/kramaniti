@@ -29,15 +29,15 @@ export function FounderPreview() {
 
         <div className={styles.content}>
           <span className="micro-label">Founder-led</span>
-          <AnimatedHeading isVisible={isVisible}>Built by a strategist who understands systems and storytelling.</AnimatedHeading>
+          <AnimatedHeading isVisible={isVisible}>Built by someone who sees the work and the story together.</AnimatedHeading>
           <p className="text-secondary">
-            Karan Chordia&apos;s background spans commercial media, workflow design, and practical AI systems. That experience shapes a simple belief: how a business communicates should reflect how it actually creates value.
+            Karan Chordia&apos;s background spans commercial media, workflow design, and practical AI systems. It shaped a simple belief: a business should communicate from what it genuinely does well.
           </p>
           <p className="text-secondary">
-            Kramaniti therefore begins with the business, builds only what is useful, and communicates the result clearly.
+            Kramaniti starts with the work, builds only what helps, and communicates the result clearly.
           </p>
           <Link href="/founder" className={styles.link}>
-            Meet Karan
+            Meet the founder
           </Link>
         </div>
       </div>

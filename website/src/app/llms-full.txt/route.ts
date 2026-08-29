@@ -23,7 +23,7 @@ export function GET() {
 
 ## Brand Positioning
 
-Kramaniti is a first-principles AI systems partner that connects strategy, operational infrastructure, and cinematic content into one brand growth pipeline.
+Kramaniti makes businesses easier to run and easier to understand. It is a first-principles AI systems partner that connects clearer work, practical systems, and stronger communication.
 
 The default narrative sequence is:
 
@@ -31,29 +31,31 @@ The default narrative sequence is:
 2. Systems before scale.
 3. Content after clarity.
 
-Kramaniti helps brands turn scattered operations, unclear AI ideas, and inconsistent content into one connected system for growth. AI adoption is treated as a human-collaborative design problem: some workflow steps can be automated, some should be AI-assisted, and some must stay human-led.
+Kramaniti finds where work gets stuck, fixes the workflow that matters most, uses AI where it genuinely helps, and keeps people in control. Communication comes from the resulting clarity.
 
 ## Core Service Architecture
 
 ### Foundation Strategy
 
-For brands that need clarity before implementation. Typical outputs include business workflow audits, business deep-dives, AI readiness reviews, brand and operations diagnosis, workflow opportunity maps, implementation roadmaps, and prototype specifications.
+For teams that need to see what is slowing the work before choosing a solution. Typical outputs include a workflow audit, a clear bottleneck, a people-and-AI boundary, and a practical next-step plan.
 
 ### Systems Engineering
 
-For brands ready to turn workflows into practical infrastructure. Typical outputs include custom workflows, practical AI tools, internal systems, CRM/process integrations, content repurposing systems, automation pipelines, API-based workflow integrations, team handoff documentation, adoption guidance, override rules, and human review checkpoints.
+For teams that know which workflow to improve. Typical outputs include a clearer workflow, practical AI support, internal tools, connections between existing tools, simple instructions, and human review points.
 
 ### Complete Lifecycle Retainer
 
-For brands that want strategy, systems, and content working together continuously. Typical outputs include system maintenance, adoption support, content production, monthly optimization, workflow improvements, and brand communication support.
+For teams that want their systems, adoption, and communication to keep improving together. Typical outputs include system care, workflow improvements, team support, communication direction, and regular reviews.
 
 ## Public Pages
 
 - [Home](${absoluteUrl('/')}): The main public positioning page for Kramaniti.
-- [Clarity Engine](${absoluteUrl('/clarity-engine/')}): Diagnostic experience for clarifying strategy, systems, AI boundaries, and presence.
+- [Clarity Engine](${absoluteUrl('/clarity-engine/')}): A focused way to understand one piece of work before choosing tools.
 - [Insights](${absoluteUrl('/insights/')}): Searchable Insights archive.
 - [Founder](${absoluteUrl('/founder/')}): Founder profile and operating principles.
-- [Nexocean Selected Work](${absoluteUrl('/work/nexocean/')}): Selected work page about internal recruiter workflow tools and brand content from a five-month Nexocean contract engagement.
+- [Selected Work](${absoluteUrl('/work/')}): Public examples of Kramaniti work.
+- [Maitri Selected Work](${absoluteUrl('/work/maitri/')}): Active foundation work for a story-led companion doll world.
+- [Nexocean Selected Work](${absoluteUrl('/work/nexocean/')}): Practical recruiter tools and brand communication from a five-month contract.
 
 ## Public-Safe Claim Notes
 
@@ -61,7 +63,7 @@ For brands that want strategy, systems, and content working together continuousl
 - Do not invent clients, testimonials, metrics, logos, case studies, or outcomes.
 - Public credibility should stay category-level unless proof and permission are verified.
 - WeWork India, Hyatt Centric, and Nexocean may only be referenced as softened text-only selected experience unless permissions change.
-- Nexocean is a five-month contract engagement focused on internal automation tools and brand content.
+- Nexocean is a five-month contract engagement focused on practical recruiter tools and brand communication.
 
 ## Insights Archive
 
@@ -75,7 +77,7 @@ ${insightRows}
 
 ## Non-Primary Public Surfaces
 
-Studio, KCS, Design Studio, and generated Clarity Blueprint routes are workbench or output surfaces. They are not intended to define Kramaniti's primary public search positioning.
+Studio, KCS, Design Studio, and generated clarity-plan routes are workbench or output surfaces. They are not intended to define Kramaniti's primary public search positioning.
 `;
 
   return new Response(body, {
@@ -84,4 +86,3 @@ Studio, KCS, Design Studio, and generated Clarity Blueprint routes are workbench
     },
   });
 }
-

@@ -400,6 +400,22 @@
   max-width: 60ch;
 }
 
+.summaryLink {
+  display: inline-flex;
+  margin-top: 20px;
+  color: var(--brand-gold, #c9a84c);
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.summaryLink:hover,
+.summaryLink:focus-visible {
+  color: #f5e6b7;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .sectionHeader {
   max-width: 760px;
   margin: 0 auto 34px;

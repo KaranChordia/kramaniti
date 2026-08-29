@@ -27,8 +27,8 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
-  title: "Kramaniti | Practical AI Systems for Business",
-  description: "Kramaniti helps businesses improve their workflows, build practical AI systems, and communicate their value clearly.",
+  title: "Kramaniti | Make Your Business Easier to Run",
+  description: "Kramaniti finds where work gets stuck, builds practical AI systems where they help, and turns that clarity into stronger communication.",
   alternates: {
     canonical: "/",
   },
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Kramaniti | Practical AI Systems for Business",
-    description: "Clear strategy, practical AI systems, and stronger business communication.",
+    title: "Kramaniti | Make Your Business Easier to Run",
+    description: "Understand the work, fix the workflow that matters, use AI where it helps, and communicate the value clearly.",
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
@@ -49,8 +49,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Kramaniti | Practical AI Systems for Business",
-    description: "Clear strategy, practical AI systems, and stronger business communication.",
+    title: "Kramaniti | Make Your Business Easier to Run",
+    description: "Understand the work, fix the workflow that matters, use AI where it helps, and communicate the value clearly.",
     images: [absoluteUrl(DEFAULT_OG_IMAGE)],
   },
   manifest: "/manifest.webmanifest",

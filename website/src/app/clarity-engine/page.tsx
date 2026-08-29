@@ -84,7 +84,7 @@ type ClaritySquareHandoff = {
 };
 
 const SAMPLE_ANSWER =
-  'We have a founder-led business with strong expertise, but the offer, workflow, and content system feel scattered. I want to clarify what should happen first before adding more AI tools.';
+  'Important work is spread across messages, spreadsheets, and people’s memory. Follow-ups get missed, and I want to know what to fix before adding another AI tool.';
 
 const DIAGNOSTIC_SEQUENCE: QuestionId[] = [
   'phase1_clarity_goal',
@@ -103,8 +103,8 @@ const createInitialSession = (): SessionState => {
     assistantReply: initial.assistantReply,
     currentQuestion: initial.nextQuestion,
     currentQuestionKey: initial.nextQuestionKey,
-    currentQuestionLabel: initial.nextQuestionLabel || 'Core Question',
-    currentQuestionPlaceholder: initial.nextQuestionPlaceholder || 'Provide your thoughts...',
+    currentQuestionLabel: initial.nextQuestionLabel || 'Starting Point',
+    currentQuestionPlaceholder: initial.nextQuestionPlaceholder || 'Tell us what is happening now...',
     transcript: [
       {
         role: 'assistant',
@@ -196,10 +196,10 @@ const createSessionFromSquareHandoff = (handoff: ClaritySquareHandoff): SessionS
     ...base,
     answers,
     assistantReply:
-      'I have the Clarity Square context, so we do not need to repeat the starting point. Next, I need the current workflow so the diagnosis can separate strategy, systems, and proof-safe presence.',
+      'I have the Clarity Square context, so we do not need to repeat the starting point. Next, I need to understand how the work happens today.',
     currentQuestion: nextQuestion.nextQuestion,
     currentQuestionKey: 'phase3_current_workflow',
-    currentQuestionLabel: nextQuestion.nextQuestionLabel || 'Current Path',
+    currentQuestionLabel: nextQuestion.nextQuestionLabel || 'How It Works Now',
     currentQuestionPlaceholder: nextQuestion.nextQuestionPlaceholder || 'Walk through the current path, even if it is messy...',
     transcript: [
       ...base.transcript,
@@ -211,29 +211,29 @@ const createSessionFromSquareHandoff = (handoff: ClaritySquareHandoff): SessionS
       {
         role: 'assistant',
         content:
-          'I have the Clarity Square context, so we do not need to repeat the starting point. Next, I need the current workflow so the diagnosis can separate strategy, systems, and proof-safe presence.',
+          'I have the Clarity Square context, so we do not need to repeat the starting point. Next, I need to understand how the work happens today.',
         createdAt: new Date().toISOString(),
       },
     ],
     contextLog: [
-      cleanHandoffValue(handoff.summary) || 'Clarity Square handoff loaded into the diagnostic session.',
+      cleanHandoffValue(handoff.summary) || 'Clarity Square context added to this session.',
       cleanHandoffValue(handoff.blocker) ? `Current blocker: ${cleanHandoffValue(handoff.blocker)}` : '',
       cleanHandoffValue(handoff.outcome) ? `Desired outcome: ${cleanHandoffValue(handoff.outcome)}` : '',
     ].filter(Boolean),
     synthesis: {
       completion: audienceAnswer ? 34 : 17,
-      statusLabel: 'Square context loaded',
+      statusLabel: 'Context ready',
       clarityContext:
         cleanHandoffValue(handoff.summary) ||
-        'The starting intent from Clarity Square is loaded. The next step is to map workflow reality.',
+        'Your starting point from Clarity Square is ready. The next step is to see how the work happens today.',
       workflowDirection:
-        'The Engine should now map the current path, then identify friction, human judgment boundaries, and the proof direction.',
+        'Next, we will map the current path, find the friction, separate people-led decisions from AI support, and clarify what should be communicated.',
       presenceIdeas: [
-        cleanHandoffValue(handoff.outcome) || 'Turn the clarified direction into one proof-safe public artifact.',
+        cleanHandoffValue(handoff.outcome) || 'Turn the clarified direction into one public example grounded in real work.',
         'Show the before-state, decision route, and next move without unsupported claims.',
-        'Let content follow the clarified workflow instead of leading the strategy.',
+        'Let communication follow the clarified work.',
       ],
-      signalTrail: ['Clarity Square intake', 'Strategy before tools', 'Systems before scale'],
+      signalTrail: ['Starting point', 'How work happens', 'What to fix'],
       focusTags: ['square', handoff.track, 'private'],
     },
     source: 'local',
@@ -380,7 +380,7 @@ export default function ClarityEnginePage() {
   const [draft, setDraft] = useState('');
   const [streamedAssistant, setStreamedAssistant] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
-  const [statusText, setStatusText] = useState('Awaiting your signal.');
+  const [statusText, setStatusText] = useState('Ready when you are.');
   const [stagePhase, setStagePhase] = useState<'idle' | 'exit' | 'enter'>('idle');
   const [isInputActive, setIsInputActive] = useState(false);
   const [isTypingPulse, setIsTypingPulse] = useState(false);
@@ -418,7 +418,7 @@ export default function ClarityEnginePage() {
       const squareHandoff = readClaritySquareHandoff();
       if (squareHandoff) {
         setSession(createSessionFromSquareHandoff(squareHandoff));
-        setStatusText('Clarity Square context loaded.');
+        setStatusText('Clarity Square context ready.');
         setIsInputActive(true);
       } else {
         setSession(readStoredSession());
@@ -496,7 +496,7 @@ export default function ClarityEnginePage() {
             currentQuestion: envelope.nextQuestion,
             currentQuestionKey: envelope.nextQuestionKey,
             currentQuestionLabel: envelope.nextQuestionLabel || 'Next Step',
-            currentQuestionPlaceholder: envelope.nextQuestionPlaceholder || 'Provide your thoughts...',
+            currentQuestionPlaceholder: envelope.nextQuestionPlaceholder || 'Tell us what is happening now...',
             transcript: [...nextTranscript, assistantTurn],
             contextLog: newContextLog,
             aiTasks: prev.aiTasks,
@@ -517,11 +517,7 @@ export default function ClarityEnginePage() {
       });
 
       setStagePhase('enter');
-      setStatusText(
-        envelope.nextQuestionKey === 'complete'
-          ? 'Blueprint signal is ready.'
-          : 'Next question ready.'
-      );
+      setStatusText(envelope.nextQuestionKey === 'complete' ? 'Your clarity plan is ready.' : 'Next question ready.');
 
       const settleTimer = window.setTimeout(() => {
         setStagePhase('idle');
@@ -607,7 +603,7 @@ export default function ClarityEnginePage() {
     setDraft('');
     setStreamedAssistant('');
     setIsStreaming(true);
-    setStatusText('Listening through the answer...');
+    setStatusText('Thinking through your answer...');
     setIsInputActive(false);
 
     try {
@@ -644,16 +640,16 @@ export default function ClarityEnginePage() {
             nextQKey === 'complete'
               ? 100
               : Math.min(95, Math.round(((currentIndex + 1) / DIAGNOSTIC_SEQUENCE.length) * 100)),
-          statusLabel: nextQKey === 'complete' ? 'Blueprint ready' : currentIndex >= 2 ? 'Opportunity mapping' : 'Pattern recognition',
-          clarityContext: 'Demo signal is moving through Kramaniti’s diagnostic sequence.',
-          workflowDirection: 'The route is being mapped from business clarity into workflow reality and AI boundaries.',
+          statusLabel: nextQKey === 'complete' ? 'Clarity plan ready' : currentIndex >= 2 ? 'Finding the next step' : 'Understanding the work',
+          clarityContext: 'The example is moving through the Kramaniti clarity sequence.',
+          workflowDirection: 'The path is moving from the business problem into the real workflow and the people-plus-AI boundary.',
           presenceIdeas: [
             'Make the operating change visible.',
-            'Use proof-safe examples instead of broad claims.',
-            'Let content follow the clarified workflow.',
+            'Use examples grounded in real work instead of broad claims.',
+            'Let communication follow the clarified work.',
           ],
-          signalTrail: ['Strategy before tools', 'Systems before scale', 'Content after clarity'],
-          focusTags: ['diagnostic', 'workflow', 'presence'],
+          signalTrail: ['Understand the work', 'Build what helps', 'Communicate clearly'],
+          focusTags: ['clarity', 'workflow', 'communication'],
           source: 'local'
         };
       } else {
@@ -819,7 +815,7 @@ export default function ClarityEnginePage() {
             style={{ borderColor: 'rgba(201, 168, 76, 0.4)', color: '#C9A84C' }}
           >
             <Wand2 size={14} />
-            Load Sample
+            See an Example
           </button>
           <div className={styles.controlDock} onClick={playClick}>
             <button
@@ -855,7 +851,7 @@ export default function ClarityEnginePage() {
               <button
                 className={`${styles.actionBtn} ${styles.synthesisBtn} ${completion > 10 ? styles.synthesisBtnPulse : ''}`}
               >
-                Synthesis ({completion}%)
+                Clarity ({completion}%)
               </button>
               </>
             )}
@@ -916,7 +912,7 @@ export default function ClarityEnginePage() {
                       >
                         <span className={styles.signalButtonContent}>
                           <ArrowUp className={styles.signalButtonIcon} size={22} aria-hidden="true" />
-                          <AnimatedButtonLabel text="Provide Signal" />
+                          <AnimatedButtonLabel text="Answer This" />
                         </span>
                       </button>
                     )}
@@ -936,7 +932,7 @@ export default function ClarityEnginePage() {
                                 void submitAnswer();
                               }
                             }}
-                            placeholder={session.currentQuestionPlaceholder || 'Provide your thoughts...'}
+                            placeholder={session.currentQuestionPlaceholder || 'Tell us what is happening now...'}
                           />
                           <div className={styles.inputFooter}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -945,10 +941,10 @@ export default function ClarityEnginePage() {
                             </div>
                             <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
                               <button className={styles.actionBtn} onClick={(e) => { e.stopPropagation(); playClick(); seedExample(); }}>
-                                Load example
+                                Use an example
                               </button>
                               <button className={styles.submitBtn} onClick={(e) => { e.stopPropagation(); playClick(); void submitAnswer(); }} disabled={isStreaming || !draft.trim()}>
-                                {isStreaming ? 'Mapping...' : 'Submit'}
+                                {isStreaming ? 'Thinking...' : 'Continue'}
                                 {isStreaming ? <Loader2 size={12} className={styles.spin} /> : null}
                               </button>
                             </div>
@@ -998,7 +994,7 @@ export default function ClarityEnginePage() {
                   >
                     <ArrowRight className={`${styles.blueprintButtonArrow} ${styles.blueprintButtonArrowOne}`} size={24} aria-hidden="true" />
                     <span className={styles.blueprintButtonCircle} aria-hidden="true" />
-                    <span className={styles.blueprintButtonText}>Generate Blueprint</span>
+                    <span className={styles.blueprintButtonText}>See My Clarity Plan</span>
                     <ArrowRight className={`${styles.blueprintButtonArrow} ${styles.blueprintButtonArrowTwo}`} size={24} aria-hidden="true" />
                   </button>
                 </div>
@@ -1011,7 +1007,7 @@ export default function ClarityEnginePage() {
         {/* Right Column: Context Gathering */}
         <aside className={styles.contextSidebar}>
           <div className={styles.contextHeader}>
-            <span className={styles.contextTitle}>Gathered Context</span>
+            <span className={styles.contextTitle}>What We Understand</span>
             <div className={styles.focusTags}>
               {session.synthesis.focusTags.map(tag => (
                 <span key={tag} className={styles.tagBadge}>{tag}</span>
@@ -1040,7 +1036,7 @@ export default function ClarityEnginePage() {
                   onClick={() => setIsTasksOpen(!isTasksOpen)}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span>AI Tasks ({session.aiTasks.length})</span>
+                    <span>Open Questions ({session.aiTasks.length})</span>
                   </div>
                   {isTasksOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </button>
@@ -1067,14 +1063,14 @@ export default function ClarityEnginePage() {
         <div className={styles.footerLeft}>
           <span className={styles.footerText}>
             <CornerDownLeft size={12} />
-            Your clarity stays private inside this session.
+            Your answers stay in this browser unless you choose to export or reset them.
           </span>
         </div>
         <div className={styles.footerRight}>
           {hasExport && (
             <button className={styles.actionBtn} onClick={() => exportBrief(session)}>
               <Download size={14} />
-              Export Brief
+              Export My Answers
             </button>
           )}
         </div>

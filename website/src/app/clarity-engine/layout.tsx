@@ -4,7 +4,7 @@ import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl } from '../../lib/seo';
 export const metadata: Metadata = {
   title: 'Clarity Engine | Kramaniti',
   description:
-    'A Kramaniti diagnostic experience for founders and teams who want clearer strategy, workflows, AI boundaries, and public presence before adding more tools.',
+    'Think through one piece of work: what matters, where it gets stuck, where AI can help, and what people should decide.',
   alternates: {
     canonical: absoluteUrl('/clarity-engine/'),
   },
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: 'Clarity Engine | Kramaniti',
     description:
-      'A diagnostic experience for clarifying strategy, workflows, AI boundaries, and public presence before adding more tools.',
+      'A focused way to understand the work, find the friction, use AI carefully, and make the next step clear.',
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'Clarity Engine | Kramaniti',
     description:
-      'Clarify strategy, workflows, AI boundaries, and public presence before adding more tools.',
+      'Understand the work, find the friction, and decide where AI can genuinely help.',
     images: [absoluteUrl(DEFAULT_OG_IMAGE)],
   },
 };
