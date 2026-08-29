@@ -32,6 +32,8 @@ This workspace is designed to be **human-readable** (for the founder, clients, a
 │   └── exports/               # PDF/deck/handoff exports
 ├── 09_reviews/                # Governance and log records
 ├── docs/                      # Implementation plans, setup notes, and cleanup audits
+├── mac-app/                   # Source-managed native macOS products
+│   └── kosh/                  # Local-first Kramaniti resource library
 ├── website/                   # Public Next.js website and integrated Studio
 ├── AGENTS.md                  # Global agent operating rules
 └── README.md                  # This file
@@ -69,6 +71,7 @@ Active app boundary:
 
 - `website/` is the only active web app in this repository.
 - Kramaniti Studio lives inside the website app at `website/src/app/studio/`.
+- `mac-app/kosh/` is the source-managed native macOS application; its Swift build and distribution output remain local artifacts.
 - Standalone prototype apps, generated build folders, and dependency folders should not be added at the repo root.
 - Local generated files such as `node_modules/`, `.next/`, `out/`, `next-env.d.ts`, `*.tsbuildinfo`, `.vercel/`, and `.DS_Store` are workspace artifacts, not source.
 
