@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-28T18:52:23.370Z",
+  "generatedAt": "2026-08-29T18:57:56.315Z",
   "privacy": "sanitized-metadata-only",
   "workspaces": [
     {
@@ -12,13 +12,13 @@
       "repositorySummary": {
         "repositoryLabel": "Kramaniti",
         "branch": "main",
-        "revision": "0b9ea372ae71",
+        "revision": "680a6cd37bd9",
         "dirty": true,
-        "dirtyFileCount": 21,
-        "trackedFileCount": 491,
-        "lastCommitAt": "2026-08-21T16:41:55+05:30",
-        "lastCommitSubject": "Publish the current website to production.",
-        "ahead": 0,
+        "dirtyFileCount": 1,
+        "trackedFileCount": 505,
+        "lastCommitAt": "2026-08-30T00:27:47+05:30",
+        "lastCommitSubject": "feat: simplify public website messaging",
+        "ahead": 4,
         "behind": 0,
         "itemCount": 1
       },
@@ -31,15 +31,15 @@
           "title": "Kramaniti repository",
           "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
           "visibility": "internal",
-          "sourceHash": "0b9ea372ae71",
+          "sourceHash": "680a6cd37bd9",
           "metadata": {
             "branch": "main",
             "dirty": true,
-            "dirtyFileCount": 21,
-            "trackedFileCount": 491,
-            "lastCommitAt": "2026-08-21T16:41:55+05:30",
-            "lastCommitSubject": "Publish the current website to production.",
-            "ahead": 0,
+            "dirtyFileCount": 1,
+            "trackedFileCount": 505,
+            "lastCommitAt": "2026-08-30T00:27:47+05:30",
+            "lastCommitSubject": "feat: simplify public website messaging",
+            "ahead": 4,
             "behind": 0
           }
         }
