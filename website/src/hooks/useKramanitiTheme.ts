@@ -14,13 +14,13 @@ export function useKramanitiTheme() {
     document.documentElement.setAttribute('data-theme', 'dark');
   }, []);
 
-  const setThemeMode = () => {
+  const setThemeMode = (newTheme: ThemeMode) => {
     const root = document.documentElement;
 
     root.setAttribute('data-theme-transitioning', 'true');
     root.removeAttribute('data-theme-settling');
-    root.setAttribute('data-theme', 'dark');
-    setTheme('dark');
+    root.setAttribute('data-theme', newTheme);
+    setTheme(newTheme);
 
     window.setTimeout(() => {
       root.removeAttribute('data-theme-transitioning');
@@ -33,7 +33,7 @@ export function useKramanitiTheme() {
   };
 
   const toggleTheme = () => {
-    setThemeMode();
+    setThemeMode(theme === 'dark' ? 'light' : 'dark');
   };
 
   return { theme, toggleTheme };

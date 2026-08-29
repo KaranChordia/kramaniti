@@ -10,7 +10,7 @@ export function LibraryLanding() {
     <main className={styles.page} data-disable-global-shockwave="true">
       <nav className={styles.floatingNav} aria-label="Kosh guide navigation">
         <Link href="/" className={styles.brand}>
-          <Image src="/assets/brand/kramaniti-kosh-mark.png" alt="" width={38} height={38} className={styles.brandMark} priority />
+          <Image src="/assets/brand/kramaniti-kosh-mark.png" alt="" width={52} height={52} className={styles.brandMark} priority />
           <strong>Kramaniti</strong><span>Kosh</span>
         </Link>
         <span className={styles.navLabel}>Guide</span>
