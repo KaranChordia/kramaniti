@@ -8,25 +8,23 @@ type HeroProps = { isActive?: boolean };
 
 const headlineLines = [
   [
-    { text: 'Make', index: 0 },
-    { text: 'your', index: 1 },
-    { text: 'business', index: 2 },
+    { text: 'We', index: 0 },
+    { text: 'make', index: 1 },
+    { text: 'your', index: 2 },
   ],
   [
-    { text: 'easier', index: 3, accent: true },
-    { text: 'to', index: 4 },
-    { text: 'run', index: 5 },
+    { text: 'business', index: 3 },
+    { text: 'clearer', index: 4, accent: true },
   ],
   [
+    { text: 'inside', index: 5 },
     { text: 'and', index: 6 },
-    { text: 'easier', index: 7, accent: true },
-    { text: 'to', index: 8 },
-    { text: 'understand.', index: 9 },
+    { text: 'out.', index: 7 },
   ],
 ] as const;
 
 const subheading =
-  'We help businesses work better, use AI where it matters, and communicate their value clearly.';
+  'We bring clarity to how work moves, automate the repetitive parts where it helps, and give your brand a more coherent way to communicate.';
 
 function revealWords(text: string, delay: number) {
   const words = text.split(' ');

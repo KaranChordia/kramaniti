@@ -96,15 +96,21 @@
 
 .brandName {
   width: fit-content;
-  margin: 0 auto clamp(24px, 3.2vh, 32px);
-  color: #f0d891;
+  margin: 0 auto clamp(22px, 2.6vh, 28px);
   font-family: var(--font-comfortaa), sans-serif;
-  font-size: clamp(20px, 1.55vw, 24px);
+  font-size: clamp(32px, 3vw, 46px);
   font-weight: 650;
   line-height: 1.2;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.025em;
   text-align: center;
-  text-shadow: 0 0 24px rgba(201, 168, 76, 0.24);
+}
+
+.brandName .revealWord {
+  color: transparent;
+  background: linear-gradient(102deg, #8f6c31 2%, #c9a84c 34%, #f0d891 56%, #c9a84c 82%, #997536 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 0 0 28px rgba(201, 168, 76, 0.22);
 }
 
 .headline {
@@ -291,6 +297,7 @@
 @media (max-width: 560px) {
   .heroSection { min-height: auto; }
   .container { width: min(100% - 34px, 520px); min-height: auto; padding: calc(120px + env(safe-area-inset-top)) 0 56px; }
+  .brandName { margin-bottom: 22px; font-size: clamp(28px, 9vw, 38px); }
   .headline { font-size: clamp(43px, 12.2vw, 56px); line-height: 1; letter-spacing: -0.048em; }
   .subheading { margin-top: 24px; font-size: 14px; line-height: 1.65; }
   .actions { align-items: stretch; flex-direction: column; gap: 10px; margin-top: 26px; }
