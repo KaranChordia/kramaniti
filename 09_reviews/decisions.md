@@ -851,3 +851,23 @@ This log registers the major strategic and structural decisions made during the 
     *   Rounded 8 px corners remain valid for ergonomic controls and functional containers.
     *   Public copy and diagrams remain proof-safe; do not invent clients, metrics, or outcomes.
     *   Formal print production values, alternate wordmark construction, and final approval cadence remain founder-approval items.
+
+### Decision 31: Establish the Kramaniti Library as a Public Learning and Download Surface
+*   **Date:** 2026-08-24
+*   **Area:** Public website, practical AI adoption, reusable operating patterns
+*   **Status:** First local prototype implemented (`[Recommendation]`)
+*   **Decision:** Add a two-route public Library inside the active `website/` app. `/library` is the information and orientation surface; `/library/workspace` is the dashboard-like catalogue for small downloadable Markdown starter templates for agents, skills, plugin evaluation, and human review.
+*   **Rationale:** The founder identified agents, skills, and plugins as a major near-term disruptive capability layer. Kramaniti can make the category legible by teaching a practical system: a role carries a bounded job, a skill supplies a repeatable method, a plugin connects a specific system, and a human owns consequential decisions. This extends the brand's adoption position without turning the public site into a generic tools directory.
+*   **Affected Files:**
+    *   `website/src/app/library/`
+    *   `website/src/lib/library/libraryData.ts`
+    *   `website/public/library/`
+    *   `website/src/components/layout/Navbar.tsx`
+    *   `website/src/app/sitemap.ts`
+    *   `website/src/app/llms.txt/route.ts`
+*   **Guardrails:**
+    *   The library remains provider-neutral and does not imply real agent execution, plugins, account access, or integrations.
+    *   No authentication or persistence is implied in the initial workspace. A future account layer may add saved resources and adapted patterns only after founder-approved product, data, and privacy decisions.
+    *   Every template preserves a clear input boundary, output contract, named owner, and human-review path where appropriate.
+    *   Do not publish a formal reuse license, contribution policy, warranties, client examples, or performance claims without founder approval.
+    *   Keep Blocks separate: Library teaches reusable patterns; Blocks owns future reusable workflow execution.

@@ -171,6 +171,25 @@ Flagged:
 - Add one detailed, verified case-study page once evidence and permission are cleared.
 - Review the insights archive separately so technical articles remain useful without shaping the homepage's first impression.
 
+## 10.0 Kramaniti Library
+
+2026-08-24 update: The Library has two complementary public routes: `/library` is the explanation and orientation surface; `/library/workspace` is the focused, dashboard-like catalogue for searching, inspecting, and downloading Markdown starter templates.
+
+[Recommendation] The Library is an education and adoption surface, not a promise of autonomous execution. The public information route uses a narrative explanation of the four layers: agent, skill, plugin, and review. The separate workspace gives functional containment to template selection. Each resource should make its input boundary, intended output, owner, and review point explicit. It should remain separate from Blocks: the Library helps a visitor begin with a reusable pattern; Blocks is the later internal workflow-execution workspace.
+
+Initial starter downloads:
+
+- Research & synthesis agent
+- Workflow diagnostic skill
+- Source-checking skill
+- Plugin evaluation guide
+- Agent brief template
+- Human review gate
+
+Account boundary: no account, login, saved-state, data collection, provider integration, or external actions exist in the initial version. A visible future `My Library` affordance communicates the planned direction without implying that authentication or persistence has been implemented.
+
+Public-release boundary: a founder-approved license and contribution policy are required before representing the downloads as reusable under specific legal terms. The initial files are static, plain Markdown.
+
 ## 10.1 Kramaniti Studio Agent OS
 
 2026-06-11 update: Kramaniti Studio now includes an Agent OS mode inside `/studio`.

@@ -16,6 +16,7 @@ Kramaniti is not an AI automation agency. The public method is strategy before t
 
 - [Home](${absoluteUrl('/')}): Kramaniti positioning, method, services, process, founder preview, and audit CTA.
 - [Clarity Engine](${absoluteUrl('/clarity-engine/')}): Interactive diagnostic experience for strategy, systems, AI boundaries, and presence clarity.
+- [Kramaniti Kosh](${absoluteUrl('/library/')}): An open treasury of starter templates for practical agents, skills, plugin evaluation, and human review.
 - [Insights](${absoluteUrl('/insights/')}): Essays on strategy, systems, adoption, governance, AI infrastructure, and content after clarity.
 - [Founder](${absoluteUrl('/founder/')}): Founder profile for Karan Chordia and the principles behind Kramaniti.
 - [Nexocean Selected Work](${absoluteUrl('/work/nexocean/')}): Selected work page for a five-month Nexocean contract engagement involving internal recruiter workflow tools and brand content.
@@ -50,4 +51,3 @@ ${latestInsights
     },
   });
 }
-

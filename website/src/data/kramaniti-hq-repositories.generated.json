@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-21T06:35:05.986Z",
+  "generatedAt": "2026-08-28T18:52:23.370Z",
   "privacy": "sanitized-metadata-only",
   "workspaces": [
     {
@@ -12,14 +12,14 @@
       "repositorySummary": {
         "repositoryLabel": "Kramaniti",
         "branch": "main",
-        "revision": "754389fc94eb",
+        "revision": "0b9ea372ae71",
         "dirty": true,
-        "dirtyFileCount": 70,
-        "trackedFileCount": 464,
-        "lastCommitAt": "2026-08-17T19:46:40+05:30",
-        "lastCommitSubject": "Refine dark mode and assistant orb",
+        "dirtyFileCount": 21,
+        "trackedFileCount": 491,
+        "lastCommitAt": "2026-08-21T16:41:55+05:30",
+        "lastCommitSubject": "Publish the current website to production.",
         "ahead": 0,
-        "behind": 1,
+        "behind": 0,
         "itemCount": 1
       },
       "items": [
@@ -31,16 +31,16 @@
           "title": "Kramaniti repository",
           "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
           "visibility": "internal",
-          "sourceHash": "754389fc94eb",
+          "sourceHash": "0b9ea372ae71",
           "metadata": {
             "branch": "main",
             "dirty": true,
-            "dirtyFileCount": 70,
-            "trackedFileCount": 464,
-            "lastCommitAt": "2026-08-17T19:46:40+05:30",
-            "lastCommitSubject": "Refine dark mode and assistant orb",
+            "dirtyFileCount": 21,
+            "trackedFileCount": 491,
+            "lastCommitAt": "2026-08-21T16:41:55+05:30",
+            "lastCommitSubject": "Publish the current website to production.",
             "ahead": 0,
-            "behind": 1
+            "behind": 0
           }
         }
       ]
