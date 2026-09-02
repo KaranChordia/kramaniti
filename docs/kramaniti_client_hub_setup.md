@@ -16,18 +16,18 @@ Database schema: `kramaniti_hub`
 - an explicitly allowlisted repository and directory index that shares metadata, not file contents;
 - Supabase Realtime refreshes across projects, tasks, notes, messages, assistant activity, and repository items.
 
-[Fact] The database migrations were applied to Supabase project `wqfensgibrvxnoztlzfo` on 2026-07-13. All ten Client Hub tables have row-level security enabled.
+[Fact] The current Kramaniti database is Kramaniti Platform (`bpvbnxqtfwrsmrpvcepc`). Its Client Hub migrations were applied on 2026-09-02; all Client Hub tables have row-level security enabled.
 
-[Fact] The founder account `karancho` was assigned the Client Hub owner role through the connected Supabase project on 2026-07-13. No real client accounts were created during implementation.
+[Fact] Kosh starts with no seeded Client Hub user, workroom, or client account. Founder access must be provisioned before Client Hub activation.
 
-[Fact] The `Kramaniti Internal` owner workroom and its three internal-only repository references were seeded, so the founder does not land in an empty Hub after activation.
+[Fact] The earlier `Kramaniti Internal` seed data remains in the retired project and was not copied into Kosh.
 
 ## 2. Required environment values
 
 Set these in the deployment environment and in `website/.env.local`:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL="https://wqfensgibrvxnoztlzfo.supabase.co"
+NEXT_PUBLIC_SUPABASE_URL="https://bpvbnxqtfwrsmrpvcepc.supabase.co"
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="your-publishable-key"
 GROQ_API_KEY="optional-for-model-backed-assistance"
 ```

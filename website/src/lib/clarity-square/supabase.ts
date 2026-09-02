@@ -254,8 +254,11 @@ type ClaritySquareDatabase = {
 
 let browserClient: SupabaseClient<ClaritySquareDatabase> | null = null;
 
+export const getClaritySquarePublicKey = () =>
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+
 export const isClaritySquareSupabaseConfigured = () =>
-  Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && getClaritySquarePublicKey());
 
 export const getClaritySquareSupabase = () => {
   if (!isClaritySquareSupabaseConfigured()) return null;
@@ -263,7 +266,7 @@ export const getClaritySquareSupabase = () => {
   if (!browserClient) {
     browserClient = createClient<ClaritySquareDatabase>(
       process.env.NEXT_PUBLIC_SUPABASE_URL as string,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
+      getClaritySquarePublicKey(),
       {
         db: { schema: 'clarity_square' },
         auth: {

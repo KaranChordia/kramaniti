@@ -14,14 +14,14 @@ export function LibraryLanding() {
           <strong>Kramaniti</strong><span>Kosh</span>
         </Link>
         <span className={styles.navLabel}>Guide</span>
-        <Link href="/library/workspace" className={styles.navAction}>Open workspace <ArrowRight size={15} /></Link>
+        <Link href="/library/workspace" className={styles.navAction}>Sign in to Kosh <ArrowRight size={15} /></Link>
       </nav>
 
       <section className={styles.hero} aria-labelledby="kosh-title">
         <p className={styles.eyebrow}>Kramaniti Kosh</p>
         <h1 id="kosh-title">A practical library for human-led systems.</h1>
         <p className={styles.intro}>Start with a useful pattern. Make it fit the work. Keep the consequential call with people.</p>
-        <Link href="/library/workspace" className={styles.primaryAction}>Enter the workspace <ArrowRight size={18} /></Link>
+        <Link href="/library/workspace" className={styles.primaryAction}>Sign in to enter Kosh <ArrowRight size={18} /></Link>
         <div className={styles.elements} aria-label="What Kosh contains">
           {elements.map((element, index) => <span key={element}><small>0{index + 1}</small>{element}</span>)}
         </div>

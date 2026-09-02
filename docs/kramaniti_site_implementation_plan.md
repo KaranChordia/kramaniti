@@ -419,8 +419,8 @@ Related files:
 - Account creation now treats the selected path as the user's Square role. Founder accounts get the founder problem-statement composer and founder-owned project/context path; solopreneur accounts get the work/idea sharing composer and solopreneur-owned project/context path.
 - A focused intent-capture screen that asks for the one-line intent, current context, audience, blocker, and desired outcome.
 - A private context workspace that saves the user's starting point locally, then shows the system's understanding, next questions, and suggested sequence.
-- Supabase-ready authentication with two-step signup: email first, then username/password, plus private project storage when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are configured.
-- A dedicated Supabase migration for the isolated `clarity_square` schema so Clarity Square data does not overlap with existing recruiting-company tables in the same Supabase project.
+- Supabase-ready authentication with two-step signup: email first, then username/password, plus private project storage when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` are configured. The legacy anon key remains a compatibility fallback.
+- Dedicated Supabase migrations for the isolated `clarity_square` schema so Clarity Square data stays separate from other Kramaniti services in Kosh.
 - A profile/settings panel placeholder for signed-in users, showing username, email, account, settings, and projects menu surfaces for future expansion.
 - A browser-local handoff into `/clarity-engine` so the Engine can use Clarity Square's saved starting context and continue with the current workflow question instead of asking the user to repeat the same initial details.
 - A dedicated Clarity Square Assistant available only inside `/clarity-square`, separate from the global public Kramaniti assistant.

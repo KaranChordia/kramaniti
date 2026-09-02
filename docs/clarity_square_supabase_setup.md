@@ -1,15 +1,15 @@
 # Kramaniti Clarity Square Supabase Setup
 
-[Fact] Clarity Square uses the existing Supabase project, but stores app data in a separate Postgres schema named `clarity_square`.
+[Fact] Kramaniti Platform (`bpvbnxqtfwrsmrpvcepc`) is the canonical Supabase project for Clarity Square, Client Hub, HQ, and future Kramaniti platform services. Kosh remains in its own Supabase project. Clarity Square stores its app data in a separate Postgres schema named `clarity_square`.
 
-[Recommendation] Keep recruiting-company tables untouched. Do not create Clarity Square tables in `public`; apply the migration in `supabase/migrations/20260623060000_clarity_square_schema.sql`.
+[Recommendation] Keep application data isolated by schema. Do not create Clarity Square tables in `public`; use the ordered migrations in `supabase/migrations/`.
 
 ## Codex MCP
 
-The project reference supplied for the existing Supabase project is:
+The Kramaniti Platform-scoped MCP connection is:
 
 ```bash
-codex mcp add supabase --url https://mcp.supabase.com/mcp?project_ref=wqfensgibrvxnoztlzfo
+codex mcp add supabase --url https://mcp.supabase.com/mcp?project_ref=bpvbnxqtfwrsmrpvcepc&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching
 codex mcp login supabase
 ```
 
@@ -22,22 +22,18 @@ Do not run these lines in the Supabase SQL editor. They are not SQL.
 Add these to `website/.env.local` or the Vercel project environment:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL="https://wqfensgibrvxnoztlzfo.supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="your-supabase-anon-key"
+NEXT_PUBLIC_SUPABASE_URL="https://bpvbnxqtfwrsmrpvcepc.supabase.co"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="your-supabase-publishable-key"
 ```
 
 Do not place service-role keys in the frontend environment.
 
 ## Running The Migration
 
-In the Supabase SQL editor, run only the SQL from:
+For a new Kramaniti service, apply the relevant ordered SQL migrations from:
 
 ```text
-supabase/migrations/20260623060000_clarity_square_schema.sql
-supabase/migrations/20260623121000_clarity_square_assistant_memory.sql
-supabase/migrations/20260623143000_clarity_square_project_folders.sql
-supabase/migrations/20260623154500_clarity_square_realtime_workspace.sql
-supabase/migrations/20260625120000_clarity_square_project_reports.sql
+supabase/migrations/
 ```
 
 The first executable SQL line should be:
@@ -46,7 +42,7 @@ The first executable SQL line should be:
 create schema if not exists clarity_square;
 ```
 
-The final SQL lines should be the `grant select, insert, update, delete...` statements. Do not paste `NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_ANON_KEY` into the SQL editor.
+The final SQL lines should be the `grant select, insert, update, delete...` statements. Do not paste `NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` into the SQL editor.
 
 ## Database Isolation
 

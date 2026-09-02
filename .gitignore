@@ -33,5 +33,6 @@ next-env.d.ts
 # Temporary
 *.tmp
 *.bak
+supabase/.temp/
 .vercel/
 .vercel

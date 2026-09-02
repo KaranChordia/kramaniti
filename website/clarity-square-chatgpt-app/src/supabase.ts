@@ -132,13 +132,17 @@ export function getBearerToken(headers: Headers): string {
 
 export function createSquareClient(accessToken: string): SquareClient {
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const publicKey =
+    process.env.SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!url || !anonKey) {
-    throw new Error("Supabase URL and anon key must be configured for the Clarity Square manager.");
+  if (!url || !publicKey) {
+    throw new Error("Supabase URL and public key must be configured for the Clarity Square manager.");
   }
 
-  return createClient<SquareDatabase, "clarity_square">(url, anonKey, {
+  return createClient<SquareDatabase, "clarity_square">(url, publicKey, {
     db: { schema: "clarity_square" },
     auth: {
       persistSession: false,
@@ -154,13 +158,17 @@ export function createSquareClient(accessToken: string): SquareClient {
 
 export function createPublicSupabaseClient(): PublicClient {
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const publicKey =
+    process.env.SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!url || !anonKey) {
-    throw new Error("Supabase URL and anon key must be configured for the Clarity Square manager.");
+  if (!url || !publicKey) {
+    throw new Error("Supabase URL and public key must be configured for the Clarity Square manager.");
   }
 
-  return createClient(url, anonKey, {
+  return createClient(url, publicKey, {
     db: { schema: "clarity_square" },
     auth: {
       persistSession: false,
