@@ -10,6 +10,7 @@ import { Story } from '../sections/Story';
 import { BrandFilm } from '../sections/BrandFilm';
 import { Services } from '../sections/Services';
 import { Workflows } from '../sections/Workflows';
+import { KoshPreview } from '../sections/KoshPreview';
 import { FounderPreview } from '../sections/FounderPreview';
 import { Contact } from '../sections/Contact';
 import { Footer } from '../layout/Footer';
@@ -103,6 +104,7 @@ export function HomepageSequence() {
           <BrandFilm />
           <Services />
           <Workflows />
+          <KoshPreview />
           <FounderPreview />
           <Contact />
         </main>

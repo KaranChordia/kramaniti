@@ -272,7 +272,7 @@ export function LibraryWorkspace() {
         {view === 'Library' || view === 'Saved' ? (
           <>
             <div className={styles.panelHeader}>
-              <label className={styles.search}><Search size={15} /><span className={styles.srOnly}>Search Kosh</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search library..." /></label>
+              <label className={styles.search}><Search size={15} /><span className={styles.srOnly}>Search Kosh</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" /></label>
               <div ref={kindNavRef} className={styles.kindNav} aria-label="Filter Kosh items">
                 <div className={styles.kindSlider} aria-hidden="true" style={{ transform: `translateX(${kindSlider.left}px)`, width: kindSlider.width, opacity: kindSlider.ready ? 1 : 0 }} />
                 <button type="button" className="no-shockwave" data-active={kind === 'All'} onClick={() => setKind('All')}>All <small>{libraryItems.length}</small></button>
@@ -291,10 +291,9 @@ export function LibraryWorkspace() {
               {visibleItems.length ? visibleItems.map((item) => (
                 <article key={item.id} className={styles.item} data-kind={item.kind}>
                   <button type="button" className={`${styles.itemOpen} no-shockwave`} onClick={() => openItem(item.id)}>
-                  <span className={styles.itemTopline}><span className={styles.itemKind}>{item.kind}</span><span className={styles.itemArrow} aria-hidden="true">↗</span></span>
+                  <span className={styles.itemTopline}><span className={styles.itemKind}>{item.kind}</span></span>
                   <strong>{item.title}</strong>
                   <span className={styles.itemSummary}>{item.summary}</span>
-                  <span className={styles.itemFoot}>Open template</span>
                   </button>
                   <button type="button" className={`${styles.bookmark} no-shockwave ${bookmarkIds.includes(item.id) ? styles.bookmarkSaved : ''}`} onClick={() => void toggleBookmark(item.id)} aria-label={bookmarkIds.includes(item.id) ? `Remove ${item.title} from saved templates` : `Save ${item.title}`} aria-pressed={bookmarkIds.includes(item.id)}><Bookmark size={16} fill={bookmarkIds.includes(item.id) ? 'currentColor' : 'none'} /></button>
                 </article>

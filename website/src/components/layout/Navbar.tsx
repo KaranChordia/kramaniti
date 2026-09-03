@@ -47,7 +47,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <nav className={styles.desktopNav}>
               <Link href="/#method" className={styles.navLink}>How We Work</Link>
               <Link href="/#services" className={styles.navLink}>Services</Link>
-              <Link href="/library" className={styles.navLink}>Library</Link>
+              <Link href="/library" className={styles.navLink}>Kosh</Link>
               <Link href="/work" className={styles.navLink}>Work</Link>
               <Link href="/insights" className={styles.navLink}>Insights</Link>
             </nav>
@@ -91,7 +91,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <Link href="/" className={styles.mobileLink} onClick={closeMobileMenu}>Home</Link>
             <Link href="/#method" className={styles.mobileLink} onClick={closeMobileMenu}>How We Work</Link>
             <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
-            <Link href="/library" className={styles.mobileLink} onClick={closeMobileMenu}>Library</Link>
+            <Link href="/library" className={styles.mobileLink} onClick={closeMobileMenu}>Kosh</Link>
             <Link href="/work" className={styles.mobileLink} onClick={closeMobileMenu}>Work</Link>
             <Link href="/insights" className={styles.mobileLink} onClick={closeMobileMenu}>Insights</Link>
             <div className={styles.mobileAuditAction}>

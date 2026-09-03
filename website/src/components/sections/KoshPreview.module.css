@@ -1,0 +1,229 @@
+.kosh {
+  position: relative;
+  padding: 110px 0;
+  overflow: hidden;
+}
+
+.kosh::before {
+  content: '';
+  position: absolute;
+  inset: 8% 0;
+  background:
+    linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.055), transparent),
+    radial-gradient(circle at 82% 44%, rgba(201, 168, 76, 0.1), transparent 28%);
+  pointer-events: none;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  gap: 42px;
+  align-items: center;
+}
+
+.content {
+  max-width: 620px;
+}
+
+.content h2 {
+  max-width: 620px;
+  margin-top: 12px;
+}
+
+.content p {
+  max-width: 590px;
+  margin: 0.9rem 0 0;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  margin-top: 28px;
+  padding: 12px 20px;
+  border: 1px solid rgba(201, 168, 76, 0.42);
+  border-radius: 10px;
+  background: rgba(201, 168, 76, 0.09);
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease, color 220ms ease, box-shadow 220ms ease;
+}
+
+.link:hover {
+  transform: translateY(-1px);
+  border-color: rgba(201, 168, 76, 0.65);
+  background: rgba(201, 168, 76, 0.14);
+  color: var(--color-burnished-gold);
+  box-shadow: 0 12px 28px rgba(201, 168, 76, 0.12);
+}
+
+.link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.5), 0 0 0 6px rgba(201, 168, 76, 0.16);
+}
+
+.libraryObject {
+  position: relative;
+  padding: 20px;
+  border: 1px solid rgba(201, 168, 76, 0.28);
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.065), rgba(201, 168, 76, 0.045));
+  box-shadow: var(--shadow-elevation-2);
+}
+
+.libraryObject::after {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 7px;
+  pointer-events: none;
+}
+
+.objectHeader,
+.shelfItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: baseline;
+}
+
+.objectHeader {
+  padding: 3px 3px 18px;
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.objectHeader span:last-child {
+  grid-column: 3;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.shelf {
+  border-top: 1px solid rgba(201, 168, 76, 0.22);
+}
+
+.shelfItem {
+  min-height: 58px;
+  padding: 16px 3px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.index,
+.itemType,
+.objectNote {
+  color: var(--text-muted);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.index {
+  font-size: 11px;
+  letter-spacing: 0.07em;
+}
+
+.itemTitle {
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.itemType {
+  font-size: 11px;
+  text-align: right;
+}
+
+.objectNote {
+  margin: 18px 3px 2px;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+:global(html[data-theme='light']) .libraryObject {
+  border-color: rgba(201, 168, 76, 0.36);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(247, 239, 211, 0.76));
+  box-shadow: 0 24px 54px rgba(20, 20, 24, 0.1), 0 8px 20px rgba(20, 20, 24, 0.06);
+}
+
+:global(html[data-theme='light']) .libraryObject::after {
+  border-color: rgba(105, 79, 23, 0.12);
+}
+
+:global(html[data-theme='light']) .shelfItem {
+  border-bottom-color: rgba(105, 79, 23, 0.13);
+}
+
+@media (min-width: 900px) {
+  .container {
+    grid-template-columns: minmax(0, 1.08fr) minmax(400px, 0.92fr);
+    gap: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .kosh {
+    padding: 80px 0;
+  }
+
+  .content p {
+    font-size: 15px;
+  }
+
+  .libraryObject {
+    padding: 16px;
+  }
+
+  .objectHeader,
+  .shelfItem {
+    gap: 10px;
+  }
+
+  .objectHeader span:last-child,
+  .itemType {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 420px) {
+  .objectHeader {
+    grid-template-columns: 1fr auto;
+  }
+
+  .objectHeader span:last-child {
+    grid-column: auto;
+  }
+
+  .shelfItem {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .itemType {
+    grid-column: 2;
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
+}
