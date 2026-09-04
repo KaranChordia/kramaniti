@@ -16,6 +16,24 @@
 
 ---
 
+## September 4, 2026 Follow-up
+
+**Purpose:** Reconcile the documented structure with the live repository after later product experiments and local development work.
+
+**Key Findings:** [Fact] The usable Kosh website refinements were approved for consolidation into `main`. [Fact] The separate Kosh/Supabase worktree had no unique commits, and both of its modified compatibility files were byte-identical to the versions already on `main`. [Fact] The retired native Kosh macOS experiment is absent even though the README still described it as active. [Fact] The finance-agent experiment and its local finance workspace did not belong in the public product repository. [Fact] `agent-os-simulation/` remains as a tracked experimental application outside the canonical `website/` boundary. [Fact] The private Foundation PDF is available outside the repository, while `06_ai_agent_context/system_prompts/master_context.md` contains the canonical repository positioning and constraints.
+
+**Evidence:** Live Git status, worktree inventory, listener ownership, tracked-file inventory, repository visibility, and the existing Kramaniti task list reviewed on September 4, 2026.
+
+**Interpretation:** [Inference] The numbered operating workspace and `website/` remain the durable repository core. Experimental applications, private administration, generated QA evidence, and final deliverables need explicit lifecycle states instead of accumulating as additional top-level roots.
+
+**Implications:** [Recommendation] Keep Kosh inside the canonical `website/` app and remove auxiliary worktrees only after their changes are proven preserved on `main`. Keep financial administration and private source documents outside this public repository. Use `06_ai_agent_context/system_prompts/master_context.md` as the portable repository foundation. Decide whether `agent-os-simulation/` should be archived, integrated, or retired before removing its source. Reconcile `output/`, `outputs/`, `.codex-audit/`, and tracked `tmp/` material only after identifying the canonical deliverables and evidence worth preserving.
+
+**Open Questions:** Is `agent-os-simulation/` still useful? Which founder-alignment deck versions must remain as historical references?
+
+**Next Steps:** Commit the verified Kosh and cleanup changes together, confirm remote parity, remove the patch-equivalent auxiliary worktree and branch, then review the remaining structural-decision shortlist.
+
+---
+
 ## Current Source Structure
 
 | Area | Role |

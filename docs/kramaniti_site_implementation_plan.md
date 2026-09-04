@@ -28,7 +28,7 @@ Preferred public vocabulary: work, clarity, systems, AI, and communication. Cont
 
 - Lead: Website Steward.
 - Supporting review roles: Brand Strategist, Narrative Editor, Proof and Governance Auditor, and Content Director for Insights framing.
-- `docs/Kramaniti Foundation Document.pdf` is absent after a repository-wide filename search. No substitute PDF is being treated as the missing source.
+- At the time of this implementation, the private Foundation PDF was not tracked in the public repository. The repository-canonical foundation is `06_ai_agent_context/system_prompts/master_context.md`.
 - Canonical sources used: root and website agent rules, master context, agent roster, decision log, and this implementation plan.
 - Starting state: clean detached worktree at `0b9ea372ae71e3ad691127ecbd4dad8be2c2123c`, matching the source checkout's `main` commit but not its unrelated uncommitted changes.
 - Kramaniti Kosh exists only in the separate source checkout as uncommitted Library work. Its orientation copy is reviewed in place, but those files are not imported into this worktree or absorbed into this change set.
@@ -79,7 +79,7 @@ Intentionally excluded from public marketing copy scope:
 - Rendered QA: production server checked at 1440×900, 390×844, and 320×800. The homepage, Founder, Work index, Maitri, Nexocean, Insights archive, one complete Insight article, Clarity Engine entry, Experience route, global footer, and assistant render without console errors, broken images, or horizontal overflow.
 - Interaction checks: reduced desktop/mobile navigation, audit CTA scroll, seven-step process expansion, empty-form focus, local form failure copy, assistant open/close and starter questions, Insights search/category filter, Clarity Engine example entry, Experience start state, CTA destinations, and first keyboard focus were exercised.
 - Claim boundary: no new metrics, testimonials, client claims, outcomes, logos, pricing, or permissions were added. Insight titles, article bodies, citations, and research claims remain unchanged.
-- Source gap: `docs/Kramaniti Foundation Document.pdf` remains absent. The existing embedded brand film remains an external media asset and still contains its original on-video language.
+- Source boundary: the private Foundation PDF is not tracked in the public repository; the master context is the portable repository source. The existing embedded brand film remains an external media asset and still contains its original on-video language.
 - Kosh gap: `/library` and `/library/workspace` are absent from this clean worktree and return 404 here. Their uncommitted source-checkout copy was reviewed without importing it, so rendered Kosh QA remains with that separate Library work.
 - Integration gap: the local contact webhook is not configured, so the rendered unavailable/error path was verified; a real success submission was not sent.
 - Approval gate: no commit, push, deploy, publication, external communication, or live integration change has been made.

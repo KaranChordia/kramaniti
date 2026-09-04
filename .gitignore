@@ -26,6 +26,13 @@ coverage/
 *.tsbuildinfo
 next-env.d.ts
 
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
 # PDF exports (generated, not source)
 *.pdf
 !08_brand_assets/exports/*.pdf

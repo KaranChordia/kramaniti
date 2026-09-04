@@ -7,7 +7,7 @@ Status: first vertical slice implemented on 2026-08-17.
 - [Fact] The worktree was clean before implementation.
 - [Fact] `website/` is the repository's only active web application. Decision 13 explicitly rejects a second root-level app.
 - [Fact] Existing internal product surfaces include Studio, Clarity Engine, Clarity Square, Client Hub, and HQ. They demonstrate useful interaction and visual patterns, but each has a narrower product boundary than Blocks.
-- [Unknown] `docs/Kramaniti Foundation Document.pdf`, named by the root instructions, is not present in the current checkout. The canonical Markdown context and decision log were used instead.
+- [Fact] The private Foundation PDF is not tracked in this public repository. The canonical Markdown master context and decision log are the portable repository sources.
 
 ## 2. Frontend stack and constraints
 

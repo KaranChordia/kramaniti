@@ -26,7 +26,7 @@ ChatGPT Projects currently present Sources as a flat list. The numeric prefixes 
 - `website/public/assets/` is a runtime copy set, not a design-source library.
 - `website/out/`, `.vercel/`, `.next/`, and `website/tmp/` are generated or QA artifacts.
 - `output/pdf/` contains client and financial deliverables. It must not be added to this general brand project without a separate, explicit confidentiality decision.
-- `Finance_Kramaniti/` is financial administration, not design reference.
+- Financial administration belongs outside this public repository and is not design reference.
 - Founder-media assets remain in `08_brand_assets/founder_media/` and need approval before repeated public use, as recorded in `08_brand_assets/asset_registry.md`.
 
 ## Suggested project instructions

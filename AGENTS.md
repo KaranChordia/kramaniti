@@ -16,10 +16,11 @@ Default narrative sequence:
 
 Before making strategic, copy, website, offer, content, or agent changes, inspect:
 
-- `docs/Kramaniti Foundation Document.pdf`
 - `06_ai_agent_context/system_prompts/master_context.md`
 - `06_ai_agent_context/agent_roles/kramaniti_agent_roster.md`
 - `09_reviews/decisions.md`
+
+The private Kramaniti Foundation PDF may be consulted when it is available in an approved internal workspace, but this public repository must not depend on an untracked private file. `06_ai_agent_context/system_prompts/master_context.md` is the canonical repository source for the foundation positioning and operating constraints.
 
 For website work, also read:
 

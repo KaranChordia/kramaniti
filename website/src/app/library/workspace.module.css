@@ -23,6 +23,11 @@
 .accessGatePanel h1 { max-width:10ch; margin:0 0 15px; color:var(--ink); font-size:clamp(36px,5vw,56px); font-weight:500; letter-spacing:-.07em; line-height:.96; }
 .gateGuide { display:inline-flex; align-items:center; gap:.45rem; margin-top:22px; color:var(--muted); font-size:12px; text-decoration:none; }.gateGuide:hover { color:var(--gold); }
 
+/* The unauthenticated workspace contains a longer sign-up flow. It must be able
+   to grow beyond a short viewport instead of inheriting the app shell's locked canvas. */
+.accessDashboard { position:relative; min-height:100dvh; overflow-x:hidden; overflow-y:auto; }
+.accessDashboard .accessGate { min-height:100dvh; padding-top:124px; }
+
 /* --- Settings placeholder view --- */
 .settingsView { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; border:1px solid var(--line); background:var(--surface); color:var(--muted); text-align:center; padding:40px; transition:background-color .3s ease, border-color .3s ease; }
 .settingsView h2 { color:var(--ink); font-size:24px; font-weight:500; margin:0; }
@@ -82,6 +87,22 @@
 /* ===== Inspector dialog (unchanged) ===== */
 .inspectorBackdrop,.readerBackdrop,.accountBackdrop { position:fixed; inset:0; display:grid; padding:24px; background:var(--backdrop); backdrop-filter:blur(9px); transition:background-color .3s ease; }.inspectorBackdrop,.accountBackdrop { z-index:30; place-items:center; }.readerBackdrop { z-index:31; place-items:end center; }.inspector,.accountDialog { position:relative; width:min(720px,100%); padding:34px; border:1px solid rgba(201,168,76,.45); background:var(--surface-deep); box-shadow:var(--shadow); transition:background-color .3s ease, box-shadow .3s ease; }.close { position:absolute; top:14px; right:14px; }.detailMeta { display:flex; justify-content:space-between; gap:1rem; padding-right:48px; color:var(--gold); font-size:9px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; }.detailMeta em { color:var(--muted); font-style:normal; font-weight:400; letter-spacing:.04em; }.inspector h2,.accountDialog h2 { max-width:12ch; margin:28px 0 12px; font-size:clamp(31px,4vw,52px); font-weight:500; letter-spacing:-.07em; line-height:.98; }.summary { max-width:56ch; margin:0; color:var(--muted); font-size:14px; line-height:1.7; }.detailGrid { display:grid; grid-template-columns:.82fr 1.18fr; gap:30px; margin:28px 0; padding:22px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }.when b,.includes b { display:block; margin-bottom:9px; color:var(--gold); font-size:9px; letter-spacing:.14em; text-transform:uppercase; }.when p { margin:0; font-size:12px; line-height:1.7; }.includes ul { display:grid; gap:8px; margin:0; padding:0; list-style:none; }.includes li { display:flex; align-items:center; gap:.55rem; color:var(--muted); font-size:12px; }.includes svg { color:var(--gold); }.templateActions { display:flex; flex-wrap:wrap; gap:10px; }.learnMore,.download,.saveTemplate,.signOutButton { display:inline-flex; align-items:center; justify-content:center; gap:.65rem; min-height:46px; padding:0 18px; font-size:12px; font-weight:700; cursor:pointer; }.learnMore,.saveTemplate,.signOutButton { border:1px solid rgba(201,168,76,.58); background:rgba(201,168,76,.08); color:var(--ink); }.learnMore:hover,.saveTemplate:hover,.signOutButton:hover,.saveTemplateActive { background:rgba(201,168,76,.16); }.download { border:0; background:var(--gold); color:#16130b; }.download:hover { background:#dfbd61; color:#16130b; }.actionMessage,.authMessage { margin:14px 0 0; color:var(--gold); font-size:12px; line-height:1.5; }.templateReader { position:relative; width:min(920px,100%); max-height:calc(100dvh - 112px); overflow-y:auto; padding:34px; border:1px solid rgba(201,168,76,.45); background:var(--surface-deep); box-shadow:var(--shadow); }.templateLabel { display:block; margin-bottom:18px; color:var(--gold); font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }.templateReader h1 { margin:0 0 20px; color:var(--ink); font-size:26px; font-weight:500; letter-spacing:-.055em; }.templateReader h2 { max-width:none; margin:22px 0 10px; color:var(--ink); font-size:15px; font-weight:600; letter-spacing:-.02em; line-height:1.25; }.templateReader p,.templateReader li { color:var(--muted); font-size:13px; line-height:1.7; }.templateReader p { margin:0 0 12px; }.templateReader ul,.templateReader ol { display:grid; gap:7px; margin:0 0 14px; padding-left:20px; }.templateLoading { margin:0; color:var(--muted); font-size:13px; }.accountDialog > p { color:var(--muted); font-size:13px; }.accountNote { max-width:48ch; margin:18px 0 24px; line-height:1.65; }.authForm { display:grid; gap:13px; margin-top:24px; }.authForm label { display:grid; gap:6px; color:var(--muted); font-size:10px; letter-spacing:.1em; text-transform:uppercase; }.authForm input { min-height:42px; padding:0 11px; border:1px solid var(--line); outline:0; background:var(--canvas); color:var(--ink); font:inherit; font-size:13px; letter-spacing:normal; text-transform:none; }.authForm input:focus { border-color:rgba(201,168,76,.7); }.authForm .download { justify-self:start; }.authSwitch { margin-top:16px; border:0; background:transparent; color:var(--muted); font:inherit; font-size:12px; cursor:pointer; }.authSwitch:hover { color:var(--gold); }.srOnly { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
 
+/* Template detail: a readable working brief rather than a generic modal. */
+.inspectorBackdrop { overflow-y:auto; overscroll-behavior:contain; }
+.inspector { display:grid; gap:0; max-height:calc(100dvh - 48px); overflow-y:auto; scrollbar-width:thin; scrollbar-color:rgba(201,168,76,.7) transparent; }
+.detailHeader { padding:4px 34px 28px 0; }
+.detailHeader h2 { max-width:14ch; margin:24px 0 14px; }
+.detailBody { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:clamp(24px,4vw,44px); margin:0; padding:27px 0; border-top:1px solid rgba(201,168,76,.3); border-bottom:1px solid var(--line); }
+.detailBlock { min-width:0; }
+.detailBlock b { display:block; margin-bottom:12px; color:var(--gold); font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+.detailBlock p { margin:0; color:var(--ink); font-size:14px; line-height:1.65; }
+.detailBlock ul { display:grid; gap:10px; margin:0; padding:0; list-style:none; }
+.detailBlock li { display:flex; align-items:flex-start; gap:.6rem; color:var(--muted); font-size:13px; line-height:1.45; }
+.detailBlock li svg { flex:0 0 auto; margin-top:2px; color:var(--gold); }
+.detailFooter { display:flex; align-items:center; justify-content:space-between; gap:20px; padding-top:22px; }
+.detailFormat { color:var(--muted); font-size:10px; letter-spacing:.1em; text-transform:uppercase; white-space:nowrap; }
+.detailFooter .templateActions { justify-content:flex-end; }
+
 /* ===== Responsive: Tablet ===== */
 @media (max-width:960px) {
   .floatingNav { width:calc(100vw - 28px); gap:9px; padding-left:9px; }
@@ -106,6 +127,7 @@
   .back { flex:0 0 32px; width:32px; height:32px; }
   .workspaceContainer { padding:112px 14px 14px; }
   .accessGate { padding:112px 14px 24px; }
+  .accessDashboard .accessGate { padding-top:120px; }
   .accessGatePanel { padding:28px 22px 24px; }
   .panelHeader { display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto; height:auto; padding:10px; gap:8px; }
   .panelHeader > *:first-child { grid-column:1; grid-row:1; }
@@ -124,9 +146,13 @@
   .itemSummary { font-size:11px; }
   .fadeTop, .fadeBottom { height:28px; }
   .inspectorBackdrop,.readerBackdrop,.accountBackdrop { padding:12px; }
-  .inspector { max-height:none; overflow:visible; padding:27px 22px 22px; }
+  .inspector { max-height:calc(100dvh - 24px); overflow-y:auto; padding:27px 22px 22px; }
   .templateReader { max-height:calc(100dvh - 24px); padding:27px 22px 22px; }
   .detailGrid { grid-template-columns:1fr; gap:21px; }
+  .detailHeader { padding-right:28px; }
+  .detailBody { grid-template-columns:1fr; gap:24px; padding:23px 0; }
+  .detailFooter { align-items:flex-start; flex-direction:column; }
+  .detailFooter .templateActions { justify-content:flex-start; }
 }
 
 @media (max-width:360px) {

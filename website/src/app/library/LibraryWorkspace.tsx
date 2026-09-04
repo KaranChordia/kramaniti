@@ -41,14 +41,24 @@ export function LibraryWorkspace() {
 
   /* --- Sliding pill indicators: measure active button positions --- */
   useLayoutEffect(() => {
-    if (view !== 'Library') return;
     const nav = kindNavRef.current;
-    if (!nav) return;
-    const activeBtn = nav.querySelector<HTMLButtonElement>('[data-active="true"]');
-    if (!activeBtn) return;
-    const navRect = nav.getBoundingClientRect();
-    const btnRect = activeBtn.getBoundingClientRect();
-    setKindSlider({ left: btnRect.left - navRect.left, width: btnRect.width, ready: true });
+    if (!nav || view === 'Settings') {
+      setKindSlider((slider) => slider.ready ? { ...slider, ready: false } : slider);
+      return;
+    }
+
+    const measureKindSlider = () => {
+      const activeBtn = nav.querySelector<HTMLButtonElement>('[data-active="true"]');
+      if (!activeBtn) return;
+      const navRect = nav.getBoundingClientRect();
+      const btnRect = activeBtn.getBoundingClientRect();
+      const next = { left: btnRect.left - navRect.left, width: btnRect.width, ready: true };
+      setKindSlider((slider) => slider.left === next.left && slider.width === next.width && slider.ready === next.ready ? slider : next);
+    };
+
+    measureKindSlider();
+    window.addEventListener('resize', measureKindSlider);
+    return () => window.removeEventListener('resize', measureKindSlider);
   }, [kind, view]);
 
   useLayoutEffect(() => {
@@ -227,7 +237,7 @@ export function LibraryWorkspace() {
 
   if (!authUser) {
     return (
-      <main className={styles.dashboard} data-disable-global-shockwave="true">
+      <main className={`${styles.dashboard} ${styles.accessDashboard}`} data-disable-global-shockwave="true">
         <nav className={styles.floatingNav} aria-label="Kosh navigation">
           <Link href="/library" className={styles.brand}><Image src="/assets/brand/kramaniti-kosh-mark.png" alt="" width={52} height={52} className={styles.brandMark} priority /><strong>Kramaniti</strong><span>Kosh</span></Link>
           <div className={styles.navUtilities}><Link href="/library" className={styles.back} aria-label="Return to Kosh guide"><ArrowLeft size={15} /></Link></div>
@@ -329,12 +339,28 @@ export function LibraryWorkspace() {
         <div className={styles.inspectorBackdrop} role="presentation" onMouseDown={() => { setIsTemplatePreviewOpen(false); setIsInspectorOpen(false); }}>
           <section className={styles.inspector} role="dialog" aria-modal="true" aria-labelledby="template-title" onMouseDown={(event) => event.stopPropagation()}>
             <button type="button" className={`${styles.close} no-shockwave`} onClick={() => { setIsTemplatePreviewOpen(false); setIsInspectorOpen(false); }} aria-label="Close template details"><X size={18} /></button>
-            <div className={styles.detailMeta}><span>{selected.kind}</span><em>{selected.status}</em></div><h2 id="template-title">{selected.title}</h2><p className={styles.summary}>{selected.summary}</p>
-            <div className={styles.detailGrid}><div className={styles.when}><b>Use when</b><p>{selected.useWhen}</p></div><div className={styles.includes}><b>Includes</b><ul>{selected.includes.map((entry) => <li key={entry}><Check size={14} />{entry}</li>)}</ul></div></div>
-            <div className={styles.templateActions}>
-              <button type="button" className={styles.learnMore} onClick={() => setIsTemplatePreviewOpen(true)}>Get to know the template <ArrowRight size={17} /></button>
-              <a href={selected.download} download className={styles.download}><Download size={17} />Download as Markdown</a>
-              <button type="button" className={`${styles.saveTemplate} ${bookmarkIds.includes(selected.id) ? styles.saveTemplateActive : ''}`} onClick={() => void toggleBookmark(selected.id)}><Bookmark size={16} fill={bookmarkIds.includes(selected.id) ? 'currentColor' : 'none'} />{bookmarkIds.includes(selected.id) ? 'Saved to Kosh' : 'Save to Kosh'}</button>
+            <header className={styles.detailHeader}>
+              <div className={styles.detailMeta}><span>{selected.kind}</span><em>{selected.status}</em></div>
+              <h2 id="template-title">{selected.title}</h2>
+              <p className={styles.summary}>{selected.summary}</p>
+            </header>
+            <div className={styles.detailBody}>
+              <section className={styles.detailBlock} aria-labelledby="template-use-when">
+                <b id="template-use-when">Use when</b>
+                <p>{selected.useWhen}</p>
+              </section>
+              <section className={styles.detailBlock} aria-labelledby="template-includes">
+                <b id="template-includes">Inside the template</b>
+                <ul>{selected.includes.map((entry) => <li key={entry}><Check size={14} aria-hidden="true" />{entry}</li>)}</ul>
+              </section>
+            </div>
+            <div className={styles.detailFooter}>
+              <span className={styles.detailFormat}>{selected.format} starter template</span>
+              <div className={styles.templateActions}>
+                <button type="button" className={styles.learnMore} onClick={() => setIsTemplatePreviewOpen(true)}>Read template <ArrowRight size={17} /></button>
+                <a href={selected.download} download className={styles.download}><Download size={17} />Download Markdown</a>
+                <button type="button" className={`${styles.saveTemplate} ${bookmarkIds.includes(selected.id) ? styles.saveTemplateActive : ''}`} onClick={() => void toggleBookmark(selected.id)}><Bookmark size={16} fill={bookmarkIds.includes(selected.id) ? 'currentColor' : 'none'} />{bookmarkIds.includes(selected.id) ? 'Saved to Kosh' : 'Save to Kosh'}</button>
+              </div>
             </div>
             {bookmarkMessage ? <p className={styles.actionMessage}>{bookmarkMessage}</p> : null}
           </section>
