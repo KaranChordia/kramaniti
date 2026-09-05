@@ -272,6 +272,18 @@ Initial starter downloads:
 
 Account boundary: no account, login, saved-state, data collection, provider integration, or external actions exist in the initial version. A visible future `My Library` affordance communicates the planned direction without implying that authentication or persistence has been implemented.
 
+2026-09-04 update: the initial no-account boundary has been superseded for `/library/workspace`. Kosh now uses its isolated Supabase project for member authentication, private bookmarks, and a private profile context field. The current local feature stores personal and professional profiles as a structured value inside that field, lets the user choose one context for a named template, and sends the authenticated request to a server-side adaptation route. The result is an ephemeral Markdown working copy that can be reviewed and downloaded; it does not alter the canonical template or persist generated content.
+
+Adaptation boundaries:
+
+- Context is read under the user's authenticated Kosh session and RLS policies; it is not accepted as an arbitrary unauthenticated request payload.
+- The Settings interface discloses that the chosen profile is sent to the configured model provider when an adaptation is requested.
+- The user explicitly chooses personal or professional context for every adaptation.
+- Missing information remains visible as a prompt instead of being fabricated.
+- Canonical public Markdown remains the stable source; adapted output is a separate working copy.
+- Model configuration remains server-only through the existing Groq environment. No provider key is exposed in the browser.
+- Kosh continues to teach and adapt patterns. It does not execute the resulting agent, skill, plugin connection, or governance workflow.
+
 Public-release boundary: a founder-approved license and contribution policy are required before representing the downloads as reusable under specific legal terms. The initial files are static, plain Markdown.
 
 ## 10.1 Kramaniti Studio Agent OS
@@ -623,3 +635,11 @@ Related files:
 - YouTube showcases are embedded as public-facing proof assets while avoiding private repo exposure or unsupported performance claims.
 - A Kramaniti-channel unlisted walkthrough is featured first to show the internal tools, UI, UX, process flow, and design work without linking the source repository.
 - The homepage Proof/Credibility section and its navigation link were removed after the Nexocean work page became the cleaner proof surface.
+
+### 2026-09-05 Kosh resource-library milestone
+
+[Fact] The local Kosh implementation now uses `/library` for public discovery, `/library/resources/[id]` for full resource reading and adaptation, `/library/collections/research-a-decision` for an ordered collection, and `/library/workspace` for member favourites, private working copies and context settings. Public resources no longer require sign-in. This supersedes the earlier full-catalogue account gate and contained dialog reading flow.
+
+[Fact] All six Markdown resources now include setup guidance, an isolated working template, a labelled illustrative example, a quality checklist and limitations. The canonical Markdown is shared by public reading and download. Adaptation extracts only the working section, excluding example facts.
+
+[Fact] Persistence and rate limiting are prepared locally, not live. The Kosh-only migration and exact release checks are documented in `docs/kosh/implementation-handoff.md`. The separate Platform migration stream and production configuration were not modified. User context remains explicitly selected; custom context is ephemeral; saved copies retain their original source version.

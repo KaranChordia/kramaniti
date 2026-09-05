@@ -871,3 +871,34 @@ This log registers the major strategic and structural decisions made during the 
     *   Every template preserves a clear input boundary, output contract, named owner, and human-review path where appropriate.
     *   Do not publish a formal reuse license, contribution policy, warranties, client examples, or performance claims without founder approval.
     *   Keep Blocks separate: Library teaches reusable patterns; Blocks owns future reusable workflow execution.
+
+### Decision 32: Add Private, User-Directed Template Adaptation to Kosh
+*   **Date:** 2026-09-04
+*   **Area:** Kosh accounts, private context, template adaptation, AI generation
+*   **Status:** Local implementation (`[Recommendation]`)
+*   **Decision:** Let a signed-in Kosh user save separate personal and professional context profiles, then explicitly choose one when adapting a starter template. Generate an ephemeral Markdown working copy through the existing server-side model provider and keep the canonical public template unchanged.
+*   **Rationale:** Kosh becomes materially more useful when a sound operating pattern can begin in the user's real situation. Keeping context selection explicit and the output separate preserves user control, avoids silently rewriting public source material, and makes the adaptation boundary legible.
+*   **Guardrails:**
+    *   Context remains private to the authenticated Kosh profile and is retrieved under the user's RLS-scoped session.
+    *   The interface must disclose that the selected context is sent to the configured model provider when the user requests an adaptation.
+    *   Personal and professional context must remain separately selectable; Kosh must not silently combine them.
+    *   Adaptation happens only after the user requests it for a named template and chosen context.
+    *   The generated copy must preserve source purpose, safety boundaries, human-review points, and missing-information prompts.
+    *   Do not invent names, evidence, clients, metrics, permissions, outcomes, or consequential decisions.
+    *   Adapted copies are previewed and downloaded separately; this version does not overwrite canonical templates or persist generated content.
+    *   Kosh remains a template-adaptation library, not an autonomous workflow executor. Blocks retains the execution boundary.
+
+### Decision 33: Make Kosh Resources Public and Keep Working Copies Private
+* **Date:** 2026-09-05
+* **Area:** Kosh discovery, resource quality, member workspace
+* **Status:** Local implementation; publication and Kosh database migration pending.
+* **Decision:** Following the founder's request to implement the Kosh improvement recommendations, make the catalogue and full resource pages publicly readable. Reserve accounts for favourites, private context, adaptation and explicitly saved working copies.
+* **Rationale:** Visitors can assess resource quality before registering. A single resource page connects instructions, examples and an editable copy without stacked dialogs.
+* **Source:** Founder request in the Kosh analysis and implementation conversation, 2026-09-05.
+* **Affected files:** `website/src/app/library/`, `website/public/library/`, `website/src/lib/library/`, `website/src/lib/kosh/`, `website/src/app/api/kosh/adapt/`, `docs/kosh/`.
+* **[Fact] Local changes:** Six version 1.1 resource editions, a research collection, shareable resource pages, a searchable public catalogue, account recovery UI, manual editing/export, private copy UI, context selection and an authenticated adaptation route.
+* **[Fact] Data boundary:** Working copies require a new Kosh-only RLS table. The migration is staged under `docs/kosh/migrations/`, outside the Platform migration stream, and has not been applied.
+* **[Recommendation] Release default:** Limit each authenticated user to 10 model attempts per UTC day through an atomic Kosh RPC. Fail closed if that function is unavailable. Failed model attempts count toward the limit.
+* **Alternatives rejected:** Blocking all resource inspection behind registration; reusing fictional demonstration data during adaptation; silently persisting generated copies; replacing users' saved copies when an original changes; moving workflow execution into Kosh.
+* **Open questions:** Apply and verify the Kosh migration, validate live email recovery and member persistence with controlled accounts, approve publication, and approve formal reuse terms separately. No legal reuse terms or tested-provider claims are introduced by this change.
+* **Ownership:** Website Steward leads; Narrative Editor, Proof and Governance Auditor, and Documentation Steward responsibilities guide content and handoff. Work was implemented in one task.

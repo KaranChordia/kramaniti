@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { libraryItems } from '@/lib/library/libraryData';
 import { insights } from '@/data/insights';
 import { absoluteUrl, getInsightPublishedDate } from '@/lib/seo';
 
@@ -85,5 +86,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  return [...staticRoutes, ...insightRoutes];
+  return [...staticRoutes, ...insightRoutes, ...libraryItems.map(item => ({ url: absoluteUrl(`/library/resources/${item.id}`), changeFrequency: 'monthly' as const, priority: 0.6 })), { url: absoluteUrl('/library/collections/research-a-decision'), changeFrequency: 'monthly', priority: 0.6 }, { url: absoluteUrl('/library/standards'), changeFrequency: 'monthly', priority: 0.4 }];
 }
