@@ -1,0 +1,11 @@
+{
+  "base": "http://127.0.0.1:3001",
+  "checks": [
+    "1440px: spatial map, method part recall, hash history, unchanged original, copy edits survive reference/review, real download, hidden-copy leave guard and original reader Escape/focus",
+    "390px: spatial map, method part recall, hash history, unchanged original, copy edits survive reference/review, real download, hidden-copy leave guard and original reader Escape/focus",
+    "320px: spatial map, method part recall, hash history, unchanged original, copy edits survive reference/review, real download, hidden-copy leave guard and original reader Escape/focus",
+    "All six resources: deep-linked method, every method part and preserved demonstration render",
+    "Direct subsection URL and light theme with 200% CSS zoom reflow; actual browser-menu zoom untested"
+  ],
+  "errors": []
+}

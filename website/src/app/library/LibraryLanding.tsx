@@ -1,182 +1,118 @@
 import Link from "next/link";
-import { KoshNav } from "./KoshNav";
 import { ResourceCatalogue } from "./ResourceCatalogue";
-import { KoshHeroField } from "./KoshHeroField";
-import { libraryItems } from "@/lib/library/libraryData";
-import { Bot, Sparkles, Plug, ShieldCheck, ArrowUpRight } from "lucide-react";
 import styles from "./editorial.module.css";
-
-const formats = [
-  {
-    kind: "Agent",
-    title: "Agents",
-    summary: "Give a recurring job a clear brief.",
-    icon: Bot,
-  },
-  {
-    kind: "Skill",
-    title: "Skills",
-    summary: "Put a repeatable method to work.",
-    icon: Sparkles,
-  },
-  {
-    kind: "Plugin guide",
-    title: "Plugin guides",
-    summary: "Choose connections with care.",
-    icon: Plug,
-  },
-  {
-    kind: "Governance",
-    title: "Human review",
-    summary: "Keep consequential calls with people.",
-    icon: ShieldCheck,
-  },
-];
+import world from "@/components/kosh/world/world.module.css";
 export function LibraryLanding({
   initialKind = "All",
+  initialQuery = "",
+  initialCompact = false,
 }: {
   initialKind?: string;
+  initialQuery?: string;
+  initialCompact?: boolean;
 }) {
   return (
     <main className={styles.page} data-disable-global-shockwave="true">
-      <KoshNav />
-      <header className={styles.hero}>
-        <KoshHeroField />
-        <p className={styles.eyebrow}>The Kramaniti library · Edition 01</p>
-        <h1>A practical library for human-led systems.</h1>
-        <div className={styles.heroBottom}>
-          <p>
-            Start with a useful pattern. Make it fit the work. Keep the
-            consequential call with people.
-          </p>
-          <a href="#catalogue" className={styles.primary}>
-            Explore the library <span aria-hidden="true">↓</span>
-          </a>
-        </div>
+      <header className={world.arrival}>
+        <p className={world.eyebrow}>Welcome to Kosh</p>
+        <h1>
+          A place for your next
+          <br />
+          way of working.
+        </h1>
+        <p>
+          Discover a useful method. Shape it around your work. Keep the
+          decisions that matter in human hands.
+        </p>
         <div
-          className={styles.heroShortcuts}
-          aria-label="Explore resource formats"
+          className={world.destinations}
+          aria-label="Find your place in Kosh"
         >
-          {formats.map(({ kind, title, summary, icon: Icon }) => (
-            <Link
-              className={styles.formatTile}
-              key={kind}
-              href={`/library?kind=${encodeURIComponent(kind)}#catalogue`}
-            >
-              <span className={styles.formatTop}>
-                <Icon size={21} strokeWidth={1.4} aria-hidden="true" />
-                <small>
-                  {libraryItems
-                    .filter((item) => item.kind === kind)
-                    .length.toString()
-                    .padStart(2, "0")}
-                </small>
-              </span>
-              <strong>{title}</strong>
-              <span>{summary}</span>
-              <ArrowUpRight
-                className={styles.formatArrow}
-                size={16}
-                aria-hidden="true"
-              />
-            </Link>
-          ))}
+          <svg
+            className={world.path}
+            viewBox="0 0 1200 180"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M 16 0 H 380 V 48 H 790 V 96 H 1200"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+            />
+          </svg>
+          <a href="#catalogue" className={world.destination}>
+            <small aria-hidden="true">01</small>
+            <h2>Explore</h2>
+            <p>Find a starting point among six practical resources.</p>
+            <span>
+              Follow a useful idea <b aria-hidden="true">↓</b>
+            </span>
+          </a>
+          <Link href="/library/create" className={world.destination}>
+            <small aria-hidden="true">02</small>
+            <h2>Create</h2>
+            <p>
+              Turn a way of working into a skill you can edit, review and
+              export.
+            </p>
+            <span>
+              Begin with your work <b aria-hidden="true">→</b>
+            </span>
+          </Link>
+          <Link href="/library/workspace" className={world.destination}>
+            <small aria-hidden="true">03</small>
+            <h2>My work</h2>
+            <p>Return to your favourites and private context.</p>
+            <span>
+              Open your workspace <b aria-hidden="true">→</b>
+            </span>
+          </Link>
         </div>
       </header>
       <section
-        className={styles.section}
         id="catalogue"
+        className={world.catalogue}
         aria-labelledby="catalogue-heading"
       >
-        <div className={styles.sectionIntro}>
-          <div>
-            <p className={styles.eyebrow}>The catalogue</p>
-            <h2 id="catalogue-heading">Start with the work.</h2>
-          </div>
+        <div className={world.catalogueHeading}>
+          <h2 id="catalogue-heading">Follow the work that interests you.</h2>
           <p>
-            Choose a useful outcome. Every resource includes a working template,
-            setup guidance and an illustrative example.
+            Open a resource, understand its method, then make something of your
+            own.
           </p>
         </div>
-        <ResourceCatalogue key={initialKind} initialKind={initialKind} />
+        <ResourceCatalogue
+          key={`${initialKind}:${initialQuery}:${initialCompact}`}
+          initialKind={initialKind}
+          initialQuery={initialQuery}
+          initialCompact={initialCompact}
+          pathView
+        />
       </section>
-      <section
-        id="collections"
-        className={`${styles.section} ${styles.feature}`}
-        aria-labelledby="collection-heading"
-      >
+      <section id="collections" className={world.crossroads}>
         <div>
-          <p className={styles.eyebrow}>A collection to begin with</p>
-          <h2 id="collection-heading">
-            Research.
-            <br />
-            Evidence.
-            <br />
-            <em>A human decision.</em>
+          <p className={world.eyebrow}>A connected collection</p>
+          <h2>
+            Research. Evidence.
+            <br />A human decision.
           </h2>
           <p>
-            Three resources, one considered sequence. Move from an open question
-            to a brief someone can act on.
+            Three resources trace a considered route from an open question to a
+            brief someone can act on.
           </p>
-          <Link
-            className={styles.textLink}
-            href="/library/collections/research-a-decision"
-          >
-            Explore the collection <span aria-hidden="true">↗</span>
+          <Link href="/library/collections/research-a-decision">
+            Enter the collection →
           </Link>
         </div>
-        <div className={styles.specimen}>
-          <span className={styles.eyebrow}>Inside the research template</span>
-          <h3>Should we review content weekly or fortnightly?</h3>
-          <dl>
-            <dt>Evidence</dt>
-            <dd>
-              The sample calendar has a Friday review slot. The sample editor
-              note describes two draft batches each month.
-            </dd>
-            <dt>Inference</dt>
-            <dd>
-              A fortnightly review may align with draft availability. A benefit
-              has not been measured.
-            </dd>
-            <dt>Next decision</dt>
-            <dd>
-              Ask the editor to check the next publication calendar before
-              choosing a cadence.
-            </dd>
-          </dl>
-          <p className={styles.caption}>
-            Illustrative example. No client work or measured result is
-            represented.
-          </p>
-          <Link href="/library/resources/research-synthesis-agent">
-            Read the complete resource →
-          </Link>
-        </div>
-      </section>
-      <section
-        className={`${styles.section} ${styles.membership}`}
-        aria-labelledby="membership-heading"
-      >
-        <p className={styles.eyebrow}>Your working library</p>
-        <h2 id="membership-heading">
-          A starting point.
-          <br />
-          Then, your own.
-        </h2>
         <div>
+          <p className={world.eyebrow}>A space to shape your own</p>
+          <h2>Have a method in mind?</h2>
           <p>
-            Read and download the originals without an account. Sign in to keep
-            favourites and use private context to adapt a resource. Review each
-            draft before putting it to work.
+            Bring it into the Creation Studio. Your local draft stays in your
+            control, with clear boundaries and a real downloadable package.
           </p>
-          <Link className={styles.primary} href="/library/workspace">
-            Open my library ↗
-          </Link>
-          <p className={styles.caption}>
-            Templates support your work. They do not run agents, install plugins
-            or take actions on your behalf.
-          </p>
+          <Link href="/library/create">Create a skill →</Link>
         </div>
       </section>
       <footer className={styles.footer}>

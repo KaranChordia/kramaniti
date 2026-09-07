@@ -1,0 +1,13 @@
+{
+  "base": "http://127.0.0.1:3001",
+  "checks": [
+    "390px touch: add focuses new text; remove returns focus to the surviving step",
+    "Native transitions can be interrupted; latest rapid navigation wins with one matching visible panel",
+    "390px touch: blank create, all fields, boundaries, sample assessment and actual reviewed ZIP; private custom context excluded",
+    "320px touch: add focuses new text; remove returns focus to the surviving step",
+    "320px touch: blank create, all fields, boundaries, sample assessment and actual reviewed ZIP; private custom context excluded",
+    "Browser without native View Transitions completes the same touch workflow",
+    "200% CSS zoom: reflow and export controls remain reachable; this is not a browser-menu zoom test"
+  ],
+  "errors": []
+}

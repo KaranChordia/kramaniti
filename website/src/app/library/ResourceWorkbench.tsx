@@ -19,10 +19,14 @@ export function ResourceWorkbench({
   item,
   original,
   question,
+  focused = false,
+  onNavigationBlocked,
 }: {
   item: LibraryItem;
   original: string;
   question: string;
+  focused?: boolean;
+  onNavigationBlocked?: () => void;
 }) {
   const router = useRouter();
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(
@@ -215,6 +219,7 @@ export function ResourceWorkbench({
         return;
       event.preventDefault();
       event.stopPropagation();
+      onNavigationBlocked?.();
       setPendingNavigation(
         destination.pathname + destination.search + destination.hash,
       );
@@ -230,7 +235,7 @@ export function ResourceWorkbench({
       window.removeEventListener("beforeunload", warn);
       document.removeEventListener("click", guard, true);
     };
-  }, [dirty]);
+  }, [dirty, onNavigationBlocked]);
 
   async function toggleBookmark() {
     const supabase = getKoshSupabase();
@@ -458,7 +463,14 @@ export function ResourceWorkbench({
       {loading ? (
         <p role="status">Checking your account…</p>
       ) : !user ? (
-        <KoshAuth />
+        focused ? (
+          <details>
+            <summary>Sign in for private copies and adaptation</summary>
+            <KoshAuth />
+          </details>
+        ) : (
+          <KoshAuth />
+        )
       ) : (
         <div className={styles.form}>
           <button

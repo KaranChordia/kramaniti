@@ -11,8 +11,14 @@ export const metadata: Metadata = {
 export default async function LibraryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ kind?: string }>;
+  searchParams: Promise<{ kind?: string; q?: string; view?: string }>;
 }) {
-  const { kind } = await searchParams;
-  return <LibraryLanding initialKind={kind} />;
+  const { kind, q, view } = await searchParams;
+  return (
+    <LibraryLanding
+      initialKind={kind}
+      initialQuery={typeof q === "string" ? q.slice(0, 200) : ""}
+      initialCompact={view === "compact"}
+    />
+  );
 }

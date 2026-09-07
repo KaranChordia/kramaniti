@@ -1,0 +1,12 @@
+{
+  "runtime": "isolated PGlite PostgreSQL, synthetic auth identities",
+  "checks": [
+    "Atomic create/update, server digest matches application, stale save rejected, restore appends without rewriting history",
+    "Direct snapshot insert/update/delete and owner reassignment denied, including to the owner",
+    "Explicit evidence save binds exact content and sample digests; wrong version digest and direct evidence rewrite rejected",
+    "Cross-user artifact/version/evidence reads return no rows; save/delete/evidence operations cannot target another owner",
+    "Anonymous table/function access and authenticated role without auth identity denied",
+    "Evidence withdrawal, stale-delete protection, owner deletion cascade and top-level owner injection rejection"
+  ],
+  "limits": "Not live Supabase, PostgREST, email, multi-connection concurrency or authenticated-browser verification."
+}

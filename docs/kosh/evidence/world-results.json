@@ -1,0 +1,10 @@
+{
+  "base": "http://127.0.0.1:3001",
+  "checks": [
+    "1440px: filtered/compact Explore → original resource download → source-backed manual skill → actual ZIP → restored discovery scroll/filter → native back/forward and My work/Create retain the local draft",
+    "390px: filtered/compact Explore → original resource download → source-backed manual skill → actual ZIP → restored discovery scroll/filter → native back/forward and My work/Create retain the local draft",
+    "320px: filtered/compact Explore → original resource download → source-backed manual skill → actual ZIP → restored discovery scroll/filter → native back/forward and My work/Create retain the local draft",
+    "320px reduced motion keeps all spaces understandable and functional without spatial animation"
+  ],
+  "errors": []
+}

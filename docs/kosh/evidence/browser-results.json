@@ -1,0 +1,17 @@
+{
+  "base": "http://127.0.0.1:3001",
+  "checks": [
+    "Connected editing: Resume restores exact field selection after a chapter change",
+    "A1: manual artifact editing, add step, explicit title focus and view scroll restoration",
+    "A12/A13: real downloaded ZIP opened; exact content and review digest; samples excluded; reviewed acknowledgment enforced",
+    "A8: content edit invalidates review; dialog Escape returns focus to Export",
+    "A4 fixture: stale synthetic candidate cannot overwrite later edits",
+    "A1: refreshing an unsaved draft can be cancelled; unavailable saving retains content",
+    "A15: rapid tabs and reduced motion keep active gold marker, aria-selected and visible panel synchronized",
+    "A15: 1440/768/390/320 layouts without overflow, keyboard tabs, reduced motion, light theme",
+    "A2: public source version 1.1 retained in separate draft; demonstration excluded",
+    "A14: unknown source has useful non-leaking state",
+    "No browser console errors or page errors"
+  ],
+  "errors": []
+}

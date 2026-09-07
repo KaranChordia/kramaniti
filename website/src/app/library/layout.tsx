@@ -1,4 +1,5 @@
 import type { Viewport } from "next";
+import { KoshWorld } from "@/components/kosh/world/KoshWorld";
 // Kosh reading and editing support user zoom independently of the public site's viewport.
 export const viewport: Viewport = {
   width: "device-width",
@@ -11,5 +12,5 @@ export default function KoshLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <KoshWorld>{children}</KoshWorld>;
 }

@@ -1,0 +1,956 @@
+.page {
+  --canvas: #0e0e10;
+  --surface: #171719;
+  --ink: #f1eee7;
+  --muted: #aaa69f;
+  --line: rgba(241, 238, 231, 0.16);
+  --gold: #d3b65d;
+  background: var(--canvas);
+  color: var(--ink);
+  min-height: 100dvh;
+  padding: 0 max(32px, calc((100vw - 1280px) / 2));
+  font-size: 16px;
+  line-height: 1.6;
+}
+:global(html[data-theme="light"]) .page {
+  --canvas: #f8f7f3;
+  --surface: #f0eee7;
+  --ink: #232321;
+  --muted: #615e57;
+  --line: rgba(28, 28, 31, 0.18);
+  --gold: #80651d;
+}
+.page *,
+.dialog * {
+  box-sizing: border-box;
+}
+.page a {
+  color: inherit;
+  text-decoration: none;
+}
+.page button {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 0;
+  text-align: left;
+  transition:
+    color 180ms,
+    background 180ms,
+    border-color 180ms;
+}
+.page button:hover,
+.page a:hover {
+  color: var(--gold);
+}
+.page button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.page :is(a, button, input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+.page input,
+.page textarea,
+.page select {
+  font: inherit;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  max-width: 100%;
+}
+.page textarea {
+  width: 100%;
+  padding: 16px;
+  line-height: 1.65;
+  resize: vertical;
+  display: block;
+}
+.page textarea::placeholder,
+.page input::placeholder {
+  color: var(--muted);
+  opacity: 0.85;
+}
+.page input[type="checkbox"] {
+  accent-color: var(--gold);
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+.page select {
+  padding: 8px 12px;
+  min-height: 44px;
+  background: var(--surface);
+}
+.page h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+}
+.page h3 {
+  font-size: 22px;
+  font-weight: 500;
+  margin: 16px 0 8px;
+}
+.page p {
+  margin: 0 0 16px;
+}
+.nav {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.nav > div {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.brand {
+  gap: 12px;
+  white-space: nowrap;
+}
+.brand b {
+  color: var(--gold);
+  font-weight: 500;
+  margin-left: 4px;
+}
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.hint {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.arrival {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 88px 0 64px;
+}
+.arrival h1 {
+  font-size: clamp(34px, 4.3vw, 60px);
+  font-weight: 400;
+  line-height: 1.23;
+  letter-spacing: -0.045em;
+  margin: 24px 0;
+}
+.arrivalLead {
+  font-size: 18px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.arrival form {
+  margin-top: 40px;
+}
+.arrival form > textarea {
+  margin-top: 8px;
+  padding: 20px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  font-size: 20px;
+  background: transparent;
+  min-height: 132px;
+}
+.entryActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 0 16px;
+  font-size: 14px;
+}
+.page .primary {
+  background: var(--gold);
+  color: var(--canvas);
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid transparent;
+}
+.page .primary:hover {
+  color: var(--canvas);
+  filter: brightness(1.08);
+}
+.page .secondary {
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 4px;
+  text-align: center;
+}
+.examples {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  margin: 24px 0 40px;
+  font-size: 13px;
+}
+.examples > span {
+  width: 100%;
+}
+.examples button span {
+  margin-left: 8px;
+  color: var(--muted);
+}
+.arrivalFoot {
+  margin-top: 48px !important;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+.details {
+  margin: 24px 0;
+  font-size: 14px;
+}
+.details summary,
+.assistance summary {
+  cursor: pointer;
+  color: var(--muted);
+  min-height: 44px;
+  padding: 10px 0;
+}
+.details summary:hover,
+.assistance summary:hover {
+  color: var(--ink);
+}
+.details pre {
+  font-size: 13px;
+}
+.studioHeader {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.titleBlock {
+  min-width: 0;
+  flex: 1;
+}
+.titleBlock .eyebrow {
+  margin-bottom: 8px;
+}
+.page .title {
+  font-size: clamp(26px, 3vw, 40px) !important;
+  field-sizing: content;
+  resize: none;
+  overflow: hidden;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+.title:hover {
+  border-bottom-color: var(--line);
+}
+.titleBlock h1 {
+  margin: 0;
+}
+.titleBlock > .hint {
+  margin: 8px 0 0;
+}
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 0 0 auto;
+  font-size: 14px;
+}
+.source {
+  max-width: 1080px;
+  margin: 0 auto 16px !important;
+  font-size: 12px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.source a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 32px;
+  border-bottom: 1px solid var(--line);
+  max-width: 1080px;
+  margin: 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--canvas);
+}
+.tabs button {
+  transition: color 180ms;
+  font-size: 14px;
+  border-bottom: 2px solid transparent;
+  padding: 14px 0;
+  color: var(--muted);
+}
+.tabs button[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--gold);
+}
+.tabHint {
+  align-self: center;
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+}
+.document {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 0 64px;
+}
+.field {
+  padding: 24px 0;
+}
+.field > label {
+  display: block;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.field > .hint {
+  margin-top: 8px;
+}
+.field > textarea {
+  border-color: transparent;
+  border-left: 1px solid var(--line);
+  border-radius: 0;
+  padding: 4px 0 4px 16px;
+  overflow: hidden;
+  resize: vertical;
+  min-height: 56px;
+}
+.field > textarea:hover {
+  border-left-color: var(--muted);
+}
+.field > textarea:focus {
+  border-left-color: var(--gold);
+  background: var(--surface);
+}
+.compactField {
+  padding: 8px 0;
+}
+.compactField > label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.compactField textarea {
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  min-height: 44px;
+  overflow: hidden;
+}
+.orderedRow {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 16px;
+  margin: 16px 0;
+}
+.number {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  color: var(--gold);
+  padding-top: 38px;
+}
+.rowActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+}
+.rowActions button {
+  color: var(--muted);
+}
+.rowActions > .secondary {
+  color: var(--ink);
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 13px;
+  margin: 8px 0;
+}
+.page .textAction {
+  color: var(--gold);
+  font-size: 14px;
+}
+.page .nextAction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 32px 0;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+  color: var(--gold);
+  font-size: 15px;
+}
+.intro {
+  font-size: 22px;
+  max-width: 640px;
+  line-height: 1.5;
+  padding-top: 24px;
+}
+.notice {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 16px 0 !important;
+  overflow-wrap: anywhere;
+}
+.notice:empty {
+  display: none;
+}
+.notice ul {
+  padding-left: 20px;
+  margin: 12px 0;
+}
+.notice strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.notice p {
+  margin-top: 8px;
+}
+.sectionHeading {
+  margin: 40px 0 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.sectionHeading button {
+  font-size: 13px;
+  color: var(--muted);
+}
+.assessment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.assessment + button {
+  margin-top: 24px;
+}
+.assistance {
+  border-top: 1px solid var(--line);
+  margin-top: 48px;
+  padding: 12px 0;
+  font-size: 14px;
+}
+.assistance summary > span {
+  margin-left: 16px;
+  font-size: 12px;
+}
+.assistance > label {
+  display: block;
+  margin: 16px 0 8px;
+}
+.context {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+}
+.pending {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--gold);
+  font-size: 13px;
+}
+.pending button {
+  color: var(--gold);
+}
+.footer {
+  border-top: 1px solid var(--line);
+  padding: 24px 0 32px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.dialog {
+  color: var(--ink);
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  width: min(760px, calc(100vw - 48px));
+  max-height: calc(100dvh - 64px);
+  padding: 32px;
+  margin: auto;
+  overflow: auto;
+  overscroll-behavior: contain;
+  box-shadow: 0 24px 80px #0006;
+}
+.dialog[open] {
+  animation: appear 240ms ease-out;
+}
+.dialog::backdrop {
+  background: #000a;
+}
+.dialogHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+}
+.dialogHeader h2 {
+  font-size: 22px;
+}
+.dialogHeader button {
+  font-size: 13px;
+  white-space: nowrap;
+}
+.fileList {
+  list-style: none;
+  padding: 16px 0;
+  margin: 16px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.fileList li {
+  margin: 4px 0;
+  font-size: 13px;
+}
+.page pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+  background: var(--surface);
+  padding: 16px;
+  border-radius: 4px;
+  max-height: 360px;
+  overflow-y: auto;
+  font-size: 13px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  font-size: 14px;
+}
+.comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.comparison > section {
+  min-width: 0;
+}
+.comparison h3 {
+  font-size: 15px;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 767px) {
+  .page {
+    padding: 0 16px;
+  }
+  .nav {
+    min-height: 64px;
+    gap: 12px;
+  }
+  .brand {
+    gap: 8px;
+    font-size: 12px;
+  }
+  .nav > div {
+    gap: 16px;
+  }
+  .nav > div > a:last-child {
+    display: none;
+  }
+  .arrival {
+    padding: 56px 0 40px;
+  }
+  .arrival h1 {
+    letter-spacing: -0.04em;
+  }
+  .desktopBreak {
+    display: none;
+  }
+  .arrivalLead {
+    font-size: 16px;
+  }
+  .arrival form > textarea {
+    font-size: 17px;
+  }
+  .entryActions {
+    gap: 16px;
+  }
+  .examples {
+    gap: 4px 16px;
+  }
+  .studioHeader {
+    padding: 32px 0 24px;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .headerActions {
+    justify-content: flex-end;
+    gap: 24px;
+  }
+  .tabs {
+    gap: 32px;
+  }
+  .tabHint {
+    display: none;
+  }
+  .document {
+    padding-top: 16px;
+  }
+  .field {
+    padding: 20px 0;
+  }
+  .field > textarea {
+    padding-left: 12px;
+  }
+  .orderedRow {
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: 8px;
+  }
+  .intro {
+    font-size: 20px;
+  }
+  .assessment {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .context {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .footer {
+    flex-direction: column;
+  }
+  .dialog {
+    width: calc(100vw - 16px);
+    max-height: calc(100dvh - 16px);
+    padding: 20px 16px;
+  }
+  .dialogHeader {
+    gap: 12px;
+  }
+  .dialogHeader h2 {
+    font-size: 20px;
+  }
+  .comparison {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .actions > button {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page *,
+  .dialog[open] {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* A shared work surface and a connected chapter path, scoped to the Studio. */
+.chapterNav {
+  max-width: 1080px;
+  margin: 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--canvas);
+}
+.chapterNav .tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border-bottom: 0;
+  padding: 12px 0 0;
+}
+.chapterNav .tabs::before {
+  content: "";
+  position: absolute;
+  top: 33px;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: var(--line);
+  pointer-events: none;
+}
+.chapterNav .tabs button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0 16px 0 0;
+  min-height: 44px;
+  background: var(--canvas);
+  border: 0;
+  font-size: 13px;
+  color: var(--muted);
+  transition: color 180ms;
+}
+.chapterNav .tabs button:nth-child(2) {
+  justify-self: center;
+  padding-left: 16px;
+}
+.chapterNav .tabs button:last-child {
+  justify-self: end;
+  padding: 0 0 0 16px;
+}
+.chapterNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+}
+.chapterNav .tabs button[aria-selected="true"] {
+  color: var(--ink);
+}
+.chapterNav .tabs button[aria-selected="true"] .chapterNumber {
+  color: var(--canvas);
+  border-color: var(--gold);
+  background: var(--gold);
+}
+.chapterContext {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  min-height: 52px;
+  padding-bottom: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.chapterContext button {
+  font-size: 12px;
+  color: var(--gold);
+}
+.document {
+  view-transition-name: studio-work;
+}
+.field {
+  transition: border-color 180ms;
+}
+.field > textarea {
+  caret-color: var(--gold);
+  border-left-color: transparent;
+  transition: border-color 180ms;
+}
+.field:hover > textarea {
+  border-left-color: var(--line);
+}
+.field:focus-within > textarea {
+  background: transparent;
+  border-left-color: var(--gold);
+}
+.field > label {
+  transition: color 180ms;
+}
+.field:focus-within > label {
+  color: var(--gold);
+}
+.compactField textarea {
+  border-bottom-color: transparent;
+  caret-color: var(--gold);
+  transition: border-color 180ms;
+}
+.compactField:hover textarea {
+  border-bottom-color: var(--line);
+}
+.compactField:focus-within textarea {
+  border-bottom-color: var(--gold);
+}
+.field > textarea:focus-visible,
+.compactField > textarea:focus-visible {
+  outline: 0;
+}
+.field > label::after {
+  content: "Edit";
+  color: var(--muted);
+  font-size: 12px;
+  margin-left: 16px;
+  opacity: 0;
+  transition: opacity 180ms;
+}
+.field:hover > label::after,
+.field:focus-within > label::after {
+  opacity: 1;
+}
+.page .nextAction span {
+  transition: transform 180ms;
+}
+.page .nextAction:hover span {
+  transform: translateX(4px);
+}
+:global(::view-transition-old(root)) {
+  display: none;
+}
+:global(::view-transition-new(root)) {
+  animation: none;
+}
+:global(html[data-studio-direction="arrival"])
+  .page
+  [data-studio-intent="true"] {
+  view-transition-name: studio-intent;
+}
+:global(::view-transition-group(studio-intent)) {
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.22, 0.68, 0, 1);
+}
+:global(::view-transition-old(studio-work)) {
+  animation: studio-out 140ms ease-in both;
+}
+:global(::view-transition-new(studio-work)) {
+  animation: studio-in 260ms cubic-bezier(0.22, 0.68, 0, 1) both;
+}
+:global(html[data-studio-direction="back"]::view-transition-new(studio-work)) {
+  animation-name: studio-back;
+}
+@keyframes studio-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@keyframes studio-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes studio-back {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 767px) {
+  .chapterNav .tabs::before {
+    top: 24px;
+  }
+  .chapterNav .tabs button,
+  .chapterNav .tabs button:nth-child(2),
+  .chapterNav .tabs button:last-child {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    background: transparent;
+    padding: 0 8px 0 0;
+    font-size: 12px;
+    width: 100%;
+    justify-self: stretch;
+    line-height: 1.5;
+  }
+  .chapterNav .tabs button:nth-child(2) {
+    align-items: center;
+    text-align: center;
+    padding: 0 4px;
+  }
+  .chapterNav .tabs button:last-child {
+    align-items: flex-end;
+    text-align: right;
+    padding-right: 0;
+  }
+  .chapterNumber {
+    background: var(--canvas);
+    position: relative;
+  }
+  .chapterContext {
+    padding: 12px 0 8px;
+    min-height: 48px;
+  }
+  .field > label::after {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(::view-transition-group(*)),
+  :global(::view-transition-old(*)),
+  :global(::view-transition-new(*)) {
+    animation: none !important;
+  }
+  .page .nextAction:hover span {
+    transform: none;
+  }
+}

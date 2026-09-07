@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { KoshNav } from "../KoshNav";
 import styles from "../editorial.module.css";
 export const metadata = {
   title: "Resource standards | Kramaniti Kosh",
@@ -9,7 +8,6 @@ export const metadata = {
 export default function StandardsPage() {
   return (
     <main className={styles.page} data-disable-global-shockwave="true">
-      <KoshNav />
       <header className={styles.resourceHero}>
         <p className={styles.eyebrow}>The editorial standard</p>
         <h1>Know what you are starting with.</h1>

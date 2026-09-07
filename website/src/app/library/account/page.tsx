@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getKoshSupabase } from "@/lib/kosh/supabase";
-import { KoshNav } from "../KoshNav";
 import { KoshAuth } from "../KoshAuth";
 import styles from "../editorial.module.css";
 export default function KoshRecovery() {
@@ -49,7 +48,6 @@ export default function KoshRecovery() {
   }
   return (
     <main className={styles.page} data-disable-global-shockwave="true">
-      <KoshNav />
       <header className={styles.resourceHero}>
         <p className={styles.eyebrow}>Kosh account</p>
         <h1>Return to your library.</h1>

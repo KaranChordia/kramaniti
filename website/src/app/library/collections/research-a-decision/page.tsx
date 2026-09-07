@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { KoshNav } from "../../KoshNav";
 import { researchCollection } from "@/lib/library/resourceDetails";
 import { libraryItems } from "@/lib/library/libraryData";
 import styles from "../../editorial.module.css";
@@ -12,7 +11,6 @@ export const metadata = {
 export default function ResearchCollection() {
   return (
     <main className={styles.page} data-disable-global-shockwave="true">
-      <KoshNav />
       <Link className={styles.breadcrumb} href="/library">
         ← Kosh collections
       </Link>

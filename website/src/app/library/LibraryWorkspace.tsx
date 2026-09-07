@@ -10,7 +10,6 @@ import {
 } from "@/lib/kosh/supabase";
 import { parseKoshContext, serializeKoshContext } from "@/lib/kosh/context";
 import { libraryItems } from "@/lib/library/libraryData";
-import { KoshNav } from "./KoshNav";
 import { KoshAuth } from "./KoshAuth";
 import { ResourceTile } from "./ResourceTile";
 import { ResourceCatalogue } from "./ResourceCatalogue";
@@ -167,7 +166,6 @@ export function LibraryWorkspace() {
   }
   return (
     <main className={styles.page} data-disable-global-shockwave="true">
-      <KoshNav />
       <header className={styles.resourceHero}>
         <p className={styles.eyebrow}>Your Kosh workspace</p>
         <h1>{user ? "Keep useful work close." : "A library of your own."}</h1>

@@ -902,3 +902,18 @@ This log registers the major strategic and structural decisions made during the 
 * **Alternatives rejected:** Blocking all resource inspection behind registration; reusing fictional demonstration data during adaptation; silently persisting generated copies; replacing users' saved copies when an original changes; moving workflow execution into Kosh.
 * **Open questions:** Apply and verify the Kosh migration, validate live email recovery and member persistence with controlled accounts, approve publication, and approve formal reuse terms separately. No legal reuse terms or tested-provider claims are introduced by this change.
 * **Ownership:** Website Steward leads; Narrative Editor, Proof and Governance Auditor, and Documentation Steward responsibilities guide content and handoff. Work was implemented in one task.
+
+### Decision 34: Implement the Kosh Creation Studio locally, skill first
+
+* **Date:** 2026-09-06
+* **Status:** Founder-authorized local implementation; visual review and release remain separate.
+* **Decision:** Extend Kosh with an artifact-centered skill creation studio: manual structured editing, explicit governance, sample review, version-bound checks and neutral package export. Prepare private persistence and model assistance within the same boundaries as resources and private working copies.
+* **Source:** KC's authorized implementation task and `docs/kosh/creation-studio-build-plan.md`.
+* **Constraints:** Preserve public originals and legacy copies; isolate Kosh from Platform; exported rules remain instructions. Blocks retains the execution boundary. No commit, push, deployment, remote migration or external communication is authorized by this local milestone.
+* **Evidence:** `docs/kosh/creation-studio-handoff.md`.
+
+* **2026-09-06 founder direction extension:** KC requested a premium, connected interactive-world experience. Locally extend the library → resource → Create → return journey with open resource paths, a persistent Explore/Create/My work frame, restrained interruptible motion and preserved discovery/draft position. This supersedes the earlier navigation hold, while retaining normal URLs, keyboard access, reduced motion and manual export. Tab-memory continuity is not private saved persistence. Live saving, account transitions and model assistance retain their release gates. Verification is recorded in `docs/kosh/creation-studio-handoff.md`.
+
+* **2026-09-07 spatial resource extension:** Following KC's request for stronger spatial awareness and focused movement within templates, replace the long resource presentation with a persistent five-place map and a focused reading/editing area. Preserve original wording, complete original reading/download, direct subsection links, keyboard access, reduced motion and manual copy continuity while moving within a resource. This is a local UX extension; live persistence/provider gates remain unchanged. Scope and evidence: `docs/kosh/resource-space-handoff.md`.
+
+* **2026-09-07 publication authorization:** KC explicitly requested commit and publication of all work in this task. Release the connected Kosh experience, manual Creation Studio and spatial resources, including verification and unapplied persistence preparation. Studio saving and AI assistance remain explicitly unavailable. Publication does not apply remote migrations. Release scope: `docs/kosh/release-20260907.md`.
