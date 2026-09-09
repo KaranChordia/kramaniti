@@ -8,23 +8,26 @@ type HeroProps = { isActive?: boolean };
 
 const headlineLines = [
   [
-    { text: 'We', index: 0 },
-    { text: 'make', index: 1 },
-    { text: 'your', index: 2 },
+    { text: 'Your', index: 0 },
+    { text: 'business', index: 1 },
+    { text: 'deserves', index: 2 },
   ],
   [
-    { text: 'business', index: 3 },
-    { text: 'clearer', index: 4, accent: true },
+    { text: 'better', index: 3, accent: true },
+    { text: 'than', index: 4 },
+    { text: 'scattered', index: 5 },
+    { text: 'work', index: 6 },
   ],
   [
-    { text: 'inside', index: 5 },
-    { text: 'and', index: 6 },
-    { text: 'out.', index: 7 },
+    { text: 'and', index: 7 },
+    { text: 'an', index: 8 },
+    { text: 'untold', index: 9 },
+    { text: 'story.', index: 10 },
   ],
 ] as const;
 
 const subheading =
-  'We bring clarity to how work moves, automate the repetitive parts where it helps, and give your brand a more coherent way to communicate.';
+  'We untangle your workflows, build useful AI systems, and turn what makes your business valuable into messaging and content people can connect with.';
 
 function revealWords(text: string, delay: number) {
   const words = text.split(' ');
@@ -105,7 +108,7 @@ export function Hero({ isActive = true }: HeroProps) {
                     style={{ '--word-index': word.index } as CSSProperties}
                   >
                     {word.text}
-                    {wordIndex < line.length - 1 ? '\u00a0' : ''}
+                    {wordIndex < line.length - 1 ? '\u00a0' : lineIndex < headlineLines.length - 1 ? ' ' : ''}
                   </span>
                 ))}
               </span>

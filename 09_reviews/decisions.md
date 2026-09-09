@@ -917,3 +917,15 @@ This log registers the major strategic and structural decisions made during the 
 * **2026-09-07 spatial resource extension:** Following KC's request for stronger spatial awareness and focused movement within templates, replace the long resource presentation with a persistent five-place map and a focused reading/editing area. Preserve original wording, complete original reading/download, direct subsection links, keyboard access, reduced motion and manual copy continuity while moving within a resource. This is a local UX extension; live persistence/provider gates remain unchanged. Scope and evidence: `docs/kosh/resource-space-handoff.md`.
 
 * **2026-09-07 publication authorization:** KC explicitly requested commit and publication of all work in this task. Release the connected Kosh experience, manual Creation Studio and spatial resources, including verification and unapplied persistence preparation. Studio saving and AI assistance remain explicitly unavailable. Publication does not apply remote migrations. Release scope: `docs/kosh/release-20260907.md`.
+
+### Decision 35: Lock the homepage hero around scattered work and an untold story
+
+* **Date:** 2026-09-09
+* **Area:** Homepage messaging
+* **Status:** [Fact] Founder-approved copy and publication.
+* **Decision:** Use the headline “Your business deserves better than scattered work and an untold story.” with the subheading “We untangle your workflows, build useful AI systems, and turn what makes your business valuable into messaging and content people can connect with.”
+* **Rationale:** Make the operational and communication offer more concrete while adding a measured emotional connection for founders. Preserve the strategy, systems, and content sequence and existing workflow-audit CTA.
+* **Source:** KC explicitly selected this exact wording and requested commit, push, and publication in the homepage-copy task.
+* **Affected files:** `website/src/components/sections/Hero.tsx`.
+* **Alternatives rejected:** Retaining the abstract “clearer inside and out” hero; the other proposed headline variations were not selected.
+* **Open questions:** None for the approved wording. Release verification is reported in the task.
