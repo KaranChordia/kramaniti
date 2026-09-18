@@ -12,7 +12,6 @@ import { parseKoshContext, serializeKoshContext } from "@/lib/kosh/context";
 import { libraryItems } from "@/lib/library/libraryData";
 import { KoshAuth } from "./KoshAuth";
 import { ResourceTile } from "./ResourceTile";
-import { ResourceCatalogue } from "./ResourceCatalogue";
 import styles from "./editorial.module.css";
 
 type CopySummary = Pick<
@@ -23,7 +22,7 @@ export function LibraryWorkspace() {
   const { theme, toggleTheme } = useKramanitiTheme();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(isKoshSupabaseConfigured);
-  const [view, setView] = useState<"Library" | "Saved" | "Settings">("Library");
+  const [view, setView] = useState<"Saved" | "Context">("Saved");
   const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [copies, setCopies] = useState<CopySummary[]>([]);
   const [context, setContext] = useState({ personal: "", professional: "" });
@@ -157,7 +156,7 @@ export function LibraryWorkspace() {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      setView("Library");
+      setView("Saved");
     } catch {
       setMessage("Sign out failed. Please try again.");
     } finally {
@@ -167,12 +166,12 @@ export function LibraryWorkspace() {
   return (
     <main className={styles.page} data-disable-global-shockwave="true">
       <header className={styles.resourceHero}>
-        <p className={styles.eyebrow}>Your Kosh workspace</p>
-        <h1>{user ? "Keep useful work close." : "A library of your own."}</h1>
+        <p className={styles.eyebrow}>My Kosh</p>
+        <h1>{user ? "Your saved work and context." : "Make Kosh yours."}</h1>
         <p>
           {user
-            ? "Return to favourites, continue a working copy, or choose the context that makes a template yours."
-            : "Explore every resource publicly. Sign in to keep favourites, save private working copies and adapt templates to your context."}
+            ? "Keep templates you return to, continue private working copies, and set the context you choose to use."
+            : "Sign in to save templates, keep private working copies and provide context when you choose to adapt a resource."}
         </p>
         {!user && (
           <Link className={styles.textLink} href="/library#catalogue">
@@ -187,7 +186,7 @@ export function LibraryWorkspace() {
       ) : (
         <>
           <nav className={styles.actions} aria-label="Workspace views">
-            {(["Library", "Saved", "Settings"] as const).map((label) => (
+            {(["Saved", "Context"] as const).map((label) => (
               <button
                 key={label}
                 className={styles.secondary}
@@ -198,12 +197,6 @@ export function LibraryWorkspace() {
               </button>
             ))}
           </nav>
-          {view === "Library" && (
-            <section className={styles.section}>
-              <h2>Find your next starting point.</h2>
-              <ResourceCatalogue />
-            </section>
-          )}
           {view === "Saved" && (
             <section className={styles.section}>
               <h2>Favourites</h2>
@@ -247,7 +240,7 @@ export function LibraryWorkspace() {
               )}
             </section>
           )}
-          {view === "Settings" && (
+          {view === "Context" && (
             <section className={styles.workbench}>
               <h2>The context you choose.</h2>
               <p>

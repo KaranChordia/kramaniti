@@ -929,3 +929,14 @@ This log registers the major strategic and structural decisions made during the 
 * **Affected files:** `website/src/components/sections/Hero.tsx`.
 * **Alternatives rejected:** Retaining the abstract “clearer inside and out” hero; the other proposed headline variations were not selected.
 * **Open questions:** None for the approved wording. Release verification is reported in the task.
+
+### Decision 36: Make Kosh a simple three-page platform
+
+* **Date:** 2026-09-18
+* **Area:** Kosh discovery and navigation
+* **Status:** Founder-directed local implementation (`[Fact]`)
+* **Decision:** Use “Kosh” as the shared wordmark and organise the product around three explicit pages: Library, Create and My Kosh. Library is a gallery grid of public templates. Create begins with a maximum five-question guided assistant intake and makes an editable local starter package. My Kosh consolidates saved templates, working copies and private context. Remove secondary collection promotion, task suggestions, format filters, compact-view controls and URL-state controls from first use.
+* **Rationale:** KC requested a substantially simpler Kosh with distinct homes for finding, making and retaining useful templates. The category choice is useful; the earlier overlapping modes were not.
+* **Guardrails:** The five-question flow is a local guided intake until a configured model endpoint is explicitly connected. Resource detail pages, original downloads, human-review boundaries and private-work limitations remain intact. This does not imply saving, execution, account access, or provider-backed package generation is currently available.
+* **Affected files:** `website/src/components/kosh/world/KoshWorld.tsx`, `website/src/components/kosh/world/world.module.css`, `website/src/components/kosh/studio/CreationEntry.tsx`, `website/src/app/library/LibraryLanding.tsx`, `website/src/app/library/LibraryWorkspace.tsx`, `website/src/app/library/ResourceCatalogue.tsx`, `website/src/app/library/discovery.module.css`, `website/src/app/library/page.tsx`, `website/src/app/library/workspace/page.tsx`.
+* **Open question:** Connect the Create intake to a scoped, server-side package-generation endpoint only after model, account, context, quota and disclosure decisions are approved.

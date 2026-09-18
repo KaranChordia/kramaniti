@@ -9,12 +9,9 @@
     var(--canvas);
 }
 .arrival {
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
-  gap: clamp(48px, 7vw, 112px);
-  align-items: center;
-  padding: 68px 0 64px;
+  padding: 68px 0 48px;
 }
+.welcome { max-width: 650px; }
 .eyebrow {
   display: flex;
   align-items: center;
@@ -35,7 +32,7 @@
 }
 .welcome h1 {
   margin: 0;
-  font-size: clamp(36px, 4.1vw, 57px);
+  font-size: clamp(38px, 4.5vw, 62px);
   font-weight: 400;
   line-height: 1.2;
   letter-spacing: -0.055em;
@@ -211,11 +208,7 @@
   scroll-margin-top: calc(var(--kosh-header-height) + 20px);
 }
 .catalogueHeading {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 24px;
-  margin-bottom: 28px;
+  margin-bottom: 18px;
 }
 .catalogueHeading .eyebrow {
   margin-bottom: 10px;
@@ -235,8 +228,7 @@
   color: var(--muted);
 }
 .toolbar {
-  display: flex;
-  gap: 12px;
+  display: block;
 }
 .search {
   display: flex;
@@ -245,7 +237,7 @@
   padding: 0 16px;
   flex: 1;
   min-width: 0;
-  min-height: 58px;
+  min-height: 54px;
   border: 1px solid var(--line);
   border-radius: var(--kosh-radius-control);
   background: color-mix(in srgb, var(--surface) 70%, transparent);
@@ -264,7 +256,7 @@
   flex: 1;
   width: 100%;
   min-width: 0;
-  min-height: 54px;
+  min-height: 50px;
   border: 0;
   outline: none;
   padding: 0;
@@ -406,7 +398,9 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  min-height: 40px;
+  justify-content: space-between;
+  min-height: 46px;
+  border-bottom: 1px solid var(--line);
   color: var(--muted);
   font-size: 10px;
 }
@@ -431,7 +425,7 @@
 .item {
   position: relative;
   display: grid;
-  grid-template-columns: 115px minmax(0, 1fr) 80px;
+  grid-template-columns: minmax(0, 1fr) 40px;
   align-items: center;
   gap: 28px;
   min-height: 145px;
@@ -465,9 +459,8 @@
   transform: none;
 }
 .itemIdentity {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display: block;
+  margin-bottom: 9px;
   font-size: 10px;
   line-height: 1.5;
   color: var(--muted);
@@ -629,8 +622,6 @@
 }
 @media (max-width: 767px) {
   .arrival {
-    grid-template-columns: 1fr;
-    gap: 34px;
     padding: 38px 0 32px;
   }
   .welcome h1 {
@@ -671,19 +662,13 @@
   .catalogue {
     padding: 32px 0 44px;
   }
-  .catalogueHeading {
-    display: block;
-    margin-bottom: 22px;
-  }
+  .catalogueHeading { margin-bottom: 18px; }
   .catalogueHeading > p {
     margin-top: 12px;
     font-size: 11px;
   }
   .catalogueHeading > p br {
     display: none;
-  }
-  .toolbar {
-    gap: 8px;
   }
   .search {
     gap: 10px;
@@ -697,46 +682,8 @@
   .search kbd {
     display: none;
   }
-  .viewToggle {
-    padding: 0 14px;
-  }
-  .viewToggle > span {
-    display: none;
-  }
-  .suggestions {
-    gap: 0 14px;
-    padding: 9px 0 15px;
-  }
-  .suggestions > span {
-    width: 100%;
-    line-height: 2;
-  }
-  .suggestions button {
-    min-height: 44px;
-  }
-  .filterBar {
-    gap: 0;
-    padding-bottom: 8px;
-  }
-  .kindNav {
-    width: 100%;
-    gap: 2px;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-  .kindNav button {
-    flex-direction: column;
-    min-height: 54px;
-    padding: 7px 2px;
-    gap: 4px;
-    font-size: 10px;
-  }
-  .kindNav small {
-    font-size: 10px;
-  }
   .resultStatus {
-    width: 100%;
-    justify-content: space-between;
+    min-height: 44px;
   }
   .item {
     grid-template-columns: minmax(0, 1fr) 28px;
@@ -744,12 +691,6 @@
     padding: 22px 0;
     min-height: 0;
   }
-  .itemIdentity {
-    grid-column: 1 / -1;
-    gap: 8px;
-    font-size: 10px;
-  }
-
   .item h3 {
     font-size: 19px;
   }

@@ -9,7 +9,6 @@ import {
   type ReactNode,
 } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import type { StudioMemory } from "./session";
 import styles from "./world.module.css";
@@ -72,7 +71,6 @@ export function KoshWorld({ children }: { children: ReactNode }) {
   });
   const returning = useRef(false);
   const memory = useRef<Record<string, StudioMemory>>({});
-  const [studioHref, setStudioHref] = useState("/library/create");
   useEffect(() => {
     const warnBeforeLeaving = (event: BeforeUnloadEvent) => {
       if (Object.values(memory.current).some((session) => session.draft)) {
@@ -132,22 +130,12 @@ export function KoshWorld({ children }: { children: ReactNode }) {
     }
   }, [discovery.scroll]);
   function remember() {
-    if (window.location.pathname === "/library/create")
-      setStudioHref(`${window.location.pathname}${window.location.search}`);
     if (window.location.pathname === "/library")
       setDiscovery({
         href: `${window.location.pathname}${window.location.search}#catalogue`,
         scroll: window.scrollY,
       });
   }
-  const activeSpace =
-    pathname.startsWith("/library/create") ||
-    pathname.startsWith("/library/studio")
-      ? 1
-      : pathname.startsWith("/library/workspace") ||
-          pathname.startsWith("/library/account")
-        ? 2
-        : 0;
   return (
     <Journey.Provider
       value={{
@@ -178,44 +166,21 @@ export function KoshWorld({ children }: { children: ReactNode }) {
         </a>
         <header className={styles.worldHeader}>
           <Link className={styles.brand} href="/library">
-            <Image
-              src="/assets/brand/kramaniti-kosh-mark.png"
-              width={36}
-              height={36}
-              alt=""
-            />
-            <span>
-              Kramaniti <b>Kosh</b>
-            </span>
+            Kosh
           </Link>
-          <nav aria-label="Kosh spaces" data-active-space={activeSpace}>
-            <span className={styles.navMarker} aria-hidden="true" />
-            <BackToExplore />
-            <Link
-              href={studioHref}
-              aria-current={
-                pathname.startsWith("/library/create") ||
-                pathname.startsWith("/library/studio")
-                  ? "page"
-                  : undefined
-              }
-            >
+          <nav className={styles.nav} aria-label="Kosh pages">
+            <Link href="/library" aria-current={pathname === "/library" ? "page" : undefined}>
+              Library
+            </Link>
+            <Link href="/library/create" aria-current={pathname.startsWith("/library/create") ? "page" : undefined}>
               Create
             </Link>
-            <Link
-              href="/library/workspace"
-              aria-current={
-                pathname.startsWith("/library/workspace") ||
-                pathname.startsWith("/library/account")
-                  ? "page"
-                  : undefined
-              }
-            >
-              My work
+            <Link href="/library/workspace" aria-current={pathname.startsWith("/library/workspace") ? "page" : undefined}>
+              My Kosh
             </Link>
           </nav>
           <Link href="/" className={styles.home}>
-            Kramaniti ↗
+            Kramaniti
           </Link>
         </header>
         <div

@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import { LibraryWorkspace } from '../LibraryWorkspace';
 
 export const metadata: Metadata = {
-  title: 'Kramaniti Kosh | Workspace',
+  title: 'My Kosh | Saved templates and context',
   robots: { index: false, follow: false },
-  description: 'Browse and download practical operating-pattern templates.',
+  description: 'Saved templates, working copies and private context for Kosh.',
 };
 
 export default function LibraryWorkspacePage() {
