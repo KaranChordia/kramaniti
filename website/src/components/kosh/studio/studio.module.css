@@ -61,7 +61,7 @@
   color: var(--ink);
   background: transparent;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: var(--kosh-radius-control);
   max-width: 100%;
 }
 .page textarea {
@@ -181,7 +181,7 @@
   background: var(--gold);
   color: var(--canvas);
   padding: 12px 20px;
-  border-radius: 4px;
+  border-radius: var(--kosh-radius-control);
   font-weight: 600;
   text-align: center;
   border: 1px solid transparent;
@@ -193,7 +193,7 @@
 .page .secondary {
   border: 1px solid var(--line);
   padding: 10px 16px;
-  border-radius: 4px;
+  border-radius: var(--kosh-radius-control);
   text-align: center;
 }
 .examples {
@@ -300,7 +300,7 @@
   max-width: 1080px;
   margin: 0 auto;
   position: sticky;
-  top: 0;
+  top: var(--kosh-header-height, 0px);
   z-index: 2;
   background: var(--canvas);
 }
@@ -516,7 +516,7 @@
   color: var(--ink);
   background: var(--canvas);
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: var(--kosh-radius-control);
   width: min(760px, calc(100vw - 48px));
   max-height: calc(100dvh - 64px);
   padding: 32px;
@@ -564,7 +564,7 @@
   line-height: 1.7;
   background: var(--surface);
   padding: 16px;
-  border-radius: 4px;
+  border-radius: var(--kosh-radius-control);
   max-height: 360px;
   overflow-y: auto;
   font-size: 13px;
@@ -718,11 +718,12 @@
   max-width: 1080px;
   margin: 0 auto;
   position: sticky;
-  top: 0;
+  top: var(--kosh-header-height, 0px);
   z-index: 3;
   background: var(--canvas);
 }
 .chapterNav .tabs {
+  top: 0;
   position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

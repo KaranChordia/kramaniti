@@ -100,7 +100,7 @@
 }
 .orientation {
   position: sticky;
-  top: 24px;
+  top: calc(var(--kosh-header-height) + 24px);
   padding-right: 12px;
 }
 .mapLabel {
@@ -189,7 +189,7 @@
   min-width: 0;
   padding: 0 0 0 36px;
   border-left: 1px solid var(--line);
-  scroll-margin-top: 30px;
+  scroll-margin-top: calc(var(--kosh-header-height) + 30px);
 }
 .field::before {
   content: "";
@@ -613,7 +613,7 @@
   }
   .orientation {
     position: sticky;
-    top: 0;
+    top: var(--kosh-header-height);
     z-index: 4;
     background: var(--canvas);
     padding: 16px 0 12px;
@@ -663,7 +663,7 @@
   .field {
     padding: 0;
     border: 0;
-    scroll-margin-top: 105px;
+    scroll-margin-top: calc(var(--kosh-header-height) + 105px);
   }
   .field::before {
     display: none;

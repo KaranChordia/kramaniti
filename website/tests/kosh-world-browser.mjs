@@ -7,7 +7,7 @@ const { chromium } = await import(
 );
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 const base = process.env.KOSH_STUDIO_URL || "http://127.0.0.1:3001";
-const evidence = new URL("../../docs/kosh/evidence/", import.meta.url).pathname;
+const evidence = process.env.KOSH_EVIDENCE_DIR || new URL("../../docs/kosh/evidence/", import.meta.url).pathname;
 const checks = [];
 const errors = [];
 try {

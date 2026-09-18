@@ -82,13 +82,30 @@ export function KoshWorld({ children }: { children: ReactNode }) {
     };
     const guardLeavingKosh = (event: MouseEvent) => {
       const link = (event.target as Element).closest("a");
-      if (!link || event.defaultPrevented || link.hasAttribute("download") ||
-          link.target === "_blank" || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ||
-          !Object.values(memory.current).some((session) => session.draft)) return;
+      if (
+        !link ||
+        event.defaultPrevented ||
+        link.hasAttribute("download") ||
+        link.target === "_blank" ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        !Object.values(memory.current).some((session) => session.draft)
+      )
+        return;
       const destination = new URL(link.href);
-      if (destination.origin === location.origin &&
-          (destination.pathname === "/library" || destination.pathname.startsWith("/library/"))) return;
-      if (!window.confirm("Your skill drafts live only in this tab. Leave Kosh without exporting?"))
+      if (
+        destination.origin === location.origin &&
+        (destination.pathname === "/library" ||
+          destination.pathname.startsWith("/library/"))
+      )
+        return;
+      if (
+        !window.confirm(
+          "Your skill drafts live only in this tab. Leave Kosh without exporting?",
+        )
+      )
         event.preventDefault();
     };
     window.addEventListener("beforeunload", warnBeforeLeaving);
@@ -123,6 +140,14 @@ export function KoshWorld({ children }: { children: ReactNode }) {
         scroll: window.scrollY,
       });
   }
+  const activeSpace =
+    pathname.startsWith("/library/create") ||
+    pathname.startsWith("/library/studio")
+      ? 1
+      : pathname.startsWith("/library/workspace") ||
+          pathname.startsWith("/library/account")
+        ? 2
+        : 0;
   return (
     <Journey.Provider
       value={{
@@ -141,6 +166,16 @@ export function KoshWorld({ children }: { children: ReactNode }) {
           if (!event.defaultPrevented && link) remember();
         }}
       >
+        <a
+          className={styles.skipLink}
+          href="#kosh-content"
+          onClick={(event) => {
+            event.preventDefault();
+            document.getElementById("kosh-content")?.focus();
+          }}
+        >
+          Skip to content
+        </a>
         <header className={styles.worldHeader}>
           <Link className={styles.brand} href="/library">
             <Image
@@ -153,7 +188,8 @@ export function KoshWorld({ children }: { children: ReactNode }) {
               Kramaniti <b>Kosh</b>
             </span>
           </Link>
-          <nav aria-label="Kosh spaces">
+          <nav aria-label="Kosh spaces" data-active-space={activeSpace}>
+            <span className={styles.navMarker} aria-hidden="true" />
             <BackToExplore />
             <Link
               href={studioHref}
@@ -182,7 +218,12 @@ export function KoshWorld({ children }: { children: ReactNode }) {
             Kramaniti ↗
           </Link>
         </header>
-        <div key={pathname} className={styles.scene}>
+        <div
+          id="kosh-content"
+          tabIndex={-1}
+          key={pathname}
+          className={styles.scene}
+        >
           {children}
         </div>
       </div>

@@ -1,4 +1,17 @@
+@property --kosh-border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
 .world {
+  --kosh-radius-surface: 8px;
+  --kosh-radius-control: 4px;
+  --kosh-nav-top: 16px;
+  --kosh-nav-height: 72px;
+  --kosh-header-height: calc(
+    var(--kosh-nav-top) + var(--kosh-nav-height) + 12px
+  );
   --canvas: #0e0e10;
   --surface: #171719;
   --ink: #f1eee7;
@@ -8,6 +21,7 @@
   background: var(--canvas);
   color: var(--ink);
   min-height: 100dvh;
+  padding-top: var(--kosh-nav-top);
 }
 :global(html[data-theme="light"]) .world {
   --canvas: #f8f7f3;
@@ -26,13 +40,60 @@
   outline-offset: 5px;
 }
 .worldHeader {
-  width: min(1280px, calc(100% - 64px));
-  min-height: 80px;
-  margin: auto;
+  position: sticky;
+  top: var(--kosh-nav-top);
+  z-index: 20;
+  isolation: isolate;
+  width: min(1240px, calc(100% - 48px));
+  height: var(--kosh-nav-height);
+  margin-inline: auto;
+  padding: 8px 20px;
   display: flex;
-  gap: 40px;
+  gap: 32px;
   align-items: center;
-  border-bottom: 1px solid var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--kosh-radius-surface);
+  background: color-mix(in srgb, var(--canvas) 96%, transparent);
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--canvas) 22%, transparent);
+  backdrop-filter: blur(12px);
+}
+.worldHeader::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--kosh-border-angle),
+    color-mix(in srgb, var(--gold) 18%, transparent) 0deg,
+    color-mix(in srgb, var(--gold) 28%, transparent) 60deg,
+    color-mix(in srgb, var(--gold) 65%, transparent) 110deg,
+    var(--gold) 145deg,
+    #fff4cc 165deg,
+    var(--gold) 185deg,
+    color-mix(in srgb, var(--gold) 55%, transparent) 230deg,
+    color-mix(in srgb, var(--gold) 25%, transparent) 300deg,
+    color-mix(in srgb, var(--gold) 18%, transparent) 360deg
+  );
+  opacity: 0.85;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-shimmer 14s linear infinite;
+}
+@keyframes border-shimmer {
+  from {
+    --kosh-border-angle: 0deg;
+  }
+  to {
+    --kosh-border-angle: 360deg;
+  }
 }
 .brand {
   display: inline-flex;
@@ -46,10 +107,34 @@
   color: var(--gold);
 }
 .worldHeader nav {
-  display: flex;
-  gap: 32px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 294px;
+  gap: 0;
   margin-left: auto;
-  font-size: 13px;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: var(--kosh-radius-control);
+  font-size: 12px;
+}
+.navMarker {
+  position: absolute;
+  z-index: -1;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 3);
+  border-radius: var(--kosh-radius-control);
+  background: color-mix(in srgb, var(--gold) 12%, var(--canvas));
+  transition: transform 320ms cubic-bezier(0.22, 0.68, 0, 1);
+}
+.worldHeader nav[data-active-space="1"] .navMarker {
+  transform: translateX(100%);
+}
+.worldHeader nav[data-active-space="2"] .navMarker {
+  transform: translateX(200%);
 }
 .worldHeader a {
   min-height: 44px;
@@ -57,19 +142,38 @@
   align-items: center;
   transition: color 180ms;
 }
+.worldHeader nav a {
+  justify-content: center;
+  border-radius: var(--kosh-radius-control);
+}
 .worldHeader a:hover,
 .worldHeader a[aria-current="page"] {
   color: var(--gold);
 }
 .home {
   color: var(--muted) !important;
-  font-size: 12px;
+  font-size: 11px;
 }
 .scene {
-  animation: space-arrival 280ms cubic-bezier(0.22, 0.68, 0, 1);
+  padding-top: 12px;
+  animation: space-arrival 380ms cubic-bezier(0.22, 0.68, 0, 1);
+  outline: none;
+  scroll-margin-top: var(--kosh-header-height);
 }
 .scene > main {
-  min-height: calc(100dvh - 80px);
+  min-height: calc(100dvh - var(--kosh-header-height));
+}
+.skipLink {
+  position: fixed;
+  top: -100px;
+  left: 20px;
+  z-index: 100;
+  padding: 14px 20px;
+  background: var(--canvas);
+  border: 1px solid var(--gold);
+}
+.skipLink:focus {
+  top: 16px;
 }
 .arrival {
   position: relative;
@@ -281,25 +385,46 @@
   }
 }
 @media (max-width: 767px) {
+  .world {
+    --kosh-nav-top: 10px;
+    --kosh-nav-height: 114px;
+  }
   .worldHeader {
-    width: calc(100% - 32px);
-    min-height: 108px;
+    width: calc(100% - 24px);
+    min-height: 0;
     flex-wrap: wrap;
-    gap: 0 16px;
-    padding: 12px 0;
+    gap: 0 12px;
+    padding: 7px 12px 9px;
+    background: var(--canvas);
+    backdrop-filter: none;
   }
   .brand {
-    font-size: 12px;
+    font-size: 11px;
+    min-height: 42px;
+  }
+  .brand img {
+    width: 28px;
+    height: 28px;
   }
   .worldHeader nav {
     width: 100%;
     order: 2;
-    margin-left: 0;
-    justify-content: space-between;
-    gap: 20px;
+    margin: 0;
+    padding: 3px;
+    font-size: 11px;
+  }
+  .worldHeader nav a {
+    min-height: 42px;
+  }
+  .navMarker {
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc((100% - 6px) / 3);
   }
   .home {
     margin-left: auto;
+    font-size: 10px;
   }
   .arrival {
     padding: 48px 0 24px;
@@ -367,10 +492,14 @@
     gap: 40px;
   }
   .scene > main {
-    min-height: calc(100dvh - 108px);
+    min-height: calc(100dvh - var(--kosh-header-height));
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .worldHeader::before {
+    animation: none;
+    opacity: 0.4;
+  }
   .scene {
     animation: none;
   }
@@ -383,5 +512,11 @@
   .destination:hover > span b,
   .item:hover > span:last-child {
     transform: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .worldHeader {
+    backdrop-filter: blur(6px);
   }
 }

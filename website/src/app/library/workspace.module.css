@@ -39,7 +39,7 @@
 .settingRow div { display:flex; flex-direction:column; gap:4px; }
 .settingRow strong { color:var(--ink); font-size:14px; font-weight:500; }
 .settingRow span { color:var(--muted); font-size:12px; }
-.themeToggle { display:inline-flex; align-items:center; gap:8px; min-height:40px; padding:0 16px; border:1px solid var(--line); border-radius:6px; background:var(--canvas); color:var(--ink); font-size:12px; font-weight:500; cursor:pointer; transition:all .2s ease; }
+.themeToggle { display:inline-flex; align-items:center; gap:8px; min-height:40px; padding:0 16px; border:1px solid var(--line); border-radius:var(--kosh-radius-control); background:var(--canvas); color:var(--ink); font-size:12px; font-weight:500; cursor:pointer; transition:all .2s ease; }
 .themeToggle:hover { border-color:var(--gold); background:rgba(201,168,76,.05); }
 
 /* --- Panel header with embedded filter pills --- */

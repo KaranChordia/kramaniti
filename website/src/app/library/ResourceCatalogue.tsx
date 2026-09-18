@@ -1,13 +1,34 @@
 "use client";
-import { Fragment, useLayoutEffect, useMemo, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import Link from "next/link";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  LayoutList,
+  List,
+  Search,
+  X,
+} from "lucide-react";
 import { useKoshJourney } from "@/components/kosh/world/KoshWorld";
-import world from "@/components/kosh/world/world.module.css";
 import { ResourceTile } from "./ResourceTile";
 import { libraryItems, libraryKinds } from "@/lib/library/libraryData";
 import { resourceDetails } from "@/lib/library/resourceDetails";
 import styles from "./editorial.module.css";
+import discovery from "./discovery.module.css";
 
+const suggestions = [
+  { label: "Research a decision", query: "research" },
+  { label: "Improve a workflow", query: "process" },
+  { label: "Check a claim", query: "claims" },
+];
 export function ResourceCatalogue({
   initialKind = "All",
   initialQuery = "",
@@ -24,11 +45,45 @@ export function ResourceCatalogue({
     libraryKinds.some((kind) => kind === initialKind) ? initialKind : "All",
   );
   const [compact, setCompact] = useState(initialCompact);
+  const search = useRef<HTMLInputElement>(null);
+  const searchId = useId();
   const journey = useKoshJourney();
   const restoreExplore = journey?.restoreExplore;
   useLayoutEffect(() => {
     if (pathView) restoreExplore?.();
   }, [pathView, restoreExplore]);
+  useEffect(() => {
+    if (!pathView) return;
+    function focusSearch(event: KeyboardEvent) {
+      const target = event.target as HTMLElement;
+      if (
+        event.defaultPrevented ||
+        event.isComposing ||
+        target.closest(
+          "input, textarea, select, [contenteditable='true'], [role='textbox'], dialog[open]",
+        )
+      )
+        return;
+      if (
+        (event.key === "/" &&
+          !event.metaKey &&
+          !event.ctrlKey &&
+          !event.altKey) ||
+        (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey))
+      ) {
+        event.preventDefault();
+        search.current?.focus({ preventScroll: true });
+        search.current?.scrollIntoView({
+          block: "center",
+          behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "instant"
+            : "smooth",
+        });
+      }
+    }
+    window.addEventListener("keydown", focusSearch);
+    return () => window.removeEventListener("keydown", focusSearch);
+  }, [pathView]);
   function updateLocation(
     nextQuery: string,
     nextKind: string,
@@ -48,116 +103,187 @@ export function ResourceCatalogue({
       `${url.pathname}${url.search}#catalogue`,
     );
   }
-  const items = useMemo(
-    () =>
-      libraryItems.filter(
-        (item) =>
-          (kind === "All" || item.kind === kind) &&
-          `${item.title} ${item.summary} ${item.useWhen} ${resourceDetails[item.id].outcome}`
-            .toLowerCase()
-            .includes(query.trim().toLowerCase()),
-      ),
-    [query, kind],
-  );
+  function reset() {
+    setQuery("");
+    setKind("All");
+    updateLocation("", "All", compact);
+  }
+  const matching = useMemo(() => {
+    const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    return libraryItems.filter((item) => {
+      const text =
+        `${item.title} ${item.kind} ${item.summary} ${item.useWhen} ${item.includes.join(" ")} ${resourceDetails[item.id].outcome}`.toLowerCase();
+      return terms.every((term) => text.includes(term));
+    });
+  }, [query]);
+  const items = matching.filter((item) => kind === "All" || item.kind === kind);
+  const filtered = !!query || kind !== "All";
   return (
-    <>
-      <div className={styles.toolbar}>
-        <label className={styles.search}>
-          Find a resource
+    <div className={discovery.browser}>
+      <div className={discovery.toolbar}>
+        <div className={discovery.search}>
+          <Search size={19} aria-hidden="true" />
+          <label className={discovery.srOnly} htmlFor={searchId}>
+            Find a resource
+          </label>
           <input
+            ref={search}
+            id={searchId}
+            aria-label="Find a resource"
             type="search"
-            placeholder="Try research, claims or workflow"
+            placeholder="Search by task or topic"
             value={query}
             maxLength={200}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              updateLocation(e.target.value, kind, compact);
+            aria-keyshortcuts="/ Control+k Meta+k"
+            onChange={(event) => {
+              setQuery(event.target.value);
+              updateLocation(event.target.value, kind, compact);
             }}
           />
-        </label>
+          {query ? (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={() => {
+                setQuery("");
+                updateLocation("", kind, compact);
+                search.current?.focus();
+              }}
+            >
+              <X size={16} aria-hidden="true" />
+            </button>
+          ) : (
+            <kbd aria-hidden="true">/</kbd>
+          )}
+        </div>
         <button
           type="button"
-          className={styles.secondary}
+          className={discovery.viewToggle}
+          aria-label="Compact view"
           aria-pressed={compact}
           onClick={() => {
             setCompact(!compact);
             updateLocation(query, kind, !compact);
           }}
         >
-          Compact view
+          {compact ? (
+            <List size={18} aria-hidden="true" />
+          ) : (
+            <LayoutList size={18} aria-hidden="true" />
+          )}
+          <span>Compact</span>
         </button>
       </div>
-      <div className={styles.kindNav} role="group" aria-label="Resource format">
-        {["All", ...libraryKinds].map((value) => (
+      <div className={discovery.suggestions} aria-label="Search by task">
+        <span>Start with a task</span>
+        {suggestions.map((suggestion) => (
           <button
-            key={value}
+            key={suggestion.query}
             type="button"
-            aria-pressed={kind === value}
+            aria-pressed={query === suggestion.query && kind === "All"}
             onClick={() => {
-              setKind(value);
-              updateLocation(query, value, compact);
+              setQuery(suggestion.query);
+              setKind("All");
+              updateLocation(suggestion.query, "All", compact);
             }}
           >
-            {value}{" "}
-            <small>
-              {value === "All"
-                ? libraryItems.length
-                : libraryItems.filter((item) => item.kind === value).length}
-            </small>
+            {suggestion.label}
+            <ArrowUpRight size={12} aria-hidden="true" />
           </button>
         ))}
       </div>
-      <p className={styles.caption} role="status">
-        {items.length} {items.length === 1 ? "resource" : "resources"}
-      </p>
+      <div className={discovery.filterBar}>
+        <div
+          className={discovery.kindNav}
+          role="group"
+          aria-label="Resource format"
+        >
+          {["All", ...libraryKinds].map((value) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={kind === value}
+              onClick={() => {
+                setKind(value);
+                updateLocation(query, value, compact);
+              }}
+            >
+              {value}
+              <small>
+                {value === "All"
+                  ? matching.length
+                  : matching.filter((item) => item.kind === value).length}
+              </small>
+            </button>
+          ))}
+        </div>
+        <div className={discovery.resultStatus}>
+          <p role="status" aria-atomic="true">
+            {items.length} {items.length === 1 ? "resource" : "resources"}
+          </p>
+          {filtered && (
+            <button type="button" onClick={reset}>
+              Reset <X size={12} aria-hidden="true" />
+            </button>
+          )}
+        </div>
+      </div>
       <div
+        key={`${kind}:${query}:${compact}`}
         className={
           pathView
-            ? `${world.list} ${compact ? world.compact : ""}`
+            ? `${discovery.list} ${compact ? discovery.compact : ""}`
             : compact
               ? styles.compactCatalogue
               : styles.catalogue
         }
       >
-        {items.map((item) => (
-          <Fragment key={item.id}>
-            {pathView ? (
-              <Link
-                key={item.id}
-                href={`/library/resources/${item.id}`}
-                className={world.item}
-              >
-                <span className={world.itemKind}>{item.kind}</span>
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.summary}</p>
-                </div>
-                <span aria-hidden="true">↗</span>
-              </Link>
-            ) : (
-              <ResourceTile key={item.id} item={item} />
-            )}
-          </Fragment>
-        ))}
+        {items.map((item, index) => {
+          return pathView ? (
+            <Link
+              key={item.id}
+              href={`/library/resources/${item.id}`}
+              className={discovery.item}
+              style={{ "--item-order": index } as CSSProperties}
+            >
+              <span className={discovery.itemIdentity}>{item.kind}</span>
+              <div className={discovery.itemBody}>
+                <h3>{item.title}</h3>
+                <span className={discovery.itemSummary}>{item.summary}</span>
+                <span className={discovery.itemIncludes}>
+                  {item.includes.slice(0, 2).map((label) => (
+                    <span key={label}>{label}</span>
+                  ))}
+                </span>
+              </div>
+              <span className={discovery.itemAction}>
+                <span>Explore</span>
+                <ArrowUpRight size={21} aria-hidden="true" />
+              </span>
+            </Link>
+          ) : (
+            <ResourceTile key={item.id} item={item} />
+          );
+        })}
       </div>
       {!items.length && (
-        <div className={styles.empty}>
+        <div className={discovery.empty}>
+          <Search size={28} strokeWidth={1.2} aria-hidden="true" />
+          <h3>A different starting point?</h3>
           <p>
-            No resources match this search. Try a broader task or reset the
-            filters.
+            No resources match{query ? <> “{query}”</> : " this selection"}
+            {kind !== "All" ? ` in ${kind}` : ""}. Try a broader task or explore
+            the full collection.
           </p>
           <button
-            className={styles.secondary}
-            onClick={() => {
-              setQuery("");
-              setKind("All");
-              updateLocation("", "All", compact);
-            }}
+            type="button"
+            className={discovery.textAction}
+            onClick={reset}
           >
-            Show all resources
+            Show all resources <ArrowRight size={16} aria-hidden="true" />
           </button>
         </div>
       )}
-    </>
+    </div>
   );
 }

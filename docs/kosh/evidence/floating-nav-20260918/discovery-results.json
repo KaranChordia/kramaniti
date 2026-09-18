@@ -1,0 +1,16 @@
+{
+  "base": "http://127.0.0.1:3003",
+  "checks": [
+    "1440px: multi-word search, clear/refocus, task shortcuts, empty recovery, filters, compact view, floating navigation and border shimmer, text-only category labels, resource focus visibility, light theme and overflow passed",
+    "768px: multi-word search, clear/refocus, task shortcuts, empty recovery, filters, compact view, floating navigation and border shimmer, text-only category labels, resource focus visibility, light theme and overflow passed",
+    "521px: multi-word search, clear/refocus, task shortcuts, empty recovery, filters, compact view, floating navigation and border shimmer, text-only category labels, resource focus visibility, light theme and overflow passed",
+    "390px: multi-word search, clear/refocus, task shortcuts, empty recovery, filters, compact view, floating navigation and border shimmer, text-only category labels, resource focus visibility, light theme and overflow passed",
+    "320px: multi-word search, clear/refocus, task shortcuts, empty recovery, filters, compact view, floating navigation and border shimmer, text-only category labels, resource focus visibility, light theme and overflow passed",
+    "Direct filtered links and refresh preserve discovery; keyboard skip link transfers focus into content"
+  ],
+  "errors": [],
+  "localPreviewNotices": [
+    "http://127.0.0.1:3003/_vercel/insights/script.js",
+    "http://127.0.0.1:3003/_vercel/speed-insights/script.js"
+  ]
+}
