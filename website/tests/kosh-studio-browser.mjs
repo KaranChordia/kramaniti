@@ -378,7 +378,7 @@ try {
   await page.goto(`${base}/library/create?source=source-checking-skill`);
   assert.equal(
     await page.getByLabel("Skill title").inputValue(),
-    "Source-checking skill",
+    "Check the facts before you publish",
   );
   assert.ok(
     !(await page.getByLabel("Step 1", { exact: true }).inputValue()).includes(

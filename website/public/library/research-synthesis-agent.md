@@ -1,4 +1,4 @@
-# Research & Synthesis Agent
+# Research a decision with sources you can check
 
 Version 1.1 · Kramaniti Kosh
 

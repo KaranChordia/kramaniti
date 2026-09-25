@@ -70,7 +70,7 @@ try {
     await page.waitForTimeout(450);
     assert.ok(
       await catalogue
-        .getByRole("link", { name: /Source-checking skill/ })
+        .getByRole("link", { name: /Check the facts before you publish/ })
         .isVisible(),
     );
     assert.match(await catalogue.getByRole("status").innerText(), /resources?/);
@@ -88,7 +88,7 @@ try {
     assert.equal(await search.inputValue(), "process");
     assert.ok(
       await catalogue
-        .getByRole("link", { name: /Workflow diagnostic/ })
+        .getByRole("link", { name: /Find where a process gets stuck/ })
         .isVisible(),
     );
     await page
@@ -169,10 +169,10 @@ try {
       );
     }
     await catalogue
-      .getByRole("link", { name: /Source-checking skill/ })
+      .getByRole("link", { name: /Check the facts before you publish/ })
       .click();
     await page
-      .getByRole("heading", { name: "Source-checking skill", level: 1 })
+      .getByRole("heading", { name: "Check the facts before you publish", level: 1 })
       .waitFor();
     const map = page.getByRole("navigation", { name: "Resource spaces" });
     await map.getByRole("link", { name: /Method/ }).click();
