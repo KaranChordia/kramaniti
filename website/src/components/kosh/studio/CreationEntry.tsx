@@ -17,7 +17,7 @@ export function CreationEntry({
     { label: "Who will use it, and what should they receive?", hint: "Name the owner, audience and useful outcome." },
     { label: "What information or source material can it use?", hint: "Include what is in scope and what must stay out." },
     { label: "Where should a person review or approve the work?", hint: "Name the decisions that should never be automatic." },
-    { label: "What are you creating?", hint: "Choose a skill, agent, governance rule, plugin guide, or a combined package." },
+    { label: "What are you creating?", hint: "For example: a how-to guide, a checklist, an AI assistant setup, a tool setup guide, or a mix." },
   ];
   const [answers, setAnswers] = useState(["", "", "", "", ""]);
   const [step, setStep] = useState(0);

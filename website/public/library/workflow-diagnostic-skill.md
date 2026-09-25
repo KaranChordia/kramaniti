@@ -1,4 +1,4 @@
-# Workflow Diagnostic Skill
+# Find where a process gets stuck
 
 Version 1.1 · Kramaniti Kosh
 

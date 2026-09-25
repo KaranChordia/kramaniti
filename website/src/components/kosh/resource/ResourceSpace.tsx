@@ -8,7 +8,7 @@ import {
 } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
-import type { LibraryItem } from "@/lib/library/libraryData";
+import { kindLabels, type LibraryItem } from "@/lib/library/libraryData";
 import type { ResourceDetail } from "@/lib/library/resourceDetails";
 import { RESOURCE_VERSION } from "@/lib/library/resourceDetails";
 import type { ResourceSection } from "@/lib/kosh/resourceSections";
@@ -147,7 +147,7 @@ export function ResourceSpace({
       <div className={styles.topline}>
         <BackToExplore>← Back to Explore</BackToExplore>
         <span>
-          {item.kind} <span aria-hidden="true">/</span> Version{" "}
+          {kindLabels[item.kind]} <span aria-hidden="true">/</span> Version{" "}
           {RESOURCE_VERSION}
         </span>
         <button
@@ -355,7 +355,7 @@ export function ResourceSpace({
         <p className={styles.eyebrow}>Connected resources</p>
         {related.map((resource) => (
           <Link key={resource.id} href={`/library/resources/${resource.id}`}>
-            <span>{resource.kind}</span>
+            <span>{kindLabels[resource.kind]}</span>
             {resource.title}
             <b aria-hidden="true">↗</b>
           </Link>

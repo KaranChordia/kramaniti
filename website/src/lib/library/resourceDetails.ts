@@ -105,9 +105,9 @@ export const resourceDetails: Record<string, ResourceDetail> = {
   },
   "exception-log": {
     outcome:
-      "A shared record of overrides, corrections and odd cases that turns repeats into owned changes to the normal route.",
+      "A shared record of each time someone had to step in, so repeat problems get fixed once, with a named person responsible.",
     question:
-      "Which live workflow keeps needing correction, and who will review what gets logged?",
+      "Where does your team keep having to fix the AI’s work, and who will look over the record?",
     requires: [
       "One live workflow where people regularly correct, override or escalate",
       "A shared table or sheet placed beside that workflow",
@@ -121,9 +121,9 @@ export const resourceDetails: Record<string, ResourceDetail> = {
   },
   "enquiry-triage-agent": {
     outcome:
-      "Every incoming enquiry is sorted, answered from approved information or passed to the right person, with nothing sent that a person has not agreed to.",
+      "Every enquiry is sorted and either answered from information you have approved or passed to the right person, and nothing is sent without a person agreeing to it.",
     question:
-      "Which enquiries can be answered from approved information, and which must always reach a person?",
+      "Which enquiries can be answered from information you already give out, and which must always go to a person?",
     requires: [
       "A sample of recent real enquiries from WhatsApp and email",
       "The approved answers you already give (price list, stock rules, timings, delivery areas)",
@@ -137,9 +137,9 @@ export const resourceDetails: Record<string, ResourceDetail> = {
   },
   "builder-exit-handover-test": {
     outcome:
-      "A clear answer to whether a workflow can run, stop safely and be corrected without the person who built it, plus a short list of what to fix before it grows.",
+      "A clear answer on whether your team can run, pause and fix the process without the person who built it, plus a short list of what to sort out before more people use it.",
     question:
-      "If the builder stepped away tomorrow, could the operator run, stop and fix this workflow?",
+      "If the person who built this left tomorrow, could the person who uses it every day run it, pause it and fix it?",
     requires: [
       "One workflow already in use, manual or AI-assisted",
       "The person who runs it day to day, and someone who has not built it",
@@ -153,7 +153,7 @@ export const resourceDetails: Record<string, ResourceDetail> = {
   },
   "founder-memory-sop-agent": {
     outcome:
-      "A draft standard operating procedure built only from what the founder actually said, with gaps returned as questions and nothing treated as the rule until the founder approves it.",
+      "Written steps built only from what the founder actually said, with gaps sent back as questions and nothing treated as the rule until the founder approves it.",
     question:
       "Which routine task keeps coming back to the founder, and who will follow the written version?",
     requires: [
@@ -169,9 +169,9 @@ export const resourceDetails: Record<string, ResourceDetail> = {
   },
   "adoption-packet-skill": {
     outcome:
-      "A one-page packet that tells a small team how to use a new AI-assisted workflow in daily work: what it is for, what stays with people, when to override it and who to ask when it goes wrong.",
+      "One page that tells a small team how to use a new AI tool in daily work: what it is for, what stays with people, when to ignore it and who to ask when it goes wrong.",
     question:
-      "What may the team use this workflow for, what stays with people, and who helps when it goes wrong?",
+      "What can the team use the AI for, what stays with people, and who helps when it goes wrong?",
     requires: [
       "One workflow that is about to go live, or that people already use informally",
       "The person accountable for the workflow and the person who will answer questions about it",

@@ -1,4 +1,4 @@
-# Human Review Gate
+# Get sign-off before anything important goes out
 
 Version 1.1 · Kramaniti Kosh
 

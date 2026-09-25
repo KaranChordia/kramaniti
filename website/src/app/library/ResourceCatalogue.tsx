@@ -3,7 +3,7 @@ import { useId, useMemo, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Search, X } from "lucide-react";
 import { ResourceTile } from "./ResourceTile";
-import { libraryItems } from "@/lib/library/libraryData";
+import { kindLabels, libraryItems } from "@/lib/library/libraryData";
 import { resourceDetails } from "@/lib/library/resourceDetails";
 import styles from "./editorial.module.css";
 import discovery from "./discovery.module.css";
@@ -26,7 +26,7 @@ export function ResourceCatalogue({
     const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return libraryItems.filter((item) => {
       const text =
-        `${item.title} ${item.kind} ${item.summary} ${item.useWhen} ${item.includes.join(" ")} ${resourceDetails[item.id].outcome}`.toLowerCase();
+        `${item.title} ${kindLabels[item.kind]} ${item.kind} ${item.summary} ${item.useWhen} ${item.includes.join(" ")} ${resourceDetails[item.id].outcome}`.toLowerCase();
       return terms.every((term) => text.includes(term));
     });
   }, [query]);
@@ -85,7 +85,7 @@ export function ResourceCatalogue({
               style={{ "--item-order": index } as CSSProperties}
             >
               <div className={discovery.itemBody}>
-                <span className={discovery.itemIdentity}>{item.kind}</span>
+                <span className={discovery.itemIdentity}>{kindLabels[item.kind]}</span>
                 <h3>{item.title}</h3>
                 <span className={discovery.itemSummary}>{item.summary}</span>
               </div>
