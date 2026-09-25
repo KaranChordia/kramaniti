@@ -16,7 +16,7 @@ Kramaniti is a first-principles AI systems partner, not an automation agency. It
 
 - [Home](${absoluteUrl('/')}): How Kramaniti understands the work, fixes the workflow that matters, uses AI carefully, and communicates the value.
 - [Clarity Engine](${absoluteUrl('/clarity-engine/')}): A focused way to think through one piece of work before choosing tools.
-- [Kramaniti Kosh](${absoluteUrl('/library/')}): An open library of starter templates for practical agents, skills, plugin evaluation, and human review.
+- [Kramaniti Kosh](${absoluteUrl('/library/')}): An open library of starter templates: how-to guides, checklists, AI assistant setups and tool setup guides.
 - [Insights](${absoluteUrl('/insights/')}): Articles on where work gets stuck, what to build, how people use AI, and how to communicate clearly.
 - [Founder](${absoluteUrl('/founder/')}): Founder profile for Karan Chordia and the principles behind Kramaniti.
 - [Selected Work](${absoluteUrl('/work/')}): Public examples of Kramaniti work.

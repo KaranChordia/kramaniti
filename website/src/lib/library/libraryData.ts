@@ -14,6 +14,14 @@ export type LibraryItem = {
 
 export const libraryKinds: LibraryKind[] = ['Agent', 'Skill', 'Plugin guide', 'Governance'];
 
+/** Plain-language labels shown to readers. The internal kind values stay unchanged. */
+export const kindLabels: Record<LibraryKind, string> = {
+  Agent: 'AI assistant setup',
+  Skill: 'How-to guide',
+  'Plugin guide': 'Tool setup guide',
+  Governance: 'Checklist',
+};
+
 export const libraryItems: LibraryItem[] = [
   {
     id: 'research-synthesis-agent',
