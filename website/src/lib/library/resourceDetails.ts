@@ -151,6 +151,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "This test checks whether ownership, instructions and recovery steps exist. It does not prove the workflow is accurate, secure or compliant, and a few practice cases will not show every failure.",
     related: ["exception-log", "human-review-gate"],
   },
+  "founder-memory-sop-agent": {
+    outcome:
+      "A draft standard operating procedure built only from what the founder actually said, with gaps returned as questions and nothing treated as the rule until the founder approves it.",
+    question:
+      "Which routine task keeps coming back to the founder, and who will follow the written version?",
+    requires: [
+      "A recorded walkthrough, voice note transcript or written notes from the founder about one routine task",
+      "The person who will follow the procedure day to day",
+      "Time set aside for the founder to review the draft and answer its questions",
+    ],
+    check:
+      "Every step traces back to something the founder said; guesses appear as open questions rather than rules; judgment calls are marked as decision points; the founder has approved the version in use and it is stored where the team works.",
+    limit:
+      "The extractor can only capture what the founder said in one walkthrough, and a single example rarely covers every case. It does not check whether the procedure meets legal, regulatory or professional requirements; that stays with the responsible professional.",
+    related: ["workflow-diagnostic-skill", "source-checking-skill"],
+  },
 };
 
 export const researchCollection = [

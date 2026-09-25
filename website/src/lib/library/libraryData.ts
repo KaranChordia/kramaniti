@@ -114,4 +114,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/builder-exit-handover-test.md',
     status: 'Starter template',
   },
+  {
+    id: 'founder-memory-sop-agent',
+    kind: 'Agent',
+    title: 'Founder memory to SOP extractor',
+    summary: 'Turn a founder’s walkthrough into a draft procedure the team can follow.',
+    useWhen: 'A routine task still depends on the founder explaining it each time, and nothing written down matches how it is really done.',
+    includes: ['Source rules', 'Draft structure', 'Decision points', 'Founder approval'],
+    format: 'Markdown',
+    download: '/library/founder-memory-sop-agent.md',
+    status: 'Starter template',
+  },
 ];
