@@ -167,6 +167,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The extractor can only capture what the founder said in one walkthrough, and a single example rarely covers every case. It does not check whether the procedure meets legal, regulatory or professional requirements; that stays with the responsible professional.",
     related: ["workflow-diagnostic-skill", "source-checking-skill"],
   },
+  "adoption-packet-skill": {
+    outcome:
+      "A one-page packet that tells a small team how to use a new AI-assisted workflow in daily work: what it is for, what stays with people, when to override it and who to ask when it goes wrong.",
+    question:
+      "What may the team use this workflow for, what stays with people, and who helps when it goes wrong?",
+    requires: [
+      "One workflow that is about to go live, or that people already use informally",
+      "The person accountable for the workflow and the person who will answer questions about it",
+      "Your rules on which client information may go into which tools",
+    ],
+    check:
+      "A new team member could use the workflow from the packet alone; client information rules are specific; every client-facing output has a named reviewer; the support route names a real person; the packet has a version and an owner.",
+    limit:
+      "The packet sets out how the team should work; it does not make a tool secure or confirm what a provider does with the data you enter. Check each tool’s current terms and your client agreements before use.",
+    related: ["builder-exit-handover-test", "exception-log"],
+  },
 };
 
 export const researchCollection = [

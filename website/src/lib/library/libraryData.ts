@@ -125,4 +125,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/founder-memory-sop-agent.md',
     status: 'Starter template',
   },
+  {
+    id: 'adoption-packet-skill',
+    kind: 'Skill',
+    title: 'Adoption packet and support route',
+    summary: 'Give a small team one page on how to use a new AI workflow and who to ask.',
+    useWhen: 'A new AI-assisted workflow is about to go live in a small agency or firm, or people are already using AI informally for client work.',
+    includes: ['Approved uses', 'Client information rules', 'Override rule', 'Support route'],
+    format: 'Markdown',
+    download: '/library/adoption-packet-skill.md',
+    status: 'Starter template',
+  },
 ];
