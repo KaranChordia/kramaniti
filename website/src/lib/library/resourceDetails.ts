@@ -135,6 +135,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "This brief does not connect to WhatsApp or email by itself, and it cannot check stock, orders or payments it has not been given. Check your messaging provider’s current rules on automated and business messages, and your obligations for customer data, before connecting any tool.",
     related: ["agent-brief-template", "human-review-gate"],
   },
+  "builder-exit-handover-test": {
+    outcome:
+      "A clear answer to whether a workflow can run, stop safely and be corrected without the person who built it, plus a short list of what to fix before it grows.",
+    question:
+      "If the builder stepped away tomorrow, could the operator run, stop and fix this workflow?",
+    requires: [
+      "One workflow already in use, manual or AI-assisted",
+      "The person who runs it day to day, and someone who has not built it",
+      "An hour when the builder can stay present but silent",
+    ],
+    check:
+      "The test was run with the operator, not the builder, doing the work; every No or Partly answer has a fix with an owner; recovery cards have safe actions that do not depend on the builder; the decision owner signed the result.",
+    limit:
+      "This test checks whether ownership, instructions and recovery steps exist. It does not prove the workflow is accurate, secure or compliant, and a few practice cases will not show every failure.",
+    related: ["exception-log", "human-review-gate"],
+  },
 };
 
 export const researchCollection = [

@@ -103,4 +103,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/enquiry-triage-agent.md',
     status: 'Starter template',
   },
+  {
+    id: 'builder-exit-handover-test',
+    kind: 'Governance',
+    title: 'Builder-exit handover test',
+    summary: 'Check that a workflow can run and recover without the person who built it.',
+    useWhen: 'The person who set up a workflow is moving on, or everyone still asks them when something breaks.',
+    includes: ['Named roles', 'Readiness questions', 'Recovery cards', 'Practice cases'],
+    format: 'Markdown',
+    download: '/library/builder-exit-handover-test.md',
+    status: 'Starter template',
+  },
 ];
