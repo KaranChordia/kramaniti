@@ -1,10 +1,10 @@
-# Founder Memory to SOP Extractor
+# Turn the founder’s know-how into written steps
 
 Version 1.1 · Kramaniti Kosh
 
 ## Intended outcome
 
-A draft standard operating procedure built only from what the founder actually said, with gaps returned as questions and nothing treated as the rule until the founder approves it.
+Written steps built only from what the founder actually said, with gaps sent back as questions and nothing treated as the rule until the founder approves it.
 
 ## Before you begin
 

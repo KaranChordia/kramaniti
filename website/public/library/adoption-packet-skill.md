@@ -1,10 +1,10 @@
-# Adoption Packet and Support Route
+# One-page AI rules for your team
 
 Version 1.1 · Kramaniti Kosh
 
 ## Intended outcome
 
-A one-page packet that tells a small team how to use a new AI-assisted workflow in daily work: what it is for, what stays with people, when to override it and who to ask when it goes wrong.
+One page that tells a small team how to use a new AI tool in daily work: what it is for, what stays with people, when to ignore it and who to ask when it goes wrong.
 
 ## Before you begin
 
