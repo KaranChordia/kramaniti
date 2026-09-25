@@ -92,4 +92,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/exception-log.md',
     status: 'Starter template',
   },
+  {
+    id: 'enquiry-triage-agent',
+    kind: 'Agent',
+    title: 'Enquiry triage for WhatsApp and email',
+    summary: 'Sort incoming enquiries, draft routine replies and hand the rest to the right person.',
+    useWhen: 'Customer enquiries arrive on WhatsApp and email faster than one person can answer them, and the same questions keep coming back.',
+    includes: ['Approved information', 'Enquiry types', 'Hand-over rules', 'Test cases'],
+    format: 'Markdown',
+    download: '/library/enquiry-triage-agent.md',
+    status: 'Starter template',
+  },
 ];

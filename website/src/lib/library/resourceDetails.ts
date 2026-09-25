@@ -119,6 +119,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "A log shows what people noticed and recorded, not everything that went wrong, so treat counts as signals rather than measurements. It does not decide which changes are worth making; the named owner does.",
     related: ["human-review-gate", "workflow-diagnostic-skill"],
   },
+  "enquiry-triage-agent": {
+    outcome:
+      "Every incoming enquiry is sorted, answered from approved information or passed to the right person, with nothing sent that a person has not agreed to.",
+    question:
+      "Which enquiries can be answered from approved information, and which must always reach a person?",
+    requires: [
+      "A sample of recent real enquiries from WhatsApp and email",
+      "The approved answers you already give (price list, stock rules, timings, delivery areas)",
+      "A named person for each type of enquiry that needs a human call",
+    ],
+    check:
+      "Every reply is built only from the approved information; money, complaints and delivery promises always reach a person; nothing is sent without approval during the trial; the weekly log shows which drafts were edited and why.",
+    limit:
+      "This brief does not connect to WhatsApp or email by itself, and it cannot check stock, orders or payments it has not been given. Check your messaging provider’s current rules on automated and business messages, and your obligations for customer data, before connecting any tool.",
+    related: ["agent-brief-template", "human-review-gate"],
+  },
 };
 
 export const researchCollection = [
