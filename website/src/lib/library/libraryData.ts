@@ -81,4 +81,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/human-review-gate.md',
     status: 'Starter template',
   },
+  {
+    id: 'exception-log',
+    kind: 'Governance',
+    title: 'Exception log',
+    summary: 'Turn repeated overrides and corrections into owned changes to the workflow.',
+    useWhen: 'A live workflow keeps needing people to correct, override or explain it, and the same fixes are being made by hand.',
+    includes: ['Log fields', 'Exception classes', 'Review questions', 'Closing outcomes'],
+    format: 'Markdown',
+    download: '/library/exception-log.md',
+    status: 'Starter template',
+  },
 ];

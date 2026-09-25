@@ -103,6 +103,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The template records a decision. It does not establish a person\u2019s authority or replace approval required by the organisation.",
     related: ["source-checking-skill", "workflow-diagnostic-skill"],
   },
+  "exception-log": {
+    outcome:
+      "A shared record of overrides, corrections and odd cases that turns repeats into owned changes to the normal route.",
+    question:
+      "Which live workflow keeps needing correction, and who will review what gets logged?",
+    requires: [
+      "One live workflow where people regularly correct, override or escalate",
+      "A shared table or sheet placed beside that workflow",
+      "A named owner who reviews the log on a fixed day",
+    ],
+    check:
+      "Every entry says what was expected and what happened; each reviewed pattern ends in one outcome with an owner; urgent cases went to a person the same day rather than waiting for review.",
+    limit:
+      "A log shows what people noticed and recorded, not everything that went wrong, so treat counts as signals rather than measurements. It does not decide which changes are worth making; the named owner does.",
+    related: ["human-review-gate", "workflow-diagnostic-skill"],
+  },
 };
 
 export const researchCollection = [
