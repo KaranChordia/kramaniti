@@ -47,7 +47,7 @@ try {
       .click();
     const source = page
       .getByRole("region", { name: "Follow the work that interests you." })
-      .getByRole("link", { name: /Source-checking skill/ });
+      .getByRole("link", { name: /Check the facts before you publish/ });
     await source.scrollIntoViewIfNeeded();
     await page.waitForTimeout(350);
     const position = await page.evaluate(() => scrollY);
@@ -61,7 +61,7 @@ try {
     await page.waitForURL("**/library/resources/source-checking-skill");
     await page
       .getByRole("heading", {
-        name: "Source-checking skill",
+        name: "Check the facts before you publish",
         exact: true,
         level: 1,
       })
@@ -169,7 +169,7 @@ try {
     await page.goBack();
     await page
       .getByRole("heading", {
-        name: "Source-checking skill",
+        name: "Check the facts before you publish",
         exact: true,
         level: 1,
       })

@@ -1,4 +1,4 @@
-# Agent Brief Template
+# Write clear instructions for an AI assistant
 
 Version 1.1 · Kramaniti Kosh
 

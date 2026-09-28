@@ -1,10 +1,10 @@
-# Builder-Exit Handover Test
+# Check your team can run it without the person who built it
 
 Version 1.1 · Kramaniti Kosh
 
 ## Intended outcome
 
-A clear answer to whether a workflow can run, stop safely and be corrected without the person who built it, plus a short list of what to fix before it grows.
+A clear answer on whether your team can run, pause and fix the process without the person who built it, plus a short list of what to sort out before more people use it.
 
 ## Before you begin
 

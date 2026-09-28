@@ -1,10 +1,10 @@
-# Exception Log
+# Keep a record of when the AI gets it wrong
 
 Version 1.1 · Kramaniti Kosh
 
 ## Intended outcome
 
-A shared record of overrides, corrections and odd cases that turns repeats into owned changes to the normal route.
+A shared record of each time someone had to step in, so repeat problems get fixed once, with a named person responsible.
 
 ## Before you begin
 

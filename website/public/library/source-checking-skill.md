@@ -1,4 +1,4 @@
-# Source-Checking Skill
+# Check the facts before you publish
 
 Version 1.1 · Kramaniti Kosh
 

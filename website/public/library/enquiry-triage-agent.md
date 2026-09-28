@@ -1,10 +1,10 @@
-# Enquiry Triage Brief for WhatsApp and Email
+# Sort and answer customer enquiries on WhatsApp and email
 
 Version 1.1 · Kramaniti Kosh
 
 ## Intended outcome
 
-Every incoming enquiry is sorted, answered from approved information or passed to the right person, with nothing sent that a person has not agreed to.
+Every enquiry is sorted and either answered from information you have approved or passed to the right person, and nothing is sent without a person agreeing to it.
 
 ## Before you begin
 

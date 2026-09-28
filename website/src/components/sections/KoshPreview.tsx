@@ -5,12 +5,13 @@ import { ArrowRight } from 'lucide-react';
 import styles from './KoshPreview.module.css';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
+import { kindLabels, type LibraryKind } from '@/lib/library/libraryData';
 
-const KOSH_SHELF = [
-  { type: 'Agent', title: 'Research & synthesis' },
-  { type: 'Skill', title: 'Workflow diagnostic' },
-  { type: 'Plugin guide', title: 'Evaluate before connecting' },
-  { type: 'Governance', title: 'Human review gate' },
+const KOSH_SHELF: { kind: LibraryKind; title: string }[] = [
+  { kind: 'Agent', title: 'Research a decision with sources you can check' },
+  { kind: 'Skill', title: 'Find where a process gets stuck' },
+  { kind: 'Plugin guide', title: 'Check a new app before you connect it' },
+  { kind: 'Governance', title: 'Get sign-off before anything important goes out' },
 ];
 
 export function KoshPreview() {
@@ -25,7 +26,7 @@ export function KoshPreview() {
             A practical starting point for better AI work.
           </AnimatedHeading>
           <p className="text-secondary">
-            Kosh is a focused library of clear agents, skills, plugin guides, and review templates. Start with a useful pattern, then make it fit your work.
+            Kosh is a focused library of how-to guides, checklists, AI assistant setups and tool setup guides. Start with a useful pattern, then make it fit your work.
           </p>
           <Link href="/library" className={styles.link}>
             Explore Kosh
@@ -40,10 +41,10 @@ export function KoshPreview() {
           </div>
           <div className={styles.shelf}>
             {KOSH_SHELF.map((item, index) => (
-              <div className={styles.shelfItem} key={item.type}>
+              <div className={styles.shelfItem} key={item.kind}>
                 <span className={styles.index}>0{index + 1}</span>
                 <span className={styles.itemTitle}>{item.title}</span>
-                <span className={styles.itemType}>{item.type}</span>
+                <span className={styles.itemType}>{kindLabels[item.kind]}</span>
               </div>
             ))}
           </div>

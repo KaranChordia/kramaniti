@@ -1,4 +1,4 @@
-# Plugin Evaluation Guide
+# Check a new app before you connect it
 
 Version 1.1 · Kramaniti Kosh
 
