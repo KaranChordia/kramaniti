@@ -144,4 +144,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/adoption-packet-skill.md',
     status: 'Starter template',
   },
+  {
+    id: 'client-onboarding-handoff-brief',
+    kind: 'Agent',
+    title: 'Hand a new client from sales to delivery without gaps',
+    summary: 'Define what sales must pass to delivery, and what an onboarding assistant may and may not do.',
+    useWhen: 'When a new client deal is closed and delivery keeps chasing sales for scope, contacts, approvals or files.',
+    includes: ['Handoff checklist', 'Scope boundary', 'Assistant limits', 'Named owners'],
+    format: 'Markdown',
+    download: '/library/client-onboarding-handoff-brief.md',
+    status: 'Starter template',
+  },
 ];
