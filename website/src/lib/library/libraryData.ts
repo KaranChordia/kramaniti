@@ -144,4 +144,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/adoption-packet-skill.md',
     status: 'Starter template',
   },
+  {
+    id: 'client-onboarding-handoff-brief',
+    kind: 'Agent',
+    title: 'Hand a new client from sales to delivery without gaps',
+    summary: 'Set out what sales must pass to delivery, and what an AI assistant may and may not do along the way.',
+    useWhen: 'A new client deal has closed and delivery keeps chasing sales for scope, contacts, approvals or files.',
+    includes: ['What sales must hand over', 'What was and was not sold', 'What the AI assistant may and may not do', 'Who owns each step'],
+    format: 'Markdown',
+    download: '/library/client-onboarding-handoff-brief.md',
+    status: 'Starter template',
+  },
 ];

@@ -183,6 +183,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The packet sets out how the team should work; it does not make a tool secure or confirm what a provider does with the data you enter. Check each tool’s current terms and your client agreements before use.",
     related: ["builder-exit-handover-test", "exception-log"],
   },
+  "client-onboarding-handoff-brief": {
+    outcome:
+      "A complete handoff from sales to delivery for each new client, with named owners, a clear scope boundary, and an onboarding assistant that only prepares work a person has agreed to.",
+    question:
+      "What must sales pass to delivery before work starts, and what may an onboarding assistant never do alone?",
+    requires: [
+      "One recent closed deal where delivery still had to chase sales for missing details",
+      "The list of what delivery needs before work can start (scope, contacts, approvals, files)",
+      "Named owners in sales and delivery who will keep the handoff honest",
+    ],
+    check:
+      "Every sold item and open promise is written down; blanks and chat-only extras are flagged; the assistant only drafts organisation and checklists; sales and delivery owners are named; delivery has accepted or refused the pack in writing before work is treated as started.",
+    limit:
+      "This brief does not connect to your CRM, email or file store by itself, and it cannot invent missing commercial or legal detail. Check your client agreements and any rules on where client files may be stored before you connect tools.",
+    related: ["agent-brief-template", "human-review-gate"],
+  },
 };
 
 export const researchCollection = [
