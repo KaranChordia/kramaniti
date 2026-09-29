@@ -155,4 +155,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/client-onboarding-handoff-brief.md',
     status: 'Starter template',
   },
+  {
+    id: 'non-build-list-register',
+    kind: 'Governance',
+    title: 'Decide which AI ideas to build, help with, or leave alone',
+    summary: 'Sort each AI idea into build, assist, keep with people, defer or reject, with a reason and a named owner.',
+    useWhen: 'A startup or SMB has a pile of AI ideas and needs a clear yes, no or not-now before anyone spends time or money.',
+    includes: ['Decision options', 'Reason codes', 'Named owner', 'Review date'],
+    format: 'Markdown',
+    download: '/library/non-build-list-register.md',
+    status: 'Starter template',
+  },
 ];
