@@ -215,6 +215,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The register records choices; it does not prove an idea would work, save money or be safe to run. Reason codes are labels for discussion, not a scoring system.",
     related: ["human-review-gate", "workflow-diagnostic-skill"],
   },
+  "conditional-founder-review-rules": {
+    outcome:
+      "A short set of rules that say which work needs founder sign-off and which can move with a lighter check, so the founder stops being a permanent review queue.",
+    question:
+      "Which work still needs the founder, and which can move with a named deputy, peer check or log?",
+    requires: [
+      "A list of the recurring work that currently waits on the founder",
+      "Named people who can act as deputy or peer reviewer when a lighter path is allowed",
+      "A shared place for the rules that the team can find again",
+    ],
+    check:
+      "Every category has one default path, a reason, a time limit and an escalation; founder-only triggers are written down; lighter paths name the deputy or peer and the log; blanks stay visible rather than filled with guesses.",
+    limit:
+      "The rules record who may decide; they do not prove a decision was wise, lawful or safe. A lighter path is not approval for money, legal wording or a new customer promise.",
+    related: ["human-review-gate", "exception-log"],
+  },
 };
 
 export const researchCollection = [

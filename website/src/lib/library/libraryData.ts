@@ -166,4 +166,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/non-build-list-register.md',
     status: 'Starter template',
   },
+  {
+    id: 'conditional-founder-review-rules',
+    kind: 'Governance',
+    title: 'Decide when the founder needs to review work',
+    summary: 'Set clear rules for what the founder must sign off and what can move with a lighter check.',
+    useWhen: 'The founder is the permanent review queue for proposals, copy, hires or tool changes, and work waits on them even when someone else could safely decide.',
+    includes: ['Work categories', 'Founder-only triggers', 'Lighter review paths', 'Stop rules'],
+    format: 'Markdown',
+    download: '/library/conditional-founder-review-rules.md',
+    status: 'Starter template',
+  },
 ];
