@@ -199,6 +199,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "This brief does not connect to your CRM, email or file store by itself, and it cannot invent missing commercial or legal detail. Check your client agreements and any rules on where client files may be stored before you connect tools.",
     related: ["agent-brief-template", "human-review-gate"],
   },
+  "non-build-list-register": {
+    outcome:
+      "A short register of AI ideas, each with a clear decision, a reason, a named owner and a date to look again.",
+    question:
+      "Which AI ideas will you build, assist, keep with people, defer or reject, and who owns each call?",
+    requires: [
+      "A list of AI ideas people have suggested, even if rough or unfinished",
+      "Someone who can decide what the organisation will and will not spend time on",
+      "A shared place for the register that the team can find again",
+    ],
+    check:
+      "Every idea has one decision option, a reason code, a named owner and a review date (or a clear reject); money and customer-promise ideas stay with a person; blanks are visible rather than filled with guesses.",
+    limit:
+      "The register records choices; it does not prove an idea would work, save money or be safe to run. Reason codes are labels for discussion, not a scoring system.",
+    related: ["human-review-gate", "workflow-diagnostic-skill"],
+  },
 };
 
 export const researchCollection = [
