@@ -177,4 +177,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/conditional-founder-review-rules.md',
     status: 'Starter template',
   },
+  {
+    id: 'constraint-pick-sheet',
+    kind: 'Skill',
+    title: 'Pick the one problem to fix before you build',
+    summary: 'Name the single constraint to fix first, with evidence and an owner, before anyone chooses a tool.',
+    useWhen: 'Your team keeps jumping to apps and builds before naming the one delay or handoff that actually limits the work.',
+    includes: ['Constraint statement', 'Evidence', 'Named owner', 'Stop rules'],
+    format: 'Markdown',
+    download: '/library/constraint-pick-sheet.md',
+    status: 'Starter template',
+  },
 ];

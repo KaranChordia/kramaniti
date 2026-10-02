@@ -231,6 +231,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The rules record who may decide; they do not prove a decision was wise, lawful or safe. A lighter path is not approval for money, legal wording or a new customer promise.",
     related: ["human-review-gate", "exception-log"],
   },
+  "constraint-pick-sheet": {
+    outcome:
+      "A one-page sheet that names the single constraint to address first, with evidence, a named owner and a plain picture of what better looks like, before anyone picks a tool.",
+    question:
+      "Which one constraint should you address first, and what evidence shows it is the limiting point?",
+    requires: [
+      "A short picture of how work moves today for one route that already feels stuck",
+      "Someone who can decide what the organisation will focus on first",
+      "Agreement that no tool or build choice will be made until this sheet is filled",
+    ],
+    check:
+      "The sheet has one decision option, one constraint statement, evidence with visible blanks where facts are missing, a named owner and a review date; no tool, cost or frequency was invented before the sheet was filled.",
+    limit:
+      "The sheet records which constraint you chose to address first; it does not prove cost, frequency or the right tool. A filled sheet is not approval to buy software or to change what customers are promised.",
+    related: ["workflow-diagnostic-skill", "non-build-list-register"],
+  },
 };
 
 export const researchCollection = [
