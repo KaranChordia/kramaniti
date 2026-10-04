@@ -10,6 +10,11 @@ export type LibraryItem = {
   format: string;
   download: string;
   status: 'Starter template';
+  /**
+   * Date the template was first published, as 'YYYY-MM-DD' (IST). Required for
+   * every new template: use the date of the commit that first adds it.
+   */
+  created: string;
 };
 
 export const libraryKinds: LibraryKind[] = ['Agent', 'Skill', 'Plugin guide', 'Governance'];
@@ -22,6 +27,24 @@ export const kindLabels: Record<LibraryKind, string> = {
   Governance: 'Checklist',
 };
 
+const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/**
+ * Formats a 'YYYY-MM-DD' created date as '4 Oct 2026'. Parses the string by hand
+ * so the output never depends on the server or browser locale or timezone.
+ */
+export function formatCreatedDate(created: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(created);
+  if (!match) throw new Error(`Invalid created date: ${created}`);
+  const [, year, month, day] = match;
+  const monthIndex = Number(month) - 1;
+  const dayNumber = Number(day);
+  if (monthIndex < 0 || monthIndex > 11 || dayNumber < 1 || dayNumber > 31) {
+    throw new Error(`Invalid created date: ${created}`);
+  }
+  return `${dayNumber} ${shortMonths[monthIndex]} ${year}`;
+}
+
 export const libraryItems: LibraryItem[] = [
   {
     id: 'research-synthesis-agent',
@@ -33,6 +56,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/research-synthesis-agent.md',
     status: 'Starter template',
+    created: '2026-08-29',
   },
   {
     id: 'workflow-diagnostic-skill',
@@ -44,6 +68,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/workflow-diagnostic-skill.md',
     status: 'Starter template',
+    created: '2026-08-29',
   },
   {
     id: 'source-checking-skill',
@@ -55,6 +80,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/source-checking-skill.md',
     status: 'Starter template',
+    created: '2026-08-29',
   },
   {
     id: 'plugin-evaluation-guide',
@@ -66,6 +92,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/plugin-evaluation-guide.md',
     status: 'Starter template',
+    created: '2026-08-29',
   },
   {
     id: 'agent-brief-template',
@@ -77,6 +104,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/agent-brief-template.md',
     status: 'Starter template',
+    created: '2026-08-29',
   },
   {
     id: 'human-review-gate',
@@ -88,6 +116,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/human-review-gate.md',
     status: 'Starter template',
+    created: '2026-08-29',
   },
   {
     id: 'exception-log',
@@ -99,6 +128,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/exception-log.md',
     status: 'Starter template',
+    created: '2026-09-25',
   },
   {
     id: 'enquiry-triage-agent',
@@ -110,6 +140,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/enquiry-triage-agent.md',
     status: 'Starter template',
+    created: '2026-09-25',
   },
   {
     id: 'builder-exit-handover-test',
@@ -121,6 +152,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/builder-exit-handover-test.md',
     status: 'Starter template',
+    created: '2026-09-25',
   },
   {
     id: 'founder-memory-sop-agent',
@@ -132,6 +164,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/founder-memory-sop-agent.md',
     status: 'Starter template',
+    created: '2026-09-25',
   },
   {
     id: 'adoption-packet-skill',
@@ -143,6 +176,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/adoption-packet-skill.md',
     status: 'Starter template',
+    created: '2026-09-25',
   },
   {
     id: 'client-onboarding-handoff-brief',
@@ -154,6 +188,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/client-onboarding-handoff-brief.md',
     status: 'Starter template',
+    created: '2026-09-28',
   },
   {
     id: 'non-build-list-register',
@@ -165,6 +200,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/non-build-list-register.md',
     status: 'Starter template',
+    created: '2026-09-29',
   },
   {
     id: 'conditional-founder-review-rules',
@@ -176,6 +212,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/conditional-founder-review-rules.md',
     status: 'Starter template',
+    created: '2026-09-30',
   },
   {
     id: 'bottleneck-interview-guide',
@@ -187,6 +224,7 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/bottleneck-interview-guide.md',
     status: 'Starter template',
+    created: '2026-10-01',
   },
   {
     id: 'constraint-pick-sheet',
@@ -198,5 +236,6 @@ export const libraryItems: LibraryItem[] = [
     format: 'Markdown',
     download: '/library/constraint-pick-sheet.md',
     status: 'Starter template',
+    created: '2026-10-02',
   },
 ];
