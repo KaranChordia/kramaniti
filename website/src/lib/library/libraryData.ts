@@ -177,4 +177,15 @@ export const libraryItems: LibraryItem[] = [
     download: '/library/conditional-founder-review-rules.md',
     status: 'Starter template',
   },
+  {
+    id: 'bottleneck-interview-guide',
+    kind: 'Skill',
+    title: 'Find where work waits by asking the people who do it',
+    summary: 'A short interview that shows where work waits, repeats or depends on one person, before you decide what to build.',
+    useWhen: 'A family business or small team knows something is slow, but nobody has yet asked the people who do the work where it actually sticks.',
+    includes: ['Who to ask', 'Waiting and repeats', 'One-person bottlenecks', 'What to fix first'],
+    format: 'Markdown',
+    download: '/library/bottleneck-interview-guide.md',
+    status: 'Starter template',
+  },
 ];

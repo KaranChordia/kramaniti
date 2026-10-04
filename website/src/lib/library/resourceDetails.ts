@@ -231,6 +231,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The rules record who may decide; they do not prove a decision was wise, lawful or safe. A lighter path is not approval for money, legal wording or a new customer promise.",
     related: ["human-review-gate", "exception-log"],
   },
+  "bottleneck-interview-guide": {
+    outcome:
+      "A short interview record that shows where work waits, repeats or depends on one person, so you can choose what to fix before you buy or build anything.",
+    question:
+      "Where does work wait, repeat or depend on one person, and what should you fix first?",
+    requires: [
+      "Permission from the owner to talk with the people who do the work",
+      "One recurring process that already feels slow or fragile",
+      "A quiet place and enough time for a short, honest conversation",
+    ],
+    check:
+      "Both who-to-ask roles are covered or the gap is noted; the capture table has visible blanks where answers were unclear; one bottleneck has interview evidence, a named owner and a review date; no tools, costs or frequencies were invented.",
+    limit:
+      "The interview shows where people say work waits; it does not prove cost, frequency or the right tool. Notes are not a substitute for clinical, legal or financial judgment.",
+    related: ["workflow-diagnostic-skill", "founder-memory-sop-agent"],
+  },
 };
 
 export const researchCollection = [
