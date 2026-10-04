@@ -102,6 +102,10 @@
   position: sticky;
   top: calc(var(--kosh-header-height) + 24px);
   padding-right: 12px;
+  align-self: start;
+  max-height: calc(100dvh - var(--kosh-header-height) - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 .mapLabel {
   font-size: 11px;
@@ -755,4 +759,11 @@
 }
 .preparation .prose ul {
   list-style: none;
+}
+
+@media (min-width: 768px) {
+  .landscape { min-height: calc(100dvh - var(--kosh-header-height)); }
+}
+@media (max-width: 767px) {
+  .orientation { max-height: none; overflow-y: visible; }
 }

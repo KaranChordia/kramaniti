@@ -763,3 +763,11 @@
     transform: none;
   }
 }
+
+.filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.filters label { display: grid; gap: 8px; color: var(--muted); font-size: 12px; }
+.filters select { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--kosh-radius-control); background: var(--surface); color: var(--ink); font: inherit; }
+@media (max-width: 600px) {
+  .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .filters label:last-child { grid-column: 1 / -1; }
+}

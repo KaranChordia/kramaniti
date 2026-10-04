@@ -3,6 +3,7 @@ export type LibraryKind = 'Agent' | 'Skill' | 'Plugin guide' | 'Governance';
 export type LibraryItem = {
   id: string;
   kind: LibraryKind;
+  category: 'Research & evidence' | 'Workflow design' | 'Tools & connections' | 'Human oversight' | 'Client work';
   title: string;
   summary: string;
   useWhen: string;
@@ -25,6 +26,7 @@ export const kindLabels: Record<LibraryKind, string> = {
 export const libraryItems: LibraryItem[] = [
   {
     id: 'research-synthesis-agent',
+    category: 'Research & evidence',
     kind: 'Agent',
     title: 'Research a decision with sources you can check',
     summary: 'Turn research into a short brief, with sources, for a decision you need to make.',
@@ -36,6 +38,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'workflow-diagnostic-skill',
+    category: 'Workflow design',
     kind: 'Skill',
     title: 'Find where a process gets stuck',
     summary: 'Map a messy process, see where it slows down and choose the next small fix.',
@@ -47,6 +50,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'source-checking-skill',
+    category: 'Research & evidence',
     kind: 'Skill',
     title: 'Check the facts before you publish',
     summary: 'Separate what is proven from guesses and claims that still need checking.',
@@ -58,6 +62,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'plugin-evaluation-guide',
+    category: 'Tools & connections',
     kind: 'Plugin guide',
     title: 'Check a new app before you connect it',
     summary: 'See what a new app can access, what could go wrong and who looks after it before you connect it.',
@@ -69,6 +74,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'agent-brief-template',
+    category: 'Workflow design',
     kind: 'Agent',
     title: 'Write clear instructions for an AI assistant',
     summary: 'Set out what an AI assistant should do, what it can use and who takes over from it.',
@@ -80,6 +86,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'human-review-gate',
+    category: 'Human oversight',
     kind: 'Governance',
     title: 'Get sign-off before anything important goes out',
     summary: 'Pause important work until a named person decides.',
@@ -91,6 +98,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'exception-log',
+    category: 'Human oversight',
     kind: 'Governance',
     title: 'Keep a record of when the AI gets it wrong',
     summary: 'Write down each time someone has to correct the AI, then fix repeat problems at the source.',
@@ -102,6 +110,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'enquiry-triage-agent',
+    category: 'Client work',
     kind: 'Agent',
     title: 'Sort and answer customer enquiries on WhatsApp and email',
     summary: 'Sort incoming enquiries, draft routine replies and hand the rest to the right person.',
@@ -113,6 +122,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'builder-exit-handover-test',
+    category: 'Workflow design',
     kind: 'Governance',
     title: 'Check your team can run it without the person who built it',
     summary: 'Find out whether your team can run, pause and fix a new process when the person who set it up is not around.',
@@ -124,6 +134,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'founder-memory-sop-agent',
+    category: 'Workflow design',
     kind: 'Agent',
     title: 'Turn the founder’s know-how into written steps',
     summary: 'Record the founder explaining a task, then turn it into steps the team can follow.',
@@ -135,6 +146,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'adoption-packet-skill',
+    category: 'Human oversight',
     kind: 'Skill',
     title: 'One-page AI rules for your team',
     summary: 'One page that tells your team what an AI tool is for, what stays with people and who to ask for help.',
@@ -146,6 +158,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'client-onboarding-handoff-brief',
+    category: 'Client work',
     kind: 'Agent',
     title: 'Hand a new client from sales to delivery without gaps',
     summary: 'Set out what sales must pass to delivery, and what an AI assistant may and may not do along the way.',
@@ -157,6 +170,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'non-build-list-register',
+    category: 'Workflow design',
     kind: 'Governance',
     title: 'Decide which AI ideas to build, help with, or leave alone',
     summary: 'Sort each AI idea into build, assist, keep with people, defer or reject, with a reason and a named owner.',
@@ -168,6 +182,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'conditional-founder-review-rules',
+    category: 'Human oversight',
     kind: 'Governance',
     title: 'Decide when the founder needs to review work',
     summary: 'Set clear rules for what the founder must sign off and what can move with a lighter check.',
@@ -179,6 +194,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'bottleneck-interview-guide',
+    category: 'Workflow design',
     kind: 'Skill',
     title: 'Find where work waits by asking the people who do it',
     summary: 'A short interview that shows where work waits, repeats or depends on one person, before you decide what to build.',
@@ -190,6 +206,7 @@ export const libraryItems: LibraryItem[] = [
   },
   {
     id: 'constraint-pick-sheet',
+    category: 'Workflow design',
     kind: 'Skill',
     title: 'Pick the one problem to fix before you build',
     summary: 'Name the single constraint to fix first, with evidence and an owner, before anyone chooses a tool.',
