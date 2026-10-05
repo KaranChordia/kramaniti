@@ -255,4 +255,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-02',
   },
+  {
+    id: 'proposal-quote-drafting-brief',
+    category: 'Client work',
+    kind: 'Agent',
+    title: 'Draft proposals and quotes without promising what you can’t deliver',
+    summary: 'Put a draft proposal or quote together from agreed scope notes and your own rates, then have a named person check every price and promise before it goes out.',
+    useWhen: 'The founder ends up rewriting every proposal because drafts guess at prices, mix up what is included or promise dates nobody agreed.',
+    includes: ['Agreed inputs only', 'Price and terms review', 'Named reviewer', 'Hold rules'],
+    format: 'Markdown',
+    download: '/library/proposal-quote-drafting-brief.md',
+    status: 'Starter template',
+    created: '2026-10-05',
+  },
 ];
