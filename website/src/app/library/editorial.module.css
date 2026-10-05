@@ -1356,11 +1356,19 @@
 }
 .tileTop {
   justify-content: flex-start;
+  width: 100%;
 }
 .tileKind {
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.14em;
+}
+.tileDate {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 .tileBody {
   display: flex;

@@ -1,7 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { libraryItems } from "../src/lib/library/libraryData.ts";
+import {
+  formatCreatedDate,
+  libraryItems,
+} from "../src/lib/library/libraryData.ts";
 import {
   resourceDetails,
   researchCollection,
@@ -44,6 +47,24 @@ test("every resource has a usable, separate template and labelled demonstration"
       libraryItems.some((item) => item.id === step.id),
     ),
   );
+});
+test("every resource sets a real created date and it formats without locale drift", () => {
+  for (const item of libraryItems) {
+    assert.match(
+      item.created ?? "",
+      /^\d{4}-\d{2}-\d{2}$/,
+      `${item.id} needs created: 'YYYY-MM-DD'`,
+    );
+    assert.equal(
+      new Date(`${item.created}T00:00:00Z`).toISOString().slice(0, 10),
+      item.created,
+      `${item.id} has an impossible created date`,
+    );
+  }
+  assert.equal(formatCreatedDate("2026-10-04"), "4 Oct 2026");
+  assert.equal(formatCreatedDate("2026-08-29"), "29 Aug 2026");
+  assert.equal(formatCreatedDate("2027-01-01"), "1 Jan 2027");
+  assert.throws(() => formatCreatedDate("04/10/2026"), /Invalid created date/);
 });
 test("missing template cannot accidentally send example data for generation", () => {
   assert.throws(
