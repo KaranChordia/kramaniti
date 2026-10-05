@@ -263,6 +263,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The sheet records which constraint you chose to address first; it does not prove cost, frequency or the right tool. A filled sheet is not approval to buy software or to change what customers are promised.",
     related: ["workflow-diagnostic-skill", "non-build-list-register"],
   },
+  "proposal-quote-drafting-brief": {
+    outcome:
+      "A draft proposal or quote built only from agreed scope notes and your own rate card, with every price, discount, timeline, claim and term checked by a named person before it reaches the client.",
+    question:
+      "Which scope notes and rates may the draft use, and who must approve the prices and promises before it is sent?",
+    requires: [
+      "Written scope notes from the client conversation, agreed by whoever ran it",
+      "Your current rate card and standard terms, kept as the only source of prices",
+      "A named person who approves prices, discounts, dates, claims and terms before anything is sent",
+    ],
+    check:
+      "Every price traces to the rate card and every scope line to an agreed note; anything without a source is a visible blank; discounts, dates, claims and terms are on the review list; the named reviewer has recorded a decision before the client sees it.",
+    limit:
+      "The brief prepares a draft for review. It cannot decide what to charge, confirm your team has capacity or check that a term is legally or tax correct, and a draft is not approval to send.",
+    related: ["human-review-gate", "client-onboarding-handoff-brief"],
+  },
 };
 
 export const researchCollection = [
