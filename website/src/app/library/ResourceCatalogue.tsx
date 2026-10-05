@@ -3,7 +3,7 @@ import { useId, useMemo, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Search, X } from "lucide-react";
 import { ResourceTile } from "./ResourceTile";
-import { kindLabels, libraryItems } from "@/lib/library/libraryData";
+import { kindLabels, libraryItems, libraryKinds } from "@/lib/library/libraryData";
 import { resourceDetails } from "@/lib/library/resourceDetails";
 import styles from "./editorial.module.css";
 import discovery from "./discovery.module.css";
@@ -16,20 +16,33 @@ export function ResourceCatalogue({
   pathView?: boolean;
 }) {
   const [query, setQuery] = useState(initialQuery);
+  const [kind, setKind] = useState("All");
+  const [category, setCategory] = useState("All");
+  const [sort, setSort] = useState("library");
+  const categories = Array.from(new Set(libraryItems.map((item) => item.category)));
   const search = useRef<HTMLInputElement>(null);
   const searchId = useId();
   function reset() {
     setQuery("");
+    setKind("All");
+    setCategory("All");
     search.current?.focus();
   }
   const matching = useMemo(() => {
     const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return libraryItems.filter((item) => {
       const text =
-        `${item.title} ${kindLabels[item.kind]} ${item.kind} ${item.summary} ${item.useWhen} ${item.includes.join(" ")} ${resourceDetails[item.id].outcome}`.toLowerCase();
-      return terms.every((term) => text.includes(term));
+        `${item.title} ${item.category} ${kindLabels[item.kind]} ${item.kind} ${item.summary} ${item.useWhen} ${item.includes.join(" ")} ${resourceDetails[item.id].outcome}`.toLowerCase();
+      return (kind === "All" || item.kind === kind) &&
+        (category === "All" || item.category === category) &&
+        terms.every((term) => text.includes(term));
+    }).sort((a, b) => {
+      if (sort === "az") return a.title.localeCompare(b.title);
+      if (sort === "za") return b.title.localeCompare(a.title);
+      if (sort === "category") return a.category.localeCompare(b.category) || a.title.localeCompare(b.title);
+      return libraryItems.indexOf(a) - libraryItems.indexOf(b);
     });
-  }, [query]);
+  }, [query, kind, category, sort]);
   const items = matching;
   return (
     <div className={discovery.browser}>
@@ -60,18 +73,40 @@ export function ResourceCatalogue({
           ) : null}
         </div>
       </div>
+      <div className={discovery.filters}>
+        <label>Format
+          <select value={kind} onChange={(event) => setKind(event.target.value)}>
+            <option value="All">All formats</option>
+            {libraryKinds.map((value) => <option key={value} value={value}>{kindLabels[value]}</option>)}
+          </select>
+        </label>
+        <label>Category
+          <select value={category} onChange={(event) => setCategory(event.target.value)}>
+            <option value="All">All categories</option>
+            {categories.map((value) => <option key={value}>{value}</option>)}
+          </select>
+        </label>
+        <label>Sort by
+          <select value={sort} onChange={(event) => setSort(event.target.value)}>
+            <option value="library">Library order</option>
+            <option value="az">Title: A–Z</option>
+            <option value="za">Title: Z–A</option>
+            <option value="category">Category</option>
+          </select>
+        </label>
+      </div>
       <div className={discovery.resultStatus}>
         <p role="status" aria-atomic="true">
           {items.length} {items.length === 1 ? "resource" : "resources"}
         </p>
-        {query && (
+        {(query || kind !== "All" || category !== "All") && (
           <button type="button" onClick={reset}>
             Reset <X size={12} aria-hidden="true" />
           </button>
         )}
       </div>
       <div
-        key={query}
+        key={`${query}:${kind}:${category}:${sort}`}
         className={
           pathView ? discovery.list : styles.catalogue
         }

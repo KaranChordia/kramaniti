@@ -349,8 +349,6 @@ export function ResourceSpace({
               </a>
             )}
           </div>
-        </div>
-      </div>
       <footer className={styles.connections}>
         <p className={styles.eyebrow}>Connected resources</p>
         {related.map((resource) => (
@@ -361,6 +359,9 @@ export function ResourceSpace({
           </Link>
         ))}
       </footer>
+        </div>
+      </div>
+
       <dialog
         ref={dialog}
         className={styles.original}
