@@ -268,4 +268,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-05',
   },
+  {
+    id: 'ai-tool-subscription-audit',
+    category: 'Tools & connections',
+    kind: 'Skill',
+    title: 'See which AI tools you pay for and what each one is for',
+    summary: 'List every AI tool the team uses, the job it does, who looks after it and what data it sees, then decide what to keep, merge or stop.',
+    useWhen: 'People have signed up for AI apps on their own, and nobody can say for sure which ones are still used, who pays for them or what they can see.',
+    includes: ['Tool list', 'Job and owner', 'Data each tool sees', 'Keep, merge or stop'],
+    format: 'Markdown',
+    download: '/library/ai-tool-subscription-audit.md',
+    status: 'Starter template',
+    created: '2026-10-06',
+  },
 ];

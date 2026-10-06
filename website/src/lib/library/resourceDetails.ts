@@ -279,6 +279,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The brief prepares a draft for review. It cannot decide what to charge, confirm your team has capacity or check that a term is legally or tax correct, and a draft is not approval to send.",
     related: ["human-review-gate", "client-onboarding-handoff-brief"],
   },
+  "ai-tool-subscription-audit": {
+    outcome:
+      "A one-page list of every AI tool the team uses, with the job each one does, who looks after it, what data it can see and one clear decision to keep, change, merge or stop it, before anyone adds the next subscription.",
+    question:
+      "Which AI tools does the team pay for, what job does each one do, and which should you keep, merge or stop?",
+    requires: [
+      "Access to the bills, card statements or admin pages where AI tools are paid for",
+      "A few minutes with each person who uses an AI tool for work, to ask what they use it for",
+      "Someone who can decide what to keep, change or stop, and who knows who pays for each tool",
+    ],
+    check:
+      "Every tool has a named job or a No clear job flag, an owner, the data it can see and one decision; costs, renewal dates and usage come from bills or the people asked, with blanks left visible; nothing was cancelled or changed before the owner agreed.",
+    limit:
+      "The audit shows what you use and why; it does not prove that a tool is secure, compliant or good value, and it does not check vendor terms. A filled list is not approval to cancel, buy or change anyone’s access.",
+    related: ["plugin-evaluation-guide", "non-build-list-register"],
+  },
 };
 
 export const researchCollection = [
