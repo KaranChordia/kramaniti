@@ -295,6 +295,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The audit shows what you use and why; it does not prove that a tool is secure, compliant or good value, and it does not check vendor terms. A filled list is not approval to cancel, buy or change anyone’s access.",
     related: ["plugin-evaluation-guide", "non-build-list-register"],
   },
+  "digital-readiness-baseline": {
+    outcome:
+      "A one-page record of where each piece of business information lives today, who holds it and what goes wrong if that person is away, with one small, safe first digital step that has an owner and a way to check it worked, before anyone buys software or AI.",
+    question:
+      "Where does your business information live today, who holds each piece, and what is the one safe first step to take it digital?",
+    requires: [
+      "Time to look at the registers, notebooks, spreadsheets, chat groups and accounting software the business already uses",
+      "A short chat with each person who keeps a piece of information that the business depends on",
+      "Someone who can decide the first step and who will not buy any new software until this record is filled",
+    ],
+    check:
+      "Every piece of information has where it lives, who holds it, a risk rating and any flags; facts come from the people asked, with blanks left visible; there is one first step with an owner, a start date and a way to check it worked; nothing was bought and the old way was not stopped before the check passed.",
+    limit:
+      "The baseline records where information lives and who the business depends on; it does not prove that a tool is right, safe or worth paying for, and it does not check data protection or accounting rules. A filled record is not approval to buy software, move customer or staff details, or stop the paper register.",
+    related: ["bottleneck-interview-guide", "founder-memory-sop-agent"],
+  },
 };
 
 export const researchCollection = [

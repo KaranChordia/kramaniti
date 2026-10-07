@@ -281,4 +281,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-06',
   },
+  {
+    id: 'digital-readiness-baseline',
+    category: 'Workflow design',
+    kind: 'Skill',
+    title: 'See where your business information lives before you go digital',
+    summary: 'Write down where each piece of business information is kept and who holds it, see what stops if they are away, then pick one small, safe first step before buying any software.',
+    useWhen: 'You want to move off paper registers, notebooks or WhatsApp, but nobody has yet written down what is kept where, or which person the business depends on to find it.',
+    includes: ['Where information lives', 'Who holds each piece', 'Risk if someone is away', 'First safe step'],
+    format: 'Markdown',
+    download: '/library/digital-readiness-baseline.md',
+    status: 'Starter template',
+    created: '2026-10-07',
+  },
 ];
