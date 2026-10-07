@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { ResourceCatalogue } from "./ResourceCatalogue";
+import { defaultLibrarySort, type LibrarySort } from "@/lib/library/libraryData";
 import styles from "./editorial.module.css";
 import discovery from "./discovery.module.css";
 
 export function LibraryLanding({
   initialQuery = "",
+  initialSort = defaultLibrarySort,
 }: {
   initialQuery?: string;
+  initialSort?: LibrarySort;
 }) {
   return (
     <main
@@ -36,8 +39,9 @@ export function LibraryLanding({
           </div>
         </div>
         <ResourceCatalogue
-          key={initialQuery}
+          key={`${initialQuery}:${initialSort}`}
           initialQuery={initialQuery}
+          initialSort={initialSort}
         />
       </section>
       <footer className={styles.footer}>
