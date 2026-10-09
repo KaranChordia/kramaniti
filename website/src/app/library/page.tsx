@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LibraryLanding } from "./LibraryLanding";
+import { parseLibrarySort } from "@/lib/library/libraryData";
 
 export const metadata: Metadata = {
   title: "Kramaniti Kosh",
@@ -11,12 +12,13 @@ export const metadata: Metadata = {
 export default async function LibraryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; sort?: string }>;
 }) {
-  const { q } = await searchParams;
+  const { q, sort } = await searchParams;
   return (
     <LibraryLanding
       initialQuery={typeof q === "string" ? q.slice(0, 200) : ""}
+      initialSort={parseLibrarySort(sort)}
     />
   );
 }

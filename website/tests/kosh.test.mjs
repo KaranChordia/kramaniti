@@ -2,8 +2,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import {
+  defaultLibrarySort,
   formatCreatedDate,
   libraryItems,
+  librarySortOptions,
+  parseLibrarySort,
+  sortLibraryItems,
 } from "../src/lib/library/libraryData.ts";
 import {
   resourceDetails,
@@ -65,6 +69,61 @@ test("every resource sets a real created date and it formats without locale drif
   assert.equal(formatCreatedDate("2026-08-29"), "29 Aug 2026");
   assert.equal(formatCreatedDate("2027-01-01"), "1 Jan 2027");
   assert.throws(() => formatCreatedDate("04/10/2026"), /Invalid created date/);
+});
+test("library sorts by date added, newest first by default, with stable ties", () => {
+  assert.equal(defaultLibrarySort, "newest");
+  assert.equal(librarySortOptions[0].value, "newest");
+  assert.equal(librarySortOptions[0].label, "Newest first");
+  assert.equal(parseLibrarySort(undefined), "newest");
+  assert.equal(parseLibrarySort("nonsense"), "newest");
+  assert.equal(parseLibrarySort("oldest"), "oldest");
+  for (const option of librarySortOptions) {
+    assert.doesNotMatch(option.label, /[\u2013\u2014]/);
+  }
+
+  const item = (id, created, title = id, category = "Client work") => ({
+    id,
+    created,
+    title,
+    category,
+  });
+  // Added in this order. b and c share a date, as do d and e.
+  const added = [
+    item("a", "2026-08-29", "Zebra"),
+    item("b", "2026-09-25", "Apple"),
+    item("c", "2026-09-25", "Mango"),
+    item("d", "2026-10-01", "Apple"),
+    item("e", "2026-10-01", "Kiwi"),
+  ];
+  const ids = (list) => list.map((entry) => entry.id).join(",");
+  const shuffled = [added[3], added[0], added[4], added[2], added[1]];
+
+  assert.equal(ids(sortLibraryItems(shuffled, undefined, added)), "e,d,c,b,a");
+  assert.equal(ids(sortLibraryItems(shuffled, "newest", added)), "e,d,c,b,a");
+  assert.equal(ids(sortLibraryItems(shuffled, "oldest", added)), "a,b,c,d,e");
+  assert.equal(ids(sortLibraryItems(shuffled, "az", added)), "b,d,e,c,a");
+  assert.equal(ids(sortLibraryItems(added, "newest", added)), ids(sortLibraryItems(shuffled, "newest", added)));
+  assert.equal(ids(shuffled), "d,a,e,c,b", "sorting must not change the input list");
+
+  const newest = sortLibraryItems(libraryItems);
+  assert.equal(newest.length, libraryItems.length);
+  for (let index = 1; index < newest.length; index += 1) {
+    const before = newest[index - 1];
+    const after = newest[index];
+    assert.ok(before.created >= after.created, `${before.id} should come before ${after.id}`);
+    if (before.created === after.created) {
+      assert.ok(libraryItems.indexOf(before) > libraryItems.indexOf(after));
+    }
+  }
+  const oldest = sortLibraryItems(libraryItems, "oldest");
+  for (let index = 1; index < oldest.length; index += 1) {
+    const before = oldest[index - 1];
+    const after = oldest[index];
+    assert.ok(before.created <= after.created, `${before.id} should come before ${after.id}`);
+    if (before.created === after.created) {
+      assert.ok(libraryItems.indexOf(before) < libraryItems.indexOf(after));
+    }
+  }
 });
 test("missing template cannot accidentally send example data for generation", () => {
   assert.throws(

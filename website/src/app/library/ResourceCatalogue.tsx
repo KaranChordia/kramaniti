@@ -3,25 +3,46 @@ import { useId, useMemo, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Search, X } from "lucide-react";
 import { ResourceTile } from "./ResourceTile";
-import { kindLabels, libraryItems, libraryKinds } from "@/lib/library/libraryData";
+import {
+  defaultLibrarySort,
+  kindLabels,
+  libraryItems,
+  libraryKinds,
+  librarySortOptions,
+  parseLibrarySort,
+  sortLibraryItems,
+  type LibrarySort,
+} from "@/lib/library/libraryData";
 import { resourceDetails } from "@/lib/library/resourceDetails";
 import styles from "./editorial.module.css";
 import discovery from "./discovery.module.css";
 
 export function ResourceCatalogue({
   initialQuery = "",
+  initialSort = defaultLibrarySort,
   pathView = false,
 }: {
   initialQuery?: string;
+  initialSort?: LibrarySort;
   pathView?: boolean;
 }) {
   const [query, setQuery] = useState(initialQuery);
   const [kind, setKind] = useState("All");
   const [category, setCategory] = useState("All");
-  const [sort, setSort] = useState("library");
+  const [sort, setSort] = useState<LibrarySort>(initialSort);
   const categories = Array.from(new Set(libraryItems.map((item) => item.category)));
   const search = useRef<HTMLInputElement>(null);
   const searchId = useId();
+  const sortId = useId();
+  function changeSort(value: string) {
+    const next = parseLibrarySort(value);
+    setSort(next);
+    // Keep a non-default sort in the address so the view can be shared. The default needs no parameter.
+    const url = new URL(window.location.href);
+    if (next === defaultLibrarySort) url.searchParams.delete("sort");
+    else url.searchParams.set("sort", next);
+    window.history.replaceState(window.history.state, "", url);
+  }
   function reset() {
     setQuery("");
     setKind("All");
@@ -30,18 +51,14 @@ export function ResourceCatalogue({
   }
   const matching = useMemo(() => {
     const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    return libraryItems.filter((item) => {
+    const filtered = libraryItems.filter((item) => {
       const text =
         `${item.title} ${item.category} ${kindLabels[item.kind]} ${item.kind} ${item.summary} ${item.useWhen} ${item.includes.join(" ")} ${resourceDetails[item.id].outcome}`.toLowerCase();
       return (kind === "All" || item.kind === kind) &&
         (category === "All" || item.category === category) &&
         terms.every((term) => text.includes(term));
-    }).sort((a, b) => {
-      if (sort === "az") return a.title.localeCompare(b.title);
-      if (sort === "za") return b.title.localeCompare(a.title);
-      if (sort === "category") return a.category.localeCompare(b.category) || a.title.localeCompare(b.title);
-      return libraryItems.indexOf(a) - libraryItems.indexOf(b);
     });
+    return sortLibraryItems(filtered, sort);
   }, [query, kind, category, sort]);
   const items = matching;
   return (
@@ -86,12 +103,11 @@ export function ResourceCatalogue({
             {categories.map((value) => <option key={value}>{value}</option>)}
           </select>
         </label>
-        <label>Sort by
-          <select value={sort} onChange={(event) => setSort(event.target.value)}>
-            <option value="library">Library order</option>
-            <option value="az">Title: A–Z</option>
-            <option value="za">Title: Z–A</option>
-            <option value="category">Category</option>
+        <label htmlFor={sortId}>Sort by
+          <select id={sortId} value={sort} onChange={(event) => changeSort(event.target.value)}>
+            {librarySortOptions.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
           </select>
         </label>
       </div>
