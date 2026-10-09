@@ -294,4 +294,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-07',
   },
+  {
+    id: 'test-before-build-sheet',
+    category: 'Workflow design',
+    kind: 'Skill',
+    title: 'Agree how you’ll know it works before you build',
+    summary: 'Write what working looks like for one workflow, with safe examples, fail conditions and an owner, before anyone builds or buys a tool.',
+    useWhen: 'The team is ready to pick an app, bot or build, but nobody has yet agreed how you will know the workflow is working in real day-to-day use.',
+    includes: ['What done looks like', 'Safe sample inputs', 'Fail and stop conditions', 'Named owner'],
+    format: 'Markdown',
+    download: '/library/test-before-build-sheet.md',
+    status: 'Starter template',
+    created: '2026-10-09',
+  },
 ];
