@@ -348,4 +348,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-07',
   },
+  {
+    id: 'repeated-question-log',
+    category: 'Workflow design',
+    kind: 'Skill',
+    title: 'Keep track of the questions you answer again and again',
+    summary: 'Write down the questions customers and staff keep asking, who answers them and where the answer is kept, then give one of them an agreed answer in one agreed place.',
+    useWhen: 'The same questions keep coming in on calls, WhatsApp and at the counter, and the answers live in one or two people’s heads, so they get answered from memory every time.',
+    includes: ['Question log', 'Who asks and who answers', 'Where the answer lives', 'One answer to fix first'],
+    format: 'Markdown',
+    download: '/library/repeated-question-log.md',
+    status: 'Starter template',
+    created: '2026-10-08',
+  },
 ];
