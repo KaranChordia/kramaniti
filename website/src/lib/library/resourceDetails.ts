@@ -327,6 +327,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The log shows which questions repeat and where the answers sit; it does not prove that a bot, FAQ page or form is the right fix, and it does not check consumer, warranty or data protection rules. An approved answer card is not approval to automate replies or to promise anything new to customers.",
     related: ["enquiry-triage-agent", "founder-memory-sop-agent"],
   },
+  "test-before-build-sheet": {
+    outcome:
+      "A one-page sheet that names the workflow, who uses it, what starts it, what \"done\" looks like in real work, safe sample inputs, expected behaviour, fail and stop conditions, evidence to keep, a named owner and a review date, written and agreed before anyone builds or buys anything.",
+    question:
+      "How will you know this workflow works in real use, before anyone builds or buys a tool for it?",
+    requires: [
+      "One workflow the team wants to change or support, described in plain words",
+      "Someone who does that work today, and someone who can decide what \"working\" means",
+      "Agreement that no build, bot, app or hire will start until this sheet is filled",
+    ],
+    check:
+      "The sheet names one workflow, who uses it, the trigger, what \"done\" looks like, safe sample inputs, expected behaviour, fail and stop conditions, evidence to keep, a named owner and a review date; blanks stay visible where facts are missing; no pass rates or results were invented; nothing was built or bought before the sheet was filled.",
+    limit:
+      "The sheet records how you will know the workflow works; it does not prove that a tool is right, safe or worth paying for, and it does not check medical, data protection or consumer rules. A filled sheet is not approval to send reminders, give clinical advice, change fees or turn on automation.",
+    related: ["constraint-pick-sheet", "human-review-gate"],
+  },
 };
 
 export const researchCollection = [
