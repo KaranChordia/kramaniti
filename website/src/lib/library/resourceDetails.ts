@@ -311,6 +311,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The baseline records where information lives and who the business depends on; it does not prove that a tool is right, safe or worth paying for, and it does not check data protection or accounting rules. A filled record is not approval to buy software, move customer or staff details, or stop the paper register.",
     related: ["bottleneck-interview-guide", "founder-memory-sop-agent"],
   },
+  "repeated-question-log": {
+    outcome:
+      "A simple log of the questions customers and staff keep asking, who asks, who answers, where the answer is kept today and what the asker needed to decide, with one repeated question chosen to get an agreed answer in one agreed place, owned by a named person, before anyone builds a bot, an FAQ page or a new form.",
+    question:
+      "Which questions does your business answer again and again, where do those answers live today, and which one should get a proper answer first?",
+    requires: [
+      "Two to four weeks of real questions from calls, WhatsApp, email, the counter and staff chats, or a few days of writing them down as they arrive",
+      "A short chat with the people who answer questions most often",
+      "Someone who can approve what the correct answer is and where it should be kept",
+    ],
+    check:
+      "Every repeated question has its count taken from the log, who asks, who answers, where the answer is kept today and any flags; different answers are recorded rather than smoothed over; one answer card has an approved answer, one place to live, an owner and a review date; nothing was built and no money or warranty answer was set to go out automatically.",
+    limit:
+      "The log shows which questions repeat and where the answers sit; it does not prove that a bot, FAQ page or form is the right fix, and it does not check consumer, warranty or data protection rules. An approved answer card is not approval to automate replies or to promise anything new to customers.",
+    related: ["enquiry-triage-agent", "founder-memory-sop-agent"],
+  },
   "test-before-build-sheet": {
     outcome:
       "A one-page sheet that names the workflow, who uses it, what starts it, what \"done\" looks like in real work, safe sample inputs, expected behaviour, fail and stop conditions, evidence to keep, a named owner and a review date, written and agreed before anyone builds or buys anything.",
