@@ -46,6 +46,60 @@ export function formatCreatedDate(created: string): string {
   return `${dayNumber} ${shortMonths[monthIndex]} ${year}`;
 }
 
+export type LibrarySort = 'newest' | 'oldest' | 'az' | 'za' | 'category';
+
+/** Sort options for the library page, in the order they appear. The first one is the default. */
+export const librarySortOptions: { value: LibrarySort; label: string }[] = [
+  { value: 'newest', label: 'Newest first' },
+  { value: 'oldest', label: 'Oldest first' },
+  { value: 'az', label: 'Title A to Z' },
+  { value: 'za', label: 'Title Z to A' },
+  { value: 'category', label: 'Category' },
+];
+
+export const defaultLibrarySort: LibrarySort = 'newest';
+
+/** Reads a sort value from the URL. Anything unknown falls back to the default. */
+export function parseLibrarySort(value: unknown): LibrarySort {
+  return librarySortOptions.some((option) => option.value === value)
+    ? (value as LibrarySort)
+    : defaultLibrarySort;
+}
+
+/**
+ * Returns a sorted copy of items. 'created' is 'YYYY-MM-DD', so comparing the
+ * strings compares the dates. Ties always resolve by position in `order`
+ * (libraryItems by default), which is the order templates were added:
+ * - Newest first: on the same date, the template added later comes first.
+ * - Oldest first: on the same date, the template added earlier comes first.
+ * - Title and category sorts keep the added order for equal values.
+ */
+export function sortLibraryItems<T extends Pick<LibraryItem, 'id' | 'created' | 'title' | 'category'>>(
+  items: readonly T[],
+  sort: LibrarySort = defaultLibrarySort,
+  order: readonly Pick<LibraryItem, 'id'>[] = libraryItems,
+): T[] {
+  const position = new Map(order.map((item, index) => [item.id, index]));
+  const added = (item: T) => position.get(item.id) ?? Number.MAX_SAFE_INTEGER;
+  const byAdded = (a: T, b: T) => added(a) - added(b);
+  const byDate = (a: T, b: T) => (a.created < b.created ? -1 : a.created > b.created ? 1 : 0);
+  return [...items].sort((a, b) => {
+    switch (sort) {
+      case 'oldest':
+        return byDate(a, b) || byAdded(a, b);
+      case 'az':
+        return a.title.localeCompare(b.title, 'en') || byAdded(a, b);
+      case 'za':
+        return b.title.localeCompare(a.title, 'en') || byAdded(a, b);
+      case 'category':
+        return a.category.localeCompare(b.category, 'en') || a.title.localeCompare(b.title, 'en') || byAdded(a, b);
+      case 'newest':
+      default:
+        return byDate(b, a) || byAdded(b, a);
+    }
+  });
+}
+
 export const libraryItems: LibraryItem[] = [
   {
     id: 'research-synthesis-agent',
