@@ -206,6 +206,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       title,
       description,
       publishedTime,
+      modifiedTime: post.modifiedAt ?? publishedTime,
       authors,
       section: post.category,
       tags: [post.category, post.focus],
@@ -258,7 +259,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       },
     },
     datePublished: publishedDate,
-    dateModified: publishedDate,
+    dateModified: post.modifiedAt ?? publishedDate,
     mainEntityOfPage: articleUrl,
     url: articleUrl,
     articleSection: post.category,
@@ -322,6 +323,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <span className={styles.metaInfo}>{formatPublishedMeta(post.date, post.publishedAt)} &middot; {post.readTime}</span>
               </div>
               {post.author ? <p className={styles.author}>By {post.author}</p> : null}
+              {post.modifiedAt && post.modifiedAt !== post.publishedAt ? (
+                <p className={styles.author}>Updated {formatPublishedMeta(post.date, post.modifiedAt)}</p>
+              ) : null}
               <h1 className={styles.title}>{post.title}</h1>
               <p className={styles.summary}>{post.summary}</p>
             </header>
