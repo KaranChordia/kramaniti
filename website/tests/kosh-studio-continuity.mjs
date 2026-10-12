@@ -23,7 +23,7 @@ try {
     page.on("console", (m) => {
       if (m.type() === "error") errors.push(m.text());
     });
-    await page.goto(`${base}/library/create`);
+    await page.goto(`${base}/kosh/create`);
     if (width === 320)
       await page.evaluate(() =>
         Object.defineProperty(document, "startViewTransition", {
@@ -169,7 +169,7 @@ try {
     reducedMotion: "reduce",
   });
   const page = await context.newPage();
-  await page.goto(`${base}/library/create`);
+  await page.goto(`${base}/kosh/create`);
   await page
     .getByText("Explore a complete synthetic example", { exact: true })
     .click();

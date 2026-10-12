@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
   async redirects() {
     return [
+      // Kosh moved from /library to /kosh. Keep every old and shared link working.
+      { source: "/library", destination: "/kosh/", permanent: true },
+      { source: "/library/", destination: "/kosh/", permanent: true },
+      { source: "/library/resources", destination: "/kosh/", permanent: true },
+      { source: "/library/resources/", destination: "/kosh/", permanent: true },
+      { source: "/library/resources/:id", destination: "/kosh/:id/", permanent: true },
+      { source: "/library/resources/:id/", destination: "/kosh/:id/", permanent: true },
+      { source: "/library/:path*", destination: "/kosh/:path*", permanent: true },
       {
         source: "/clarity-circle/:path*",
         destination: "/clarity-square/:path*",

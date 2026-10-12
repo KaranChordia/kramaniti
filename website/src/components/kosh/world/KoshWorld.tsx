@@ -37,19 +37,19 @@ export function BackToExplore({
   return (
     <Link
       href={
-        pathname === "/library"
-          ? "/library#catalogue"
-          : (journey?.discovery.href ?? "/library#catalogue")
+        pathname === "/kosh"
+          ? "/kosh#catalogue"
+          : (journey?.discovery.href ?? "/kosh#catalogue")
       }
-      scroll={pathname === "/library"}
+      scroll={pathname === "/kosh"}
       className={className}
       aria-current={
-        pathname === "/library" || pathname.startsWith("/library/resources/")
+        pathname === "/kosh" || pathname.startsWith("/kosh/")
           ? "page"
           : undefined
       }
       onNavigate={(event) => {
-        if (pathname === "/library") {
+        if (pathname === "/kosh") {
           event.preventDefault();
           document.getElementById("catalogue")?.scrollIntoView({
             behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -66,7 +66,7 @@ export function BackToExplore({
 export function KoshWorld({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [discovery, setDiscovery] = useState<Discovery>({
-    href: "/library#catalogue",
+    href: "/kosh#catalogue",
     scroll: 0,
   });
   const returning = useRef(false);
@@ -95,8 +95,8 @@ export function KoshWorld({ children }: { children: ReactNode }) {
       const destination = new URL(link.href);
       if (
         destination.origin === location.origin &&
-        (destination.pathname === "/library" ||
-          destination.pathname.startsWith("/library/"))
+        (destination.pathname === "/kosh" ||
+          destination.pathname.startsWith("/kosh/"))
       )
         return;
       if (
@@ -130,7 +130,7 @@ export function KoshWorld({ children }: { children: ReactNode }) {
     }
   }, [discovery.scroll]);
   function remember() {
-    if (window.location.pathname === "/library")
+    if (window.location.pathname === "/kosh")
       setDiscovery({
         href: `${window.location.pathname}${window.location.search}#catalogue`,
         scroll: window.scrollY,
@@ -165,17 +165,17 @@ export function KoshWorld({ children }: { children: ReactNode }) {
           Skip to content
         </a>
         <header className={styles.worldHeader}>
-          <Link className={styles.brand} href="/library">
+          <Link className={styles.brand} href="/kosh">
             Kosh
           </Link>
           <nav className={styles.nav} aria-label="Kosh pages">
-            <Link href="/library" aria-current={pathname === "/library" ? "page" : undefined}>
+            <Link href="/kosh" aria-current={pathname === "/kosh" ? "page" : undefined}>
               Library
             </Link>
-            <Link href="/library/create" aria-current={pathname.startsWith("/library/create") ? "page" : undefined}>
+            <Link href="/kosh/create" aria-current={pathname.startsWith("/kosh/create") ? "page" : undefined}>
               Create
             </Link>
-            <Link href="/library/workspace" aria-current={pathname.startsWith("/library/workspace") ? "page" : undefined}>
+            <Link href="/kosh/workspace" aria-current={pathname.startsWith("/kosh/workspace") ? "page" : undefined}>
               My Kosh
             </Link>
           </nav>

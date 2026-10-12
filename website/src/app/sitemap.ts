@@ -36,7 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
-      url: absoluteUrl('/library/'),
+      url: absoluteUrl('/kosh/'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.7,
@@ -86,5 +86,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  return [...staticRoutes, ...insightRoutes, ...libraryItems.map(item => ({ url: absoluteUrl(`/library/resources/${item.id}`), changeFrequency: 'monthly' as const, priority: 0.6 })), { url: absoluteUrl('/library/collections/research-a-decision'), changeFrequency: 'monthly', priority: 0.6 }, { url: absoluteUrl('/library/standards'), changeFrequency: 'monthly', priority: 0.4 }];
+  return [...staticRoutes, ...insightRoutes, ...libraryItems.map(item => ({ url: absoluteUrl(`/kosh/${item.id}`), changeFrequency: 'monthly' as const, priority: 0.6 })), { url: absoluteUrl('/kosh/collections/research-a-decision'), changeFrequency: 'monthly', priority: 0.6 }, { url: absoluteUrl('/kosh/standards'), changeFrequency: 'monthly', priority: 0.4 }];
 }

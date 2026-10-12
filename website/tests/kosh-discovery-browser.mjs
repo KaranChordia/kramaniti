@@ -36,7 +36,7 @@ try {
         localPreviewNotices.add(url);
       } else errors.push(`${message.text()} (${url})`);
     });
-    await page.goto(`${base}/library`);
+    await page.goto(`${base}/kosh`);
     await page.getByRole("heading", { level: 1 }).waitFor();
     await page.waitForTimeout(450);
     assert.equal(
@@ -233,7 +233,7 @@ try {
     viewport: { width: 1440, height: 900 },
   });
   const page = await context.newPage();
-  await page.goto(`${base}/library?q=claims&kind=Skill&view=compact#catalogue`);
+  await page.goto(`${base}/kosh?q=claims&kind=Skill&view=compact#catalogue`);
   const search = page.getByRole("searchbox", { name: "Find a resource" });
   await search.waitFor();
   assert.equal(await search.inputValue(), "claims");
@@ -246,7 +246,7 @@ try {
   await page.reload();
   assert.equal(await search.inputValue(), "claims");
   await page.keyboard.press("Tab");
-  await page.goto(`${base}/library`);
+  await page.goto(`${base}/kosh`);
   await page.keyboard.press("Tab");
   assert.equal(
     await page.evaluate(() => document.activeElement?.textContent),
