@@ -10,7 +10,7 @@ const publisher = {
   url: absoluteUrl('/'),
 };
 
-const koshCrumb = { '@type': 'ListItem', position: 1, name: 'Kosh', item: absoluteUrl('/library') };
+const koshCrumb = { '@type': 'ListItem', position: 1, name: 'Kosh', item: absoluteUrl('/library/') };
 
 function breadcrumb(name: string, path: string) {
   return {
@@ -20,7 +20,7 @@ function breadcrumb(name: string, path: string) {
 }
 
 export function resourcePath(id: string) {
-  return `/library/resources/${id}`;
+  return `/library/resources/${id}/`;
 }
 
 export function koshLandingJsonLd() {
@@ -28,7 +28,7 @@ export function koshLandingJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Kramaniti Kosh',
-    url: absoluteUrl('/library'),
+    url: absoluteUrl('/library/'),
     description:
       'Practical templates and guides for research, workflows and accountable AI, with examples and setup guidance.',
     publisher,
@@ -59,7 +59,7 @@ export function koshResourceJsonLd(item: LibraryItem) {
         isAccessibleForFree: true,
         inLanguage: 'en',
         publisher,
-        isPartOf: { '@type': 'CollectionPage', name: 'Kramaniti Kosh', url: absoluteUrl('/library') },
+        isPartOf: { '@type': 'CollectionPage', name: 'Kramaniti Kosh', url: absoluteUrl('/library/') },
       },
       breadcrumb(item.title, resourcePath(item.id)),
     ],
