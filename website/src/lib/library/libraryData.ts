@@ -374,4 +374,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-09',
   },
+  {
+    id: 'customer-handoff-plan',
+    category: 'Human oversight',
+    kind: 'Governance',
+    title: 'Decide when a customer chat gets handed to a person',
+    summary: 'List the moments a chat assistant or WhatsApp auto-reply must pass a customer to a real person, who picks it up, how fast, and what the customer is told.',
+    useWhen: 'You are about to let an assistant or auto-reply answer customers, but nobody has agreed when it should stop and hand over to someone on the team.',
+    includes: ['When to hand over', 'Who picks it up', 'What the customer is told', 'What goes with the handoff'],
+    format: 'Markdown',
+    download: '/library/customer-handoff-plan.md',
+    status: 'Starter template',
+    created: '2026-10-12',
+  },
 ];
