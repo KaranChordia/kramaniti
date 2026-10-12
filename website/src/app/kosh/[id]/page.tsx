@@ -1,4 +1,6 @@
 import { ResourceSpace } from "@/components/kosh/resource/ResourceSpace";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { koshResourceJsonLd } from "@/lib/kosh/jsonLd";
 import { resourceSections } from "@/lib/kosh/resourceSections";
 import type { Metadata } from "next";
 import { readFile } from "node:fs/promises";
@@ -40,6 +42,8 @@ export default async function ResourcePage({
     "utf8",
   );
   return (
+    <>
+      <JsonLd data={koshResourceJsonLd(item)} />
     <ResourceSpace
       key={item.id}
       item={item}
@@ -51,5 +55,6 @@ export default async function ResourcePage({
         libraryItems.find((entry) => entry.id === id)!,
       )}
     />
+    </>
   );
 }
