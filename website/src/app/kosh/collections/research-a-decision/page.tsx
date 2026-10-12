@@ -6,7 +6,7 @@ export const metadata = {
   title: "Research a decision | Kramaniti Kosh",
   description:
     "A three-part collection: research a question, check the evidence and prepare a human decision.",
-  alternates: { canonical: "/kosh/collections/research-a-decision" },
+  alternates: { canonical: "/kosh/collections/research-a-decision/" },
 };
 export default function ResearchCollection() {
   return (
