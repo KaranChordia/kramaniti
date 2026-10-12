@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { koshPageJsonLd } from "@/lib/kosh/jsonLd";
 import styles from "../editorial.module.css";
 export const metadata = {
   title: "Resource standards | Kramaniti Kosh",
@@ -9,6 +11,7 @@ export const metadata = {
 export default function StandardsPage() {
   return (
     <main className={styles.page} data-disable-global-shockwave="true">
+      <JsonLd data={koshPageJsonLd("Resource standards", "/library/standards", "How Kosh resources describe scope, examples, versions and human review.")} />
       <header className={styles.resourceHero}>
         <p className={styles.eyebrow}>The editorial standard</p>
         <h1>Know what you are starting with.</h1>
