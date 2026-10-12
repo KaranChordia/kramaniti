@@ -343,6 +343,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The sheet records how you will know the workflow works; it does not prove that a tool is right, safe or worth paying for, and it does not check medical, data protection or consumer rules. A filled sheet is not approval to send reminders, give clinical advice, change fees or turn on automation.",
     related: ["constraint-pick-sheet", "human-review-gate"],
   },
+  "customer-handoff-plan": {
+    outcome:
+      "A one-page plan that lists the situations where a chat assistant, website chat or WhatsApp auto-reply must stop and pass the customer to a person, who picks it up and how fast, what the customer is told while they wait, and what context goes with the handoff, agreed before the assistant talks to any customer.",
+    question:
+      "When should your assistant stop and pass a customer to a person, and what happens next?",
+    requires: [
+      "The channels where customers reach you today (WhatsApp, website chat, email, phone) and who answers each one",
+      "A few weeks of real customer messages, including the awkward ones: complaints, refund asks, angry replies",
+      "One person who can decide who picks up each kind of handoff, and when they are actually available",
+    ],
+    check:
+      "Every handoff situation has a named person and a backup; the reply time is one the team says it can keep; the customer is told honestly what happens next; the handoff carries enough context that the customer does not repeat themselves; refunds, safety and damage stay with people; no counts or reply times were invented.",
+    limit:
+      "The plan sets out when and how a customer is passed to a person; it does not prove that an assistant is accurate, safe or right for your business, and it does not check consumer, data protection or safety rules. A filled plan is not approval to switch on an assistant, agree refunds or answer safety questions automatically.",
+    related: ["enquiry-triage-agent", "human-review-gate"],
+  },
 };
 
 export const researchCollection = [
