@@ -410,3 +410,14 @@
     padding: 24px 0;
   }
 }
+
+.tierTitleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tierTitleLink:hover,
+.tierTitleLink:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

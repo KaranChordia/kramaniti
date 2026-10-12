@@ -12,6 +12,9 @@ const STATIC_ROUTES: Array<{
   priority: number;
 }> = [
   { path: '/', lastModified: '2026-08-29', changeFrequency: 'weekly', priority: 1 },
+  { path: '/audit/', lastModified: '2026-10-12', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/build/', lastModified: '2026-10-12', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/retainer/', lastModified: '2026-10-12', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/experience/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/founder/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/clarity-engine/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.7 },
