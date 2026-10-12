@@ -4,6 +4,7 @@ export const metadata = {
   title: "Resource standards | Kramaniti Kosh",
   description:
     "How Kosh resources describe scope, examples, versions and human review.",
+  alternates: { canonical: "/kosh/standards/" },
 };
 export default function StandardsPage() {
   return (

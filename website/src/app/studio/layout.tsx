@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: null },
   title: 'Kramaniti Studio',
   robots: {
     index: false,

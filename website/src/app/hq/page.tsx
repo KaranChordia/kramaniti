@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { KramanitiHq } from './KramanitiHq';
 
 export const metadata: Metadata = {
+  alternates: { canonical: null },
   title: 'Kramaniti HQ',
   description: 'Private founder command centre for Kramaniti priorities, portfolio, follow-ups and repository activity.',
   robots: {

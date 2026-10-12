@@ -1,6 +1,6 @@
 import type { Insight } from '@/data/insights';
 
-export const SITE_URL = 'https://kramaniti.com';
+export const SITE_URL = 'https://www.kramaniti.com';
 export const SITE_NAME = 'Kramaniti';
 export const DEFAULT_OG_IMAGE = '/assets/pwa/icon-512.png';
 

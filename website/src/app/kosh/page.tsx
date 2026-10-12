@@ -4,7 +4,7 @@ import { parseLibrarySort } from "@/lib/library/libraryData";
 
 export const metadata: Metadata = {
   title: "Kramaniti Kosh",
-  alternates: { canonical: "/kosh" },
+  alternates: { canonical: "/kosh/" },
   description:
     "Practical templates and guides for research, workflows and accountable AI, with examples and setup guidance.",
 };

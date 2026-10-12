@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description:
     "Shape, review and export a reusable skill with clear human boundaries.",
   robots: { index: false, follow: false },
-  alternates: { canonical: "/kosh/create" },
+  alternates: { canonical: "/kosh/create/" },
 };
 export default async function CreatePage({
   searchParams,

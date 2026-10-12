@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: { unoptimized: true },
   trailingSlash: true,
-  skipTrailingSlashRedirect: true,
   async redirects() {
     return [
       // Kosh moved from /library to /kosh. Keep every old and shared link working.
