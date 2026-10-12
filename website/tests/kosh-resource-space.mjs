@@ -31,7 +31,7 @@ try {
     page.on("console", (m) => {
       if (m.type() === "error") errors.push(m.text());
     });
-    await page.goto(`${base}/library/resources/source-checking-skill`);
+    await page.goto(`${base}/kosh/source-checking-skill`);
     const map = page.getByRole("navigation", { name: "Resource spaces" });
     await map.getByRole("link", { name: /Intent/ }).waitFor();
     await page.waitForTimeout(400);
@@ -140,7 +140,7 @@ try {
     assert.equal(
       await readFile(`${evidence}resource-original-${width}.md`, "utf8"),
       await readFile(
-        new URL("../public/library/source-checking-skill.md", import.meta.url),
+        new URL("../public/kosh/source-checking-skill.md", import.meta.url),
         "utf8",
       ),
     );
@@ -173,7 +173,7 @@ try {
     if (m.type() === "error") errors.push(m.text());
   });
   for (const id of ids) {
-    await page.goto(`${base}/library/resources/${id}#working-template`);
+    await page.goto(`${base}/kosh/${id}#working-template`);
     const parts = page.getByRole("navigation", { name: "Method parts" });
     await parts.waitFor();
     for (const link of await parts.getByRole("link").all()) {
@@ -195,7 +195,7 @@ try {
   checks.push(
     "All six resources: deep-linked method, every method part and preserved demonstration render",
   );
-  await page.goto(`${base}/library/resources/source-checking-skill#labels`);
+  await page.goto(`${base}/kosh/source-checking-skill#labels`);
   await page.getByRole("heading", { name: "Labels", exact: true }).waitFor();
   await page.evaluate(() => {
     document.documentElement.dataset.theme = "light";

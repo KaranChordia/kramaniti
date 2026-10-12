@@ -183,7 +183,7 @@ export async function POST(request: Request) {
 
     const relativeTemplatePath = item.download.replace(/^\/+/, "");
     if (
-      !relativeTemplatePath.startsWith("library/") ||
+      !relativeTemplatePath.startsWith("kosh/") ||
       path.extname(relativeTemplatePath) !== ".md"
     ) {
       return Response.json(

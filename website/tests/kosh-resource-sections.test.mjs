@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { readFile, readdir } from "node:fs/promises";
 import { resourceSections } from "../src/lib/kosh/resourceSections.ts";
 test("all public resource sections preserve their exact wording and nested demonstration headings", async () => {
-  const directory = new URL("../public/library/", import.meta.url);
+  const directory = new URL("../public/kosh/", import.meta.url);
   for (const filename of (await readdir(directory)).filter((name) =>
     name.endsWith(".md"),
   )) {

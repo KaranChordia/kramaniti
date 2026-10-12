@@ -30,7 +30,7 @@ async function overflow(label) {
   );
 }
 try {
-  await page.goto(`${base}/library/create`);
+  await page.goto(`${base}/kosh/create`);
   await page
     .getByRole("heading", { name: "What would you like to make repeatable?" })
     .waitFor();
@@ -275,7 +275,7 @@ try {
   );
   page.once("dialog", (dialog) => dialog.dismiss());
   await page.reload().catch(() => {});
-  assert.equal(new URL(page.url()).pathname, "/library/create");
+  assert.equal(new URL(page.url()).pathname, "/kosh/create");
   await page.getByRole("button", { name: "Save version", exact: true }).click();
   await page
     .getByText("Private saving is unavailable", { exact: false })
@@ -375,7 +375,7 @@ try {
     "A15: 1440/768/390/320 layouts without overflow, keyboard tabs, reduced motion, light theme",
   );
   page.once("dialog", (dialog) => dialog.accept());
-  await page.goto(`${base}/library/create?source=source-checking-skill`);
+  await page.goto(`${base}/kosh/create?source=source-checking-skill`);
   assert.equal(
     await page.getByLabel("Skill title").inputValue(),
     "Check the facts before you publish",
@@ -390,7 +390,7 @@ try {
     "A2: public source version 1.1 retained in separate draft; demonstration excluded",
   );
   page.once("dialog", (dialog) => dialog.accept());
-  await page.goto(`${base}/library/create?source=unknown-private-id`);
+  await page.goto(`${base}/kosh/create?source=unknown-private-id`);
   await page
     .getByText("That public resource could not be found.", { exact: false })
     .waitFor();

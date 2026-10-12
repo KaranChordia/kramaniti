@@ -282,7 +282,7 @@ export function StudioShell({
           {draft.source && (
             <p className={styles.source}>
               From{" "}
-              <Link href={`/library/resources/${draft.source.resourceId}`}>
+              <Link href={`/kosh/${draft.source.resourceId}`}>
                 {draft.source.resourceId}
               </Link>{" "}
               · v{draft.source.version} · Original unchanged
@@ -517,7 +517,7 @@ export function StudioShell({
       )}
       <footer className={styles.footer}>
         <span>A method you shape. A decision you own.</span>
-        <Link href="/library/standards">Kosh standards ↗</Link>
+        <Link href="/kosh/standards">Kosh standards ↗</Link>
       </footer>
       {draft && dialog === "export" && (
         <ExportReview

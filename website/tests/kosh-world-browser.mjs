@@ -24,7 +24,7 @@ try {
     page.on("console", (m) => {
       if (m.type() === "error") errors.push(m.text());
     });
-    await page.goto(`${base}/library`);
+    await page.goto(`${base}/kosh`);
     await page
       .getByRole("heading", { name: "A place for your next way of working." })
       .waitFor();
@@ -58,7 +58,7 @@ try {
       caret: "initial",
     });
     await source.click();
-    await page.waitForURL("**/library/resources/source-checking-skill");
+    await page.waitForURL("**/kosh/source-checking-skill");
     await page
       .getByRole("heading", {
         name: "Check the facts before you publish",
@@ -68,7 +68,7 @@ try {
       .waitFor();
     assert.equal(
       new URL(page.url()).pathname,
-      "/library/resources/source-checking-skill",
+      "/kosh/source-checking-skill",
     );
     await page.screenshot({
       path: `${evidence}world-resource-${width}.png`,
@@ -83,7 +83,7 @@ try {
     assert.equal(
       await readFile(`${evidence}original-source-${width}.md`, "utf8"),
       await readFile(
-        new URL("../public/library/source-checking-skill.md", import.meta.url),
+        new URL("../public/kosh/source-checking-skill.md", import.meta.url),
         "utf8",
       ),
     );
@@ -158,7 +158,7 @@ try {
     assert.match(warning.message(), /drafts live only in this tab/);
     await warning.dismiss();
     await leaveClick;
-    assert.equal(new URL(page.url()).pathname, "/library");
+    assert.equal(new URL(page.url()).pathname, "/kosh");
     // Native back/forward reopens the original draft in tab memory, not server storage.
     await page.goBack();
     await page.getByLabel("Purpose", { exact: true }).waitFor();

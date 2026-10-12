@@ -165,3 +165,10 @@ test("profiles remain separate and legacy context remains professional only", ()
     { personal: "", professional: "Work" },
   );
 });
+
+test("every template downloads from /kosh/<id>.md and the file exists", async () => {
+  for (const item of libraryItems) {
+    assert.equal(item.download, `/kosh/${item.id}.md`, item.id);
+    await readFile(new URL(`../public${item.download}`, import.meta.url), "utf8");
+  }
+});

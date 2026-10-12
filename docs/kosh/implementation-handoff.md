@@ -10,7 +10,7 @@ Lead: Website Steward. Content and review responsibilities: Narrative Editor, Pr
 
 [Fact] The resource page provides an editable working copy, Markdown export, comparison with the original, explicit save/update/delete actions, private favourites, context selection and inline member access. Workspace Saved links reopen the selected copy. Copies retain source version 1.1; later originals do not overwrite them. Unsaved edits receive a navigation warning. Signing out or switching accounts clears private in-memory state. Guest manual edits survive sign-in.
 
-[Fact] Account UI supports sign-in, signup confirmation messaging and recovery-link requests. `/library/account` accepts Supabase PASSWORD_RECOVERY events and offers a password update form. Public reading permits user zoom; account/workspace routes are marked noindex.
+[Fact] Account UI supports sign-in, signup confirmation messaging and recovery-link requests. `/kosh/account` accepts Supabase PASSWORD_RECOVERY events and offers a password update form. Public reading permits user zoom; account/workspace routes are marked noindex.
 
 [Fact] Adaptation authenticates the session, reads only the selected RLS-scoped saved profile or explicitly supplied per-resource context, excludes demonstration material, and returns an ephemeral draft. No content is saved unless the user chooses Save privately. The model has no tools. Incomplete responses are rejected. The draft always requires human review; structural validation is not a guarantee of factual correctness.
 
@@ -37,7 +37,7 @@ The SQL creates:
 2. Verify the connected database destination and apply the migration only to Kosh.
 3. With two controlled member accounts, verify each can create, reopen, edit, rename and delete only its own copies and cannot read/write the other's rows. Verify anonymous table access is denied. Exercise concurrent quota calls: exactly ten succeed for a fresh user/day; later calls fail. Ensure public access to the function is revoked and authenticated calls work.
 4. Verify the existing Kosh project exposes the `kosh` schema. Verify public Kosh environment variables and the server-only Groq key without printing secrets. No Platform environment changes are needed.
-5. Ensure the Kosh Supabase redirect allowlist includes the approved production `/library/account` recovery URL and permitted confirmation return URLs. Use an explicitly authorised test mailbox to verify recovery delivery, valid/expired links, password update, sign-in, refresh, and sign-out. Do not disable confirmation to bypass this check.
+5. Ensure the Kosh Supabase redirect allowlist includes the approved production `/kosh/account` recovery URL and permitted confirmation return URLs. Use an explicitly authorised test mailbox to verify recovery delivery, valid/expired links, password update, sign-in, refresh, and sign-out. Do not disable confirmation to bypass this check.
 6. Test actual adaptation with a clearly labelled, non-sensitive test context. Verify selected context, error recovery, source boundaries, saved version and output review. Test provider failures and limits.
 7. Obtain explicit approval before commit/push and publication; deploy the approved revision, then verify its public routes and authenticated flow on the production alias.
 

@@ -28,7 +28,7 @@ export function KoshPreview() {
           <p className="text-secondary">
             Kosh is a focused library of how-to guides, checklists, AI assistant setups and tool setup guides. Start with a useful pattern, then make it fit your work.
           </p>
-          <Link href="/library" className={styles.link}>
+          <Link href="/kosh" className={styles.link}>
             Explore Kosh
             <ArrowRight size={17} strokeWidth={1.8} aria-hidden="true" />
           </Link>
