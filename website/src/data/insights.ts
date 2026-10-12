@@ -6,6 +6,8 @@ export interface Insight {
   date: string;
   author?: string;
   publishedAt?: string;
+  /** ISO date of the last substantive edit. Used for dateModified. */
+  modifiedAt?: string;
   readTime: string;
   summary: string;
   sourceLinks?: {
@@ -2140,52 +2142,32 @@ export const insights: Insight[] = [
   },
   {
     slug: 'why-scaling-chaos-breaks-business',
-    title: 'Why Scaling Your Chaos with AI Will Break Your Business First',
+    title: 'Scaling Messy Work with AI Makes It Messier',
     category: 'Systems',
     focus: 'Operational Architecture',
     date: 'May 31, 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-05-31T12:00:00+05:30',
+    modifiedAt: '2026-10-12T17:00:00+05:30',
     readTime: '4 min read',
-    summary: 'The uncomfortable truth about implementing AI in a growing company: if your underlying operations are a mess, adding AI simply allows you to execute that mess at a terrifying speed.',
+    summary: 'If the work underneath is unclear, adding AI tends to repeat the confusion faster. Start with clarity, then build, then communicate.',
     content: [
       '<img src="/assets/insights/chaos_vs_clarity.png" alt="Chaos vs Clarity" style="width: 100%; border-radius: 8px; margin: 1rem 0;" />',
-      'Every week, I speak to founders who are looking for the same thing: the magic prompt that will automate their entire business. They want an AI agent to handle their sales pipeline, write their newsletters, and manage their operations, all by next Tuesday.',
-      'The impulse is understandable, but the execution is almost always fatal to their brand.',
-      'Here is the uncomfortable truth about implementing AI in a growing company: <gold>if your underlying operations are a mess, adding AI simply allows you to execute that mess at a terrifying speed.</gold>',
-      'You don\'t need "revolutionary AI." You need clarity.',
-      '<h3>Strategy Before Tools</h3>',
-      'The most expensive mistake you can make right now is buying software before you have a strategy. When you lack a clear understanding of your workflows, you end up bolting on fragmented tools that don\'t speak to each other. Your CRM doesn\'t talk to your content engine, and your sales team is still manually entering data that an API could have routed in seconds.',
-      'Before you write a single line of code or subscribe to another SaaS product, you need an <gold>AI Workflow Audit & Strategy Blueprint</gold>. You have to map the bottlenecks. The goal isn\'t to replace your team with bots; the goal is to identify exactly where human bandwidth is being wasted on repetitive execution rather than strategic thinking.',
-      '<h3>Systems Before Scale</h3>',
+      'It is tempting to look for one tool that will take care of sales, newsletters, and operations at once. The impulse is understandable. But if the work underneath is unclear, <gold>adding AI tends to repeat the confusion faster</gold>.',
+      'What helps first is not a bigger tool. It is clarity.',
+      '<h3>Strategy before tools</h3>',
+      'Buying software before you understand your workflows usually leads to tools that do not connect. The records live in one place, the conversations in another, and someone on the team copies information between them by hand.',
+      'So start by mapping the work. That is what <gold>Foundation Strategy</gold> is for: a workflow audit, the bottleneck worth fixing, where AI can genuinely help, what should stay human-led, and a practical next-step plan. The goal is not to replace people. It is to see where their time goes on repeated work that a clearer system could support.',
+      '<h3>Systems before scale</h3>',
       '<img src="/assets/insights/business_system_architecture.png" alt="System Architecture" style="width: 100%; border-radius: 8px; margin: 1rem 0;" />',
-      'Once you know where the bottlenecks are, the instinct is to build a massive, complex system to solve everything at once.',
-      'Don\'t.',
-      'Scale requires stable infrastructure. A robust business architecture isn\'t built by downloading twenty different AI wrappers. It’s built by designing an <gold>Intelligence System Build</gold> that connects your core customer touchpoints to the right records, review points, and handoffs. Whether that\'s an internal system that scores leads or a pipeline that supports onboarding, the workflow must be tailored to your data, your team, and the decisions that should remain human-led.',
-      'If you try to scale before your internal systems are rock solid, the friction will compound, and your customer experience will fracture.',
-      '<h3>Content After Clarity</h3>',
-      'Only when your strategy is defined and your systems are operating smoothly should you turn your attention to the megaphone.',
-      'Many brands start here—they build an <gold>AI-assisted content workflow</gold> to increase output, hoping volume will compensate for a lack of narrative. But hollow volume destroys trust. Premium content—the kind that actually converts interest into revenue—is the byproduct of business clarity.',
-      'When your founder story is clear, and your systems are capturing the right insights, content creation becomes a cinematic output of your daily operations. You don\'t need to invent hype; you just need to document the reality of the value you are delivering.',
-      '<h3>The Bottom Line</h3>',
-      'AI is not a substitute for operational hygiene. It is an amplifier.',
-      'If you amplify chaos, you get noise. If you amplify a well-architected system, you get leverage.',
-      'Before you ask how to automate your business, ask yourself if your business is currently worth automating. Build the blueprint, design the system, and let the content follow the clarity.'
-    ]
-  },
-  {
-    slug: 'spatial-ai-and-the-death-of-physical-staging',
-    title: 'Spatial AI and the Death of Physical Staging',
-    category: 'Spatial',
-    focus: 'Spatial AI & CRE',
-    date: 'May 28, 2026',
-    readTime: '4 min read',
-    summary: 'Why traditional real estate staging and commercial media budgets are being replaced by generative spatial AI pipelines and autonomous leasing agents.',
-    content: [
-      'In 2018, I spent weeks at WeWork Galaxy on Residency Road in Bangalore, hauling heavy cameras, lenses, and a DJI drone to map, film, and produce launch media. Back then, capturing a physical space required extensive production schedules, high capital budgets, and deterministic editing. Today, that entire model is obsolete.',
-      'With generative spatial AI, we can now digitally stage, render, and redesign complex commercial real estate footprints at 1/10th the cost and 100x the speed. But the real shift isn\'t just about generating beautiful images of a desk or lounge. It is about how those visual assets feed into an autonomous pipeline that acquires and nurtures members.',
-      '[infographic:spatial-acquisition]',
-      'A modern spatial acquisition system integrates generative imagery directly with <gold>autonomous leasing agents</gold>. When a prospective member visits a coworking site, an agent can dynamically generate customized layouts based on their team size and industry, and instantly email them a personalized, photorealistic walk-through, while pre-qualifying the lead in the CRM.',
-      'However, volume without taste is just noise. High-end property operators cannot afford to present potential tenants with distorted, sterile AI-generated rooms. Winning the premium market requires applying a strict <gold>cinematic filter</gold>—using professional lighting dynamics, desaturated color grades, and accurate focal lengths—to ensure the digital space feels as premium as the physical one.',
-      'The future of commercial real estate and coworking belongs to operators who treat physical space and digital pipelines as a unified system. By auditing your current media workflow and deploying agentic infrastructure, you turn empty square footage into a self-optimizing distribution engine.'
+      'Once the bottleneck is clear, the instinct is to build one large system that fixes everything. Resist it.',
+      'Start with the one workflow that matters most. <gold>Systems Engineering</gold> means a clearer workflow, practical internal tools, useful AI support, connections between existing tools, and simple handover and review rules. It should fit your records, your team, and the decisions that should stay with people.',
+      '<h3>Communication after clarity</h3>',
+      'Only when the work is clear does it make sense to put more effort into content. Volume does not make up for an unclear message. Good content follows from a business that understands its own value.',
+      'When the work is clear and the systems capture the right information, content becomes easier to write, because you are describing what you actually do. A <gold>Complete Lifecycle Retainer</gold> keeps systems, adoption, and communication improving together over time.',
+      '<h3>The short version</h3>',
+      'AI does not replace a clear way of working. It amplifies whatever is already there.',
+      'Before you ask how to automate the business, ask whether the work is clear enough to automate. Understand the work, build what helps, then communicate it clearly.'
     ]
   },
   {
@@ -2193,66 +2175,22 @@ export const insights: Insight[] = [
     title: 'Mapping the Core (Why Tech Stacks Come Last)',
     category: 'Strategy',
     focus: 'Deep Strategy',
-    date: 'Mar 02, 2024',
+    date: '12 Oct 2026',
+    author: 'Karan Chordia',
+    publishedAt: '2026-10-12T17:00:00+05:30',
+    modifiedAt: '2026-10-12T17:00:00+05:30',
     readTime: '3 min read',
-    summary: 'Why the biggest mistake companies make is buying AI tools before they understand their own operations.',
+    summary: 'Why it helps to understand how the work happens before choosing any AI tool.',
     content: [
-      'The most common mistake founders make when trying to "implement AI" is starting with the technology. They read about a new tool, sign up for a subscription, and then scramble to find a use case for it within their company. <gold>This is backwards</gold>, and it almost always leads to wasted capital and team frustration.',
-      'The best AI implementations never start with a tech stack. They start with a deep, uncompromising audit of the business\'s core operations. Before writing a single line of code or deploying a single agent, you must <gold>map the core strategy</gold>.',
+      'A common way to start with AI is to start with the tool. Someone reads about something new, signs up, and then looks for a place to use it. In our view, that order is backwards.',
+      'A better start is the work itself. Before anyone writes code or sets up an assistant, it helps to <gold>see how the work actually happens today</gold>.',
       '[infographic:tech-stack]',
-      'What is the actual bottleneck in your delivery? Where are your highest-paid employees spending time on low-leverage tasks? What is the unique value proposition that your brand must protect at all costs?',
-      'Only once the strategy is mapped and the operational bottlenecks are clearly defined do we look at technology. <gold>The technology should serve the brand\'s unique identity</gold>—not the other way around. By starting with deep analysis rather than shiny new tools, we ensure that the systems we eventually build deliver actual commercial value, rather than just technological novelty.'
-    ]
-  },
-  {
-    slug: 'cinematic-standard-ai-world',
-    title: 'The Cinematic Standard in an AI World',
-    category: 'Content',
-    focus: 'Premium Output & Design Thinking',
-    date: 'Jan 18, 2024',
-    readTime: '4 min read',
-    summary: 'Why human curation and rigorous design thinking are more valuable than ever when raw content costs approach zero.',
-    content: [
-      'We are living through a massive deflationary event in content creation. With LLMs and image generators, anyone can produce a thousand-word blog post or a photorealistic image in seconds. But as the floor for content quality has risen, the ceiling has remained exactly where it was.',
-      'The problem with AI-generated content isn\'t that it\'s bad; it\'s that it\'s <gold>aggressively average</gold>. It lacks a point of view. It defaults to the mean of its training data. In a world drowning in average, generic content—what we call "AI slop"—the only way to cut through the noise is by being distinctly, undeniably premium.',
-      '[infographic:cinematic-standard]',
-      'This is why we enforce a <gold>Cinematic Standard</gold> on all output generated by our systems. We do not use AI to replace the creative process; we use AI systems to handle the heavy lifting of research, data synthesis, and initial drafting, so that human talent can focus entirely on editorial precision and design thinking.',
-      'Cinematic content requires a human eye for pacing, contrast, typography, and narrative tension. It means refusing to publish the raw output of an LLM. It means applying a rigorous filter that ensures every piece of content feels crafted, deliberate, and expensive.',
-      'In an era where anyone can generate volume, the brands that win will be the ones that leverage automation for scale, but rely on <gold>human taste for the final cinematic polish</gold>.'
-    ]
-  },
-  {
-    slug: 'agentic-workflows-vs-basic-automation',
-    title: 'Agentic Workflows vs. Basic Automation',
-    category: 'AI Infrastructure',
-    focus: 'Agentic Infrastructure',
-    date: 'Nov 04, 2023',
-    readTime: '5 min read',
-    summary: 'Why triggering a webhook isn\'t enough anymore, and how autonomous agents actually scale human decision-making.',
-    content: [
-      'Basic automation is deterministic: "If X happens, then do Y." It is incredibly useful for moving data from a CRM to a spreadsheet, or sending a slack notification when a form is submitted. For years, tools like Zapier and Make have been the backbone of this "if/then" operational efficiency.',
-      'But deterministic automation breaks down the moment <gold>ambiguity is introduced</gold>. It cannot make a judgment call. It cannot read the nuance of an angry customer email and decide whether to issue a refund or escalate to a manager. It only follows rigid paths.',
-      '[infographic:agentic-workflows]',
-      'Agentic workflows represent a fundamental shift in how we build operational infrastructure. Instead of programming rigid rules, we deploy <gold>autonomous AI agents</gold> equipped with a set of tools, a core prompt, and the ability to reason. These agents don\'t just move data around; they scale human decision-making.',
-      'An agentic workflow can research a prospect, synthesize their recent company news, draft a highly personalized outreach strategy, and then decide on the optimal channel for delivery—all without human intervention. This is leverage on a completely different scale.',
-      'By replacing basic automations with agentic infrastructure, small teams can execute with the operational capacity of large enterprises, while maintaining the nuanced judgment and strategic alignment that rigid automations lack.'
-    ]
-  },
-  {
-    slug: 'death-of-disconnected-ops',
-    title: 'The Death of Disconnected Ops',
-    category: 'Systems',
-    focus: 'The Unified Pipeline Advantage',
-    date: 'Oct 12, 2023',
-    readTime: '4 min read',
-    summary: 'Why treating strategy, automation, and content as separate silos creates "AI slop" and operational bottlenecks.',
-    content: [
-      'For the last decade, companies have treated digital growth as an assembly line of disconnected silos. Strategy happens in a boardroom. Operations and automation are handled by an IT or RevOps team. Content is outsourced to a creative agency or a team of freelancers.',
-      'This model used to work when the barrier to creating content was high. But today, generative AI has driven the cost of producing average text, images, and video down to zero. The result? A massive flood of <gold>generic, disconnected "AI slop"</gold> that dilutes brand identity and clogs up the internet.',
-      '[infographic:disconnected-ops]',
-      'The core issue isn\'t the AI tools themselves; it\'s the disconnected operations. When the team building your automation workflows doesn\'t understand your core strategy, they build systems that move data efficiently but lack nuance. When your creative team doesn\'t understand your operational infrastructure, they produce beautiful assets that fail to integrate into your sales or marketing pipelines.',
-      'True scale requires treating operations and creative as a <gold>single, connected pipeline</gold>. It means laying a deep strategic foundation, engineering custom agentic workflows that understand that strategy, and then forcing the raw output of those systems through a rigorous, cinematic design filter.',
-      'When your strategy, your operational tech, and your final content are all driven by the exact same vision under one roof, your brand\'s digital presence remains completely coherent and undeniably impactful.'
+      '<h3>Three questions to answer first</h3>',
+      'Where does the work get stuck? Which delay, handoff, or decision is worth fixing first? And what should stay human-led, because it depends on judgment, context, or trust?',
+      'These are the questions a <gold>Foundation Strategy</gold> engagement starts with: a workflow audit, the bottleneck worth fixing, where AI can genuinely help, what should stay human-led, and a practical next-step plan.',
+      '<h3>Then look at technology</h3>',
+      'Only when the bottleneck is clear does it make sense to choose a tool. Sometimes the answer is a simple change to the process. Sometimes it is an internal tool, a connection between existing tools, or useful AI support. Choosing that is the job of <gold>Systems Engineering</gold>, and it works best when it follows the audit, not the other way round.',
+      'The technology should serve the way the business works. A good system reduces friction and supports better decisions. Extra complexity proves nothing.'
     ]
   }
 ];
