@@ -4,36 +4,10 @@ import styles from './Services.module.css';
 import { Button } from '../ui/Button';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
+import Link from 'next/link';
+import { services, servicePath } from '../../data/services';
 
-const tiers = [
-  {
-    id: 1,
-    title: 'Foundation Strategy',
-    label: 'CLARITY',
-    summary: 'For teams that need to see what is slowing the work before choosing a solution.',
-    deliverables: ['Workflow audit', 'The bottleneck worth fixing', 'Where AI can genuinely help', 'What should stay human-led', 'A practical next-step plan'],
-    ctaText: 'Start with an Audit',
-    isPopular: true
-  },
-  {
-    id: 2,
-    title: 'Systems Engineering',
-    label: 'BUILD',
-    summary: 'For teams that know which workflow to improve and need practical support built around it.',
-    deliverables: ['A clearer workflow', 'Practical internal tools', 'Useful AI support', 'Connections between existing tools', 'Simple handover and review rules'],
-    ctaText: 'Discuss the Workflow',
-    isPopular: false
-  },
-  {
-    id: 3,
-    title: 'Complete Lifecycle Retainer',
-    label: 'KEEP IMPROVING',
-    summary: 'For teams that want their systems, adoption, and communication to improve together.',
-    deliverables: ['System care', 'Workflow improvements', 'Team support', 'Communication and content direction', 'Regular reviews'],
-    ctaText: 'Explore Ongoing Work',
-    isPopular: false
-  }
-];
+const tiers = services;
 
 export function Services() {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
@@ -76,7 +50,7 @@ export function Services() {
               <div className={styles.tierHeader}>
                 <span className={styles.tierCoordinate}>{getCoordinate(tier.id)}</span>
                 <span className="micro-label">{tier.label}</span>
-                <h4>{tier.title}</h4>
+                <h4><Link href={servicePath(tier.slug)} className={styles.tierTitleLink}>{tier.title}</Link></h4>
                 <p className={`${styles.summary} text-secondary caption`}>{tier.summary}</p>
               </div>
               
