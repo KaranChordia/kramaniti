@@ -359,6 +359,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The plan sets out when and how a customer is passed to a person; it does not prove that an assistant is accurate, safe or right for your business, and it does not check consumer, data protection or safety rules. A filled plan is not approval to switch on an assistant, agree refunds or answer safety questions automatically.",
     related: ["enquiry-triage-agent", "human-review-gate"],
   },
+  "decision-record": {
+    outcome:
+      "A short decision record kept beside the workflow itself, stating what was decided, why, who owns it and when to look at it again, so the team does not have to reconstruct the rule from chat or memory later.",
+    question:
+      "What decision keeps getting remade in chat or meetings, and where will you write it beside the work?",
+    requires: [
+      "One live workflow where the same choice keeps coming up (who may do what, what needs a check, when an exception is allowed)",
+      "A place next to that work where the record will live (a sheet column, a pinned chat note, a ticket field, a shared folder)",
+      "One person who can name the owner of the decision and agree when it should be revisited",
+    ],
+    check:
+      "The decision is stated in plain sentences; context and trade-offs are written without invented counts; a named owner and decision date are present; a revisit date is set for any reversible choice that affects clients or money; the record lives beside the workflow, not only in chat; stop rules were followed.",
+    limit:
+      "The record captures what the team agreed and where to find it; it does not prove the decision is wise, lawful or complete, and it does not replace professional judgment on filings, tax positions or client advice.",
+    related: ["human-review-gate", "exception-log"],
+  },
 };
 
 export const researchCollection = [
