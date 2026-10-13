@@ -387,4 +387,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-12',
   },
+  {
+    id: 'decision-record',
+    category: 'Human oversight',
+    kind: 'Governance',
+    title: 'Write decisions down where the work happens',
+    summary: 'Keep a short note of what was decided, why, who owns it and when to revisit, next to the work itself.',
+    useWhen: 'For teams where decisions live only in chat, meetings or one person’s head and later nobody remembers why a rule or exception exists.',
+    includes: ['What was decided', 'Why and trade-offs', 'Named owner', 'When to revisit'],
+    format: 'Markdown',
+    download: '/kosh/decision-record.md',
+    status: 'Starter template',
+    created: '2026-10-13',
+  },
 ];
