@@ -33,6 +33,7 @@ import {
   ShieldCheck,
   Trash2,
   Users,
+  Wrench,
   UserRound,
 } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
@@ -50,25 +51,17 @@ import {
   type ClaritySquareProductEventName,
 } from '@/lib/clarity-square/supabase';
 import styles from './ClaritySquare.module.css';
+import simple from './SimpleWorkspace.module.css';
+import { ClarityConversation } from './ClarityConversation';
+import { parseWorkspaceView, workspaceViewUrl, workspaceToolGroups, isSupportingView, type WorkspaceView } from '@/lib/clarity-square/navigation';
+import { isClarityActionData } from '@/lib/clarity-square/actions';
+import { emptyClarityIntent, workspaceRevision, taskSourceLabel, actionClaimId } from '@/lib/clarity-square/workspace';
 
 type Track = 'founder' | 'builder';
 type StepId = 'entry' | 'track' | 'intent' | 'context';
 type SessionMode = 'signin' | 'signup';
-type AuthView = 'signup-email' | 'signup-credentials' | 'signin';
-type MenuId =
-  | 'home'
-  | 'start'
-  | 'path'
-  | 'context'
-  | 'square'
-  | 'loops'
-  | 'tasks'
-  | 'assistant'
-  | 'memory'
-  | 'projects'
-  | 'more'
-  | 'profile'
-  | 'settings';
+type AuthView = 'signup-email' | 'signup-credentials' | 'signin' | 'recover' | 'reset-password' | 'confirm-email';
+type MenuId = WorkspaceView | 'start';
 type LoopId = 'signal' | 'project' | 'task' | 'reflection' | 'brief';
 type LoopStatus = 'pending' | 'working' | 'needs_approval' | 'completed';
 type LoopRunPhase = 'idle' | 'gathering' | 'ready';
@@ -178,17 +171,31 @@ type AssistantResponse = {
   taskUpdates?: AssistantTaskUpdateDraft[] | null;
   memoryUpdate?: AssistantMemoryUpdateDraft | null;
   error?: string;
+  source?: 'local' | 'groq';
+  workspaceRevision?: string;
 };
 
 type AssistantPendingAction = {
   id: string;
   data: AssistantResponse;
-  status: 'pending' | 'approved' | 'declined' | 'failed';
+  status: 'pending' | 'saving' | 'approved' | 'declined' | 'failed';
+  ownerId?: string;
+  targetProjectId?: string | null;
+  resultProjectId?: string | null;
   resultText?: string;
+};
+
+const restorePendingAction = (metadata: Record<string, unknown>): AssistantPendingAction | null => {
+  const value = metadata.pending_action;
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const action = value as AssistantPendingAction;
+  if (typeof action.id !== 'string' || !isClarityActionData(action.data) || !['pending', 'saving', 'approved', 'declined', 'failed'].includes(action.status)) return null;
+  return action.status === 'saving' ? { ...action, status: 'failed', resultText: 'This approval was interrupted. Check your saved work before drafting a new action.' } : action;
 };
 
 type AssistantSettingsDraft = {
   behaviorPreference: string;
+  digestRhythm?: 'weekly' | 'paused';
 };
 
 type AssistantActionResult = {
@@ -357,33 +364,14 @@ const STEPS: Array<{ id: StepId; label: string; detail: string }> = [
 ];
 
 const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> = [
-  { id: 'path', label: 'Path', icon: Compass },
-  { id: 'context', label: 'Context', icon: FileText },
-  { id: 'square', label: 'Square', icon: Users },
-  { id: 'loops', label: 'Loops', icon: Repeat2 },
-  { id: 'tasks', label: 'Tasks', icon: CheckCircle2 },
-  { id: 'assistant', label: 'Assistant', icon: MessageCircle },
-  { id: 'memory', label: 'Memory', icon: Database },
-  { id: 'projects', label: 'Projects', icon: FolderOpen },
-];
-
-const MOBILE_PRIMARY_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> = [
   { id: 'home', label: 'Home', icon: Activity },
   { id: 'projects', label: 'Projects', icon: FolderOpen },
-  { id: 'loops', label: 'Loops', icon: Repeat2 },
-  { id: 'assistant', label: 'Assistant', icon: MessageCircle },
-  { id: 'more', label: 'More', icon: List },
+
 ];
 
-const MORE_MENU_ITEMS: Array<{ id: MenuId; label: string; detail: string; icon: typeof CircleDot }> = [
-  { id: 'path', label: 'Path', detail: 'Choose founder or solopreneur mode.', icon: Compass },
-  { id: 'context', label: 'Context', detail: 'Open the saved signal and next questions.', icon: FileText },
-  { id: 'square', label: 'Square', detail: 'Review founder problems and builder shares.', icon: Users },
-  { id: 'tasks', label: 'Tasks', detail: 'Manage open work grouped by project.', icon: CheckCircle2 },
-  { id: 'memory', label: 'Memory', detail: 'Review memories and delete saved items.', icon: Database },
-  { id: 'profile', label: 'Profile', detail: 'Check account identity and workspace state.', icon: UserRound },
-  { id: 'settings', label: 'Settings', detail: 'Adjust path, privacy, and digest preferences.', icon: Settings },
-];
+const MOBILE_PRIMARY_ITEMS = MENU_ITEMS;
+
+const TOOL_ICONS: Partial<Record<WorkspaceView, typeof CircleDot>> = { path: Compass, context: FileText, loops: Repeat2, tasks: CheckCircle2, assistant: MessageCircle, files: FolderOpen, overview: BarChart3, memory: Database, square: Users };
 
 const createUiMessage = (
   role: UiAssistantMessage['role'],
@@ -690,6 +678,7 @@ const normalizeAssistantSettings = (value: unknown): AssistantSettingsDraft => {
   const settings = value as Partial<AssistantSettingsDraft>;
   return {
     behaviorPreference: typeof settings.behaviorPreference === 'string' ? settings.behaviorPreference.slice(0, 600) : '',
+    digestRhythm: settings.digestRhythm === 'paused' ? 'paused' : 'weekly',
   };
 };
 
@@ -757,7 +746,7 @@ export function ClaritySquare() {
   const router = useRouter();
   const [step, setStep] = useState<StepId>('entry');
   const [track, setTrack] = useState<Track>('founder');
-  const [intent, setIntent] = useState<IntentDraft>(TRACKS.founder.defaults);
+  const [intent, setIntent] = useState<IntentDraft>(emptyClarityIntent);
   const [savedContext, setSavedContext] = useState<SavedContext | null>(null);
   const [clarityBriefProjectId, setClarityBriefProjectId] = useState<string | null>(null);
   const [activeMenu, setActiveMenu] = useState<MenuId>('start');
@@ -789,6 +778,11 @@ export function ClaritySquare() {
   const [activeProjectFolder, setActiveProjectFolder] = useState<ProjectFolderFilter>('all');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [projectSearch, setProjectSearch] = useState('');
+  const [projectView, setProjectView] = useState<'list' | 'workspace'>('list');
+  const [projectTab, setProjectTab] = useState<'conversation' | 'steps' | 'details'>('conversation');
+  const [projectDescriptionDraft, setProjectDescriptionDraft] = useState<string | null>(null);
+  const [isSavingDescription, setIsSavingDescription] = useState(false);
+  const [isAddingTask, setIsAddingTask] = useState(false);
   const [taskProjectFilter, setTaskProjectFilter] = useState<string>('all');
   const [taskStatusFilter, setTaskStatusFilter] = useState<TaskStatusFilter>('all');
   const [isCreatingProject, setIsCreatingProject] = useState(false);
@@ -819,6 +813,18 @@ export function ClaritySquare() {
   const [isProjectAssistantBusy, setIsProjectAssistantBusy] = useState(false);
   const [isSavingProject, setIsSavingProject] = useState(false);
   const [isSavingProjectInstruction, setIsSavingProjectInstruction] = useState(false);
+  const [editingMemoryId, setEditingMemoryId] = useState<string | null>(null);
+  const [memoryTitleDraft, setMemoryTitleDraft] = useState('');
+  const [memoryContentDraft, setMemoryContentDraft] = useState('');
+  const [isSavingMemory, setIsSavingMemory] = useState(false);
+  const [privacyProjectId, setPrivacyProjectId] = useState<string | null>(null);
+  const conversationRequestsRef = useRef(0);
+  const threadsLoadedRef = useRef(false);
+  const approvingActionRef = useRef<string | null>(null);
+  const sessionOwnerRef = useRef<string | null>(null);
+  const workspaceLoadRef = useRef(0);
+  const authViewRef = useRef<AuthView>(authView);
+  useEffect(() => { authViewRef.current = authView; }, [authView]);
   const stageRef = useRef<HTMLElement | null>(null);
   const assistantInputRef = useRef<HTMLTextAreaElement | null>(null);
   const projectAssistantInputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -965,12 +971,61 @@ export function ClaritySquare() {
     };
   }, []);
 
+  const clearPrivateWorkspace = useCallback(() => {
+    workspaceLoadRef.current += 1;
+    threadsLoadedRef.current = false;
+    conversationRequestsRef.current = 0;
+    setAuthProfile(null);
+    setAuthUsername('');
+    setAuthPassword('');
+    setAuthLogin('');
+    setAuthEmail('');
+    setProjects([]);
+    setProjectFolders([]);
+    setProjectTasks([]);
+    setProjectReports([]);
+    setContextEntries([]);
+    setProductEvents([]);
+    setSavedContext(null);
+    setIntent(emptyClarityIntent());
+    setClarityBriefProjectId(null);
+    setSelectedProjectId(null);
+    setProjectView('list');
+    setProjectTab('conversation');
+    setProjectDescriptionDraft(null);
+    setActiveProjectFolder('all');
+    setProjectSearch('');
+    setProjectBrief('');
+    setProjectInstructionDraft(null);
+    setManualTaskTitle('');
+    setProjectAssistantInput('');
+    setAssistantInput('');
+    setAssistantMessages(INITIAL_ASSISTANT_MESSAGES);
+    setAssistantThreads(INITIAL_ASSISTANT_THREADS);
+    setActiveAssistantThreadId(DEFAULT_ASSISTANT_THREAD_ID);
+    setAssistantSettings({ behaviorPreference: '' });
+    setAssistantMemories([]);
+    setPrivacyProjectId(null);
+    setEditingMemoryId(null);
+    setMemoryTitleDraft('');
+    setMemoryContentDraft('');
+    setCommunityPosts(COMMUNITY_SEED_POSTS);
+    setCommunityTitle('');
+    setCommunityBody('');
+    setCommunityTags('');
+    setCommunityVisibilityConfirmed(false);
+    setIsCreatingProject(false);
+    setIsAssistantBusy(false);
+    setIsProjectAssistantBusy(false);
+    clearSquareLocalStorage();
+  }, []);
+
   const syncProfileTrack = useCallback((profile: ClaritySquareProfile | null) => {
     const profileTrack = profile?.preferred_track;
     if (!profileTrack || !TRACKS[profileTrack]) return;
 
     setTrack(profileTrack);
-    setIntent((current) => (current === TRACKS.founder.defaults || current === TRACKS.builder.defaults ? TRACKS[profileTrack].defaults : current));
+
   }, []);
 
   const upsertProfile = useCallback(async (user: User, username: string, preferredTrack: Track, options?: { quiet?: boolean }) => {
@@ -985,7 +1040,7 @@ export function ClaritySquare() {
         {
           user_id: user.id,
           email: user.email ?? null,
-          username: normalizedUsername,
+          ...(normalizedUsername ? { username: normalizedUsername } : {}),
           preferred_track: preferredTrack,
         },
         { onConflict: 'user_id' }
@@ -993,6 +1048,7 @@ export function ClaritySquare() {
       .select('*')
       .single();
 
+    if (sessionOwnerRef.current !== user.id) return null;
     if (error) {
       if (!options?.quiet) {
         setStatus(error.code === '23505' ? 'That username is already taken.' : error.message);
@@ -1031,7 +1087,9 @@ export function ClaritySquare() {
       .eq('user_id', user.id)
       .maybeSingle();
 
+    if (sessionOwnerRef.current !== user.id) return null;
     if (error) {
+      setStatus('Your profile could not be loaded. Please try again.');
       setAuthProfile(fallbackProfile);
       setAssistantSettings(normalizeAssistantSettings(fallbackProfile?.assistant_settings));
       return fallbackProfile;
@@ -1059,13 +1117,13 @@ export function ClaritySquare() {
     const supabase = getClaritySquareSupabase();
     if (!supabase) return null;
 
+    const loadId = ++workspaceLoadRef.current;
     const [projectResult, folderResult, taskResult, reportResult, entryResult, messageResult, memoryResult, eventResult] = await Promise.all([
       supabase
         .schema('clarity_square')
         .from('projects')
         .select('*')
         .eq('user_id', user.id)
-        .eq('status', 'active')
         .order('updated_at', { ascending: false })
         .limit(120),
       supabase
@@ -1124,21 +1182,10 @@ export function ClaritySquare() {
         .limit(80),
     ]);
 
-    if (projectResult.error) {
-      if (!options?.quiet) setStatus('Saved projects could not be loaded.');
+    if (sessionOwnerRef.current !== user.id || loadId !== workspaceLoadRef.current) return null;
+    if (projectResult.error || folderResult.error || taskResult.error || reportResult.error || entryResult.error || messageResult.error || memoryResult.error) {
+      setStatus('Your saved workspace could not be refreshed. Displayed work may be out of date. Retry before saving changes.');
       return null;
-    }
-
-    if (folderResult.error && !options?.quiet) {
-      setStatus('Saved folders could not be loaded.');
-    }
-
-    if (taskResult.error && !options?.quiet) {
-      setStatus('Project tasks could not be loaded. The latest migration may need to be applied.');
-    }
-
-    if (reportResult.error && !options?.quiet) {
-      setStatus('Project reports could not be loaded. The latest migration may need to be applied.');
     }
 
     const nextProjects = projectResult.data ?? [];
@@ -1147,9 +1194,15 @@ export function ClaritySquare() {
     const nextReports = reportResult.error ? [] : reportResult.data ?? [];
     const nextEntries = entryResult.error ? [] : entryResult.data ?? [];
     const nextMessageRows = !messageResult.error && messageResult.data?.length ? [...messageResult.data].reverse() : [];
+    const actionReceipts = new Map<string, AssistantPendingAction>();
+    for (const row of nextMessageRows) {
+      const receipt = restorePendingAction({ pending_action: row.metadata.action_receipt });
+      if (receipt) actionReceipts.set(receipt.id, receipt);
+    }
+    const conversationRows = nextMessageRows.filter((row) => !row.metadata.action_receipt);
     const nextMessages =
-      nextMessageRows.length > 0
-        ? nextMessageRows.map((message) => ({
+      conversationRows.length > 0
+        ? conversationRows.map((message) => ({
             id: message.id,
             role: message.role,
             content: normalizeLegacySquareLanguage(message.content),
@@ -1157,6 +1210,7 @@ export function ClaritySquare() {
             project_id: message.project_id,
             thread_id: message.project_id ? null : getMessageThreadIdFromMetadata(message.metadata),
             thread_title: message.project_id ? null : getMessageThreadTitleFromMetadata(message.metadata),
+            pendingAction: (() => { const action = restorePendingAction(message.metadata); return action ? actionReceipts.get(action.id) ?? action : null; })(),
           }))
         : INITIAL_ASSISTANT_MESSAGES;
     const nextMemories = memoryResult.error ? [] : memoryResult.data ?? [];
@@ -1174,16 +1228,16 @@ export function ClaritySquare() {
     }
     setProductEvents(eventResult.error ? [] : eventResult.data ?? []);
     setContextEntries(nextEntries);
-    if (!options?.preserveAssistantState) {
+    if ((!options?.preserveAssistantState || !threadsLoadedRef.current) && !approvingActionRef.current && !conversationRequestsRef.current) {
       setAssistantMessages(nextMessages);
       setAssistantThreads(nextAssistantThreads);
-      setActiveAssistantThreadId((current) =>
-        nextAssistantThreads.some((thread) => thread.id === current) ? current : nextAssistantThreads[0]?.id ?? DEFAULT_ASSISTANT_THREAD_ID,
-      );
+      const firstThreadLoad = !threadsLoadedRef.current;
+      threadsLoadedRef.current = true;
+      setActiveAssistantThreadId((current) => firstThreadLoad && !nextAssistantThreads.some((thread) => thread.id === current) ? nextAssistantThreads[0]?.id ?? DEFAULT_ASSISTANT_THREAD_ID : current);
     }
     setAssistantMemories(nextMemories);
     setSelectedProjectId((current) => {
-      if (current && nextProjects.some((project) => project.id === current)) return current;
+      if (current === null || nextProjects.some((project) => project.id === current)) return current;
       return nextProjects[0]?.id ?? null;
     });
 
@@ -1224,7 +1278,10 @@ export function ClaritySquare() {
           }>;
 
           if (parsed.track && TRACKS[parsed.track]) setTrack(parsed.track);
-          if (parsed.intent) setIntent(parsed.intent);
+          if (parsed.intent) {
+            const wasExample = Object.values(TRACKS).some((item) => JSON.stringify(item.defaults) === JSON.stringify(parsed.intent));
+            setIntent(wasExample ? emptyClarityIntent() : parsed.intent);
+          }
           if (parsed.savedContext) setSavedContext(parsed.savedContext);
           if (parsed.sessionMode) setSessionMode(parsed.sessionMode);
           const hasMeaningfulSavedWork =
@@ -1236,7 +1293,7 @@ export function ClaritySquare() {
             hasMeaningfulSavedWork &&
             (restoredActiveMenu === 'home' ||
               restoredActiveMenu === 'more' ||
-              (restoredActiveMenu && MENU_ITEMS.some((item) => item.id === restoredActiveMenu)))
+              (restoredActiveMenu && parseWorkspaceView(restoredActiveMenu) === restoredActiveMenu))
           ) {
             setActiveMenu(restoredActiveMenu);
           }
@@ -1297,15 +1354,9 @@ export function ClaritySquare() {
           if (parsed.step && STEPS.some((item) => item.id === parsed.step)) setStep(parsed.step);
         }
 
-        const requestedView = new URLSearchParams(window.location.search).get('view');
-        if (requestedView === 'home') {
-          setActiveMenu('home');
-        }
-        if (requestedView === 'square' || requestedView === 'circle') {
-          setActiveMenu('square');
-        }
-        if (requestedView === 'assistant') {
-          setActiveMenu('assistant');
+        if (sessionOwnerRef.current) {
+          const requestedView = parseWorkspaceView(new URLSearchParams(window.location.search).get('view'));
+          setActiveMenu(requestedView);
         }
       } catch {
         setStatus('This session starts fresh.');
@@ -1371,49 +1422,52 @@ export function ClaritySquare() {
   useEffect(() => {
     const supabase = getClaritySquareSupabase();
     if (!supabase) return;
-
-    let isMounted = true;
-
-    supabase.auth.getSession().then(({ data }) => {
-      if (!isMounted) return;
-      const user = data.session?.user ?? null;
+    let mounted = true;
+    let authEventSeen = false;
+    const authError = new URLSearchParams(window.location.hash.slice(1)).get('error');
+    const authErrorTimer = authError ? window.setTimeout(() => { setAuthView('recover'); setStatus('This account link is invalid or expired. Request a new link.'); window.history.replaceState(null, '', window.location.pathname); }, 0) : null;
+    const applySession = (user: User | null, recovery = false) => {
+      if (!mounted) return;
+      const changedOwner = sessionOwnerRef.current !== (user?.id ?? null);
+      if (changedOwner) clearPrivateWorkspace();
+      sessionOwnerRef.current = user?.id ?? null;
       setAuthUser(user);
-      if (user && step === 'entry') {
-        clearSquareLocalStorage();
-        void loadProfile(user);
-        setStep('track');
-        setActiveMenu((current) => (current === 'start' ? 'path' : current));
-        setStatus('Welcome back.');
+      if (recovery) {
+        authViewRef.current = 'reset-password';
+        setAuthView('reset-password');
+        setActiveMenu('start');
+        setStep('entry');
+        setStatus('Choose a new password for your account.');
+      } else if (user && authViewRef.current !== 'reset-password') {
+        if (changedOwner) {
+          setActiveMenu('home');
+          setStep('track');
+          setStatus('Welcome back.');
+        }
+      } else if (!user && changedOwner) {
+        setActiveMenu('start');
+        setStep('entry');
+        setAuthView('signin');
+        setStatus('Your session ended. Sign in to continue.');
       }
-    });
-
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-      const user = session?.user ?? null;
-      setAuthUser(user);
-      if (user) {
-        clearSquareLocalStorage();
-        void loadProfile(user);
-        setStep((current) => {
-          if (current === 'entry') {
-            setActiveMenu((currentMenu) => (currentMenu === 'start' ? 'path' : currentMenu));
-            return 'track';
-          }
-          return current;
-        });
-        setStatus('Welcome back.');
-      } else {
-        setAuthProfile(null);
-        setProjects([]);
-        setProjectFolders([]);
-        setProjectReports([]);
-      }
-    });
-
-    return () => {
-      isMounted = false;
-      data.subscription.unsubscribe();
     };
-  }, [loadProfile, step]);
+    void supabase.auth.getSession().then(({ data, error }) => {
+      if (!mounted || authEventSeen) return;
+      if (error) setStatus('Your account connection is unavailable. Please try again.');
+      applySession(data.session?.user ?? null);
+    });
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      authEventSeen = true;
+      applySession(session?.user ?? null, event === 'PASSWORD_RECOVERY');
+    });
+    return () => { mounted = false; if (authErrorTimer) window.clearTimeout(authErrorTimer); data.subscription.unsubscribe(); };
+  }, [clearPrivateWorkspace]);
+
+  useEffect(() => {
+    if (!authUser) return;
+    const timer = window.setTimeout(() => { void loadProfile(authUser); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [authUser, loadProfile]);
 
   useEffect(() => {
     const supabase = getClaritySquareSupabase();
@@ -1423,7 +1477,7 @@ export function ClaritySquare() {
 
     const initialRefresh = window.setTimeout(() => {
       if (!isMounted) return;
-      void refreshWorkspace(authUser, { preserveAssistantState: activeMenu === 'assistant' });
+      void refreshWorkspace(authUser, { preserveAssistantState: Boolean(conversationRequestsRef.current || approvingActionRef.current) });
     }, 0);
 
     return () => {
@@ -1453,7 +1507,7 @@ export function ClaritySquare() {
     const queueRefresh = () => {
       if (refreshTimer) window.clearTimeout(refreshTimer);
       refreshTimer = window.setTimeout(() => {
-        void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: activeMenu === 'assistant' });
+        void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: Boolean(conversationRequestsRef.current || approvingActionRef.current) });
       }, 180);
     };
 
@@ -1498,6 +1552,41 @@ export function ClaritySquare() {
     };
   }, [activeMenu, authUser, refreshWorkspace]);
 
+  useEffect(() => {
+    if (!authUser) return;
+    const restoreLocation = () => {
+      if (authViewRef.current === 'reset-password') return;
+      const params = new URLSearchParams(window.location.search);
+      const projectId = params.get('project');
+      const view = parseWorkspaceView(params.get('view'));
+      if (projectId) {
+        const requestedProject = projects.find((project) => project.id === projectId);
+        if (!requestedProject || requestedProject.status === 'archived') {
+          if (!threadsLoadedRef.current) return;
+          setProjectView('list'); setActiveMenu('projects');
+          setStatus(requestedProject ? 'This project is archived. You can restore it below.' : 'This project is not available in your account.');
+          return;
+        }
+        setSelectedProjectId(projectId);
+        setProjectView('workspace');
+        const tab = params.get('tab');
+        setProjectTab(tab === 'steps' || tab === 'details' ? tab : 'conversation');
+        if (view === 'context') {
+          setSavedContext(savedContextFromProject(requestedProject));
+          setClarityBriefProjectId(requestedProject.id);
+          setStep('context');
+        }
+        setActiveMenu(isSupportingView(view) ? view : 'projects');
+      } else {
+        if (view === 'projects') setProjectView('list');
+        setActiveMenu(view);
+      }
+    };
+    const timer = window.setTimeout(restoreLocation, 0);
+    window.addEventListener('popstate', restoreLocation);
+    return () => { window.clearTimeout(timer); window.removeEventListener('popstate', restoreLocation); };
+  }, [authUser, projects]);
+
   const accountTrack = authProfile?.preferred_track ?? track;
   const accountTrackCopy = TRACKS[accountTrack];
   const isFounderAccount = accountTrack === 'founder';
@@ -1505,23 +1594,6 @@ export function ClaritySquare() {
   const metadataUsername = getUserMetadataUsername(authUser);
   const displayUsername = authProfile?.username || metadataUsername;
   const displayEmail = authUser?.email ?? authProfile?.email ?? '';
-
-  const continueSignupWithEmail = () => {
-    const supabase = getClaritySquareSupabase();
-    if (!supabase) {
-      setStatus('Account connection is not available. Please refresh and try again.');
-      return;
-    }
-
-    if (!isEmail(authEmail)) {
-      setStatus('Enter a valid email address to create your account.');
-      return;
-    }
-
-    setSessionMode('signup');
-    setAuthView('signup-credentials');
-    setStatus('Choose your path, then create your username and password.');
-  };
 
   const createAccount = async () => {
     const supabase = getClaritySquareSupabase();
@@ -1532,7 +1604,7 @@ export function ClaritySquare() {
 
     const email = authEmail.trim();
     const username = normalizeUsername(authUsername);
-    const password = authPassword.trim();
+    const password = authPassword;
 
     if (!isEmail(email)) {
       setAuthView('signup-email');
@@ -1540,7 +1612,7 @@ export function ClaritySquare() {
       return;
     }
 
-    if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+    if (username && !/^[a-z0-9_]{3,24}$/.test(username)) {
       setStatus('Choose a username using 3-24 lowercase letters, numbers, or underscores.');
       return;
     }
@@ -1555,8 +1627,8 @@ export function ClaritySquare() {
       email,
       password,
       options: {
-        data: { username },
-        emailRedirectTo: `${window.location.origin}/clarity-square`,
+        data: username ? { username } : {},
+        emailRedirectTo: `${window.location.origin}/clarity-square/`,
       },
     });
     setIsAuthBusy(false);
@@ -1568,40 +1640,60 @@ export function ClaritySquare() {
 
     const user = result.data.user ?? result.data.session?.user ?? null;
     if (user && result.data.session) {
+      sessionOwnerRef.current = user.id;
       const profile = await upsertProfile(user, username, track);
       if (!profile) return;
       clearSquareLocalStorage();
       setAuthUser(user);
       setAuthLogin(username);
       setStep('track');
-      setActiveMenu('path');
+      setAuthPassword('');
+      setActiveMenu('home');
       setStatus(`Account created as ${TRACKS[track].shortLabel}. Signed in as ${username}.`);
       return;
     }
 
-    const retry = await supabase.auth.signInWithPassword({ email, password });
+    setAuthView('confirm-email');
+    setAuthPassword('');
+    setStatus('Check your email to confirm your account, then return here to sign in.');
+  };
 
-    if (retry.error) {
-      const message = retry.error.message.toLowerCase();
-      if (message.includes('confirm')) {
-        setStatus('Account created. Email confirmation is still required before first sign-in.');
-        return;
-      }
+  const recoverAccount = async () => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !isEmail(authEmail)) { setStatus('Enter the email you used for your account.'); return; }
+    setIsAuthBusy(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(authEmail.trim(), { redirectTo: `${window.location.origin}/clarity-square/` });
+      setStatus(error ? 'The reset email could not be requested. Please try again shortly.' : 'If an account uses this email, a password-reset link is on its way.');
+    } catch { setStatus('Your account connection is unavailable. Please retry.'); }
+    finally { setIsAuthBusy(false); }
+  };
 
-      setStatus('Account could not be opened yet. If this email already exists, use the Sign in tab.');
-      return;
-    }
+  const resetPassword = async () => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser) { setAuthView('recover'); setStatus('This reset link has expired. Request a new one.'); return; }
+    if (authPassword.length < 8) { setStatus('Use a password with at least 8 characters.'); return; }
+    setIsAuthBusy(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: authPassword });
+      if (error) { setStatus('Your password was not changed. Request a new reset link or try again.'); return; }
+      setAuthPassword('');
+      setAuthView('signin');
+      setActiveMenu('home');
+      setStatus('Password updated. You can continue in your workspace.');
+    } catch { setStatus('Your password was not changed. Please retry.'); }
+    finally { setIsAuthBusy(false); }
+  };
 
-    const retryUser = retry.data.user;
-    const profile = await upsertProfile(retryUser, username, track);
-    if (!profile) return;
-
-    clearSquareLocalStorage();
-    setAuthUser(retryUser);
-    setAuthLogin(username);
-    setStep('track');
-    setActiveMenu('path');
-    setStatus(`Signed in as ${username} on the ${TRACKS[track].shortLabel}.`);
+  const resendConfirmation = async () => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !isEmail(authEmail)) { setStatus('Enter the email used to create your account.'); return; }
+    setIsAuthBusy(true);
+    try {
+      const { error } = await supabase.auth.resend({ type: 'signup', email: authEmail.trim(), options: { emailRedirectTo: `${window.location.origin}/clarity-square/` } });
+      setStatus(error ? 'The confirmation email could not be requested. Please try again shortly.' : 'If this account needs confirmation, a new link is on its way.');
+    } catch { setStatus('Your account connection is unavailable. Please retry.'); }
+    finally { setIsAuthBusy(false); }
   };
 
   const signIn = async () => {
@@ -1612,7 +1704,7 @@ export function ClaritySquare() {
     }
 
     const login = authLogin.trim();
-    const password = authPassword.trim();
+    const password = authPassword;
 
     if (!login || !password) {
       setStatus('Enter your username and password.');
@@ -1629,13 +1721,13 @@ export function ClaritySquare() {
 
       if (error) {
         setIsAuthBusy(false);
-        setStatus('Username sign-in is not available yet. The latest database migration may need to be applied.');
+        setStatus('Username sign-in is unavailable. Try your account email instead.');
         return;
       }
 
       if (!data) {
         setIsAuthBusy(false);
-        setStatus('No account found for that username.');
+        setStatus('Sign in did not complete. Check your email or username and password.');
         return;
       }
 
@@ -1652,10 +1744,12 @@ export function ClaritySquare() {
 
     const user = result.data.user;
     clearSquareLocalStorage();
+    sessionOwnerRef.current = user.id;
     setAuthUser(user);
     const profile = await loadProfile(user);
+    setAuthPassword('');
     setStep('track');
-    setActiveMenu('path');
+    setActiveMenu('home');
     setStatus(`Signed in${profile?.username ? ` as ${profile.username}` : ''}.`);
   };
 
@@ -1663,7 +1757,11 @@ export function ClaritySquare() {
     const supabase = getClaritySquareSupabase();
     if (!supabase) return;
 
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    if (error) { setStatus('Sign out did not complete. Please try again.'); return; }
+    clearPrivateWorkspace();
+    sessionOwnerRef.current = null;
+    setAuthPassword('');
     setAuthUser(null);
     visitTrackedRef.current = null;
     setAuthProfile(null);
@@ -1696,7 +1794,6 @@ export function ClaritySquare() {
 
   const applyTrackChoice = async (nextTrack: Track, options?: { persist?: boolean; statusPrefix?: string }) => {
     setTrack(nextTrack);
-    setIntent(TRACKS[nextTrack].defaults);
 
     if (!options?.persist || !authUser) {
       setStatus(options?.statusPrefix ?? `${TRACKS[nextTrack].shortLabel} selected.`);
@@ -1758,7 +1855,7 @@ export function ClaritySquare() {
   });
 
   const selectedProject =
-    filteredProjects.find((project) => project.id === selectedProjectId) || filteredProjects[0] || null;
+    projects.find((project) => project.id === selectedProjectId) || null;
   const selectedProjectTasks = selectedProject
     ? projectTasks
         .filter((task) => task.project_id === selectedProject.id && task.status !== 'archived')
@@ -1792,7 +1889,7 @@ export function ClaritySquare() {
     : [];
   const selectedProjectInstruction = selectedProject?.project_instruction || selectedProject?.context || '';
 
-  const recentProjects = [...projects]
+  const recentProjects = projects.filter((project) => project.status === 'active')
     .sort((left, right) => new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime())
     .slice(0, 3);
   const latestProject = recentProjects[0] ?? null;
@@ -1862,29 +1959,14 @@ export function ClaritySquare() {
           label: 'Founder problem statement',
           titlePlaceholder: 'What problem needs sharper thinking?',
           bodyPlaceholder: 'Describe the workflow, blocker, audience, and what a useful contribution would clarify.',
-          button: 'Post problem',
+          button: 'Add example problem',
         }
       : {
           label: 'Solopreneur share',
           titlePlaceholder: 'What are you working on or noticing?',
           bodyPlaceholder: 'Describe the work, idea, signal, or experiment. Keep it specific enough for founders to understand.',
-          button: 'Share with Square',
+          button: 'Add example response',
         };
-  const homeRoleCopy = isFounderAccount
-    ? {
-        title: 'Founder problem command center',
-        description:
-          'Post real operating problems, turn the strongest thread into a private project, and keep the assistant anchored to your current workflow.',
-        roleDetail: 'You can publish founder problem statements. Solopreneurs can respond with work, ideas, and experiments.',
-        primaryAction: savedContext || latestProject ? 'Continue founder context' : 'Capture founder signal',
-      }
-    : {
-        title: 'Solopreneur clarity command center',
-        description:
-          'Find founder problems, share useful work or ideas, and turn promising signals into private projects with assistant memory.',
-        roleDetail: 'You can share work, ideas, and experiments. Founder problem-posting stays reserved for founder accounts.',
-        primaryAction: savedContext || latestProject ? 'Continue solopreneur context' : 'Capture solopreneur signal',
-      };
   const journeySteps = [
     { label: 'Path', detail: accountTrackCopy.shortLabel, active: true },
     { label: 'Signal', detail: savedContext || latestProject ? 'Captured' : 'Awaiting input', active: Boolean(savedContext || latestProject) },
@@ -2219,8 +2301,9 @@ export function ClaritySquare() {
 
     const { data, error } = await supabase.schema('clarity_square').from('project_tasks').insert(rows).select('*');
 
+    if (sessionOwnerRef.current !== authUser.id) return [];
     if (error || !data) {
-      setStatus('Tasks could not be saved. The project task migration may need to be applied.');
+      setStatus('Tasks were not saved. Please retry from the project.');
       return [];
     }
 
@@ -2272,6 +2355,7 @@ export function ClaritySquare() {
       .select('*')
       .single();
 
+    if (sessionOwnerRef.current !== authUser.id) return null;
     if (error || !data) {
       setStatus(error?.code === '23505' ? 'A folder with this name already exists.' : 'Folder could not be saved to your account.');
       return null;
@@ -2304,27 +2388,15 @@ export function ClaritySquare() {
   };
 
   const moveProjectToFolder = async (project: ClaritySquareProject, folderId: string | null) => {
-    setProjects((current) =>
-      current.map((item) => (item.id === project.id ? { ...item, folder_id: folderId, updated_at: new Date().toISOString() } : item)),
-    );
-    setStatus(folderId ? `Moved to ${getFolderName(folderId)}.` : 'Moved to Unfiled.');
-
     const supabase = getClaritySquareSupabase();
-    if (!supabase || !authUser || project.id.startsWith('local-project-')) return;
-
-    const { error } = await supabase
-      .schema('clarity_square')
-      .from('projects')
-      .update({ folder_id: folderId })
-      .eq('id', project.id);
-
-    if (error) {
-      setStatus('Project move could not be saved.');
-      void refreshWorkspace(authUser, { quiet: true });
-      return;
-    }
-
-    void refreshWorkspace(authUser, { quiet: true });
+    if (!supabase || !authUser) { setStatus('Sign in to save this change.'); return; }
+    const owner = authUser.id;
+    const { data, error } = await supabase.schema('clarity_square').from('projects')
+      .update({ folder_id: folderId }).eq('id', project.id).eq('user_id', owner).select('*').single();
+    if (sessionOwnerRef.current !== owner) return;
+    if (error || !data) { setStatus('Project move was not saved. The previous folder is unchanged.'); return; }
+    setProjects((current) => current.map((item) => item.id === data.id ? data : item));
+    setStatus(folderId ? `Moved to ${getFolderName(folderId)}.` : 'Moved to Unfiled.');
   };
 
   const createProjectFromBrief = async () => {
@@ -2382,13 +2454,14 @@ export function ClaritySquare() {
       .select('*')
       .single();
 
+    if (sessionOwnerRef.current !== authUser.id) return null;
     if (error || !project) {
       setIsSavingProject(false);
       setStatus('Project could not be saved to your account.');
       return null;
     }
 
-    await supabase.schema('clarity_square').from('context_entries').insert({
+    const { error: noteError } = await supabase.schema('clarity_square').from('context_entries').insert({
       project_id: project.id,
       user_id: authUser.id,
       entry_type: 'note',
@@ -2407,9 +2480,9 @@ export function ClaritySquare() {
     setProjectInstructionDraft(project.project_instruction || project.context);
     setIsCreatingProject(false);
     setIsSavingProject(false);
-    await insertProjectTasks(project, buildAutoTasks(project), 'auto');
+    const starterTasks = await insertProjectTasks(project, buildAutoTasks(project), 'auto');
     void trackProductEvent('project_created', { source: 'manual_brief', track: accountTrack });
-    setStatus('Project created with starting tasks.');
+    setStatus(noteError || starterTasks.length === 0 ? 'Project saved. Some supporting notes or starter tasks were not saved; check the project before retrying.' : 'Project and starting tasks saved.');
     void refreshWorkspace(authUser, { quiet: true });
     return project;
   };
@@ -2423,7 +2496,7 @@ export function ClaritySquare() {
       return null;
     }
     if (!communityVisibilityConfirmed) {
-      setStatus('Confirm that this shared Square post is safe to show to other members before publishing.');
+      setStatus('Confirm this local preview contains no confidential information before adding it.');
       return null;
     }
 
@@ -2521,12 +2594,14 @@ export function ClaritySquare() {
           created_at: message.createdAt,
           thread_id: projectId ? null : message.thread_id || threadId || DEFAULT_ASSISTANT_THREAD_ID,
           thread_title: projectId ? null : message.thread_title || threadTitle || null,
+          pending_action: message.pendingAction ?? null,
         },
       })
       .select('*')
       .single();
 
-    if (error || !data) return null;
+    if (sessionOwnerRef.current !== authUser.id) return null;
+    if (error || !data) { setStatus('This conversation was not saved. Keep this page open and retry before leaving.'); return null; }
 
     const savedMessage: UiAssistantMessage = {
       id: data.id,
@@ -2579,64 +2654,39 @@ export function ClaritySquare() {
   };
 
   const toggleProjectTask = async (task: ClaritySquareProjectTask) => {
-    const nextStatus: ClaritySquareProjectTask['status'] = task.status === 'done' ? 'open' : 'done';
-    setProjectTasks((current) =>
-      current.map((item) => (item.id === task.id ? { ...item, status: nextStatus, updated_at: new Date().toISOString() } : item)),
-    );
-
     const supabase = getClaritySquareSupabase();
-    if (!supabase || !authUser) return;
-
-    const { error } = await supabase
-      .schema('clarity_square')
-      .from('project_tasks')
-      .update({ status: nextStatus })
-      .eq('id', task.id);
-
-    if (error) {
-      setStatus('Task status could not be saved.');
-      void refreshWorkspace(authUser, { quiet: true });
-    } else if (nextStatus === 'done') {
-      void trackProductEvent('loop_completed', { loop: 'task', source: task.source });
+    if (!supabase || !authUser) { setStatus('Sign in to save task changes.'); return; }
+    const owner = authUser.id;
+    const nextStatus = task.status === 'done' ? 'open' : 'done';
+    const { data, error } = await supabase.schema('clarity_square').from('project_tasks')
+      .update({ status: nextStatus }).eq('id', task.id).eq('user_id', owner)
+      .eq('updated_at', task.updated_at).select('*').single();
+    if (sessionOwnerRef.current !== owner) return;
+    if (error || !data) {
+      setStatus('Task change was not saved. It may have changed elsewhere. Refresh and try again.');
+      return;
     }
+    setProjectTasks((current) => current.map((item) => item.id === data.id ? data : item));
+    setStatus(nextStatus === 'done' ? 'Task completed and saved.' : 'Task reopened and saved.');
+    if (nextStatus === 'done') void trackProductEvent('loop_completed', { loop: 'task', source: task.source });
   };
 
   const saveProjectInstruction = async (project: ClaritySquareProject) => {
     const instruction = (projectInstructionDraft ?? selectedProjectInstruction).trim();
-    if (!instruction) {
-      setStatus('Add a project instruction first.');
-      return;
-    }
-
-    setIsSavingProjectInstruction(true);
-    setProjects((current) =>
-      current.map((item) =>
-        item.id === project.id ? { ...item, project_instruction: instruction, updated_at: new Date().toISOString() } : item,
-      ),
-    );
-
+    if (!instruction) { setStatus('Add a project instruction first.'); return; }
     const supabase = getClaritySquareSupabase();
-    if (!supabase || !authUser) {
-      setIsSavingProjectInstruction(false);
-      return;
-    }
-
-    const { error } = await supabase
-      .schema('clarity_square')
-      .from('projects')
-      .update({ project_instruction: instruction })
-      .eq('id', project.id);
-
-    setIsSavingProjectInstruction(false);
-
-    if (error) {
-      setStatus('Project instruction could not be saved.');
-      void refreshWorkspace(authUser, { quiet: true });
-      return;
-    }
-
-    setStatus('Project instruction saved.');
-    void refreshWorkspace(authUser, { quiet: true });
+    if (!supabase || !authUser) { setStatus('Sign in to save this instruction.'); return; }
+    const owner = authUser.id;
+    setIsSavingProjectInstruction(true);
+    try {
+      const { data, error } = await supabase.schema('clarity_square').from('projects')
+        .update({ project_instruction: instruction }).eq('id', project.id).eq('user_id', owner)
+        .eq('updated_at', project.updated_at).select('*').single();
+      if (sessionOwnerRef.current !== owner) return;
+      if (error || !data) { setStatus('Instruction was not saved. Your draft is still here; refresh before retrying.'); return; }
+      setProjects((current) => current.map((item) => item.id === data.id ? data : item));
+      setStatus('Project instruction saved.');
+    } finally { setIsSavingProjectInstruction(false); }
   };
 
   const saveAssistantMemory = async (
@@ -2674,6 +2724,7 @@ export function ClaritySquare() {
       .select('*')
       .single();
 
+    if (sessionOwnerRef.current !== authUser.id) return null;
     if (error || !data) {
       setStatus('Assistant memory could not be saved to your account.');
       return null;
@@ -2716,11 +2767,7 @@ export function ClaritySquare() {
     setSavedContext(context);
     setStep('context');
 
-    const folderId = await getOrCreateProjectFolderId(projectIntent.headline, options?.folderId);
-    if (!folderId) {
-      setStatus('Project folder could not be prepared.');
-      return null;
-    }
+    const folderId = options?.folderId ?? null;
     const { data: project, error } = await supabase
       .schema('clarity_square')
       .from('projects')
@@ -2741,12 +2788,13 @@ export function ClaritySquare() {
       .select('*')
       .single();
 
+    if (sessionOwnerRef.current !== authUser.id) return null;
     if (error || !project) {
       setStatus('Project could not be saved to your account.');
       return null;
     }
 
-    await supabase.schema('clarity_square').from('context_entries').insert({
+    const { error: noteError } = await supabase.schema('clarity_square').from('context_entries').insert({
       project_id: project.id,
       user_id: authUser.id,
       entry_type: 'note',
@@ -2770,15 +2818,7 @@ export function ClaritySquare() {
     setIsCreatingProject(false);
     setProjectBrief(project.project_instruction || project.context);
     setProjectInstructionDraft(project.project_instruction || project.context);
-    await insertProjectTasks(
-      project,
-      context.actions.map((title) => ({
-        title,
-        detail: 'Approved from the Clarity Brief as a reviewed first action.',
-      })),
-      'auto',
-    );
-    setStatus('Project created with assistant context and starting tasks.');
+    setStatus(noteError ? 'Project saved. The supporting note was not saved; the project itself is available.' : 'Project and assistant context saved.');
     void refreshWorkspace(authUser, { quiet: true, preserveAssistantState: options?.keepCurrentMenu });
     return project;
   };
@@ -2823,13 +2863,11 @@ export function ClaritySquare() {
       return null;
     }
 
-    const optimisticProject = { ...currentProject, ...patch, updated_at: new Date().toISOString() };
-    setProjects((current) => current.map((project) => (project.id === draft.id ? optimisticProject : project)));
-
     const { data, error } = await supabase
       .schema('clarity_square')
       .from('projects')
       .update(patch)
+      .eq('updated_at', currentProject.updated_at)
       .eq('id', draft.id)
       .eq('user_id', authUser.id)
       .select('*')
@@ -2890,14 +2928,11 @@ export function ClaritySquare() {
       return null;
     }
 
-    setProjectFolders((current) =>
-      current.map((folder) => (folder.id === draft.id ? { ...folder, ...patch, updated_at: new Date().toISOString() } : folder)),
-    );
-
     const { data, error } = await supabase
       .schema('clarity_square')
       .from('project_folders')
       .update(patch)
+      .eq('updated_at', currentFolder.updated_at)
       .eq('id', draft.id)
       .eq('user_id', authUser.id)
       .select('*')
@@ -2950,6 +2985,7 @@ export function ClaritySquare() {
         .schema('clarity_square')
         .from('project_tasks')
         .update(patch)
+        .eq('updated_at', currentTask.updated_at)
         .eq('id', draft.id)
         .eq('user_id', authUser.id)
         .select('*')
@@ -3006,6 +3042,7 @@ export function ClaritySquare() {
       .schema('clarity_square')
       .from('assistant_memories')
       .update(patch)
+      .eq('updated_at', currentMemory.updated_at)
       .eq('id', draft.id)
       .eq('user_id', authUser.id)
       .select('*')
@@ -3044,7 +3081,7 @@ export function ClaritySquare() {
     const actionLabels: string[] = [];
 
     if (data.folderUpdate) {
-      const folder = await updateFolderFromAssistantDraft(data.folderUpdate, { keepCurrentMenu: activeMenu === 'assistant' });
+      const folder = await updateFolderFromAssistantDraft(data.folderUpdate, { keepCurrentMenu: (activeMenu === 'assistant' || activeMenu === 'home') });
       if (folder) {
         result.folderUpdated = true;
         actionLabels.push('folder update');
@@ -3054,7 +3091,7 @@ export function ClaritySquare() {
     if (data.folderDraft) {
       const folder = await createProjectFolder(data.folderDraft.name, {
         source: 'assistant',
-        keepCurrentMenu: activeMenu === 'assistant',
+        keepCurrentMenu: (activeMenu === 'assistant' || activeMenu === 'home'),
       });
       if (folder) {
         result.folder = folder;
@@ -3063,7 +3100,7 @@ export function ClaritySquare() {
     }
 
     if (data.projectUpdate) {
-      const project = await updateProjectFromAssistantDraft(data.projectUpdate, { keepCurrentMenu: activeMenu === 'assistant' });
+      const project = await updateProjectFromAssistantDraft(data.projectUpdate, { keepCurrentMenu: (activeMenu === 'assistant' || activeMenu === 'home') });
       if (project) {
         result.project = project;
         result.projectUpdated = true;
@@ -3073,7 +3110,7 @@ export function ClaritySquare() {
 
     if (data.projectDraft) {
       const project = await createProjectFromAssistantDraft(data.projectDraft, {
-        keepCurrentMenu: activeMenu === 'assistant',
+        keepCurrentMenu: (activeMenu === 'assistant' || activeMenu === 'home'),
         folderId: result.folder?.id ?? null,
       });
       if (project) {
@@ -3083,14 +3120,14 @@ export function ClaritySquare() {
     }
 
     if (data.taskUpdates?.length) {
-      const updatedCount = await updateProjectTasksFromAssistantDraft(data.taskUpdates, { keepCurrentMenu: activeMenu === 'assistant' });
+      const updatedCount = await updateProjectTasksFromAssistantDraft(data.taskUpdates, { keepCurrentMenu: (activeMenu === 'assistant' || activeMenu === 'home') });
       if (updatedCount > 0) {
         result.taskUpdateCount = updatedCount;
         actionLabels.push(updatedCount === 1 ? 'task update' : 'task updates');
       }
     }
 
-    const taskTarget = result.project ?? options?.project ?? selectedProject;
+    const taskTarget = result.project ?? options?.project ?? null;
     if (data.taskDrafts?.length && taskTarget) {
       const tasks = await insertProjectTasks(taskTarget, data.taskDrafts, 'assistant');
       if (tasks.length > 0) {
@@ -3102,7 +3139,7 @@ export function ClaritySquare() {
     }
 
     if (data.memoryUpdate) {
-      const memory = await updateMemoryFromAssistantDraft(data.memoryUpdate, { keepCurrentMenu: activeMenu === 'assistant' });
+      const memory = await updateMemoryFromAssistantDraft(data.memoryUpdate, { keepCurrentMenu: (activeMenu === 'assistant' || activeMenu === 'home') });
       if (memory) {
         result.memory = memory;
         result.memoryUpdated = true;
@@ -3112,7 +3149,7 @@ export function ClaritySquare() {
 
     if (data.memoryDraft) {
       const memoryProjectId = result.project?.id ?? options?.project?.id ?? null;
-      const memory = await saveAssistantMemory(data.memoryDraft, memoryProjectId, { keepCurrentMenu: activeMenu === 'assistant' });
+      const memory = await saveAssistantMemory(data.memoryDraft, memoryProjectId, { keepCurrentMenu: (activeMenu === 'assistant' || activeMenu === 'home') });
       if (memory) {
         result.memory = memory;
         actionLabels.push('memory');
@@ -3178,13 +3215,15 @@ export function ClaritySquare() {
       result.memory && !result.memoryUpdated ? 'memory' : null,
     ].filter(Boolean) as string[];
     const failedActions = requestedActions.filter((action) => !savedActions.includes(action));
+    if ((data.taskDrafts?.length ?? 0) > result.taskCount) failedActions.push(`${(data.taskDrafts?.length ?? 0) - result.taskCount} task draft(s)`);
+    if ((data.taskUpdates?.length ?? 0) > result.taskUpdateCount) failedActions.push(`${(data.taskUpdates?.length ?? 0) - result.taskUpdateCount} task update(s)`);
 
     if (failedActions.length === 0) {
       return `${fallbackReply} Saved to your Square: ${savedActions.join(', ')}.`;
     }
 
     const failureReason = authUser
-      ? 'the account save did not complete. Please check that the latest Supabase migrations are applied and try again.'
+      ? 'the account save did not complete. Please refresh and try again.'
       : 'you need to sign in before I can save it to your Square workspace.';
 
     if (savedActions.length > 0) {
@@ -3198,7 +3237,8 @@ export function ClaritySquare() {
     const labels = getAssistantActionLabels(pendingAction.data).join(', ');
 
     if (pendingAction.status === 'pending') return `Save ${labels}?`;
-    if (pendingAction.status === 'approved') return 'Action approved';
+    if (pendingAction.status === 'saving') return 'Saving approved changes...';
+    if (pendingAction.status === 'approved') return 'Changes saved';
     if (pendingAction.status === 'declined') return 'Action dismissed';
     return 'Action not saved';
   };
@@ -3206,95 +3246,103 @@ export function ClaritySquare() {
   const getPendingActionText = (pendingAction: AssistantPendingAction) =>
     pendingAction.resultText ?? 'No project, folder, task, or memory will be saved until you approve.';
 
-  const approveAssistantAction = async (message: UiAssistantMessage) => {
-    const pendingAction = message.pendingAction;
-    if (!pendingAction || pendingAction.status !== 'pending') return;
-
-    setAssistantMessages((current) =>
-      current.map((item) =>
-        item.id === message.id
-          ? {
-              ...item,
-              pendingAction: {
-                ...pendingAction,
-                status: 'approved',
-                resultText: 'Saving...',
-              },
-            }
-          : item,
-      ),
-    );
-
-    let resultText = 'The save did not complete. Please try again.';
-    let failed = true;
-
-    try {
-      const actionProject = message.project_id ? projects.find((project) => project.id === message.project_id) ?? null : null;
-      const result = await runAssistantActions(pendingAction.data, { project: actionProject });
-      resultText = buildActionAwareAssistantReply(pendingAction.data, result, 'Approved.');
-      failed = getAssistantActionLabels(pendingAction.data).some((label) => {
-        if (label === 'project update') return !result.projectUpdated;
-        if (label === 'folder update') return !result.folderUpdated;
-        if (label === 'memory update') return !result.memoryUpdated;
-        if (label === 'task update' || label === 'task updates') return result.taskUpdateCount <= 0;
-        if (label === 'project') return !result.project;
-        if (label === 'folder') return !result.folder;
-        if (label === 'memory') return !result.memory;
-        if (label === 'task' || label === 'tasks') return result.taskCount <= 0;
-        return false;
-      });
-    } catch (error) {
-      console.error('Assistant action approval failed', error);
-    }
-
-    setAssistantMessages((current) =>
-      current.map((item) =>
-        item.id === message.id
-          ? {
-              ...item,
-              pendingAction: {
-                ...pendingAction,
-                status: failed ? 'failed' : 'approved',
-                resultText,
-              },
-            }
-          : item,
-      ),
-    );
+  const persistActionState = async (message: UiAssistantMessage, action: AssistantPendingAction) => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser) return false;
+    const { data, error } = await supabase.schema('clarity_square').from('assistant_messages')
+      .insert({
+        ...(action.status === 'saving' ? { id: await actionClaimId(message.id) } : {}),
+        user_id: authUser.id, project_id: message.project_id ?? null, role: 'assistant',
+        content: action.resultText ?? 'Action reviewed.',
+        metadata: { thread_id: message.thread_id ?? null, thread_title: message.thread_title ?? null, action_receipt: action },
+      }).select('id').single();
+    if (error?.code === '23505') setStatus('This action was already approved in another session. Refresh to see its result.');
+    return !error && Boolean(data) && sessionOwnerRef.current === authUser.id;
   };
 
-  const declineAssistantAction = (message: UiAssistantMessage) => {
-    const pendingAction = message.pendingAction;
-    if (!pendingAction || pendingAction.status !== 'pending') return;
+  const approveAssistantAction = async (message: UiAssistantMessage) => {
+    const pending = message.pendingAction;
+    if (!pending || pending.status !== 'pending' || approvingActionRef.current || !authUser) return;
+    if (!/^[0-9a-f-]{36}$/i.test(message.id) || pending.ownerId !== authUser.id || !pending.data.workspaceRevision) { setStatus('This draft needs a fresh review. Ask the assistant to draft it again.'); return; }
+    approvingActionRef.current = message.id;
+    const owner = authUser.id;
+    const updateState = (action: AssistantPendingAction) => setAssistantMessages((current) => current.map((item) => item.id === message.id ? { ...item, pendingAction: action } : item));
+    try {
+      const live = await refreshWorkspace(authUser, { preserveAssistantState: true });
+      if (sessionOwnerRef.current !== owner) return;
+      if (!live || workspaceRevision(live) !== pending.data.workspaceRevision) {
+        setStatus('Your workspace changed since this draft. Nothing was applied. Ask the assistant for an updated draft.');
+        return;
+      }
+      const saving: AssistantPendingAction = { ...pending, status: 'saving', resultText: 'Saving the changes you reviewed...' };
+      // Persist the consumed state before any writes: reloads cannot accidentally replay a create operation.
+      if (!await persistActionState(message, saving)) { setStatus('Approval could not be saved. No changes were applied. Please retry.'); return; }
+      updateState(saving);
+      const target = pending.targetProjectId ? live.projects.find((project) => project.id === pending.targetProjectId) ?? null : null;
+      const result = await runAssistantActions(pending.data, { project: target });
+      if (sessionOwnerRef.current !== owner) return;
+      const requestedTasks = pending.data.taskDrafts?.length ?? 0;
+      const requestedUpdates = pending.data.taskUpdates?.length ?? 0;
+      const failed = Boolean(
+        (pending.data.projectDraft && !result.project) || (pending.data.projectUpdate && !result.projectUpdated) ||
+        (pending.data.folderDraft && !result.folder) || (pending.data.folderUpdate && !result.folderUpdated) ||
+        (pending.data.memoryDraft && !result.memory) || (pending.data.memoryUpdate && !result.memoryUpdated) ||
+        result.taskCount < requestedTasks || result.taskUpdateCount < requestedUpdates
+      );
+      const final: AssistantPendingAction = { ...pending, status: failed ? 'failed' : 'approved', resultProjectId: result.project?.id ?? null, resultText: buildActionAwareAssistantReply(pending.data, result, 'Reviewed by you.') };
+      updateState(final);
+      if (!await persistActionState(message, final)) setStatus('Changes were applied, but the approval record could not be updated. Check saved work before drafting again.');
+    } catch {
+      if (sessionOwnerRef.current !== owner) return;
+      const failed: AssistantPendingAction = { ...pending, status: 'failed', resultText: 'This approval was interrupted. Check your saved work before drafting a new action.' };
+      updateState(failed);
+      await persistActionState(message, failed);
+    } finally { approvingActionRef.current = null; }
+  };
 
-    setAssistantMessages((current) =>
-      current.map((item) =>
-        item.id === message.id
-          ? {
-              ...item,
-              pendingAction: {
-                ...pendingAction,
-                status: 'declined',
-                resultText: 'Not saved.',
-              },
-            }
-          : item,
-      ),
-    );
-    setStatus('Assistant action dismissed.');
+  const declineAssistantAction = async (message: UiAssistantMessage) => {
+    const pending = message.pendingAction;
+    if (!pending || pending.status !== 'pending') return;
+    const declined: AssistantPendingAction = { ...pending, status: 'declined', resultText: 'Not saved.' };
+    if (!await persistActionState(message, declined)) { setStatus('Dismissal was not saved. Please retry.'); return; }
+    setAssistantMessages((current) => current.map((item) => item.id === message.id ? { ...item, pendingAction: declined } : item));
+    setStatus('Draft dismissed.');
+  };
+
+  const renderActionPreview = (action: AssistantPendingAction) => {
+    const data = action.data;
+    return <details className={styles.actionPreview} open><summary>Review proposed changes</summary>
+      {action.targetProjectId && <p><strong>For project:</strong> {projects.find((project) => project.id === action.targetProjectId)?.title ?? 'Project no longer available'}</p>}
+      {data.projectDraft && <p><strong>New project: {data.projectDraft.title}</strong><br />{data.projectDraft.context}</p>}
+      {data.folderDraft && <p><strong>New folder:</strong> {data.folderDraft.name}</p>}
+      {data.projectUpdate && <p><strong>Project update:</strong> {data.projectUpdate.title ?? projects.find((project) => project.id === data.projectUpdate?.id)?.title}<br />{data.projectUpdate.projectInstruction ?? data.projectUpdate.context ?? data.projectUpdate.outcome}</p>}
+      {data.folderUpdate && <p><strong>Folder update:</strong> {data.folderUpdate.name}</p>}
+      {data.taskDrafts?.map((task, index) => <p key={index}><strong>New task:</strong> {task.title}<br />{task.detail}</p>)}
+      {data.taskUpdates?.map((task) => <p key={task.id}><strong>Task update:</strong> {task.title ?? projectTasks.find((item) => item.id === task.id)?.title} {task.status ? `→ ${task.status}` : ''}<br />{task.detail}</p>)}
+      {data.memoryDraft && <p><strong>New memory: {data.memoryDraft.title}</strong><br />{data.memoryDraft.content}</p>}
+      {data.memoryUpdate && <p><strong>Memory update:</strong> {data.memoryUpdate.title}<br />{data.memoryUpdate.content}</p>}
+    </details>;
+  };
+
+  const saveMemoryEdit = async (memory: ClaritySquareAssistantMemory) => {
+    if (!memoryTitleDraft.trim() || !memoryContentDraft.trim()) { setStatus('Add a title and memory text before saving.'); return; }
+    setIsSavingMemory(true);
+    try {
+      const updated = await updateMemoryFromAssistantDraft({ id: memory.id, title: memoryTitleDraft.trim(), content: memoryContentDraft.trim() });
+      if (updated) { setEditingMemoryId(null); setStatus('Memory changes saved.'); }
+    } finally { setIsSavingMemory(false); }
   };
 
   const archiveAssistantMemory = async (memory: ClaritySquareAssistantMemory) => {
-    setAssistantMemories((current) => current.filter((item) => item.id !== memory.id));
-
     const supabase = getClaritySquareSupabase();
-    if (!supabase || !authUser || memory.id.startsWith('local-memory-')) return;
-
-    await supabase
-      .schema('clarity_square')
-      .from('assistant_memories')
-      .update({ status: 'archived' })
-      .eq('id', memory.id);
+    if (!supabase || !authUser) { setStatus('Sign in to change saved memory.'); return; }
+    const owner = authUser.id;
+    const { data, error } = await supabase.schema('clarity_square').from('assistant_memories')
+      .update({ status: 'archived' }).eq('id', memory.id).eq('user_id', owner).select('id').single();
+    if (sessionOwnerRef.current !== owner) return;
+    if (error || !data) { setStatus('Memory was not archived. Please try again.'); return; }
+    setAssistantMemories((current) => current.filter((item) => item.id !== memory.id));
+    setStatus('Memory archived.');
   };
 
   const deleteSavedSignal = () => {
@@ -3456,28 +3504,18 @@ export function ClaritySquare() {
   };
 
   const saveAssistantSettings = async (nextSettings = assistantSettings, options?: { close?: boolean }) => {
-    const normalizedSettings = normalizeAssistantSettings(nextSettings);
-    setAssistantSettings(normalizedSettings);
-
-    if (options?.close) {
-      closeAssistantSettings();
-    }
-
+    const normalizedSettings = normalizeAssistantSettings({ ...assistantSettings, ...nextSettings });
     const supabase = getClaritySquareSupabase();
     if (!supabase || !authUser) return;
-
-    const { error } = await supabase
-      .schema('clarity_square')
-      .from('profiles')
-      .update({ assistant_settings: normalizedSettings })
-      .eq('user_id', authUser.id);
-
-    if (error) {
-      setStatus('Assistant settings could not be saved.');
-      return;
-    }
-
-    setAuthProfile((current) => (current ? { ...current, assistant_settings: normalizedSettings } : current));
+    const owner = authUser.id;
+    const { data, error } = await supabase.schema('clarity_square').from('profiles')
+      .update({ assistant_settings: { ...authProfile?.assistant_settings, ...normalizedSettings } }).eq('user_id', owner).select('*').single();
+    if (sessionOwnerRef.current !== owner) return;
+    if (error || !data) { setStatus('Preference was not saved. Please retry.'); return; }
+    setAssistantSettings(normalizedSettings);
+    setAuthProfile(data);
+    if (options?.close) closeAssistantSettings();
+    setStatus('Assistant preference saved.');
   };
 
   const touchAssistantThread = (threadId: string, prompt?: string) => {
@@ -3600,7 +3638,7 @@ export function ClaritySquare() {
           id: task.id,
           title: task.title,
           detail: task.detail || (project ? `Project: ${project.title}` : 'Task project not loaded'),
-          meta: `${task.status} - ${task.source}`,
+          meta: `${task.status} - ${taskSourceLabel(task.source)}`,
           onDelete: () => deleteProjectTask(task),
         };
       }),
@@ -3658,10 +3696,13 @@ export function ClaritySquare() {
     },
   ];
 
-  const sendAssistantMessage = async () => {
-    const prompt = assistantInput.trim();
+  const sendAssistantMessage = async (promptOverride?: string) => {
+    const prompt = (promptOverride ?? assistantInput).trim();
     if (!prompt || isAssistantBusy) return;
+    if (!authUser) { setStatus('Sign in to use your saved workspace with the assistant.'); openMenu('start'); return; }
 
+    const owner = authUser.id;
+    conversationRequestsRef.current += 1;
     const threadId = resolvedAssistantThreadId;
     const isFirstAssistantMessage = !assistantMessages.some((message) => message.role === 'user');
     const userMessage = createUiMessage('user', prompt, null, threadId);
@@ -3680,78 +3721,23 @@ export function ClaritySquare() {
 
     try {
       const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true, preserveAssistantState: true }) : null;
-      const assistantProjects = liveWorkspace?.projects ?? projects;
-      const assistantFolders = liveWorkspace?.folders ?? projectFolders;
-      const assistantTasks = liveWorkspace?.tasks ?? projectTasks;
-      const assistantEntries = liveWorkspace?.contextEntries ?? contextEntries;
-      const assistantMemoriesForRequest = liveWorkspace?.memories ?? assistantMemories;
-
+      if (authUser && !liveWorkspace) throw new Error('Workspace could not be refreshed.');
+      const { data: sessionData } = await getClaritySquareSupabase()!.auth.getSession();
+      if (!sessionData.session) throw new Error('Sign in to continue.');
+      const requestOwner = sessionData.session.user.id;
       const response = await fetch('/api/clarity-square/assistant', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${sessionData.session.access_token}` },
         body: JSON.stringify({
           messages: nextMessages.map((message) => ({ role: message.role, content: message.content })),
-          track,
-          savedContext: savedContext
-            ? {
-                track: savedContext.track,
-                headline: savedContext.intent.headline,
-                context: savedContext.intent.context,
-                audience: savedContext.intent.audience,
-                blocker: savedContext.intent.blocker,
-                outcome: savedContext.intent.outcome,
-                summary: savedContext.summary,
-              }
-            : null,
-          projects: assistantProjects.map((project) => ({
-            id: project.id,
-            folder_id: project.folder_id,
-            folderName: project.folder_id
-              ? assistantFolders.find((folder) => folder.id === project.folder_id)?.name ?? 'Folder'
-              : 'Unfiled',
-            title: project.title,
-            track: project.track,
-            context: project.context,
-            project_instruction: project.project_instruction,
-            audience: project.audience,
-            blocker: project.blocker,
-            outcome: project.outcome,
-            summary: project.summary,
-            questions: project.questions,
-            actions: project.actions,
-          })),
-          projectTasks: assistantTasks.map((task) => ({
-            id: task.id,
-            project_id: task.project_id,
-            title: task.title,
-            detail: task.detail,
-            source: task.source,
-            status: task.status,
-          })),
-          folders: assistantFolders.map((folder) => ({
-            id: folder.id,
-            name: folder.name,
-          })),
-          contextEntries: assistantEntries.map((entry) => ({
-            project_id: entry.project_id,
-            entry_type: entry.entry_type,
-            payload: entry.payload,
-            created_at: entry.created_at,
-          })),
-          selectedProjectId,
-          assistantPreference: assistantSettings.behaviorPreference.trim() || null,
-          memories: assistantMemoriesForRequest.map((memory) => ({
-            id: memory.id,
-            project_id: memory.project_id,
-            title: memory.title,
-            content: memory.content,
-            memory_type: memory.memory_type,
-          })),
+          selectedProjectId: null,
         }),
       });
 
       const data = (await response.json()) as AssistantResponse;
-      const baseReply = data.response || data.error || 'The Square assistant could not respond yet.';
+      if (sessionOwnerRef.current !== requestOwner) return;
+      if (!response.ok) throw new Error(data.error || 'The assistant is unavailable.');
+      const baseReply = (data.source === 'local' ? 'The live assistant is unavailable, so this is a basic draft for your review. ' : '') + (data.response || data.error || 'The Square assistant could not respond yet.');
       const savedUserMessage = (await userMessageSave) ?? userMessage;
       const reply = buildAssistantApprovalReply(data, baseReply);
       const assistantMessage = createUiMessage('assistant', reply, null, threadId);
@@ -3759,6 +3745,8 @@ export function ClaritySquare() {
         assistantMessage.pendingAction = {
           id: `pending-action-${assistantMessage.id}`,
           data,
+          ownerId: requestOwner,
+          targetProjectId: null,
           status: 'pending',
         };
       }
@@ -3785,9 +3773,10 @@ export function ClaritySquare() {
 
       await assistantMessageSave;
     } catch {
+      if (sessionOwnerRef.current !== owner) return;
       const fallbackMessage = createUiMessage(
         'assistant',
-        'I could not reach the Square assistant just now. Your context is still available here, and you can try again.',
+        'The assistant could not continue. Your message is still in this conversation. Refresh your workspace or try again.',
         null,
         threadId,
       );
@@ -3798,15 +3787,19 @@ export function ClaritySquare() {
       setActiveAssistantThreadId(threadId);
       touchAssistantThread(threadId, prompt);
     } finally {
+      if (sessionOwnerRef.current === owner) conversationRequestsRef.current = Math.max(0, conversationRequestsRef.current - 1);
       setIsAssistantBusy(false);
     }
   };
 
-  const sendProjectAssistantMessage = async () => {
+  const sendProjectAssistantMessage = async (promptOverride?: string) => {
     if (!selectedProject) return;
-    const prompt = projectAssistantInput.trim();
+    const prompt = (promptOverride ?? projectAssistantInput).trim();
     if (!prompt || isProjectAssistantBusy) return;
+    if (!authUser) { setStatus('Sign in to continue this project.'); openMenu('start'); return; }
 
+    const owner = authUser.id;
+    conversationRequestsRef.current += 1;
     const userMessage = createUiMessage('user', prompt, selectedProject.id);
     const nextMessages = [...selectedProjectMessages, userMessage].slice(-12);
 
@@ -3817,78 +3810,23 @@ export function ClaritySquare() {
 
     try {
       const liveWorkspace = authUser ? await refreshWorkspace(authUser, { quiet: true, preserveAssistantState: true }) : null;
-      const assistantProjects = liveWorkspace?.projects ?? projects;
-      const assistantFolders = liveWorkspace?.folders ?? projectFolders;
-      const assistantTasks = liveWorkspace?.tasks ?? projectTasks;
-      const assistantEntries = liveWorkspace?.contextEntries ?? contextEntries;
-      const assistantMemoriesForRequest = liveWorkspace?.memories ?? assistantMemories;
-
+      if (authUser && !liveWorkspace) throw new Error('Workspace could not be refreshed.');
+      const { data: sessionData } = await getClaritySquareSupabase()!.auth.getSession();
+      if (!sessionData.session) throw new Error('Sign in to continue.');
+      const requestOwner = sessionData.session.user.id;
       const response = await fetch('/api/clarity-square/assistant', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${sessionData.session.access_token}` },
         body: JSON.stringify({
           messages: nextMessages.map((message) => ({ role: message.role, content: message.content })),
-          track: selectedProject.track,
-          savedContext: {
-            track: selectedProject.track,
-            headline: selectedProject.title,
-            context: selectedProject.project_instruction || selectedProject.context,
-            audience: selectedProject.audience || '',
-            blocker: selectedProject.blocker || '',
-            outcome: selectedProject.outcome || '',
-            summary: selectedProject.summary || selectedProject.context,
-          },
-          projects: assistantProjects.map((project) => ({
-            id: project.id,
-            folder_id: project.folder_id,
-            folderName: project.folder_id
-              ? assistantFolders.find((folder) => folder.id === project.folder_id)?.name ?? 'Folder'
-              : 'Unfiled',
-            title: project.title,
-            track: project.track,
-            context: project.context,
-            project_instruction: project.project_instruction,
-            audience: project.audience,
-            blocker: project.blocker,
-            outcome: project.outcome,
-            summary: project.summary,
-            questions: project.questions,
-            actions: project.actions,
-          })),
-          projectTasks: assistantTasks.map((task) => ({
-            id: task.id,
-            project_id: task.project_id,
-            title: task.title,
-            detail: task.detail,
-            source: task.source,
-            status: task.status,
-          })),
-          folders: assistantFolders.map((folder) => ({
-            id: folder.id,
-            name: folder.name,
-          })),
-          contextEntries: assistantEntries.map((entry) => ({
-            project_id: entry.project_id,
-            entry_type: entry.entry_type,
-            payload: entry.payload,
-            created_at: entry.created_at,
-          })),
           selectedProjectId: selectedProject.id,
-          assistantPreference: assistantSettings.behaviorPreference.trim() || null,
-          memories: assistantMemoriesForRequest
-            .filter((memory) => !memory.project_id || memory.project_id === selectedProject.id)
-            .map((memory) => ({
-              id: memory.id,
-              project_id: memory.project_id,
-              title: memory.title,
-              content: memory.content,
-              memory_type: memory.memory_type,
-            })),
         }),
       });
 
       const data = (await response.json()) as AssistantResponse;
-      const baseReply = data.response || data.error || 'The project assistant could not respond yet.';
+      if (sessionOwnerRef.current !== requestOwner) return;
+      if (!response.ok) throw new Error(data.error || 'The assistant is unavailable.');
+      const baseReply = (data.source === 'local' ? 'The live assistant is unavailable, so this is a basic draft for your review. ' : '') + (data.response || data.error || 'The project assistant could not respond yet.');
       const savedUserMessage = (await userMessageSave) ?? userMessage;
       const reply = buildAssistantApprovalReply(data, baseReply);
       const assistantMessage = createUiMessage('assistant', reply, selectedProject.id);
@@ -3896,6 +3834,8 @@ export function ClaritySquare() {
         assistantMessage.pendingAction = {
           id: `pending-action-${assistantMessage.id}`,
           data,
+          ownerId: requestOwner,
+          targetProjectId: selectedProject.id,
           status: 'pending',
         };
       }
@@ -3912,9 +3852,10 @@ export function ClaritySquare() {
 
       await assistantMessageSave;
     } catch {
+      if (sessionOwnerRef.current !== owner) return;
       const fallbackMessage = createUiMessage(
         'assistant',
-        'I could not reach the project assistant just now. The project instruction and tasks are still saved here.',
+        'The project assistant could not continue. Refresh the project before trying again.',
         selectedProject.id,
       );
       setAssistantMessages((current) => [
@@ -3922,13 +3863,15 @@ export function ClaritySquare() {
         ...[...nextMessages, fallbackMessage].slice(-12),
       ]);
     } finally {
+      if (sessionOwnerRef.current === owner) conversationRequestsRef.current = Math.max(0, conversationRequestsRef.current - 1);
       setIsProjectAssistantBusy(false);
     }
   };
 
   const chooseTrack = (nextTrack: Track) => {
+    setIntent(emptyClarityIntent());
     setStep('intent');
-    setActiveMenu('context');
+    openMenu('context');
     void applyTrackChoice(nextTrack, { persist: Boolean(authUser), statusPrefix: `${TRACKS[nextTrack].shortLabel} selected.` });
     void trackProductEvent('path_chosen', { track: nextTrack });
     void trackProductEvent('context_started', { track: nextTrack });
@@ -3950,7 +3893,7 @@ export function ClaritySquare() {
     setSavedContext(context);
     setClarityBriefProjectId(null);
     setStep('context');
-    setActiveMenu('context');
+    openMenu('context');
     setStatus('Clarity Brief ready. Review the problem, boundary, and first three actions before approving a private project.');
     void trackProductEvent('context_completed', { track: accountTrack });
     void trackProductEvent('clarity_brief_produced', { track: accountTrack, action_count: context.actions.length });
@@ -3994,13 +3937,14 @@ export function ClaritySquare() {
       .select('*')
       .single();
 
+    if (sessionOwnerRef.current !== authUser.id) return;
     if (projectError || !project) {
       setIsSavingContext(false);
       setStatus('The private project could not be saved to your account.');
       return;
     }
 
-    await supabase.schema('clarity_square').from('context_entries').insert({
+    const { error: noteError } = await supabase.schema('clarity_square').from('context_entries').insert({
       project_id: project.id,
       user_id: authUser.id,
       entry_type: 'intent',
@@ -4020,35 +3964,30 @@ export function ClaritySquare() {
     setClarityBriefProjectId(project.id);
     setProjectBrief(project.project_instruction || project.context);
     setProjectInstructionDraft(project.project_instruction || project.context);
-    await insertProjectTasks(project, buildAutoTasks(project), 'auto');
+    const starterTasks = await insertProjectTasks(project, context.actions.map((title) => ({ title, detail: 'Reviewed in your Clarity Brief.' })), 'auto');
     setIsSavingContext(false);
-    setStatus('Private project approved with three starting actions.');
+    setStatus(noteError || starterTasks.length === 0 ? 'Project saved. Some supporting notes or starter tasks were not saved; check the project before retrying.' : 'Private project and starting tasks saved.');
     void trackProductEvent('project_created', { source: 'clarity_brief', project_id: project.id });
     void trackProductEvent('task_approved', { source: 'clarity_brief', project_id: project.id, action_count: context.actions.length });
     void refreshWorkspace(authUser, { quiet: true });
   };
 
   const openProject = (project: ClaritySquareProject) => {
-    setTrack(project.track);
-    setIntent({
-      headline: project.title,
-      context: project.context,
-      audience: project.audience ?? '',
-      blocker: project.blocker ?? '',
-      outcome: project.outcome ?? '',
-    });
+    setSelectedProjectId(project.id);
+    setProjectView('workspace');
+    setProjectTab('conversation');
+    setProjectDescriptionDraft(null);
+    setProjectInstructionDraft(null);
     setSavedContext(savedContextFromProject(project));
     setClarityBriefProjectId(project.id);
-    setStep('context');
-    setActiveMenu('context');
-    setProjectBrief(project.project_instruction || project.context);
-    setProjectInstructionDraft(project.project_instruction || project.context);
-    setStatus('Project loaded.');
+    setActiveMenu('projects');
+    window.history.pushState(null, '', `${window.location.pathname}?project=${encodeURIComponent(project.id)}`);
+    window.requestAnimationFrame(() => stageRef.current?.scrollTo({ top: 0 }));
   };
 
   const refineAgain = () => {
     setStep('intent');
-    setActiveMenu('context');
+    openMenu('context');
     setClarityBriefProjectId(null);
     setStatus('Refine the signal.');
   };
@@ -4095,7 +4034,7 @@ export function ClaritySquare() {
 
   const seedAssistantPrompt = (prompt: string) => {
     setAssistantInput(prompt);
-    setActiveMenu('assistant');
+    openMenu('assistant');
     window.requestAnimationFrame(() => {
       assistantInputRef.current?.focus();
       if (assistantInputRef.current) {
@@ -4179,29 +4118,100 @@ export function ClaritySquare() {
   };
 
   const openMenu = (menuId: MenuId) => {
-    setActiveMenu(menuId);
-    if (menuId === 'start') setStep('entry');
-    if (menuId === 'path') setStep('track');
-    if (menuId === 'context' && step === 'entry') setStep(savedContext ? 'context' : 'intent');
-    window.requestAnimationFrame(() => {
-      stageRef.current?.scrollTo({ top: 0, left: 0 });
-    });
+    const next = authUser || menuId === 'start' ? menuId : 'start';
+    setActiveMenu(next);
+    if (next === 'projects') setProjectView('list');
+    if (next === 'start') setStep('entry');
+    const params = new URLSearchParams(window.location.search);
+    const anchor = params.get('project');
+    const ownedAnchor = isSupportingView(next) && projects.some((project) => project.id === anchor && project.status === 'active') ? anchor : null;
+    const href = next === 'start' ? window.location.pathname : workspaceViewUrl(window.location.pathname, next, ownedAnchor, ownedAnchor ? projectTab : null);
+    if (href !== `${window.location.pathname}${window.location.search}`) window.history.pushState(null, '', href);
+    window.requestAnimationFrame(() => stageRef.current?.scrollTo({ top: 0 }));
   };
 
-  const mobileMoreIsActive = activeMenu === 'more' || MORE_MENU_ITEMS.some((item) => item.id === activeMenu);
+  const selectProjectTab = (tab: 'conversation' | 'steps' | 'details') => {
+    setProjectTab(tab);
+    if (selectedProject) window.history.replaceState(null, '', `${window.location.pathname}?project=${encodeURIComponent(selectedProject.id)}${tab === 'conversation' ? '' : `&tab=${tab}`}`);
+  };
+
+  const saveProjectDescription = async (project: ClaritySquareProject) => {
+    const text = (projectDescriptionDraft ?? project.context).trim();
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser || !text) { setStatus('Add a project summary before saving.'); return; }
+    const owner = authUser.id;
+    setIsSavingDescription(true);
+    try {
+      const { data, error } = await supabase.schema('clarity_square').from('projects')
+        .update({ context: text, summary: text }).eq('id', project.id).eq('user_id', owner).eq('updated_at', project.updated_at).select('*').single();
+      if (sessionOwnerRef.current !== owner) return;
+      if (error || !data) { setStatus('Details were not saved. Your draft is still here. Retry after refreshing.'); return; }
+      setProjects((current) => current.map((item) => item.id === data.id ? data : item));
+      setProjectDescriptionDraft(null);
+      setStatus('Project details saved.');
+    } finally { setIsSavingDescription(false); }
+  };
+
+  const setProjectArchived = async (project: ClaritySquareProject, archived: boolean) => {
+    const supabase = getClaritySquareSupabase();
+    if (!supabase || !authUser) return;
+    const owner = authUser.id;
+    const { data, error } = await supabase.schema('clarity_square').from('projects')
+      .update({ status: archived ? 'archived' : 'active' }).eq('id', project.id).eq('user_id', owner).eq('updated_at', project.updated_at).select('*').single();
+    if (sessionOwnerRef.current !== owner) return;
+    if (error || !data) { setStatus('Project change was not saved. Retry after refreshing.'); return; }
+    setProjects((current) => current.map((item) => item.id === data.id ? data : item));
+    if (archived) { setSelectedProjectId(null); openMenu('projects'); }
+    setStatus(archived ? 'Project archived. You can restore it from the projects list.' : 'Project restored.');
+  };
+
+  const addSimpleTask = async (project: ClaritySquareProject) => {
+    if (isAddingTask) return;
+    setIsAddingTask(true);
+    try { await createManualTask(project); } finally { setIsAddingTask(false); }
+  };
+
+  const renderSimpleTask = (task: ClaritySquareProjectTask) => <div key={task.id} className={`${simple.task} ${task.status === 'done' ? simple.done : ''}`}>
+    <button role="checkbox" aria-checked={task.status === 'done'} onClick={() => void toggleProjectTask(task)} aria-label={task.title}>
+      <CheckCircle2 size={20} aria-hidden="true" /><span><strong>{task.title}</strong><small>{taskSourceLabel(task.source)}{task.detail ? ` · ${task.detail}` : ''}</small></span>
+    </button>
+  </div>;
+
+  const renderSaveFeedback = () => {
+    if (!status || /^(Welcome back|Project loaded|Signed in|New assistant thread|Choose your path)/.test(status)) return null;
+    const failed = /not saved|could not|couldn.t|unavailable|out of date|changed since|failed|did not|ended|retry|didn.t/i.test(status);
+    return <div className={simple.feedback} role={failed ? 'alert' : 'status'}><span>{status}</span>
+      {failed && authUser && <button className={simple.quiet} onClick={async () => { const snapshot = await refreshWorkspace(authUser, { preserveAssistantState: true }); if (snapshot) setStatus('Workspace refreshed. Your draft is ready to retry.'); }}>Retry</button>}
+    </div>;
+  };
+
+  const renderConversationAction = (id: string) => {
+    const message = assistantMessages.find((item) => item.id === id);
+    const action = message?.pendingAction;
+    if (!message || !action) return null;
+    const resultProject = action.resultProjectId ? projects.find((project) => project.id === action.resultProjectId) : null;
+    return <div className={styles.assistantApprovalPanel}>
+      <div><strong>{getPendingActionTitle(action)}</strong>{action.status === 'pending' && renderActionPreview(action)}<span>{getPendingActionText(action)}</span>
+        {resultProject && action.status === 'approved' && <button className={simple.quiet} onClick={() => openProject(resultProject)}>Open project</button>}
+      </div>
+      {action.status === 'pending' && <div className={styles.assistantApprovalActions}>
+        <button onClick={() => void approveAssistantAction(message)}>Save changes</button><button onClick={() => void declineAssistantAction(message)}>Dismiss</button>
+      </div>}
+    </div>;
+  };
+
 
   return (
     <main className={`clarity-square-route ${styles.page}`}>
       <section className={`clarity-square-shell ${styles.shell}`} aria-label="Kramaniti Clarity Square">
         <header
           className={`clarity-square-rail ${styles.rail}`}
-          style={{ backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}
           aria-label="Clarity Square navigation"
         >
           <button
             type="button"
             className={`${styles.productLabel} ${activeMenu === 'home' ? styles.productLabelActive : ''}`}
-            onClick={() => openMenu('home')}
+            onClick={() => openMenu(authUser ? 'home' : 'start')}
             aria-label="Open Clarity Square home"
             aria-pressed={activeMenu === 'home'}
           >
@@ -4217,7 +4227,7 @@ export function ClaritySquare() {
           </button>
 
           <nav className={`clarity-square-menu ${styles.menu}`} aria-label="Clarity Square sections">
-            {MENU_ITEMS.map((item) => {
+            {(authUser ? MENU_ITEMS : []).map((item) => {
               const Icon = item.icon;
               return (
                 <button
@@ -4236,76 +4246,97 @@ export function ClaritySquare() {
             })}
           </nav>
 
-          <div className={`clarity-square-utilities ${styles.navUtilities}`} aria-label="Account and display controls">
-            <button
-              type="button"
-              className={`${styles.navIconButton} ${activeMenu === 'profile' ? styles.navIconActive : ''}`}
-              onClick={() => openMenu('profile')}
-              aria-label="Open profile"
-              aria-pressed={activeMenu === 'profile'}
-              title="Profile"
-            >
-              <UserRound size={17} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              className={`${styles.navIconButton} ${activeMenu === 'settings' ? styles.navIconActive : ''}`}
-              onClick={() => openMenu('settings')}
-              aria-label="Open settings"
-              aria-pressed={activeMenu === 'settings'}
-              title="Settings"
-            >
-              <Settings size={17} aria-hidden="true" />
-            </button>
-          </div>
+          {authUser && <button type="button" className={simple.toolsButton} aria-pressed={isSupportingView(activeMenu)} onClick={() => openMenu('more')}><Wrench size={17} aria-hidden="true" /><span>Tools</span></button>}
+
+          {authUser && <details className={`${simple.accountMenu} ${simple.options}`} onKeyDown={(event) => { if (event.key === 'Escape') { event.currentTarget.open = false; event.currentTarget.querySelector('summary')?.focus(); } }}>
+            <summary aria-label="Account menu"><UserRound size={20} aria-hidden="true" /></summary>
+            <div><strong>{displayUsername || displayEmail}</strong>
+              <button onClick={(event) => { openMenu('profile'); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Account overview</button>
+              <button onClick={(event) => { openMenu('settings'); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Account & preferences</button>
+              <button onClick={(event) => { setPrivacyProjectId(null); openMenu('memory'); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Privacy & remembered information</button>
+              <button onClick={() => void signOut()}>Sign out</button>
+            </div>
+          </details>}
         </header>
 
         <section
           ref={stageRef}
-          className={`${styles.stage} ${activeMenu === 'start' ? styles.entryStage : ''} ${
-            activeMenu === 'assistant' ? styles.assistantStage : ''
+          className={`${styles.stage} ${activeMenu === 'home' || activeMenu === 'projects' || activeMenu === 'more' ? simple.simpleStage : ''} ${activeMenu === 'start' ? styles.entryStage : ''} ${
+            (activeMenu === 'assistant' || activeMenu === 'home') ? styles.assistantStage : ''
           } ${activeMenu === 'projects' ? styles.projectsStage : ''
+          } ${isSupportingView(activeMenu) && activeMenu !== 'more' ? simple.supportingStage : ''
           } clarity-square-stage`}
           aria-live="polite"
         >
 
+          {authUser && isSupportingView(activeMenu) && activeMenu !== 'more' && <div className={simple.toolOrientation}>
+            <button className={simple.quiet} onClick={() => openMenu('more')}>← All tools</button>
+            {selectedProject && new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '').get('project') === selectedProject.id && <button className={simple.quiet} onClick={() => { const tab = projectTab; openProject(selectedProject); selectProjectTab(tab); }}>Back to {selectedProject.title}</button>}
+          </div>}
+
+          {!['start', 'home', 'projects', 'memory', 'settings'].includes(activeMenu) && status && (
+            renderSaveFeedback()
+          )}
+
           {activeMenu === 'home' && (
+            <section className={simple.main} aria-label="Home">
+              <div className={simple.listHeader}>
+                <h1>What would you like to make clearer?</h1>
+                {squareAssistantMessages.some((message) => message.role === 'user') && <details className={simple.options}><summary>Conversation options</summary><div>
+                  <button className={simple.quiet} onClick={startAssistantThread}>New idea</button>
+                  <details><summary>Previous conversations</summary>{displayedAssistantThreads.map((thread) => <button key={thread.id} className={simple.quiet} onClick={() => setActiveAssistantThreadId(thread.id)}>{thread.title}</button>)}</details>
+                </div></details>}
+              </div>
+              {!squareAssistantMessages.some((message) => message.role === 'user') && <p className={simple.intro}>Bring an idea, a decision, or something that feels stuck. A few sentences are enough to begin.</p>}
+              <ClarityConversation
+                messages={squareAssistantMessages.some((message) => message.role === 'user') ? squareAssistantMessages : []}
+                input={assistantInput} busy={isAssistantBusy} onInput={setAssistantInput} onSend={() => void sendAssistantMessage()}
+                renderAction={renderConversationAction} label="Your idea" placeholder="Describe the idea or problem on your mind…"
+                feedback={renderSaveFeedback()}
+              />
+              {squareAssistantMessages.some((message) => message.role === 'user') && !squareAssistantMessages.some((message) => message.pendingAction) && !isAssistantBusy && <button className={simple.quiet} onClick={() => void sendAssistantMessage(`Create a project from this idea: ${squareAssistantMessages.filter((message) => message.role === 'user').map((message) => message.content).join('\n')}`)}>Save as a project</button>}
+              {recentProjects.length > 0 && <section className={simple.recent} aria-label="Recent projects"><h2>Pick up where you left off</h2>
+                {recentProjects.map((project) => <button key={project.id} className={simple.projectRow} onClick={() => openProject(project)}>
+                  <span><strong>{project.title}</strong><small>{project.summary || project.context}</small></span><ArrowRight size={18} aria-hidden="true" />
+                </button>)}
+              </section>}
+            </section>
+          )}
+          {activeMenu === 'overview' && (
             <section className={`${styles.screen} ${styles.homeScreen}`} aria-labelledby="home-title">
               <div className={styles.homeHero}>
                 <div className={styles.homeHeroMain}>
                   <span>{accountTrackCopy.shortLabel}</span>
-                  <h1 id="home-title">{homeRoleCopy.title}</h1>
-                  <p>{homeRoleCopy.description}</p>
+                  <h1 id="home-title">Workspace overview</h1>
+                  <p>{latestProject ? "Your latest project is ready to continue. Pick up the context and decide the next move." : "Start with the idea, decision, or problem on your mind. You only need a few sentences to begin."}</p>
                   <div className={styles.homeHeroActions}>
                     <button
                       type="button"
                       className={styles.primaryButton}
                       onClick={() => {
-                        if (latestProject && !savedContext) {
+                        if (latestProject) {
                           openProject(latestProject);
                           return;
                         }
-                        openMenu(savedContext ? 'context' : 'path');
+                        if (!savedContext) setStep('intent');
+                        openMenu('context');
                       }}
                     >
-                      {homeRoleCopy.primaryAction}
+                      {latestProject ? 'Continue latest project' : 'Capture your first idea'}
                       <ArrowRight size={17} aria-hidden="true" />
                     </button>
-                    <button type="button" className={styles.secondaryButton} onClick={() => openMenu('square')}>
-                      Open Square
+                    <button type="button" className={styles.secondaryButton} onClick={() => openMenu('assistant')}>
+                      Think with the assistant
                     </button>
                   </div>
                 </div>
-                <aside className={styles.homeRoleCard} aria-label="Account path">
-                  <span>Account path</span>
-                  <strong>{accountTrackCopy.shortLabel}</strong>
-                  <p>{homeRoleCopy.roleDetail}</p>
-                  <button type="button" className={styles.textButton} onClick={() => openMenu('settings')}>
-                    Adjust path
-                  </button>
-                </aside>
+                <div className={styles.homePathPreference} aria-label="Preferred path">
+                  <span>{accountTrackCopy.shortLabel}</span>
+                  <button type="button" className={styles.textButton} onClick={() => openMenu('settings')}>Change path</button>
+                </div>
               </div>
 
+              <details className={styles.supportingDetails}><summary>Workspace overview and supporting tools</summary>
               <div className={styles.homeStatsGrid} aria-label="Workspace summary">
                 {homeStats.map((item) => {
                   const Icon = item.icon;
@@ -4422,7 +4453,8 @@ export function ClaritySquare() {
                         openProject(latestProject);
                         return;
                       }
-                      openMenu(savedContext ? 'context' : 'path');
+                      if (!savedContext) setStep('intent');
+                        openMenu('context');
                     }}
                   >
                     Continue
@@ -4468,24 +4500,25 @@ export function ClaritySquare() {
                   </div>
                 </article>
               </div>
+              </details>
             </section>
           )}
 
           {activeMenu === 'start' && (
             <section className={`${styles.screen} ${styles.entryScreen}`} aria-labelledby="entry-title">
-              <h1 id="entry-title">Kramaniti&apos;s Clarity Square</h1>
+              <h1 id="entry-title">Make room for your next clear move.</h1>
               <p className={styles.lead}>
-                A focused workspace for founders and solopreneurs to turn rough thinking into clearer next steps.
+                Bring an idea or a problem. Shape it into a private project, decide what to do next, and pick it up where you left off.
               </p>
 
               <div className={styles.authTabs} aria-label="Authentication mode">
                 <button
                   type="button"
-                  className={authView !== 'signin' ? styles.authTabActive : ''}
+                  className={authView === 'signup-email' || authView === 'signup-credentials' ? styles.authTabActive : ''}
                   onClick={() => {
                     setSessionMode('signup');
                     setAuthView('signup-email');
-                    setStatus('Enter your email to begin account creation.');
+                    setStatus('Use your email and a password to keep your projects private.');
                   }}
                 >
                   Create account
@@ -4507,102 +4540,20 @@ export function ClaritySquare() {
                 {status ||
                   (authView === 'signin'
                     ? 'Enter your username and password to continue.'
-                    : 'Create an account to save projects, tasks, and project assistant memory.')}
+                    : 'Your ideas, projects, and next steps stay private to your account.')}
               </p>
 
-              {authView === 'signup-email' && (
-                <div className={styles.entryActions}>
-                  <label className={styles.authField}>
-                    <span>Email</span>
-                    <input
-                      type="email"
-                      value={authEmail}
-                      onChange={(event) => setAuthEmail(event.target.value)}
-                      placeholder="you@company.com"
-                      autoComplete="email"
-                      disabled={Boolean(authUser) || isAuthBusy}
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    className={styles.primaryButton}
-                    onClick={continueSignupWithEmail}
-                    disabled={isAuthBusy}
-                  >
-                    {isAuthBusy ? 'Checking...' : 'Continue'}
-                    <ArrowRight size={17} aria-hidden="true" />
-                  </button>
-                </div>
+              {(authView === 'signup-email' || authView === 'signup-credentials') && (
+                <form className={styles.entryActions} onSubmit={(event) => { event.preventDefault(); void createAccount(); }}>
+                  <label className={styles.authField}><span>Email</span><input type="email" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} autoComplete="email" placeholder="you@company.com" disabled={isAuthBusy} required /></label>
+                  <label className={styles.authField}><span>Password</span><input type="password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} autoComplete="new-password" minLength={8} placeholder="At least 8 characters" disabled={isAuthBusy} required /></label>
+                  <button className={styles.primaryButton} disabled={isAuthBusy}>{isAuthBusy ? 'Creating…' : 'Create account'}</button>
+                </form>
               )}
-
-              {authView === 'signup-credentials' && (
-                <div className={styles.entryActions}>
-                  <div className={styles.signupPathPicker} aria-label="Choose account path">
-                    {(Object.keys(TRACKS) as Track[]).map((key) => {
-                      const item = TRACKS[key];
-                      const Icon = item.icon;
-                      return (
-                        <button
-                          key={key}
-                          type="button"
-                          className={track === key ? styles.signupPathActive : ''}
-                          onClick={() => {
-                            setTrack(key);
-                            setIntent(TRACKS[key].defaults);
-                            setStatus(`${TRACKS[key].shortLabel} will be used for this account.`);
-                          }}
-                          aria-pressed={track === key}
-                        >
-                          <Icon size={16} aria-hidden="true" />
-                          <span>{item.shortLabel}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <label className={styles.authField}>
-                    <span>Email</span>
-                    <input type="email" value={authEmail} readOnly />
-                  </label>
-                  <label className={styles.authField}>
-                    <span>Username</span>
-                    <input
-                      value={authUsername}
-                      onChange={(event) => setAuthUsername(normalizeUsername(event.target.value))}
-                      placeholder="your_username"
-                      autoComplete="username"
-                      disabled={Boolean(authUser) || isAuthBusy}
-                    />
-                  </label>
-                  <label className={styles.authField}>
-                    <span>Password</span>
-                    <input
-                      type="password"
-                      value={authPassword}
-                      onChange={(event) => setAuthPassword(event.target.value)}
-                      placeholder="Minimum 8 characters"
-                      autoComplete="new-password"
-                      disabled={Boolean(authUser) || isAuthBusy}
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    className={styles.primaryButton}
-                    onClick={() => void createAccount()}
-                    disabled={isAuthBusy}
-                  >
-                    {isAuthBusy ? 'Creating...' : 'Create account'}
-                    <ArrowRight size={17} aria-hidden="true" />
-                  </button>
-                  <button type="button" className={styles.textButton} onClick={() => setAuthView('signup-email')}>
-                    Change email
-                  </button>
-                </div>
-              )}
-
               {authView === 'signin' && (
                 <div className={styles.entryActions}>
                   <label className={styles.authField}>
-                    <span>Username</span>
+                    <span>Email or username</span>
                     <input
                       value={authLogin}
                       onChange={(event) => setAuthLogin(event.target.value)}
@@ -4631,6 +4582,30 @@ export function ClaritySquare() {
                     {isAuthBusy ? 'Signing in...' : 'Sign in'}
                     <ArrowRight size={17} aria-hidden="true" />
                   </button>
+                </div>
+              )}
+              {authView === 'signin' && (
+                <button type="button" className={styles.textButton} onClick={() => { setAuthView('recover'); setStatus('Enter your account email to reset your password.'); }}>Forgot password?</button>
+              )}
+              {authView === 'recover' && (
+                <form className={styles.entryActions} onSubmit={(event) => { event.preventDefault(); void recoverAccount(); }}>
+                  <label className={styles.authField}><span>Account email</span><input type="email" autoComplete="email" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} required /></label>
+                  <button className={styles.primaryButton} disabled={isAuthBusy}>{isAuthBusy ? 'Requesting...' : 'Send reset link'}</button>
+                  <button type="button" className={styles.textButton} onClick={() => { setAuthView('signin'); setStatus('Sign in with your email or username.'); }}>Back to sign in</button>
+                </form>
+              )}
+              {authView === 'reset-password' && (
+                <form className={styles.entryActions} onSubmit={(event) => { event.preventDefault(); void resetPassword(); }}>
+                  <label className={styles.authField}><span>New password</span><input type="password" autoComplete="new-password" minLength={8} value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} required /></label>
+                  <button className={styles.primaryButton} disabled={isAuthBusy}>{isAuthBusy ? 'Updating...' : 'Update password'}</button>
+                </form>
+              )}
+              {authView === 'confirm-email' && (
+                <div className={styles.entryActions}>
+                  <p>Confirm your email to keep your workspace private. Once confirmed, return here to sign in.</p>
+                  <label className={styles.authField}><span>Account email</span><input type="email" autoComplete="email" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} /></label>
+                  <button type="button" className={styles.secondaryButton} disabled={isAuthBusy} onClick={() => void resendConfirmation()}>Resend confirmation</button>
+                  <button type="button" className={styles.textButton} onClick={() => { setAuthView('signin'); setStatus('Sign in after confirming your email.'); }}>Go to sign in</button>
                 </div>
               )}
             </section>
@@ -4681,6 +4656,7 @@ export function ClaritySquare() {
                     placeholder="Describe the business, idea, workflow, or starting confusion."
                   />
                 </label>
+                <details className={styles.supportingDetails}><summary>Add audience, blocker, or outcome (optional)</summary>
                 <div className={styles.formGrid}>
                   <label>
                     Audience
@@ -4706,11 +4682,12 @@ export function ClaritySquare() {
                       placeholder="What should become clearer?"
                     />
                   </label>
-                </div>
+                </div></details>
+                <details className={styles.supportingDetails}><summary>See an example</summary><p><strong>Example only:</strong> {TRACKS[accountTrack].defaults.headline}</p><p>{TRACKS[accountTrack].defaults.context}</p></details>
               </div>
 
               <div className={styles.screenActions}>
-                <button type="button" className={styles.secondaryButton} onClick={() => setStep('track')}>
+                <button type="button" className={styles.secondaryButton} onClick={() => openMenu('home')}>
                   Back
                 </button>
                 <button type="button" className={styles.primaryButton} onClick={prepareClarityBrief}>
@@ -4822,6 +4799,7 @@ export function ClaritySquare() {
 
           {activeMenu === 'square' && (
             <section className={`${styles.screen} ${styles.communityScreen}`} aria-label="Square threads">
+              <p className={styles.authStatus}>Example Square: these threads demonstrate possible conversations. Posts and reactions stay in this session; they are not shared with other members.</p>
               <div className={styles.communityGrid}>
                 <form
                   className={styles.communityComposer}
@@ -4882,7 +4860,7 @@ export function ClaritySquare() {
                       checked={communityVisibilityConfirmed}
                       onChange={(event) => setCommunityVisibilityConfirmed(event.target.checked)}
                     />
-                    <span>I understand this post is intended for other Square members. I will not include confidential client, financial, or personal information.</span>
+                    <span>I understand this is a local preview, not a post shared with other members. I will not include confidential information.</span>
                   </label>
                   <p className={styles.communityQualityNote}>Useful threads name a real workflow, a testable contribution, or a review boundary. Do not use the Square for promotion. Confidential, promotional, or irrelevant material should be removed.</p>
                   <button type="submit" className={styles.primaryButton}>
@@ -4925,6 +4903,7 @@ export function ClaritySquare() {
                           <em>{post.kind === 'founder_problem' ? 'Problem' : 'Share'}</em>
                         </div>
                         <h2>{post.title}</h2>
+                        <small>{post.source === 'seed' ? 'Illustrative example' : 'Your session-only draft'}</small>
                         <p>{post.body}</p>
                         {post.tags.length > 0 && (
                           <div className={styles.communityTags} aria-label="Thread tags">
@@ -5242,7 +5221,7 @@ export function ClaritySquare() {
                                 <CheckCircle2 size={16} aria-hidden="true" />
                                 <span>
                                   <strong>{task.title}</strong>
-                                  {task.detail && <small>{task.detail}</small>}
+                                  <small>{taskSourceLabel(task.source)}{task.detail ? ` · ${task.detail}` : ""}</small>
                                 </span>
                               </button>
                             ))}
@@ -5344,7 +5323,7 @@ export function ClaritySquare() {
                               <span>
                                 <strong>{task.title}</strong>
                                 <small>
-                                  {task.detail || (task.source === 'assistant' ? 'Created by assistant' : task.source === 'auto' ? 'Starting task' : 'Manual task')}
+                                  {task.detail || (task.source === 'assistant' ? 'Assistant draft, approved by you' : task.source === 'auto' ? 'Starter suggestion' : 'Manual task')}
                                 </small>
                               </span>
                             </button>
@@ -5376,7 +5355,7 @@ export function ClaritySquare() {
                             <CheckCircle2 size={16} aria-hidden="true" />
                             <span>
                               <strong>{task.title}</strong>
-                              {task.detail && <small>{task.detail}</small>}
+                              <small>{taskSourceLabel(task.source)}{task.detail ? ` · ${task.detail}` : ""}</small>
                             </span>
                           </button>
                         ))}
@@ -5527,6 +5506,9 @@ export function ClaritySquare() {
                     </div>
                   </div>
 
+                  <details className={`${simple.options} ${simple.conversationActions}`} onKeyDown={(event) => { if (event.key === 'Escape') { event.currentTarget.open = false; event.currentTarget.querySelector('summary')?.focus(); } }} onClick={(event) => { if ((event.target as HTMLElement).closest('button')) event.currentTarget.open = false; }}>
+                    <summary>Conversation actions</summary>
+                    <div>
                   <button
                     type="button"
                     className={styles.assistantMenuButton}
@@ -5574,6 +5556,9 @@ export function ClaritySquare() {
                     </button>
                   </div>
 
+                    </div>
+                  </details>
+
                   <div className={styles.assistantSettingsHost} ref={assistantSettingsHostRef}>
                     <button
                       type="button"
@@ -5602,9 +5587,9 @@ export function ClaritySquare() {
                         <textarea
                           value={assistantSettings.behaviorPreference}
                           onChange={(event) =>
-                            setAssistantSettings({
-                              behaviorPreference: event.target.value.slice(0, 600),
-                            })
+                            setAssistantSettings((current) => ({
+                              ...current, behaviorPreference: event.target.value.slice(0, 600),
+                            }))
                           }
                           onBlur={() => void saveAssistantSettings(assistantSettings)}
                           placeholder="Example: be more direct, ask sharper questions, keep replies concise, challenge weak assumptions."
@@ -5638,6 +5623,15 @@ export function ClaritySquare() {
                   </div>
                 </div>
 
+                <label className={styles.assistantContextPicker}>
+                  <span>Assistant context</span>
+                  <select value={selectedProjectId ?? ''} onChange={(event) => setSelectedProjectId(event.target.value || null)} disabled={isAssistantBusy}>
+                    <option value="">Saved workspace</option>
+                    {projects.map((project) => <option key={project.id} value={project.id}>{project.title}</option>)}
+                  </select>
+                  <small>{selectedProjectId ? 'Replies use this project and its related tasks and memories.' : 'Choose a project before drafting tasks for it.'}</small>
+                </label>
+
                 <aside className={styles.assistantBoundaryNote} aria-label="Assistant approval rule">
                   <ShieldCheck size={17} aria-hidden="true" />
                   <p>The assistant can use the Square context you provide and draft projects, tasks, or memories. It does not save or publish those changes until you approve them.</p>
@@ -5670,15 +5664,16 @@ export function ClaritySquare() {
                             <div className={styles.assistantApprovalPanel}>
                               <div>
                                 <strong>{getPendingActionTitle(message.pendingAction)}</strong>
+                              {message.pendingAction.status === 'pending' && renderActionPreview(message.pendingAction)}
                                 <span>{getPendingActionText(message.pendingAction)}</span>
                               </div>
                               {message.pendingAction.status === 'pending' && (
                                 <div className={styles.assistantApprovalActions}>
                                   <button type="button" onClick={() => void approveAssistantAction(message)}>
-                                    Yes
+                                    Save changes
                                   </button>
                                   <button type="button" onClick={() => declineAssistantAction(message)}>
-                                    No
+                                    Dismiss
                                   </button>
                                 </div>
                               )}
@@ -5745,80 +5740,40 @@ export function ClaritySquare() {
           )}
 
           {activeMenu === 'more' && (
-            <section className={`${styles.screen} ${styles.moreScreen}`} aria-label="More Clarity Square sections">
-              <div className={styles.moreHeader}>
-                <div>
-                  <span>More</span>
-                  <h1>Workspace menu</h1>
-                  <p>
-                    Open secondary sections without crowding the main mobile tabs. Your projects, loops, and assistant stay one tap away.
-                  </p>
-                </div>
-                <div className={styles.moreAccountCard}>
-                  <span>{authUser ? 'Signed in' : 'Local session'}</span>
-                  <strong>{displayUsername || displayEmail || accountTrackCopy.shortLabel}</strong>
-                  <small>{status || `${projects.length} projects, ${projectTasks.length} tasks, ${assistantMemories.length} memories`}</small>
-                </div>
-              </div>
-
-              <div className={styles.moreQuickActions} aria-label="Primary workspace shortcuts">
-                <button
-                  type="button"
-                  className={styles.primaryButton}
-                  onClick={() => {
-                    if (latestProject && !savedContext) {
-                      openProject(latestProject);
-                      return;
-                    }
-                    openMenu(savedContext ? 'context' : 'path');
-                  }}
-                >
-                  {savedContext || latestProject ? 'Open current context' : 'Capture first signal'}
-                  <ArrowRight size={16} aria-hidden="true" />
-                </button>
-                <button type="button" className={styles.secondaryButton} onClick={() => openMenu('tasks')}>
-                  Tasks
-                  <CheckCircle2 size={16} aria-hidden="true" />
-                </button>
-              </div>
-
-              <div className={styles.moreSectionGrid} aria-label="Secondary sections">
-                {MORE_MENU_ITEMS.map((item) => {
-                  const Icon = item.icon;
-                  const isCurrent = activeMenu === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      className={isCurrent ? styles.moreSectionActive : ''}
-                      onClick={() => openMenu(item.id)}
-                      aria-pressed={isCurrent}
-                    >
-                      <span className={styles.moreSectionIcon}>
-                        <Icon size={17} aria-hidden="true" />
-                      </span>
-                      <span>
-                        <strong>{item.label}</strong>
-                        <small>{item.detail}</small>
-                      </span>
-                      <ChevronRight size={16} aria-hidden="true" />
-                    </button>
-                  );
-                })}
+            <section className={simple.main} aria-labelledby="tools-heading">
+              <h1 id="tools-heading">A tool when you need it.</h1>
+              <p className={simple.intro}>Your everyday work stays in Home and Projects. Open a supporting tool for a little more structure, a wider view, or a fresh perspective.</p>
+              <div className={simple.toolGroups}>
+                {workspaceToolGroups.map((group) => <section className={simple.toolGroup} key={group.title} aria-label={group.title}>
+                  <h2>{group.title}</h2><p>{group.detail}</p>
+                  {group.items.map((item) => { const Icon = TOOL_ICONS[item.id] ?? CircleDot; return <button key={item.id} className={simple.toolLink} onClick={() => { if (item.id === 'memory') setPrivacyProjectId(null); if (item.id === 'context') setStep(savedContext ? 'context' : 'intent'); openMenu(item.id); }}>
+                    <Icon size={19} aria-hidden="true" /><span><strong>{item.title}</strong><small>{item.detail}</small></span><ArrowRight size={16} aria-hidden="true" />
+                  </button>; })}
+                </section>)}
               </div>
             </section>
           )}
 
           {activeMenu === 'memory' && (
-            <section className={styles.screen} aria-label="Memory">
+            <section className={`${styles.screen} ${simple.main}`} aria-label="Remembered information">
+              <h1>What’s remembered</h1>
+              <p className={simple.intro}>{privacyProjectId ? 'Information used with this project, including your general preferences.' : 'Information you chose to save. You can edit or remove it here.'}</p>
+              {renderSaveFeedback()}
               <div className={styles.memoryList} aria-label="Assistant memories">
-                {assistantMemories.length > 0 ? (
-                  assistantMemories.map((memory) => (
+                {assistantMemories.filter((memory) => !privacyProjectId || !memory.project_id || memory.project_id === privacyProjectId).length > 0 ? (
+                  assistantMemories.filter((memory) => !privacyProjectId || !memory.project_id || memory.project_id === privacyProjectId).map((memory) => (
                     <article key={memory.id} className={styles.memoryItem}>
                       <div>
                         <span>{memory.memory_type.replace('_', ' ')}</span>
                         <h2>{memory.title}</h2>
-                        <p>{memory.content}</p>
+                        {editingMemoryId === memory.id ? (
+                          <form className={styles.entryActions} onSubmit={(event) => { event.preventDefault(); void saveMemoryEdit(memory); }}>
+                            <label className={styles.authField}><span>Memory title</span><input value={memoryTitleDraft} onChange={(event) => setMemoryTitleDraft(event.target.value)} required /></label>
+                            <label className={styles.authField}><span>Memory text</span><textarea value={memoryContentDraft} onChange={(event) => setMemoryContentDraft(event.target.value)} required /></label>
+                            <button className={styles.primaryButton} disabled={isSavingMemory}>Save memory</button>
+                            <button type="button" className={styles.textButton} onClick={() => setEditingMemoryId(null)}>Cancel</button>
+                          </form>
+                        ) : <><p>{memory.content}</p><button type="button" className={styles.textButton} onClick={() => { setEditingMemoryId(memory.id); setMemoryTitleDraft(memory.title); setMemoryContentDraft(memory.content); }}>Edit memory</button></>}
                       </div>
                       <button
                         type="button"
@@ -5834,16 +5789,16 @@ export function ClaritySquare() {
                 ) : (
                   <div className={styles.emptyState}>
                     <Database size={18} aria-hidden="true" />
-                    <strong>No assistant memories yet.</strong>
+                    <strong>Nothing remembered yet.</strong>
                     <p>Ask the assistant to remember a preference, decision boundary, or useful project signal.</p>
                   </div>
                 )}
               </div>
 
               <div className={styles.screenActions}>
-                <button type="button" className={styles.primaryButton} onClick={() => openMenu('assistant')}>
+                <button type="button" className={styles.primaryButton} onClick={() => openMenu('home')}>
                   <Plus size={16} aria-hidden="true" />
-                  Add through assistant
+                  Add in a conversation
                 </button>
               </div>
 
@@ -5851,13 +5806,13 @@ export function ClaritySquare() {
                 <div className={styles.deleteDataHeader}>
                   <div>
                     <span>Delete data</span>
-                    <h2>Saved items in this Square</h2>
+                    <h2>Your saved information</h2>
                     <p>Remove individual saved context, projects, tasks, memories, folders, and assistant threads.</p>
                   </div>
                   <small>{deleteDataSections.reduce((total, section) => total + section.count, 0)} saved items</small>
                 </div>
 
-                <div className={styles.deleteDataGroups}>
+                <details className={simple.supporting}><summary>Manage or delete saved information</summary><div className={styles.deleteDataGroups}>
                   {deleteDataSections.map((section) => (
                     <article key={section.id} className={styles.deleteDataGroup}>
                       <div className={styles.deleteDataGroupHeader}>
@@ -5906,12 +5861,71 @@ export function ClaritySquare() {
                       </div>
                     </article>
                   ))}
-                </div>
+                </div></details>
               </section>
             </section>
           )}
 
           {activeMenu === 'projects' && (
+            <section className={simple.main} aria-label="Projects">
+              {projectView === 'list' || !selectedProject ? <>
+                <div className={simple.listHeader}><h1>Your projects</h1><button className={simple.primary} onClick={() => { startAssistantThread(); openMenu('home'); }}>New project</button></div>
+                <label className={simple.inputLabel}><span>Find a project</span><input className={simple.search} value={projectSearch} onChange={(event) => setProjectSearch(event.target.value)} placeholder="Search projects" /></label>
+                {renderSaveFeedback()}
+                <div aria-label="Project list">
+                  {filteredProjects.filter((project) => project.status === 'active').map((project) => <button key={project.id} className={simple.projectRow} onClick={() => openProject(project)}>
+                    <span><strong>{project.title}</strong><small>{project.summary || project.context}</small></span><ArrowRight size={18} aria-hidden="true" />
+                  </button>)}
+                  {!filteredProjects.some((project) => project.status === 'active') && <p className={simple.intro}>{projects.some((project) => project.status === 'active') ? 'No projects match this view. Try a different search or folder.' : 'Your first saved idea will appear here. Start a new project when you are ready.'}</p>}
+                </div>
+                <details className={simple.supporting}><summary>Organise projects</summary><div className={simple.detailsForm}>
+                  <label>Folder<select value={activeProjectFolder} onChange={(event) => setActiveProjectFolder(event.target.value)}><option value="all">All projects</option><option value="unfiled">Without a folder</option>{projectFolders.map((folder) => <option key={folder.id} value={folder.id}>{folder.name}</option>)}</select></label>
+                  <form className={simple.addTask} onSubmit={(event) => { event.preventDefault(); void createProjectFolder(); }}><input aria-label="New folder name" value={newFolderName} onChange={(event) => setNewFolderName(event.target.value)} placeholder="New folder name" /><button className={simple.quiet} type="submit">Add folder</button></form>
+                </div></details>
+                {projects.some((project) => project.status === 'archived') && <details className={simple.supporting}><summary>Archived projects</summary><div>{projects.filter((project) => project.status === 'archived').map((project) => <div className={simple.projectRow} key={project.id}><span><strong>{project.title}</strong><small>{project.context}</small></span><button className={simple.quiet} onClick={() => void setProjectArchived(project, false)}>Restore</button></div>)}</div></details>}
+              </> : <>
+                <button className={simple.quiet} onClick={() => openMenu('projects')}>← All projects</button>
+                <div className={simple.workspaceHeader}>
+                  <h1>{selectedProject.title}</h1>
+                  <details className={simple.options} onClick={(event) => { if ((event.target as HTMLElement).closest('button')) event.currentTarget.open = false; }}><summary>Project options</summary><div>
+                    <button className={simple.quiet} disabled={isProjectAssistantBusy} onClick={() => { selectProjectTab('conversation'); void sendProjectAssistantMessage('Review the progress of this project. Explain what has moved, what is still open, and the single most useful next step.'); }}>Review progress</button>
+                    <button className={simple.quiet} onClick={() => continueProjectInEngine(selectedProject)}>Build a detailed plan</button>
+                    <button className={simple.quiet} onClick={() => { selectLoop('project'); openMenu('loops'); }}>Open progress loops</button>
+                    <button className={simple.quiet} onClick={() => openMenu('files')}>Open project organiser</button>
+                    <button className={simple.quiet} onClick={() => { setPrivacyProjectId(selectedProject.id); openMenu('memory'); }}>What’s remembered</button>
+                    <button className={simple.quiet} onClick={() => void setProjectArchived(selectedProject, true)}>Archive project</button>
+                  </div></details>
+                </div>
+                <div className={simple.tabs} role="tablist" aria-label="Project workspace" onKeyDown={(event) => {
+                  const tabs = ['conversation', 'steps', 'details'] as const;
+                  const index = tabs.indexOf(projectTab);
+                  const next = event.key === 'ArrowRight' ? (index + 1) % tabs.length : event.key === 'ArrowLeft' ? (index + tabs.length - 1) % tabs.length : event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : null;
+                  if (next !== null) { event.preventDefault(); selectProjectTab(tabs[next]); document.getElementById(`project-tab-${tabs[next]}`)?.focus(); }
+                }}>
+                  {([{ id: 'conversation', label: 'Conversation' }, { id: 'steps', label: 'Next steps' }, { id: 'details', label: 'Details' }] as const).map((tab) => <button key={tab.id} id={`project-tab-${tab.id}`} role="tab" tabIndex={projectTab === tab.id ? 0 : -1} aria-selected={projectTab === tab.id} aria-controls={`project-panel-${tab.id}`} onClick={() => selectProjectTab(tab.id)}>{tab.label}</button>)}
+                </div>
+                {projectTab === 'conversation' && <div id="project-panel-conversation" role="tabpanel" aria-labelledby="project-tab-conversation">
+                  <ClarityConversation messages={selectedProjectMessages} input={projectAssistantInput} busy={isProjectAssistantBusy} onInput={setProjectAssistantInput} onSend={() => void sendProjectAssistantMessage()} renderAction={renderConversationAction} label="Project message" placeholder="Ask about this project or choose the next step…" emptyText="This conversation uses your saved project details. What would you like to work through next?" feedback={renderSaveFeedback()} />
+                </div>}
+                {projectTab === 'steps' && <div id="project-panel-steps" role="tabpanel" aria-labelledby="project-tab-steps">
+                  <p className={simple.intro}>Small actions to move this project forward.</p>
+                  {renderSaveFeedback()}
+                  {selectedProjectTasks.filter((task) => task.status === 'open').map((task) => renderSimpleTask(task))}
+                  {!selectedProjectTasks.some((task) => task.status === 'open') && <p className={simple.intro}>No open steps. Add one below, or ask in the conversation.</p>}
+                  <form className={simple.addTask} onSubmit={(event) => { event.preventDefault(); void addSimpleTask(selectedProject); }}><input aria-label="New next step" value={manualTaskTitle} onChange={(event) => setManualTaskTitle(event.target.value)} placeholder="One useful next step" /><button className={simple.primary} disabled={isAddingTask || !manualTaskTitle.trim()}>{isAddingTask ? 'Saving…' : 'Add step'}</button></form>
+                  {selectedProjectTasks.some((task) => task.status === 'done') && <details className={simple.supporting}><summary>Completed steps</summary><div>{selectedProjectTasks.filter((task) => task.status === 'done').map((task) => renderSimpleTask(task))}</div></details>}
+                </div>}
+                {projectTab === 'details' && <div id="project-panel-details" role="tabpanel" aria-labelledby="project-tab-details">
+                  <form className={simple.detailsForm} onSubmit={(event) => { event.preventDefault(); void saveProjectDescription(selectedProject); }}><label>Project summary<textarea aria-label="Project summary" value={projectDescriptionDraft ?? selectedProject.context} onChange={(event) => setProjectDescriptionDraft(event.target.value)} required /></label><button className={simple.primary} disabled={isSavingDescription}>{isSavingDescription ? 'Saving…' : 'Save details'}</button></form>
+                  {renderSaveFeedback()}
+                  <details className={simple.supporting}><summary>Instructions for the assistant (optional)</summary><div className={simple.detailsForm}><label>How should the assistant approach this project?<textarea value={projectInstructionDraft ?? selectedProjectInstruction} onChange={(event) => setProjectInstructionDraft(event.target.value)} /></label><button className={simple.quiet} onClick={() => void saveProjectInstruction(selectedProject)} disabled={isSavingProjectInstruction}>Save instructions</button></div></details>
+                  <details className={simple.supporting}><summary>Folder</summary><div className={simple.detailsForm}><label>Keep this project in<select value={selectedProject.folder_id ?? ''} onChange={(event) => void moveProjectToFolder(selectedProject, event.target.value || null)}><option value="">Without a folder</option>{projectFolders.map((folder) => <option key={folder.id} value={folder.id}>{folder.name}</option>)}</select></label></div></details>
+                  {selectedProjectReports.length > 0 && <details className={simple.supporting}><summary>Saved plans</summary><div>{selectedProjectReports.map((report) => <details key={report.id}><summary>{report.title}</summary><p style={{ whiteSpace: 'pre-wrap' }}>{report.content}</p></details>)}</div></details>}
+                </div>}
+              </>}
+            </section>
+          )}
+          {activeMenu === 'files' && (
             <section className={`${styles.screen} ${styles.projectsScreen}`} aria-label="Projects">
               <div className={styles.projectMenuBar} aria-label="Project menu bar">
                 <div className={styles.projectScopeGroup} aria-label="Project locations">
@@ -6146,6 +6160,7 @@ export function ClaritySquare() {
                             setSelectedProjectId(project.id);
                             setProjectInstructionDraft(project.project_instruction || project.context);
                             setIsCreatingProject(false);
+                            window.history.pushState(null, '', workspaceViewUrl(window.location.pathname, 'files', project.id));
                           }}
                         >
                           <span className={styles.projectFileIcon}>
@@ -6260,7 +6275,7 @@ export function ClaritySquare() {
                                 <CheckCircle2 size={16} aria-hidden="true" />
                                 <span>
                                   <strong>{task.title}</strong>
-                                  {task.detail && <small>{task.detail}</small>}
+                                  <small>{taskSourceLabel(task.source)}{task.detail ? ` · ${task.detail}` : ""}</small>
                                 </span>
                               </button>
                             ))
@@ -6316,15 +6331,16 @@ export function ClaritySquare() {
                                     <div className={styles.assistantApprovalPanel}>
                                       <div>
                                         <strong>{getPendingActionTitle(message.pendingAction)}</strong>
+                                      {message.pendingAction.status === 'pending' && renderActionPreview(message.pendingAction)}
                                         <span>{getPendingActionText(message.pendingAction)}</span>
                                       </div>
                                       {message.pendingAction.status === 'pending' && (
                                         <div className={styles.assistantApprovalActions}>
                                           <button type="button" onClick={() => void approveAssistantAction(message)}>
-                                            Yes
+                                            Save changes
                                           </button>
                                           <button type="button" onClick={() => declineAssistantAction(message)}>
-                                            No
+                                            Dismiss
                                           </button>
                                         </div>
                                       )}
@@ -6455,80 +6471,27 @@ export function ClaritySquare() {
             </section>
           )}
 
-          {activeMenu === 'settings' && (
-            <section className={styles.screen} aria-label="Settings">
-              {!authUser && (
-                <div className={styles.accountAccessPanel}>
-                  <div>
-                    <span>Account access</span>
-                    <h2>Sign in or create an account</h2>
-                    <p>Use an account to keep projects, tasks, memories, and loop context saved across sessions.</p>
-                  </div>
-                  <div>
-                    <button
-                      type="button"
-                      className={styles.primaryButton}
-                      onClick={() => {
-                        setSessionMode('signup');
-                        setAuthView('signup-email');
-                        openMenu('start');
-                      }}
-                    >
-                      Create account
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.secondaryButton}
-                      onClick={() => {
-                        setSessionMode('signin');
-                        setAuthView('signin');
-                        openMenu('start');
-                      }}
-                    >
-                      Sign in
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              <div className={styles.settingsList}>
-                <label>
-                  <span>Preferred path</span>
-                  <select
-                    value={accountTrack}
-                    onChange={(event) => {
-                      const nextTrack = event.target.value as Track;
-                      void applyTrackChoice(nextTrack, {
-                        persist: Boolean(authUser),
-                        statusPrefix: `${TRACKS[nextTrack].shortLabel} saved for this account.`,
-                      });
-                    }}
-                  >
-                    <option value="founder">Founder Track</option>
-                    <option value="builder">Solopreneur Track</option>
-                  </select>
-                </label>
-                <label>
-                  <span>Digest rhythm</span>
-                  <select defaultValue="weekly">
-                    <option value="weekly">Weekly</option>
-                    <option value="paused">Paused</option>
-                  </select>
-                </label>
-                <label className={styles.toggleRow}>
-                  <input type="checkbox" defaultChecked />
-                  <span>Keep vault entries private by default</span>
-                </label>
-              </div>
-
+          {activeMenu === 'settings' && authUser && (
+            <section className={simple.main} aria-label="Account preferences">
+              <h1>Your account</h1><p className={simple.intro}>{displayEmail}</p>
+              {renderSaveFeedback()}
+              <details className={simple.supporting}><summary>Username (optional)</summary><form className={simple.detailsForm} onSubmit={(event) => { event.preventDefault(); void upsertProfile(authUser, authUsername, accountTrack).then((profile) => { if (profile) { setAuthUsername(''); setStatus('Username saved.'); } }); }}><label>Choose a username<input value={authUsername} onChange={(event) => setAuthUsername(normalizeUsername(event.target.value))} placeholder={displayUsername || 'Optional username'} pattern="[a-z0-9_]{3,24}" /></label><button className={simple.primary} disabled={!authUsername.trim()}>Save username</button></form></details>
+              <details className={simple.supporting}><summary>Assistant preferences</summary><div className={simple.detailsForm}>
+                <label>How would you like replies to feel?<textarea value={assistantSettings.behaviorPreference} onChange={(event) => setAssistantSettings((current) => ({ ...current, behaviorPreference: event.target.value }))} placeholder="For example: concise, direct, one next step at a time." /></label>
+                <label>Review rhythm<select value={assistantSettings.digestRhythm ?? 'weekly'} onChange={(event) => setAssistantSettings((current) => ({ ...current, digestRhythm: event.target.value as 'weekly' | 'paused' }))}><option value="weekly">Weekly</option><option value="paused">Paused</option></select></label>
+                <p className={simple.intro}>A saved preference for reviewing your work. Automatic email digests are not connected.</p>
+                <button className={simple.quiet} onClick={() => void saveAssistantSettings()}>Save preference</button>
+                <label>Default focus (optional)<select value={accountTrack} onChange={(event) => void applyTrackChoice(event.target.value as Track, { persist: true, statusPrefix: 'Default focus saved.' })}><option value="founder">Business or workflow</option><option value="builder">Idea or personal project</option></select></label>
+              </div></details>
+              <section className={simple.recent}><h2>Your privacy</h2><p className={simple.intro}>Your projects and next steps are private. You can inspect, edit, or delete remembered information whenever you need to.</p><button className={simple.quiet} onClick={() => { setPrivacyProjectId(null); openMenu('memory'); }}>Manage remembered information</button></section>
             </section>
           )}
         </section>
 
-        <nav className={styles.mobileTabBar} aria-label="Primary Clarity Square navigation">
-          {MOBILE_PRIMARY_ITEMS.map((item) => {
+        <nav className={styles.mobileTabBar} aria-label="Primary Clarity Square navigation" hidden={!authUser}>
+          {(authUser ? MOBILE_PRIMARY_ITEMS : []).map((item) => {
             const Icon = item.icon;
-            const isCurrent = item.id === 'more' ? mobileMoreIsActive : activeMenu === item.id;
+            const isCurrent = activeMenu === item.id;
             return (
               <button
                 key={item.id}

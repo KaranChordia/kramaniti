@@ -954,3 +954,17 @@ This log registers the major strategic and structural decisions made during the 
 * **[Fact] Boundary:** The assistant uses public catalogue metadata and supplied conversation only. It reads no private account context, persists no chat, adapts no template and executes no action. Completed exchanges survive resource navigation within Kosh and clear on refresh.
 * **Alternatives rejected:** A generic site chatbot with ungrounded links; requiring an account to discover public templates; replacing search; adding a new agent runtime; deploying the dirty primary checkout.
 * **Open questions:** Verify the deployed model configuration and public assistant flow, and configure distributed request protection in the existing owning Vercel project. Current Vercel API/CLI access is insufficient; the pre-integration remote commit has a successful GitHub Vercel status.
+
+
+### Decision 38: Restore Clarity Square features through secondary tools
+
+* **Date:** 2026-10-14
+* **Area:** Clarity Square navigation and private workspace continuity
+* **Status:** Founder-reviewed; KC explicitly authorized commit, deployment and closure of outstanding Clarity work on 2026-10-14.
+* **Decision:** Retain Home and Projects as the two everyday destinations and the integrated Conversation/Next steps/Details project workspace. Restore the earlier guided path, brief, five loops, aggregate tasks, standalone assistant, organiser, overview, memory and community examples through a secondary Tools directory grouped by purpose. Restore account overview and preferences in the account menu.
+* **Rationale:** KC requested the pre-simplification features to return without restoring daily navigation complexity. Supporting views keep the current owned project and tab, with canonical URLs and a direct return action.
+* **Source:** KC's request in the Clarity Circle restoration conversation on 2026-10-14.
+* **[Fact] Boundaries:** Private Platform ownership and existing reviewed-save safeguards remain. Kosh stays separate. Community remains explicitly local examples. Review frequency is a saved profile preference; no automatic email digests are connected. No database migration or remote write was required.
+* **Evidence:** `docs/clarity-square-improvement-plan.md`, route/navigation tests and the controlled production-preview browser suite. Fixtures do not prove actual email delivery or hosted member/provider sessions.
+* **Alternatives rejected:** Adding every feature to primary navigation; redirecting tools back to Home; overlapping More screens; claiming local community examples are publicly shared.
+* **Open work:** Verify the public deployment and report hosted-flow evidence separately. Unrelated dirty primary and About work is preserved. Shared community persistence and automated email digests remain explicitly outside this release.

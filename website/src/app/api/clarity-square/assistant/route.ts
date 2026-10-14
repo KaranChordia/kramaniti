@@ -1,6 +1,8 @@
 import Groq from 'groq-sdk';
 import type { ChatCompletionMessageParam } from 'groq-sdk/resources/chat/completions';
 import { NextResponse } from 'next/server';
+import { isClarityActionData } from '@/lib/clarity-square/actions';
+import { loadAssistantWorkspace } from '@/lib/clarity-square/assistantWorkspace';
 import { buildKramanitiKnowledgeContext } from '@/lib/kramaniti-assistant/knowledge';
 
 export const runtime = 'nodejs';
@@ -315,6 +317,8 @@ const inferTrack = (message: string, fallback: Track): Track =>
   /\b(individual|builder|idea|validate|exploring)\b/i.test(message) ? 'builder' : fallback;
 
 const getProjectSourceMessage = (latestMessage: string, history: AssistantMessage[], body: AssistantRequestBody) => {
+  const suppliedIdea = latestMessage.match(/^Create a project from this idea:\s*([\s\S]+)$/i)?.[1];
+  if (suppliedIdea) return suppliedIdea;
   if (directlyWantsProject(latestMessage)) return latestMessage;
 
   const previousUserMessage = [...history]
@@ -554,7 +558,7 @@ const buildLocalPayload = (latestMessage: string, body: AssistantRequestBody, hi
 
   if (wantsProject(latestMessage, history)) {
     payload.response =
-      'I can turn this into a working project. I drafted it as a private Square project so you can refine the audience, blocker, and desired outcome before moving into a Clarity Brief.';
+      'I drafted a project from this idea. Review the summary and save it when you are ready.';
     payload.projectDraft = buildProjectDraft(latestMessage, history, body);
   }
 
@@ -594,7 +598,7 @@ const parseAssistantPayload = (raw: string): AssistantPayload | null => {
 
   try {
     const parsed = JSON.parse(jsonText) as Partial<AssistantPayload>;
-    if (!parsed.response || typeof parsed.response !== 'string') return null;
+    if (!parsed?.response || typeof parsed.response !== 'string' || !isClarityActionData(parsed)) return null;
 
     return {
       response: clean(parsed.response),
@@ -739,15 +743,35 @@ ${buildKramanitiKnowledgeContext()}`,
   ];
 };
 
-export async function POST(request: Request) {
-  let body: AssistantRequestBody;
+const reviewablePayload = (payload: AssistantPayload, body: AssistantRequestBody) => {
+  if (payload.taskDrafts?.length && !body.selectedProjectId && !payload.projectDraft && !payload.projectUpdate) {
+    return { ...payload, taskDrafts: null, response: 'Choose a project in Assistant context, then ask me to draft its next tasks.' };
+  }
+  return payload;
+};
 
+export async function POST(request: Request) {
+  const token = request.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1]?.trim();
+  if (!token) return NextResponse.json({ error: 'Sign in to use your workspace assistant.' }, { status: 401 });
+  let body: AssistantRequestBody;
   try {
-    body = (await request.json()) as AssistantRequestBody;
+    const text = await request.text();
+    if (text.length > 64000) return NextResponse.json({ error: 'This request is too large. Send a shorter message.' }, { status: 413 });
+    const parsed = JSON.parse(text);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('Invalid request');
+    if (parsed.selectedProjectId != null && typeof parsed.selectedProjectId !== 'string') throw new Error('Invalid project');
+    body = parsed;
   } catch {
     return NextResponse.json({ error: 'Invalid request payload.' }, { status: 400 });
   }
-
+  let workspace;
+  try { workspace = await loadAssistantWorkspace(token, body.selectedProjectId); }
+  catch { return NextResponse.json({ error: 'Your account connection is unavailable. Please try again.', }, { status: 503 }); }
+  if ('error' in workspace) return NextResponse.json({ error: workspace.error }, { status: workspace.status });
+  const messages = normalizeMessages(body);
+  // Client-supplied persisted records and preferences never override the owned server snapshot.
+  body = { ...workspace.context, messages };
+  const revision = workspace.revision;
   const history = normalizeMessages(body);
   const latestUserMessage = [...history].reverse().find((message) => message.role === 'user')?.content || '';
 
@@ -757,9 +781,10 @@ export async function POST(request: Request) {
 
   if (!process.env.GROQ_API_KEY) {
     return NextResponse.json({
-      ...ensureRequestedActions(buildLocalPayload(latestUserMessage, body, history), latestUserMessage, history, body),
+      ...reviewablePayload(ensureRequestedActions(buildLocalPayload(latestUserMessage, body, history), latestUserMessage, history, body), body),
       source: 'local',
-      model: MODEL_NAME,
+      workspaceRevision: revision,
+      model: null,
     });
   }
 
@@ -789,20 +814,22 @@ export async function POST(request: Request) {
       throw new Error('Clarity Square assistant returned invalid JSON.');
     }
 
-    const payload = ensureRequestedActions(parsed, latestUserMessage, history, body);
+    const payload = reviewablePayload(ensureRequestedActions(parsed, latestUserMessage, history, body), body);
 
     return NextResponse.json({
       ...payload,
       source: 'groq',
+      workspaceRevision: revision,
       model: MODEL_NAME,
     });
   } catch (error) {
     console.error('Clarity Square assistant route failed:', error);
 
     return NextResponse.json({
-      ...ensureRequestedActions(buildLocalPayload(latestUserMessage, body, history), latestUserMessage, history, body),
+      ...reviewablePayload(ensureRequestedActions(buildLocalPayload(latestUserMessage, body, history), latestUserMessage, history, body), body),
       source: 'local',
-      model: MODEL_NAME,
+      workspaceRevision: revision,
+      model: null,
     });
   }
 }

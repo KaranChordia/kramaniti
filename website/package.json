@@ -12,7 +12,8 @@
     "client-hub:sync": "node ../scripts/sync-client-hub.mjs",
     "hq:sync": "node ../scripts/sync-kramaniti-hq.mjs",
     "hq:watch": "node ../scripts/sync-kramaniti-hq.mjs --watch",
-    "test:kosh": "node --experimental-test-module-mocks --test tests/kosh*.test.mjs"
+    "test:kosh": "node --experimental-test-module-mocks --test tests/kosh*.test.mjs",
+    "test:clarity-square": "node --experimental-test-module-mocks --test tests/clarity-square*.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
