@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { StudioMemory } from "./session";
+import type { DiscoveryTurn } from "@/lib/kosh/discovery";
 import styles from "./world.module.css";
 
 type Discovery = { href: string; scroll: number };
@@ -20,6 +21,8 @@ const Journey = createContext<{
   restoreExplore: () => void;
   readStudio: (key: string) => StudioMemory | undefined;
   writeStudio: (key: string, value: StudioMemory) => void;
+  readGuide: () => DiscoveryTurn[];
+  writeGuide: (turns: DiscoveryTurn[]) => void;
   remember: () => void;
 } | null>(null);
 export function useKoshJourney() {
@@ -71,6 +74,9 @@ export function KoshWorld({ children }: { children: ReactNode }) {
   });
   const returning = useRef(false);
   const memory = useRef<Record<string, StudioMemory>>({});
+  const guide = useRef<DiscoveryTurn[]>([]);
+  const readGuide = useCallback(() => guide.current, []);
+  const writeGuide = useCallback((turns: DiscoveryTurn[]) => { guide.current = turns; }, []);
   useEffect(() => {
     const warnBeforeLeaving = (event: BeforeUnloadEvent) => {
       if (Object.values(memory.current).some((session) => session.draft)) {
@@ -144,6 +150,8 @@ export function KoshWorld({ children }: { children: ReactNode }) {
         restoreExplore,
         readStudio,
         writeStudio,
+        readGuide,
+        writeGuide,
         remember,
       }}
     >

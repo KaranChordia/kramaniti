@@ -942,3 +942,15 @@ This log registers the major strategic and structural decisions made during the 
 * **Open question:** Connect the Create intake to a scoped, server-side package-generation endpoint only after model, account, context, quota and disclosure decisions are approved.
 
 * **2026-10-04 browsing update:** [Fact] KC requested sorting and category filters in Library and a persistent resource guide while scrolling. This supersedes Decision 36's removal of format filters, while preserving the three-page navigation and gallery. Local implementation starts from fetched `origin/main` at `da2986e`, including all 16 resources and plain-language type labels. Controls combine search, format, task category and title/category sorting. KC previewed the result and explicitly authorized commit and deployment on 2026-10-04.
+### Decision 37: Add conversational guidance to the public Kosh library
+
+* **Date:** 2026-10-14
+* **Area:** Kosh template discovery
+* **Status:** Implemented and verified; KC authorized closing outstanding Kosh commits and PRs on 2026-10-14. Hosted verification remains required.
+* **Decision:** Add an inline assistant that helps visitors describe their task, choose an existing public template, refine recommendations and open the resource. Retain direct catalogue browsing.
+* **Rationale:** Visitors may know the problem without knowing a template's title or format. Guidance should connect that problem to a real starting point with a clear reason.
+* **Source:** KC's request to deploy a smart assistant in Kosh for template navigation.
+* **Affected files:** `website/src/app/kosh/`, `website/src/app/api/kosh/discover/`, `website/src/lib/kosh/discovery.ts`, Kosh journey state, environment examples and discovery tests. Implementation details: `docs/kosh/discovery-assistant.md`.
+* **[Fact] Boundary:** The assistant uses public catalogue metadata and supplied conversation only. It reads no private account context, persists no chat, adapts no template and executes no action. Completed exchanges survive resource navigation within Kosh and clear on refresh.
+* **Alternatives rejected:** A generic site chatbot with ungrounded links; requiring an account to discover public templates; replacing search; adding a new agent runtime; deploying the dirty primary checkout.
+* **Open questions:** Verify the deployed model configuration and public assistant flow, and configure distributed request protection in the existing owning Vercel project. Current Vercel API/CLI access is insufficient; the pre-integration remote commit has a successful GitHub Vercel status.
