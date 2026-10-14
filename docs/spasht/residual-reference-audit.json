@@ -597,9 +597,10 @@
     "lines": [
       13,
       17,
-      18
+      18,
+      28
     ],
-    "count": 3,
+    "count": 4,
     "purpose": "Historical migration links, explicit transition notes, or parent geometry and distinct product names"
   },
   {

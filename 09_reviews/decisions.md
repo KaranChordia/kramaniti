@@ -979,3 +979,7 @@ This log registers the major strategic and structural decisions made during the 
 * **Affected files:** `website/src/app/spasht/`, `website/src/lib/spasht/`, `website/src/app/api/spasht/`, `website/spasht-chatgpt-app/`, forward migration and `docs/spasht/`.
 * **Alternatives rejected:** Display-label-only rename; an empty replacement database; rewriting historical migrations; changing receipt hashes; silently hiding features.
 * **Open work:** Approval and coordinated hosted migration/configuration/publication followed by hosted account and isolation checks. See `docs/spasht/release-plan.md` for compatibility exceptions, cutover and rollback.
+
+#### Decision 39 publication update — 2026-10-15
+
+[Fact] KC approved publication. PR #36 merged, Platform storage was renamed without changing existing rows/table identities/RLS, and the website and existing ChatGPT manager were published as Spasht. Supabase-owned trigger naming and the saved OAuth authority remain explicit compatibility exceptions. See `docs/spasht/production-release-2026-10-15.md` for public checks, partial production-browser evidence and remaining user-account verification limits.

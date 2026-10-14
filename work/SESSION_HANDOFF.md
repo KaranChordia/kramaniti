@@ -1,9 +1,11 @@
-# Spasht handoff — 14 October 2026
+# Spasht release handoff — 15 October 2026
 
-Worktree: `/Users/karanchordia/.codex/worktrees/spasht-rebrand/kramaniti`; branch `codex/spasht-rebrand`; base `80ea3c8` (restoration PR #35).
+[Fact] KC approved publication. PR #36 is merged; website and manager are live. Owning worktree: `/Users/karanchordia/.codex/worktrees/spasht-rebrand/kramaniti`. Primary checkout's unrelated changes remain intact.
 
-Local rebrand implemented across routes, UI, code, browser-state adapters, assets, manager/OAuth, metadata, docs and reversible schema migration. Primary dirty work preserved. No live writes or deployment.
+[Fact] Hosted migration version `20261014184930` matches the repository filename. All nine table object identities, RLS and record hashes were preserved. Auth callbacks are saved; manager production domain and project use Spasht. Keep legacy read adapters, old OAuth origin and the Supabase-managed trigger-name exception.
 
-Read `docs/spasht/release-plan.md` and `docs/spasht/verification.md` before release. Existing code targets the renamed schema; do not publish before applying approved migration. Compatibility views retain RLS and ordinary writes; cached clients require refresh for upserts/Realtime. Keep Platform/Kosh distinct.
+Read `docs/spasht/production-release-2026-10-15.md`, `docs/spasht/release-plan.md` and rollback before subsequent changes. No private recovery contents or credentials belong in Git. The private logical backup is outside the repository.
 
-Local preview: owned Next production server at `127.0.0.1:3017`, fixture-only public key. Hosted account verification is still required after approval. Do not copy this fixture environment to a deployment.
+[Unverified] Real-user email delivery, ChatGPT OAuth consent/user-specific connector names, two-device authenticated save/return and PWA offline behavior. Production browser fixture was partially blocked by the existing Vercel anti-bot checkpoint; local complete fixtures and hosted rollback-only database checks passed.
+
+[Fact] The fixture-only local preview is no longer needed after publication; retain the public Spasht browser tab.

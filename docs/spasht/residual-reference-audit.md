@@ -25,7 +25,7 @@
 | `docs/kramaniti_brand_design_kit.md` | 1 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
 | `docs/kramaniti_hq_operating_guide.md` | 1 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
 | `docs/kramaniti_site_implementation_plan.md` | 9 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
-| `docs/spasht/production-release-2026-10-15.md` | 3 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
+| `docs/spasht/production-release-2026-10-15.md` | 4 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
 | `docs/spasht/release-plan.md` | 3 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
 | `docs/spasht/rollback.sql` | 13 | Source schema names, data-preserving event compatibility and reversible migration |
 | `docs/spasht/verification.md` | 1 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
