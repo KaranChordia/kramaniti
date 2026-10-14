@@ -518,7 +518,7 @@ export function createKramanitiMcpServer(requestHeaders = new Headers()): McpSer
   );
 
   // Retain the old widget resource for already-rendered ChatGPT conversations.
-  for (const uri of [WORKSPACE_URI, "ui://kramaniti/clarity-square-manager.html"]) {
+  for (const uri of [WORKSPACE_URI, "ui://kramaniti/clarity-square-manager.html", "ui://kramaniti/clarity-circle-manager.html"]) {
     registerAppResource(server, uri === WORKSPACE_URI ? "Kramaniti Spasht Manager Widget" : "Legacy workspace widget adapter", uri,
       { mimeType: RESOURCE_MIME_TYPE, description: "Interactive Spasht manager workspace HTML." },
       async () => ({ contents: [{ uri, mimeType: RESOURCE_MIME_TYPE, text: widgetHtml }] }));

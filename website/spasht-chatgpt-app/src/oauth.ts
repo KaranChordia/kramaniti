@@ -245,7 +245,7 @@ export async function handleOAuth(req: IncomingMessage, res: ServerResponse) {
     try {
       const { clientId, redirectUri, codeChallenge } = validateAuthorizeParams(params);
       const resource = params.get("resource") || mcpResource(req);
-      const scope = (params.get("scope") || "spasht.read spasht.write").replace(/clarity_square\./g, "spasht.");
+      const scope = (params.get("scope") || "spasht.read spasht.write").replace(/clarity_(?:square|circle)\./g, "spasht.");
       const login = String(body.login || "");
       const password = String(body.password || "");
 

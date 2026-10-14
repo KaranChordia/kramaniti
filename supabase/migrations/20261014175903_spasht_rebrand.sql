@@ -19,7 +19,14 @@ begin
     execute format('alter index spasht.%I rename to %I',obj.relname,replace(obj.relname,'clarity_square','spasht'));
   end loop;
   for obj in select t.tgname,c.relname,n.nspname from pg_trigger t join pg_class c on c.oid=t.tgrelid join pg_namespace n on n.oid=c.relnamespace where not t.tgisinternal and t.tgname like '%clarity_square%' and (n.nspname='spasht' or (n.nspname='auth' and c.relname='users')) loop
-    execute format('alter trigger %I on %I.%I rename to %I',obj.tgname,obj.nspname,obj.relname,replace(obj.tgname,'clarity_square','spasht'));
+    begin
+      execute format('alter trigger %I on %I.%I rename to %I',obj.tgname,obj.nspname,obj.relname,replace(obj.tgname,'clarity_square','spasht'));
+    exception when insufficient_privilege then
+      if obj.nspname <> 'auth' then raise; end if;
+      -- Supabase owns auth.users; its cosmetic trigger name is a managed exception.
+      -- The trigger retains the same function OID, now in the spasht schema.
+      raise notice 'Retaining managed Auth trigger name %', obj.tgname;
+    end;
   end loop;
   -- Preserve the legacy event value while allowing the new community identifier.
   for obj in select c.conname,pg_get_constraintdef(c.oid) as def from pg_constraint c where c.conrelid='spasht.product_events'::regclass and c.contype='c' and pg_get_constraintdef(c.oid) like '%square_post%' loop
