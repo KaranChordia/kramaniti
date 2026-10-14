@@ -27,7 +27,7 @@
 
 ## Local migration and compatibility
 
-[Fact] `supabase/migrations/20261014175903_spasht_rebrand.sql` renames the existing schema in a transaction. Tables, UUIDs, ownership, grants, constraints and Realtime publication membership remain attached to existing objects. Function bodies/search paths and product policy/index/trigger names are repaired. New event writes use `community_post`; old `square_post` events remain valid and unchanged.
+[Fact] `supabase/migrations/20261014184930_spasht_rebrand.sql` renames the existing schema in a transaction. Tables, UUIDs, ownership, grants, constraints and Realtime publication membership remain attached to existing objects. Function bodies/search paths and product policy/index/trigger names are repaired. New event writes use `community_post`; old `square_post` events remain valid and unchanged.
 
 [Fact] Temporary `clarity_square` invoker views copy existing table grants and enforce underlying RLS; the old login RPC forwards to the renamed function. Old page URLs redirect to `/spasht`; old API URLs rewrite without losing POST bodies. Old browser storage and Engine handoffs migrate on read; original snapshots remain for recovery and all are cleared on sign-out. Saved non-default thread IDs and approval receipts remain immutable. New OAuth token prefixes and scopes use Spasht; existing encrypted tokens/codes and widget resource URIs are accepted.
 

@@ -593,6 +593,16 @@
     "purpose": "Historical migration links, explicit transition notes, or parent geometry and distinct product names"
   },
   {
+    "file": "docs/spasht/production-release-2026-10-15.md",
+    "lines": [
+      13,
+      17,
+      18
+    ],
+    "count": 3,
+    "purpose": "Historical migration links, explicit transition notes, or parent geometry and distinct product names"
+  },
+  {
     "file": "docs/spasht/release-plan.md",
     "lines": [
       9,
@@ -1176,7 +1186,7 @@
     "purpose": "Immutable applied migration history; later migration renames current objects"
   },
   {
-    "file": "supabase/migrations/20261014175903_spasht_rebrand.sql",
+    "file": "supabase/migrations/20261014184930_spasht_rebrand.sql",
     "lines": [
       6,
       7,

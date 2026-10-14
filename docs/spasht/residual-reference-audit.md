@@ -25,6 +25,7 @@
 | `docs/kramaniti_brand_design_kit.md` | 1 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
 | `docs/kramaniti_hq_operating_guide.md` | 1 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
 | `docs/kramaniti_site_implementation_plan.md` | 9 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
+| `docs/spasht/production-release-2026-10-15.md` | 3 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
 | `docs/spasht/release-plan.md` | 3 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
 | `docs/spasht/rollback.sql` | 13 | Source schema names, data-preserving event compatibility and reversible migration |
 | `docs/spasht/verification.md` | 1 | Historical migration links, explicit transition notes, or parent geometry and distinct product names |
@@ -52,7 +53,7 @@
 | `supabase/migrations/20260713100327_kramaniti_client_hub.sql` | 1 | Immutable applied migration history; later migration renames current objects |
 | `supabase/migrations/20260713101500_remove_duplicate_product_event_indexes.sql` | 2 | Immutable applied migration history; later migration renames current objects |
 | `supabase/migrations/20260720040451_kramaniti_hq_portfolio.sql` | 5 | Immutable applied migration history; later migration renames current objects |
-| `supabase/migrations/20261014175903_spasht_rebrand.sql` | 19 | Source schema names, data-preserving event compatibility and reversible migration |
+| `supabase/migrations/20261014184930_spasht_rebrand.sql` | 19 | Source schema names, data-preserving event compatibility and reversible migration |
 | `website/chatgpt-app/widgets/clarity-map.html` | 2 | Generic geometry, CSS gradients, icon names or distinct products; no legacy workspace identity |
 | `website/next.config.ts` | 5 | Permanent old entry redirects and method-preserving API adapters |
 | `website/spasht-chatgpt-app/src/mcp.ts` | 1 | Existing OAuth scope/token or widget URI read compatibility |
