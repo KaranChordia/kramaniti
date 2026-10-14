@@ -227,7 +227,7 @@
   text-shadow: none;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .desktopNav {
     display: flex;
     align-items: center;
@@ -265,7 +265,7 @@
   color: var(--action-accent-light);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .mobileMenuBtn {
     display: none;
   }
@@ -317,6 +317,7 @@
 .mobileNavLinks > *:nth-child(6) { animation-delay: 290ms; }
 .mobileNavLinks > *:nth-child(7) { animation-delay: 340ms; }
 .mobileNavLinks > *:nth-child(8) { animation-delay: 390ms; }
+.mobileNavLinks > *:nth-child(9) { animation-delay: 440ms; }
 
 .mobileLink {
   font-family: var(--font-comfortaa), sans-serif;
@@ -338,6 +339,7 @@
   font-family: var(--font-inter), sans-serif;
   font-weight: 500;
   font-size: 15px;
+  white-space: nowrap;
   text-decoration: none;
   transition: color 200ms ease;
 }

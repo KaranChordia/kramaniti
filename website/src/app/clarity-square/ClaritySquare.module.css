@@ -236,7 +236,7 @@
   min-height: 0;
   min-width: 0;
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: center;
   gap: 5px;
   width: 100%;
@@ -1779,7 +1779,7 @@
 
 .loopBoardGrid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -5655,7 +5655,7 @@
     left: 0;
     z-index: 30;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 3px;
     padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
     border-top: 1px solid var(--square-border);
@@ -6150,4 +6150,42 @@
   .assistantComposer {
     min-height: 58px;
   }
+}
+
+/* Keep supporting information progressive and save outcomes visible. */
+.supportingDetails { min-width: 0; color: var(--square-muted); }
+.supportingDetails summary { cursor: pointer; padding: 12px 0; color: var(--square-text); }
+.supportingDetails > div { margin-top: 16px; }
+.workspaceStatus { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--square-muted); font-size: 13px; overflow-wrap: anywhere; }
+.actionPreview { margin: 12px 0; border-top: 1px solid var(--square-divider); }
+.actionPreview summary { cursor: pointer; padding-top: 10px; }
+.actionPreview p { overflow-wrap: anywhere; white-space: pre-wrap; }
+.stage:has(> .workspaceStatus) { grid-template-rows: auto minmax(0, 1fr); gap: 14px; }
+
+.mobileTabBar[hidden] { display: none; }
+.assistantContextPicker { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; color: var(--square-muted); }
+.assistantContextPicker select { max-width: 100%; min-height: 38px; border: 1px solid var(--square-border); border-radius: 8px; background: var(--square-control); color: var(--square-text); padding: 6px 10px; font: inherit; }
+.assistantContextPicker small { width: 100%; }
+
+.assistantLayout { grid-template-rows: auto auto auto minmax(0, 1fr); }
+.assistantApprovalPanel { align-items: start; }
+.assistantApprovalPanel > div:first-child { min-width: 0; }
+.actionPreview p { max-width: 100%; }
+
+.workspaceStatus .textButton { width: auto; flex: 0 0 auto; min-height: 34px; padding: 6px 12px; }
+.homePathPreference { display: flex; align-items: center; align-self: start; justify-content: flex-end; flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--square-muted); }
+.homePathPreference .textButton { width: auto; }
+@media (max-width: 760px) { .homePathPreference { justify-content: flex-start; } }
+
+/* Two primary destinations; account controls live in one menu. */
+.menu { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 380px; justify-self: center; }
+.mobileTabBar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rail { z-index: 30; overflow: visible; }
+.rail:global(.clarity-square-rail) { grid-template-areas: "brand sections tools account"; grid-template-columns: auto minmax(0, 1fr) auto auto; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.productLabel { grid-area: brand; }
+.menu { grid-area: sections; }
+@media (max-width: 1100px) { .rail { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); } }
+@media (max-width: 720px) {
+  .rail:global(.clarity-square-rail) { grid-template-areas: "brand tools account"; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .menu:global(.clarity-square-menu) { display: none; }
 }

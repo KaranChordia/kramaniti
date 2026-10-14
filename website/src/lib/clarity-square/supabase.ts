@@ -123,7 +123,7 @@ export type ClaritySquareProductEvent = {
   created_at: string;
 };
 
-type ClaritySquareDatabase = {
+export type ClaritySquareDatabase = {
   clarity_square: {
     Tables: {
       profiles: {
@@ -210,6 +210,7 @@ type ClaritySquareDatabase = {
       assistant_messages: {
         Row: ClaritySquareAssistantMessage;
         Insert: {
+          id?: string;
           user_id: string;
           project_id?: string | null;
           role: ClaritySquareAssistantMessage['role'];
