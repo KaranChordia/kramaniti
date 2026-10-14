@@ -18,21 +18,16 @@ const nextConfig: NextConfig = {
       { source: "/library/resources/:id", destination: "/kosh/:id/", permanent: true },
       { source: "/library/resources/:id/", destination: "/kosh/:id/", permanent: true },
       { source: "/library/:path*", destination: "/kosh/:path*", permanent: true },
-      {
-        source: "/clarity-circle/:path*",
-        destination: "/clarity-square/:path*",
-        permanent: true,
-      },
-      {
-        source: "/api/clarity-circle/:path*",
-        destination: "/api/clarity-square/:path*",
-        permanent: true,
-      },
+      { source: "/clarity-square/:path*", destination: "/spasht/:path*", permanent: true },
+      { source: "/clarity-circle/:path*", destination: "/spasht/:path*", permanent: true },
+      { source: "/assets/brand/clarity-square-mark-gold.png", destination: "/assets/brand/spasht-mark-gold.png", permanent: true },
     ];
   },
   async rewrites() {
     return {
       beforeFiles: [
+        { source: "/api/clarity-square/:path*", destination: "/api/spasht/:path*" },
+        { source: "/api/clarity-circle/:path*", destination: "/api/spasht/:path*" },
         {
           source: "/agent-simulation",
           destination: "/agent-simulation/",

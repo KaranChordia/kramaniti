@@ -48,7 +48,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
               <Link href="/#method" className={styles.navLink}>How We Work</Link>
               <Link href="/#services" className={styles.navLink}>Services</Link>
               <Link href="/kosh" className={styles.navLink}>Kosh</Link>
-              <Link href="/clarity-square/" className={styles.navLink}>Clarity Square</Link>
+              <Link href="/spasht/" className={styles.navLink}>Spasht</Link>
               <Link href="/work" className={styles.navLink}>Work</Link>
               <Link href="/insights" className={styles.navLink}>Insights</Link>
             </nav>
@@ -93,7 +93,7 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <Link href="/#method" className={styles.mobileLink} onClick={closeMobileMenu}>How We Work</Link>
             <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
             <Link href="/kosh" className={styles.mobileLink} onClick={closeMobileMenu}>Kosh</Link>
-            <Link href="/clarity-square/" className={styles.mobileLink} onClick={closeMobileMenu}>Clarity Square</Link>
+            <Link href="/spasht/" className={styles.mobileLink} onClick={closeMobileMenu}>Spasht</Link>
             <Link href="/work" className={styles.mobileLink} onClick={closeMobileMenu}>Work</Link>
             <Link href="/insights" className={styles.mobileLink} onClick={closeMobileMenu}>Insights</Link>
             <div className={styles.mobileAuditAction}>

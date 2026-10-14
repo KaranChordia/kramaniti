@@ -15,6 +15,7 @@ Kramaniti is a first-principles AI systems partner, not an automation agency. It
 ## Core Public Pages
 
 - [Home](${absoluteUrl('/')}): How Kramaniti understands the work, fixes the workflow that matters, uses AI carefully, and communicates the value.
+- [Spasht](${absoluteUrl('/spasht/')}): A private ongoing workspace for ideas, projects, tasks and reviewed assistant conversations.
 - [Clarity Engine](${absoluteUrl('/clarity-engine/')}): A focused way to think through one piece of work before choosing tools.
 - [Kramaniti Kosh](${absoluteUrl('/kosh/')}): An open library of starter templates: how-to guides, checklists, AI assistant setups and tool setup guides.
 - [Insights](${absoluteUrl('/insights/')}): Articles on where work gets stuck, what to build, how people use AI, and how to communicate clearly.

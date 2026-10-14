@@ -968,3 +968,14 @@ This log registers the major strategic and structural decisions made during the 
 * **Evidence:** `docs/clarity-square-improvement-plan.md`, route/navigation tests and the controlled production-preview browser suite. Fixtures do not prove actual email delivery or hosted member/provider sessions.
 * **Alternatives rejected:** Adding every feature to primary navigation; redirecting tools back to Home; overlapping More screens; claiming local community examples are publicly shared.
 * **Open work:** Verify the public deployment and report hosted-flow evidence separately. Unrelated dirty primary and About work is preserved. Shared community persistence and automated email digests remain explicitly outside this release.
+
+### Decision 39: Rebrand the ongoing workspace as Spasht
+
+* **Date:** 2026-10-14
+* **Area:** Product identity, website, account storage and ChatGPT manager
+* **Decision:** [Fact] KC selected Spasht, canonical `spasht`, for the complete ongoing-workspace rebrand. Clarity Engine remains the separate focused diagnostic; Kosh remains its own product and database.
+* **Rationale:** One consistent product identity across UI, routes, code, metadata, integrations and operational documentation, with existing member records and restored capabilities preserved.
+* **Source:** KC's implementation-task brief; restored base `80ea3c8`; read-only Platform metadata.
+* **Affected files:** `website/src/app/spasht/`, `website/src/lib/spasht/`, `website/src/app/api/spasht/`, `website/spasht-chatgpt-app/`, forward migration and `docs/spasht/`.
+* **Alternatives rejected:** Display-label-only rename; an empty replacement database; rewriting historical migrations; changing receipt hashes; silently hiding features.
+* **Open work:** Approval and coordinated hosted migration/configuration/publication followed by hosted account and isolation checks. See `docs/spasht/release-plan.md` for compatibility exceptions, cutover and rollback.

@@ -1,4 +1,4 @@
-const CACHE_NAME = "kramaniti-app-shell-v1";
+const CACHE_NAME = "kramaniti-app-shell-v2-spasht";
 const BASE_PATH = "";
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
 const IS_LOCAL_DEVELOPMENT = LOCAL_HOSTS.has(self.location.hostname);

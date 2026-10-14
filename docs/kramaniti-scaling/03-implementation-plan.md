@@ -19,7 +19,7 @@
 ## Guardrails for Stage 3
 
 - Generate any migration through the Supabase CLI after the tenancy model is approved; do not hand-create a migration filename.
-- Use a dedicated schema or clearly isolated tables rather than expanding Clarity Square by default.
+- Use a dedicated schema or clearly isolated tables rather than expanding Spasht by default.
 - Apply RLS and least-privilege grants to every exposed table; test member isolation and role-specific writes.
 - Use server-side session verification for every write API; do not trust browser-provided workspace IDs alone.
 - Preserve workflow versions and human approvals separately from advisory AI outputs.
