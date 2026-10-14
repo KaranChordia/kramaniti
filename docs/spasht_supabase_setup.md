@@ -1,0 +1,75 @@
+# Kramaniti Spasht Supabase Setup
+
+[Fact] Kramaniti Platform (`bpvbnxqtfwrsmrpvcepc`) is the canonical Supabase project for Spasht, Client Hub, HQ, and future Kramaniti platform services. Kosh remains in its own Supabase project. The local Spasht code targets `spasht`; hosted storage remains `clarity_square` until the approved migration. Both names refer to the same existing product data during the planned transition.
+
+[Recommendation] Keep application data isolated by schema. Do not create Spasht tables in `public`; use the ordered migrations in `supabase/migrations/`.
+
+## Codex MCP
+
+The Kramaniti Platform-scoped MCP connection is:
+
+```bash
+codex mcp add supabase --url https://mcp.supabase.com/mcp?project_ref=bpvbnxqtfwrsmrpvcepc&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching
+codex mcp login supabase
+```
+
+After authentication, verify the MCP connection inside Codex with `/mcp`.
+
+## Website Env Vars
+
+Do not run these lines in the Supabase SQL editor. They are not SQL.
+
+Add these to `website/.env.local` or the Vercel project environment:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL="https://bpvbnxqtfwrsmrpvcepc.supabase.co"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="your-supabase-publishable-key"
+```
+
+Do not place service-role keys in the frontend environment.
+
+## Running the migration
+
+[Constraint] Use [the release plan](spasht/release-plan.md). The new forward migration renames existing storage in place; do not create an empty schema or reapply historical migrations over an existing account database. A fresh database must run the complete ordered Platform history including the Spasht migration. Kosh has a separate history.
+
+## Database Isolation
+
+The migrations create:
+
+- `spasht.profiles`
+- `spasht.project_folders`
+- `spasht.projects`
+- `spasht.project_tasks`
+- `spasht.project_reports`
+- `spasht.context_entries`
+- `spasht.assistant_messages`
+- `spasht.assistant_memories`
+
+All Spasht tables have RLS enabled. Policies limit each authenticated user to their own rows via `auth.uid()`.
+
+[Constraint] Add `spasht` to Data API exposure while retaining every existing schema, including `kramaniti_hub` and the temporary compatibility facade. The forward migration preserves the configured list and appends `spasht`. Do not replace that list with a shortened example.
+
+## Current App Behavior
+
+- Signup is a two-step flow: email first, then username and password.
+- Usernames are stored in `spasht.profiles.username` and must be 3-24 lowercase letters, numbers, or underscores.
+- Sign-in accepts the username and password. The app resolves the username to the linked email through `spasht.resolve_login_email`; the `anon` role needs schema usage plus execute permission on this function because the lookup happens before password authentication. The resolver also repairs missing profile rows from Supabase Auth metadata when an account was created successfully but the `spasht.profiles` row did not persist.
+- If Supabase email confirmation is enabled, users may still need to confirm their email before first access. Disable email confirmation in Supabase Auth settings if the product should allow immediate username/password access.
+- Unsigned sessions continue to work locally in the browser.
+- Completed intent capture is saved as a private `spasht.projects` row for signed-in users.
+- Project rows include `project_instruction`, the saved operating context used by the project assistant and future project output.
+- New Projects-created rows are seeded from the "what is this project about?" field; assistant-created rows auto-fill the instruction from the assistant conversation.
+- Auto-built and manual tasks are stored in `spasht.project_tasks` and remain user-owned through RLS.
+- Project folders are stored in `spasht.project_folders`; projects reference them through `spasht.projects.folder_id`.
+- Clarity Engine blueprint reports are stored in `spasht.project_reports`, linked to the originating project. The project folder relationship is inherited through `spasht.projects.folder_id`.
+- The folder move policy only allows a project to be assigned to a folder owned by the same signed-in user.
+- Workspace realtime is enabled for `projects`, `project_folders`, `project_tasks`, `project_reports`, `context_entries`, `assistant_messages`, and `assistant_memories`.
+- The dashboard listens for workspace changes and refreshes project counts, folders, assistant memories, and context entries without requiring a page refresh.
+- The dedicated Spasht Assistant stores signed-in conversation turns in `spasht.assistant_messages`.
+- Main Spasht Assistant thread identity and summary titles are stored in `spasht.assistant_messages.metadata`, with project-specific threads still scoped by `project_id`.
+- Assistant response-style preferences are stored on `spasht.profiles.assistant_settings`; these are behavior tweaks only, not replacement system instructions.
+- Project-specific assistant turns use `spasht.assistant_messages.project_id`, so each project can keep a separate assistant thread while preserving common Spasht assistant behavior.
+- User-visible assistant memory notes are stored in `spasht.assistant_memories` and can be archived from the Memory panel.
+- The Spasht Assistant can create new private projects from user requests; those projects still use `spasht.projects`.
+- Before answering, the Spasht Assistant refreshes the signed-in workspace and receives folder names, projects, saved context entries, project questions/actions, selected project, and memory notes.
+- The Spasht to Clarity Engine handoff remains browser-local and one-time during diagnosis. Project reports are saved only when the user explicitly selects "Save all to project" after blueprint generation.

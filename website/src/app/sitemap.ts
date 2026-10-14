@@ -19,7 +19,7 @@ const STATIC_ROUTES: Array<{
   { path: '/founder/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/clarity-engine/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/kosh/', lastModified: '2026-10-12', changeFrequency: 'weekly', priority: 0.7 },
-  { path: '/clarity-square/', lastModified: '2026-08-17', changeFrequency: 'weekly', priority: 0.75 },
+  { path: '/spasht/', lastModified: '2026-08-17', changeFrequency: 'weekly', priority: 0.75 },
   { path: '/work/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/work/nexocean/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/work/maitri/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.6 },

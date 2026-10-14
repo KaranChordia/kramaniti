@@ -1,4 +1,5 @@
 'use client';
+import { handoffStorageKey, legacyHandoffKeys, readCompatibleStorage, clearCompatibleStorage, normalizeProjectPayload } from '@/lib/spasht/compatibility';
 
 import Link from 'next/link';
 import { startTransition, useDeferredValue, useEffect, useRef, useState } from 'react';
@@ -49,7 +50,7 @@ type SessionState = {
   >;
   source: 'groq' | 'local';
   mockScenarioId?: string;
-  squareProject?: {
+  spashtProject?: {
     projectId: string;
     folderId?: string | null;
     projectTitle: string;
@@ -59,13 +60,12 @@ type SessionState = {
 };
 
 const STORAGE_KEY = 'kramaniti-clarity-engine-v2';
-const SQUARE_HANDOFF_KEY = 'kramaniti-clarity-square-engine-handoff-v1';
-const LEGACY_SQUARE_HANDOFF_KEY = 'kramaniti-clarity-circle-engine-handoff-v1';
+const SPASHT_HANDOFF_KEY = handoffStorageKey;
 
-type ClaritySquareHandoff = {
+type SpashtHandoff = {
   version: 1;
   createdAt: string;
-  source?: 'clarity_square_project' | 'clarity_square_context';
+  source?: 'spasht_project' | 'spasht_context';
   projectId?: string;
   folderId?: string | null;
   projectTitle?: string;
@@ -122,10 +122,10 @@ const createInitialSession = (): SessionState => {
 const cleanHandoffValue = (value: unknown) =>
   typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
 
-const isClaritySquareHandoff = (value: unknown): value is ClaritySquareHandoff => {
+const isSpashtHandoff = (value: unknown): value is SpashtHandoff => {
   if (!value || typeof value !== 'object') return false;
 
-  const candidate = value as Partial<ClaritySquareHandoff>;
+  const candidate = value as Partial<SpashtHandoff>;
 
   return (
     candidate.version === 1 &&
@@ -135,31 +135,29 @@ const isClaritySquareHandoff = (value: unknown): value is ClaritySquareHandoff =
   );
 };
 
-const readClaritySquareHandoff = (): ClaritySquareHandoff | null => {
+const readSpashtHandoff = (): SpashtHandoff | null => {
   if (typeof window === 'undefined') return null;
 
   try {
     const stored =
-      window.localStorage.getItem(SQUARE_HANDOFF_KEY) || window.localStorage.getItem(LEGACY_SQUARE_HANDOFF_KEY);
+      readCompatibleStorage(window.localStorage, SPASHT_HANDOFF_KEY, legacyHandoffKeys);
     if (!stored) return null;
 
     const parsed = JSON.parse(stored) as unknown;
-    window.localStorage.removeItem(SQUARE_HANDOFF_KEY);
-    window.localStorage.removeItem(LEGACY_SQUARE_HANDOFF_KEY);
+    clearCompatibleStorage(window.localStorage, SPASHT_HANDOFF_KEY, legacyHandoffKeys);
 
-    return isClaritySquareHandoff(parsed) ? parsed : null;
+    return isSpashtHandoff(parsed) ? parsed : null;
   } catch {
-    window.localStorage.removeItem(SQUARE_HANDOFF_KEY);
-    window.localStorage.removeItem(LEGACY_SQUARE_HANDOFF_KEY);
+    clearCompatibleStorage(window.localStorage, SPASHT_HANDOFF_KEY, legacyHandoffKeys);
     return null;
   }
 };
 
-const buildSquareHandoffAnswer = (handoff: ClaritySquareHandoff) => {
+const buildSpashtHandoffAnswer = (handoff: SpashtHandoff) => {
   const lines = [
     handoff.projectTitle ? `Project: ${cleanHandoffValue(handoff.projectTitle)}` : '',
     handoff.folderName ? `Folder: ${cleanHandoffValue(handoff.folderName)}` : '',
-    `Clarity Square path: ${cleanHandoffValue(handoff.trackLabel) || handoff.track}`,
+    `Spasht path: ${cleanHandoffValue(handoff.trackLabel) || handoff.track}`,
     `Intent: ${cleanHandoffValue(handoff.headline)}`,
     handoff.projectInstruction ? `Project instruction: ${cleanHandoffValue(handoff.projectInstruction)}` : '',
     `Context: ${cleanHandoffValue(handoff.context)}`,
@@ -171,9 +169,9 @@ const buildSquareHandoffAnswer = (handoff: ClaritySquareHandoff) => {
   return lines.join('\n');
 };
 
-const createSessionFromSquareHandoff = (handoff: ClaritySquareHandoff): SessionState => {
+const createSessionFromSpashtHandoff = (handoff: SpashtHandoff): SessionState => {
   const base = createInitialSession();
-  const handoffAnswer = buildSquareHandoffAnswer(handoff);
+  const handoffAnswer = buildSpashtHandoffAnswer(handoff);
   const audienceAnswer = cleanHandoffValue(handoff.audience);
   const phase1Answer = [
     cleanHandoffValue(handoff.headline),
@@ -196,7 +194,7 @@ const createSessionFromSquareHandoff = (handoff: ClaritySquareHandoff): SessionS
     ...base,
     answers,
     assistantReply:
-      'I have the Clarity Square context, so we do not need to repeat the starting point. Next, I need to understand how the work happens today.',
+      'I have the Spasht context, so we do not need to repeat the starting point. Next, I need to understand how the work happens today.',
     currentQuestion: nextQuestion.nextQuestion,
     currentQuestionKey: 'phase3_current_workflow',
     currentQuestionLabel: nextQuestion.nextQuestionLabel || 'How It Works Now',
@@ -211,12 +209,12 @@ const createSessionFromSquareHandoff = (handoff: ClaritySquareHandoff): SessionS
       {
         role: 'assistant',
         content:
-          'I have the Clarity Square context, so we do not need to repeat the starting point. Next, I need to understand how the work happens today.',
+          'I have the Spasht context, so we do not need to repeat the starting point. Next, I need to understand how the work happens today.',
         createdAt: new Date().toISOString(),
       },
     ],
     contextLog: [
-      cleanHandoffValue(handoff.summary) || 'Clarity Square context added to this session.',
+      cleanHandoffValue(handoff.summary) || 'Spasht context added to this session.',
       cleanHandoffValue(handoff.blocker) ? `Current blocker: ${cleanHandoffValue(handoff.blocker)}` : '',
       cleanHandoffValue(handoff.outcome) ? `Desired outcome: ${cleanHandoffValue(handoff.outcome)}` : '',
     ].filter(Boolean),
@@ -225,7 +223,7 @@ const createSessionFromSquareHandoff = (handoff: ClaritySquareHandoff): SessionS
       statusLabel: 'Context ready',
       clarityContext:
         cleanHandoffValue(handoff.summary) ||
-        'Your starting point from Clarity Square is ready. The next step is to see how the work happens today.',
+        'Your starting point from Spasht is ready. The next step is to see how the work happens today.',
       workflowDirection:
         'Next, we will map the current path, find the friction, separate people-led decisions from AI support, and clarify what should be communicated.',
       presenceIdeas: [
@@ -234,10 +232,10 @@ const createSessionFromSquareHandoff = (handoff: ClaritySquareHandoff): SessionS
         'Let communication follow the clarified work.',
       ],
       signalTrail: ['Starting point', 'How work happens', 'What to fix'],
-      focusTags: ['square', handoff.track, 'private'],
+      focusTags: ['spasht', handoff.track, 'private'],
     },
     source: 'local',
-    squareProject:
+    spashtProject:
       handoff.projectId && handoff.projectTitle
         ? {
             projectId: handoff.projectId,
@@ -258,7 +256,7 @@ const readStoredSession = (): SessionState => {
 
     if (!stored) return createInitialSession();
 
-    const parsed = JSON.parse(stored) as Partial<SessionState>;
+    const parsed = normalizeProjectPayload(JSON.parse(stored)) as Partial<SessionState>;
     const base = createInitialSession();
 
     return {
@@ -415,10 +413,10 @@ export default function ClarityEnginePage() {
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      const squareHandoff = readClaritySquareHandoff();
-      if (squareHandoff) {
-        setSession(createSessionFromSquareHandoff(squareHandoff));
-        setStatusText('Clarity Square context ready.');
+      const spashtHandoff = readSpashtHandoff();
+      if (spashtHandoff) {
+        setSession(createSessionFromSpashtHandoff(spashtHandoff));
+        setStatusText('Spasht context ready.');
         setIsInputActive(true);
       } else {
         setSession(readStoredSession());
@@ -511,7 +509,7 @@ export default function ClarityEnginePage() {
             },
             source: envelope.source,
             mockScenarioId: prev.mockScenarioId,
-            squareProject: prev.squareProject ?? null,
+            spashtProject: prev.spashtProject ?? null,
           };
         });
       });
@@ -986,7 +984,7 @@ export default function ClarityEnginePage() {
                         aiTasks: session.aiTasks,
                         contextLog: session.contextLog,
                         mockScenarioId: session.mockScenarioId,
-                        squareProject: session.squareProject ?? null,
+                        spashtProject: session.spashtProject ?? null,
                       };
                       sessionStorage.setItem('kramaniti-blueprint-session', JSON.stringify(payload));
                       router.push('/clarity-engine/blueprint');

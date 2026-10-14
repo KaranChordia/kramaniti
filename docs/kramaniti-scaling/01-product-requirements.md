@@ -43,7 +43,7 @@ The workflow must show:
 
 ## Explicit non-requirements
 
-This slice does not implement agent building/orchestration, automatic workflow execution, process mining, external actions, ATS/CRM integrations, customer-data ingestion, payments, pricing, marketplace features, compliance enforcement, public product navigation, or broad Clarity Square changes.
+This slice does not implement agent building/orchestration, automatic workflow execution, process mining, external actions, ATS/CRM integrations, customer-data ingestion, payments, pricing, marketplace features, compliance enforcement, public product navigation, or broad Spasht changes.
 
 ## Access and data requirements
 

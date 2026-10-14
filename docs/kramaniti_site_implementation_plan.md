@@ -55,7 +55,7 @@ Intentionally excluded from public marketing copy scope:
 
 - Private or owner/client surfaces: `/hq`, `/client-hub`.
 - Internal or prototype workbenches: `/KCS`, `/studio`, `/design-studio`, `/blocks`, `/agent-simulation`, `/brand-blue-preview`, and `/workflow-intelligence`.
-- Product UI outside the requested marketing journey: `/clarity-square`, except for ensuring the public route boundary is not misrepresented elsewhere.
+- Product UI outside the requested marketing journey: `/spasht`, except for ensuring the public route boundary is not misrepresented elsewhere.
 - Article bodies, research titles, citations, and factual claims in `website/src/data/insights.ts`.
 
 ### Implementation checklist
@@ -414,89 +414,89 @@ Related files:
 - `website/src/lib/kramaniti-assistant/knowledge.ts`
 - `docs/kcs_zero_copy_motion_proposal.md`
 
-## 10.5 Kramaniti Clarity Square
+## 10.5 Kramaniti Spasht
 
-2026-06-22 update: the website now includes a public `/clarity-square` route for Kramaniti Clarity Square, a free AI-assisted clarity ecosystem for founders and early builders.
+2026-06-22 update: the website now includes a public `/spasht` route for Kramaniti Spasht, a free AI-assisted clarity ecosystem for founders and early builders.
 
-[Recommendation] Clarity Square should not be positioned as an AI social network. It should behave as an ongoing clarity network: private memory, public learning, weekly AI-assisted reflection, and clarity briefs that can lead serious users toward the AI Workflow Audit or deeper Kramaniti services.
+[Recommendation] Spasht should not be positioned as an AI social network. It should behave as an ongoing clarity network: private memory, public learning, weekly AI-assisted reflection, and clarity briefs that can lead serious users toward the AI Workflow Audit or deeper Kramaniti services.
 
 [Fact] The current implementation includes:
 
-- A standalone route at `/clarity-square`.
+- A standalone route at `/spasht`.
 - A premium but simple sequential app flow rather than a dense all-in-one dashboard.
 - A modern entry screen with simulated sign in / account creation for the v1 prototype.
 - A two-track selector: Building a business / Founder Track, and Exploring an idea / Builder Track.
-- A Square community surface with two contribution paths: founders can post problem statements as threads, and solopreneurs can share work, ideas, prototypes, or useful signals.
-- The first Square feed implementation is local-first, with seeded founder problem threads and solopreneur shares for product validation before community persistence is added.
-- Account creation now treats the selected path as the user's Square role. Founder accounts get the founder problem-statement composer and founder-owned project/context path; solopreneur accounts get the work/idea sharing composer and solopreneur-owned project/context path.
+- A Spasht community surface with two contribution paths: founders can post problem statements as threads, and solopreneurs can share work, ideas, prototypes, or useful signals.
+- The first Spasht feed implementation is local-first, with seeded founder problem threads and solopreneur shares for product validation before community persistence is added.
+- Account creation now treats the selected path as the user's Spasht role. Founder accounts get the founder problem-statement composer and founder-owned project/context path; solopreneur accounts get the work/idea sharing composer and solopreneur-owned project/context path.
 - A focused intent-capture screen that asks for the one-line intent, current context, audience, blocker, and desired outcome.
 - A private context workspace that saves the user's starting point locally, then shows the system's understanding, next questions, and suggested sequence.
 - Supabase-ready authentication with two-step signup: email first, then username/password, plus private project storage when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` are configured. The legacy anon key remains a compatibility fallback.
-- Dedicated Supabase migrations for the isolated `clarity_square` schema so Clarity Square data stays separate from other Kramaniti services in Kosh.
+- Dedicated Supabase migrations for the isolated `spasht` schema so Spasht data stays separate from other Kramaniti services in Kosh.
 - A profile/settings panel placeholder for signed-in users, showing username, email, account, settings, and projects menu surfaces for future expansion.
-- A browser-local handoff into `/clarity-engine` so the Engine can use Clarity Square's saved starting context and continue with the current workflow question instead of asking the user to repeat the same initial details.
-- A dedicated Clarity Square Assistant available only inside `/clarity-square`, separate from the global public Kramaniti assistant.
-- Square Assistant conversations and user-visible memory notes are stored in `clarity_square.assistant_messages` and `clarity_square.assistant_memories` for signed-in users, with browser-local fallback for local sessions.
-- The Square Assistant uses the member's supplied context, saved projects, and memory notes, plus Kramaniti's curated repository context, to answer in a Clarity Square-specific way.
-- The Square Assistant can create new private projects from a user query while keeping project storage under `clarity_square.projects`.
+- A browser-local handoff into `/clarity-engine` so the Engine can use Spasht's saved starting context and continue with the current workflow question instead of asking the user to repeat the same initial details.
+- A dedicated Spasht Assistant available only inside `/spasht`, separate from the global public Kramaniti assistant.
+- Spasht Assistant conversations and user-visible memory notes are stored in `spasht.assistant_messages` and `spasht.assistant_memories` for signed-in users, with browser-local fallback for local sessions.
+- The Spasht Assistant uses the member's supplied context, saved projects, and memory notes, plus Kramaniti's curated repository context, to answer in a Spasht-specific way.
+- The Spasht Assistant can create new private projects from a user query while keeping project storage under `spasht.projects`.
 - The Projects section now uses a Finder-style workspace with folder navigation, project rows, preview details, search, folder creation, and move-to-folder controls.
-- Signed-in project folders are stored in `clarity_square.project_folders`; projects reference folders through `clarity_square.projects.folder_id`.
+- Signed-in project folders are stored in `spasht.project_folders`; projects reference folders through `spasht.projects.folder_id`.
 - Projects now include a project-level instruction field that acts as the operating context for future project output.
 - New projects can be created directly from Projects by answering what the project is about; assistant-created projects auto-fill that instruction from the assistant conversation.
-- Projects now support auto-built starter tasks, manually added tasks, and a selected-project assistant thread that reuses the Clarity Square assistant behavior while staying scoped to the project instruction and task context.
-- The Square Assistant now runs one shared intelligent-action path across the main assistant and selected-project assistant: project drafts, folder drafts, task drafts, and memory drafts are saved through the same workspace executor, then reflected in Projects/Memory state.
-- Signed-in project tasks are stored in `clarity_square.project_tasks`; project assistant messages continue using `clarity_square.assistant_messages.project_id`.
-- Clarity Square now subscribes to realtime workspace changes for projects, folders, context entries, assistant messages, and assistant memories.
-- The Square Assistant refreshes the signed-in workspace before answering so manually created projects, folders, project entries, and assistant-created projects use the same context path.
-- The Square Assistant supports multiple main chat threads through assistant message metadata, with each main thread treated as a separate conversation session. Project-specific assistant threads remain scoped separately by `project_id`.
+- Projects now support auto-built starter tasks, manually added tasks, and a selected-project assistant thread that reuses the Spasht assistant behavior while staying scoped to the project instruction and task context.
+- The Spasht Assistant now runs one shared intelligent-action path across the main assistant and selected-project assistant: project drafts, folder drafts, task drafts, and memory drafts are saved through the same workspace executor, then reflected in Projects/Memory state.
+- Signed-in project tasks are stored in `spasht.project_tasks`; project assistant messages continue using `spasht.assistant_messages.project_id`.
+- Spasht now subscribes to realtime workspace changes for projects, folders, context entries, assistant messages, and assistant memories.
+- The Spasht Assistant refreshes the signed-in workspace before answering so manually created projects, folders, project entries, and assistant-created projects use the same context path.
+- The Spasht Assistant supports multiple main chat threads through assistant message metadata, with each main thread treated as a separate conversation session. Project-specific assistant threads remain scoped separately by `project_id`.
 - After five completed main assistant exchanges, the thread title should shift from the early prompt label to a compact summary title stored in assistant message metadata.
 - The Assistant surface uses an action-first assistant menu bar below the route navigation. Keep it as icon + button text only; do not add visible instruction labels to that bar.
-- Assistant settings may collect user response-style preferences such as directness, question style, or reply structure. Treat these as behavior/personality tweaks only, never as replacement system instructions or permission to override Clarity Square boundaries.
-- Clarity Square now includes a Loop Board section with five user-facing loops: Signal Loop, Project Loop, Task Loop, Reflection Loop, and Brief Loop. These are not presented as technical internal Kramaniti agents; they are user-visible operating cycles for seeing what is pending, working, waiting for approval, and completed.
+- Assistant settings may collect user response-style preferences such as directness, question style, or reply structure. Treat these as behavior/personality tweaks only, never as replacement system instructions or permission to override Spasht boundaries.
+- Spasht now includes a Loop Board section with five user-facing loops: Signal Loop, Project Loop, Task Loop, Reflection Loop, and Brief Loop. These are not presented as technical internal Kramaniti agents; they are user-visible operating cycles for seeing what is pending, working, waiting for approval, and completed.
 - The Loop Board UX is a guided loop runner, not a dense dashboard or creation menu. Selecting a loop triggers a short context-gathering state that refreshes signed-in workspace data when available, shows the context sources being read, then reveals a focused scan report for that loop.
 - Loop Board state is derived from existing workspace data: projects, folders, project tasks, assistant pending actions, memories, and context entries. Project Loop scans saved projects and task load; Signal, Task, Reflection, and Brief loops scan their relevant context before offering source navigation or assistant interpretation.
-- Clarity Square includes a dedicated Tasks page in the main navigation. It groups `clarity_square.project_tasks` by project, includes project/status filters, shows assistant-created, auto-generated, and manual tasks in the same manager, and lets users add or complete tasks without leaving the task surface.
+- Spasht includes a dedicated Tasks page in the main navigation. It groups `spasht.project_tasks` by project, includes project/status filters, shows assistant-created, auto-generated, and manual tasks in the same manager, and lets users add or complete tasks without leaving the task surface.
 - The Start screen remains available as the first-time entry/auth surface, but it is no longer a persistent main navigation item. The navigation slot is used for Tasks.
 - Memory includes a Delete Data section listing saved context, projects, tasks, memories, folders, and assistant threads. Deletes are item-level, confirmation-gated, update local UI immediately, and persist through the existing signed-in Supabase tables when available.
-- Projects now have a project-centered Get Clarity path. The action passes the selected project id, folder id, title, folder name, project instruction, and context into Clarity Engine. When the Engine blueprint agents finish, the Blueprint page can save the Strategy, Systems, and Presence reports as individual `clarity_square.project_reports` records under the originating project.
+- Projects now have a project-centered Get Clarity path. The action passes the selected project id, folder id, title, folder name, project instruction, and context into Clarity Engine. When the Engine blueprint agents finish, the Blueprint page can save the Strategy, Systems, and Presence reports as individual `spasht.project_reports` records under the originating project.
 - New manually created and assistant-created projects must resolve to a folder before being saved. When no explicit folder is selected, the app creates or reuses a folder named from the project title so the project does not remain unfiled by default.
 - A progressive product model where future digest, public-learning, and Clarity Brief surfaces should appear after context is captured instead of being visible all at once.
 - Navigation and sitemap entries for the new route.
 
 [Recommendation] 2026-06-25 Supabase wiring backlog:
 
-- Square/community posts, replies, interest counts, and feed filters are still local-first. Add dedicated `clarity_square` tables before treating Square activity as cross-device or durable account data.
-- Digest rhythm and "keep vault entries private by default" style settings are currently UI-level preferences. Persist them in `clarity_square.profiles.assistant_settings` or a dedicated preferences table before using them as product behavior.
+- Spasht/community posts, replies, interest counts, and feed filters are still local-first. Add dedicated `spasht` tables before treating Spasht activity as cross-device or durable account data.
+- Digest rhythm and "keep vault entries private by default" style settings are currently UI-level preferences. Persist them in `spasht.profiles.assistant_settings` or a dedicated preferences table before using them as product behavior.
 - Assistant pending approvals are transient UI state. Approved actions write through the shared workspace executor, but the approval card itself can be lost on reload. Persist pending assistant actions if approval workflows need to survive refreshes or move across devices.
 - Empty assistant thread shells are local until a message exists. If blank named threads must be durable, add a thread table instead of relying only on `assistant_messages.metadata.thread_id`.
 - Loop Board scans read existing workspace data but do not store loop run history, generated scan summaries, or completion records. Add loop-run persistence only if users need audit history or recurring loop outputs.
 - The active saved signal/current context object is local UI state. Persisted projects and context entries can already be deleted through Memory, but the "saved signal" control should either map clearly to those records or remain framed as clearing the current local workspace view.
-- The Clarity Square to Clarity Engine handoff remains browser-local and one-time while the diagnostic session is in progress. Project-originated blueprint outputs are now persisted only when the user chooses "Save all to project".
+- The Spasht to Clarity Engine handoff remains browser-local and one-time while the diagnostic session is in progress. Project-originated blueprint outputs are now persisted only when the user chooses "Save all to project".
 - Signed-out local session data is not migrated into Supabase on sign-in. Add an explicit import flow before promising continuity from local sessions into accounts.
 
-[Constraint] Clarity Square must stay distinct from Clarity Engine. Clarity Engine is the focused single diagnostic session. Clarity Square is the ongoing ecosystem layer with member memory, community engagement, and recurring progress rhythm.
+[Constraint] Spasht must stay distinct from Clarity Engine. Clarity Engine is the focused single diagnostic session. Spasht is the ongoing ecosystem layer with member memory, community engagement, and recurring progress rhythm.
 
 [Constraint] The social layer should be founder/solopreneur-focused. Founders contribute real problem statements; solopreneurs contribute work, ideas, and experiments. It should not become a generic engagement feed.
 
 [Constraint] Founder and solopreneur capabilities should remain role-gated by the account's saved `preferred_track`. Do not show founder problem-posting controls to solopreneur accounts, and do not show solopreneur share-posting controls to founder accounts unless a newer product decision explicitly merges those roles.
 
-[Constraint] Clarity Square screens should not spend meaningful viewport space on sections that only explain the product. Prefer effective UI density: composers, threads, project/task surfaces, filters, actions, and stateful workspace objects. Explanatory copy should be compact and embedded inside functional controls or empty states.
+[Constraint] Spasht screens should not spend meaningful viewport space on sections that only explain the product. Prefer effective UI density: composers, threads, project/task surfaces, filters, actions, and stateful workspace objects. Explanatory copy should be compact and embedded inside functional controls or empty states.
 
-[Constraint] V1 remains free. Auth-backed storage is allowed only inside the isolated `clarity_square` schema, with RLS scoped to `auth.uid()`. Do not add payments, public claims, external tool recommendations, emails, or market updates without a newer implementation decision and privacy/storage model.
+[Constraint] V1 remains free. Auth-backed storage is allowed only inside the isolated `spasht` schema, with RLS scoped to `auth.uid()`. Do not add payments, public claims, external tool recommendations, emails, or market updates without a newer implementation decision and privacy/storage model.
 
-[Constraint] The Clarity Square UX should stay sequential by default: entry, path selection, focused intent capture, then saved-context development. Do not return to an all-panels-at-once dashboard unless the founder explicitly asks for that mode again.
+[Constraint] The Spasht UX should stay sequential by default: entry, path selection, focused intent capture, then saved-context development. Do not return to an all-panels-at-once dashboard unless the founder explicitly asks for that mode again.
 
-[Constraint] The Clarity Square to Clarity Engine connection remains a temporary browser-local handoff. Do not treat the handoff itself as CRM storage or public sharing.
+[Constraint] The Spasht to Clarity Engine connection remains a temporary browser-local handoff. Do not treat the handoff itself as CRM storage or public sharing.
 
-[Constraint] Supabase-backed Clarity Square storage must remain under the `clarity_square` schema with RLS policies scoped to `auth.uid()`. Do not reuse recruiting tables or add Clarity Square data to existing recruiting-company schemas.
+[Constraint] Supabase-backed Spasht storage must remain under the `spasht` schema with RLS policies scoped to `auth.uid()`. Do not reuse recruiting tables or add Spasht data to existing recruiting-company schemas.
 
 Related files:
 
-- `website/src/app/clarity-square/page.tsx`
-- `website/src/app/clarity-square/ClaritySquare.tsx`
-- `website/src/app/clarity-square/ClaritySquare.module.css`
-- `website/src/app/api/clarity-square/assistant/route.ts`
-- `website/src/lib/clarity-square/supabase.ts`
+- `website/src/app/spasht/page.tsx`
+- `website/src/app/spasht/Spasht.tsx`
+- `website/src/app/spasht/Spasht.module.css`
+- `website/src/app/api/spasht/assistant/route.ts`
+- `website/src/lib/spasht/supabase.ts`
 - `supabase/migrations/20260623060000_clarity_square_schema.sql`
 - `supabase/migrations/20260623121000_clarity_square_assistant_memory.sql`
 - `supabase/migrations/20260623143000_clarity_square_project_folders.sql`
@@ -504,7 +504,7 @@ Related files:
 - `supabase/migrations/20260625120000_clarity_square_project_reports.sql`
 - `supabase/migrations/20260624111719_clarity_square_project_tasks.sql`
 - `supabase/migrations/20260624130000_clarity_square_assistant_settings.sql`
-- `docs/clarity_square_supabase_setup.md`
+- `docs/spasht_supabase_setup.md`
 - `website/src/components/layout/Navbar.tsx`
 - `website/src/app/sitemap.ts`
 
@@ -550,7 +550,7 @@ Related files:
 - a private `noindex` route that is absent from the sitemap and does not mount the global public assistant.
 - a JWT-protected Supabase Edge Function that keeps privileged Auth administration out of the website runtime.
 
-[Constraint] Client Hub is a private delivery system, not a public Clarity Square extension. Keep its authentication, storage, assistant actions, and repository visibility rules separate.
+[Constraint] Client Hub is a private delivery system, not a public Spasht extension. Keep its authentication, storage, assistant actions, and repository visibility rules separate.
 
 [Constraint] Supabase's secret or service-role key remains inside the hosted Edge Function runtime. Client access must remain membership-scoped through RLS, and internal records must not become visible to client-role members.
 

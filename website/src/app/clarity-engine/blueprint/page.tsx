@@ -1,4 +1,5 @@
 'use client';
+import { normalizeProjectPayload } from '@/lib/spasht/compatibility';
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -9,7 +10,7 @@ import BlueprintStreamer from '../BlueprintStreamer';
 import { type BlueprintRequestBody } from '@/lib/clarity-engine/blueprintStreamer';
 import { useAudioEngine } from '@/hooks/useAudioEngine';
 import ReportReader from './ReportReader';
-import { getClaritySquareSupabase, type ClaritySquareProjectReport } from '@/lib/clarity-square/supabase';
+import { getSpashtSupabase, type SpashtProjectReport } from '@/lib/spasht/supabase';
 
 interface ActiveReport {
   agentId: string;
@@ -18,7 +19,7 @@ interface ActiveReport {
   icon: React.ReactNode;
 }
 
-type ReportType = ClaritySquareProjectReport['report_type'];
+type ReportType = SpashtProjectReport['report_type'];
 
 const REPORT_TITLES: Record<ReportType, string> = {
   strategy: 'What Matters and Why',
@@ -57,7 +58,7 @@ export default function BlueprintPage() {
 
       if (sessionData) {
         try {
-          setPayload(JSON.parse(sessionData) as BlueprintRequestBody);
+          setPayload(normalizeProjectPayload(JSON.parse(sessionData)) as BlueprintRequestBody);
         } catch (err) {
           console.error("Failed to parse blueprint session data", err);
         }
@@ -76,10 +77,10 @@ export default function BlueprintPage() {
   }, [hasLoadedPayload, payload, router]);
 
   useEffect(() => {
-    if (!hasLoadedPayload || !payload || payload.squareProject?.projectId) return;
+    if (!hasLoadedPayload || !payload || payload.spashtProject?.projectId) return;
 
     const loadSaveProjects = async () => {
-      const supabase = getClaritySquareSupabase();
+      const supabase = getSpashtSupabase();
 
       if (!supabase) {
         setHasLoadedSaveProjects(true);
@@ -95,7 +96,7 @@ export default function BlueprintPage() {
 
       const [projectResult, folderResult] = await Promise.all([
         supabase
-          .schema('clarity_square')
+          .schema('spasht')
           .from('projects')
           .select('id,title,folder_id')
           .eq('user_id', userData.user.id)
@@ -103,7 +104,7 @@ export default function BlueprintPage() {
           .order('updated_at', { ascending: false })
           .limit(40),
         supabase
-          .schema('clarity_square')
+          .schema('spasht')
           .from('project_folders')
           .select('id,name')
           .eq('user_id', userData.user.id)
@@ -111,7 +112,7 @@ export default function BlueprintPage() {
       ]);
 
       if (projectResult.error) {
-        setSaveStatus('Saved projects could not be loaded. Return to Clarity Square and try again.');
+        setSaveStatus('Saved projects could not be loaded. Return to Spasht and try again.');
         setHasLoadedSaveProjects(true);
         return;
       }
@@ -149,12 +150,12 @@ export default function BlueprintPage() {
     }));
   }, []);
 
-  const attachedSaveTarget = payload?.squareProject?.projectId
+  const attachedSaveTarget = payload?.spashtProject?.projectId
     ? {
-        projectId: payload.squareProject.projectId,
-        folderId: payload.squareProject.folderId ?? null,
-        projectTitle: payload.squareProject.projectTitle,
-        folderName: payload.squareProject.folderName || 'Project save',
+        projectId: payload.spashtProject.projectId,
+        folderId: payload.spashtProject.folderId ?? null,
+        projectTitle: payload.spashtProject.projectTitle,
+        folderName: payload.spashtProject.folderName || 'Project save',
       }
     : null;
   const selectedSaveProject = saveProjectOptions.find((project) => project.projectId === selectedSaveProjectId) ?? null;
@@ -175,7 +176,7 @@ export default function BlueprintPage() {
       return;
     }
 
-    const supabase = getClaritySquareSupabase();
+    const supabase = getSpashtSupabase();
     if (!supabase) {
       setSaveStatus('Project report storage is not available.');
       return;
@@ -209,7 +210,7 @@ export default function BlueprintPage() {
       },
     }));
 
-    const { error: reportError } = await supabase.schema('clarity_square').from('project_reports').insert(rows);
+    const { error: reportError } = await supabase.schema('spasht').from('project_reports').insert(rows);
 
     if (reportError) {
       setIsSavingReports(false);
@@ -217,7 +218,7 @@ export default function BlueprintPage() {
       return;
     }
 
-    await supabase.schema('clarity_square').from('context_entries').insert({
+    await supabase.schema('spasht').from('context_entries').insert({
       project_id: saveTarget.projectId,
       user_id: user.id,
       entry_type: 'brief',
