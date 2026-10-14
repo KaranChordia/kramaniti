@@ -1,6 +1,6 @@
 # Kosh template discovery assistant
 
-Status: implemented locally on `codex/kosh-template-assistant`, based on `origin/main` at `07c2a0c`. Public release awaits KC approval. Lead: Website Steward, with Documentation Steward and Proof and Governance Auditor responsibilities applied within this task.
+Status: implemented and verified on `codex/kosh-template-assistant`, based on `origin/main` at `07c2a0c`. KC authorized reconciling the outstanding Kosh commits and PRs on 14 October 2026. Hosted verification remains required. Lead: Website Steward, with Documentation Steward and Proof and Governance Auditor responsibilities applied within this task.
 
 ## User outcome
 
@@ -31,7 +31,7 @@ A visitor describes the work they need help with, receives a useful starting tem
 
 [Fact] Both the connected Vercel tool and the CLI returned 403 for the existing Kramaniti project (`prj_RrU88c8YiensRewhArjr2T4YoaXQ`, owning team `team_1vMT59KOyt37gczEFWMoicRX`). A CLI scope check also failed. Do not create a lookalike project or change teams.
 
-[Fact] The latest remote `main` commit has a successful GitHub Vercel status. [Recommendation] After KC approves the scoped release, use a focused PR and the existing GitHub–Vercel integration. Confirm its resulting deployment environment and public alias rather than assuming the successful check means production.
+[Fact] The pre-integration remote `main` commit has a successful GitHub Vercel status. KC subsequently authorized closing the outstanding Kosh commits and PRs. Use a focused PR and the existing GitHub–Vercel integration. Confirm its resulting deployment environment and public alias rather than assuming the successful check means production.
 
 [Unverified] The production presence of `GROQ_API_KEY`, the new route's real-Origin behaviour on the public domain, and distributed platform abuse controls could not be inspected with current Vercel access. Existing local provider configuration was used only for local verification. No environment values, accounts or databases were changed.
 
