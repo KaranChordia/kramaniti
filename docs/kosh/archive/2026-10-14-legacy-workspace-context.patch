@@ -1,0 +1,63 @@
+diff --git a/website/src/app/library/workspace.module.css b/website/src/app/library/workspace.module.css
+index 4b90fe0..c0ddab8 100644
+--- a/website/src/app/library/workspace.module.css
++++ b/website/src/app/library/workspace.module.css
+@@ -42,6 +42,23 @@
+ .themeToggle { display:inline-flex; align-items:center; gap:8px; min-height:40px; padding:0 16px; border:1px solid var(--line); border-radius:6px; background:var(--canvas); color:var(--ink); font-size:12px; font-weight:500; cursor:pointer; transition:all .2s ease; }
+ .themeToggle:hover { border-color:var(--gold); background:rgba(201,168,76,.05); }
+ 
++/* --- Private context profile --- */
++.settingsView { align-items:stretch; justify-content:flex-start; overflow-y:auto; text-align:left; }
++.settingsIntro { width:100%; max-width:900px; margin:0 auto; }
++.settingsIntro h2 { max-width:18ch; font-size:clamp(28px,4vw,48px); letter-spacing:-.06em; line-height:1; }
++.settingsIntro > p { max-width:62ch; margin-top:14px; }
++.contextForm { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; width:100%; max-width:900px; margin:8px auto 0; }
++.contextForm > label { display:grid; gap:12px; min-width:0; padding:20px; border:1px solid var(--line); background:var(--surface-deep); }
++.contextForm label > span { display:grid; gap:5px; }
++.contextForm strong { color:var(--ink); font-size:14px; font-weight:600; }
++.contextForm small { color:var(--muted); font-size:11px; line-height:1.5; }
++.contextForm textarea { width:100%; min-height:180px; resize:vertical; padding:14px; border:1px solid var(--line); outline:0; background:var(--canvas); color:var(--ink); font:inherit; font-size:13px; line-height:1.6; }
++.contextForm textarea:focus { border-color:rgba(201,168,76,.72); }
++.contextFormFooter { grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between; gap:18px; }
++.contextFormFooter p { margin:0; color:var(--muted); font-size:12px; line-height:1.5; }
++.settingsView > .settingsSection { max-width:900px; margin-inline:auto; }
++.settingsView > .signOutButton { align-self:flex-start; margin-left:max(0px,calc((100% - 900px) / 2)); }
++
+ /* --- Panel header with embedded filter pills --- */
+ .panelHeader { flex:0 0 auto; min-height:42px; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:14px; padding:0 0 0 4px; border:1px solid var(--line); border-bottom:0; color:var(--muted); font-size:9px; letter-spacing:.13em; text-transform:uppercase; transition:border-color .3s ease; }
+ .panelHeader > span:last-child { color:var(--gold); justify-self:end; padding-right:18px; }
+@@ -102,6 +119,20 @@
+ .detailFooter { display:flex; align-items:center; justify-content:space-between; gap:20px; padding-top:22px; }
+ .detailFormat { color:var(--muted); font-size:10px; letter-spacing:.1em; text-transform:uppercase; white-space:nowrap; }
+ .detailFooter .templateActions { justify-content:flex-end; }
++.adaptationPanel { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:18px 28px; padding:22px 0; border-bottom:1px solid var(--line); }
++.adaptationPanel b { display:block; margin-bottom:8px; color:var(--gold); font-size:9px; letter-spacing:.14em; text-transform:uppercase; }
++.adaptationPanel p { max-width:48ch; margin:0; color:var(--muted); font-size:12px; line-height:1.6; }
++.adaptationPanel > .actionMessage { grid-column:1 / -1; color:var(--gold); }
++.adaptationControls { display:flex; align-items:center; flex-wrap:wrap; justify-content:flex-end; gap:9px; }
++.contextKindPicker { display:flex; padding:3px; border:1px solid var(--line); background:var(--canvas); }
++.contextKindPicker button { min-height:34px; padding:0 11px; border:0; background:transparent; color:var(--muted); font:inherit; font-size:10px; cursor:pointer; }
++.contextKindPicker button[data-active='true'] { background:rgba(201,168,76,.13); color:var(--ink); }
++.adaptButton { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:42px; padding:0 14px; border:1px solid rgba(201,168,76,.65); background:var(--gold); color:#16130b; font:inherit; font-size:11px; font-weight:700; cursor:pointer; }
++.adaptButton:hover { background:#dfbd61; }
++.adaptButton:disabled { cursor:wait; opacity:.62; }
++.readerTopline { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-right:48px; }
++.readerTopline .templateLabel { margin-bottom:0; }
++.readerDownload { display:inline-flex; align-items:center; gap:7px; min-height:34px; padding:0 10px; border:1px solid rgba(201,168,76,.55); background:rgba(201,168,76,.08); color:var(--ink); font:inherit; font-size:10px; cursor:pointer; }
+ 
+ /* ===== Responsive: Tablet ===== */
+ @media (max-width:960px) {
+@@ -153,6 +184,13 @@
+   .detailBody { grid-template-columns:1fr; gap:24px; padding:23px 0; }
+   .detailFooter { align-items:flex-start; flex-direction:column; }
+   .detailFooter .templateActions { justify-content:flex-start; }
++  .settingsView { padding:26px 18px; }
++  .contextForm { grid-template-columns:1fr; }
++  .contextFormFooter { grid-column:1; align-items:flex-start; flex-direction:column; }
++  .settingsView > .signOutButton { margin-left:0; }
++  .adaptationPanel { grid-template-columns:1fr; }
++  .adaptationControls { justify-content:flex-start; }
++  .readerTopline { align-items:flex-start; flex-direction:column; padding-right:44px; }
+ }
+ 
+ @media (max-width:360px) {
