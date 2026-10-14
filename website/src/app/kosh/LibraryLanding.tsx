@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ResourceCatalogue } from "./ResourceCatalogue";
+import { TemplateGuide } from "./TemplateGuide";
 import { defaultLibrarySort, type LibrarySort } from "@/lib/library/libraryData";
 import styles from "./editorial.module.css";
 import discovery from "./discovery.module.css";
@@ -28,6 +29,7 @@ export function LibraryLanding({
           </p>
         </div>
       </header>
+      <TemplateGuide />
       <section
         id="catalogue"
         className={discovery.catalogue}
