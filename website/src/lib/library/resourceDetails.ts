@@ -375,6 +375,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The record captures what the team agreed and where to find it; it does not prove the decision is wise, lawful or complete, and it does not replace professional judgment on filings, tax positions or client advice.",
     related: ["human-review-gate", "exception-log"],
   },
+  "website-from-real-work": {
+    outcome:
+      "A plain-words draft for one website page that describes what the business actually does, step by step, with every promise on the page traced back to a step the team can deliver today, softened, or taken out.",
+    question:
+      "Which page are you writing, and which steps of the real work does each promise on it depend on?",
+    requires: [
+      "One page you want to write or fix (a home page section, a service page, a booking or ordering page)",
+      "The person who does the work that page describes, and 20 to 30 minutes of their time",
+      "The page as it reads today, or the lines people have been suggesting for it",
+    ],
+    check:
+      "The page describes one real job as it runs today; every promise on the page points to a step or a record; unsupported promises are softened or removed; no invented numbers, ratings or results appear; customer names, logos and reviews have written agreement; the named approver has read the draft against the steps.",
+    limit:
+      "The template helps the page match how the work runs; it does not check advertising, consumer or data protection rules, and it does not prove that the business will deliver every time.",
+    related: ["source-checking-skill", "human-review-gate"],
+  },
 };
 
 export const researchCollection = [

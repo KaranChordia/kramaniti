@@ -400,4 +400,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-13',
   },
+  {
+    id: 'website-from-real-work',
+    category: 'Client work',
+    kind: 'Skill',
+    title: 'Write your website from how the work really gets done',
+    summary: 'Write one website page from the steps your team really follows, and keep only the promises you can deliver.',
+    useWhen: 'For owners whose website, or a friend’s draft of it, says more than the business can back up, or says it in words customers would not use.',
+    includes: ['How the work runs', 'Promises you can keep', 'Plain-words page draft', 'Owner sign-off'],
+    format: 'Markdown',
+    download: '/kosh/website-from-real-work.md',
+    status: 'Starter template',
+    created: '2026-10-14',
+  },
 ];
