@@ -391,6 +391,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The template helps the page match how the work runs; it does not check advertising, consumer or data protection rules, and it does not prove that the business will deliver every time.",
     related: ["source-checking-skill", "human-review-gate"],
   },
+  "invoice-follow-up-brief": {
+    outcome:
+      "A short brief that lets an assistant draft polite, dated payment reminders from your list of unpaid invoices, while a named person approves every reminder before it goes out and handles any dispute.",
+    question:
+      "Which unpaid invoices are due for a reminder today, and who will read each draft before it is sent?",
+    requires: [
+      "Your current list of unpaid invoices with invoice number, date, amount, due date and customer contact",
+      "The payment terms you agreed with each customer, as written on the order, contract or invoice",
+      "One person who will approve reminders and speak to customers when something is disputed",
+    ],
+    check:
+      "Every reminder quotes the invoice details exactly as in the list; each draft matches a written step; disputed invoices and excluded customers got no drafts; no interest, penalty or legal wording appears without owner approval; the named person read and sent each reminder.",
+    limit:
+      "The template helps you chase payments politely and on time; it does not give legal or accounting advice, check what a customer actually owes, or decide whether any payment law applies to you.",
+    related: ["human-review-gate", "exception-log"],
+  },
 };
 
 export const researchCollection = [
