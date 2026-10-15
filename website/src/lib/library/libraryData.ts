@@ -413,4 +413,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-14',
   },
+  {
+    id: 'invoice-follow-up-brief',
+    category: 'Client work',
+    kind: 'Agent',
+    title: 'Follow up on unpaid invoices without hurting the relationship',
+    summary: 'An assistant drafts polite, dated payment reminders from your invoice list, and a named person approves each one and handles any dispute.',
+    useWhen: 'For suppliers, manufacturers, agencies and service firms that chase payments by memory, too late or too bluntly, and want to keep good customers.',
+    includes: ['Reminder steps', 'Tone rules', 'Dispute route', 'Owner approval'],
+    format: 'Markdown',
+    download: '/kosh/invoice-follow-up-brief.md',
+    status: 'Starter template',
+    created: '2026-10-15',
+  },
 ];
