@@ -426,4 +426,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-15',
   },
+  {
+    id: 'customer-data-map',
+    category: 'Human oversight',
+    kind: 'Governance',
+    title: 'Know what customer data you keep and who can see it',
+    summary: 'List each kind of customer detail you keep, where it lives, who can see it, which AI tools touch it and when it is deleted, so you can take a clear picture to your lawyer.',
+    useWhen: 'For clinics, labs, shops and startups that hold customer phone numbers, IDs, health or payment details in several places and want to get ready for India\'s data protection rules.',
+    includes: ['Data map', 'AI tool list', 'Customer requests', 'Questions for your lawyer'],
+    format: 'Markdown',
+    download: '/kosh/customer-data-map.md',
+    status: 'Starter template',
+    created: '2026-10-16',
+  },
 ];
