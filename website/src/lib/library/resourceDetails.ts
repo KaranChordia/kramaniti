@@ -391,6 +391,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The template helps the page match how the work runs; it does not check advertising, consumer or data protection rules, and it does not prove that the business will deliver every time.",
     related: ["source-checking-skill", "human-review-gate"],
   },
+  "review-reply-brief": {
+    outcome:
+      "A short brief that lets an assistant draft replies to your Google and marketplace reviews in your own voice, while the owner approves every reply to a complaint before it is posted.",
+    question:
+      "Which new reviews need a reply today, and who will read each complaint reply before it goes public?",
+    requires: [
+      "Ten to twenty recent reviews, good and bad, copied from wherever customers review you",
+      "Two or three past replies that sounded like your business",
+      "One person who will approve complaint replies and contact upset customers directly",
+    ],
+    check:
+      "Every reply sounds like the business's own past replies and uses only what the review and the brief say; complaint and mixed replies were read by the named person before posting; no refund, discount or private customer detail appears in public; safety, health and legal reviews got no public draft.",
+    limit:
+      "The template helps you answer reviews promptly and in your own voice; it does not check whether a review is true, settle a complaint, or tell you what each review platform's rules allow.",
+    related: ["customer-handoff-plan", "human-review-gate"],
+  },
   "invoice-follow-up-brief": {
     outcome:
       "A short brief that lets an assistant draft polite, dated payment reminders from your list of unpaid invoices, while a named person approves every reminder before it goes out and handles any dispute.",

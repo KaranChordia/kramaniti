@@ -91,6 +91,7 @@ const synonyms: Record<string, string> = {
   "test-before-build-sheet": "test pilot experiment validate before build",
   "customer-handoff-plan": "customer chat complaints escalate escalation human handover chatbot",
   "decision-record": "decisions why owner record chat meetings exceptions",
+  "review-reply-brief": "reviews review ratings google zomato swiggy reply replies complaints stars",
 };
 const ignored = new Set("a an the i we our my me us you your to for of in on at it is are was be have has with and or but do does can should need want help work business team keeps how what which too".split(" "));
 function words(text: string) {
