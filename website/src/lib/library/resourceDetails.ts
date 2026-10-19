@@ -407,6 +407,23 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The template helps you chase payments politely and on time; it does not give legal or accounting advice, check what a customer actually owes, or decide whether any payment law applies to you.",
     related: ["human-review-gate", "exception-log"],
   },
+  "customer-data-map": {
+    outcome:
+      "A one-page map of the personal details your business keeps about customers: what each kind is, where it lives, who can see it, which AI tools or outside apps touch it, and when it gets deleted, with a named owner and a review date.",
+    question:
+      "Where does each kind of customer detail end up in our business, and who can see it?",
+    requires: [
+      "A list of every place customer details are kept today, including phones, spreadsheets and paper registers",
+      "The names of everyone who can open each of those places, including part-time staff and outside vendors",
+      "A list of the AI tools and outside apps your team uses with customer information",
+      "One person who will own the map and keep it current",
+    ],
+    check:
+      "Every kind of customer data has a row naming where it lives and who can see it; every AI tool that touches customer data is listed with whether it is allowed; unknowns are written as not known, not guessed; the map has an owner and a review date; no legal duty or deadline appears without a source.",
+    limit:
+      "The map shows what customer data you keep and who can reach it; it does not give legal advice, tell you which data protection duties apply to you or from when, or make you compliant with any law.",
+    related: ["ai-tool-subscription-audit", "digital-readiness-baseline"],
+  },
 };
 
 export const researchCollection = [
