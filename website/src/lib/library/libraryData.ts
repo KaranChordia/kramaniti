@@ -452,4 +452,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-16',
   },
+  {
+    id: 'business-fact-sheet',
+    category: 'Tools & connections',
+    kind: 'Skill',
+    title: 'Give your WhatsApp assistant the right facts about your business',
+    summary: 'Write one checked sheet of your prices, timings, policies and the things your assistant must never promise, with a named owner and a review date.',
+    useWhen: 'For shops, clinics and service businesses switching on WhatsApp Business AI or any chat assistant that will answer customers about prices, timings and policies.',
+    includes: ['Prices and what is included', 'Timings and policies', 'Never promise list', 'Owner and review date'],
+    format: 'Markdown',
+    download: '/kosh/business-fact-sheet.md',
+    status: 'Starter template',
+    created: '2026-10-20',
+  },
 ];
