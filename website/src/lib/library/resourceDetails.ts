@@ -440,6 +440,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The map shows what customer data you keep and who can reach it; it does not give legal advice, tell you which data protection duties apply to you or from when, or make you compliant with any law.",
     related: ["ai-tool-subscription-audit", "digital-readiness-baseline"],
   },
+  "business-fact-sheet": {
+    outcome:
+      "One checked sheet of your prices, timings, policies and the things your assistant must never promise, with a named owner and a review date, so a WhatsApp or chat assistant answers customers only from facts you have approved.",
+    question:
+      "Which facts can the assistant give customers, what must it never promise, and who checked the sheet last?",
+    requires: [
+      "Your current price list or rate card, timings, holidays and delivery or visit areas",
+      "Your rules for returns, warranty, payment and bookings",
+      "One person who will own the sheet, check every line and keep it up to date",
+    ],
+    check:
+      "Every price, timing and policy matches what the business charges and does today; unknown lines say not decided rather than a guess; the never-promise list covers discounts, dates, stock and health or safety advice; the sheet names an owner and a review date; ten real questions were checked against it before customers saw any replies.",
+    limit:
+      "The sheet gives the assistant approved facts to answer from; it does not make the assistant's replies correct, and it does not replace your rules for when a chat goes to a person.",
+    related: ["enquiry-triage-agent", "customer-handoff-plan"],
+  },
 };
 
 export const researchCollection = [
