@@ -3434,3 +3434,73 @@ export function DocumentationModeSelectorInfographic() {
     </div>
   );
 }
+
+export function AiImplementationRouteInfographic() {
+  const stages = [
+    { icon: Radar, label: 'Pick the workflow', copy: 'Choose one repeated piece of work with a visible cost and a named owner.' },
+    { icon: Workflow, label: 'Map it as it runs', copy: 'Trace the real steps, handoffs, waits, and records, not the ideal version.' },
+    { icon: ShieldCheck, label: 'Set the boundary', copy: 'Decide what AI may prepare, what a person reviews, and who makes the final call.' },
+    { icon: Settings2, label: 'Build small', copy: 'Use the simplest setup that improves the workflow, often a tool already in use.' },
+    { icon: FileCheck2, label: 'Adopt and review', copy: 'Run it in daily work, log corrections, and review against a test written first.' },
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>AI Implementation Route</div>
+      <div className={`${styles.threadMap} ${styles.threadMapFive}`}>
+        <div className={styles.threadLine} aria-hidden="true" />
+        {stages.map((stage, index) => {
+          const Icon = stage.icon;
+          const isFirst = index === 0;
+
+          return (
+            <div className={`${styles.threadStage} ${isFirst ? styles.threadStageHighlight : ''}`} key={stage.label}>
+              <div className={isFirst ? styles.threadIconHighlight : styles.threadIcon}>
+                <Icon size={18} />
+              </div>
+              <span className={styles.threadStep}>{String(index + 1).padStart(2, '0')}</span>
+              <h4>{stage.label}</h4>
+              <p>{stage.copy}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function FirstWorkflowSelectorInfographic() {
+  const rows = [
+    ['Customer enquiries pile up across WhatsApp and email', 'Put a chatbot in front of every customer.', 'Sort enquiries, draft routine replies, and route the rest to a named person.'],
+    ['Work keeps waiting for the founder', 'Ask AI to handle operations.', 'Write clear sign-off rules, then let AI prepare the routine drafts that no longer need founder review.'],
+    ['Proposals and quotes take days', 'Let AI generate quotes from scratch.', 'Draft from agreed scope notes and your own rates, with a named person checking every price and promise.'],
+    ['Unpaid invoices slip', 'Automate reminders with no owner.', 'Draft dated, polite reminders from the invoice list, approved by one person who also handles disputes.'],
+    ['Too many AI tools, no clear value', 'Add one more subscription.', 'List every tool, its job, its owner, and the data it sees, then keep, merge, or stop.'],
+  ];
+
+  return (
+    <div className={styles.infographicWrapper}>
+      <div className={styles.infographicTitle}>First Workflow Selector</div>
+      <div className={styles.matrixScrollWrapper}>
+        <table className={styles.matrixTable}>
+          <thead>
+            <tr>
+              <th className={styles.matrixColHeader}>Business situation</th>
+              <th className={styles.matrixColHeader}>Wrong first move</th>
+              <th className={`${styles.matrixColHeader} ${styles.matrixColHeaderHighlight}`}>Useful first workflow</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([situation, wrong, useful]) => (
+              <tr key={situation}>
+                <td className={styles.matrixCellLabel}>{situation}</td>
+                <td className={styles.matrixCell}>{wrong}</td>
+                <td className={`${styles.matrixCell} ${styles.matrixCellHighlight}`}>{useful}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

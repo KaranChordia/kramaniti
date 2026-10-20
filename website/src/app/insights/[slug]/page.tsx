@@ -86,7 +86,9 @@ import {
   PresenceTranslationRouteInfographic,
   PublicPageRealityCheckInfographic,
   WorkflowNoteLibraryInfographic,
-  DocumentationModeSelectorInfographic
+  DocumentationModeSelectorInfographic,
+  AiImplementationRouteInfographic,
+  FirstWorkflowSelectorInfographic
 } from '../../../components/ui/Infographics';
 import styles from './Article.module.css';
 
@@ -544,6 +546,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
         if (paragraph === '[infographic:documentation-mode-selector]') {
           return <DocumentationModeSelectorInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:ai-implementation-route]') {
+          return <AiImplementationRouteInfographic key={index} />;
+        }
+        if (paragraph === '[infographic:first-workflow-selector]') {
+          return <FirstWorkflowSelectorInfographic key={index} />;
         }
 
         const headingMatch = paragraph.match(/^<h3>(.*?)<\/h3>$/);
