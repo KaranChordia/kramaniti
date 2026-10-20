@@ -26,6 +26,10 @@
   gap: 16px;
 }
 
+.threadMapFive {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
 .threadLine {
   position: absolute;
   left: 9%;
@@ -150,7 +154,8 @@
 }
 
 @media (max-width: 760px) {
-  .threadMap {
+  .threadMap,
+  .threadMapFive {
     grid-template-columns: 1fr;
   }
 
