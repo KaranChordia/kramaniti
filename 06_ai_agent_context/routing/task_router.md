@@ -32,6 +32,8 @@ When a new task or request is received, the Master Coordinator evaluates the pri
 
 ## Activation Rules
 
+For “content team”, “content agents”, “what is currently published”, “plan content around published posts” and “generate follow-up content”, route to Digital Presence Orchestrator with Distribution & Analytics, Content Director, Brand Identity and Proof/Governance as needed. Follow `04_content_system/content_team_workflow.md`. Publication evidence refresh precedes planning; missing social account access yields a labelled partial plan, not invented publication history. Routine copy and visual modes can run sequentially inside one task. Do not start background jobs or independent chats merely to activate these roles.
+
 - Do not create a new agent unless the work is recurring and clearly falls outside these defined routes.
 - If a task spans more than 3 categories, the Master Coordinator must break it down into smaller sequential tasks before routing.
 - If a task spans brand identity, strategy, content, website, distribution, assets, and proof, route it to the Digital Presence Orchestrator as the lead rather than treating it as a generic marketing task.

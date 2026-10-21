@@ -26,6 +26,8 @@ Memory to maintain:
 
 ## Core Files
 
+For publication-aware planning and production, read `content_team_workflow.md` first. `content_registry.json` separates production state from per-channel publication evidence; `published_baseline.md` records audit scope; `production_queue.md` holds the rolling proposal. `runs/` records compact execution evidence and `drafts/content_team/` holds next-item packages. These supplement the existing calendar, briefs and analytics records rather than duplicate them.
+
 - `content_pillars.md`
 - `content_calendar.md`
 - `campaign_briefs.md`

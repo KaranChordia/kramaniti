@@ -1,5 +1,9 @@
 # Campaign Briefs
 
+## Active working campaign — Kosh and Spasht applied follow-ups
+
+Status: draft plan / no publication approval. Primary channels: LinkedIn and Instagram (KC-confirmed, 15 October 2026). Lead: Digital Presence Orchestrator. Objective: move from accepted introductory visual directions toward concrete product understanding. Current source coverage: public website verified, social accounts/history unknown. The production plan is `production_queue.md`; finished captions and applied carousel brief are in `drafts/content_team/`. Reuse existing follow-up images before generating duplicates. KC supplies final Canva logos; no logo design is commissioned. Validate each post's novelty against the account inventory when available.
+
 **Purpose:** Store campaign plans that connect Kramaniti's positioning, content, website direction, distribution, and proof review.
 
 **Key Findings:** [Recommendation] Campaigns should start from a business goal and audience problem, not from a channel or trend.

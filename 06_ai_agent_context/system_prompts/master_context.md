@@ -279,3 +279,11 @@ Core operating files:
 - `09_reviews/proof_register.md`
 
 The Digital Presence Orchestrator may draft, structure, audit, and recommend. It must not directly publish, invent proof, change pricing, use client logos, or make public claims without founder approval and Proof and Governance review.
+
+## 15. Publication-aware Content Team
+
+[Fact] KC requested a reusable content team on 15 October 2026, covering what is already published, connected content strategy and actual content generation. LinkedIn and Instagram are the primary platforms. KC will create product logos in Canva and supply the approved files.
+
+[Recommendation] Use `04_content_system/content_team_workflow.md` as the operational procedure. Refresh `content_registry.json` and `published_baseline.md` before planning, use `production_queue.md` for the next connected sequence, and produce one item at a time unless KC asks for a batch. The configured team extends existing roles instead of spawning duplicate agents. Definitions are on-demand instructions, not background jobs.
+
+[Constraint] A local asset, positive creative feedback, scheduled post or historical calendar row does not establish current publication on a specific social account. Keep channel/account/revision-specific evidence and approval. Report unknown identity/access and partial coverage. No automatic posting, scheduling or new social account connection is authorised by creating the team.

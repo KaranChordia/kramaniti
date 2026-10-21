@@ -1,6 +1,24 @@
 {
   "routing_matrix": [
     {
+      "intent": "publication_aware_content_team",
+      "lead_agent": "digital_presence_orchestrator",
+      "supporting_agents": [
+        "distribution_analytics_agent",
+        "content_director",
+        "brand_identity_agent",
+        "proof_governance_auditor"
+      ],
+      "triggers": [
+        "content team",
+        "content agents",
+        "what is currently published",
+        "plan content around published posts",
+        "next content batch",
+        "generate follow-up content"
+      ]
+    },
+    {
       "intent": "digital_presence_orchestration",
       "lead_agent": "digital_presence_orchestrator",
       "supporting_agents": [

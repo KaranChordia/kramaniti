@@ -1,5 +1,17 @@
 # Kramaniti Agent Roster
 
+## Publication-aware content team activation — 15 October 2026
+
+KC requested a team that knows what is published, builds a connected plan and generates content. The durable activation procedure is `04_content_system/content_team_workflow.md`.
+
+- Digital Presence Orchestrator: integrated lead and review package.
+- Distribution & Analytics Agent, Published Content Researcher mode: account identity, publication evidence, scope and feedback.
+- Content Director, Editorial Strategist mode: linked rolling plan, duplicate/novelty checks and next-item selection.
+- Content Director, Visual Content Producer and repurposing modes: finished channel copy, creative briefs and requested media assets.
+- Brand Identity Agent and Proof and Governance Auditor: appropriate brand/claim review; KC approves external publication.
+
+The first three role configurations and routing are updated. Primary channels are LinkedIn and Instagram; exact profiles still require confirmation. The register separates generated assets from verified per-channel posts. Logo generation is deferred to KC's Canva work. These are reusable on-demand roles, not continuously running workers or scheduled automations.
+
 Purpose: define the core agents Kramaniti can use as the brand grows, modeled like early company hires with clear memory, roles, tasks, boundaries, and accountability.
 
 Canonical positioning: Kramaniti is a first-principles AI systems partner that connects strategy, operational infrastructure, and cinematic content into one brand growth pipeline.

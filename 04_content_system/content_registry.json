@@ -1,0 +1,251 @@
+{
+  "version": 1,
+  "updated_at": "2026-10-15",
+  "coverage": {
+    "linkedin": {
+      "account_url": null,
+      "status": "account_required",
+      "checked_at": null,
+      "window": null,
+      "limit": "KC confirmed platform; exact account and publication history not yet established."
+    },
+    "instagram": {
+      "account_url": null,
+      "status": "account_required",
+      "checked_at": null,
+      "window": null,
+      "limit": "KC confirmed platform; exact account and publication history not yet established."
+    },
+    "website": {
+      "account_url": "https://www.kramaniti.com/",
+      "status": "partial",
+      "checked_at": "2026-10-15",
+      "window": "Current public listing and selected product/resource pages",
+      "limit": "Not an exhaustive article-body or authenticated product audit."
+    }
+  },
+  "items": [
+    {
+      "id": "KOSH-INTRO-01",
+      "brand": "Kosh",
+      "revision": 1,
+      "stage": "generated",
+      "title": "The work feels scattered. Start here.",
+      "channels": [
+        "linkedin",
+        "instagram"
+      ],
+      "asset_paths": [
+        "work/marketing-presence-2026-10-14/generated/kosh-start-here-v1.png"
+      ],
+      "creative_review": {
+        "status": "positive_feedback",
+        "evidence": "KC: perfect, now proceed to generate the follow up image"
+      },
+      "publication_approvals": [],
+      "source": "Current marketing chat and workspace assets; no social post evidence supplied.",
+      "parent_logo": {
+        "status": "needs_update",
+        "source": "website/public/assets/brand/kramaniti-mark-gold.png",
+        "note": "Earlier text-only asset predates KC mandatory-logo instruction; do not publish until logo insertion is complete."
+      }
+    },
+    {
+      "id": "SPASHT-INTRO-01",
+      "brand": "Spasht",
+      "revision": 1,
+      "stage": "generated",
+      "title": "Give your idea room to become clearer.",
+      "channels": [
+        "linkedin",
+        "instagram"
+      ],
+      "asset_paths": [
+        "work/marketing-presence-2026-10-14/generated/spasht-coming-into-focus-v1.png"
+      ],
+      "creative_review": {
+        "status": "positive_feedback",
+        "evidence": "KC: thanks these are good introductory image"
+      },
+      "publication_approvals": [],
+      "source": "Current marketing chat and workspace assets; no social post evidence supplied.",
+      "parent_logo": {
+        "status": "needs_update",
+        "source": "website/public/assets/brand/kramaniti-mark-gold.png",
+        "note": "Earlier text-only asset predates KC mandatory-logo instruction; do not publish until logo insertion is complete."
+      }
+    },
+    {
+      "id": "KOSH-FOLLOW-01",
+      "brand": "Kosh",
+      "revision": 1,
+      "stage": "generated",
+      "title": "Work keeps waiting? Find a useful pattern.",
+      "channels": [
+        "linkedin",
+        "instagram"
+      ],
+      "asset_paths": [
+        "work/marketing-presence-2026-10-14/generated/kosh-useful-pattern-followup-v1.png"
+      ],
+      "creative_review": {
+        "status": "pending",
+        "evidence": null
+      },
+      "publication_approvals": [],
+      "source": "Current marketing chat and workspace assets; no social post evidence supplied.",
+      "parent_logo": {
+        "status": "needs_update",
+        "source": "website/public/assets/brand/kramaniti-mark-gold.png",
+        "note": "Earlier text-only asset predates KC mandatory-logo instruction; do not publish until logo insertion is complete."
+      }
+    },
+    {
+      "id": "SPASHT-FOLLOW-01",
+      "brand": "Spasht",
+      "revision": 1,
+      "stage": "generated",
+      "title": "You don’t need the whole plan. Choose the next step.",
+      "channels": [
+        "linkedin",
+        "instagram"
+      ],
+      "asset_paths": [
+        "work/marketing-presence-2026-10-14/generated/spasht-next-step-followup-v1.png"
+      ],
+      "creative_review": {
+        "status": "pending",
+        "evidence": null
+      },
+      "publication_approvals": [],
+      "source": "Current marketing chat and workspace assets; no social post evidence supplied.",
+      "parent_logo": {
+        "status": "needs_update",
+        "source": "website/public/assets/brand/kramaniti-mark-gold.png",
+        "note": "Earlier text-only asset predates KC mandatory-logo instruction; do not publish until logo insertion is complete."
+      }
+    },
+    {
+      "id": "KOSH-USE-01",
+      "brand": "Kosh",
+      "revision": 1,
+      "stage": "draft",
+      "title": "A considered follow-up for an overdue invoice",
+      "channels": [
+        "linkedin",
+        "instagram"
+      ],
+      "asset_paths": [],
+      "creative_review": {
+        "status": "pending",
+        "evidence": null
+      },
+      "publication_approvals": [],
+      "source": "https://www.kramaniti.com/kosh/invoice-follow-up-brief/"
+    },
+    {
+      "id": "KOSH-CONTEXT-01",
+      "brand": "Kosh",
+      "revision": 2,
+      "stage": "generated",
+      "title": "Before the reminder, check the context.",
+      "channels": [
+        "linkedin",
+        "instagram"
+      ],
+      "asset_paths": [
+        "work/marketing-presence-2026-10-14/generated/kosh-context-before-reminder-branded-v2.png"
+      ],
+      "creative_review": {
+        "status": "pending",
+        "evidence": null
+      },
+      "publication_approvals": [],
+      "source": "https://www.kramaniti.com/kosh/invoice-follow-up-brief/",
+      "parent_logo": {
+        "status": "visually_checked",
+        "source": "website/public/assets/brand/kramaniti-mark-gold.png",
+        "note": "Supplied mark included in lower-left product endorsement using built-in image editing; visually inspected."
+      }
+    },
+    {
+      "id": "SPASHT-QUESTION-01",
+      "brand": "Spasht",
+      "revision": 2,
+      "stage": "generated",
+      "title": "A broad idea. A better question.",
+      "channels": [
+        "linkedin",
+        "instagram"
+      ],
+      "asset_paths": [
+        "work/marketing-presence-2026-10-14/generated/spasht-better-question-branded-v2.png"
+      ],
+      "creative_review": {
+        "status": "pending",
+        "evidence": null
+      },
+      "publication_approvals": [],
+      "source": "https://www.kramaniti.com/spasht/",
+      "parent_logo": {
+        "status": "visually_checked",
+        "source": "website/public/assets/brand/kramaniti-mark-gold.png",
+        "note": "Supplied mark included in lower-left product endorsement using built-in image editing; visually inspected."
+      }
+    }
+  ],
+  "publications": [
+    {
+      "id": "WEB-SPASHT",
+      "content_id": null,
+      "channel": "website",
+      "account_url": "https://www.kramaniti.com/",
+      "status": "verified",
+      "url": "https://www.kramaniti.com/spasht/",
+      "title": "Spasht public entry",
+      "published_at": null,
+      "observed_at": "2026-10-15",
+      "evidence": "Direct public HTTPS response, rendered HTML/title or catalogue date; see published_baseline.md.",
+      "metrics": null
+    },
+    {
+      "id": "WEB-KOSH",
+      "content_id": null,
+      "channel": "website",
+      "account_url": "https://www.kramaniti.com/",
+      "status": "verified",
+      "url": "https://www.kramaniti.com/kosh/",
+      "title": "Kosh public catalogue",
+      "published_at": null,
+      "observed_at": "2026-10-15",
+      "evidence": "Direct public HTTPS response, rendered HTML/title or catalogue date; see published_baseline.md.",
+      "metrics": null
+    },
+    {
+      "id": "WEB-INSIGHTS",
+      "content_id": null,
+      "channel": "website",
+      "account_url": "https://www.kramaniti.com/",
+      "status": "verified",
+      "url": "https://www.kramaniti.com/insights/",
+      "title": "Insights public listing",
+      "published_at": null,
+      "observed_at": "2026-10-15",
+      "evidence": "Direct public HTTPS response, rendered HTML/title or catalogue date; see published_baseline.md.",
+      "metrics": null
+    },
+    {
+      "id": "WEB-INVOICE",
+      "content_id": null,
+      "channel": "website",
+      "account_url": "https://www.kramaniti.com/",
+      "status": "verified",
+      "url": "https://www.kramaniti.com/kosh/invoice-follow-up-brief/",
+      "title": "Follow up on unpaid invoices without hurting the relationship",
+      "published_at": "2026-10-15",
+      "observed_at": "2026-10-15",
+      "evidence": "Direct public HTTPS response, rendered HTML/title or catalogue date; see published_baseline.md.",
+      "metrics": null
+    }
+  ]
+}

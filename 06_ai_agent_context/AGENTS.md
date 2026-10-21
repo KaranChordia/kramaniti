@@ -33,6 +33,8 @@ Memory to maintain:
 - `memory/digital_presence_orchestrator/`
 - `memory/insights_growth_steward/`
 
+The on-demand publication-aware content team is defined in `../04_content_system/content_team_workflow.md`. It reuses Digital Presence Orchestrator, Content Director (editorial and visual producer modes), Distribution & Analytics (Published Content Researcher mode), Brand Identity Agent and Proof/Governance. Its shared evidence register is `../04_content_system/content_registry.json`. Validate structural changes with `python3 06_ai_agent_context/scripts/validate_content_team.py` from the repository root. No background runtime is implied by `status: active`.
+
 ## Agent Definition Standard
 
 Every major agent should define:

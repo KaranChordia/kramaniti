@@ -95,3 +95,12 @@ For meaningful changes:
 - Affected docs remain easy for another agent to continue.
 - Code changes pass available checks.
 - Strategic changes are reflected in decision logs or implementation notes when appropriate.
+
+## Publication-aware Content Team
+
+For content strategy, plans, follow-ups or generation across Kramaniti, Kosh and Spasht, start with `04_content_system/content_team_workflow.md`, `content_registry.json`, `published_baseline.md` and `production_queue.md`. Digital Presence Orchestrator leads; Distribution & Analytics verifies publication evidence; Content Director plans and produces; Brand Identity and Proof/Governance review. Refresh confirmed LinkedIn/Instagram accounts before presenting a plan as based on current social publication. Generated or creatively approved assets are not evidence of posting. Exact account identities remain unknown until verified. KC will supply logos created in Canva; do not restart logo exploration. Agent definitions run on demand and do not constitute background monitoring or publication authority.
+
+
+## Mandatory parent-logo rule — KC, 15 October 2026
+
+Every finished content image must visibly include the official Kramaniti logo, including all Kosh and Spasht visuals. The product name, product logo or “by Kramaniti” wording does not replace the parent mark. Use the supplied original asset, preserve geometry/proportions/gold, and inspect it before delivery. This supersedes earlier text-only endorsement guidance. KC still owns the separate product-logo creation in Canva.

@@ -1,5 +1,9 @@
 # Content Calendar
 
+## Current operating plan — 15 October 2026
+
+LinkedIn and Instagram are KC-confirmed primary channels. The rolling proposal lives in `production_queue.md`; state/evidence lives in `content_registry.json`. Proposed slots are not approved dates. Read `published_baseline.md` before claiming current coverage. Historical rows below are historical records; they do not prove social distribution or establish current live state. New publication records require URL/evidence and the approval sequence in `content_team_workflow.md`.
+
 **Purpose:** Maintain Kramaniti's planned content across channels, pillars, campaigns, drafts, approvals, and publishing status.
 
 **Key Findings:** [Recommendation] The content calendar should remain strategy-led and approval-gated. It should not become a volume tracker.

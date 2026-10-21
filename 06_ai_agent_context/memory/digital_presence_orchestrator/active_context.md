@@ -18,4 +18,6 @@
 - `08_brand_assets/asset_registry.md`
 - `09_reviews/proof_register.md`
 
-**Next Review:** Fill the first active channel plan and monthly content theme after founder channel/cadence approval.
+**Current activation — 15 October 2026:** KC requested publication-aware strategy and generation agents. LinkedIn and Instagram are primary. Read `04_content_system/content_team_workflow.md`, `content_registry.json`, `published_baseline.md` and `production_queue.md`. Four generated campaign images and one draft applied carousel are registered; no social publication is evidenced. Two follow-up caption packages are ready for review. Exact profile links remain the next input for complete social coverage. Spasht is now public and the legacy route redirects, superseding the 14 October pack's stale warning. KC owns logos in Canva; no further logo exploration. Configured agents run on demand, no automatic posting/scheduler.
+
+**Next Review:** Confirm exact account URLs; refresh recent post evidence, then adjust the queue and produce/review one next item. Preserve existing drafts and approval boundaries.

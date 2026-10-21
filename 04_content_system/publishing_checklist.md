@@ -18,6 +18,8 @@
 
 ## Pre-Publish Gate
 
+Publication-aware team requirements: read `content_team_workflow.md`; identify the exact final content ID/revision, asset, channel/account and proposed publish/schedule action. Record specific KC approval and then observed outcome in `content_registry.json`. Positive image feedback alone is not publication approval. A scheduled item remains scheduled until the public post is verified. Check current destination, account inventory and duplicate-send risk immediately before acting.
+
 - [ ] Goal is clear.
 - [ ] Audience is clear.
 - [ ] Content maps to a pillar or campaign.
@@ -44,3 +46,8 @@
 - [ ] Record what should be repeated, revised, or stopped.
 - [ ] Move any reusable decision into `03_brand_strategy/brand_system/brand_decisions.md`.
 - [ ] Add proof issues or permission questions to `09_reviews/proof_register.md`.
+
+
+## Mandatory parent-logo rule — KC, 15 October 2026
+
+Every finished content image must visibly include the official Kramaniti logo, including all Kosh and Spasht visuals. The product name, product logo or “by Kramaniti” wording does not replace the parent mark. Use the supplied original asset, preserve geometry/proportions/gold, and inspect it before delivery. This supersedes earlier text-only endorsement guidance. KC still owns the separate product-logo creation in Canva.

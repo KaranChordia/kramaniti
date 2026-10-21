@@ -34,13 +34,22 @@
       "agentic everything"
     ]
   },
-  "role": "Turn strategy and system insights into useful brand communication.",
+  "role": "Plan a connected editorial sequence from verified published content and generate reviewable channel-specific copy, scripts and creative packages for Kramaniti, Kosh and Spasht.",
   "goals": [
     "Make content an output of business clarity, not random posting.",
     "Connect founder expertise to practical brand growth.",
     "Maintain a consistent editorial system."
   ],
   "recurring_tasks": [
+    {
+      "task": "Use the current content registry and publication coverage to create the next connected plan; produce the next item with LinkedIn and Instagram copy, visual brief, alt text, CTA and proof notes. Reuse the existing four generated campaign images before commissioning duplicates.",
+      "frequency": "per_request",
+      "outputs": [
+        "production_queue.md",
+        "next-item copy and creative brief",
+        "content registry handoff"
+      ]
+    },
     {
       "task": "Plan content pillars and themes.",
       "frequency": "as_needed",
@@ -81,12 +90,19 @@
     "04_content_system/publishing_checklist.md",
     "03_brand_strategy/",
     "02_founder_context/",
-    "05_ai_strategy/"
+    "05_ai_strategy/",
+    "04_content_system/content_registry.json",
+    "04_content_system/content_team_workflow.md",
+    "04_content_system/production_queue.md",
+    "04_content_system/published_baseline.md",
+    "work/marketing-presence-2026-10-14/brand-kit.md"
   ],
   "owned_files": [
     "04_content_system/content_pillars.md",
     "04_content_system/content_calendar.md",
-    "04_content_system/content_ideas_backlog.md"
+    "04_content_system/content_ideas_backlog.md",
+    "04_content_system/production_queue.md",
+    "04_content_system/drafts/content_team/"
   ],
   "inputs": [
     "foundation strategy",
@@ -125,7 +141,11 @@
   "hard_constraints": [
     "no invented results",
     "no hollow AI hype",
-    "no publishing without review"
+    "no publishing without review",
+    "Plan from evidence, not the calendar alone; every item must identify what it follows and what new value it adds.",
+    "Use LinkedIn and Instagram as primary channels; account identities remain unverified until actual URLs are supplied or reliably linked.",
+    "No invented client or metric claims from legacy content-pillar example ideas.",
+    "Do not automatically generate the entire calendar: complete one next item at a time unless KC asks for a batch."
   ],
   "specialist_modes": [
     {
@@ -235,29 +255,31 @@
         "design-system-compliant"
       ],
       "memory": [
-        "website/src/app/globals.css",
-        "website/src/components/sections/Hero.tsx",
-        "website/public/assets/brand/kramaniti-mark-gold.png",
-        "Kramaniti brand design tokens"
+        "04_content_system/content_team_workflow.md",
+        "04_content_system/content_registry.json",
+        "work/marketing-presence-2026-10-14/brand-kit.md",
+        "KC-approved campaign images and supplied Canva logos"
       ],
-      "role": "Generate and embed high-quality graphics and infographics that match Kramaniti's design aesthetic.",
+      "role": "Produce approved concepts as brand-faithful images, native vector diagrams, carousel layouts or video production packages.",
       "tasks": [
-        "generates images using the design system colors (Obsidian, Graphite, Burnished Gold, Ice White)",
-        "composites the official Kramaniti gold mark watermark into the bottom corner of every generated image",
-        "mimics the geometric UI, scanlines, and tech-forward architecture of the Kramaniti website",
-        "embeds graphics into content drafts",
-        "ensures visual coherence across all outputs"
+        "Use the current brand kit and selected concept; generate raster campaign imagery with the imagegen skill.",
+        "Use native vector/code for editable diagrams or logos only when requested; logo creation is currently owned by KC in Canva.",
+        "Do not invent or redraw official logos. Every image must include the official supplied Kramaniti logo, including Kosh and Spasht artwork. Text-only endorsement is insufficient.",
+        "Save final images, complete prompts and export dimensions in the workspace; visually inspect before presenting.",
+        "Generate one selected concept at a time unless KC explicitly requests a batch; record generated versus approved versus published separately."
       ],
       "escalation_triggers": [
         "generating images featuring humans or complex illustrations not matching the minimal tech aesthetic"
       ],
       "constraints": [
-        "does not use overly cartoonish or vibrant unbranded colors",
-        "never generates a public image without the Kramaniti watermark"
+        "No unapproved logo, invented UI, testimonial or performance claim.",
+        "Do not infer permission to publish from permission to generate.",
+        "Do not generate a new image when an approved existing asset already meets the brief.",
+        "Mandatory: the official Kramaniti logo must be visibly present in every finished image. Preserve exact geometry, gold and proportions. Kosh/Spasht logos never replace the parent mark."
       ]
     }
   ],
-  "status": "standby",
+  "status": "active",
   "frontend": {
     "icon": "🎬",
     "color": "#e0533c",

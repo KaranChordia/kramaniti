@@ -37,9 +37,13 @@ venv/
 *.pdf
 !08_brand_assets/exports/*.pdf
 
-# Temporary
+# Temporary & Local Scratch
 *.tmp
 *.bak
 supabase/.temp/
 .vercel/
 .vercel
+work/*
+!work/SESSION_HANDOFF.md
+08_brand_assets/exports/kramaniti_pitch_deck.*
+scripts/render_kramaniti_pitch_deck.mjs
