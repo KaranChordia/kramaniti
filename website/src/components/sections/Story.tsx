@@ -41,9 +41,9 @@ export function Story() {
       <div className={styles.container}>
         <div className={`${styles.header} ${isVisible ? styles.visible : ''}`}>
           <span className="micro-label">The method</span>
-          <AnimatedHeading isVisible={isVisible}>First understand the work. Then build what helps. Then communicate it clearly.</AnimatedHeading>
+          <AnimatedHeading isVisible={isVisible}>First understand the work. Then build what helps. Then tell the story clearly.</AnimatedHeading>
           <p className="text-secondary">
-            One connected route: clarity in the work, useful systems around it, and a brand that reflects it.
+            One connected route: strategy, systems and story working together.
           </p>
         </div>
 

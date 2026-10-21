@@ -339,6 +339,125 @@
   align-items: start;
 }
 
+.architectureGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.archColumn {
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015)),
+    rgba(255, 255, 255, 0.02);
+}
+
+.archColumnAfter {
+  border-color: rgba(201, 168, 76, 0.34);
+  background:
+    linear-gradient(180deg, rgba(201, 168, 76, 0.08), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.025);
+}
+
+.archCode {
+  display: inline-block;
+  color: var(--color-burnished-gold);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.archColumn h3 {
+  margin: 10px 0 22px;
+  color: var(--text-primary);
+  font-family: var(--font-comfortaa), sans-serif;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.archStepList {
+  display: grid;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.archStep {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.archStepIndex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(201, 168, 76, 0.28);
+  border-radius: 6px;
+  background: rgba(201, 168, 76, 0.08);
+  color: var(--color-burnished-gold);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.archStep strong {
+  display: block;
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.archStep p {
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.archGateNote {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border: 1px solid rgba(201, 168, 76, 0.28);
+  border-radius: 10px;
+  background: rgba(10, 10, 14, 0.42);
+}
+
+.archGateNote span {
+  display: block;
+  color: var(--color-burnished-gold);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.archGateNote p {
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 980px) {
+  .architectureGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .outcomeList {
   display: grid;
   gap: 16px;

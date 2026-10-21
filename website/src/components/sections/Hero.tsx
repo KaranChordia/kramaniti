@@ -8,26 +8,19 @@ type HeroProps = { isActive?: boolean };
 
 const headlineLines = [
   [
-    { text: 'Your', index: 0 },
-    { text: 'business', index: 1 },
-    { text: 'deserves', index: 2 },
+    { text: 'Clearer', index: 0 },
+    { text: 'workflows', index: 1 },
+    { text: 'inside.', index: 2, accent: true },
   ],
   [
-    { text: 'better', index: 3, accent: true },
-    { text: 'than', index: 4 },
-    { text: 'scattered', index: 5 },
-    { text: 'work', index: 6 },
-  ],
-  [
-    { text: 'and', index: 7 },
-    { text: 'an', index: 8 },
-    { text: 'untold', index: 9 },
-    { text: 'story.', index: 10 },
+    { text: 'Coherent', index: 3 },
+    { text: 'brand', index: 4 },
+    { text: 'outside.', index: 5, accent: true },
   ],
 ] as const;
 
 const subheading =
-  'We untangle your workflows, build useful AI systems, and turn what makes your business valuable into messaging and content people can connect with.';
+  'We find where work gets stuck, build practical AI systems that help, and turn that clarity into a stronger story.';
 
 function revealWords(text: string, delay: number) {
   const words = text.split(' ');
@@ -97,6 +90,9 @@ export function Hero({ isActive = true }: HeroProps) {
       <div className={styles.container}>
         <div className={styles.copy}>
           <p className={styles.brandName}>{revealWords('Kramaniti', 20)}</p>
+          <p className={styles.categoryEyebrow}>
+            {revealWords('Human-Led AI Systems & Products', 60)}
+          </p>
 
           <h1 className={styles.headline} id="hero-heading">
             {headlineLines.map((line, lineIndex) => (
@@ -108,7 +104,7 @@ export function Hero({ isActive = true }: HeroProps) {
                     style={{ '--word-index': word.index } as CSSProperties}
                   >
                     {word.text}
-                    {wordIndex < line.length - 1 ? '\u00a0' : lineIndex < headlineLines.length - 1 ? ' ' : ''}
+                    {wordIndex < line.length - 1 ? '\u00a0' : ''}
                   </span>
                 ))}
               </span>

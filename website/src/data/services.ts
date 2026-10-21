@@ -25,7 +25,7 @@ const steps: Record<string, ServiceStep> = {
   design: { index: '03', title: 'Design', copy: 'Shape the simplest useful system around the real work.' },
   build: { index: '04', title: 'Build', copy: 'Create the workflow, tools, and clear instructions.' },
   use: { index: '05', title: 'Put it into use', copy: 'Help the team use it, review it, and know when to step in.' },
-  communicate: { index: '06', title: 'Communicate', copy: 'Explain the value in language customers can understand.' },
+  communicate: { index: '06', title: 'Story', copy: 'Explain the value in language customers can understand.' },
   improve: { index: '07', title: 'Improve', copy: 'Learn from real use and make the system better over time.' },
 };
 
@@ -67,9 +67,9 @@ export const services: Service[] = [
     title: 'Complete Lifecycle Retainer',
     label: 'KEEP IMPROVING',
     coordinate: '[03/CONTINUITY]',
-    summary: 'For teams that want their systems, adoption, and communication to improve together.',
-    deliverables: ['System care', 'Workflow improvements', 'Team support', 'Communication and content direction', 'Regular reviews'],
-    outputs: 'Typical outputs include system care, workflow improvements, team support, communication direction, and regular reviews.',
+    summary: 'For teams that want their strategy, systems and story to improve together.',
+    deliverables: ['System care', 'Workflow improvements', 'Team support', 'Story and content direction', 'Regular reviews'],
+    outputs: 'Typical outputs include system care, workflow improvements, team support, story direction, and regular reviews.',
     ctaText: 'Explore Ongoing Work',
     isPopular: false,
     steps: [steps.use, steps.communicate, steps.improve],

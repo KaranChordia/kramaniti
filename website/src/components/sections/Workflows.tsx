@@ -27,7 +27,7 @@ const steps = [
     copy: 'Help the team use it, review it, and know when to step in.'
   },
   {
-    title: 'Communicate',
+    title: 'Story',
     copy: 'Explain the value in language customers can understand.'
   },
   {
@@ -76,7 +76,7 @@ export function Workflows() {
                 <KramanitiOrb state="composing" size={20} paused={!isVisible} />
                 <span className="micro-label">Output</span>
               </span>
-              <span className={styles.summaryValue}>Clearer work and communication</span>
+              <span className={styles.summaryValue}>Clearer work and story</span>
             </div>
           </div>
 

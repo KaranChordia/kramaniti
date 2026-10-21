@@ -72,9 +72,56 @@ const systemModules = [
 
 const outcomes = [
   'Brought intake, review, sourcing, outreach, and follow-up into a clearer recruiter workflow.',
-  'Turned AI capability into focused tools that were easier for recruiters to understand.',
-  'Built brand communication alongside the internal tools so the work and the story could move together.'
+  'Turned AI capability into six focused internal modules with explicit recruiter review points.',
+  'Shipped six companion brand and adoption films so internal tooling and external narrative moved together.'
 ];
+
+const architectureComparison = {
+  before: {
+    code: '[01 / BEFORE · FRAGMENTED WORKFLOW]',
+    title: 'Disconnected tools and manual handoffs',
+    steps: [
+      {
+        stage: 'Role Intake',
+        detail: 'Raw job descriptions arriving across emails and docs without standardized search criteria.',
+      },
+      {
+        stage: 'Sourcing & Screening',
+        detail: 'Manual boolean query writing and repetitive resume reading across scattered browser tabs.',
+      },
+      {
+        stage: 'Candidate Outreach',
+        detail: 'Ad-hoc messages drafted separately across email, LinkedIn, and WhatsApp without shared context.',
+      },
+      {
+        stage: 'Follow-Up State',
+        detail: 'Recruiter notes, tasks, and candidate status split across personal spreadsheets and memory.',
+      },
+    ],
+  },
+  after: {
+    code: '[02 / AFTER · CONNECTED WINGMAN PIPELINE]',
+    title: 'One human-led recruiter operating system',
+    steps: [
+      {
+        stage: 'Blaze · Role to Search Plan',
+        detail: 'Transforms raw JDs into company context, skill priorities, candidate notes, and search strings.',
+      },
+      {
+        stage: 'Radar & Atlas · Talent & Resume Review',
+        detail: 'Structures resume evaluation, role/skill tagging, shortlist filtering, and recruiter review notes.',
+      },
+      {
+        stage: 'Zephyr · Multi-Channel Outreach',
+        detail: 'Prepares tailored email, WhatsApp, and LinkedIn drafts while keeping final send decisions with the recruiter.',
+      },
+      {
+        stage: 'Launchpad & Wingmanager · Daily Control',
+        detail: 'Centralizes tasks, shared notes, files, and follow-up workflows inside one recruiter workspace.',
+      },
+    ],
+  },
+};
 
 const featuredWalkthrough = {
   id: 'cfRzZO1UDEU',
@@ -173,12 +220,12 @@ export default function NexoceanWorkPage() {
                     <strong>5-month contract</strong>
                   </div>
                   <div>
-                    <span>Scope</span>
-                    <strong>Internal tools + communication</strong>
+                    <span>Shipped Output</span>
+                    <strong>6 AI modules + 6 brand films</strong>
                   </div>
                   <div>
                     <span>Environment</span>
-                    <strong>Recruitment operations</strong>
+                    <strong>Human-led recruiter operations</strong>
                   </div>
                 </div>
               </div>
@@ -217,6 +264,56 @@ export default function NexoceanWorkPage() {
                   <p>{module.copy}</p>
                 </article>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.section} aria-labelledby="architecture-heading">
+          <div className={styles.container}>
+            <div className={styles.sectionHeader}>
+              <span className="micro-label">Workflow Transformation Architecture</span>
+              <h2 id="architecture-heading">From scattered recruiter tasks to one connected system.</h2>
+              <p>
+                Instead of adding another standalone tool, the Wingman suite connected the full recruitment sequence while keeping candidate judgment with recruiters.
+              </p>
+            </div>
+
+            <div className={styles.architectureGrid}>
+              <article className={styles.archColumn}>
+                <span className={styles.archCode}>{architectureComparison.before.code}</span>
+                <h3>{architectureComparison.before.title}</h3>
+                <ol className={styles.archStepList} role="list">
+                  {architectureComparison.before.steps.map((step, index) => (
+                    <li key={step.stage} className={styles.archStep}>
+                      <span className={styles.archStepIndex}>0{index + 1}</span>
+                      <div>
+                        <strong>{step.stage}</strong>
+                        <p>{step.detail}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </article>
+
+              <article className={`${styles.archColumn} ${styles.archColumnAfter}`}>
+                <span className={styles.archCode}>{architectureComparison.after.code}</span>
+                <h3>{architectureComparison.after.title}</h3>
+                <ol className={styles.archStepList} role="list">
+                  {architectureComparison.after.steps.map((step, index) => (
+                    <li key={step.stage} className={styles.archStep}>
+                      <span className={styles.archStepIndex}>0{index + 1}</span>
+                      <div>
+                        <strong>{step.stage}</strong>
+                        <p>{step.detail}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+                <div className={styles.archGateNote}>
+                  <span>Human Review Boundary</span>
+                  <p>AI prepares role briefs, candidate tags, and outreach drafts; recruiters own shortlist selection and candidate communication.</p>
+                </div>
+              </article>
             </div>
           </div>
         </section>
@@ -293,10 +390,10 @@ export default function NexoceanWorkPage() {
         <section className={styles.closing}>
           <div className={styles.container}>
             <div className={styles.closingCard}>
-              <span className="micro-label">What this page shows</span>
-              <h2>The public view of private internal work.</h2>
+              <span className="micro-label">Architecture &amp; Governance Boundary</span>
+              <h2>Verifiable system design and production output.</h2>
               <p>
-                The internal repository is not public. The videos and descriptions here show the practical recruiter tools and the communication built around them, without claiming business results.
+                The walkthroughs and films above demonstrate the delivered UI, workflow architecture, and brand communication across the six Wingman modules. Source repositories and internal client recruitment metrics remain private by governance design.
               </p>
               <div className={styles.closingActions}>
                 <Link href="/#contact" className={styles.closingLink}>

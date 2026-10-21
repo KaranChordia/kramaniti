@@ -28,16 +28,16 @@ export function FounderPreview() {
         </div>
 
         <div className={styles.content}>
-          <span className="micro-label">Founder-led</span>
-          <AnimatedHeading isVisible={isVisible}>Built by someone who sees the work and the story together.</AnimatedHeading>
+          <span className="micro-label">Founder-Architected · System-Multiplied</span>
+          <AnimatedHeading isVisible={isVisible}>Built at the intersection of computational logic and cinematic narrative.</AnimatedHeading>
           <p className="text-secondary">
-            Karan Chordia&apos;s background spans commercial media, workflow design, and practical AI systems. It shaped a simple belief: a business should communicate from what it genuinely does well.
+            Karan Chordia&apos;s background spans commercial media across co-working, hospitality, startup, and B2B technology ecosystems, quantitative systems R&amp;D, and full-stack AI architecture.
           </p>
           <p className="text-secondary">
-            Kramaniti starts with the work, builds only what helps, and communicates the result clearly.
+            Instead of scaling through agency headcount bloat, Kramaniti runs on its own governed agent and delivery infrastructure—pairing bespoke workflow engineering with proprietary software like <strong>Spasht</strong> and <strong>Kosh</strong>.
           </p>
           <Link href="/founder" className={styles.link}>
-            Meet the founder
+            Read the founder &amp; operating thesis
           </Link>
         </div>
       </div>

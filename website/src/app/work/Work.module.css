@@ -95,6 +95,79 @@
   gap: 24px;
 }
 
+.velocitySection {
+  padding: 0 0 96px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 340px;
+}
+
+.velocityHeader {
+  max-width: 720px;
+  margin-bottom: 28px;
+}
+
+.velocityHeader h2 {
+  margin-top: 10px;
+  font-size: clamp(26px, 3.2vw, 38px);
+  line-height: 1.15;
+}
+
+.velocityGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.velocityCard {
+  padding: 22px 20px;
+  border: 1px solid rgba(201, 168, 76, 0.24);
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(201, 168, 76, 0.03));
+}
+
+.velocityMetric {
+  display: block;
+  color: var(--color-burnished-gold);
+  font-family: var(--font-comfortaa), sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.velocityLabel {
+  display: block;
+  margin-top: 8px;
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.velocityDetail {
+  margin: 10px 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 980px) {
+  .velocityGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .velocityGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .folderCard {
   position: relative;
   min-height: 420px;

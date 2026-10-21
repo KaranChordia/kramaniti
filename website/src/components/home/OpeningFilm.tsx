@@ -95,15 +95,15 @@ export function OpeningFilm({ onSkip }: OpeningFilmProps) {
             <small>build what matters</small>
           </div>
           <div className={`${styles.readout} ${styles.contentReadout}`}>
-            <span>03 / Communication</span>
-            <strong>Communication</strong>
+            <span>03 / Narrative</span>
+            <strong>Story</strong>
             <small>explain it clearly</small>
           </div>
         </div>
 
         <div className={styles.resolution}>
           <span>Kramaniti</span>
-          <p>Strategy, systems, and communication—working together.</p>
+          <p>Strategy, systems and story—working together.</p>
         </div>
       </div>
 

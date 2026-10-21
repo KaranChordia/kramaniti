@@ -983,3 +983,19 @@ This log registers the major strategic and structural decisions made during the 
 #### Decision 39 publication update — 2026-10-15
 
 [Fact] KC approved publication. PR #36 merged, Platform storage was renamed without changing existing rows/table identities/RLS, and the website and existing ChatGPT manager were published as Spasht. Supabase-owned trigger naming and the saved OAuth authority remain explicit compatibility exceptions. See `docs/spasht/production-release-2026-10-15.md` for public checks, partial production-browser evidence and remaining user-account verification limits.
+
+### Decision 40: Investor-Lens Website Upgrade & Strategy, Systems and Story Refinement
+
+* **Date:** 2026-10-21
+* **Area:** Website positioning, product ecosystem narrative (Kosh & Spasht), founder operating leverage, execution proof, investor inquiry path
+* **Status:** Implemented and approved for publication (`[Fact]`)
+* **Decision:** Upgrade the public website through an investor-readiness lens across two goals and founder review refinements:
+    1. **Goal 1 (Option B Hero):** Update `Hero.tsx` with the plain-text category callout `Human-Led AI Systems & Products`, the headline `"Clearer workflows inside. Coherent brand outside."`, and the simplified subheading `"We find where work gets stuck, build practical AI systems that help, and turn that clarity into a stronger story."`
+    2. **Goal 2 (Points 1–5) & Triad Refinement:**
+        * Expand `KoshPreview.tsx` into the four-layer Kramaniti Ecosystem (`[01/DIAGNOSE] Clarity Engine`, `[02/STANDARDIZE] Kramaniti Kosh`, `[03/OPERATE] Kramaniti Spasht`, `[04/TRANSFORM] Systems & Lifecycle Partner`) plus the Context & Governance Moat banner.
+        * Reframe `founder/page.tsx` and `FounderPreview.tsx` from solo-founder dependency to **Founder-Architected, System-Multiplied** (`#operating-leverage`), expand the three-part Founder-Market Fit story, and add the **Why Now: Wave 1 vs. Wave 2 of AI Adoption** section (`#why-now`).
+        * Add a verified **Execution Footprint** strip on `/work` and a **Before vs. After Recruiter Workflow Architecture** comparison on `/work/nexocean`.
+        * Add a dedicated **Investors & Strategic Partners** doorway (`#investor-doorway`) in `Contact.tsx` and `Footer.tsx`, and remove the glowing liquid orb from the inline Clarity Engine audit column.
+        * Replace the `strategy, systems, communication` triad across public surfaces with `strategy, systems and story`.
+* **Affected files:** `website/src/components/sections/Hero.tsx`, `website/src/components/sections/Hero.module.css`, `website/src/components/sections/KoshPreview.tsx`, `website/src/components/sections/KoshPreview.module.css`, `website/src/components/sections/FounderPreview.tsx`, `website/src/app/founder/page.tsx`, `website/src/app/work/page.tsx`, `website/src/app/work/Work.module.css`, `website/src/app/work/nexocean/page.tsx`, `website/src/app/work/nexocean/Nexocean.module.css`, `website/src/components/sections/Contact.tsx`, `website/src/components/sections/Contact.module.css`, `website/src/components/layout/Footer.tsx`, `website/src/components/home/OpeningFilm.tsx`, `website/src/components/sections/Story.tsx`, `website/src/components/sections/Workflows.tsx`, `website/src/data/services.ts`, `website/src/app/layout.tsx`, `website/src/app/page.tsx`, `website/src/app/api/clarity-engine/chat/route.ts`, `docs/kramaniti_site_implementation_plan.md`.
+* **Claim guardrails:** All execution footprint metrics on `/work` reflect verifiable repository deliverables (`[Fact]`: 2 live products, 25+ Kosh patterns, 6 Nexocean AI modules, 46+ published essays). No client outcomes, ROI percentages, or unverified testimonials were introduced.

@@ -24,7 +24,7 @@ export function Footer() {
             </Link>
             <div className={styles.brandText}>
               <span className={styles.brandName}>Kramaniti</span>
-              <span className={styles.brandLabel}>Clearer work. Clearer communication.</span>
+              <span className={styles.brandLabel}>Strategy, systems and story.</span>
             </div>
           </div>
 
@@ -48,20 +48,26 @@ export function Footer() {
             <div className={styles.contactItem}>
               <span className={styles.label}>Explore</span>
               <div className={styles.legalLinks}>
+                <Link href="/kosh" className={styles.legalLink}>Kosh</Link>
+                <span className={styles.separator}>•</span>
+                <Link href="/spasht/" className={styles.legalLink}>Spasht</Link>
+                <span className={styles.separator}>•</span>
+                <Link href="/clarity-engine" className={styles.legalLink}>Clarity Engine</Link>
+                <span className={styles.separator}>•</span>
                 <Link href="/work" className={styles.legalLink}>Work</Link>
                 <span className={styles.separator}>•</span>
                 <Link href="/founder" className={styles.legalLink}>Founder</Link>
                 <span className={styles.separator}>•</span>
                 <Link href="/insights" className={styles.legalLink}>Insights</Link>
                 <span className={styles.separator}>•</span>
-                <Link href="/clarity-engine" className={styles.legalLink}>Clarity Engine</Link>
+                <Link href="/#investor-doorway" className={styles.legalLink}>Investors &amp; Partners</Link>
               </div>
             </div>
           </div>
         </div>
 
         <div className={styles.bottomBar}>
-          <p className={styles.bottomNote}>Practical systems. Human judgment. Clear communication.</p>
+          <p className={styles.bottomNote}>Strategy, systems and story.</p>
           <p className={styles.copyright}>© {new Date().getFullYear()} Kramaniti. All rights reserved.</p>
         </div>
       </div>

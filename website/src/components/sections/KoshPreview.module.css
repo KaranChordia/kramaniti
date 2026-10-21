@@ -2,6 +2,8 @@
   position: relative;
   padding: 110px 0;
   overflow: hidden;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 760px;
 }
 
 .kosh::before {
@@ -42,17 +44,22 @@
   line-height: 1.65;
 }
 
-.link {
+.primaryActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.link,
+.secondaryLink {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   min-height: 48px;
-  margin-top: 28px;
   padding: 12px 20px;
-  border: 1px solid rgba(201, 168, 76, 0.42);
-  border-radius: 10px;
-  background: rgba(201, 168, 76, 0.09);
-  color: var(--text-primary);
+  border-radius: 8px;
   font-family: var(--font-inter), sans-serif;
   font-size: 15px;
   font-weight: 700;
@@ -60,7 +67,20 @@
   transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease, color 220ms ease, box-shadow 220ms ease;
 }
 
-.link:hover {
+.link {
+  border: 1px solid rgba(201, 168, 76, 0.42);
+  background: rgba(201, 168, 76, 0.09);
+  color: var(--text-primary);
+}
+
+.secondaryLink {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+}
+
+.link:hover,
+.secondaryLink:hover {
   transform: translateY(-1px);
   border-color: rgba(201, 168, 76, 0.65);
   background: rgba(201, 168, 76, 0.14);
@@ -68,9 +88,9 @@
   box-shadow: 0 12px 28px rgba(201, 168, 76, 0.12);
 }
 
-.link:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.5), 0 0 0 6px rgba(201, 168, 76, 0.16);
+:where(.link, .secondaryLink, .cardLink):focus-visible {
+  outline: 2px solid var(--color-burnished-gold);
+  outline-offset: 4px;
 }
 
 .libraryObject {
@@ -172,10 +192,179 @@
   border-bottom-color: rgba(105, 79, 23, 0.13);
 }
 
+.flywheelContainer {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 56px auto 0;
+  padding: 44px 24px 0;
+  border-top: 1px solid rgba(201, 168, 76, 0.22);
+}
+
+.flywheelHeader {
+  max-width: 680px;
+  margin-bottom: 26px;
+}
+
+.flywheelLead {
+  margin: 10px 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.ecosystemGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ecosystemCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.045), rgba(201, 168, 76, 0.025));
+  transition: transform 220ms ease, border-color 220ms ease;
+}
+
+.ecosystemCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(201, 168, 76, 0.38);
+}
+
+.cardTop {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.cardCode {
+  color: var(--color-burnished-gold);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.cardRole {
+  color: var(--text-muted);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ecosystemCard h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-comfortaa), sans-serif;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.ecosystemCard p {
+  margin: 12px 0 20px;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  color: var(--color-burnished-gold);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cardLink:hover {
+  color: var(--text-primary);
+}
+
+.moatBanner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  gap: 28px;
+  align-items: center;
+  margin-top: 24px;
+  padding: 26px 28px;
+  border: 1px solid rgba(201, 168, 76, 0.28);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.08), rgba(255, 255, 255, 0.02));
+}
+
+.moatCopy h4 {
+  margin: 8px 0 10px;
+  color: var(--text-primary);
+  font-family: var(--font-comfortaa), sans-serif;
+  font-size: clamp(19px, 2.2vw, 24px);
+  line-height: 1.25;
+}
+
+.moatCopy p {
+  margin: 0;
+  line-height: 1.68;
+}
+
+.moatPills {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.moatPills span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 14px;
+  border: 1px solid rgba(201, 168, 76, 0.26);
+  border-radius: 8px;
+  background: rgba(10, 10, 14, 0.45);
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+:global(html[data-theme='light']) .ecosystemCard,
+:global(html[data-theme='light']) .moatBanner {
+  border-color: rgba(105, 79, 23, 0.18);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(247, 239, 211, 0.56));
+}
+
+:global(html[data-theme='light']) .moatPills span {
+  background: rgba(255, 255, 255, 0.85);
+}
+
 @media (min-width: 900px) {
   .container {
     grid-template-columns: minmax(0, 1.08fr) minmax(400px, 0.92fr);
     gap: 70px;
+  }
+}
+
+@media (max-width: 980px) {
+  .ecosystemGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .moatBanner {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -190,6 +379,14 @@
 
   .libraryObject {
     padding: 16px;
+  }
+
+  .ecosystemGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .moatBanner {
+    padding: 20px;
   }
 
   .objectHeader,
@@ -223,7 +420,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .link {
+  .link,
+  .secondaryLink,
+  .ecosystemCard {
     transition: none;
   }
 }

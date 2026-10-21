@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
   title: "Kramaniti | Make Your Business Easier to Run",
-  description: "Kramaniti finds where work gets stuck, builds practical AI systems where they help, and turns that clarity into stronger communication.",
+  description: "Kramaniti finds where work gets stuck, builds practical AI systems where they help, and turns that clarity into a stronger story.",
   alternates: {
     canonical: "/",
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: SITE_NAME,
     title: "Kramaniti | Make Your Business Easier to Run",
-    description: "Understand the work, fix the workflow that matters, use AI where it helps, and communicate the value clearly.",
+    description: "Strategy, systems and story—working together to make your business clearer inside and out.",
     images: [
       {
         url: absoluteUrl(DEFAULT_OG_IMAGE),
