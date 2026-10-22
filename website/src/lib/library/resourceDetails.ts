@@ -456,6 +456,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The sheet gives the assistant approved facts to answer from; it does not make the assistant's replies correct, and it does not replace your rules for when a chat goes to a person.",
     related: ["enquiry-triage-agent", "customer-handoff-plan"],
   },
+  "new-hire-first-two-weeks": {
+    outcome:
+      "A written plan for a new person's first two weeks: the real tasks they do each day, the steps they follow, who answers their questions and what a named person checks before their work reaches a customer.",
+    question:
+      "What does the new person do each day, who do they ask, and what are they not allowed to do alone yet?",
+    requires: [
+      "The role, start date and a list of the tasks the role does in a normal week",
+      "Any written steps, checklists or sample work you already have",
+      "One go-to person for questions and a backup",
+    ],
+    check:
+      "Every task is real and says where its steps are or says no steps yet; each day says watch, with help or alone; the not alone yet list covers money, prices, complaints and customer data; a go-to person and backup are named; any AI-drafted part was checked by the go-to person; both weekly reviews are signed.",
+    limit:
+      "The plan sets the order in which a new person learns the real work; it does not replace safety, legal or tool training, and it does not tell you whether someone is right for the job.",
+    related: ["founder-memory-sop-agent", "repeated-question-log"],
+  },
 };
 
 export const researchCollection = [
