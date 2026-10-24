@@ -4147,10 +4147,6 @@ export function Spasht() {
     if (view === 'memory') setPrivacyProjectId(null);
     if (view === 'context') setStep(savedContext ? 'context' : 'intent');
     openMenu(view);
-    window.requestAnimationFrame(() => {
-      const heading = stageRef.current?.querySelector<HTMLElement>(':scope > section:not(#workspace-tools) h1, :scope > section:not(#workspace-tools) h2');
-      if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
-    });
   };
 
   const selectProjectTab = (tab: 'conversation' | 'steps' | 'details') => {

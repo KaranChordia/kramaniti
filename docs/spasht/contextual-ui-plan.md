@@ -9,7 +9,7 @@
 - Compact state: one tool bar with Change tool and Exit tools; no directory paragraphs. Expanded state: a searchable icon-and-label palette, grouped into Think / Work / Review. Selection replaces the palette with the actual existing workspace. Nine tools remain reachable.
 - Trigger and exit: Tools opens the palette. Change tool expands it above the current workspace; Escape closes the palette and restores trigger focus. Exit tools returns to the originating project/tab or Home. No modal focus trap. A closed palette has no tabbable hidden controls.
 - Persistence: domain state remains in the owning Spasht component, outside the palette; switching tools preserves assistant input, task filters, loop state, selected project and pending reviewed actions. Existing URL/back/reload semantics stay intact.
-- Keyboard: native buttons and search; Escape closes the innermost palette; tool selection focuses its working heading; close returns focus to the relevant anchor. No custom listbox.
+- Keyboard: native buttons and search; Escape closes the innermost palette; tool selection focuses its persistent tool heading; close returns focus to the relevant anchor. No custom listbox.
 - Narrow screens: three-column icon controls with short visible labels and full accessible names, no paragraph directory or overlay; wrapping context label and reachable exit. Maintain primary navigation at every breakpoint.
 - Empty/loading/error: search has a clear no-match/reset state. Existing real workspace loading/save/error/retry/approval controls remain. Community remains labelled Local preview; automated digests remain unconnected.
 - Motion: brief opacity/translation for palette and workspace entry; reduced motion removes movement. Do not animate editors or remount domain state.
@@ -20,7 +20,7 @@
 2. [x] Tighten Home/recent projects, tool page headings and loop workspace chrome; put explanatory material behind explicit disclosures while retaining real content and capabilities.
 3. [x] Verify open/switch/close/reopen, draft and project ownership, Escape/focus, search/empty state, rapid switching, all nine tools, saved/failed writes and reviewed actions. Inspect desktop and 820/747/390/320 px, light theme and reduced motion.
 4. [x] Run lint, TypeScript, Spasht and Kosh tests and production build. Record fixture versus hosted evidence separately.
-5. [ ] Commit scoped changes, create and merge a passing PR, deploy through existing Git integration. Verify exact merged SHA Production status, canonical public route, legacy redirect, anonymous API rejection and public browser rendering. Do not alter credentials, schema, email delivery or unrelated Kosh PRs.
+5. [x] Commit scoped changes and merge the passing PR (#44). Run the production release through the existing Git integration. Final exact-SHA status, public-route/API/browser verification and the keyboard-focus follow-up are recorded in the calling task release outputs. Do not alter credentials, schema, email delivery or unrelated Kosh PRs.
 
 ## Capability preservation
 

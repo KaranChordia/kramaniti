@@ -25,15 +25,22 @@ export function WorkspaceTools({ active, expanded, contextLabel, counts, onExpan
   const searchRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const previousExpanded = useRef(false);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const previousActive = useRef(active);
   const current = tools.find(tool => tool.id === active);
   const ActiveIcon = current ? icons[current.id as keyof typeof icons] : Wrench;
   const search = query.trim().toLowerCase();
-  const matching = tools.filter(tool => `${tool.title} ${tool.detail}`.toLowerCase().includes(search));
+  const matching = tools.filter(tool => `${tool.id} ${tool.title} ${shortLabels[tool.id]} ${tool.detail}`.toLowerCase().includes(search));
 
   useEffect(() => {
     if (expanded && !previousExpanded.current) searchRef.current?.focus();
     previousExpanded.current = expanded;
   }, [expanded]);
+
+  useEffect(() => {
+    if (previousActive.current !== active) headingRef.current?.focus({ preventScroll: true });
+    previousActive.current = active;
+  }, [active]);
 
   const collapse = () => { onCollapse(); triggerRef.current?.focus(); };
 
@@ -43,7 +50,7 @@ export function WorkspaceTools({ active, expanded, contextLabel, counts, onExpan
     <div className={ui.bar}>
       <div className={ui.identity}><span className={ui.toolIcon}><ActiveIcon size={19} aria-hidden="true" /></span><div>
         <span className={ui.eyebrow}>{current ? 'Workspace tools' : contextLabel}</span>
-        {current ? <strong>{current.title}</strong> : <h1>Tools</h1>}
+        {current ? <h2 ref={headingRef} tabIndex={-1}>{current.title}</h2> : <h1>Tools</h1>}
       </div></div>
       {current && <span className={ui.context} title={contextLabel}>{contextLabel}</span>}
       <div className={ui.controls}>
