@@ -131,13 +131,14 @@ try {
   ['All tasks','tasks',()=>page.getByRole('heading',{name:'Tasks',exact:true})],
   ['Workspace assistant','assistant',()=>page.getByRole('region',{name:'Spasht Assistant',exact:true})],
   ['Project organiser','files',()=>page.getByRole('region',{name:'Projects',exact:true})],
-  ['Workspace overview','overview',()=>page.getByRole('heading',{name:'Workspace overview',exact:true})],
+  ['Workspace overview','overview',()=>page.getByRole('heading',{name:'Workspace overview',exact:true,level:1})],
   ['Remembered information','privacy',()=>page.getByRole('heading',{name:'Memory',exact:true})],
   ['Community examples','community',()=>page.getByRole('region',{name:'Spasht threads',exact:true})],
  ];
  await tools();await page.screenshot({path:`${output}/tool-station-1440.png`});
  for(const [label,view,visible] of restored){
   await tool(label);await visible().waitFor();
+  await page.waitForFunction(()=>document.querySelector('#workspace-tools h2')===document.activeElement);
   assert.equal(new URL(page.url()).searchParams.get('view'),view);
   assert.equal(new URL(page.url()).searchParams.get('project'),created.id);
   await page.reload({waitUntil:'networkidle'});await visible().waitFor();
@@ -149,6 +150,7 @@ try {
  await tools();const search=page.getByRole('textbox',{name:'Find a tool',exact:true});await search.fill('not-a-real-tool');await page.getByText('No tool matches', {exact:false}).waitFor();
  await page.getByRole('button',{name:'Show all tools',exact:true}).click();assert.equal(await search.inputValue(),'');
  await search.fill('folder');assert.equal(await page.getByRole('region',{name:'Work tools',exact:true}).getByRole('button').count(),1);
+ await search.fill('memory');assert.equal(await page.getByRole('button',{name:'Remembered information',exact:true}).count(),1);
  await page.getByRole('button',{name:'Clear tool search',exact:true}).click();
  await search.press('Escape');assert.equal(await search.count(),0);assert.equal(await page.getByRole('button',{name:'All tools',exact:true}).evaluate(el=>el===document.activeElement),true);
  await page.getByRole('button',{name:'Exit tools',exact:true}).click();await page.getByRole('heading',{name:'My first real project',exact:true}).waitFor();

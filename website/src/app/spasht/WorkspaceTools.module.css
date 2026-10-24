@@ -4,7 +4,7 @@
 .toolIcon { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--spasht-gold-border); border-radius: 10px; color: var(--spasht-gold-light); flex: 0 0 auto; }
 .identity > div { display: grid; gap: 4px; }
 .eyebrow { color: var(--spasht-faint); font-size: 10px; font-weight: 500; letter-spacing: .05em; }
-.identity h1, .identity strong { font: inherit; font-size: 16px; font-weight: 600; margin: 0; line-height: 1.3; }
+.identity h1, .identity h2 { font: inherit; font-size: 16px; font-weight: 600; margin: 0; line-height: 1.3; }
 .context { max-width: 240px; margin-left: auto; border-left: 1px solid var(--spasht-divider); padding-left: 18px; color: var(--spasht-muted); font-size: 12px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 .controls { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
 .station button { font: inherit; cursor: pointer; }
@@ -38,7 +38,7 @@
 .empty { display: grid; justify-items: center; gap: 12px; color: var(--spasht-muted); padding: 36px 10px; font-size: 13px; overflow-wrap: anywhere; }
 .empty p { margin: 0; }
 @keyframes reveal { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-@media (max-width: 760px) { .context { display: none; } .bar { padding: 12px; gap: 8px; } .identity strong { font-size: 13px; } .palette { padding: 14px; } .groups { gap: 14px; } }
+@media (max-width: 760px) { .context { display: none; } .bar { padding: 12px; gap: 8px; } .identity h2 { font-size: 13px; } .palette { padding: 14px; } .groups { gap: 14px; } }
 @media (max-width: 600px) { .groups { grid-template-columns: 1fr; gap: 16px; } .toolGrid { grid-template-columns: repeat(2,minmax(0,1fr)); } .station .tool { min-height: 82px; padding: 10px; grid-template-columns: 22px minmax(0,1fr); column-gap: 7px; } .tool > span { font-size: 11px; } .tool .arrow { display: none; } .controls button { padding: 8px; gap: 5px; font-size: 11px; } .toolIcon { width: 32px; height: 32px; } .identity { gap: 8px; } }
 @media (prefers-reduced-motion: reduce) { .palette { animation: none; } .controls svg, .station .tool { transition: none; } }
 
