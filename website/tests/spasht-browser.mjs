@@ -120,9 +120,10 @@ try {
  const created=db.projects.find(row=>row.title==='My first real project');assert.ok(created);assert.equal(created.context,'I want to validate a local service with five interviews.');assert.equal(created.folder_id,null);assert.equal(db.project_folders.length,0);
  await page.getByRole('button',{name:'Open project',exact:true}).click();await page.getByRole('heading',{name:'My first real project',exact:true}).waitFor();assert.ok(page.url().includes(created.id));assert.equal(await page.getByRole('tab',{name:'Conversation',exact:true}).getAttribute('aria-selected'),'true');
 
+ console.log('Core workspace journeys passed');
  // Restored supporting features remain behind one secondary entry.
- const tools=async()=>{await page.getByRole('button',{name:'Tools',exact:true}).click();await page.getByRole('heading',{name:'A tool when you need it.',exact:true}).waitFor();};
- const tool=async(name)=>{await tools();await page.getByRole('button',{name:new RegExp('^'+name)}).click();};
+ const tools=async()=>{if(!(await page.getByRole('textbox',{name:'Find a tool',exact:true}).isVisible())) await page.getByRole('button',{name:'Tools',exact:true}).click();await page.getByRole('textbox',{name:'Find a tool',exact:true}).waitFor();};
+ const tool=async(name)=>{await tools();await page.getByRole('button',{name:new RegExp('^'+name)}).click();assert.equal(await page.getByRole('textbox',{name:'Find a tool',exact:true}).count(),0);};
  const restored=[
   ['Guided path','path',()=>page.getByRole('region',{name:'Choose your path',exact:true})],
   ['Clarity brief','context',()=>page.getByRole('heading',{name:'Your Clarity Brief',exact:true})],
@@ -131,18 +132,37 @@ try {
   ['Workspace assistant','assistant',()=>page.getByRole('region',{name:'Spasht Assistant',exact:true})],
   ['Project organiser','files',()=>page.getByRole('region',{name:'Projects',exact:true})],
   ['Workspace overview','overview',()=>page.getByRole('heading',{name:'Workspace overview',exact:true})],
-  ['Remembered information','privacy',()=>page.getByRole('heading',{name:'What’s remembered',exact:true})],
+  ['Remembered information','privacy',()=>page.getByRole('heading',{name:'Memory',exact:true})],
   ['Community examples','community',()=>page.getByRole('region',{name:'Spasht threads',exact:true})],
  ];
+ await tools();await page.screenshot({path:`${output}/tool-station-1440.png`});
  for(const [label,view,visible] of restored){
   await tool(label);await visible().waitFor();
   assert.equal(new URL(page.url()).searchParams.get('view'),view);
   assert.equal(new URL(page.url()).searchParams.get('project'),created.id);
   await page.reload({waitUntil:'networkidle'});await visible().waitFor();
-  await page.getByRole('button',{name:'← All tools',exact:true}).click();await page.getByRole('heading',{name:'A tool when you need it.',exact:true}).waitFor();
-  assert.equal(await page.locator('h1').count(),1);
+  await page.getByRole('button',{name:'All tools',exact:true}).click();await page.getByRole('textbox',{name:'Find a tool',exact:true}).waitFor();
+  assert.equal(await page.getByRole('region',{name:'Workspace tools',exact:true}).getByRole('button',{pressed:true}).count(),1);
  }
  await page.screenshot({path:`${output}/tools-desktop-1440.png`});
+ // Palette search, truthful empty state, keyboard focus and return context.
+ await tools();const search=page.getByRole('textbox',{name:'Find a tool',exact:true});await search.fill('not-a-real-tool');await page.getByText('No tool matches', {exact:false}).waitFor();
+ await page.getByRole('button',{name:'Show all tools',exact:true}).click();assert.equal(await search.inputValue(),'');
+ await search.fill('folder');assert.equal(await page.getByRole('region',{name:'Work tools',exact:true}).getByRole('button').count(),1);
+ await page.getByRole('button',{name:'Clear tool search',exact:true}).click();
+ await search.press('Escape');assert.equal(await search.count(),0);assert.equal(await page.getByRole('button',{name:'All tools',exact:true}).evaluate(el=>el===document.activeElement),true);
+ await page.getByRole('button',{name:'Exit tools',exact:true}).click();await page.getByRole('heading',{name:'My first real project',exact:true}).waitFor();
+ await tools();assert.equal(await search.evaluate(el=>el===document.activeElement),true);
+ assert.equal(await page.locator('#workspace-tool-palette').evaluate(el=>getComputedStyle(el).animationName),'none');
+ await page.emulateMedia({colorScheme:'light',reducedMotion:'reduce'});await page.screenshot({path:`${output}/tool-station-light-preference.png`});await page.emulateMedia({colorScheme:'dark',reducedMotion:'reduce'});
+ await page.getByRole('button',{name:'Exit tools',exact:true}).click();
+ await tool('All tasks');
+ const headerTools=page.getByRole('button',{name:'Tools',exact:true});
+ for(let toggle=0;toggle<6;toggle++)await headerTools.click();
+ assert.equal(await search.count(),0);assert.equal(await page.getByRole('region',{name:'Workspace tools',exact:true}).count(),1);
+ await tools();await page.getByRole('button',{name:/^Workspace assistant/}).click();
+ const assistantDraft=page.getByPlaceholder('Ask, create, or save context...',{exact:true});
+ await assistantDraft.fill('Keep this unfinished thought');await tool('All tasks');await tool('Workspace assistant');assert.equal(await assistantDraft.inputValue(),'Keep this unfinished thought');await assistantDraft.fill('');
  // Five distinct loop states, with source gathering before a reviewed action.
  await tool('Progress loops');
  const picker=page.getByRole('complementary',{name:'Choose a loop',exact:true});
@@ -164,13 +184,13 @@ try {
  await page.getByPlaceholder('Folder name',{exact:true}).fill('Reviewed workspace');
  await page.getByPlaceholder('Folder name',{exact:true}).press('Enter');
  await page.getByRole('status').filter({hasText:'Folder created'}).waitFor();assert.ok(db.project_folders.some(folder=>folder.name==='Reviewed workspace'));
- await page.getByRole('button',{name:/^All/}).first().click();
+ await page.getByRole('region',{name:'Projects',exact:true}).getByRole('button',{name:/^All/}).first().click();
  await page.getByRole('list',{name:'Project list',exact:true}).getByRole('button',{name:/My first real project/}).click();
  await page.reload({waitUntil:'networkidle'});await page.getByRole('region',{name:'Project reports',exact:true}).waitFor();
  assert.equal(new URL(page.url()).searchParams.get('view'),'files');assert.equal(new URL(page.url()).searchParams.get('project'),created.id);
  // Community actions are deliberately local, never a shared write.
  await tool('Community examples');
- await page.getByText('Example Spasht: these threads demonstrate possible conversations.',{exact:false}).waitFor();
+ await page.getByText('Local preview. Threads and reactions stay in this session.',{exact:false}).waitFor();
  const postsBefore=db.projects.length;
  await page.getByLabel('Title',{exact:true}).fill('An example founder question');
  await page.getByLabel('Context',{exact:true}).fill('A synthetic problem to explore together without sharing member data.');
@@ -188,6 +208,7 @@ try {
  await page.getByRole('tab',{name:'Details',exact:true}).waitFor();assert.equal(await page.getByRole('tab',{name:'Details',exact:true}).getAttribute('aria-selected'),'true');
  await page.getByRole('tab',{name:'Conversation',exact:true}).click();
  for(const width of [820,747,390,320]){
+  console.log(`Checking responsive tools at ${width}`);
   await page.setViewportSize({width,height:844});await tools();
   const brandBounds=await page.getByRole('button',{name:'Open Spasht home',exact:true}).boundingBox();const toolsBounds=await page.getByRole('button',{name:'Tools',exact:true}).boundingBox();assert.ok(brandBounds.x+brandBounds.width<=toolsBounds.x,`Header controls overlap at ${width}`);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
@@ -222,7 +243,7 @@ try {
  await page.getByLabel('Email',{exact:true}).fill(user.email);await page.getByLabel('Password',{exact:true}).fill('fixture-password');await page.getByRole('button',{name:'Create account',exact:true}).last().click();await page.getByRole('button',{name:'Resend confirmation',exact:true}).waitFor();await page.getByRole('button',{name:'Resend confirmation',exact:true}).click();await page.getByText('If this account needs confirmation, a new link is on its way.').waitFor();
  await page.goto(`${origin}/spasht/?recovery-fixture=1#access_token=${token}&refresh_token=fixture-refresh&expires_in=3600&token_type=bearer&type=recovery`,{waitUntil:'networkidle'});await page.getByLabel('New password',{exact:true}).waitFor();await page.getByLabel('New password',{exact:true}).fill('new-fixture-password');await page.getByRole('button',{name:'Update password',exact:true}).click();await page.getByRole('status').filter({hasText:'Password updated.'}).waitFor();
  assert.deepEqual(errors,[]);
- const report={passed:true,checks:['two primary destinations','canonical project opening','keyboard project tabs','native back and reload','failed saves preserve state','task completion persists','editable project details','memory editing','draft reload','stale draft rejection','one-time approval','failed snapshot blocks provider','archive and restore without data loss','idea to reviewed project','no automatic folders','responsive workspace','sign-out clears private state','email/password signup','confirmation retry','password recovery','all former feature areas reachable','tool URLs reload','five loops and actual project scan','cross-project task updates','explicit folder creation','project organiser URL continuity','local community preview','project-tab return continuity','secondary mobile tools','account overview','saved review preference'],operations:operations.length};
+ const report={passed:true,checks:['two primary destinations','canonical project opening','keyboard project tabs','native back and reload','failed saves preserve state','task completion persists','editable project details','memory editing','draft reload','stale draft rejection','one-time approval','failed snapshot blocks provider','archive and restore without data loss','idea to reviewed project','no automatic folders','responsive workspace','sign-out clears private state','email/password signup','confirmation retry','password recovery','all former feature areas reachable','tool URLs reload','five loops and actual project scan','cross-project task updates','explicit folder creation','project organiser URL continuity','local community preview','project-tab return continuity','secondary mobile tools','account overview','saved review preference','palette search and empty state','Escape and focus return','draft survives tool switching','Exit returns to selected project','rapid toggles leave one surface','system light preference','reduced motion'],operations:operations.length};
  await writeFile(`${output}/verification.json`,JSON.stringify(report,null,2));console.log(JSON.stringify(report));
 } catch(error) { await page.screenshot({path:`${output}/failure.png`}); throw error; }
 finally {await browser.close();}

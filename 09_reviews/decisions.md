@@ -999,3 +999,16 @@ This log registers the major strategic and structural decisions made during the 
         * Replace the `strategy, systems, communication` triad across public surfaces with `strategy, systems and story`.
 * **Affected files:** `website/src/components/sections/Hero.tsx`, `website/src/components/sections/Hero.module.css`, `website/src/components/sections/KoshPreview.tsx`, `website/src/components/sections/KoshPreview.module.css`, `website/src/components/sections/FounderPreview.tsx`, `website/src/app/founder/page.tsx`, `website/src/app/work/page.tsx`, `website/src/app/work/Work.module.css`, `website/src/app/work/nexocean/page.tsx`, `website/src/app/work/nexocean/Nexocean.module.css`, `website/src/components/sections/Contact.tsx`, `website/src/components/sections/Contact.module.css`, `website/src/components/layout/Footer.tsx`, `website/src/components/home/OpeningFilm.tsx`, `website/src/components/sections/Story.tsx`, `website/src/components/sections/Workflows.tsx`, `website/src/data/services.ts`, `website/src/app/layout.tsx`, `website/src/app/page.tsx`, `website/src/app/api/clarity-engine/chat/route.ts`, `docs/kramaniti_site_implementation_plan.md`.
 * **Claim guardrails:** All execution footprint metrics on `/work` reflect verifiable repository deliverables (`[Fact]`: 2 live products, 25+ Kosh patterns, 6 Nexocean AI modules, 46+ published essays). No client outcomes, ROI percentages, or unverified testimonials were introduced.
+
+### Decision 41: Use a contextual tool controller in Spasht
+
+* **Date:** 2026-10-24
+* **Area:** Spasht interaction density and workspace navigation
+* **Status:** KC requested implementation, an executable plan and deployment.
+* **Decision:** Replace the paragraph directory with one compact tool controller. It expands into a searchable icon-and-label palette and collapses into the selected workspace. Home and Projects remain primary. On phones, use short visible labels in a three-column grid with full accessible names.
+* **Rationale:** KC found the current interface too text-heavy and explicitly requested the KramanitiUI skill. Tool selection should reveal working controls while retaining the selected project, tab and unfinished input.
+* **Affected files:** `website/src/app/spasht/WorkspaceTools.tsx`, its CSS module, Spasht workspace/chrome styles, browser checks and `docs/spasht/contextual-ui-plan.md`.
+* **[Fact] Scope:** Tighten Home, recent-project summaries, loop headings and context guidance. Move explanatory copy behind disclosures; retain all nine tools, five loops, tasks, assistant context/threads/settings/reviewed actions, organiser, memory, account controls and existing private persistence. Current Spasht naming/routes/legacy adapters remain. No schema, API contract, credentials or Kosh changes.
+* **Alternatives rejected:** Returning to hidden features; replacing visible labels with ambiguous icons; adding competing overlays; treating local community examples as a shared service; copying Artha's brand or code.
+* **Evidence:** The executable interaction contract and verification steps are in `docs/spasht/contextual-ui-plan.md`. Fixture-based browser evidence is distinct from real hosted account/email/model evidence.
+* **Ownership:** Website Steward leads; Documentation Steward and Proof/Governance responsibilities apply within one task.

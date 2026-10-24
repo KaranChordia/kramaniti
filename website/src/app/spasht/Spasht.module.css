@@ -6189,3 +6189,44 @@
   .rail:global(.spasht-rail) { grid-template-areas: "brand tools account"; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .menu:global(.spasht-menu) { display: none; }
 }
+
+/* KramanitiUI: keep the controls ahead of explanations. */
+.screen h1 { font-size: clamp(23px, 3vw, 32px); line-height: 1.2; }
+.loopBoardHeader, .taskManagerHeader { padding: 0 0 12px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.loopBoardHeader::before, .taskManagerHeader::before { display: none; }
+.loopExperience { grid-template-columns: minmax(170px, 220px) minmax(0, 1fr); gap: 16px; padding: 0; background: transparent; border: 0; box-shadow: none; }
+.loopPicker { gap: 6px; padding: 0; border: 0; background: transparent; box-shadow: none; }
+.loopPicker button { grid-template-columns: 26px minmax(0, 1fr); gap: 8px; padding: 12px; min-height: 72px; border-radius: 8px; box-shadow: none; }
+.loopPicker button > span:nth-child(2) { min-width: 0; }
+.loopPicker strong { font-size: 12px; }
+.loopPicker small { display: none; }
+.loopPicker em { grid-column: 2; justify-self: start; padding: 0; background: transparent; border: 0; font-size: 9px; }
+.loopPickerIcon { width: 26px; height: 26px; padding: 0; border: 0; background: transparent; }
+.loopRunner { padding: 18px; border-radius: 9px; box-shadow: none; }
+.loopRunnerHeader { gap: 12px; margin-bottom: 14px; padding-bottom: 12px; }
+.loopRunnerHeader h2 { font-size: clamp(20px, 2.8vw, 28px); margin: 4px 0; }
+.loopIconLarge { width: 40px; height: 40px; border-radius: 9px; }
+.projectLoopStartCopy, .projectLoopResultHero { padding: 16px; border-radius: 8px; }
+.projectLoopStartCopy h3, .projectLoopResultHero h3 { font-size: 22px; }
+.projectLoopStartCopy p, .projectLoopResultHero p { font-size: 12px; line-height: 1.6; }
+.loopOverviewItem { padding: 14px; }
+.loopOverviewItem p { font-size: 11px; line-height: 1.5; }
+.homeHero { padding: 0; border: 0; background: none; box-shadow: none; }
+.homeHero h1 { font-size: 28px; }
+.homeHero::before, .homeHero::after { display: none; }
+.homeStatCard { padding: 16px; box-shadow: none; min-height: 110px; }
+.homeStatCard small { display: none; }
+@media (max-width: 760px) {
+ .loopExperience { grid-template-columns: minmax(0, 1fr); }
+ .loopPicker { display: flex; gap: 6px; overflow-x: auto; max-width: 100%; padding: 3px 2px 8px; }
+ .loopPicker button { flex: 0 0 138px; width: 138px; min-height: 68px; }
+ .loopRunner { padding: 12px; }
+ .loopRunnerHeader h2 { font-size: 22px; }
+ .homeStatsGrid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (prefers-reduced-motion: reduce) { .stage { scroll-behavior: auto; } }
+.loopPicker button small { display: none; }
+.loopPicker button strong { font-size: 12px; }
+.loopRunner .projectLoopResultHero { min-height: 0; padding: 14px; }
+.loopRunner .projectLoopStartCopy { min-height: 0; }
+@media (max-width: 760px) { .loopRunner { order: 0; } .loopPicker { order: -1; } }
