@@ -1,5 +1,6 @@
 "use client";
 import { useRef } from "react";
+import { ArrowUp } from "lucide-react";
 import type { SkillDraft } from "@/lib/kosh/studio/schema";
 import { Field } from "./Field";
 import styles from "./studio.module.css";
@@ -171,7 +172,7 @@ export function ArtifactEditor({
                     update("steps", steps);
                   }}
                 >
-                  Move up ↑
+                  Move up <ArrowUp size={15} aria-hidden="true" />
                 </button>
                 <button
                   aria-label={`Remove step ${index + 1}`}

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, LoaderCircle, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowUpRight, LoaderCircle } from "lucide-react";
 import { libraryItems, kindLabels } from "@/lib/library/libraryData";
 import { discoveryHistory, discoveryStarters, MAX_DISCOVERY_MESSAGE, MAX_DISCOVERY_TURNS, parseDiscoveryAnswer, type DiscoveryTurn } from "@/lib/kosh/discovery";
 import { useKoshJourney } from "@/components/kosh/world/KoshWorld";
@@ -66,7 +66,7 @@ export function TemplateGuide() {
     <section className={styles.guide} aria-labelledby={`${id}-heading`}>
       <div className={styles.heading}>
         <div>
-          <p className={styles.eyebrow}><Sparkles size={14} aria-hidden="true" /> Kosh guide</p>
+          <p className={styles.eyebrow}>Kosh guide</p>
           <h2 id={`${id}-heading`}>Tell me what you’re trying to do.</h2>
           <p>I’ll help you choose a template and a useful place to start.</p>
         </div>

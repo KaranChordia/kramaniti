@@ -26,6 +26,7 @@
 .back a {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   min-height: 44px;
   color: var(--muted);
   font-size: 14px;
@@ -78,7 +79,7 @@
   gap: 10px;
   min-height: 52px;
   padding: 0 26px;
-  border-radius: 999px;
+  border-radius: 0;
   font-size: 16px;
   font-weight: 500;
 }
@@ -123,7 +124,7 @@
 .blockHead button {
   min-height: 40px;
   padding: 0 18px;
-  border-radius: 999px;
+  border-radius: 0;
   border: 1px solid var(--line);
   background: none;
   color: var(--ink);
@@ -185,18 +186,18 @@
   align-items: center;
   font-size: 17px;
   list-style: none;
+  justify-content: space-between;
 }
 .fold summary::-webkit-details-marker {
   display: none;
 }
-.fold summary::after {
-  content: "+";
-  margin-left: auto;
+.fold summary svg {
+  flex: 0 0 auto;
   color: var(--gold);
-  font-size: 22px;
+  transition: transform 180ms ease;
 }
-.fold[open] summary::after {
-  content: "−";
+.fold[open] summary svg {
+  transform: rotate(180deg);
 }
 .fold[open] {
   padding-bottom: 20px;
@@ -291,6 +292,9 @@
   line-height: 1.4;
 }
 .related small {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   color: var(--gold);
   font-size: 13px;
   margin-top: auto;

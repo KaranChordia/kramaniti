@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { koshPageJsonLd } from "@/lib/kosh/jsonLd";
 import styles from "../editorial.module.css";
@@ -60,7 +61,7 @@ export default function StandardsPage() {
           correction. Keep private context out of your report.
         </p>
         <Link className={styles.textLink} href="/#contact">
-          Contact Kramaniti ↗
+        Contact Kramaniti <ArrowUpRight size={15} aria-hidden="true" />
         </Link>
       </article>
       <footer className={styles.footer}>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { koshPageJsonLd } from "@/lib/kosh/jsonLd";
 import { researchCollection } from "@/lib/library/resourceDetails";
@@ -15,7 +16,7 @@ export default function ResearchCollection() {
     <main className={styles.page} data-disable-global-shockwave="true">
       <JsonLd data={koshPageJsonLd("Research a decision", "/kosh/collections/research-a-decision/", "A three-part collection: research a question, check the evidence and prepare a human decision.", "CollectionPage")} />
       <Link className={styles.breadcrumb} href="/kosh">
-        ← Kosh collections
+        <ArrowLeft size={15} aria-hidden="true" /> Kosh collections
       </Link>
       <header className={styles.resourceHero}>
         <p className={styles.eyebrow}>Collection 01 · Three resources</p>
@@ -44,7 +45,7 @@ export default function ResearchCollection() {
                 className={styles.textLink}
                 href={`/kosh/${step.id}`}
               >
-                Open resource ↗
+                Open resource <ArrowUpRight size={15} aria-hidden="true" />
               </Link>
             </div>
           </li>

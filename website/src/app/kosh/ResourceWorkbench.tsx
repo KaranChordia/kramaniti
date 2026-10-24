@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import type { LibraryItem } from "@/lib/library/libraryData";
 import { RESOURCE_VERSION } from "@/lib/library/resourceDetails";
@@ -511,7 +512,7 @@ export function ResourceWorkbench({
                 {selectedContext ||
                   "This saved profile is empty. Choose context for this resource or add a profile in Settings."}
               </p>
-              <Link href="/kosh/workspace">Manage saved context →</Link>
+              <Link href="/kosh/workspace">Manage saved context <ArrowRight size={15} aria-hidden="true" /></Link>
             </>
           )}
           <p className={styles.caption}>

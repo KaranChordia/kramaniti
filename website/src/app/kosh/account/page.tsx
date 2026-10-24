@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { getKoshSupabase } from "@/lib/kosh/supabase";
 import { KoshAuth } from "../KoshAuth";
 import styles from "../editorial.module.css";
@@ -93,7 +94,7 @@ export default function KoshRecovery() {
           "Recovery links are time-limited and can only be used for the account they were issued to."}
       </p>
       <Link className={styles.textLink} href="/kosh/workspace">
-        Return to my library ↗
+        Return to my library <ArrowUpRight size={15} aria-hidden="true" />
       </Link>
     </main>
   );

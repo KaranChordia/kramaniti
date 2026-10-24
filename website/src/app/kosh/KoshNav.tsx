@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import styles from "./editorial.module.css";
 
 export function KoshNav() {
@@ -20,7 +21,7 @@ export function KoshNav() {
         <Link href="/kosh#catalogue">Browse</Link>
         <Link href="/kosh#collections">Collections</Link>
         <Link href="/kosh/workspace">
-          My library <span aria-hidden="true">↗</span>
+          My library <ArrowUpRight size={15} aria-hidden="true" />
         </Link>
       </div>
     </nav>

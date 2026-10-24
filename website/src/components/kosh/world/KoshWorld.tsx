@@ -47,7 +47,7 @@ export function BackToExplore({
       scroll={pathname === "/kosh"}
       className={className}
       aria-current={
-        pathname === "/kosh" || pathname.startsWith("/kosh/")
+        pathname === "/kosh"
           ? "page"
           : undefined
       }

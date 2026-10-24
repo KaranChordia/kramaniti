@@ -5,19 +5,19 @@
 }
 
 .world {
-  --kosh-radius-surface: 8px;
-  --kosh-radius-control: 4px;
+  --kosh-radius-surface: var(--public-button-radius);
+  --kosh-radius-control: var(--public-button-radius);
   --kosh-nav-top: 16px;
   --kosh-nav-height: 72px;
   --kosh-header-height: calc(
     var(--kosh-nav-top) + var(--kosh-nav-height) + 12px
   );
-  --canvas: #0e0e10;
-  --surface: #171719;
-  --ink: #f1eee7;
-  --muted: #aaa69f;
-  --line: rgba(241, 238, 231, 0.16);
-  --gold: #d3b65d;
+  --canvas: var(--color-obsidian);
+  --surface: var(--color-graphite);
+  --ink: var(--color-ice-white);
+  --muted: var(--color-silver-mist);
+  --line: rgba(240, 240, 245, 0.16);
+  --gold: var(--color-burnished-gold);
   background: var(--canvas);
   color: var(--ink);
   min-height: 100dvh;
@@ -122,8 +122,11 @@
 .scene {
   padding-top: 12px;
   animation: space-arrival 380ms cubic-bezier(0.22, 0.68, 0, 1);
-  outline: none;
   scroll-margin-top: var(--kosh-header-height);
+}
+.scene:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 5px;
 }
 .scene > main {
   min-height: calc(100dvh - var(--kosh-header-height));

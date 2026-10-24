@@ -11,6 +11,7 @@ export function ResourceTile({ item }: { item: LibraryItem }) {
     <Link href={`/kosh/${item.id}`} className={styles.resource}>
       <span className={styles.tileTop}>
         <span className={styles.tileKind}>{kindLabels[item.kind]}</span>
+        <span className={styles.tileCategory}>{item.category}</span>
         <time className={styles.tileDate} dateTime={item.created}>
           {formatCreatedDate(item.created)}
         </time>

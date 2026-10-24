@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { useKramanitiTheme } from "@/hooks/useKramanitiTheme";
 import {
@@ -175,7 +176,7 @@ export function LibraryWorkspace() {
         </p>
         {!user && (
           <Link className={styles.textLink} href="/kosh#catalogue">
-            Explore without an account ↗
+          Explore without an account <ArrowUpRight size={15} aria-hidden="true" />
           </Link>
         )}
       </header>
@@ -229,7 +230,7 @@ export function LibraryWorkspace() {
                       <Link
                         href={`/kosh/${copy.template_id}?copy=${copy.id}#make-it-yours`}
                       >
-                        {copy.title} ↗
+                        {copy.title} <ArrowUpRight size={15} aria-hidden="true" />
                       </Link>
                       <span className={styles.caption}>
                         Source v{copy.template_version}

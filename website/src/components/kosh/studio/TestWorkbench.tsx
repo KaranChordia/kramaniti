@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { ArrowDownLeft } from "lucide-react";
 import type {
   Assessment,
   Finding,
@@ -99,7 +100,7 @@ export function TestWorkbench({
               setSample(researchSample);
           }}
         >
-          Use synthetic input ↙
+          Use synthetic input <ArrowDownLeft size={15} aria-hidden="true" />
         </button>
       </div>
       <Field

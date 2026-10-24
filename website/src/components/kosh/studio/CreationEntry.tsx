@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
+import { ArrowRight, ArrowUpLeft, ArrowUpRight } from "lucide-react";
 import {
   blankSkill,
   exampleIntents,
@@ -79,7 +80,7 @@ export function CreationEntry({
         />
         <div className={styles.entryActions}>
           <button className={styles.primary} type="submit">
-            {isLast ? "Create my starting package" : "Continue"} <span aria-hidden="true">↗</span>
+            {isLast ? "Create my starting package" : "Continue"} <ArrowUpRight size={15} aria-hidden="true" />
           </button>
           {step > 0 && <button type="button" onClick={() => setStep((value) => value - 1)}>Back</button>}
           <button type="button" onClick={() => onStart(blankSkill())}>
@@ -105,7 +106,7 @@ export function CreationEntry({
               ref.current?.focus();
             }}
           >
-            {example.label} <span aria-hidden="true">↖</span>
+            {example.label} <ArrowUpLeft size={15} aria-hidden="true" />
           </button>
         ))}
       </div>
@@ -116,7 +117,7 @@ export function CreationEntry({
           is an explicit design fixture, not generated work.
         </p>
         <button onClick={() => onStart(researchFixture())}>
-          Open synthetic research skill →
+          Open synthetic research skill <ArrowRight size={15} aria-hidden="true" />
         </button>
       </details>
       <p className={styles.arrivalFoot}>

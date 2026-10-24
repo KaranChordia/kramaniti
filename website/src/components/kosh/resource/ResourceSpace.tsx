@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Download } from "lucide-react";
 import {
   formatCreatedDate,
   kindLabels,
@@ -70,14 +71,16 @@ export function ResourceSpace({
   return (
     <main className={styles.page} data-disable-global-shockwave="true">
       <nav className={styles.back} aria-label="Back">
-        <BackToExplore>← All templates</BackToExplore>
+        <BackToExplore>
+          <ArrowLeft size={15} aria-hidden="true" /> All templates
+        </BackToExplore>
       </nav>
 
       <header className={styles.hero}>
         <p className={styles.tag}>
           {kindLabels[item.kind]}
           <span aria-hidden="true"> · </span>
-          Free template
+          {item.category} · Free template
           {item.created ? (
             <>
               <span aria-hidden="true"> · </span>
@@ -96,7 +99,7 @@ export function ResourceSpace({
             href={item.download}
             download={`${item.id}.md`}
           >
-            Download template <span aria-hidden="true">↓</span>
+            Download template <Download size={16} aria-hidden="true" />
           </a>
           <button
             type="button"
@@ -104,7 +107,7 @@ export function ResourceSpace({
             onClick={copyTemplate}
           >
             {copied === "done"
-              ? "Copied ✓"
+              ? <><span>Copied</span><Check size={15} aria-hidden="true" /></>
               : copied === "failed"
                 ? "Could not copy, try Download"
                 : "Copy template"}
@@ -123,7 +126,10 @@ export function ResourceSpace({
         <h2 id="how-heading">How to use it</h2>
         <div className={styles.steps}>{prose(section("how-to-use"))}</div>
         <details className={styles.fold}>
-          <summary>What you will need before you start</summary>
+          <summary>
+            <span>What you will need before you start</span>
+            <ChevronDown size={18} aria-hidden="true" />
+          </summary>
           {prose(section("before-you-begin"))}
         </details>
       </section>
@@ -132,7 +138,7 @@ export function ResourceSpace({
         <div className={styles.blockHead}>
           <h2 id="template-heading">The template</h2>
           <button type="button" onClick={copyTemplate}>
-            {copied === "done" ? "Copied ✓" : "Copy"}
+            {copied === "done" ? <><span>Copied</span><Check size={14} aria-hidden="true" /></> : "Copy"}
           </button>
         </div>
         <p className={styles.hint}>
@@ -148,7 +154,7 @@ export function ResourceSpace({
 
       <section className={styles.block} aria-label="More detail">
         <details className={styles.fold}>
-          <summary>See an example</summary>
+          <summary><span>See an example</span><ChevronDown size={18} aria-hidden="true" /></summary>
           <p className={styles.hint}>
             A made-up example, so you can see what a filled-in version looks
             like.
@@ -160,11 +166,11 @@ export function ResourceSpace({
           </div>
         </details>
         <details className={styles.fold}>
-          <summary>How to tell it is done well</summary>
+          <summary><span>How to tell it is done well</span><ChevronDown size={18} aria-hidden="true" /></summary>
           {prose(section("quality-check"))}
         </details>
         <details className={styles.fold}>
-          <summary>Where a person should decide</summary>
+          <summary><span>Where a person should decide</span><ChevronDown size={18} aria-hidden="true" /></summary>
           {prose(section("limits-and-human-review"))}
           <p className={styles.hint}>{detail.limit}</p>
         </details>
@@ -177,7 +183,7 @@ export function ResourceSpace({
             setYourCopyOpen((event.target as HTMLDetailsElement).open)
           }
         >
-          <summary>Edit your own copy on this site</summary>
+          <summary><span>Edit your own copy on this site</span><ChevronDown size={18} aria-hidden="true" /></summary>
           {yourCopyOpen ? (
             <ResourceWorkbench
               key={item.id}
@@ -190,7 +196,7 @@ export function ResourceSpace({
           ) : null}
         </details>
         <details className={styles.fold}>
-          <summary>About this version</summary>
+          <summary><span>About this version</span><ChevronDown size={18} aria-hidden="true" /></summary>
           {prose(section("edition-notes"))}
           <Link className={styles.textLink} href="/kosh/standards">
             How we write Kosh templates
@@ -206,7 +212,7 @@ export function ResourceSpace({
               <Link key={resource.id} href={`/kosh/${resource.id}`}>
                 <span>{kindLabels[resource.kind]}</span>
                 <b>{resource.title}</b>
-                <small>Open template →</small>
+                <small>Open template <ArrowUpRight size={14} aria-hidden="true" /></small>
               </Link>
             ))}
           </div>

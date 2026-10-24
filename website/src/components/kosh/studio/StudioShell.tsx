@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { ArrowRight, ArrowUpRight, CornerDownLeft } from "lucide-react";
 import { useKoshJourney } from "../world/KoshWorld";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
@@ -275,7 +276,7 @@ export function StudioShell({
                 className={styles.primary}
                 onClick={() => setDialog("export")}
               >
-                Export <span aria-hidden="true">↗</span>
+                Export <ArrowUpRight size={15} aria-hidden="true" />
               </button>
             </div>
           </header>
@@ -349,7 +350,7 @@ export function StudioShell({
               </span>
               {resumeLabel && (
                 <button onClick={resumeEditing}>
-                  Resume at {resumeLabel} ↙
+                  Resume at {resumeLabel} <CornerDownLeft size={15} aria-hidden="true" />
                 </button>
               )}
             </div>
@@ -374,7 +375,7 @@ export function StudioShell({
                   document.getElementById("tab-Boundaries")?.focus();
                 }}
               >
-                Give this work clear boundaries <span>→</span>
+                Give this work clear boundaries <ArrowRight size={15} aria-hidden="true" />
               </button>
             </section>
             <section
@@ -391,7 +392,7 @@ export function StudioShell({
                   document.getElementById("tab-Test")?.focus();
                 }}
               >
-                Try it with a sample <span>→</span>
+                Try it with a sample <ArrowRight size={15} aria-hidden="true" />
               </button>
             </section>
             <section
@@ -416,7 +417,7 @@ export function StudioShell({
                 className={styles.nextAction}
                 onClick={() => setDialog("export")}
               >
-                Review your package <span>→</span>
+                Review your package <ArrowRight size={15} aria-hidden="true" />
               </button>
             </section>
             <details className={styles.assistance}>
@@ -497,7 +498,7 @@ export function StudioShell({
               <div className={styles.pending}>
                 <span>Synthetic change pending</span>
                 <button onClick={() => setDialog("compare")}>
-                  Review changes →
+                  Review changes <ArrowRight size={15} aria-hidden="true" />
                 </button>
                 <button
                   onClick={() => {
@@ -517,7 +518,7 @@ export function StudioShell({
       )}
       <footer className={styles.footer}>
         <span>A method you shape. A decision you own.</span>
-        <Link href="/kosh/standards">Kosh standards ↗</Link>
+        <Link href="/kosh/standards">Kosh standards <ArrowUpRight size={15} aria-hidden="true" /></Link>
       </footer>
       {draft && dialog === "export" && (
         <ExportReview

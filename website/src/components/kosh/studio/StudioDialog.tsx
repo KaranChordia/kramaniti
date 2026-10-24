@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, type ReactNode } from "react";
+import { X } from "lucide-react";
 import styles from "./studio.module.css";
 export function StudioDialog({
   title,
@@ -30,7 +31,7 @@ export function StudioDialog({
       <div className={styles.dialogHeader}>
         <h2 id="studio-dialog-title">{title}</h2>
         <button onClick={onClose} aria-label="Close dialog">
-          Close <span aria-hidden="true">×</span>
+          Close <X size={15} aria-hidden="true" />
         </button>
       </div>
       {children}

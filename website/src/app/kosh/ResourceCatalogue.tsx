@@ -136,7 +136,7 @@ export function ResourceCatalogue({
               style={{ "--item-order": index } as CSSProperties}
             >
               <div className={discovery.itemBody}>
-                <span className={discovery.itemIdentity}>{kindLabels[item.kind]}</span>
+                <span className={discovery.itemIdentity}>{kindLabels[item.kind]} · {item.category}</span>
                 <h3>{item.title}</h3>
                 <span className={discovery.itemSummary}>{item.summary}</span>
               </div>
