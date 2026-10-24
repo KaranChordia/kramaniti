@@ -41,6 +41,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "A process description alone does not establish the cause, cost, or frequency of a delay.",
     related: ["agent-brief-template", "human-review-gate"],
   },
+  "premium-ui": {
+    outcome:
+      "A brand-adapted interaction contract and implementation brief for an interface that changes shape while preserving orientation and unfinished work.",
+    question:
+      "Which compact control should reveal which next workspace, and what context must survive the transition?",
+    requires: [
+      "One primary user task and the current product surface",
+      "The selected object, mode, filters or draft that must persist",
+      "The target brand's existing visual and accessibility constraints",
+    ],
+    check:
+      "The compact and expanded states are useful without motion; focus returns predictably; inactive surfaces cannot receive input; narrow-screen, reduced-motion and unavailable-dependency paths remain usable.",
+    limit:
+      "An interaction brief does not prove usability, performance or accessibility in every environment. Test the real product with representative content, devices and users before treating it as ready.",
+    related: ["workflow-diagnostic-skill", "human-review-gate"],
+  },
   "source-checking-skill": {
     outcome: "A draft whose claims are traceable, qualified, or removed.",
     question:

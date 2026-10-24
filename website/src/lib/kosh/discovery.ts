@@ -70,6 +70,7 @@ function plainText(text: string): string {
 const synonyms: Record<string, string> = {
   "research-synthesis-agent": "research evidence sources compare investigate decision brief",
   "workflow-diagnostic-skill": "process workflow slow delays handoffs stuck messy",
+  "premium-ui": "interface ui ux design adaptive responsive interaction controls workspace progressive disclosure transitions context keyboard focus motion",
   "source-checking-skill": "facts claims verify publish evidence accuracy check",
   "plugin-evaluation-guide": "plugin permissions connect app integration access security",
   "agent-brief-template": "assistant instructions job scope agent brief recurring",
