@@ -53,6 +53,7 @@ import {
 import styles from './Spasht.module.css';
 import simple from './SimpleWorkspace.module.css';
 import { SpashtConversation } from './SpashtConversation';
+import { WorkspaceTools } from './WorkspaceTools';
 import { workspaceStorageKey, handoffStorageKey, legacyWorkspaceKeys, defaultThreadId, normalizeThreadId, readCompatibleStorage, clearCompatibleStorage } from '@/lib/spasht/compatibility';
 import { parseWorkspaceView, workspaceViewUrl, workspaceToolGroups, isSupportingView, type WorkspaceView } from '@/lib/spasht/navigation';
 import { isSpashtActionData } from '@/lib/spasht/actions';
@@ -369,7 +370,7 @@ const MENU_ITEMS: Array<{ id: MenuId; label: string; icon: typeof CircleDot }> =
 
 const MOBILE_PRIMARY_ITEMS = MENU_ITEMS;
 
-const TOOL_ICONS: Partial<Record<WorkspaceView, typeof CircleDot>> = { path: Compass, context: FileText, loops: Repeat2, tasks: CheckCircle2, assistant: MessageCircle, files: FolderOpen, overview: BarChart3, memory: Database, community: Users };
+const TOOL_VIEWS: readonly WorkspaceView[] = workspaceToolGroups.flatMap(group => group.items.map(item => item.id));
 
 const createUiMessage = (
   role: UiAssistantMessage['role'],
@@ -747,6 +748,9 @@ export function Spasht() {
   const [savedContext, setSavedContext] = useState<SavedContext | null>(null);
   const [clarityBriefProjectId, setClarityBriefProjectId] = useState<string | null>(null);
   const [activeMenu, setActiveMenu] = useState<MenuId>('start');
+  const [toolPickerOpen, setToolPickerOpen] = useState(false);
+  const toolsButtonRef = useRef<HTMLButtonElement>(null);
+  const toolOriginRef = useRef<MenuId>('home');
   const [activeLoopId, setActiveLoopId] = useState<LoopId>('signal');
   const [loopRun, setLoopRun] = useState<LoopRunState>({
     loopId: 'signal',
@@ -1014,8 +1018,10 @@ export function Spasht() {
     setIsCreatingProject(false);
     setIsAssistantBusy(false);
     setIsProjectAssistantBusy(false);
+    setToolPickerOpen(false);
+    toolOriginRef.current = 'home';
     clearSpashtLocalStorage();
-  }, []);
+  }, [setAuthUsername, setAssistantSettings, setPrivacyProjectId]);
 
   const syncProfileTrack = useCallback((profile: SpashtProfile | null) => {
     const profileTrack = profile?.preferred_track;
@@ -1056,7 +1062,7 @@ export function Spasht() {
     setAuthProfile(data);
     syncProfileTrack(data);
     return data;
-  }, [syncProfileTrack]);
+  }, [syncProfileTrack, setStatus]);
 
   const loadProfile = useCallback(async (user: User) => {
     const supabase = getSpashtSupabase();
@@ -1108,7 +1114,7 @@ export function Spasht() {
     syncProfileTrack(fallbackProfile);
     setAssistantSettings(normalizeAssistantSettings(fallbackProfile?.assistant_settings));
     return fallbackProfile;
-  }, [syncProfileTrack, track, upsertProfile]);
+  }, [syncProfileTrack, track, upsertProfile, setStatus, setAssistantSettings]);
 
   const refreshWorkspace = useCallback(async (user: User, options?: { quiet?: boolean; preserveAssistantState?: boolean }) => {
     const supabase = getSpashtSupabase();
@@ -1247,7 +1253,7 @@ export function Spasht() {
       messages: nextMessages,
       memories: nextMemories,
     } satisfies WorkspaceSnapshot;
-  }, []);
+  }, [setStatus]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -4127,6 +4133,26 @@ export function Spasht() {
     window.requestAnimationFrame(() => stageRef.current?.scrollTo({ top: 0 }));
   };
 
+  const toolIsActive = activeMenu !== 'start' && (activeMenu === 'more' || TOOL_VIEWS.includes(activeMenu));
+  const exitTools = () => {
+    setToolPickerOpen(false);
+    const anchor = new URLSearchParams(window.location.search).get('project');
+    const project = projects.find(item => item.id === anchor && item.status === 'active');
+    if (project) { const tab = projectTab; openProject(project); selectProjectTab(tab); }
+    else openMenu(toolOriginRef.current === 'projects' ? 'projects' : 'home');
+    window.requestAnimationFrame(() => toolsButtonRef.current?.focus());
+  };
+  const chooseTool = (view: WorkspaceView) => {
+    setToolPickerOpen(false);
+    if (view === 'memory') setPrivacyProjectId(null);
+    if (view === 'context') setStep(savedContext ? 'context' : 'intent');
+    openMenu(view);
+    window.requestAnimationFrame(() => {
+      const heading = stageRef.current?.querySelector<HTMLElement>(':scope > section:not(#workspace-tools) h1, :scope > section:not(#workspace-tools) h2');
+      if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }); }
+    });
+  };
+
   const selectProjectTab = (tab: 'conversation' | 'steps' | 'details') => {
     setProjectTab(tab);
     if (selectedProject) window.history.replaceState(null, '', `${window.location.pathname}?project=${encodeURIComponent(selectedProject.id)}${tab === 'conversation' ? '' : `&tab=${tab}`}`);
@@ -4243,7 +4269,10 @@ export function Spasht() {
             })}
           </nav>
 
-          {authUser && <button type="button" className={simple.toolsButton} aria-pressed={isSupportingView(activeMenu)} onClick={() => openMenu('more')}><Wrench size={17} aria-hidden="true" /><span>Tools</span></button>}
+          {authUser && <button ref={toolsButtonRef} type="button" className={simple.toolsButton} aria-pressed={toolIsActive} aria-expanded={toolIsActive && (toolPickerOpen || activeMenu === 'more')} aria-controls={toolIsActive ? 'workspace-tools' : undefined} onClick={() => {
+            if (toolIsActive) { if (activeMenu === 'more') exitTools(); else setToolPickerOpen(current => !current); }
+            else { toolOriginRef.current = activeMenu; setToolPickerOpen(true); openMenu('more'); }
+          }}><Wrench size={17} aria-hidden="true" /><span>Tools</span></button>}
 
           {authUser && <details className={`${simple.accountMenu} ${simple.options}`} onKeyDown={(event) => { if (event.key === 'Escape') { event.currentTarget.open = false; event.currentTarget.querySelector('summary')?.focus(); } }}>
             <summary aria-label="Account menu"><UserRound size={20} aria-hidden="true" /></summary>
@@ -4261,13 +4290,17 @@ export function Spasht() {
           className={`${styles.stage} ${activeMenu === 'home' || activeMenu === 'projects' || activeMenu === 'more' ? simple.simpleStage : ''} ${activeMenu === 'start' ? styles.entryStage : ''} ${
             (activeMenu === 'assistant' || activeMenu === 'home') ? styles.assistantStage : ''
           } ${activeMenu === 'projects' ? styles.projectsStage : ''
-          } ${isSupportingView(activeMenu) && activeMenu !== 'more' ? simple.supportingStage : ''
+          } ${isSupportingView(activeMenu) ? simple.supportingStage : ''
           } spasht-stage`}
           aria-live="polite"
         >
 
+          {authUser && toolIsActive && <WorkspaceTools active={activeMenu as WorkspaceView} expanded={toolPickerOpen || activeMenu === 'more'}
+            contextLabel={selectedProject && new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '').get('project') === selectedProject.id ? selectedProject.title : 'All projects'}
+            counts={{ tasks: openTaskCount, files: projects.filter(project => project.status === 'active').length, memory: assistantMemories.filter(memory => memory.status === 'active').length }}
+            onExpand={() => setToolPickerOpen(true)} onCollapse={() => activeMenu === 'more' ? exitTools() : setToolPickerOpen(false)} onSelect={chooseTool} onExit={exitTools} />}
           {authUser && isSupportingView(activeMenu) && activeMenu !== 'more' && <div className={simple.toolOrientation}>
-            <button className={simple.quiet} onClick={() => openMenu('more')}>← All tools</button>
+            {!toolIsActive && <button className={simple.quiet} onClick={() => { setToolPickerOpen(true); openMenu('more'); }}>← All tools</button>}
             {selectedProject && new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '').get('project') === selectedProject.id && <button className={simple.quiet} onClick={() => { const tab = projectTab; openProject(selectedProject); selectProjectTab(tab); }}>Back to {selectedProject.title}</button>}
           </div>}
 
@@ -4284,7 +4317,7 @@ export function Spasht() {
                   <details><summary>Previous conversations</summary>{displayedAssistantThreads.map((thread) => <button key={thread.id} className={simple.quiet} onClick={() => setActiveAssistantThreadId(thread.id)}>{thread.title}</button>)}</details>
                 </div></details>}
               </div>
-              {!spashtAssistantMessages.some((message) => message.role === 'user') && <p className={simple.intro}>Bring an idea, a decision, or something that feels stuck. A few sentences are enough to begin.</p>}
+              {!spashtAssistantMessages.some((message) => message.role === 'user') && <p className={simple.intro}>One idea. One useful next step.</p>}
               <SpashtConversation
                 messages={spashtAssistantMessages.some((message) => message.role === 'user') ? spashtAssistantMessages : []}
                 input={assistantInput} busy={isAssistantBusy} onInput={setAssistantInput} onSend={() => void sendAssistantMessage()}
@@ -4292,9 +4325,9 @@ export function Spasht() {
                 feedback={renderSaveFeedback()}
               />
               {spashtAssistantMessages.some((message) => message.role === 'user') && !spashtAssistantMessages.some((message) => message.pendingAction) && !isAssistantBusy && <button className={simple.quiet} onClick={() => void sendAssistantMessage(`Create a project from this idea: ${spashtAssistantMessages.filter((message) => message.role === 'user').map((message) => message.content).join('\n')}`)}>Save as a project</button>}
-              {recentProjects.length > 0 && <section className={simple.recent} aria-label="Recent projects"><h2>Pick up where you left off</h2>
+              {recentProjects.length > 0 && <section className={simple.recent} aria-label="Recent projects"><h2>Recent projects</h2>
                 {recentProjects.map((project) => <button key={project.id} className={simple.projectRow} onClick={() => openProject(project)}>
-                  <span><strong>{project.title}</strong><small>{project.summary || project.context}</small></span><ArrowRight size={18} aria-hidden="true" />
+                  <span><strong>{project.title}</strong><small>{projectTasks.filter(task => task.project_id === project.id && task.status === 'open').length} open steps</small></span><ArrowRight size={18} aria-hidden="true" />
                 </button>)}
               </section>}
             </section>
@@ -4305,7 +4338,7 @@ export function Spasht() {
                 <div className={styles.homeHeroMain}>
                   <span>{accountTrackCopy.shortLabel}</span>
                   <h1 id="home-title">Workspace overview</h1>
-                  <p>{latestProject ? "Your latest project is ready to continue. Pick up the context and decide the next move." : "Start with the idea, decision, or problem on your mind. You only need a few sentences to begin."}</p>
+
                   <div className={styles.homeHeroActions}>
                     <button
                       type="button"
@@ -4333,7 +4366,6 @@ export function Spasht() {
                 </div>
               </div>
 
-              <details className={styles.supportingDetails}><summary>Workspace overview and supporting tools</summary>
               <div className={styles.homeStatsGrid} aria-label="Workspace summary">
                 {homeStats.map((item) => {
                   const Icon = item.icon;
@@ -4348,6 +4380,7 @@ export function Spasht() {
                 })}
               </div>
 
+              <details className={styles.supportingDetails}><summary>Activity & insights</summary>
               <div className={styles.homeBentoGrid}>
                 <article className={styles.homePanel} aria-label="Your activation signal">
                   <div className={styles.homePanelHeader}>
@@ -4505,7 +4538,7 @@ export function Spasht() {
             <section className={`${styles.screen} ${styles.entryScreen}`} aria-labelledby="entry-title">
               <h1 id="entry-title">Make room for your next clear move.</h1>
               <p className={styles.lead}>
-                Bring an idea or a problem. Shape it into a private project, decide what to do next, and pick it up where you left off.
+                Your ideas, projects and next steps. One private workspace.
               </p>
 
               <div className={styles.authTabs} aria-label="Authentication mode">
@@ -4632,8 +4665,8 @@ export function Spasht() {
               <aside className={styles.workspacePrivacyNote} aria-label="Private workspace guidance">
                 <ShieldCheck size={18} aria-hidden="true" />
                 <div>
-                  <strong>Your context stays in your private workspace.</strong>
-                  <p>The assistant can use this signal to draft your Clarity Brief, projects, tasks, and memories. It is not added to the public Spasht feed. You stay in control of what is saved and can delete saved workspace items from Memory.</p>
+                  <strong>Private context</strong>
+                  <details className={simple.help}><summary>How it’s used</summary><p>The assistant uses this context for briefs, projects, tasks and memory. You review saves and can remove remembered information.</p></details>
                 </div>
               </aside>
               <div className={styles.intentForm}>
@@ -4796,7 +4829,7 @@ export function Spasht() {
 
           {activeMenu === 'community' && (
             <section className={`${styles.screen} ${styles.communityScreen}`} aria-label="Spasht threads">
-              <p className={styles.authStatus}>Example Spasht: these threads demonstrate possible conversations. Posts and reactions stay in this session; they are not shared with other members.</p>
+              <p className={styles.authStatus}>Local preview. Threads and reactions stay in this session.</p>
               <div className={styles.communityGrid}>
                 <form
                   className={styles.communityComposer}
@@ -4952,7 +4985,7 @@ export function Spasht() {
               <div className={styles.loopBoardHeader}>
                 <div>
                   <h1>Loops</h1>
-                  <p>Start with Signal Loop to capture the decision that matters. Then use Project, Task, Reflection, and Brief loops to turn that signal into reviewed movement.</p>
+                  <details className={simple.help}><summary>About loops</summary><p>Signal → Project → Task → Reflection → Brief. Each loop uses your saved context; review changes before saving.</p></details>
                 </div>
               </div>
 
@@ -4995,32 +5028,8 @@ export function Spasht() {
                     </span>
                     <div>
                       <span>{selectedLoop.name}</span>
-                      <h2>
-                        {selectedLoop.id === 'project'
-                          ? activeLoopIsRunning
-                            ? 'Scanning your project workspace'
-                            : activeLoopIsReady
-                              ? loopResultTitle.project
-                              : 'Scan saved projects'
-                          : activeLoopIsRunning
-                            ? `Gathering context for ${selectedLoop.name}`
-                            : activeLoopIsReady
-                              ? loopResultTitle[selectedLoop.id]
-                              : 'Ready when you are'}
-                      </h2>
-                      <p>
-                        {selectedLoop.id === 'project'
-                          ? activeLoopIsRunning
-                            ? 'The loop agent is reading project files, folders, tasks, reports, and recent updates.'
-                            : activeLoopIsReady
-                              ? loopResultDetail.project
-                              : selectedLoop.nextAction
-                          : activeLoopIsRunning
-                            ? 'The Spasht is reading only the context this loop needs.'
-                            : activeLoopIsReady
-                              ? loopResultDetail[selectedLoop.id]
-                              : selectedLoop.nextAction}
-                      </p>
+                      <h2>{activeLoopIsRunning ? 'Working…' : activeLoopIsReady ? 'Ready to review' : selectedLoop.name}</h2>
+                      <details className={simple.help}><summary>How this works</summary><p>{selectedLoop.nextAction}</p></details>
                     </div>
                   </div>
 
@@ -5030,9 +5039,9 @@ export function Spasht() {
                         <div className={styles.projectLoopStart}>
                           <div className={styles.projectLoopStartCopy}>
                             <span>Project scan</span>
-                            <h3>Let the loop agent read your project workspace.</h3>
+                            <h3>Project scan</h3>
                             <p>
-                              The scan checks saved projects, folders, project instructions, open tasks, saved reports, and recent movement before showing the clearest project picture.
+                              Projects, tasks and recent changes.
                             </p>
                             <button type="button" className={styles.projectLoopScanButton} onClick={() => void activateLoop('project')}>
                               <Search size={17} aria-hidden="true" />
@@ -5248,7 +5257,7 @@ export function Spasht() {
               <div className={styles.taskManagerHeader}>
                 <div>
                   <h1>Tasks</h1>
-                  <p>Manage open, completed, assistant-created, and manually added tasks by project.</p>
+
                 </div>
                 <div className={styles.taskStatusStrip} aria-label="Task status summary">
                   <span><strong>{openTaskCount}</strong> Open</span>
@@ -5736,25 +5745,10 @@ export function Spasht() {
             </section>
           )}
 
-          {activeMenu === 'more' && (
-            <section className={simple.main} aria-labelledby="tools-heading">
-              <h1 id="tools-heading">A tool when you need it.</h1>
-              <p className={simple.intro}>Your everyday work stays in Home and Projects. Open a supporting tool for a little more structure, a wider view, or a fresh perspective.</p>
-              <div className={simple.toolGroups}>
-                {workspaceToolGroups.map((group) => <section className={simple.toolGroup} key={group.title} aria-label={group.title}>
-                  <h2>{group.title}</h2><p>{group.detail}</p>
-                  {group.items.map((item) => { const Icon = TOOL_ICONS[item.id] ?? CircleDot; return <button key={item.id} className={simple.toolLink} onClick={() => { if (item.id === 'memory') setPrivacyProjectId(null); if (item.id === 'context') setStep(savedContext ? 'context' : 'intent'); openMenu(item.id); }}>
-                    <Icon size={19} aria-hidden="true" /><span><strong>{item.title}</strong><small>{item.detail}</small></span><ArrowRight size={16} aria-hidden="true" />
-                  </button>; })}
-                </section>)}
-              </div>
-            </section>
-          )}
-
           {activeMenu === 'memory' && (
             <section className={`${styles.screen} ${simple.main}`} aria-label="Remembered information">
-              <h1>What’s remembered</h1>
-              <p className={simple.intro}>{privacyProjectId ? 'Information used with this project, including your general preferences.' : 'Information you chose to save. You can edit or remove it here.'}</p>
+              <h1>Memory</h1>
+              <p className={simple.intro}>{privacyProjectId ? 'This project + your preferences' : 'Saved by you. Edit or remove anytime.'}</p>
               {renderSaveFeedback()}
               <div className={styles.memoryList} aria-label="Assistant memories">
                 {assistantMemories.filter((memory) => !privacyProjectId || !memory.project_id || memory.project_id === privacyProjectId).length > 0 ? (
@@ -5871,7 +5865,7 @@ export function Spasht() {
                 {renderSaveFeedback()}
                 <div aria-label="Project list">
                   {filteredProjects.filter((project) => project.status === 'active').map((project) => <button key={project.id} className={simple.projectRow} onClick={() => openProject(project)}>
-                    <span><strong>{project.title}</strong><small>{project.summary || project.context}</small></span><ArrowRight size={18} aria-hidden="true" />
+                    <span><strong>{project.title}</strong><small>{projectTasks.filter(task => task.project_id === project.id && task.status === 'open').length} open steps</small></span><ArrowRight size={18} aria-hidden="true" />
                   </button>)}
                   {!filteredProjects.some((project) => project.status === 'active') && <p className={simple.intro}>{projects.some((project) => project.status === 'active') ? 'No projects match this view. Try a different search or folder.' : 'Your first saved idea will appear here. Start a new project when you are ready.'}</p>}
                 </div>
@@ -5905,7 +5899,7 @@ export function Spasht() {
                   <SpashtConversation messages={selectedProjectMessages} input={projectAssistantInput} busy={isProjectAssistantBusy} onInput={setProjectAssistantInput} onSend={() => void sendProjectAssistantMessage()} renderAction={renderConversationAction} label="Project message" placeholder="Ask about this project or choose the next step…" emptyText="This conversation uses your saved project details. What would you like to work through next?" feedback={renderSaveFeedback()} />
                 </div>}
                 {projectTab === 'steps' && <div id="project-panel-steps" role="tabpanel" aria-labelledby="project-tab-steps">
-                  <p className={simple.intro}>Small actions to move this project forward.</p>
+
                   {renderSaveFeedback()}
                   {selectedProjectTasks.filter((task) => task.status === 'open').map((task) => renderSimpleTask(task))}
                   {!selectedProjectTasks.some((task) => task.status === 'open') && <p className={simple.intro}>No open steps. Add one below, or ask in the conversation.</p>}

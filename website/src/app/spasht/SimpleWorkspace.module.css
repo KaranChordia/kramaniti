@@ -2,19 +2,6 @@
 :global(.spasht-rail) > .toolsButton { grid-area: tools; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 8px 12px; flex-shrink: 0; color: var(--spasht-muted); font: inherit; font-size: 13px; background: transparent; border: 1px solid var(--spasht-border); border-radius: 8px; cursor: pointer; }
 .toolsButton:hover, .toolsButton[aria-pressed='true'] { color: var(--spasht-gold-light); border-color: var(--spasht-gold-border); }
 .toolsButton:focus-visible { outline: 2px solid var(--spasht-gold-light); outline-offset: 3px; }
-.toolGroups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; margin-top: 40px; }
-.toolGroup { min-width: 0; }
-.toolGroup h2 { font-size: 16px; font-weight: 600; color: var(--spasht-text); margin: 0 0 8px; }
-.toolGroup > p { color: var(--spasht-faint); font-size: 12px; line-height: 1.7; margin: 0 0 20px; }
-.toolLink { display: flex; width: 100%; align-items: flex-start; gap: 12px; min-height: 44px; padding: 18px 0; color: var(--spasht-text); background: transparent; border: 0; border-top: 1px solid var(--spasht-divider); text-align: left; font: inherit; cursor: pointer; }
-.toolLink > svg { flex-shrink: 0; margin-top: 3px; color: var(--spasht-gold-light); }
-.toolLink > svg:last-child { width: 13px; margin-left: auto; }
-.toolLink > span { min-width: 0; }
-.toolLink strong { display: block; font-size: 14px; font-weight: 500; line-height: 1.5; }
-.toolLink small { display: block; margin-top: 6px; color: var(--spasht-muted); font-size: 12px; line-height: 1.7; }
-.toolLink:hover strong { color: var(--spasht-gold-light); }
-.toolGroup .toolLink { background: none; box-shadow: none; border: 0; border-top: 1px solid var(--spasht-divider); border-radius: 0; }
-.toolGroup .toolLink::before, .toolGroup .toolLink::after { display: none; }
 .supportingStage { display: flex; flex-direction: column; gap: 16px; }
 .supportingStage > section { flex: 0 0 auto; }
 .supportingStage > section:has([aria-label="Assistant menu bar"]) { height: auto; flex: 1 0 520px; min-height: 520px; }
@@ -82,7 +69,6 @@
   .simpleStage { padding-bottom: calc(112px + env(safe-area-inset-bottom)); scroll-padding-bottom: 112px; }
 }
 @media (max-width: 700px) {
-  .toolGroups { grid-template-columns: 1fr; gap: 28px; margin-top: 28px; }
   .toolsButton { padding: 8px 10px; font-size: 12px; gap: 6px; }
   .composer { grid-template-columns: minmax(0, 1fr); }
   .composer button { justify-self: end; }
@@ -96,3 +82,18 @@
 @media (max-width: 700px) {
   .workspaceHeader .options[open] > div { left: 0; right: auto; }
 }
+
+/* Working surfaces share a quiet, compact control language. */
+.main h1 { font-size: clamp(23px, 3vw, 32px); }
+.supportingStage { gap: 14px; }
+.supportingStage > .toolOrientation:empty { display: none; }
+.supportingStage > :global(#workspace-tools) { flex: 0 0 auto; }
+.projectRow small { font-size: 11px; }
+.help { font-size: 12px; color: var(--spasht-muted); }
+.help summary { cursor: pointer; padding: 8px 0; font-size: 11px; color: var(--spasht-faint); }
+.help p { max-width: 650px; margin: 8px 0; font-size: 12px; line-height: 1.6; }
+.supportingStage > section { width: 100%; max-width: 1120px; margin-inline: auto; }
+.supportingStage .toolOrientation { width: 100%; max-width: 1120px; margin-inline: auto; }
+.toolOrientation button { min-height: 36px; padding: 6px 10px; font-size: 11px; box-shadow: none; }
+
+@media (max-width: 760px) { .supportingStage { padding-bottom: calc(112px + env(safe-area-inset-bottom)); scroll-padding-bottom: 112px; } }
