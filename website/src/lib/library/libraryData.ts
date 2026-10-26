@@ -478,4 +478,17 @@ export const libraryItems: LibraryItem[] = [
     status: 'Starter template',
     created: '2026-10-20',
   },
+  {
+    id: 'new-hire-first-two-weeks',
+    category: 'Workflow design',
+    kind: 'Skill',
+    title: 'Get a new hire doing real work in their first two weeks',
+    summary: 'Plan a new person’s first two weeks of real tasks, the written steps they follow, who answers their questions and what gets checked before their work reaches a customer.',
+    useWhen: 'You are taking on frontline or junior staff and the first weeks usually mean the owner explaining the same things again and again while the new person waits for work.',
+    includes: ['Day-by-day plan', 'Go-to person and backup', 'Not alone yet list', 'Weekly review notes'],
+    format: 'Markdown',
+    download: '/kosh/new-hire-first-two-weeks.md',
+    status: 'Starter template',
+    created: '2026-10-22',
+  },
 ];
