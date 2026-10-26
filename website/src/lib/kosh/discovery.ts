@@ -91,6 +91,7 @@ const synonyms: Record<string, string> = {
   "repeated-question-log": "questions repeated repetitive answers knowledge faq",
   "test-before-build-sheet": "test pilot experiment validate before build",
   "customer-handoff-plan": "customer chat complaints escalate escalation human handover chatbot",
+  "founder-voice-sheet": "voice tone style brand writing founder rewrite rewriting drafts captions emails posts sound like me",
   "decision-record": "decisions why owner record chat meetings exceptions",
   "review-reply-brief": "reviews review ratings google zomato swiggy reply replies complaints stars",
   "business-fact-sheet": "whatsapp chatbot bot facts prices price list timings hours holidays policies faq information sheet",
