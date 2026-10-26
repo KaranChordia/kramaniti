@@ -423,6 +423,23 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The template helps you answer reviews promptly and in your own voice; it does not check whether a review is true, settle a complaint, or tell you what each review platform's rules allow.",
     related: ["customer-handoff-plan", "human-review-gate"],
   },
+  "applicant-shortlist-rules": {
+    outcome:
+      "A one-page set of hiring rules written before AI reads any application, so a tool can sort applicants against what the job really needs while a named person makes and records every call, reject or hire decision.",
+    question:
+      "What must an applicant have for this job, what must never count against anyone, and who decides?",
+    requires: [
+      "A plain description of the job and what the person will do on a normal day",
+      "The things someone truly needs on day one, separate from what they can learn",
+      "The applications, or the place they arrive",
+      "One person who owns the hiring decision and reads every pile",
+    ],
+    check:
+      "Must-haves were written before any application was read; the never-counts list was checked with a lawyer or HR adviser; every AI sort quotes the application; the owner read every pile, including does not meet; every decision has a reason and a named person in the log.",
+    limit:
+      "The template keeps hiring decisions with a person and sets rules before AI sorts applications; it does not give legal or HR advice, prove a tool is free of bias, or tell you which hiring laws apply to you.",
+    related: ["human-review-gate", "decision-record"],
+  },
   "invoice-follow-up-brief": {
     outcome:
       "A short brief that lets an assistant draft polite, dated payment reminders from your list of unpaid invoices, while a named person approves every reminder before it goes out and handles any dispute.",
