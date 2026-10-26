@@ -82,6 +82,7 @@ const synonyms: Record<string, string> = {
   "adoption-packet-skill": "team rules adoption ai policy client data",
   "client-onboarding-handoff-brief": "onboard onboarding sales delivery client handoff scope",
   "non-build-list-register": "ideas prioritize prioritise build defer reject ai",
+  "applicant-shortlist-rules": "hiring hire applicants applications candidates resumes cv shortlist screening recruit recruitment fair bias interview",
   "conditional-founder-review-rules": "founder waiting approvals review bottleneck signoff",
   "bottleneck-interview-guide": "interview people waiting bottleneck slow process",
   "constraint-pick-sheet": "constraint priority problem fix first build",
