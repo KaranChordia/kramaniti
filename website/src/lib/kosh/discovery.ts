@@ -87,6 +87,7 @@ const synonyms: Record<string, string> = {
   "constraint-pick-sheet": "constraint priority problem fix first build",
   "proposal-quote-drafting-brief": "proposal proposals quote quotes prices pricing scope promises",
   "ai-tool-subscription-audit": "subscriptions tools apps audit paying costs duplicate too many",
+  "vendor-quote-comparison": "vendor vendors supplier suppliers quote quotes quotation quotations compare comparison buy buying purchase price software machinery machine transport logistics contract",
   "digital-readiness-baseline": "digital paper notebooks registers information software",
   "repeated-question-log": "questions repeated repetitive answers knowledge faq",
   "test-before-build-sheet": "test pilot experiment validate before build",
