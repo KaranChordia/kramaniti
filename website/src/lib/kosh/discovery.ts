@@ -69,6 +69,7 @@ function plainText(text: string): string {
 
 const synonyms: Record<string, string> = {
   "research-synthesis-agent": "research evidence sources compare investigate decision brief",
+  "weekly-owner-summary": "weekly summary report numbers sales stock inventory dues credit collections owner dashboard figures sheets shop store accounts",
   "workflow-diagnostic-skill": "process workflow slow delays handoffs stuck messy",
   "premium-ui": "interface ui ux design adaptive responsive interaction controls workspace progressive disclosure transitions context keyboard focus motion",
   "source-checking-skill": "facts claims verify publish evidence accuracy check",
