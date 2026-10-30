@@ -135,6 +135,23 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "A log shows what people noticed and recorded, not everything that went wrong, so treat counts as signals rather than measurements. It does not decide which changes are worth making; the named owner does.",
     related: ["human-review-gate", "workflow-diagnostic-skill"],
   },
+  "local-language-reply-check": {
+    outcome:
+      "For each language your customers use, a fluent person checks the AI's replies against a short list, every mistake is logged with its fix, and the owner decides when that language can go out with lighter checks.",
+    question:
+      "Which languages do your customers write in, who can read each one well, and what must a reply get right before it is sent?",
+    requires: [
+      "The languages customers actually use, including mixed and English-letter typing",
+      "One fluent checker and a backup for each language",
+      "Your approved facts, so a wrong answer is caught and not just a wrong word",
+      "A shared sheet for the mistake log",
+    ],
+    check:
+      "Every reply in a language on trial was seen by the checker before sending; every mistake is logged with its type and source fix; no product name, price or number was changed; no health claim or unapproved promise went out; the owner decided when a language was ready.",
+    limit:
+      "The checklist helps a fluent person catch mistakes; it does not make the assistant fluent, cannot catch mistakes in replies nobody checks, and does not tell you which product or health claims the law allows.",
+    related: ["exception-log", "business-fact-sheet"],
+  },
   "enquiry-triage-agent": {
     outcome:
       "Every enquiry is sorted and either answered from information you have approved or passed to the right person, and nothing is sent without a person agreeing to it.",
