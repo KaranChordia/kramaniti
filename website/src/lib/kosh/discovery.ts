@@ -76,6 +76,7 @@ const synonyms: Record<string, string> = {
   "agent-brief-template": "assistant instructions job scope agent brief recurring",
   "human-review-gate": "approval signoff sign-off important sending review",
   "exception-log": "errors wrong mistakes corrections overrides repeat ai",
+  "local-language-reply-check": "kannada hindi tamil telugu malayalam marathi language languages translation translate regional local whatsapp replies check mistakes customers",
   "enquiry-triage-agent": "customer enquiries inquiries whatsapp email replies inbox piling",
   "builder-exit-handover-test": "builder leaving handover absence maintenance run fix",
   "founder-memory-sop-agent": "founder knowhow knowledge sop steps document instructions",
