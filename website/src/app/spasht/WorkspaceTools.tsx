@@ -7,6 +7,8 @@ import ui from './WorkspaceTools.module.css';
 
 const icons = { path: Compass, context: FileText, loops: Repeat2, tasks: CheckCircle2, assistant: MessageCircle, files: FolderOpen, overview: Activity, memory: Database, community: Users };
 const labels = ['Think', 'Work', 'Review'];
+const groupHeadings = ['Clarify an idea', 'Move work forward', 'Keep perspective'];
+const guidance: Partial<Record<WorkspaceView, string>> = { path: 'Find a starting point for your idea.', context: 'Put the problem and desired outcome in words.', loops: 'Review what moved and what to do next.', tasks: 'Choose an action across your projects.', assistant: 'Talk through questions across your workspace.', files: 'Find project folders, conversations and plans.', overview: 'See the wider picture of your work.', memory: 'Choose what stays in your assistant’s context.', community: 'Explore example problems. Not a shared feed.' };
 const shortLabels: Partial<Record<WorkspaceView, string>> = { path: 'Path', context: 'Brief', loops: 'Loops', tasks: 'Tasks', assistant: 'Assistant', files: 'Organiser', overview: 'Overview', memory: 'Memory', community: 'Examples' };
 type Tool = { id: WorkspaceView; title: string; detail: string };
 const tools = workspaceToolGroups.flatMap<Tool>(group => group.items);
@@ -30,7 +32,7 @@ export function WorkspaceTools({ active, expanded, contextLabel, counts, onExpan
   const current = tools.find(tool => tool.id === active);
   const ActiveIcon = current ? icons[current.id as keyof typeof icons] : Wrench;
   const search = query.trim().toLowerCase();
-  const matching = tools.filter(tool => `${tool.id} ${tool.title} ${shortLabels[tool.id]} ${tool.detail}`.toLowerCase().includes(search));
+  const matching = tools.filter(tool => `${tool.id} ${tool.title} ${shortLabels[tool.id]} ${tool.detail} ${guidance[tool.id]}`.toLowerCase().includes(search));
 
   useEffect(() => {
     if (expanded && !previousExpanded.current) searchRef.current?.focus();
@@ -50,7 +52,7 @@ export function WorkspaceTools({ active, expanded, contextLabel, counts, onExpan
     <div className={ui.bar}>
       <div className={ui.identity}><span className={ui.toolIcon}><ActiveIcon size={19} aria-hidden="true" /></span><div>
         <span className={ui.eyebrow}>{current ? 'Workspace tools' : contextLabel}</span>
-        {current ? <h2 ref={headingRef} tabIndex={-1}>{current.title}</h2> : <h1>Tools</h1>}
+        {current ? <h2 ref={headingRef} tabIndex={-1}>{current.title}</h2> : <h1>Find a way forward</h1>}
       </div></div>
       {current && <span className={ui.context} title={contextLabel}>{contextLabel}</span>}
       <div className={ui.controls}>
@@ -59,13 +61,14 @@ export function WorkspaceTools({ active, expanded, contextLabel, counts, onExpan
       </div>
     </div>
     {expanded && <div id="workspace-tool-palette" className={ui.palette}>
+      <p className={ui.intro}>{current ? 'Switch tools without losing your project context.' : 'Choose what you need to do. Your project context travels with you.'}</p>
       <div className={ui.search}><Search size={16} aria-hidden="true" /><input ref={searchRef} aria-label="Find a tool" placeholder="Find a tool…" value={query} onChange={event => setQuery(event.target.value)} />{query && <button type="button" aria-label="Clear tool search" onClick={() => { setQuery(''); searchRef.current?.focus(); }}><X size={15} aria-hidden="true" /></button>}<kbd>esc</kbd></div>
       <div className={ui.groups}>
         {workspaceToolGroups.map((group, index) => {
           const visible = group.items.filter(tool => matching.includes(tool));
-          return visible.length > 0 && <section key={group.title} className={ui.group} aria-label={`${labels[index]} tools`}><h2>{labels[index]}</h2><div className={ui.toolGrid}>
+          return visible.length > 0 && <section key={group.title} className={ui.group} aria-label={`${labels[index]} tools`}><h2><span>0{index + 1}</span>{groupHeadings[index]}</h2><div className={ui.toolGrid}>
             {visible.map(tool => { const Icon = icons[tool.id as keyof typeof icons]; return <button key={tool.id} type="button" className={ui.tool} aria-label={tool.title} aria-pressed={active === tool.id} title={tool.detail} onClick={() => { setQuery(''); onSelect(tool.id); }}>
-              <Icon size={22} strokeWidth={1.5} aria-hidden="true" /><span className={ui.fullLabel}>{tool.title}</span><span className={ui.shortLabel}>{shortLabels[tool.id]}</span>
+              <Icon size={22} strokeWidth={1.5} aria-hidden="true" /><span className={ui.fullLabel}>{tool.title}</span><span className={ui.description}>{guidance[tool.id]}</span>
               {tool.id === 'community' ? <small>Local preview</small> : counts[tool.id] !== undefined ? <small>{counts[tool.id]} {tool.id === 'tasks' ? 'open' : 'saved'}</small> : <ArrowUpRight size={13} className={ui.arrow} aria-hidden="true" />}
             </button>; })}
           </div></section>;

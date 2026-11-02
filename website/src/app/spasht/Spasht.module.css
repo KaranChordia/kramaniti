@@ -6230,3 +6230,26 @@
 .loopRunner .projectLoopResultHero { min-height: 0; padding: 14px; }
 .loopRunner .projectLoopStartCopy { min-height: 0; }
 @media (max-width: 760px) { .loopRunner { order: 0; } .loopPicker { order: -1; } }
+
+/* Full experience refresh: support screens use the same readable surfaces. */
+.page:has(:global(.spasht-stage)) .mobileTabBar { background:var(--spasht-panel-solid); border-top:1px solid var(--spasht-border); box-shadow:none; backdrop-filter:none; }
+.page .entryScreen { min-height:0; display:block; }
+.page .entryScreen .authTabs { margin-top:24px; }
+.page .entryScreen .authStatus { font-size:13px; line-height:1.6; }
+.page .entryScreen .entryActions { max-width:none; }
+.page .screen { box-shadow:none; }
+.page .taskStatusStrip { gap:12px; }
+.page .taskStatusStrip span { background:transparent; border:0; }
+.page .loopPicker small { display:block; font-size:12px; line-height:1.5; margin-top:5px; color:var(--spasht-muted); }
+.page .loopPicker button { min-height:88px; }
+.page .loopPicker em { font-size:11px; }
+.page .loopRunner { background:var(--spasht-panel-solid); border:1px solid var(--spasht-border); border-radius:12px; padding:24px; }
+.page .homeStatCard { background:var(--spasht-pane); border:1px solid var(--spasht-border); }
+.page .deleteDataConfirmButton { color:#8b2929; }
+.page .deleteDataConfirmButton:hover { color:#731f1f; }
+.page .assistantApprovalPanel { background:var(--spasht-gold-soft); border:1px solid var(--spasht-gold-border); box-shadow:none; }
+.page .assistantThreadDropdown,.page .assistantSettingsPanel { background:var(--spasht-panel-solid); box-shadow:var(--spasht-card-shadow); }
+.page .deleteDataButton,.page .deleteDataButtonConfirm { color:#8b2929; border-color:#c99893; }
+.page .deleteDataButton:hover { color:#731f1f; }
+.page .projectInstructionPanel { margin-top:12px; }
+.page .projectPreview > details { grid-column:1 / -1; }

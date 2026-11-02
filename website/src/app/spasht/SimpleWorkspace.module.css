@@ -97,3 +97,20 @@
 .toolOrientation button { min-height: 36px; padding: 6px 10px; font-size: 11px; box-shadow: none; }
 
 @media (max-width: 760px) { .supportingStage { padding-bottom: calc(112px + env(safe-area-inset-bottom)); scroll-padding-bottom: 112px; } }
+
+/* Shared working content, with readable hierarchy rather than glowing chrome. */
+.main { max-width:1120px; }
+.main h1 { font-weight:500; }
+.composer { background:var(--spasht-pane-soft); border-color:var(--spasht-border); border-radius:10px; padding:18px; }
+.composer button,.primary { background:#e8d497; border-color:#c5ac69; min-height:44px; font-size:14px; }
+.messages article { border:0; padding:0; }
+.messages .userMessage { background:var(--spasht-pane-soft); padding:16px 18px; border-radius:10px; }
+.messages p { font-size:15px; }
+.speaker { color:var(--spasht-muted); font-size:12px; font-weight:600; }
+.projectRow { padding:20px 0; }
+.projectRow strong { font-size:17px; font-weight:500; }
+.projectRow small { font-size:13px; line-height:1.6; margin-top:7px; }
+.task { padding:18px 0; }
+.task small { font-size:12px; }
+.detailsForm label { font-size:14px; }
+.options summary { min-height:44px; }

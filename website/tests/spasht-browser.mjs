@@ -26,7 +26,7 @@ const project={id:projectId,user_id:owner,folder_id:null,track:'founder',title:'
 const task={id:'f731acb1-28a6-4433-bd8c-1d46c5a883a1',user_id:owner,project_id:projectId,title:'Fixture task',detail:'First test action',source:'user',status:'open',sort_order:0,created_at:stamp,updated_at:stamp};
 const memory={id:'f731acb1-28a6-4433-bd8c-1d46c5a884a1',user_id:owner,project_id:projectId,title:'Fixture preference',content:'Keep replies concise',memory_type:'preference',source:'user',status:'active',created_at:stamp,updated_at:stamp};
 const db={projects:[project],project_tasks:[task],assistant_memories:[memory],profiles:[{user_id:owner,email:user.email,username:'fixture',preferred_track:'founder',assistant_settings:{},created_at:stamp,updated_at:stamp}],project_folders:[],project_reports:[],context_entries:[],assistant_messages:[],product_events:[]};
-let failTable=null;let failRead=null;let operations=[];
+let failTable=null;let failRead=null;let operations=[];let holdSummarySave=false;let releaseSummarySave;
 const browser=await chromium.launch({headless:true,channel:'chrome'});
 const context=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
 await context.addInitScript(({session})=>{if(!localStorage.getItem('clarity-qa-seeded')){localStorage.setItem('sb-bpvbnxqtfwrsmrpvcepc-auth-token',JSON.stringify(session));localStorage.setItem('clarity-qa-seeded','true');}},{session});
@@ -46,6 +46,7 @@ await context.route('https://bpvbnxqtfwrsmrpvcepc.supabase.co/**',async route=>{
  const table=url.pathname.split('/').pop();
  if(!(table in db)) throw new Error(`Unexpected table ${table}`);
  if((method==='GET'&&failRead===table)||(method!=='GET'&&failTable===table)) return send({code:'TEST_FAILURE',message:'Controlled save failure'},500);
+ if(table==='projects' && method==='PATCH' && holdSummarySave) { holdSummarySave=false; await new Promise(resolve=>{releaseSummarySave=resolve;}); }
  const filters=[...url.searchParams].filter(([key])=>!['select','order','limit'].includes(key));
  const matches=row=>filters.every(([key,value])=>value.startsWith('eq.')?String(row[key])===value.slice(3):value.startsWith('neq.')?String(row[key])!==value.slice(4):true);
  let rows=db[table].filter(matches);
@@ -78,10 +79,17 @@ try {
  await page.goto(`${origin}/clarity-square/`,{waitUntil:'networkidle'});
  assert.equal(new URL(page.url()).pathname,'/spasht/');
  await page.getByRole('heading',{name:'What would you like to make clearer?',exact:true}).waitFor();
- await page.getByLabel('Recent projects').getByRole('button').first().waitFor();
+ await page.getByLabel('Recent projects').getByRole('button').filter({hasText:'Fixture project'}).waitFor();
  assert.deepEqual(await mainNav().getByRole('button').allTextContents(),['Home','Projects']);
  await page.screenshot({path:`${output}/simple-home-1440.png`});
- await page.getByLabel('Recent projects').getByRole('button').first().click();
+ await page.getByLabel('Your idea',{exact:true}).fill('An unfinished thought');
+ await page.getByRole('button',{name:/Start with an idea/}).click();
+ assert.equal(await page.getByLabel('Your idea',{exact:true}).isVisible(),false);
+ await page.getByRole('button',{name:/Start with an idea/}).click();
+ assert.equal(await page.getByLabel('Your idea',{exact:true}).inputValue(),'An unfinished thought');
+ await page.getByLabel('Your idea',{exact:true}).fill('');
+
+ await page.getByLabel('Recent projects').getByRole('button').filter({hasText:'Fixture project'}).click();
  await page.getByRole('heading',{name:'Fixture project',exact:true}).waitFor();assert.ok(page.url().includes(`project=${projectId}`));
  const conversationTab=page.getByRole('tab',{name:'Conversation',exact:true});
  await conversationTab.focus();await page.keyboard.press('ArrowRight');
@@ -96,6 +104,36 @@ try {
  await page.reload({waitUntil:'networkidle'});await page.getByRole('heading',{name:'Fixture project',exact:true}).waitFor();assert.equal(await page.getByRole('tab',{name:'Next steps',exact:true}).getAttribute('aria-selected'),'true');
  await page.getByText('Completed steps',{exact:true}).click();await page.getByRole('checkbox',{name:'Fixture task',exact:true}).waitFor();
  await page.getByRole('tab',{name:'Details',exact:true}).click();await page.getByLabel('Project summary',{exact:true}).fill('A clearer description of the real project');await page.getByRole('button',{name:'Save details',exact:true}).click();await page.getByRole('status').filter({hasText:'Project details saved.'}).waitFor();assert.equal(db.projects[0].context,'A clearer description of the real project');
+ // Details remain owned by the project through modes, tools and project reopening.
+ await page.getByLabel('Project summary',{exact:true}).fill('Unfinished details kept with this project');
+ await page.getByRole('tab',{name:'Conversation',exact:true}).click();
+ assert.equal(await page.getByLabel('Project summary',{exact:true}).count(),0);
+ await page.getByRole('tab',{name:'Details',exact:true}).click();
+ assert.equal(await page.getByLabel('Project summary',{exact:true}).inputValue(),'Unfinished details kept with this project');
+ await page.getByText('Project options',{exact:true}).click();await page.getByRole('button',{name:'Open progress loops',exact:true}).click();
+ await page.getByRole('button',{name:'Back to Fixture project',exact:true}).click();
+ assert.equal(await page.getByLabel('Project summary',{exact:true}).inputValue(),'Unfinished details kept with this project');
+ await page.getByRole('button',{name:'All projects',exact:true}).click();
+ await page.getByLabel('Project list').getByRole('button').filter({hasText:'Fixture project'}).click();
+ await page.getByRole('tab',{name:'Details',exact:true}).click();
+ assert.equal(await page.getByLabel('Project summary',{exact:true}).inputValue(),'Unfinished details kept with this project');
+ failTable='projects';await page.getByRole('button',{name:'Save details',exact:true}).click();
+ await page.getByRole('alert').filter({hasText:'Details were not saved'}).waitFor();
+ assert.equal(await page.getByLabel('Project summary',{exact:true}).inputValue(),'Unfinished details kept with this project');
+ failTable=null;await page.getByRole('button',{name:'Save details',exact:true}).click();
+ await page.getByRole('status').filter({hasText:'Project details saved.'}).waitFor();
+ assert.equal(await page.getByText('Unsaved details · kept while you work here',{exact:true}).count(),0);
+ // A slow response must not erase text entered after submission.
+ await page.getByLabel('Project summary',{exact:true}).fill('Submitted version');
+ holdSummarySave=true;await page.getByRole('button',{name:'Save details',exact:true}).click();
+ await page.getByRole('button',{name:'Saving…',exact:true}).waitFor();
+ await page.getByLabel('Project summary',{exact:true}).fill('Newer unsaved version');
+ while(!releaseSummarySave) await new Promise(resolve=>setTimeout(resolve,10));
+ releaseSummarySave();await page.getByRole('button',{name:'Save details',exact:true}).waitFor();
+ assert.equal(await page.getByLabel('Project summary',{exact:true}).inputValue(),'Newer unsaved version');
+ assert.equal(db.projects[0].context,'Submitted version');
+ await page.getByRole('button',{name:'Save details',exact:true}).click();await page.getByRole('button',{name:'Save details',exact:true}).waitFor();
+ await page.screenshot({path:`${output}/project-workspace-details-1440.png`});
  await page.getByText('Project options',{exact:true}).click();await page.getByRole('button',{name:'What’s remembered',exact:true}).click();await page.getByRole('button',{name:'Edit memory',exact:true}).click();
  await page.getByLabel('Memory text').fill('Use one concrete next action');await page.getByRole('button',{name:'Save memory',exact:true}).click();await page.getByLabel('Assistant memories').getByText('Use one concrete next action',{exact:true}).waitFor();assert.equal(db.assistant_memories[0].content,'Use one concrete next action');
  await page.goBack();await page.getByRole('heading',{name:'Fixture project',exact:true}).waitFor();await page.getByRole('tab',{name:'Conversation',exact:true}).click();
@@ -138,6 +176,7 @@ try {
  await tools();await page.screenshot({path:`${output}/tool-station-1440.png`});
  for(const [label,view,visible] of restored){
   await tool(label);await visible().waitFor();
+  await page.screenshot({path:`${output}/destination-${view}-1440.png`});
   await page.waitForFunction(()=>document.querySelector('#workspace-tools h2')===document.activeElement);
   assert.equal(new URL(page.url()).searchParams.get('view'),view);
   assert.equal(new URL(page.url()).searchParams.get('project'),created.id);
@@ -212,7 +251,7 @@ try {
  for(const width of [820,747,390,320]){
   console.log(`Checking responsive tools at ${width}`);
   await page.setViewportSize({width,height:844});await tools();
-  const brandBounds=await page.getByRole('button',{name:'Open Spasht home',exact:true}).boundingBox();const toolsBounds=await page.getByRole('button',{name:'Tools',exact:true}).boundingBox();assert.ok(brandBounds.x+brandBounds.width<=toolsBounds.x,`Header controls overlap at ${width}`);
+  const brandBounds=await page.getByRole('button',{name:'Open Spasht home',exact:true}).boundingBox();const toolsBounds=await page.getByRole('button',{name:'Tools',exact:true}).boundingBox();assert.ok(brandBounds.x+brandBounds.width<=toolsBounds.x || brandBounds.y+brandBounds.height<=toolsBounds.y,`Navigation controls overlap at ${width}`);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   const bottom=page.getByRole('navigation',{name:'Primary Spasht navigation',exact:true});assert.ok(await bottom.isVisible()||await page.getByRole('navigation',{name:'Spasht sections',exact:true}).isVisible(),`Primary navigation missing at ${width}`);if(await bottom.isVisible())assert.deepEqual(await bottom.getByRole('button').allTextContents(),['Home','Projects']);
   await page.screenshot({path:`${output}/tools-${width}.png`});
@@ -232,6 +271,19 @@ try {
  await page.reload({waitUntil:'networkidle'});await page.getByText('Assistant preferences',{exact:true}).click();assert.equal(await page.getByRole('combobox',{name:'Review rhythm',exact:true}).inputValue(),'paused');
  await page.getByRole('button',{name:'Back to My first real project',exact:true}).click();
 
+ // Separate project drafts must survive switching without crossing ownership.
+ await page.getByRole('tab',{name:'Details',exact:true}).click();
+ await page.getByLabel('Project summary',{exact:true}).fill('Draft owned by the new project');
+ await page.getByRole('button',{name:'All projects',exact:true}).click();
+ await page.getByLabel('Project list').getByRole('button').filter({hasText:'Fixture project'}).click();
+ await page.getByRole('tab',{name:'Details',exact:true}).click();
+ assert.notEqual(await page.getByLabel('Project summary',{exact:true}).inputValue(),'Draft owned by the new project');
+ await page.getByLabel('Project summary',{exact:true}).fill('Draft owned by the original project');
+ await page.getByRole('button',{name:'All projects',exact:true}).click();
+ await page.getByLabel('Project list').getByRole('button').filter({hasText:'My first real project'}).click();
+ await page.getByRole('tab',{name:'Details',exact:true}).click();
+ assert.equal(await page.getByLabel('Project summary',{exact:true}).inputValue(),'Draft owned by the new project');
+ await page.getByRole('tab',{name:'Conversation',exact:true}).click();
  // Same two destinations, visible conversation input and no overflow on small screens.
  for(const width of [820,390,320]) {
   await page.setViewportSize({width,height:844});await page.reload({waitUntil:'networkidle'});await page.getByRole('heading',{name:'My first real project',exact:true}).waitFor();
@@ -239,13 +291,16 @@ try {
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await page.screenshot({path:`${output}/simple-project-${width}.png`});
  }
+ await page.getByRole('navigation',{name:'Primary Spasht navigation',exact:true}).getByRole('button',{name:'Home',exact:true}).click();await page.screenshot({path:`${output}/home-320.png`});
  await page.getByLabel('Account menu').click();await page.getByRole('button',{name:'Sign out',exact:true}).click();await page.getByRole('heading',{name:'Make room for your next clear move.',exact:true}).waitFor();assert.ok(!(await page.locator('main').innerText()).includes('My first real project'));
  await page.reload({waitUntil:'networkidle'});assert.ok(!(await page.locator('main').innerText()).includes('My first real project'));
+ await page.screenshot({path:`${output}/entry-320.png`});
+ await page.setViewportSize({width:1440,height:900});await page.screenshot({path:`${output}/entry-1440.png`});
  assert.equal(await page.getByLabel('Username',{exact:true}).count(),0);
  await page.getByLabel('Email',{exact:true}).fill(user.email);await page.getByLabel('Password',{exact:true}).fill('fixture-password');await page.getByRole('button',{name:'Create account',exact:true}).last().click();await page.getByRole('button',{name:'Resend confirmation',exact:true}).waitFor();await page.getByRole('button',{name:'Resend confirmation',exact:true}).click();await page.getByText('If this account needs confirmation, a new link is on its way.').waitFor();
  await page.goto(`${origin}/spasht/?recovery-fixture=1#access_token=${token}&refresh_token=fixture-refresh&expires_in=3600&token_type=bearer&type=recovery`,{waitUntil:'networkidle'});await page.getByLabel('New password',{exact:true}).waitFor();await page.getByLabel('New password',{exact:true}).fill('new-fixture-password');await page.getByRole('button',{name:'Update password',exact:true}).click();await page.getByRole('status').filter({hasText:'Password updated.'}).waitFor();
  assert.deepEqual(errors,[]);
- const report={passed:true,checks:['two primary destinations','canonical project opening','keyboard project tabs','native back and reload','failed saves preserve state','task completion persists','editable project details','memory editing','draft reload','stale draft rejection','one-time approval','failed snapshot blocks provider','archive and restore without data loss','idea to reviewed project','no automatic folders','responsive workspace','sign-out clears private state','email/password signup','confirmation retry','password recovery','all former feature areas reachable','tool URLs reload','five loops and actual project scan','cross-project task updates','explicit folder creation','project organiser URL continuity','local community preview','project-tab return continuity','secondary mobile tools','account overview','saved review preference','palette search and empty state','Escape and focus return','draft survives tool switching','Exit returns to selected project','rapid toggles leave one surface','system light preference','reduced motion'],operations:operations.length};
+ const report={passed:true,checks:['Home composer disclosure preserves input','desktop rail and mobile navigation','task-led tools directory','summary drafts survive modes and tools','failed summary saves retain input','slow saves preserve newer edits','summary drafts isolated by project','two primary destinations','canonical project opening','keyboard project tabs','native back and reload','failed saves preserve state','task completion persists','editable project details','memory editing','draft reload','stale draft rejection','one-time approval','failed snapshot blocks provider','archive and restore without data loss','idea to reviewed project','no automatic folders','responsive workspace','sign-out clears private state','email/password signup','confirmation retry','password recovery','all former feature areas reachable','tool URLs reload','five loops and actual project scan','cross-project task updates','explicit folder creation','project organiser URL continuity','local community preview','project-tab return continuity','secondary mobile tools','account overview','saved review preference','palette search and empty state','Escape and focus return','draft survives tool switching','Exit returns to selected project','rapid toggles leave one surface','system light preference','reduced motion'],operations:operations.length};
  await writeFile(`${output}/verification.json`,JSON.stringify(report,null,2));console.log(JSON.stringify(report));
 } catch(error) { await page.screenshot({path:`${output}/failure.png`}); throw error; }
 finally {await browser.close();}
