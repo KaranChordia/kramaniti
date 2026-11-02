@@ -456,6 +456,22 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The map shows what customer data you keep and who can reach it; it does not give legal advice, tell you which data protection duties apply to you or from when, or make you compliant with any law.",
     related: ["ai-tool-subscription-audit", "digital-readiness-baseline"],
   },
+  "founder-voice-sheet": {
+    outcome:
+      "One short voice sheet with real on-voice and off-voice examples and a few plain rules, so staff and AI tools can draft in the founder's voice and the founder only checks instead of rewriting.",
+    question:
+      "What makes writing sound like the founder, what never does, and which drafts does the founder still check before they go out?",
+    requires: [
+      "Five to ten pieces of writing the founder is happy with",
+      "Three to five drafts the founder rewrote or rejected",
+      "Fifteen minutes with the founder and one person to keep the sheet up to date",
+    ],
+    check:
+      "Every rule comes from a real example the founder agreed with; there are at least three on-voice and two off-voice examples; the never-do list covers promises, client names and unsupported claims; the founder-checks list covers new clients, money, complaints and public posts; a keeper and review date are named; every change is logged.",
+    limit:
+      "The sheet helps people and AI sound like the founder; it does not make a draft accurate, and it does not decide what the business promises or claims.",
+    related: ["conditional-founder-review-rules", "founder-memory-sop-agent"],
+  },
   "business-fact-sheet": {
     outcome:
       "One checked sheet of your prices, timings, policies and the things your assistant must never promise, with a named owner and a review date, so a WhatsApp or chat assistant answers customers only from facts you have approved.",
