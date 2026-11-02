@@ -311,6 +311,23 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The audit shows what you use and why; it does not prove that a tool is secure, compliant or good value, and it does not check vendor terms. A filled list is not approval to cancel, buy or change anyone’s access.",
     related: ["plugin-evaluation-guide", "non-build-list-register"],
   },
+  "vendor-quote-comparison": {
+    outcome:
+      "One comparison sheet that puts every vendor quote on the same terms, with each figure checked against the original quote by a named person, and a written record of which vendor the owner chose and why.",
+    question:
+      "What do we need, what does each quote really include and cost now and later, and who checks the figures and makes the choice?",
+    requires: [
+      "The quotes as the vendors sent them",
+      "A short note of what you are buying and the must-haves",
+      "The same questions for every vendor, including support, lock-in and your data",
+      "One person who checks every figure and an owner who decides",
+    ],
+    check:
+      "Must-haves were written before the quotes were read; every line quotes the original or says not stated; the checker ticked every figure against the quote; gaps were answered in writing; tax and contract questions went to the CA or adviser; the decision record says why.",
+    limit:
+      "The template lines up quotes and records your choice; it does not pick the best vendor, check a vendor's reliability, or give legal or tax advice. Check GST, input credit and contract terms with your CA or adviser.",
+    related: ["decision-record", "source-checking-skill"],
+  },
   "digital-readiness-baseline": {
     outcome:
       "A one-page record of where each piece of business information lives today, who holds it and what goes wrong if that person is away, with one small, safe first digital step that has an owner and a way to check it worked, before anyone buys software or AI.",
