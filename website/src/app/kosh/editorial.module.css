@@ -893,7 +893,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   flex: 1;
   min-width: 0;
   text-align: left;
@@ -1401,7 +1401,10 @@
 }
 .tileTop {
   justify-content: flex-start;
+  align-items: flex-start;
   width: 100%;
+  /* Room for a tag row that wraps to two lines, so titles in a row line up. */
+  min-height: 31px;
 }
 .tileKind {
   font-size: 9px;
@@ -1418,7 +1421,7 @@
 .tileBody {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   min-width: 0;
   text-align: left;
@@ -1529,5 +1532,11 @@
 @media (min-width: 681px) and (max-width: 1024px) {
   .catalogue {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* Tag rows can wrap at this width; reserve the same height on every tile
+     so titles in a row start at the same line. */
+  .tileTop {
+    min-height: 46px;
+    align-items: flex-start;
   }
 }
