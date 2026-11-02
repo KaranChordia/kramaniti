@@ -407,6 +407,23 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "The template helps the page match how the work runs; it does not check advertising, consumer or data protection rules, and it does not prove that the business will deliver every time.",
     related: ["source-checking-skill", "human-review-gate"],
   },
+  "content-from-real-work-plan": {
+    outcome:
+      "A weekly plan where every post starts from real work and approved facts, AI drafts stay inside those facts, and a named person approves every claim and customer mention before it goes out.",
+    question:
+      "What did the business actually do this week that would help a future customer, and what can you say about it that you can back up?",
+    requires: [
+      "Where you post and how often you can keep it up",
+      "A simple place to collect notes from the week's work",
+      "Your approved facts and the claims you never make",
+      "Customer permission before any name, photo or quote is used",
+    ],
+    check:
+      "Every post points to a real note; every claim, number or price comes from a note or the approved facts; every customer mention has permission on file; a named person approved each post with a claim or customer mention.",
+    limit:
+      "The plan helps you post about real work without overstating it; it does not promise enquiries or reach, and it does not replace a proper consent form or legal advice on using customer details.",
+    related: ["website-from-real-work", "source-checking-skill"],
+  },
   "review-reply-brief": {
     outcome:
       "A short brief that lets an assistant draft replies to your Google and marketplace reviews in your own voice, while the owner approves every reply to a complaint before it is posted.",
