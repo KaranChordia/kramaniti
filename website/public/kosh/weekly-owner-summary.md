@@ -67,7 +67,7 @@ Suggested starting list, cut or change it:
 
 ## Checks the assistant must run
 
-- Totals match between sources where they should (for example sales in the billing export and collections in the dues sheet)
+- Totals match between sources where they should (for example credit sales in the billing export and new entries in the dues sheet)
 - No source is older than the "updated until" time
 - Any number that moved a lot from last week is flagged, with the lines behind it
 - Any row with a blank amount, date or name is listed, not skipped
@@ -117,15 +117,15 @@ A sample family-run hardware and paint store keeps its numbers in three places: 
 
 ### Sample inputs
 
-Demonstration inputs only. Every amount below is a placeholder, not a real figure. Billing export: weekly sales [amount A]. Dues sheet: contractor balances totalling [amount B], with one contractor's row missing a date. Stock register: last updated Friday evening, so Saturday's entries are not in it. The owner asked for five numbers: sales, collections, contractor dues, low stock and supplier payments due next week.
+Demonstration inputs only. Every amount below is a placeholder, not a real figure. Billing export: weekly sales [amount A]. Dues sheet: contractor balances totalling [amount B], with one contractor's row missing a date, and payments received this week totalling [amount C]. Stock register: last updated Friday evening, so Saturday's entries are not in it. The owner asked for five numbers: sales, collections, contractor dues, low stock and supplier payments due next week.
 
 ### Example output
 
 #### The numbers
-[Fact within this demonstration] Sales this week: [amount A], from the billing export, weekly total line. Contractor dues: [amount B], from the dues sheet, total row. Supplier payments due next week: listed from the dues sheet's supplier tab.
+[Fact within this demonstration] Sales this week: [amount A], from the billing export, weekly total line. Contractor dues: [amount B], from the dues sheet, total row. Collections: [amount C], from the dues sheet, payments received column. Supplier payments due next week: missing, because none of the three sources lists them.
 
 #### Flags
-[Fact within this demonstration] The stock register was last updated on Friday, so low stock is left out this week. One contractor row in the dues sheet has no date, so it cannot be marked overdue or not.
+[Fact within this demonstration] The stock register was last updated on Friday, so low stock is left out this week. Supplier payments due are not in any of the sources, so they are left out too. One contractor row in the dues sheet has no date, so it cannot be marked overdue or not.
 
 #### What changed
 [Inference] Collections look lower than sales this week, which may only mean contractors bought on credit. The checker should confirm this from the dues sheet before the owner reads anything into it.

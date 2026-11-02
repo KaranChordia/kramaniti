@@ -82,7 +82,7 @@ List every "not stated" you asked about, who you asked and what they replied in 
 
 ## Things to check with our CA or adviser
 
-- Whether GST or other taxes apply and whether we can claim any input credit on this purchase
+- Whether GST or other taxes apply, and whether we can claim back any GST paid (input tax credit)
 - Any contract term we do not fully understand, especially lock-in, penalties or automatic renewal
 
 ## Decision record
@@ -99,7 +99,7 @@ List every "not stated" you asked about, who you asked and what they replied in 
 - Do not decide from the AI comparison until the checker has marked every line checked against the original quote.
 - If a figure in the comparison does not match the quote, the quote wins. Fix the comparison and tell the decision owner.
 - Do not let the AI tool contact vendors, accept a quote or agree to any term. A person does that.
-- Do not paste bank details, signed contracts or other private documents into an AI tool unless you are sure where that data goes.
+- Do not paste bank details, signed contracts or other private documents into an AI tool.
 - If two quotes cover different things, do not compare them on price alone. Ask the vendors to quote on the same scope first.
 
 ## Owner and review
@@ -121,13 +121,13 @@ Demonstration inputs only. The vendors are named A, B and C, and every price bel
 ### Example output
 
 #### Side by side comparison
-[Fact within this demonstration] Vendor A and C charge per trip; Vendor B charges a fixed monthly fee with a six-month minimum term. Loading is included by B and C, not by A. Only C mentions damage cover. Only C says how delivery proofs are shared. Taxes are "not stated" in A's and C's quotes.
+[Fact within this demonstration] Vendors A and C charge per trip; Vendor B charges a fixed monthly fee with a six-month minimum term. Loading is included by B and C, not by A. Only C mentions damage cover. Only C says how delivery proofs are shared. None of the quotes say whether taxes are included.
 
 #### Questions sent to vendors
 [Fact within this demonstration] Ask A about damage cover and taxes, ask B what happens to the fee in a slow month and how the minimum term ends, and ask C whether taxes are extra.
 
 #### What the comparison shows
-[Inference] The per-trip prices cannot be compared with B's monthly fee until the owner writes down how many trips a normal month needs. Leaving out loading and damage cover may make A look cheaper than it is.
+[Inference] The per-trip prices cannot be compared with B's monthly fee until the owner writes down how many trips a normal month needs. Leaving out loading and damage cover may make A look cheaper than it really is once those costs are added.
 
 #### Owner's decision
 [Recommendation] Fill in the gaps in writing first, have the checker tick every figure against the three original quotes, and check the tax question with the unit's CA. Then the owner picks and records the reason. This recommendation is not the business's decision.

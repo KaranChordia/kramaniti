@@ -19,7 +19,7 @@ One short voice sheet with real examples of writing that sounds like the founder
 ## How to use
 
 1. Sit with the founder and go through the examples. For each one, write a line on what makes it sound right or wrong. Use the founder's own words where you can. Do not write rules nobody has seen the founder apply.
-2. Fill in the sheet, keeping each rule short and pairing it with an example. Then give the sheet to the people and AI tools that draft for the business. If you use ChatGPT, Claude or Gemini, paste the sheet in before asking for a draft, and ask the tool to say which rule it followed for any line it is unsure about.
+2. Fill in the sheet, keeping each rule short and pairing it with an example. Then give the sheet to the people and AI tools that draft for the business. If you use ChatGPT, Claude or Gemini, paste the sheet in before asking for a draft, and ask the tool to say which rule it followed for any line it is unsure about, and check that the rule it names is really on the sheet.
 3. For the next two weeks, the founder marks up drafts against the sheet instead of rewriting them. Every time the founder changes a line, add the before and after to the sheet. Check the whole sheet again on the review date.
 
 ## Working template
@@ -114,7 +114,7 @@ Add more examples the same way.
 
 The founder checks these drafts every time, whatever the sheet says. For everything else, the person sending the draft checks it against the sheet.
 
-- First message to a new client or a large prospect
+- First message to a new client, or to any prospect the founder has named
 - Anything about money, a complaint or a mistake
 - Anything posted in public under the founder's name
 - Add your own:
@@ -152,8 +152,8 @@ Demonstration inputs only. No real clients, projects, prices or results are used
 #### How the founder sounds, in plain words
 [Fact within this demonstration] Says what is done first, then what is next, then asks one question. Describes materials and light plainly instead of using praise words. Apologises once, gives the reason and the new date, and moves on.
 
-#### Words and phrases the founder never uses
-[Fact within this demonstration] "Luxurious", "timeless elegance", "sanctuary", "dream home", and any line that claims the studio is the best.
+#### Things a draft must never do
+[Fact within this demonstration] Use praise words such as "luxurious", "timeless elegance", "sanctuary" or "dream home". Post a client's home without written permission.
 
 #### When the founder still checks before it goes out
 [Fact within this demonstration] Any post that shows a client's home, any update about a delay or extra cost, and the first email to every new client.
@@ -161,7 +161,7 @@ Demonstration inputs only. No real clients, projects, prices or results are used
 #### Next draft checked against the sheet
 [Inference] The junior designer's draft caption for a finished study room describes the cane shutters and the morning light, and names no client. It follows the sheet, so the founder only needs to confirm that the client's written permission to post is on file.
 
-#### Stop rules applied
+#### Next step
 [Recommendation] For the next two weeks the founder marks up drafts against the sheet rather than rewriting them, and the junior designer adds every change to the change log. This recommendation is not the business's decision.
 
 ## Quality check

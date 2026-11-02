@@ -19,7 +19,7 @@ A short weekly plan for Instagram, LinkedIn or WhatsApp status where every post 
 ## How to use
 
 1. Through the week, whoever does the work drops a line in the notes: what happened, a photo if the customer agreed, and anything a customer asked or said. One line is enough.
-2. On a fixed day, pick three to five notes that would help a future customer understand what you do or decide whether to call you. Fill in one row per post below. AI can write the first draft from the note and your approved facts.
+2. On a fixed day, pick the notes that would help a future customer understand what you do or decide whether to call you. Pick as many as you have posts that week, usually a few. Fill in one row per post below. AI can write the first draft from the note and your approved facts.
 3. The approver reads every draft against its note. Any post with a claim, a number, a price or a customer mention needs their yes before it is scheduled. Anything nobody can back up is cut or rewritten, not posted and fixed later.
 
 ## Working template
@@ -108,12 +108,11 @@ A sample boutique wedding and event planner in Bengaluru, run by two partners wi
 
 ### Sample inputs
 
-Demonstration inputs only. Notes from one week: a mehendi setup finished on a rainy afternoon after moving it indoors at short notice; a couple asked how early they should book a venue; the team tested a new flower supplier for a small engagement. Approved facts: the cities and kinds of events they plan, and that they do not publish prices. One couple has given written permission for photos without names; the others have not been asked.
+Demonstration inputs only. Notes from one week: a mehendi setup finished on a rainy afternoon after moving it indoors at short notice; a couple asked how early they should book a venue; the team tested a new flower supplier for a small engagement. Approved facts: the cities and kinds of events they plan, and that they do not publish prices. The mehendi couple has given written permission for photos without names; the others have not been asked.
 
 ### Example output
 
 #### This week's plan
-
 [Fact within this demonstration] Post 1 (Instagram): the rainy-day mehendi move, told as the steps the team took, using the photos the couple agreed to and no names.
 
 [Fact within this demonstration] Post 2 (WhatsApp status): a plain answer to "how early should we book a venue", written from the partners' own advice, with no promise about availability.
@@ -121,12 +120,10 @@ Demonstration inputs only. Notes from one week: a mehendi setup finished on a ra
 [Fact within this demonstration] Cut: the flower supplier test, because the result is not known yet and the engagement couple has not been asked about photos.
 
 #### What the approver changed
-
-[Inference] The AI draft for post 1 said the team "never lets weather ruin a wedding". The partner cut that line because no one can promise it, and kept the factual description of what was done that day.
+[Fact within this demonstration] The AI draft for post 1 said the team "never lets weather ruin a wedding". The partner cut that line because no one can promise it, and kept the factual description of what was done that day.
 
 #### Next step
-
-[Recommendation] Ask for photo permission at the booking stage instead of after the event, and add "we do not publish prices" to the AI's instructions so it stops suggesting price posts. This recommendation is not the business's decision.
+[Recommendation] Ask for photo permission at the booking stage instead of after the event, and add "we do not publish prices" to the AI's instructions before the next drafts are written. This recommendation is not the business's decision.
 
 ## Quality check
 
@@ -134,7 +131,7 @@ Every post points to a note from real work; every claim, number or price comes f
 
 ## Limits and human review
 
-The template helps you post about real work without overstating it; it does not grow your following, guarantee enquiries or tell you what will perform well on any platform. It does not replace a proper consent form or legal advice on using customer images and details; take that to a qualified adviser. Keep the final call on every claim and every customer mention with a named person.
+The template helps you post about real work without overstating it; it does not grow your following, guarantee enquiries or tell you what will perform well on any platform. It does not replace a proper consent form or legal advice on using customer images and details; take that to a lawyer or adviser. Keep the final call on every claim and every customer mention with a named person.
 
 ## Edition notes
 
