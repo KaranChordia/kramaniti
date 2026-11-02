@@ -25,6 +25,23 @@ export const resourceDetails: Record<string, ResourceDetail> = {
       "This template cannot verify sources that you have not supplied or that your chosen assistant cannot access.",
     related: ["source-checking-skill", "human-review-gate"],
   },
+  "weekly-owner-summary": {
+    outcome:
+      "A one-page weekly summary of the numbers the owner uses, where every figure names the sheet and line it came from, gaps and mismatches are flagged instead of guessed, and a named person has checked it before the owner reads it.",
+    question:
+      "Which few numbers does the owner need each week, which sheet does each one come from, and who checks them before anyone acts?",
+    requires: [
+      "The sheets or exports where sales, stock and dues are kept",
+      "A short list of the numbers the owner actually uses",
+      "A fixed day when the sheets are up to date",
+      "One person who checks every number against its source",
+    ],
+    check:
+      "Every number names its source and line; nothing missing was estimated; out-of-date sources are flagged at the top; mismatches are shown, not resolved by the assistant; the checker signed the summary; any action was decided by a person.",
+    limit:
+      "The template summarises your own sheets; it does not audit your books, check that the sheets are right, or give accounting, tax or GST advice. A summary is not approval to reorder, chase a customer or pay a supplier.",
+    related: ["source-checking-skill", "exception-log"],
+  },
   "workflow-diagnostic-skill": {
     outcome:
       "A clear process map and the smallest useful improvement to investigate.",
