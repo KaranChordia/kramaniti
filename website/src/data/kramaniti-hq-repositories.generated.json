@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-29T18:57:56.315Z",
+  "generatedAt": "2026-10-30T01:55:23.798Z",
   "privacy": "sanitized-metadata-only",
   "workspaces": [
     {
@@ -11,14 +11,14 @@
       "versioned": true,
       "repositorySummary": {
         "repositoryLabel": "Kramaniti",
-        "branch": "main",
-        "revision": "680a6cd37bd9",
+        "branch": "kosh/add-local-language-reply-check-20261030",
+        "revision": "f8e5865cc832",
         "dirty": true,
-        "dirtyFileCount": 1,
-        "trackedFileCount": 505,
-        "lastCommitAt": "2026-08-30T00:27:47+05:30",
-        "lastCommitSubject": "feat: simplify public website messaging",
-        "ahead": 4,
+        "dirtyFileCount": 4,
+        "trackedFileCount": 711,
+        "lastCommitAt": "2026-10-24T15:08:03+05:30",
+        "lastCommitSubject": "Merge pull request #45 from KaranChordia/codex/spasht-contextual-ui",
+        "ahead": 0,
         "behind": 0,
         "itemCount": 1
       },
@@ -31,15 +31,15 @@
           "title": "Kramaniti repository",
           "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
           "visibility": "internal",
-          "sourceHash": "680a6cd37bd9",
+          "sourceHash": "f8e5865cc832",
           "metadata": {
-            "branch": "main",
+            "branch": "kosh/add-local-language-reply-check-20261030",
             "dirty": true,
-            "dirtyFileCount": 1,
-            "trackedFileCount": 505,
-            "lastCommitAt": "2026-08-30T00:27:47+05:30",
-            "lastCommitSubject": "feat: simplify public website messaging",
-            "ahead": 4,
+            "dirtyFileCount": 4,
+            "trackedFileCount": 711,
+            "lastCommitAt": "2026-10-24T15:08:03+05:30",
+            "lastCommitSubject": "Merge pull request #45 from KaranChordia/codex/spasht-contextual-ui",
+            "ahead": 0,
             "behind": 0
           }
         }
@@ -49,85 +49,43 @@
       "slug": "maitri-circle",
       "repositoryKey": "maitri-circle",
       "name": "Maitri Circle",
-      "available": true,
-      "versioned": true,
+      "available": false,
+      "versioned": false,
       "repositorySummary": {
         "repositoryLabel": "Maitri Circle",
-        "branch": "main",
-        "revision": "6fa02b5c6e9a",
+        "branch": null,
+        "revision": null,
         "dirty": false,
         "dirtyFileCount": 0,
-        "trackedFileCount": 451,
-        "lastCommitAt": "2026-08-21T10:50:30+05:30",
-        "lastCommitSubject": "Add Nandini companion and finalize Maitri pages",
+        "trackedFileCount": 0,
+        "lastCommitAt": null,
+        "lastCommitSubject": null,
         "ahead": 0,
         "behind": 0,
-        "itemCount": 1
+        "itemCount": 0
       },
-      "items": [
-        {
-          "sourceKey": "maitri-circle:.",
-          "repositoryLabel": "Maitri Circle",
-          "repositoryPath": ".",
-          "itemType": "repository",
-          "title": "Maitri Circle repository",
-          "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
-          "visibility": "internal",
-          "sourceHash": "6fa02b5c6e9a",
-          "metadata": {
-            "branch": "main",
-            "dirty": false,
-            "dirtyFileCount": 0,
-            "trackedFileCount": 451,
-            "lastCommitAt": "2026-08-21T10:50:30+05:30",
-            "lastCommitSubject": "Add Nandini companion and finalize Maitri pages",
-            "ahead": 0,
-            "behind": 0
-          }
-        }
-      ]
+      "items": []
     },
     {
       "slug": "basispoint-studio",
       "repositoryKey": "basispoint-studio",
       "name": "Basispoint Studio",
-      "available": true,
-      "versioned": true,
+      "available": false,
+      "versioned": false,
       "repositorySummary": {
         "repositoryLabel": "Basispoint Studio",
-        "branch": "main",
-        "revision": "6aff5d9c9984",
+        "branch": null,
+        "revision": null,
         "dirty": false,
         "dirtyFileCount": 0,
-        "trackedFileCount": 15,
-        "lastCommitAt": "2026-07-21T12:08:49+05:30",
-        "lastCommitSubject": "Project Initialisation",
+        "trackedFileCount": 0,
+        "lastCommitAt": null,
+        "lastCommitSubject": null,
         "ahead": 0,
         "behind": 0,
-        "itemCount": 1
+        "itemCount": 0
       },
-      "items": [
-        {
-          "sourceKey": "basispoint-studio:.",
-          "repositoryLabel": "Basispoint Studio",
-          "repositoryPath": ".",
-          "itemType": "repository",
-          "title": "Basispoint Studio repository",
-          "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
-          "visibility": "internal",
-          "sourceHash": "6aff5d9c9984",
-          "metadata": {
-            "branch": "main",
-            "dirty": false,
-            "dirtyFileCount": 0,
-            "trackedFileCount": 15,
-            "lastCommitAt": "2026-07-21T12:08:49+05:30",
-            "lastCommitSubject": "Project Initialisation",
-            "ahead": 0,
-            "behind": 0
-          }
-        }
-      ]
+      "items": []
     },
     {
       "slug": "trust-data",
@@ -154,7 +112,7 @@
       "slug": "raju-bafna",
       "repositoryKey": "raju-bafna",
       "name": "Raju Bafna",
-      "available": true,
+      "available": false,
       "versioned": false,
       "repositorySummary": {
         "repositoryLabel": "Raju Bafna",
@@ -167,30 +125,9 @@
         "lastCommitSubject": null,
         "ahead": 0,
         "behind": 0,
-        "itemCount": 1
+        "itemCount": 0
       },
-      "items": [
-        {
-          "sourceKey": "raju-bafna:.",
-          "repositoryLabel": "Raju Bafna",
-          "repositoryPath": ".",
-          "itemType": "repository",
-          "title": "Raju Bafna repository",
-          "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
-          "visibility": "internal",
-          "sourceHash": null,
-          "metadata": {
-            "branch": null,
-            "dirty": false,
-            "dirtyFileCount": 0,
-            "trackedFileCount": 0,
-            "lastCommitAt": null,
-            "lastCommitSubject": null,
-            "ahead": 0,
-            "behind": 0
-          }
-        }
-      ]
+      "items": []
     }
   ]
 }
