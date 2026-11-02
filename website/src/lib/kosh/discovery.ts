@@ -79,6 +79,7 @@ const synonyms: Record<string, string> = {
   "enquiry-triage-agent": "customer enquiries inquiries whatsapp email replies inbox piling",
   "builder-exit-handover-test": "builder leaving handover absence maintenance run fix",
   "founder-memory-sop-agent": "founder knowhow knowledge sop steps document instructions",
+  "content-from-real-work-plan": "social media instagram linkedin posts posting post ideas content calendar captions marketing weekly plan what to post",
   "adoption-packet-skill": "team rules adoption ai policy client data",
   "client-onboarding-handoff-brief": "onboard onboarding sales delivery client handoff scope",
   "non-build-list-register": "ideas prioritize prioritise build defer reject ai",
