@@ -53,6 +53,8 @@ import {
 import styles from './Spasht.module.css';
 import simple from './SimpleWorkspace.module.css';
 import { SpashtConversation } from './SpashtConversation';
+import experience from './SpashtExperience.module.css';
+import { ProjectWorkspace } from './ProjectWorkspace';
 import { WorkspaceTools } from './WorkspaceTools';
 import { workspaceStorageKey, handoffStorageKey, legacyWorkspaceKeys, defaultThreadId, normalizeThreadId, readCompatibleStorage, clearCompatibleStorage } from '@/lib/spasht/compatibility';
 import { parseWorkspaceView, workspaceViewUrl, workspaceToolGroups, isSupportingView, type WorkspaceView } from '@/lib/spasht/navigation';
@@ -749,6 +751,7 @@ export function Spasht() {
   const [clarityBriefProjectId, setClarityBriefProjectId] = useState<string | null>(null);
   const [activeMenu, setActiveMenu] = useState<MenuId>('start');
   const [toolPickerOpen, setToolPickerOpen] = useState(false);
+  const [ideaExpanded, setIdeaExpanded] = useState(true);
   const toolsButtonRef = useRef<HTMLButtonElement>(null);
   const toolOriginRef = useRef<MenuId>('home');
   const [activeLoopId, setActiveLoopId] = useState<LoopId>('signal');
@@ -781,7 +784,11 @@ export function Spasht() {
   const [projectSearch, setProjectSearch] = useState('');
   const [projectView, setProjectView] = useState<'list' | 'workspace'>('list');
   const [projectTab, setProjectTab] = useState<'conversation' | 'steps' | 'details'>('conversation');
-  const [projectDescriptionDraft, setProjectDescriptionDraft] = useState<string | null>(null);
+  const [projectDescriptionDrafts, setProjectDescriptionDrafts] = useState<Record<string, string>>({});
+  const projectDescriptionDraft = selectedProjectId ? projectDescriptionDrafts[selectedProjectId] ?? null : null;
+  const setProjectDescriptionDraft = (value: string) => {
+    if (selectedProjectId) setProjectDescriptionDrafts(current => ({ ...current, [selectedProjectId]: value }));
+  };
   const [isSavingDescription, setIsSavingDescription] = useState(false);
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [taskProjectFilter, setTaskProjectFilter] = useState<string>('all');
@@ -993,7 +1000,7 @@ export function Spasht() {
     setSelectedProjectId(null);
     setProjectView('list');
     setProjectTab('conversation');
-    setProjectDescriptionDraft(null);
+    setProjectDescriptionDrafts({});
     setActiveProjectFolder('all');
     setProjectSearch('');
     setProjectBrief('');
@@ -3979,7 +3986,6 @@ export function Spasht() {
     setSelectedProjectId(project.id);
     setProjectView('workspace');
     setProjectTab('conversation');
-    setProjectDescriptionDraft(null);
     setProjectInstructionDraft(null);
     setSavedContext(savedContextFromProject(project));
     setClarityBriefProjectId(project.id);
@@ -4155,7 +4161,8 @@ export function Spasht() {
   };
 
   const saveProjectDescription = async (project: SpashtProject) => {
-    const text = (projectDescriptionDraft ?? project.context).trim();
+    const submittedDraft = projectDescriptionDrafts[project.id];
+    const text = (submittedDraft ?? project.context).trim();
     const supabase = getSpashtSupabase();
     if (!supabase || !authUser || !text) { setStatus('Add a project summary before saving.'); return; }
     const owner = authUser.id;
@@ -4166,8 +4173,15 @@ export function Spasht() {
       if (sessionOwnerRef.current !== owner) return;
       if (error || !data) { setStatus('Details were not saved. Your draft is still here. Retry after refreshing.'); return; }
       setProjects((current) => current.map((item) => item.id === data.id ? data : item));
-      setProjectDescriptionDraft(null);
+      setProjectDescriptionDrafts(current => {
+        if (current[project.id] !== submittedDraft) return current;
+        const next = { ...current };
+        delete next[project.id];
+        return next;
+      });
       setStatus('Project details saved.');
+    } catch {
+      if (sessionOwnerRef.current === owner) setStatus('Details were not saved. Your draft is still here. Retry after refreshing.');
     } finally { setIsSavingDescription(false); }
   };
 
@@ -4221,7 +4235,7 @@ export function Spasht() {
 
 
   return (
-    <main className={`spasht-route ${styles.page}`}>
+    <main className={`spasht-route ${styles.page} ${experience.experience}`}>
       <section className={`spasht-shell ${styles.shell}`} aria-label="Kramaniti Spasht">
         <header
           className={`spasht-rail ${styles.rail}`}
@@ -4270,8 +4284,15 @@ export function Spasht() {
             else { toolOriginRef.current = activeMenu; setToolPickerOpen(true); openMenu('more'); }
           }}><Wrench size={17} aria-hidden="true" /><span>Tools</span></button>}
 
+          {authUser && <div className={experience.quickNav} aria-label="Workspace shortcuts">
+            <span>Keep moving</span>
+            <button aria-current={activeMenu === 'tasks' ? 'page' : undefined} onClick={() => openMenu('tasks')}><CheckCircle2 size={17} aria-hidden="true" />Next steps <small>{openTaskCount}</small></button>
+            <button aria-current={activeMenu === 'loops' ? 'page' : undefined} onClick={() => openMenu('loops')}><Repeat2 size={17} aria-hidden="true" />Review progress</button>
+            <button aria-current={activeMenu === 'memory' ? 'page' : undefined} onClick={() => { setPrivacyProjectId(null); openMenu('memory'); }}><Database size={17} aria-hidden="true" />Saved knowledge</button>
+          </div>}
+          <p className={experience.railNote}>A little clarity.<br />A useful next move.</p>
           {authUser && <details className={`${simple.accountMenu} ${simple.options}`} onKeyDown={(event) => { if (event.key === 'Escape') { event.currentTarget.open = false; event.currentTarget.querySelector('summary')?.focus(); } }}>
-            <summary aria-label="Account menu"><UserRound size={20} aria-hidden="true" /></summary>
+            <summary aria-label="Account menu"><UserRound size={20} aria-hidden="true" /><span className={experience.accountLabel}>Your account</span></summary>
             <div><strong>{displayUsername || displayEmail}</strong>
               <button onClick={(event) => { openMenu('profile'); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Account overview</button>
               <button onClick={(event) => { openMenu('settings'); event.currentTarget.closest('details')?.removeAttribute('open'); }}>Account & preferences</button>
@@ -4288,7 +4309,6 @@ export function Spasht() {
           } ${activeMenu === 'projects' ? styles.projectsStage : ''
           } ${isSupportingView(activeMenu) ? simple.supportingStage : ''
           } spasht-stage`}
-          aria-live="polite"
         >
 
           {authUser && toolIsActive && <WorkspaceTools active={activeMenu as WorkspaceView} expanded={toolPickerOpen || activeMenu === 'more'}
@@ -4306,14 +4326,18 @@ export function Spasht() {
 
           {activeMenu === 'home' && (
             <section className={simple.main} aria-label="Home">
-              <div className={simple.listHeader}>
+              <header className={experience.homeHeader}>
+                <span className={experience.kicker}><CircleDot size={14} aria-hidden="true" />Your workspace</span>
                 <h1>What would you like to make clearer?</h1>
-                {spashtAssistantMessages.some((message) => message.role === 'user') && <details className={simple.options}><summary>Conversation options</summary><div>
-                  <button className={simple.quiet} onClick={startAssistantThread}>New idea</button>
-                  <details><summary>Previous conversations</summary>{displayedAssistantThreads.map((thread) => <button key={thread.id} className={simple.quiet} onClick={() => setActiveAssistantThreadId(thread.id)}>{thread.title}</button>)}</details>
-                </div></details>}
-              </div>
-              {!spashtAssistantMessages.some((message) => message.role === 'user') && <p className={simple.intro}>One idea. One useful next step.</p>}
+                <p>Start with what’s on your mind. Or pick up where your work left off.</p>
+              </header>
+              <div className={experience.homeGrid}>
+                <div className={experience.homeWork}>
+                  <section className={experience.ideaSurface} aria-label="Idea workspace">
+                    <button className={experience.ideaTrigger} aria-expanded={ideaExpanded} aria-controls="home-idea-workspace" onClick={() => setIdeaExpanded(value => !value)}>
+                      <span><strong>{spashtAssistantMessages.some(message => message.role === 'user') ? 'Your conversation' : 'Start with an idea'}</strong><small>A thought, a decision, or something that feels stuck.</small></span><Plus size={19} aria-hidden="true" />
+                    </button>
+                    <div className={experience.ideaBody} id="home-idea-workspace" hidden={!ideaExpanded}>
               <SpashtConversation
                 messages={spashtAssistantMessages.some((message) => message.role === 'user') ? spashtAssistantMessages : []}
                 input={assistantInput} busy={isAssistantBusy} onInput={setAssistantInput} onSend={() => void sendAssistantMessage()}
@@ -4321,11 +4345,25 @@ export function Spasht() {
                 feedback={renderSaveFeedback()}
               />
               {spashtAssistantMessages.some((message) => message.role === 'user') && !spashtAssistantMessages.some((message) => message.pendingAction) && !isAssistantBusy && <button className={simple.quiet} onClick={() => void sendAssistantMessage(`Create a project from this idea: ${spashtAssistantMessages.filter((message) => message.role === 'user').map((message) => message.content).join('\n')}`)}>Save as a project</button>}
-              {recentProjects.length > 0 && <section className={simple.recent} aria-label="Recent projects"><h2>Recent projects</h2>
-                {recentProjects.map((project) => <button key={project.id} className={simple.projectRow} onClick={() => openProject(project)}>
-                  <span><strong>{project.title}</strong><small>{projectTasks.filter(task => task.project_id === project.id && task.status === 'open').length} open steps</small></span><ArrowRight size={18} aria-hidden="true" />
-                </button>)}
-              </section>}
+                    {spashtAssistantMessages.some(message => message.role === 'user') && <details className={simple.options}><summary>Conversation options</summary><div>
+                      <button className={simple.quiet} onClick={startAssistantThread}>New idea</button>
+                      <details><summary>Previous conversations</summary>{displayedAssistantThreads.map(thread => <button key={thread.id} className={simple.quiet} onClick={() => setActiveAssistantThreadId(thread.id)}>{thread.title}</button>)}</details>
+                    </div></details>}
+                    </div>
+                  </section>
+                  <div className={experience.nextActions}>
+                    <button onClick={() => openMenu('tasks')}><CheckCircle2 size={22} aria-hidden="true" /><strong>Choose your next step</strong><small>{openTaskCount ? `${openTaskCount} open across your projects` : 'Turn a plan into something you can do.'}</small></button>
+                    <button onClick={() => openMenu('loops')}><Repeat2 size={22} aria-hidden="true" /><strong>Take stock of your work</strong><small>See what moved and what needs attention.</small></button>
+                  </div>
+                </div>
+                <aside className={experience.homeAside}>
+                  <section aria-label="Recent projects"><div className={experience.sectionTop}><h2>Pick up a project</h2><button onClick={() => openMenu('projects')}>View all →</button></div>
+                    {recentProjects.map(project => <button key={project.id} className={simple.projectRow} onClick={() => openProject(project)}><span><strong>{project.title}</strong><small>{project.context ? project.context.slice(0, 110) : 'Open your project workspace'}</small><span className={experience.projectMeta}>{projectTasks.filter(task => task.project_id === project.id && task.status === 'open').length} open steps</span></span><ArrowRight size={18} aria-hidden="true" /></button>)}
+                    {!recentProjects.length && <p className={experience.emptyProjects}>Your projects will live here. Start an idea, then review and save it as a project when you’re ready.</p>}
+                  </section>
+                  <div className={experience.sectionTop}><button onClick={() => { setToolPickerOpen(true); openMenu('more'); }}>Explore ways to work →</button></div>
+                </aside>
+              </div>
             </section>
           )}
           {activeMenu === 'overview' && (
@@ -4531,6 +4569,8 @@ export function Spasht() {
           )}
 
           {activeMenu === 'start' && (
+            <div className={experience.entryLayout}>
+              <div className={experience.entryStory}><span className={experience.kicker}>Spasht by Kramaniti</span><h2>Give your thinking<br />somewhere to go.</h2><p>A private place to work through ideas, build a plan, and keep the next step in sight.</p><div className={experience.entrySteps}><div><span>01</span>Bring the idea, even if it’s unfinished.</div><div><span>02</span>Work it through with context.</div><div><span>03</span>Review, save, and move forward.</div></div></div>
             <section className={`${styles.screen} ${styles.entryScreen}`} aria-labelledby="entry-title">
               <h1 id="entry-title">Make room for your next clear move.</h1>
               <p className={styles.lead}>
@@ -4583,7 +4623,7 @@ export function Spasht() {
                     <input
                       value={authLogin}
                       onChange={(event) => setAuthLogin(event.target.value)}
-                      placeholder="your_username"
+                      placeholder="Email or username"
                       autoComplete="username"
                       disabled={Boolean(authUser) || isAuthBusy}
                     />
@@ -4635,6 +4675,7 @@ export function Spasht() {
                 </div>
               )}
             </section>
+            </div>
           )}
 
           {activeMenu === 'path' && (
@@ -5857,11 +5898,11 @@ export function Spasht() {
             <section className={simple.main} aria-label="Projects">
               {projectView === 'list' || !selectedProject ? <>
                 <div className={simple.listHeader}><h1>Your projects</h1><button className={simple.primary} onClick={() => { startAssistantThread(); openMenu('home'); }}>New project</button></div>
-                <label className={simple.inputLabel}><span>Find a project</span><input className={simple.search} value={projectSearch} onChange={(event) => setProjectSearch(event.target.value)} placeholder="Search projects" /></label>
+                <p className={experience.listIntro}>Keep the conversation, context and next steps together. Open a project to continue.</p><label className={simple.inputLabel}><span>Find a project</span><input className={simple.search} value={projectSearch} onChange={(event) => setProjectSearch(event.target.value)} placeholder="Search projects" /></label>
                 {renderSaveFeedback()}
                 <div aria-label="Project list">
                   {filteredProjects.filter((project) => project.status === 'active').map((project) => <button key={project.id} className={simple.projectRow} onClick={() => openProject(project)}>
-                    <span><strong>{project.title}</strong><small>{projectTasks.filter(task => task.project_id === project.id && task.status === 'open').length} open steps</small></span><ArrowRight size={18} aria-hidden="true" />
+                    <span><strong>{project.title}</strong><small>{project.context ? project.context.slice(0, 160) : 'Add a little context to guide this project.'}</small><span className={experience.projectMeta}>{projectTasks.filter(task => task.project_id === project.id && task.status === 'open').length} open steps · Updated {formatProjectDate(project.updated_at)}</span></span><ArrowRight size={18} aria-hidden="true" />
                   </button>)}
                   {!filteredProjects.some((project) => project.status === 'active') && <p className={simple.intro}>{projects.some((project) => project.status === 'active') ? 'No projects match this view. Try a different search or folder.' : 'Your first saved idea will appear here. Start a new project when you are ready.'}</p>}
                 </div>
@@ -5871,9 +5912,11 @@ export function Spasht() {
                 </div></details>
                 {projects.some((project) => project.status === 'archived') && <details className={simple.supporting}><summary>Archived projects</summary><div>{projects.filter((project) => project.status === 'archived').map((project) => <div className={simple.projectRow} key={project.id}><span><strong>{project.title}</strong><small>{project.context}</small></span><button className={simple.quiet} onClick={() => void setProjectArchived(project, false)}>Restore</button></div>)}</div></details>}
               </> : <>
-                <button className={simple.quiet} onClick={() => openMenu('projects')}>← All projects</button>
-                <div className={simple.workspaceHeader}>
-                  <h1>{selectedProject.title}</h1>
+                <ProjectWorkspace title={selectedProject.title} summary={selectedProject.context}
+                  openSteps={selectedProjectTasks.filter(task => task.status === 'open').length}
+                  doneSteps={selectedProjectTasks.filter(task => task.status === 'done').length}
+                  draft={projectDescriptionDraft !== null} mode={projectTab} onMode={selectProjectTab}
+                  onBack={() => openMenu('projects')} options={
                   <details className={simple.options} onClick={(event) => { if ((event.target as HTMLElement).closest('button')) event.currentTarget.open = false; }}><summary>Project options</summary><div>
                     <button className={simple.quiet} disabled={isProjectAssistantBusy} onClick={() => { selectProjectTab('conversation'); void sendProjectAssistantMessage('Review the progress of this project. Explain what has moved, what is still open, and the single most useful next step.'); }}>Review progress</button>
                     <button className={simple.quiet} onClick={() => continueProjectInEngine(selectedProject)}>Build a detailed plan</button>
@@ -5882,15 +5925,7 @@ export function Spasht() {
                     <button className={simple.quiet} onClick={() => { setPrivacyProjectId(selectedProject.id); openMenu('memory'); }}>What’s remembered</button>
                     <button className={simple.quiet} onClick={() => void setProjectArchived(selectedProject, true)}>Archive project</button>
                   </div></details>
-                </div>
-                <div className={simple.tabs} role="tablist" aria-label="Project workspace" onKeyDown={(event) => {
-                  const tabs = ['conversation', 'steps', 'details'] as const;
-                  const index = tabs.indexOf(projectTab);
-                  const next = event.key === 'ArrowRight' ? (index + 1) % tabs.length : event.key === 'ArrowLeft' ? (index + tabs.length - 1) % tabs.length : event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : null;
-                  if (next !== null) { event.preventDefault(); selectProjectTab(tabs[next]); document.getElementById(`project-tab-${tabs[next]}`)?.focus(); }
-                }}>
-                  {([{ id: 'conversation', label: 'Conversation' }, { id: 'steps', label: 'Next steps' }, { id: 'details', label: 'Details' }] as const).map((tab) => <button key={tab.id} id={`project-tab-${tab.id}`} role="tab" tabIndex={projectTab === tab.id ? 0 : -1} aria-selected={projectTab === tab.id} aria-controls={`project-panel-${tab.id}`} onClick={() => selectProjectTab(tab.id)}>{tab.label}</button>)}
-                </div>
+                }>
                 {projectTab === 'conversation' && <div id="project-panel-conversation" role="tabpanel" aria-labelledby="project-tab-conversation">
                   <SpashtConversation messages={selectedProjectMessages} input={projectAssistantInput} busy={isProjectAssistantBusy} onInput={setProjectAssistantInput} onSend={() => void sendProjectAssistantMessage()} renderAction={renderConversationAction} label="Project message" placeholder="Ask about this project or choose the next step…" emptyText="This conversation uses your saved project details. What would you like to work through next?" feedback={renderSaveFeedback()} />
                 </div>}
@@ -5909,6 +5944,7 @@ export function Spasht() {
                   <details className={simple.supporting}><summary>Folder</summary><div className={simple.detailsForm}><label>Keep this project in<select value={selectedProject.folder_id ?? ''} onChange={(event) => void moveProjectToFolder(selectedProject, event.target.value || null)}><option value="">Without a folder</option>{projectFolders.map((folder) => <option key={folder.id} value={folder.id}>{folder.name}</option>)}</select></label></div></details>
                   {selectedProjectReports.length > 0 && <details className={simple.supporting}><summary>Saved plans</summary><div>{selectedProjectReports.map((report) => <details key={report.id}><summary>{report.title}</summary><p style={{ whiteSpace: 'pre-wrap' }}>{report.content}</p></details>)}</div></details>}
                 </div>}
+                </ProjectWorkspace>
               </>}
             </section>
           )}
@@ -6204,7 +6240,7 @@ export function Spasht() {
                         <p>{selectedProject.summary || selectedProject.context}</p>
                       </div>
 
-                      <div className={styles.projectInstructionPanel}>
+                      <details className={simple.supporting}><summary>Assistant instructions</summary><div className={styles.projectInstructionPanel}>
                         <label>
                           <span>Project instruction</span>
                           <textarea
@@ -6223,6 +6259,7 @@ export function Spasht() {
                         </button>
                       </div>
 
+                      </details>
                       <section className={styles.projectTaskPanel} aria-label="Project reports">
                         <div className={styles.projectSubheader}>
                           <span>Reports</span>
@@ -6286,7 +6323,7 @@ export function Spasht() {
                         </form>
                       </section>
 
-                      <section className={styles.projectAssistantPanel} aria-label="Project assistant">
+                      <details className={simple.supporting}><summary>Project conversation</summary><section className={styles.projectAssistantPanel} aria-label="Project assistant">
                         <div className={styles.projectSubheader}>
                           <span>Project assistant</span>
                           <small>Uses this instruction</small>
@@ -6384,7 +6421,7 @@ export function Spasht() {
                             <span>Send</span>
                           </button>
                         </form>
-                      </section>
+                      </section></details>
 
                     </>
                   ) : (

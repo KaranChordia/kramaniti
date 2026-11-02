@@ -1,0 +1,49 @@
+.workspace { --workspace-motion: 180ms; min-width: 0; }
+.topline { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 28px; color: var(--spasht-faint); font-size: 12px; }
+.topline button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 0; border: 0; background: transparent; color: var(--spasht-muted); font: inherit; cursor: pointer; }
+.header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding-bottom: 26px; border-bottom: 1px solid var(--spasht-divider); }
+.header > div { min-width: 0; }
+.header h1 { margin: 8px 0 0; }
+.eyebrow { font-size: 12px; color: var(--spasht-gold-light); }
+.header > details { flex: 0 0 auto; }
+.header > details[open] > div { position: absolute; right: 0; z-index: 20; width: 250px; max-width: calc(100vw - 48px); box-shadow: var(--spasht-card-shadow); }
+.layout { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 32px; padding-top: 28px; align-items: start; }
+.anchor { min-width: 0; display: grid; gap: 22px; }
+.progress { display: grid; gap: 10px; font-size: 12px; color: var(--spasht-muted); }
+.progress strong { color: var(--spasht-text); font-size: 36px; font-weight: 500; line-height: 1; }
+.progress small { font-size: 13px; font-weight: 400; color: var(--spasht-muted); }
+.track { height: 3px; background: var(--spasht-border); border-radius: 3px; overflow: hidden; }
+.track span { display: block; height: 100%; background: var(--spasht-gold-light); transition: width var(--workspace-motion) ease; }
+.context { font-size: 13px; color: var(--spasht-muted); border-top: 1px solid var(--spasht-divider); }
+.context summary { padding: 14px 0; cursor: pointer; min-height: 44px; }
+.context p { margin: 0; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+.draft { font-size: 12px; line-height: 1.6; color: var(--spasht-gold-light); margin: 0; }
+.instrument { min-width: 0; border: 1px solid var(--spasht-border); border-radius: 14px; background: var(--spasht-pane); }
+.modes { display: grid; grid-template-columns: 1.25fr 1fr 1fr; padding: 6px; gap: 4px; border-bottom: 1px solid var(--spasht-divider); }
+.modes button { min-width: 0; display: flex; align-items: center; gap: 9px; min-height: 66px; padding: 12px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: var(--spasht-muted); text-align: left; font: inherit; font-size: 13px; cursor: pointer; transition: background var(--workspace-motion), border-color var(--workspace-motion); }
+.modes button > svg { flex: 0 0 auto; }
+.modes small { display: block; font-size: 11px; line-height: 1.4; margin-top: 5px; color: var(--spasht-faint); }
+.modes b { font-size: 11px; font-weight: 500; margin-left: auto; }
+.modes i { width: 5px; height: 5px; border-radius: 50%; background: var(--spasht-gold-light); flex: 0 0 auto; }
+.modes button[aria-selected='true'] { background: var(--spasht-control); color: var(--spasht-gold-light); border-color: var(--spasht-gold-border); }
+.modes button:hover { background: var(--spasht-control-hover); }
+.surface { padding: clamp(16px, 2.5vw, 28px); min-height: 320px; }
+.surface > [role='tabpanel'] { animation: surface-in var(--workspace-motion) ease-out; }
+.workspace button:focus-visible, .workspace summary:focus-visible { outline: 2px solid var(--spasht-gold-light); outline-offset: 3px; }
+@keyframes surface-in { from { opacity: .65; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 1000px) { .layout { grid-template-columns: minmax(0, 1fr); gap: 20px; } .anchor { grid-template-columns: 150px minmax(0, 1fr); align-items: start; gap: 20px; } .context { border-top: 0; } .draft { grid-column: 1 / -1; } .progress strong { font-size: 28px; } }
+@media (max-width: 600px) { .topline { margin-bottom: 16px; } .topline > span { display: none; } .header { flex-wrap: wrap; gap: 14px; padding-bottom: 20px; } .header > details[open] > div { right: auto; left: 0; } .layout { padding-top: 20px; } .anchor { grid-template-columns: 100px minmax(0, 1fr); } .modes { grid-template-columns: repeat(3, minmax(0, 1fr)); } .modes button { flex-direction: column; gap: 8px; padding: 12px 4px; text-align: center; font-size: 12px; position: relative; } .modes small { display: none; } .modes b, .modes i { position: absolute; right: 7px; top: 8px; font-size: 10px; } .surface { padding: 16px 12px; } .instrument { border-radius: 10px; } }
+@media (prefers-reduced-motion: reduce) { .surface > [role='tabpanel'] { animation: none; } .modes button, .track span { transition: none; } }
+/* On phones, keep context available without pushing the work below the fold. */
+@media (max-width: 600px) {
+  .topline { margin-bottom: 8px; }
+  .eyebrow { display: none; }
+  .header { padding-bottom: 16px; gap: 10px; }
+  .header h1 { margin-top: 0; }
+  .layout { padding-top: 16px; gap: 16px; }
+  .anchor { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .progress { gap: 6px; }
+  .progress strong { font-size: 23px; }
+  .progress > span:last-child { font-size: 11px; }
+  .context summary { padding-top: 0; }
+}
