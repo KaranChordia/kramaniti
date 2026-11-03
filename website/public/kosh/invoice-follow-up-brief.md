@@ -1,4 +1,4 @@
-# Follow up on unpaid invoices without hurting the relationship
+# Follow up on unpaid invoices politely
 
 Version 1.1 · Kramaniti Kosh
 

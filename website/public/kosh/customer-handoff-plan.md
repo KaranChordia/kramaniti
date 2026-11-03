@@ -1,4 +1,4 @@
-# Decide when a customer chat gets handed to a person
+# Decide when a customer chat goes to a person
 
 Version 1.1 · Kramaniti Kosh
 

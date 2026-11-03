@@ -1,4 +1,4 @@
-# Check AI replies in Kannada, Hindi or Tamil before customers see them
+# Check AI replies in Kannada, Hindi or Tamil
 
 Version 1.1 · Kramaniti Kosh
 

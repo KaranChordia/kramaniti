@@ -1,4 +1,4 @@
-# Hand a new client from sales to delivery without gaps
+# Hand a new client from sales to delivery
 
 Version 1.1 · Kramaniti Kosh
 

@@ -1,4 +1,4 @@
-# Decide which AI ideas to build, help with, or leave alone
+# Decide which AI ideas to build or leave alone
 
 Version 1.1 · Kramaniti Kosh
 

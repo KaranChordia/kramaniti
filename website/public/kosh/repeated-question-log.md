@@ -1,4 +1,4 @@
-# Keep track of the questions you answer again and again
+# Track the questions you answer again and again
 
 Version 1.1 · Kramaniti Kosh
 

@@ -1,4 +1,4 @@
-# Sort and answer customer enquiries on WhatsApp and email
+# Sort and answer WhatsApp and email enquiries
 
 Version 1.1 · Kramaniti Kosh
 

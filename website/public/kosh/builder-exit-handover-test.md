@@ -1,4 +1,4 @@
-# Check your team can run it without the person who built it
+# Check your team can run it without its builder
 
 Version 1.1 · Kramaniti Kosh
 

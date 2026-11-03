@@ -64,7 +64,7 @@ test("fake template IDs, duplicate IDs, invalid follow-ups and oversized output 
   assert.equal(parseDiscoveryAnswer({ ...validAnswer, reply: "x".repeat(1001) }), null);
   assert.equal(parseDiscoveryAnswer({ ...validAnswer, followUps: [42] }), null);
   const formatted = parseDiscoveryAnswer({ ...validAnswer, reply: "Try **customer‑handoff‑plan**." });
-  assert.equal(formatted.reply, "Try Decide when a customer chat gets handed to a person.");
+  assert.equal(formatted.reply, "Try Decide when a customer chat goes to a person.");
 });
 test("the public browser origin works behind a proxy while other origins stay blocked", async () => {
   const response = await POST(request(question("Find a template"), { host: "www.kramaniti.com", "x-forwarded-proto": "https", origin: "https://www.kramaniti.com" }));
@@ -101,7 +101,7 @@ test("outage suggestions cover specific user jobs and do not force an unrelated 
 });
 test("follow-up history preserves the chosen templates and a topic change follows the latest request", () => {
   const history = discoveryHistory([{ question: "enquiries", answer: { ...validAnswer, mode: "assistant" } }]);
-  assert.ok(history[1].content.includes("Sort and answer customer enquiries"));
+  assert.ok(history[1].content.includes("Sort and answer WhatsApp and email enquiries"));
   const next = catalogueDiscovery([...history, { role: "user", content: "Actually we need to audit AI tool subscriptions and costs" }]);
   assert.equal(next.recommendations[0].id, "ai-tool-subscription-audit");
 });
