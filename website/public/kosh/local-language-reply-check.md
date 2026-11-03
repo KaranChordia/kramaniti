@@ -40,7 +40,7 @@ Copy this block for each language.
 - Language (and how customers type it, for example Kannada script, Kannada in English letters, mixed with English):
 - Fluent checker:
 - Backup checker:
-- Stage (on trial, every reply checked / ready, sample checked weekly / paused):
+- Stage (choose one: on trial, every reply checked; ready, a sample checked each week; paused):
 - How many replies the checker looks at each week once it is ready:
 - Date of next review:
 
@@ -81,7 +81,7 @@ One row per mistake.
 Write the rule before the trial starts, not after.
 
 - The checker has looked at replies across the usual kinds of questions, not just greetings:
-- No mistake about facts, promises or wrong language in the recent checks:
+- No mistake about facts, promises or wrong language in the last [number the owner sets] checked replies:
 - Tone mistakes are rare and getting fewer:
 - Owner's decision and date:
 
@@ -102,7 +102,7 @@ The assistant may not:
 ## Stop rules
 
 - If the checker for a language is away and there is no backup, replies in that language go to a person to write, not to the assistant.
-- Any mistake about a fact, a promise or a health claim pauses that language until the owner and checker have fixed the source.
+- Any mistake about a fact, a promise, a health claim or the wrong language pauses that language until the owner and checker have fixed the source.
 - A complaint, a refund request or an upset customer goes to a named person, whatever the language.
 - Do not paste customer phone numbers, addresses or ID details into the mistake log or an AI tool.
 
@@ -125,17 +125,14 @@ Demonstration inputs only. Languages: Kannada (checker: the shop manager), Tamil
 ### Example output
 
 #### Mistake log entries
-
-[Fact within this demonstration] Tamil: a customer asked whether a hair oil was in stock. The draft answered in Hindi. Marked "wrong language", blocked, and the checker replied in Tamil.
+[Fact within this demonstration] Tamil: a customer asked whether a hair oil was in stock. The draft answered in Hindi. Marked "wrong language", blocked, the checker replied in Tamil, and Tamil replies went back to a person to write until the instructions were fixed.
 
 [Fact within this demonstration] Kannada: a customer asked what a herbal powder is for. The draft said it "cures" acidity. Marked "promise", blocked, and Kannada replies went back to a person to write until the instructions were fixed.
 
 #### What the review found
-
 [Inference] Both mistakes came from the instructions, not the language itself: the assistant was not told to always answer in the customer's language, and it was not told that product benefits must come word for word from the approved descriptions.
 
 #### Next step
-
 [Recommendation] Add both rules to the assistant's instructions, add approved one-line product descriptions to the fact sheet, and keep every reply checked in both languages until the owner is satisfied. This recommendation is not the business's decision.
 
 ## Quality check
@@ -144,7 +141,7 @@ Every language has a named fluent checker and a backup; replies in a language on
 
 ## Limits and human review
 
-The template helps a fluent person check AI replies in your customers' languages; it does not make the assistant fluent, it cannot catch mistakes in replies nobody checks, and it is not a translation or language quality certificate. It does not tell you which health or product claims the law allows; take that to a qualified adviser. Keep complaints, refunds and any reply that commits the business with a named person.
+The template helps a fluent person check AI replies in your customers' languages; it does not make the assistant fluent, it cannot catch mistakes in replies nobody checks, and it is not a translation or language quality certificate. It does not tell you which health or product claims the law allows; take that to a lawyer or adviser who knows the rules for your products. Keep complaints, refunds and any reply that commits the business with a named person.
 
 ## Edition notes
 

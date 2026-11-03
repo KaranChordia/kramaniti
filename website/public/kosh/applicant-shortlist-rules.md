@@ -6,7 +6,7 @@ Version 1.1 · Kramaniti Kosh
 
 ## Intended outcome
 
-A one-page set of hiring rules written before any AI tool reads a single application: what the role really needs, what an applicant must have, what must never count against anyone, and who decides. AI can then sort applications into piles against those rules, while a named person reads every pile, makes every call, reject or hire decision, and can explain each one.
+A one-page set of hiring rules written before any AI tool reads a single application: what the role really needs, what an applicant must have, what must never count against anyone, and who decides. AI can then sort applications into piles against those rules, while a named person reads every pile, decides who to call, reject or hire, and can explain each one.
 
 ## Before you begin
 
@@ -18,7 +18,7 @@ A one-page set of hiring rules written before any AI tool reads a single applica
 ## How to use
 
 1. Fill in the role and the rules below before you open any application. Rules written after reading the applicants tend to bend towards whoever you liked first.
-2. Give the AI tool only the rules and the application text. Remove photos, and do not ask it to judge things that are not in your must-haves. Ask it to sort each application into "meets the must-haves", "unclear" or "does not meet", and to quote the line from the application that supports each sort.
+2. Give the AI tool only the rules and the application text. Remove photos, and replace names with a reference number before the AI reads the text. Do not ask it to judge things that are not in your must-haves. Ask it to sort each application into "meets the must-haves", "unclear" or "does not meet", and to quote the line from the application that supports each sort.
 3. The decision owner reads every pile, including "does not meet", before anyone is called or rejected. Any reject is the owner's decision, not the tool's. Record each decision and the reason in the log.
 
 ## Working template
@@ -39,7 +39,7 @@ Date the rules were written:
 
 ## Must-haves
 
-Things the person needs on day one. Keep this list short, and make each line something you can see in an application or check in a call.
+Things the person needs on day one. Keep this list short, and make each line something you can see in an application or check in a call. If you list a language, write why the job needs it.
 
 -
 -
@@ -88,9 +88,10 @@ Copy this block for each applicant.
 
 - Do not use the AI sort until the must-haves and the never-counts list are written down and the decision owner has signed them.
 - Do not send any rejection, call or offer from the tool. A person sends every message.
-- If the AI sort and the owner disagree more than now and then, stop using the tool and rewrite the must-haves.
+- If the owner keeps disagreeing with the AI sort, stop using the tool and rewrite the must-haves.
 - Do not paste ID numbers, salary slips or other private documents into an AI tool.
 - If an applicant asks how they were assessed, the decision owner answers, using the log.
+- Decide how long you keep applications and the log, and delete them after that. This is the owner's decision. Applicants should be told that an AI tool helps sort applications; if you are unsure what you must tell them, ask a lawyer or HR adviser.
 
 ## Owner and review
 
@@ -114,10 +115,10 @@ Demonstration inputs only. No applicant names, counts or results are used. Role 
 [Fact within this demonstration] Valid two-wheeler licence. Speaks Kannada and either English or Hindi. Willing to travel across the city daily. Any experience of speaking to customers face to face.
 
 #### Never counts against an applicant
-[Fact within this demonstration] Degree or college name, age, gaps in work history, and which part of the state someone is from.
+[Fact within this demonstration] Degree or college name, age, gaps in work history, and where someone is from.
 
 #### AI sort
-[Fact within this demonstration] The retail applicant is sorted "unclear", quoting the retail experience and licence lines and noting that languages are not mentioned. The survey applicant is sorted "meets", quoting the door-to-door survey line and the languages line, with "licence not mentioned" as a question for the first call.
+[Fact within this demonstration] The retail applicant is sorted "unclear", quoting the retail experience and licence lines and noting that languages are not mentioned. The survey applicant is also sorted "unclear", quoting the door-to-door survey line and the languages line and noting that a licence is not mentioned.
 [Inference] Neither application gives enough to reject. Both missing details can be checked in a short call, which is cheaper than losing a good applicant.
 
 #### Owner's decision

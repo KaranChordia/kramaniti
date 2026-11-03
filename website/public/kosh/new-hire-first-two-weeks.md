@@ -168,10 +168,10 @@ Demonstration inputs only. No real figures are used. From the owner and the seni
 [Fact within this demonstration] Role: service advisor. Go-to person: the owner. Backup: the senior mechanic. Plan signed off by the owner before day one.
 
 #### What the new person does not do alone yet
-[Fact within this demonstration] No prices or approval for extra work, no payment disputes, no promises of ready times that the senior mechanic has not confirmed.
+[Fact within this demonstration] No prices or approval for extra work, no payment disputes, no promises of ready times that the senior mechanic has not confirmed, and no access to customer phone numbers or the billing login without the owner present.
 
 #### Week one, day by day
-[Inference] Day 1: watch the owner receive bikes and write job cards using the written format. Day 2: write job cards with the owner checking each one before the bike goes into the workshop. Day 3: take photos with the checklist and write job cards, owner checks. Day 4: send "bike ready" updates on WhatsApp from messages the owner has approved, owner reads each before it is sent. Day 5: hand over bikes with the bill alongside the owner. Explaining extra work found during a service stays with the owner, because there are no written steps for it yet.
+[Inference] Day 1: watch the owner receive bikes and write job cards using the written format. Day 2: write job cards with the owner checking each one before the bike goes into the workshop. Day 3: take photos with the checklist and write job cards, with the owner checking each one. Day 4: send "bike ready" updates on WhatsApp from messages the owner has approved, owner reads each before it is sent. Day 5: hand over bikes with the bill alongside the owner. Explaining extra work found during a service stays with the owner, because there are no written steps for it yet. The owner checks this plan before day one.
 
 #### End of week one review
 [Recommendation] The owner writes down the steps for explaining extra work to customers in week two, using the questions the advisor asked during week one, and checks the new steps with the senior mechanic before the advisor uses them. This recommendation is not the business's decision.
@@ -182,7 +182,7 @@ Every task in the plan is one the role really does, and each one says where its 
 
 ## Limits and human review
 
-The plan helps a new person learn the real work in a set order; it does not replace training on safety, legal or tool-specific rules, and it does not tell you whether someone is right for the job. A named go-to person checks the plan before day one, checks the new person's work as the plan says, and decides when each task can be done alone. If you use AI to draft the plan, it only arranges what you gave it; it does not know your business, and a person checks every line. Tasks with no written steps are a sign to write them down, for example with [Turn the founder's know-how into written steps](/kosh/founder-memory-sop-agent/). A filled template is not approval for the new person to handle money, prices or customers alone. Keep consequential actions with the named human owner.
+The plan helps a new person learn the real work in a set order; it does not replace training on safety, legal or tool-specific rules, and it does not tell you whether someone is right for the job. Decisions about the person's job, pay or probation are separate and stay with the owner. A named go-to person checks the plan before day one, checks the new person's work as the plan says, and decides when each task can be done alone. If you use AI to draft the plan, it only arranges what you gave it; it does not know your business, and a person checks every line. Tasks with no written steps are a sign to write them down, for example with [Turn the founder's know-how into written steps](/kosh/founder-memory-sop-agent/). A filled template is not approval for the new person to handle money, prices or customers alone. Keep consequential actions with the named human owner.
 
 ## Edition notes
 
