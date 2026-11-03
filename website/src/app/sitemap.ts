@@ -1,5 +1,4 @@
 import type { MetadataRoute } from 'next';
-import { libraryItems } from '@/lib/library/libraryData';
 import { insights } from '@/data/insights';
 import { absoluteUrl, getInsightPublishedDate } from '@/lib/seo';
 
@@ -18,13 +17,9 @@ const STATIC_ROUTES: Array<{
   { path: '/experience/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.8 },
   { path: '/founder/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/clarity-engine/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.7 },
-  { path: '/kosh/', lastModified: '2026-10-12', changeFrequency: 'weekly', priority: 0.7 },
-  { path: '/spasht/', lastModified: '2026-08-17', changeFrequency: 'weekly', priority: 0.75 },
   { path: '/work/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/work/nexocean/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.6 },
   { path: '/work/maitri/', lastModified: '2026-08-29', changeFrequency: 'monthly', priority: 0.6 },
-  { path: '/kosh/collections/research-a-decision/', lastModified: '2026-09-07', changeFrequency: 'monthly', priority: 0.6 },
-  { path: '/kosh/standards/', lastModified: '2026-09-07', changeFrequency: 'monthly', priority: 0.4 },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -49,12 +44,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  const libraryRoutes: MetadataRoute.Sitemap = libraryItems.map((item) => ({
-    url: absoluteUrl(`/kosh/${item.id}/`),
-    lastModified: new Date(item.created),
-    changeFrequency: 'monthly',
-    priority: 0.6,
-  }));
+  // Kosh and Spasht pages are listed in their own sitemaps on kosh.kramaniti.com and spasht.kramaniti.com.
 
-  return [...staticRoutes, ...insightsIndex, ...insightRoutes, ...libraryRoutes];
+  return [...staticRoutes, ...insightsIndex, ...insightRoutes];
 }

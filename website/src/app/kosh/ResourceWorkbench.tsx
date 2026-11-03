@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { koshUrl } from "@/lib/seo";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
@@ -512,7 +513,7 @@ export function ResourceWorkbench({
                 {selectedContext ||
                   "This saved profile is empty. Choose context for this resource or add a profile in Settings."}
               </p>
-              <Link href="/kosh/workspace">Manage saved context <ArrowRight size={15} aria-hidden="true" /></Link>
+              <Link href={koshUrl("/workspace/")}>Manage saved context <ArrowRight size={15} aria-hidden="true" /></Link>
             </>
           )}
           <p className={styles.caption}>

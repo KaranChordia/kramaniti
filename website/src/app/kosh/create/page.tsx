@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { KOSH_URL } from "@/lib/seo";
 import { StudioShell } from "@/components/kosh/studio/StudioShell";
 import { blankSkill, slugify } from "@/lib/kosh/studio/schema";
 import { libraryItems } from "@/lib/library/libraryData";
@@ -11,7 +12,8 @@ export const metadata: Metadata = {
   description:
     "Shape, review and export a reusable skill with clear human boundaries.",
   robots: { index: false, follow: false },
-  alternates: { canonical: "/kosh/create/" },
+  alternates: { canonical: `${KOSH_URL}/create/` },
+  openGraph: { url: `${KOSH_URL}/create/` },
 };
 export default async function CreatePage({
   searchParams,

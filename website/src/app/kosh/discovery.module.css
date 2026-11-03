@@ -213,6 +213,7 @@
 .catalogueHeading .eyebrow {
   margin-bottom: 10px;
 }
+.catalogueHeading h1,
 .catalogueHeading h2 {
   margin: 0;
   max-width: 25ch;

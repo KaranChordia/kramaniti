@@ -5,12 +5,13 @@ import { koshPageJsonLd } from "@/lib/kosh/jsonLd";
 import { researchCollection } from "@/lib/library/resourceDetails";
 import { libraryItems } from "@/lib/library/libraryData";
 import styles from "../../editorial.module.css";
-import { KOSH_URL } from "@/lib/seo";
+import { KOSH_URL, koshUrl } from "@/lib/seo";
 export const metadata = {
   title: "Research a decision | Kramaniti Kosh",
   description:
     "A three-part collection: research a question, check the evidence and prepare a human decision.",
   alternates: { canonical: `${KOSH_URL}/collections/research-a-decision/` },
+  openGraph: { url: `${KOSH_URL}/collections/research-a-decision/` },
 };
 export default function ResearchCollection() {
   return (
@@ -44,7 +45,7 @@ export default function ResearchCollection() {
               <p>{step.handoff}</p>
               <Link
                 className={styles.textLink}
-                href={`/kosh/${step.id}`}
+                href={koshUrl(`/${step.id}/`)}
               >
                 Open resource <ArrowUpRight size={15} aria-hidden="true" />
               </Link>
@@ -59,7 +60,7 @@ export default function ResearchCollection() {
           approval record. If evidence or authority is missing, the next step is
           to resolve it, not to imply a decision has been made.
         </p>
-        <Link href="/kosh#catalogue" className={styles.secondary}>
+        <Link href={koshUrl("/#catalogue")} className={styles.secondary}>
           Explore all resources
         </Link>
       </section>

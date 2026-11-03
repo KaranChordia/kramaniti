@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { KOSH_URL, koshUrl } from "@/lib/seo";
 import { ArrowUpRight } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { koshPageJsonLd } from "@/lib/kosh/jsonLd";
@@ -7,7 +8,8 @@ export const metadata = {
   title: "Resource standards | Kramaniti Kosh",
   description:
     "How Kosh resources describe scope, examples, versions and human review.",
-  alternates: { canonical: "/kosh/standards/" },
+  alternates: { canonical: `${KOSH_URL}/standards/` },
+  openGraph: { url: `${KOSH_URL}/standards/` },
 };
 export default function StandardsPage() {
   return (
@@ -65,7 +67,7 @@ export default function StandardsPage() {
         </Link>
       </article>
       <footer className={styles.footer}>
-        <Link href="/kosh">Back to the library</Link>
+        <Link href={koshUrl("/")}>Back to the library</Link>
       </footer>
     </main>
   );

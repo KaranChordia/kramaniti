@@ -1,5 +1,6 @@
 "use client";
 import { useId, useMemo, useRef, useState, type CSSProperties } from "react";
+import { koshUrl } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowUpRight, Search, X } from "lucide-react";
 import { ResourceTile } from "./ResourceTile";
@@ -131,7 +132,7 @@ export function ResourceCatalogue({
           return pathView ? (
             <Link
               key={item.id}
-              href={`/kosh/${item.id}`}
+              href={koshUrl(`/${item.id}/`)}
               className={discovery.item}
               style={{ "--item-order": index } as CSSProperties}
             >
