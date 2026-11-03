@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './Footer.module.css';
+import { KOSH_URL, SPASHT_URL } from '@/lib/seo';
 
 export function Footer() {
   return (
@@ -48,9 +49,9 @@ export function Footer() {
             <div className={styles.contactItem}>
               <span className={styles.label}>Explore</span>
               <div className={styles.legalLinks}>
-                <Link href="/kosh" className={styles.legalLink}>Kosh</Link>
+                <Link href={KOSH_URL} className={styles.legalLink}>Kosh</Link>
                 <span className={styles.separator}>•</span>
-                <Link href="/spasht/" className={styles.legalLink}>Spasht</Link>
+                <Link href={SPASHT_URL} className={styles.legalLink}>Spasht</Link>
                 <span className={styles.separator}>•</span>
                 <Link href="/clarity-engine" className={styles.legalLink}>Clarity Engine</Link>
                 <span className={styles.separator}>•</span>

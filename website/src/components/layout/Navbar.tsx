@@ -4,6 +4,7 @@ import styles from './Navbar.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '../ui/Button';
+import { KOSH_URL, SPASHT_URL } from '@/lib/seo';
 
 interface NavbarProps {
   isVisible?: boolean;
@@ -47,8 +48,8 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <nav className={styles.desktopNav}>
               <Link href="/#method" className={styles.navLink}>How We Work</Link>
               <Link href="/#services" className={styles.navLink}>Services</Link>
-              <Link href="/kosh" className={styles.navLink}>Kosh</Link>
-              <Link href="/spasht/" className={styles.navLink}>Spasht</Link>
+              <Link href={KOSH_URL} className={styles.navLink}>Kosh</Link>
+              <Link href={SPASHT_URL} className={styles.navLink}>Spasht</Link>
               <Link href="/work" className={styles.navLink}>Work</Link>
               <Link href="/insights" className={styles.navLink}>Insights</Link>
             </nav>
@@ -92,8 +93,8 @@ export function Navbar({ isVisible = true }: NavbarProps) {
             <Link href="/" className={styles.mobileLink} onClick={closeMobileMenu}>Home</Link>
             <Link href="/#method" className={styles.mobileLink} onClick={closeMobileMenu}>How We Work</Link>
             <Link href="/#services" className={styles.mobileLink} onClick={closeMobileMenu}>Services</Link>
-            <Link href="/kosh" className={styles.mobileLink} onClick={closeMobileMenu}>Kosh</Link>
-            <Link href="/spasht/" className={styles.mobileLink} onClick={closeMobileMenu}>Spasht</Link>
+            <Link href={KOSH_URL} className={styles.mobileLink} onClick={closeMobileMenu}>Kosh</Link>
+            <Link href={SPASHT_URL} className={styles.mobileLink} onClick={closeMobileMenu}>Spasht</Link>
             <Link href="/work" className={styles.mobileLink} onClick={closeMobileMenu}>Work</Link>
             <Link href="/insights" className={styles.mobileLink} onClick={closeMobileMenu}>Insights</Link>
             <div className={styles.mobileAuditAction}>

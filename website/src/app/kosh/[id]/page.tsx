@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { libraryItems } from "@/lib/library/libraryData";
 import { resourceDetails } from "@/lib/library/resourceDetails";
 import { workingTemplate } from "@/lib/kosh/resourceContent";
+import { KOSH_URL } from "@/lib/seo";
 
 export function generateStaticParams() {
   return libraryItems.map((item) => ({ id: item.id }));
@@ -24,7 +25,7 @@ export async function generateMetadata({
     ? {
         title: `${item.title} | Kramaniti Kosh`,
         description: item.summary,
-        alternates: { canonical: `/kosh/${id}/` },
+        alternates: { canonical: `${KOSH_URL}/${id}/` },
       }
     : { title: "Resource not found | Kosh" };
 }

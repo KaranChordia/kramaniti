@@ -23,10 +23,13 @@ export function KoshAuth() {
     setBusy(true);
     setMessage("");
     try {
+      const accountPath = window.location.hostname === "kosh.kramaniti.com" || window.location.hostname === "kosh.localhost"
+        ? "/account/"
+        : "/kosh/account/";
       if (mode === "reset") {
         const { error } = await supabase.auth.resetPasswordForEmail(
           email.trim(),
-          { redirectTo: `${window.location.origin}/kosh/account` },
+          { redirectTo: `${window.location.origin}${accountPath}` },
         );
         if (error) throw error;
         setMessage(

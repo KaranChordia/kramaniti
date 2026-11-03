@@ -3,9 +3,15 @@ import type { Insight } from '@/data/insights';
 export const SITE_URL = 'https://www.kramaniti.com';
 export const SITE_NAME = 'Kramaniti';
 export const DEFAULT_OG_IMAGE = '/assets/pwa/icon-512.png';
+export const KOSH_URL = 'https://kosh.kramaniti.com';
+export const SPASHT_URL = 'https://spasht.kramaniti.com';
 
 export function absoluteUrl(path: string) {
   return new URL(path, SITE_URL).toString();
+}
+
+export function productUrl(origin: string, path = '/') {
+  return new URL(path, `${origin}/`).toString();
 }
 
 export function stripInlineMarkup(value: string) {

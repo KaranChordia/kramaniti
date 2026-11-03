@@ -6,9 +6,10 @@ import {
   type LibraryItem,
 } from "@/lib/library/libraryData";
 import styles from "./editorial.module.css";
+import { KOSH_URL } from "@/lib/seo";
 export function ResourceTile({ item }: { item: LibraryItem }) {
   return (
-    <Link href={`/kosh/${item.id}`} className={styles.resource}>
+    <Link href={`${KOSH_URL}/${item.id}/`} className={styles.resource}>
       <span className={styles.tileTop}>
         <span className={styles.tileKind}>{kindLabels[item.kind]}</span>
         <span className={styles.tileCategory}>{item.category}</span>

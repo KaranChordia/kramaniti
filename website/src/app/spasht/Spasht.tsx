@@ -1633,12 +1633,15 @@ export function Spasht() {
     }
 
     setIsAuthBusy(true);
+    const authReturnPath = window.location.hostname === 'spasht.kramaniti.com' || window.location.hostname === 'spasht.localhost'
+      ? '/'
+      : '/spasht/';
     const result = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: username ? { username } : {},
-        emailRedirectTo: `${window.location.origin}/spasht/`,
+        emailRedirectTo: `${window.location.origin}${authReturnPath}`,
       },
     });
     setIsAuthBusy(false);
@@ -1673,7 +1676,10 @@ export function Spasht() {
     if (!supabase || !isEmail(authEmail)) { setStatus('Enter the email you used for your account.'); return; }
     setIsAuthBusy(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(authEmail.trim(), { redirectTo: `${window.location.origin}/spasht/` });
+      const authReturnPath = window.location.hostname === 'spasht.kramaniti.com' || window.location.hostname === 'spasht.localhost'
+        ? '/'
+        : '/spasht/';
+      const { error } = await supabase.auth.resetPasswordForEmail(authEmail.trim(), { redirectTo: `${window.location.origin}${authReturnPath}` });
       setStatus(error ? 'The reset email could not be requested. Please try again shortly.' : 'If an account uses this email, a password-reset link is on its way.');
     } catch { setStatus('Your account connection is unavailable. Please retry.'); }
     finally { setIsAuthBusy(false); }
@@ -1700,7 +1706,10 @@ export function Spasht() {
     if (!supabase || !isEmail(authEmail)) { setStatus('Enter the email used to create your account.'); return; }
     setIsAuthBusy(true);
     try {
-      const { error } = await supabase.auth.resend({ type: 'signup', email: authEmail.trim(), options: { emailRedirectTo: `${window.location.origin}/spasht/` } });
+      const authReturnPath = window.location.hostname === 'spasht.kramaniti.com' || window.location.hostname === 'spasht.localhost'
+        ? '/'
+        : '/spasht/';
+      const { error } = await supabase.auth.resend({ type: 'signup', email: authEmail.trim(), options: { emailRedirectTo: `${window.location.origin}${authReturnPath}` } });
       setStatus(error ? 'The confirmation email could not be requested. Please try again shortly.' : 'If this account needs confirmation, a new link is on its way.');
     } catch { setStatus('Your account connection is unavailable. Please retry.'); }
     finally { setIsAuthBusy(false); }

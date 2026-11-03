@@ -1012,3 +1012,22 @@ This log registers the major strategic and structural decisions made during the 
 * **Alternatives rejected:** Returning to hidden features; replacing visible labels with ambiguous icons; adding competing overlays; treating local community examples as a shared service; copying Artha's brand or code.
 * **Evidence:** The executable interaction contract and verification steps are in `docs/spasht/contextual-ui-plan.md`. Fixture-based browser evidence is distinct from real hosted account/email/model evidence.
 * **Ownership:** Website Steward leads; Documentation Steward and Proof/Governance responsibilities apply within one task.
+
+### Decision 42: KC is the only post approver; no backup approver for now
+
+* **Date:** 2026-11-02
+* **Area:** Weekly posting plan from real work (`04_content_system/weekly_work_notes_plan.md`)
+* **Status:** KC confirmed in conversation.
+* **Decision:** KC alone approves posts. No backup approver is named. If KC is away, nothing new is posted that week.
+* **Rationale:** Matches the existing rule in `content_team_workflow.md` that KC holds publication authority.
+* **Revisit:** Name a backup here if KC later wants posting to continue while away.
+
+### Decision 43: Keep Kosh and Spasht in the Shared Website Deployment During Domain Migration
+
+* **Date:** 2026-11-03
+* **Area:** Product domains, website routing, deployment architecture
+* **Status:** Approved (`[Fact]`)
+* **Decision:** Move Kosh and Spasht toward `kosh.kramaniti.com` and `spasht.kramaniti.com` using the existing shared Next.js/Vercel deployment with hostname-aware routing as the first implementation stage.
+* **Rationale:** Kosh and Spasht currently share the active `website/` application while using distinct product routes and integrations. Hostname-aware routing provides independent product URLs without prematurely splitting code, deployment, authentication, and release infrastructure. A later split remains possible if independent release ownership, scaling, access control, or operational needs justify it.
+* **Guardrails:** Legacy `/kosh/...` and `/spasht/...` routes remain available during migration; DNS, Vercel domain attachment, Supabase/Auth configuration, OAuth/MCP changes, and production cutover require separate verification and explicit approval. No database split is implied by this decision.
+* **Source or Evidence:** `docs/product-domain-migration-plan.md`; `docs/product-domain-migration-inventory.md`; KC approval in conversation on 2026-11-03.

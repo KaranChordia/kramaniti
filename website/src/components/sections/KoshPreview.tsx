@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import styles from './KoshPreview.module.css';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { AnimatedHeading } from '../ui/AnimatedHeading';
+import { KOSH_URL, SPASHT_URL } from '@/lib/seo';
 
 const KOSH_SHELF = [
   { type: 'Agent', title: 'Research & synthesis' },
@@ -27,7 +28,7 @@ const ECOSYSTEM_SURFACES = [
     name: 'Kramaniti Kosh',
     role: 'Context-adaptable AI library',
     copy: '25+ governed starter patterns across agents, skills, plugin evaluations, and human review gates—adaptable to your private operating context.',
-    href: '/kosh',
+    href: KOSH_URL,
     cta: 'Explore Kosh',
   },
   {
@@ -35,7 +36,7 @@ const ECOSYSTEM_SURFACES = [
     name: 'Kramaniti Spasht',
     role: 'Founder & builder clarity workspace',
     copy: 'Ongoing workspace combining structured project instructions, five guided operating loops, task execution, and persistent context memory.',
-    href: '/spasht/',
+    href: SPASHT_URL,
     cta: 'Enter Spasht',
   },
   {
@@ -63,11 +64,11 @@ export function KoshPreview() {
             Kramaniti pairs high-conviction workflow and AI systems consulting with proprietary product surfaces. Real operational bottlenecks uncovered in client work are codified into governed tools—so founders and teams can diagnose friction, adapt proven patterns in <strong>Kosh</strong>, and run ongoing clarity loops in <strong>Spasht</strong>.
           </p>
           <div className={styles.primaryActions}>
-            <Link href="/kosh" className={styles.link}>
+            <Link href={KOSH_URL} className={styles.link}>
               Explore Kosh
               <ArrowRight size={17} strokeWidth={1.8} aria-hidden="true" />
             </Link>
-            <Link href="/spasht/" className={styles.secondaryLink}>
+            <Link href={SPASHT_URL} className={styles.secondaryLink}>
               Open Spasht Workspace
               <ArrowRight size={17} strokeWidth={1.8} aria-hidden="true" />
             </Link>

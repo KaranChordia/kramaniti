@@ -1,4 +1,4 @@
-import { absoluteUrl, SITE_NAME } from '@/lib/seo';
+import { absoluteUrl, KOSH_URL, productUrl, SITE_NAME } from '@/lib/seo';
 import { libraryItems, kindLabels, type LibraryItem } from '@/lib/library/libraryData';
 
 // Structured data for Kosh pages. Built only from data the pages already show.
@@ -10,12 +10,12 @@ const publisher = {
   url: absoluteUrl('/'),
 };
 
-const koshCrumb = { '@type': 'ListItem', position: 1, name: 'Kosh', item: absoluteUrl('/kosh/') };
+const koshCrumb = { '@type': 'ListItem', position: 1, name: 'Kosh', item: productUrl(KOSH_URL) };
 
 function breadcrumb(name: string, path: string) {
   return {
     '@type': 'BreadcrumbList',
-    itemListElement: [koshCrumb, { '@type': 'ListItem', position: 2, name, item: absoluteUrl(path) }],
+    itemListElement: [koshCrumb, { '@type': 'ListItem', position: 2, name, item: productUrl(KOSH_URL, path.replace(/^\/kosh/, '') || '/') }],
   };
 }
 
@@ -23,12 +23,16 @@ export function resourcePath(id: string) {
   return `/kosh/${id}/`;
 }
 
+function resourceUrl(id: string) {
+  return productUrl(KOSH_URL, `/${id}/`);
+}
+
 export function koshLandingJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Kramaniti Kosh',
-    url: absoluteUrl('/kosh/'),
+    url: productUrl(KOSH_URL),
     description:
       'Practical templates and guides for research, workflows and accountable AI, with examples and setup guidance.',
     publisher,
@@ -39,7 +43,7 @@ export function koshLandingJsonLd() {
         '@type': 'ListItem',
         position: index + 1,
         name: item.title,
-        url: absoluteUrl(resourcePath(item.id)),
+        url: resourceUrl(item.id),
       })),
     },
   };
@@ -53,13 +57,13 @@ export function koshResourceJsonLd(item: LibraryItem) {
         '@type': 'CreativeWork',
         name: item.title,
         description: item.summary,
-        url: absoluteUrl(resourcePath(item.id)),
+        url: resourceUrl(item.id),
         genre: kindLabels[item.kind],
         datePublished: item.created,
         isAccessibleForFree: true,
         inLanguage: 'en',
         publisher,
-        isPartOf: { '@type': 'CollectionPage', name: 'Kramaniti Kosh', url: absoluteUrl('/kosh/') },
+        isPartOf: { '@type': 'CollectionPage', name: 'Kramaniti Kosh', url: productUrl(KOSH_URL) },
       },
       breadcrumb(item.title, resourcePath(item.id)),
     ],
@@ -70,7 +74,7 @@ export function koshPageJsonLd(name: string, path: string, description: string, 
   return {
     '@context': 'https://schema.org',
     '@graph': [
-      { '@type': type, name, description, url: absoluteUrl(path), publisher },
+      { '@type': type, name, description, url: productUrl(KOSH_URL, path.replace(/^\/kosh/, '') || '/'), publisher },
       breadcrumb(name, path),
     ],
   };

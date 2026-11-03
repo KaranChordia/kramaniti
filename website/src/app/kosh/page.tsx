@@ -3,10 +3,11 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { koshLandingJsonLd } from "@/lib/kosh/jsonLd";
 import { LibraryLanding } from "./LibraryLanding";
 import { parseLibrarySort } from "@/lib/library/libraryData";
+import { KOSH_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Kramaniti Kosh",
-  alternates: { canonical: "/kosh/" },
+  alternates: { canonical: `${KOSH_URL}/` },
   description:
     "Practical templates and guides for research, workflows and accountable AI, with examples and setup guidance.",
 };

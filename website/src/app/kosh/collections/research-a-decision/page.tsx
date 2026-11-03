@@ -5,17 +5,18 @@ import { koshPageJsonLd } from "@/lib/kosh/jsonLd";
 import { researchCollection } from "@/lib/library/resourceDetails";
 import { libraryItems } from "@/lib/library/libraryData";
 import styles from "../../editorial.module.css";
+import { KOSH_URL } from "@/lib/seo";
 export const metadata = {
   title: "Research a decision | Kramaniti Kosh",
   description:
     "A three-part collection: research a question, check the evidence and prepare a human decision.",
-  alternates: { canonical: "/kosh/collections/research-a-decision/" },
+  alternates: { canonical: `${KOSH_URL}/collections/research-a-decision/` },
 };
 export default function ResearchCollection() {
   return (
     <main className={styles.page} data-disable-global-shockwave="true">
       <JsonLd data={koshPageJsonLd("Research a decision", "/kosh/collections/research-a-decision/", "A three-part collection: research a question, check the evidence and prepare a human decision.", "CollectionPage")} />
-      <Link className={styles.breadcrumb} href="/kosh">
+      <Link className={styles.breadcrumb} href={KOSH_URL}>
         <ArrowLeft size={15} aria-hidden="true" /> Kosh collections
       </Link>
       <header className={styles.resourceHero}>

@@ -256,7 +256,7 @@ export function Contact() {
               <span aria-hidden="true">·</span>
               <Link href="/work">Verified Execution Footprint</Link>
               <span aria-hidden="true">·</span>
-              <Link href="/spasht/">Open Spasht</Link>
+              <Link href="https://spasht.kramaniti.com/">Open Spasht</Link>
             </div>
           </div>
         </aside>
