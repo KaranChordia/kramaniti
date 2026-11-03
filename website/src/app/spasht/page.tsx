@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Spasht } from './Spasht';
-import { SPASHT_URL, OG_BASE } from '@/lib/seo';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { SITE_URL, SPASHT_URL, OG_BASE } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: 'Kramaniti Spasht | AI-Assisted Founder Clarity',
@@ -13,6 +14,25 @@ export const metadata: Metadata = {
   },
 };
 
+const spashtJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Kramaniti Spasht',
+  url: `${SPASHT_URL}/`,
+  description:
+    'A free AI-assisted clarity ecosystem for founders and solopreneurs who need sharper thinking before tools, systems before scale, and content after clarity.',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  isAccessibleForFree: true,
+  audience: { '@type': 'Audience', audienceType: 'Founders and solopreneurs' },
+  publisher: { '@type': 'Organization', name: 'Kramaniti', url: SITE_URL },
+};
+
 export default function SpashtPage() {
-  return <Spasht />;
+  return (
+    <>
+      <JsonLd data={spashtJsonLd} />
+      <Spasht />
+    </>
+  );
 }
