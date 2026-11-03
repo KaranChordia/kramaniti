@@ -13,7 +13,6 @@ export function TemplateGuide() {
   const [question, setQuestion] = useState("");
   const [pending, setPending] = useState("");
   const [error, setError] = useState("");
-  const [expanded, setExpanded] = useState(true);
   const input = useRef<HTMLTextAreaElement>(null);
   const controller = useRef<AbortController | null>(null);
   const result = useRef<HTMLDivElement>(null);
@@ -66,20 +65,17 @@ export function TemplateGuide() {
     <section className={styles.guide} aria-labelledby={`${id}-heading`}>
       <div className={styles.heading}>
         <div>
-          <p className={styles.eyebrow}>Kosh guide</p>
+          <p className={styles.eyebrow}>Kosh Assistant</p>
           <h2 id={`${id}-heading`}>Tell me what you’re trying to do.</h2>
           <p>I’ll help you choose a template and a useful place to start.</p>
         </div>
-        <button type="button" className={styles.quiet} aria-expanded={expanded} aria-controls={`${id}-guide`} onClick={() => setExpanded(!expanded)}>
-          {expanded ? "Hide guide" : "Show guide"}
-        </button>
       </div>
-      <div id={`${id}-guide`} hidden={!expanded}>
+      <div id={`${id}-assistant`}>
         {turns.length > 0 && <div className={styles.conversation}>
           {turns.map((turn, index) => <div className={styles.turn} key={index}>
             <p className={styles.question}><span>You</span>{turn.question}</p>
             <div className={styles.answer}>
-              <span>Kosh guide</span>
+              <span>Kosh Assistant</span>
               <p>{turn.answer.reply}</p>
               {turn.answer.mode === "catalogue" && <p className={styles.fallback}>Catalogue suggestions · conversational guidance is unavailable right now.</p>}
               <ol className={styles.recommendations}>

@@ -12,6 +12,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { StudioMemory } from "./session";
 import type { DiscoveryTurn } from "@/lib/kosh/discovery";
+import { KOSH_URL } from "@/lib/seo";
 import styles from "./world.module.css";
 
 type Discovery = { href: string; scroll: number };
@@ -173,7 +174,7 @@ export function KoshWorld({ children }: { children: ReactNode }) {
           Skip to content
         </a>
         <header className={styles.worldHeader}>
-          <Link className={styles.brand} href="/kosh">
+          <Link className={styles.brand} href={KOSH_URL}>
             Kosh
           </Link>
           <nav className={styles.nav} aria-label="Kosh pages">
@@ -182,6 +183,9 @@ export function KoshWorld({ children }: { children: ReactNode }) {
             </Link>
             <Link href="/kosh/create" aria-current={pathname.startsWith("/kosh/create") ? "page" : undefined}>
               Create
+            </Link>
+            <Link href="/kosh/assistant" aria-current={pathname.startsWith("/kosh/assistant") ? "page" : undefined}>
+              Assistant
             </Link>
             <Link href="/kosh/workspace" aria-current={pathname.startsWith("/kosh/workspace") ? "page" : undefined}>
               My Kosh

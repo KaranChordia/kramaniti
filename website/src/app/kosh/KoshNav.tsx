@@ -20,7 +20,7 @@ export function KoshNav() {
       </Link>
       <div>
         <Link href={`${KOSH_URL}/#catalogue`}>Browse</Link>
-        <Link href={`${KOSH_URL}/#collections`}>Collections</Link>
+        <Link href={`${KOSH_URL}/assistant/`}>Kosh Assistant</Link>
         <Link href={`${KOSH_URL}/workspace/`}>
           My library <ArrowUpRight size={15} aria-hidden="true" />
         </Link>

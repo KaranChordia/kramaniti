@@ -49,53 +49,66 @@ export default function KoshRecovery() {
   }
   return (
     <main className={styles.page} data-disable-global-shockwave="true">
-      <header className={styles.resourceHero}>
-        <p className={styles.eyebrow}>Kosh account</p>
-        <h1>Return to your library.</h1>
-        <p>
-          {recovery
-            ? "Choose a new password for your account."
-            : "Use “Forgot password?” below to request a recovery link. If a link has expired, request a new one."}
-        </p>
-      </header>
-      {recovery ? (
-        <form className={styles.form} onSubmit={submit}>
-          <label>
-            New password
-            <input
-              type="password"
-              required
-              minLength={8}
-              autoComplete="new-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </label>
-          <label>
-            Confirm password
-            <input
-              type="password"
-              required
-              minLength={8}
-              autoComplete="new-password"
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-            />
-          </label>
-          <button disabled={busy} className={styles.primary}>
-            {busy ? "Updating…" : "Update password"}
-          </button>
-        </form>
-      ) : (
-        <KoshAuth />
-      )}
-      <p role="status" className={styles.notice}>
-        {message ||
-          "Recovery links are time-limited and can only be used for the account they were issued to."}
-      </p>
-      <Link className={styles.textLink} href="/kosh/workspace">
-        Return to my library <ArrowUpRight size={15} aria-hidden="true" />
-      </Link>
+      <div className={styles.authLayout}>
+        <header className={styles.authIntro}>
+          <p className={styles.eyebrow}>Kosh account</p>
+          <h1>{recovery ? "Set a new password." : "Keep the useful work close."}</h1>
+          <p>
+            {recovery
+              ? "Choose a new password and return to your private Kosh library."
+              : "Save the resources, working copies and context you want to return to."}
+          </p>
+          <div className={styles.authPrinciples} aria-label="Kosh account benefits">
+            <span><b>01</b> Read openly</span>
+            <span><b>02</b> Save privately</span>
+            <span><b>03</b> Return with context</span>
+          </div>
+        </header>
+        <section className={styles.authPanel} aria-label="Account access">
+          {recovery ? (
+            <form className={styles.form} onSubmit={submit}>
+              <div className={styles.authPanelHeading}>
+                <p className={styles.eyebrow}>Account recovery</p>
+                <h2>Choose a new password</h2>
+              </div>
+              <label>
+                New password
+                <input
+                  type="password"
+                  required
+                  minLength={8}
+                  autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </label>
+              <label>
+                Confirm password
+                <input
+                  type="password"
+                  required
+                  minLength={8}
+                  autoComplete="new-password"
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                />
+              </label>
+              <button disabled={busy} className={styles.primary}>
+                {busy ? "Updating…" : "Update password"}
+              </button>
+            </form>
+          ) : (
+            <KoshAuth />
+          )}
+          <p role="status" className={styles.notice}>
+            {message ||
+              "Your account is only for your private Kosh work. Public resources remain open to everyone."}
+          </p>
+          <Link className={styles.textLink} href="/kosh/workspace">
+            Return to my library <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
+        </section>
+      </div>
     </main>
   );
 }

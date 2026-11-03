@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ResourceCatalogue } from "./ResourceCatalogue";
-import { TemplateGuide } from "./TemplateGuide";
 import { defaultLibrarySort, type LibrarySort } from "@/lib/library/libraryData";
 import styles from "./editorial.module.css";
 import discovery from "./discovery.module.css";
@@ -19,26 +18,14 @@ export function LibraryLanding({
       data-disable-global-shockwave="true"
       tabIndex={-1}
     >
-      <header className={discovery.arrival}>
-        <div className={discovery.welcome}>
-          <p className={discovery.eyebrow}>A practical library</p>
-          <h1>Find a useful way to work.</h1>
-          <p className={discovery.intro}>
-            Start with a resource. Read it, adapt it, and keep the important
-            decisions with people.
-          </p>
-        </div>
-      </header>
-      <TemplateGuide />
       <section
         id="catalogue"
         className={discovery.catalogue}
         aria-labelledby="catalogue-heading"
       >
         <div className={discovery.catalogueHeading}>
-          <div>
-            <h2 id="catalogue-heading">Start here.</h2>
-          </div>
+          <p className={discovery.eyebrow}>Browse the collection</p>
+          <h2 id="catalogue-heading">Templates for clearer decisions, better handoffs and useful systems.</h2>
         </div>
         <ResourceCatalogue
           key={`${initialQuery}:${initialSort}`}

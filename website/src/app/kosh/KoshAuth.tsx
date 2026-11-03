@@ -71,13 +71,23 @@ export function KoshAuth() {
   }
   return (
     <form className={styles.form} onSubmit={submit}>
-      <h3>
-        {mode === "reset"
-          ? "Recover your account"
-          : mode === "sign-up"
-            ? "Create your Kosh account"
-            : "Sign in to your library"}
-      </h3>
+      <div className={styles.authPanelHeading}>
+        <p className={styles.eyebrow}>Private library</p>
+        <h2>
+          {mode === "reset"
+            ? "Recover your account"
+            : mode === "sign-up"
+              ? "Create your Kosh account"
+              : "Sign in to your library"}
+        </h2>
+        <p className={styles.authPanelSubcopy}>
+          {mode === "reset"
+            ? "Enter your email and we’ll send a time-limited recovery link."
+            : mode === "sign-up"
+              ? "Create a private place for the resources you want to keep working on."
+              : "Pick up where you left off in your private library."}
+        </p>
+      </div>
       {mode === "sign-up" && (
         <label>
           Name

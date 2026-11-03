@@ -1,0 +1,41 @@
+.page {
+  background:
+    radial-gradient(ellipse 48% 28% at 82% 8%, rgba(201, 168, 76, .08), transparent 75%),
+    var(--canvas);
+}
+.hero {
+  max-width: 780px;
+  padding: 78px 0 54px;
+}
+.eyebrow {
+  margin: 0 0 18px;
+  color: var(--gold);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.hero h1 {
+  margin: 0;
+  font-size: clamp(44px, 6.5vw, 82px);
+  font-weight: 400;
+  line-height: .98;
+  letter-spacing: -.065em;
+}
+.hero h1 em { color: var(--gold); font-style: normal; }
+.hero > p:not(.eyebrow) {
+  max-width: 560px;
+  margin: 28px 0 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.8;
+}
+.workspace {
+  border-top: 1px solid var(--line);
+  padding: 15px 0 70px;
+}
+.workspace :global(section) { margin-bottom: 0; border-top: 0; }
+@media (max-width: 640px) {
+  .hero { padding: 52px 0 38px; }
+  .hero h1 { font-size: clamp(43px, 13vw, 62px); }
+  .hero > p:not(.eyebrow) { font-size: 14px; }
+}
