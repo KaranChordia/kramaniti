@@ -823,19 +823,19 @@ export function PromiseDeliveryCheckInfographic() {
 export function ValueGapFunnelInfographic() {
   const steps = [
     {
-      label: 'Adoption',
-      value: '90%+',
-      copy: 'Tools are available, trials are active, and usage is visible.',
+      label: 'Expectation',
+      value: '92%',
+      copy: 'Senior executives who believe agentic AI will fundamentally change how work is executed.',
     },
     {
-      label: 'Debt',
-      value: 'Process',
-      copy: 'Data, workflow, technology, and talent gaps still shape the route.',
+      label: 'Integration',
+      value: '13%',
+      copy: 'Executives who say agentic AI is already integrated into their operations.',
     },
     {
-      label: 'Value',
+      label: 'Proven results',
       value: '6%',
-      copy: 'Only the resolved operating system turns AI activity into measurable value.',
+      copy: 'Enterprises that have resolved their foundational debts and measured the results.',
     },
   ];
 
