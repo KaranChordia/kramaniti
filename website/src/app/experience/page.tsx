@@ -1,3 +1,4 @@
+import { JsonLd } from '@/components/seo/JsonLd';
 import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl } from '../../lib/seo';
 import { KramanitiExperience } from './KramanitiExperience';
@@ -28,5 +29,19 @@ export const metadata: Metadata = {
 };
 
 export default function ExperiencePage() {
-  return <KramanitiExperience />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          name: 'How Kramaniti Works | Interactive Experience',
+          url: absoluteUrl('/experience/'),
+          description: 'Follow one simple Kramaniti path: understand the work, build what helps, keep people in control, and communicate clearly.',
+          isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: absoluteUrl('/') },
+        }}
+      />
+      <KramanitiExperience />
+    </>
+  );
 }

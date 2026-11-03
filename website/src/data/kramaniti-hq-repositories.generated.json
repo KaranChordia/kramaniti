@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-30T01:55:23.798Z",
+  "generatedAt": "2026-11-03T13:12:17.182Z",
   "privacy": "sanitized-metadata-only",
   "workspaces": [
     {
@@ -11,13 +11,13 @@
       "versioned": true,
       "repositorySummary": {
         "repositoryLabel": "Kramaniti",
-        "branch": "kosh/add-local-language-reply-check-20261030",
-        "revision": "f8e5865cc832",
+        "branch": "seo/full-check-fixes",
+        "revision": "aa1d5611e44b",
         "dirty": true,
-        "dirtyFileCount": 4,
-        "trackedFileCount": 711,
-        "lastCommitAt": "2026-10-24T15:08:03+05:30",
-        "lastCommitSubject": "Merge pull request #45 from KaranChordia/codex/spasht-contextual-ui",
+        "dirtyFileCount": 12,
+        "trackedFileCount": 732,
+        "lastCommitAt": "2026-11-03T18:30:33+05:30",
+        "lastCommitSubject": "Merge pull request #54 from KaranChordia/seo/subdomain-fixes",
         "ahead": 0,
         "behind": 0,
         "itemCount": 1
@@ -31,14 +31,14 @@
           "title": "Kramaniti repository",
           "summary": "Owner-only repository pulse. File contents, remotes, secrets and absolute paths are excluded.",
           "visibility": "internal",
-          "sourceHash": "f8e5865cc832",
+          "sourceHash": "aa1d5611e44b",
           "metadata": {
-            "branch": "kosh/add-local-language-reply-check-20261030",
+            "branch": "seo/full-check-fixes",
             "dirty": true,
-            "dirtyFileCount": 4,
-            "trackedFileCount": 711,
-            "lastCommitAt": "2026-10-24T15:08:03+05:30",
-            "lastCommitSubject": "Merge pull request #45 from KaranChordia/codex/spasht-contextual-ui",
+            "dirtyFileCount": 12,
+            "trackedFileCount": 732,
+            "lastCommitAt": "2026-11-03T18:30:33+05:30",
+            "lastCommitSubject": "Merge pull request #54 from KaranChordia/seo/subdomain-fixes",
             "ahead": 0,
             "behind": 0
           }

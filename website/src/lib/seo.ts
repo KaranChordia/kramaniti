@@ -6,6 +6,25 @@ export const DEFAULT_OG_IMAGE = '/assets/pwa/icon-512.png';
 export const KOSH_URL = 'https://kosh.kramaniti.com';
 export const SPASHT_URL = 'https://spasht.kramaniti.com';
 
+// Shared Open Graph base, so page-level openGraph overrides keep the image.
+export const OG_BASE = {
+  type: 'website' as const,
+  siteName: SITE_NAME,
+  images: [{ url: new URL(DEFAULT_OG_IMAGE, SITE_URL).toString(), width: 512, height: 512, alt: `${SITE_NAME} mark` }],
+};
+
+// Rewrites root-relative links inside Kosh Markdown: old /kosh/<id>/ paths go to the
+// clean Kosh path, and main-site paths become absolute www URLs with a trailing slash.
+export function koshContentHref(href: string) {
+  if (!href.startsWith('/') || href.startsWith('//')) return href;
+  if (/^\/kosh(?=\/|$)/.test(href)) return koshUrl(href);
+  const m = href.match(/^([^?#]*)(.*)$/);
+  let path = m ? m[1] : href;
+  const rest = m ? m[2] : '';
+  if (path && !path.endsWith('/') && !/\.[a-z0-9]+$/i.test(path)) path += '/';
+  return new URL(path + rest, SITE_URL).toString();
+}
+
 export function absoluteUrl(path: string) {
   return new URL(path, SITE_URL).toString();
 }

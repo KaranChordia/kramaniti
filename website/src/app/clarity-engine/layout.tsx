@@ -1,3 +1,4 @@
+import { JsonLd } from '@/components/seo/JsonLd';
 import type { Metadata } from 'next';
 import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl } from '../../lib/seo';
 
@@ -38,5 +39,19 @@ export default function ClarityEngineLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  return (
+    <>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          name: 'Clarity Engine | Kramaniti',
+          url: absoluteUrl('/clarity-engine/'),
+          description: 'Think through one piece of work: what matters, where it gets stuck, where AI can help, and what people should decide.',
+          isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: absoluteUrl('/') },
+        }}
+      />
+      {children}
+    </>
+  );
 }

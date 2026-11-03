@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import { libraryItems } from "@/lib/library/libraryData";
 import { resourceDetails } from "@/lib/library/resourceDetails";
 import { workingTemplate } from "@/lib/kosh/resourceContent";
-import { KOSH_URL } from "@/lib/seo";
+import { KOSH_URL, OG_BASE } from "@/lib/seo";
 
 export function generateStaticParams() {
   return libraryItems.map((item) => ({ id: item.id }));
@@ -23,10 +23,10 @@ export async function generateMetadata({
   const item = libraryItems.find((item) => item.id === id);
   return item
     ? {
-        title: `${item.title} | Kramaniti Kosh`,
+        title: `${item.title} | Kramaniti Kosh`.length > 60 ? item.title : `${item.title} | Kramaniti Kosh`,
         description: item.summary,
         alternates: { canonical: `${KOSH_URL}/${id}/` },
-        openGraph: { url: `${KOSH_URL}/${id}/` },
+        openGraph: { ...OG_BASE, url: `${KOSH_URL}/${id}/` },
       }
     : { title: "Resource not found | Kosh" };
 }

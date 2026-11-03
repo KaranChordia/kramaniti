@@ -1,3 +1,4 @@
+import { JsonLd } from '@/components/seo/JsonLd';
 import type { Metadata } from 'next';
 import { Navbar } from '../../components/layout/Navbar';
 import { Footer } from '../../components/layout/Footer';
@@ -50,6 +51,16 @@ export default function InsightsPage() {
 
   return (
     <>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Insights | Kramaniti',
+          url: absoluteUrl('/insights/'),
+          description: 'Clear Kramaniti articles on how work gets stuck, what to fix, where AI helps, and how to communicate the value.',
+          isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: absoluteUrl('/') },
+        }}
+      />
       <Navbar />
       <main className={styles.main}>
         <section className={styles.heroSection}>
