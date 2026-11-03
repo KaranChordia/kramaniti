@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { koshUrl } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { getKoshSupabase } from "@/lib/kosh/supabase";
@@ -104,7 +105,7 @@ export default function KoshRecovery() {
             {message ||
               "Your account is only for your private Kosh work. Public resources remain open to everyone."}
           </p>
-          <Link className={styles.textLink} href="/kosh/workspace">
+          <Link className={styles.textLink} href={koshUrl("/workspace/")}>
             Return to my library <ArrowUpRight size={15} aria-hidden="true" />
           </Link>
         </section>

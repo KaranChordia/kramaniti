@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { koshUrl } from "@/lib/seo";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Download } from "lucide-react";
@@ -96,7 +97,7 @@ export function ResourceSpace({
         <div className={styles.actions}>
           <a
             className={styles.primary}
-            href={item.download}
+            href={koshUrl(item.download)}
             download={`${item.id}.md`}
           >
             Download template <Download size={16} aria-hidden="true" />
@@ -198,7 +199,7 @@ export function ResourceSpace({
         <details className={styles.fold}>
           <summary><span>About this version</span><ChevronDown size={18} aria-hidden="true" /></summary>
           {prose(section("edition-notes"))}
-          <Link className={styles.textLink} href="/kosh/standards">
+          <Link className={styles.textLink} href={koshUrl("/standards/")}>
             How we write Kosh templates
           </Link>
         </details>
@@ -209,7 +210,7 @@ export function ResourceSpace({
           <h2>You might also like</h2>
           <div>
             {related.map((resource) => (
-              <Link key={resource.id} href={`/kosh/${resource.id}`}>
+              <Link key={resource.id} href={koshUrl(`/${resource.id}/`)}>
                 <span>{kindLabels[resource.kind]}</span>
                 <b>{resource.title}</b>
                 <small>Open template <ArrowUpRight size={14} aria-hidden="true" /></small>

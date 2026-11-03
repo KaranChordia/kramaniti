@@ -12,7 +12,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { StudioMemory } from "./session";
 import type { DiscoveryTurn } from "@/lib/kosh/discovery";
-import { KOSH_URL } from "@/lib/seo";
+import { KOSH_URL, SITE_URL, koshUrl } from "@/lib/seo";
 import styles from "./world.module.css";
 
 type Discovery = { href: string; scroll: number };
@@ -43,7 +43,7 @@ export function BackToExplore({
       href={
         pathname === "/kosh"
           ? "/kosh#catalogue"
-          : (journey?.discovery.href ?? "/kosh#catalogue")
+          : (journey?.discovery.href ?? koshUrl("/#catalogue"))
       }
       scroll={pathname === "/kosh"}
       className={className}
@@ -70,7 +70,7 @@ export function BackToExplore({
 export function KoshWorld({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [discovery, setDiscovery] = useState<Discovery>({
-    href: "/kosh#catalogue",
+    href: koshUrl("/#catalogue"),
     scroll: 0,
   });
   const returning = useRef(false);
@@ -101,9 +101,10 @@ export function KoshWorld({ children }: { children: ReactNode }) {
         return;
       const destination = new URL(link.href);
       if (
-        destination.origin === location.origin &&
-        (destination.pathname === "/kosh" ||
-          destination.pathname.startsWith("/kosh/"))
+        destination.origin === new URL(KOSH_URL).origin ||
+        (destination.origin === location.origin &&
+          (destination.pathname === "/kosh" ||
+            destination.pathname.startsWith("/kosh/")))
       )
         return;
       if (
@@ -178,20 +179,20 @@ export function KoshWorld({ children }: { children: ReactNode }) {
             Kosh
           </Link>
           <nav className={styles.nav} aria-label="Kosh pages">
-            <Link href="/kosh" aria-current={pathname === "/kosh" ? "page" : undefined}>
+            <Link href={koshUrl("/")} aria-current={pathname === "/kosh" ? "page" : undefined}>
               Library
             </Link>
-            <Link href="/kosh/create" aria-current={pathname.startsWith("/kosh/create") ? "page" : undefined}>
+            <Link href={koshUrl("/create/")} aria-current={pathname.startsWith("/kosh/create") ? "page" : undefined}>
               Create
             </Link>
-            <Link href="/kosh/assistant" aria-current={pathname.startsWith("/kosh/assistant") ? "page" : undefined}>
+            <Link href={koshUrl("/assistant/")} aria-current={pathname.startsWith("/kosh/assistant") ? "page" : undefined}>
               Assistant
             </Link>
-            <Link href="/kosh/workspace" aria-current={pathname.startsWith("/kosh/workspace") ? "page" : undefined}>
+            <Link href={koshUrl("/workspace/")} aria-current={pathname.startsWith("/kosh/workspace") ? "page" : undefined}>
               My Kosh
             </Link>
           </nav>
-          <Link href="/" className={styles.home}>
+          <Link href={SITE_URL} className={styles.home}>
             Kramaniti
           </Link>
         </header>

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import { koshUrl } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, LoaderCircle } from "lucide-react";
 import { libraryItems, kindLabels } from "@/lib/library/libraryData";
@@ -86,7 +87,7 @@ export function TemplateGuide() {
                     <span className={styles.number}>{String(order + 1).padStart(2, "0")}</span>
                     <div>
                       <small>{order === 0 ? "Start here" : "Also useful"} · {kindLabels[item.kind]}</small>
-                      <Link href={`/kosh/${item.id}/`} className={styles.templateLink}>{item.title}<ArrowUpRight size={17} aria-hidden="true" /></Link>
+                      <Link href={koshUrl(`/${item.id}/`)} className={styles.templateLink}>{item.title}<ArrowUpRight size={17} aria-hidden="true" /></Link>
                       <p>{reason}</p>
                     </div>
                   </li>;

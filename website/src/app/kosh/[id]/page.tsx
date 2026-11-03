@@ -26,6 +26,7 @@ export async function generateMetadata({
         title: `${item.title} | Kramaniti Kosh`,
         description: item.summary,
         alternates: { canonical: `${KOSH_URL}/${id}/` },
+        openGraph: { url: `${KOSH_URL}/${id}/` },
       }
     : { title: "Resource not found | Kosh" };
 }

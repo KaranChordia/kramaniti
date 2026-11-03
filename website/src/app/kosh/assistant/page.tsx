@@ -7,6 +7,7 @@ import { KOSH_URL } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Kosh Assistant | Kramaniti Kosh",
   alternates: { canonical: `${KOSH_URL}/assistant/` },
+  openGraph: { url: `${KOSH_URL}/assistant/` },
   description:
     "Describe the work in front of you and Kosh Assistant will help you find a practical template to start with.",
 };

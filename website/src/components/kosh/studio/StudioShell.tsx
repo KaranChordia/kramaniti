@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { koshUrl } from "@/lib/seo";
 import { ArrowRight, ArrowUpRight, CornerDownLeft } from "lucide-react";
 import { useKoshJourney } from "../world/KoshWorld";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -283,7 +284,7 @@ export function StudioShell({
           {draft.source && (
             <p className={styles.source}>
               From{" "}
-              <Link href={`/kosh/${draft.source.resourceId}`}>
+              <Link href={koshUrl(`/${draft.source.resourceId}/`)}>
                 {draft.source.resourceId}
               </Link>{" "}
               · v{draft.source.version} · Original unchanged
@@ -518,7 +519,7 @@ export function StudioShell({
       )}
       <footer className={styles.footer}>
         <span>A method you shape. A decision you own.</span>
-        <Link href="/kosh/standards">Kosh standards <ArrowUpRight size={15} aria-hidden="true" /></Link>
+        <Link href={koshUrl("/standards/")}>Kosh standards <ArrowUpRight size={15} aria-hidden="true" /></Link>
       </footer>
       {draft && dialog === "export" && (
         <ExportReview

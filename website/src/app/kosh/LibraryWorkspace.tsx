@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { koshUrl } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
@@ -175,7 +176,7 @@ export function LibraryWorkspace() {
             : "Sign in to save templates, keep private working copies and provide context when you choose to adapt a resource."}
         </p>
         {!user && (
-          <Link className={styles.textLink} href="/kosh#catalogue">
+          <Link className={styles.textLink} href={koshUrl("/#catalogue")}>
           Explore without an account <ArrowUpRight size={15} aria-hidden="true" />
           </Link>
         )}
@@ -228,7 +229,7 @@ export function LibraryWorkspace() {
                   {copies.map((copy) => (
                     <li key={copy.id}>
                       <Link
-                        href={`/kosh/${copy.template_id}?copy=${copy.id}#make-it-yours`}
+                        href={koshUrl(`/${copy.template_id}/?copy=${copy.id}#make-it-yours`)}
                       >
                         {copy.title} <ArrowUpRight size={15} aria-hidden="true" />
                       </Link>
@@ -290,7 +291,7 @@ export function LibraryWorkspace() {
                 <button className={styles.secondary} onClick={toggleTheme}>
                   Use {theme === "dark" ? "light" : "dark"} appearance
                 </button>
-                <Link className={styles.secondary} href="/kosh/account">
+                <Link className={styles.secondary} href={koshUrl("/account/")}>
                   Account recovery
                 </Link>
                 <button
@@ -311,8 +312,8 @@ export function LibraryWorkspace() {
         </p>
       )}
       <footer className={styles.footer}>
-        <Link href="/kosh">Explore Kosh</Link>
-        <Link href="/kosh/standards">Resource standards</Link>
+        <Link href={koshUrl("/")}>Explore Kosh</Link>
+        <Link href={koshUrl("/standards/")}>Resource standards</Link>
       </footer>
     </main>
   );

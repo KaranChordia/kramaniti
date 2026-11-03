@@ -14,6 +14,13 @@ export function productUrl(origin: string, path = '/') {
   return new URL(path, `${origin}/`).toString();
 }
 
+// Absolute URL on the Kosh host for a Kosh path. Accepts old /kosh/... paths and
+// returns the clean path, so links never point at the /kosh prefix.
+export function koshUrl(path = '/') {
+  const clean = path.replace(/^\/kosh(?=\/|#|\?|$)/, '') || '/';
+  return productUrl(KOSH_URL, clean.startsWith('/') ? clean : `/${clean}`);
+}
+
 export function stripInlineMarkup(value: string) {
   return value
     .replace(/<h3>|<\/h3>|<gold>|<\/gold>/g, '')

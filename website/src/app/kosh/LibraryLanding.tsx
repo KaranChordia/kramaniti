@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SITE_URL, koshUrl } from "@/lib/seo";
 import { ResourceCatalogue } from "./ResourceCatalogue";
 import { defaultLibrarySort, type LibrarySort } from "@/lib/library/libraryData";
 import styles from "./editorial.module.css";
@@ -25,7 +26,7 @@ export function LibraryLanding({
       >
         <div className={discovery.catalogueHeading}>
           <p className={discovery.eyebrow}>Browse the collection</p>
-          <h2 id="catalogue-heading">Templates for clearer decisions, better handoffs and useful systems.</h2>
+          <h1 id="catalogue-heading">Templates for clearer decisions, better handoffs and useful systems.</h1>
         </div>
         <ResourceCatalogue
           key={`${initialQuery}:${initialSort}`}
@@ -34,9 +35,9 @@ export function LibraryLanding({
         />
       </section>
       <footer className={styles.footer}>
-        <Link href="/">Kramaniti</Link>
+        <Link href={SITE_URL}>Kramaniti</Link>
         <span>Strategy before tools. Systems before scale.</span>
-        <Link href="/kosh/standards">Resource standards</Link>
+        <Link href={koshUrl("/standards/")}>Resource standards</Link>
       </footer>
     </main>
   );
