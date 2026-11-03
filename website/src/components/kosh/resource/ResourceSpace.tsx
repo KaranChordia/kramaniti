@@ -1,14 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { koshUrl } from "@/lib/seo";
+import { koshContentHref, koshUrl } from "@/lib/seo";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Download } from "lucide-react";
 import {
   formatCreatedDate,
   kindLabels,
   type LibraryItem,
 } from "@/lib/library/libraryData";
+
+const mdUrl = (url: string) => koshContentHref(defaultUrlTransform(url));
 import type { ResourceDetail } from "@/lib/library/resourceDetails";
 import type { ResourceSection } from "@/lib/kosh/resourceSections";
 import { BackToExplore } from "../world/KoshWorld";
@@ -65,7 +67,7 @@ export function ResourceSpace({
 
   const prose = (body: string) => (
     <div className={styles.prose}>
-      <ReactMarkdown>{body}</ReactMarkdown>
+      <ReactMarkdown urlTransform={mdUrl}>{body}</ReactMarkdown>
     </div>
   );
 
@@ -147,7 +149,7 @@ export function ResourceSpace({
           download or copy it.
         </p>
         <article className={`${styles.prose} ${styles.sheet}`}>
-          <ReactMarkdown components={{ h2: "h3", h3: "h4" }}>
+          <ReactMarkdown urlTransform={mdUrl} components={{ h2: "h3", h3: "h4" }}>
             {template}
           </ReactMarkdown>
         </article>
@@ -161,7 +163,7 @@ export function ResourceSpace({
             like.
           </p>
           <div className={styles.prose}>
-            <ReactMarkdown components={{ h2: "h3", h3: "h4" }}>
+            <ReactMarkdown urlTransform={mdUrl} components={{ h2: "h3", h3: "h4" }}>
               {section("demonstration")}
             </ReactMarkdown>
           </div>

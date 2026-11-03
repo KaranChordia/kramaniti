@@ -189,7 +189,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   }
 
   const url = getInsightUrl(post);
-  const title = `${post.title} | Kramaniti Insights`;
+  const fullTitle = `${post.title} | Kramaniti Insights`;
+  const title = fullTitle.length > 60 ? post.title : fullTitle;
   const description = stripInlineMarkup(post.summary);
   const publishedTime = getInsightPublishedDate(post);
   const authors = post.author ? [post.author] : ['Kramaniti'];

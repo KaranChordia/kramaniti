@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { KOSH_URL, koshUrl } from "@/lib/seo";
+import { KOSH_URL, OG_BASE, koshUrl } from "@/lib/seo";
 import { ArrowUpRight } from "lucide-react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { koshPageJsonLd } from "@/lib/kosh/jsonLd";
@@ -9,7 +9,7 @@ export const metadata = {
   description:
     "How Kosh resources describe scope, examples, versions and human review.",
   alternates: { canonical: `${KOSH_URL}/standards/` },
-  openGraph: { url: `${KOSH_URL}/standards/` },
+  openGraph: { ...OG_BASE, url: `${KOSH_URL}/standards/` },
 };
 export default function StandardsPage() {
   return (
