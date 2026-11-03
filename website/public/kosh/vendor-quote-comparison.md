@@ -1,4 +1,4 @@
-# Compare vendor quotes side by side before you decide
+# Compare vendor quotes side by side
 
 Version 1.1 · Kramaniti Kosh
 

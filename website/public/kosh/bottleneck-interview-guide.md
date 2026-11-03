@@ -1,4 +1,4 @@
-# Find where work waits by asking the people who do it
+# Find where work waits by asking your team
 
 Version 1.1 · Kramaniti Kosh
 

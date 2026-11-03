@@ -1,4 +1,4 @@
-# See where your business information lives before you go digital
+# See where your business information lives
 
 Version 1.1 · Kramaniti Kosh
 

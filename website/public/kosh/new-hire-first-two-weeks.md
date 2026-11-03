@@ -1,4 +1,4 @@
-# Get a new hire doing real work in their first two weeks
+# Get a new hire doing real work in two weeks
 
 Version 1.1 · Kramaniti Kosh
 

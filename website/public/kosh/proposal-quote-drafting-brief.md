@@ -1,4 +1,4 @@
-# Draft proposals and quotes without promising what you can’t deliver
+# Draft proposals and quotes you can deliver on
 
 Version 1.1 · Kramaniti Kosh
 

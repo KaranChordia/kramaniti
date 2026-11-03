@@ -1,4 +1,4 @@
-# Give your WhatsApp assistant the right facts about your business
+# Give your WhatsApp assistant the right facts
 
 Version 1.1 · Kramaniti Kosh
 

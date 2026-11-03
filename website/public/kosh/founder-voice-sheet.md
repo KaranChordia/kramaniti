@@ -1,4 +1,4 @@
-# Write in the founder’s voice without the founder rewriting it
+# Write in the founder’s voice without rewrites
 
 Version 1.1 · Kramaniti Kosh
 

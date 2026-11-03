@@ -1,4 +1,4 @@
-# See which AI tools you pay for and what each one is for
+# See which AI tools you pay for and why
 
 Version 1.1 · Kramaniti Kosh
 

@@ -1,4 +1,4 @@
-# Know what customer data you keep and who can see it
+# Know what customer data you keep and who sees it
 
 Version 1.1 · Kramaniti Kosh
 

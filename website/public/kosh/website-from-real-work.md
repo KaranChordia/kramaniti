@@ -1,4 +1,4 @@
-# Write your website from how the work really gets done
+# Write your website from how the work gets done
 
 Version 1.1 · Kramaniti Kosh
 
