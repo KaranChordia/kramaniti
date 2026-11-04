@@ -21,8 +21,6 @@ import {
   FolderKanban,
   Library,
   Menu,
-  Move,
-  RotateCcw,
   Search,
   SlidersHorizontal,
   Sparkles,
@@ -33,10 +31,7 @@ import {
   useMemo,
   useRef,
   useState,
-  type CSSProperties,
   type FormEvent,
-  type KeyboardEvent as ReactKeyboardEvent,
-  type PointerEvent as ReactPointerEvent,
 } from "react";
 import {
   defaultLibrarySort,
@@ -63,15 +58,10 @@ type AssistantRecommendation = { id: string; reason: string };
 
 const SAVED_STORAGE_KEY = "kosh:saved-templates";
 const DRAFTS_STORAGE_KEY = "kosh:stage-drafts";
+const BENTO_SPANS = ["hero", "feature", "compact", "compact", "feature", "hero"] as const;
 
 const categories = ["All", ...new Set(libraryItems.map((item) => item.category))];
 const emptyDraft: Draft = { goal: "", context: "", boundary: "" };
-const tilePlacements = [
-  { x: 42, y: 42, r: -1.5 }, { x: 348, y: 112, r: 1.2 }, { x: 676, y: 28, r: -0.8 },
-  { x: 1006, y: 126, r: 1.7 }, { x: 176, y: 304, r: 1.1 }, { x: 514, y: 374, r: -1.2 },
-  { x: 846, y: 286, r: 0.7 }, { x: 1172, y: 394, r: -1.5 }, { x: 48, y: 574, r: -0.7 },
-  { x: 386, y: 642, r: 1.4 }, { x: 726, y: 548, r: -1.1 }, { x: 1068, y: 632, r: 0.9 },
-];
 
 function parseScene(value?: string): Scene {
   return value === "overview" || value === "create" || value === "review"
@@ -138,7 +128,7 @@ export function KoshStage({
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState<LibrarySort>(initialSort);
   const [page, setPage] = useState(0);
-  const perPage = 12;
+  const [perPage, setPerPage] = useState(6);
   const [saved, setSaved] = useState<string[]>([]);
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
   const [validation, setValidation] = useState("");
@@ -149,14 +139,9 @@ export function KoshStage({
   const [assistantRecommendations, setAssistantRecommendations] = useState<AssistantRecommendation[]>([]);
   const [dockMenu, setDockMenu] = useState<DockMenu | null>(null);
   const [peekedId, setPeekedId] = useState<string | null>(null);
-  const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 });
-  const [panning, setPanning] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const peekHeadingRef = useRef<HTMLHeadingElement>(null);
-  const canvasViewportRef = useRef<HTMLDivElement>(null);
-  const canvasWorldRef = useRef<HTMLDivElement>(null);
   const tileRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const dragState = useRef<{ pointerId: number; x: number; y: number; startX: number; startY: number } | null>(null);
   const dockRef = useRef<HTMLElement>(null);
   const bottomDockRef = useRef<HTMLElement>(null);
   const placesTrigger = useRef<HTMLButtonElement>(null);
@@ -182,6 +167,25 @@ export function KoshStage({
   const pageCount = Math.max(1, Math.ceil(filtered.length / perPage));
   const visibleItems = filtered.slice(page * perPage, page * perPage + perPage);
   const peeked = peekedId ? libraryItems.find((item) => item.id === peekedId) ?? null : null;
+
+  useEffect(() => {
+    const updateFit = () => {
+      const next = window.innerWidth <= 760 ? 4 : 6;
+      setPerPage((current) => {
+        if (current !== next) {
+          setPage((oldPage) => {
+            if (scene !== "library") return oldPage;
+            const anchor = filtered[oldPage * current]?.id ?? selectedId;
+            return pageForItem(filtered, anchor, next);
+          });
+        }
+        return next;
+      });
+    };
+    updateFit();
+    window.addEventListener("resize", updateFit);
+    return () => window.removeEventListener("resize", updateFit);
+  }, [filtered, scene, selectedId]);
 
   useEffect(() => {
     const hydrateFrame = requestAnimationFrame(() => {
@@ -298,52 +302,9 @@ export function KoshStage({
     });
   }
 
-  function clampCanvasOffset(x: number, y: number) {
-    const viewport = canvasViewportRef.current;
-    const world = canvasWorldRef.current;
-    if (!viewport || !world) return { x, y };
-    const edge = 24;
-    const minX = Math.min(edge, viewport.clientWidth - world.offsetWidth - edge);
-    const minY = Math.min(edge, viewport.clientHeight - world.offsetHeight - edge);
-    return {
-      x: Math.max(minX, Math.min(edge, x)),
-      y: Math.max(minY, Math.min(edge, y)),
-    };
-  }
-
-  function moveCanvas(x: number, y: number) {
-    setCanvasOffset((current) => clampCanvasOffset(current.x + x, current.y + y));
-  }
-
-  function ensureTileVisible(index: number) {
-    const viewport = canvasViewportRef.current;
-    if (!viewport) return;
-    viewport.scrollLeft = 0;
-    viewport.scrollTop = 0;
-    const placement = tilePlacements[index % tilePlacements.length];
-    const tileW = 270;
-    const tileH = 158;
-    const pad = 28;
-    setCanvasOffset((current) => {
-      let nextX = current.x;
-      let nextY = current.y;
-      if (placement.x + nextX < pad) nextX = pad - placement.x;
-      else if (placement.x + tileW + nextX > viewport.clientWidth - pad) nextX = viewport.clientWidth - pad - (placement.x + tileW);
-      if (placement.y + nextY < pad) nextY = pad - placement.y;
-      else if (placement.y + tileH + nextY > viewport.clientHeight - pad) nextY = viewport.clientHeight - pad - (placement.y + tileH);
-      if (nextX === current.x && nextY === current.y) return current;
-      return clampCanvasOffset(nextX, nextY);
-    });
-  }
-
-  function resetCanvasView() {
-    setCanvasOffset({ x: 0, y: 0 });
-    setPeekedId(null);
-  }
-
   function changePage(nextPage: number) {
     setPage(Math.max(0, Math.min(pageCount - 1, nextPage)));
-    resetCanvasView();
+    setPeekedId(null);
   }
 
   function openTile(item: LibraryItem) {
@@ -360,45 +321,6 @@ export function KoshStage({
     const closingId = peekedId;
     setPeekedId(null);
     requestAnimationFrame(() => closingId && tileRefs.current[closingId]?.focus());
-  }
-
-  function handleCanvasPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
-    if ((event.target as Element).closest("button, a")) return;
-    dragState.current = {
-      pointerId: event.pointerId,
-      x: event.clientX,
-      y: event.clientY,
-      startX: canvasOffset.x,
-      startY: canvasOffset.y,
-    };
-    event.currentTarget.setPointerCapture(event.pointerId);
-    setPanning(true);
-  }
-
-  function handleCanvasPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
-    const drag = dragState.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    const dx = event.clientX - drag.x;
-    const dy = event.clientY - drag.y;
-    setCanvasOffset(clampCanvasOffset(drag.startX + dx, drag.startY + dy));
-  }
-
-  function handleCanvasPointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
-    if (dragState.current?.pointerId !== event.pointerId) return;
-    dragState.current = null;
-    setPanning(false);
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
-  }
-
-  function handleCanvasKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
-    if (event.target !== event.currentTarget) return;
-    const movement: Record<string, [number, number]> = {
-      ArrowLeft: [72, 0], ArrowRight: [-72, 0], ArrowUp: [0, 72], ArrowDown: [0, -72],
-    };
-    const delta = movement[event.key];
-    if (!delta) return;
-    event.preventDefault();
-    moveCanvas(delta[0], delta[1]);
   }
 
   function navigate(nextScene: Scene, options?: { item?: string; step?: Step; replace?: boolean }) {
@@ -599,7 +521,7 @@ export function KoshStage({
           {dockMenu === "places" && (
             <div className={`${styles.dockMenu} ${styles.placesMenu}`} role="menu" aria-label="Kosh places">
               <p>Stage</p>
-              <button type="button" role="menuitem" aria-current={scene === "library" ? "page" : undefined} onClick={() => navigate("library")}><Library size={15} /> <span><strong>Library</strong><small>Explore the spatial field</small></span></button>
+              <button type="button" role="menuitem" aria-current={scene === "library" ? "page" : undefined} onClick={() => navigate("library")}><Library size={15} /> <span><strong>Library</strong><small>Browse the bento collection</small></span></button>
               <button type="button" role="menuitem" aria-current={scene === "overview" ? "page" : undefined} onClick={() => navigate("overview")}><Eye size={15} /> <span><strong>Template</strong><small>{selected.title}</small></span></button>
               <button type="button" role="menuitem" aria-current={scene === "create" ? "page" : undefined} onClick={() => navigate("create", { step })}><FilePenLine size={15} /> <span><strong>Create</strong><small>Shape a working copy</small></span></button>
               <span className={styles.menuRule} role="separator" />
@@ -624,69 +546,55 @@ export function KoshStage({
             <div className={`${styles.scene} ${styles.libraryScene}`}>
               <div className={styles.galleryHeader}>
                 <div className={styles.libraryIntro}>
-                  <p className={styles.eyebrow}>Library · spatial field</p>
-                  <h1 ref={headingRef} tabIndex={-1}>Move through useful patterns.</h1>
+                  <p className={styles.eyebrow}>Library · curated collection</p>
+                  <h1 ref={headingRef} tabIndex={-1}>Clear templates for better systems.</h1>
                 </div>
                 <label className={styles.searchField}>
                   <Search size={16} aria-hidden="true" />
                   <span className={styles.srOnly}>Search templates</span>
                   <input
                     value={query}
-                    onChange={(event) => { setQuery(event.target.value); setPage(0); resetCanvasView(); }}
+                    onChange={(event) => { setQuery(event.target.value); setPage(0); setPeekedId(null); }}
                     placeholder="Search the library"
                   />
-                  {query && <button type="button" onClick={() => { setQuery(""); setPage(0); resetCanvasView(); }} aria-label="Clear search"><X size={15} /></button>}
+                  {query && <button type="button" onClick={() => { setQuery(""); setPage(0); setPeekedId(null); }} aria-label="Clear search"><X size={15} /></button>}
                 </label>
-                <p className={styles.galleryStatus} role="status">{filtered.length} {filtered.length === 1 ? "template" : "templates"} · field {Math.min(page + 1, pageCount)} of {pageCount}</p>
+                <p className={styles.galleryStatus} role="status">{filtered.length} {filtered.length === 1 ? "template" : "templates"} · page {Math.min(page + 1, pageCount)} of {pageCount}</p>
               </div>
               {visibleItems.length ? (
-                <div
-                  ref={canvasViewportRef}
-                  className={styles.canvasViewport}
-                  data-panning={panning}
-                  tabIndex={0}
-                  role="region"
-                  aria-label="Template canvas. Drag to move, or use arrow keys."
-                  onKeyDown={handleCanvasKeyDown}
-                  onPointerDown={handleCanvasPointerDown}
-                  onPointerMove={handleCanvasPointerMove}
-                  onPointerUp={handleCanvasPointerEnd}
-                  onPointerCancel={handleCanvasPointerEnd}
-                >
-                  <div
-                    ref={canvasWorldRef}
-                    className={styles.canvasWorld}
-                    style={{ transform: `translate3d(${canvasOffset.x}px, ${canvasOffset.y}px, 0)` }}
-                  >
-                    {visibleItems.map((item, index) => {
-                      const placement = tilePlacements[index % tilePlacements.length];
-                      return (
-                        <button
-                          ref={(node) => { tileRefs.current[item.id] = node; }}
-                          className={styles.galleryTile}
-                          data-tone={index % 4}
-                          type="button"
-                          key={item.id}
-                          style={{
-                            "--tile-x": `${placement.x}px`,
-                            "--tile-y": `${placement.y}px`,
-                            "--tile-r": `${placement.r}deg`,
-                          } as CSSProperties}
-                          aria-label={`Preview ${item.title}`}
-                          onFocus={() => ensureTileVisible(index)}
-                          onClick={() => openTile(item)}
-                        >
-                          <span className={styles.tileTopline}>
-                            <small>{kindLabels[item.kind]}</small>
-                            <b>{String(page * perPage + index + 1).padStart(2, "0")}</b>
-                          </span>
+                <div className={styles.bentoStage} role="region" aria-label="Template bento gallery">
+                  {visibleItems.map((item, index) => {
+                    const span = BENTO_SPANS[index % BENTO_SPANS.length];
+                    return (
+                      <button
+                        ref={(node) => { tileRefs.current[item.id] = node; }}
+                        className={styles.bentoTile}
+                        data-span={span}
+                        data-tone={index % 4}
+                        data-selected={selectedId === item.id}
+                        type="button"
+                        key={item.id}
+                        aria-label={`Preview ${item.title}`}
+                        onClick={() => openTile(item)}
+                      >
+                        <span className={styles.tileTopline}>
+                          <small>{kindLabels[item.kind]}</small>
+                          <b>{String(page * perPage + index + 1).padStart(2, "0")}</b>
+                        </span>
+                        <div className={styles.tileBody}>
                           <strong>{item.title}</strong>
-                          <span className={styles.tileFooter}>{item.category}<ArrowRight size={15} aria-hidden="true" /></span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <div className={styles.canvasHint}><Move size={14} aria-hidden="true" /><span>Drag the field · arrow keys also move it</span></div>
+                          <p className={styles.tileSummary}>{item.summary}</p>
+                        </div>
+                        <span className={styles.tileFooter}>
+                          <span className={styles.tileMetaGroup}>
+                            <span>{item.category}</span>
+                            <span className={styles.tileParts}>{item.includes.length} parts</span>
+                          </span>
+                          <ArrowRight size={15} aria-hidden="true" />
+                        </span>
+                      </button>
+                    );
+                  })}
                   {peeked && (
                     <div className={styles.lensLayer} onPointerDown={(event) => { if (event.target === event.currentTarget) closeTileLens(); }}>
                       <article className={styles.templateLens} role="dialog" aria-modal="true" aria-labelledby="template-lens-heading">
@@ -717,7 +625,7 @@ export function KoshStage({
                   <Library size={25} aria-hidden="true" />
                   <h2>No templates match this view.</h2>
                   <p>Clear the search or return to all focus areas.</p>
-                  <button type="button" onClick={() => { setQuery(""); setCategory("All"); setPage(0); resetCanvasView(); }}>Show all templates</button>
+                  <button type="button" onClick={() => { setQuery(""); setCategory("All"); setPage(0); setPeekedId(null); }}>Show all templates</button>
                 </div>
               )}
             </div>
@@ -887,11 +795,11 @@ export function KoshStage({
             <div className={`${styles.dockMenu} ${styles.contextMenu}`} role="menu" aria-label={`${contextLabel} options`}>
               {scene === "library" && <>
                 <p>Focus the library</p>
-                {categories.map((value) => <button key={value} type="button" role="menuitemradio" aria-checked={category === value} onClick={() => { setCategory(value); setPage(0); resetCanvasView(); closeDockMenu(false); }}><span className={styles.menuCheck}>{category === value ? <Check size={13} /> : null}</span><span><strong>{value === "All" ? "All templates" : value}</strong><small>{value === "All" ? "Show the complete public library" : `Only ${value.toLowerCase()} templates`}</small></span></button>)}
+                {categories.map((value) => <button key={value} type="button" role="menuitemradio" aria-checked={category === value} onClick={() => { setCategory(value); setPage(0); setPeekedId(null); closeDockMenu(false); }}><span className={styles.menuCheck}>{category === value ? <Check size={13} /> : null}</span><span><strong>{value === "All" ? "All templates" : value}</strong><small>{value === "All" ? "Show the complete public library" : `Only ${value.toLowerCase()} templates`}</small></span></button>)}
                 <span className={styles.menuRule} role="separator" />
                 <p>Sort order</p>
-                {librarySortOptions.map((option) => <button key={option.value} type="button" role="menuitemradio" aria-checked={sort === option.value} onClick={() => { setSort(option.value); setPage(0); resetCanvasView(); closeDockMenu(false); }}><span className={styles.menuCheck}>{sort === option.value ? <Check size={13} /> : null}</span><span><strong>{option.label}</strong><small>Order templates in the field</small></span></button>)}
-                {query && <button type="button" role="menuitem" onClick={() => { setQuery(""); setPage(0); resetCanvasView(); closeDockMenu(false); }}><X size={15} /><span><strong>Clear search</strong><small>Keep the current focus</small></span></button>}
+                {librarySortOptions.map((option) => <button key={option.value} type="button" role="menuitemradio" aria-checked={sort === option.value} onClick={() => { setSort(option.value); setPage(0); setPeekedId(null); closeDockMenu(false); }}><span className={styles.menuCheck}>{sort === option.value ? <Check size={13} /> : null}</span><span><strong>{option.label}</strong><small>Order templates in the collection</small></span></button>)}
+                {query && <button type="button" role="menuitem" onClick={() => { setQuery(""); setPage(0); setPeekedId(null); closeDockMenu(false); }}><X size={15} /><span><strong>Clear search</strong><small>Keep the current focus</small></span></button>}
               </>}
               {scene === "overview" && <>
                 <p>Template tools</p>
@@ -918,7 +826,7 @@ export function KoshStage({
         </div>
 
         <div className={styles.bottomStatus} aria-live="polite">
-          {scene === "library" && <span>Field {Math.min(page + 1, pageCount)} / {pageCount}</span>}
+          {scene === "library" && <span>Page {Math.min(page + 1, pageCount)} / {pageCount}</span>}
           {scene === "overview" && <span>{saved.includes(selected.id) ? "Saved to Kosh" : kindLabels[selected.kind]}</span>}
           {scene === "create" && <span>{(step === 1 ? draft.goal : step === 2 ? draft.context : draft.boundary).length} / 240</span>}
           {scene === "review" && <span>{copiedBrief ? "Brief copied" : draftComplete ? "Working brief ready" : "Draft unavailable"}</span>}
@@ -926,9 +834,8 @@ export function KoshStage({
 
         <div className={styles.bottomActions}>
           {scene === "library" && <>
-            <button type="button" className={styles.dockIconButton} onClick={resetCanvasView} aria-label="Reset canvas position"><RotateCcw size={15} /></button>
-            <button type="button" className={styles.dockIconButton} onClick={() => changePage(page - 1)} disabled={page === 0} aria-label="Previous field"><ChevronLeft size={17} /></button>
-            <button type="button" className={styles.dockIconButton} onClick={() => changePage(page + 1)} disabled={page >= pageCount - 1} aria-label="Next field"><ChevronRight size={17} /></button>
+            <button type="button" className={styles.dockIconButton} onClick={() => changePage(page - 1)} disabled={page === 0} aria-label="Previous page"><ChevronLeft size={17} /></button>
+            <button type="button" className={styles.dockIconButton} onClick={() => changePage(page + 1)} disabled={page >= pageCount - 1} aria-label="Next page"><ChevronRight size={17} /></button>
           </>}
           {scene === "overview" && <>
             <button type="button" className={styles.dockAction} aria-label={saved.includes(selected.id) ? "Remove saved template" : "Save template"} onClick={() => toggleSaved(selected.id)}>
