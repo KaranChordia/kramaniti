@@ -144,6 +144,8 @@ export function KoshWorld({ children }: { children: ReactNode }) {
         scroll: window.scrollY,
       });
   }
+  const isStageRoot =
+    pathname === "/kosh" || pathname === "/kosh/" || pathname === "/";
   return (
     <Journey.Provider
       value={{
@@ -157,54 +159,58 @@ export function KoshWorld({ children }: { children: ReactNode }) {
         remember,
       }}
     >
-      <div
-        className={styles.world}
-        onClickCapture={(event) => {
-          const link = (event.target as Element).closest("a");
-          if (!event.defaultPrevented && link) remember();
-        }}
-      >
-        <a
-          className={styles.skipLink}
-          href="#kosh-content"
-          onClick={(event) => {
-            event.preventDefault();
-            document.getElementById("kosh-content")?.focus();
+      {isStageRoot ? (
+        children
+      ) : (
+        <div
+          className={styles.world}
+          onClickCapture={(event) => {
+            const link = (event.target as Element).closest("a");
+            if (!event.defaultPrevented && link) remember();
           }}
         >
-          Skip to content
-        </a>
-        <header className={styles.worldHeader}>
-          <Link className={styles.brand} href={KOSH_URL}>
-            Kosh
-          </Link>
-          <nav className={styles.nav} aria-label="Kosh pages">
-            <Link href={koshUrl("/")} aria-current={pathname === "/kosh" ? "page" : undefined}>
-              Library
+          <a
+            className={styles.skipLink}
+            href="#kosh-content"
+            onClick={(event) => {
+              event.preventDefault();
+              document.getElementById("kosh-content")?.focus();
+            }}
+          >
+            Skip to content
+          </a>
+          <header className={styles.worldHeader}>
+            <Link className={styles.brand} href={KOSH_URL}>
+              Kosh
             </Link>
-            <Link href={koshUrl("/create/")} aria-current={pathname.startsWith("/kosh/create") ? "page" : undefined}>
-              Create
+            <nav className={styles.nav} aria-label="Kosh pages">
+              <Link href={koshUrl("/")} aria-current={pathname === "/kosh" ? "page" : undefined}>
+                Library
+              </Link>
+              <Link href={koshUrl("/create/")} aria-current={pathname.startsWith("/kosh/create") ? "page" : undefined}>
+                Create
+              </Link>
+              <Link href={koshUrl("/assistant/")} aria-current={pathname.startsWith("/kosh/assistant") ? "page" : undefined}>
+                Assistant
+              </Link>
+              <Link href={koshUrl("/workspace/")} aria-current={pathname.startsWith("/kosh/workspace") ? "page" : undefined}>
+                My Kosh
+              </Link>
+            </nav>
+            <Link href={SITE_URL} className={styles.home}>
+              Kramaniti
             </Link>
-            <Link href={koshUrl("/assistant/")} aria-current={pathname.startsWith("/kosh/assistant") ? "page" : undefined}>
-              Assistant
-            </Link>
-            <Link href={koshUrl("/workspace/")} aria-current={pathname.startsWith("/kosh/workspace") ? "page" : undefined}>
-              My Kosh
-            </Link>
-          </nav>
-          <Link href={SITE_URL} className={styles.home}>
-            Kramaniti
-          </Link>
-        </header>
-        <div
-          id="kosh-content"
-          tabIndex={-1}
-          key={pathname}
-          className={styles.scene}
-        >
-          {children}
+          </header>
+          <div
+            id="kosh-content"
+            tabIndex={-1}
+            key={pathname}
+            className={styles.scene}
+          >
+            {children}
+          </div>
         </div>
-      </div>
+      )}
     </Journey.Provider>
   );
 }

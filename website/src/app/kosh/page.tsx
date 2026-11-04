@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { koshLandingJsonLd } from "@/lib/kosh/jsonLd";
-import { LibraryLanding } from "./LibraryLanding";
+import { KoshStage } from "./KoshStage";
 import { parseLibrarySort } from "@/lib/library/libraryData";
 import { KOSH_URL, OG_BASE } from "@/lib/seo";
 
@@ -16,16 +16,25 @@ export const metadata: Metadata = {
 export default async function LibraryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; sort?: string }>;
+  searchParams: Promise<{
+    q?: string | string[];
+    sort?: string | string[];
+    scene?: string | string[];
+    item?: string | string[];
+    step?: string | string[];
+  }>;
 }) {
-  const { q, sort } = await searchParams;
+  const { q, sort, scene, item, step } = await searchParams;
   return (
     <>
       <JsonLd data={koshLandingJsonLd()} />
-    <LibraryLanding
-      initialQuery={typeof q === "string" ? q.slice(0, 200) : ""}
-      initialSort={parseLibrarySort(sort)}
-    />
+      <KoshStage
+        initialQuery={typeof q === "string" ? q.slice(0, 200) : ""}
+        initialSort={parseLibrarySort(typeof sort === "string" ? sort : undefined)}
+        initialScene={typeof scene === "string" ? scene : undefined}
+        initialItem={typeof item === "string" ? item : undefined}
+        initialStep={typeof step === "string" ? step : undefined}
+      />
     </>
   );
 }
